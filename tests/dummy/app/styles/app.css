@@ -1,0 +1,5 @@
+.scenario-each > .animated-container {
+    overflow: hidden;
+    transform: translateZ(0);
+    border: 1px solid green;
+}
