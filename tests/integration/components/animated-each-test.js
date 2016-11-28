@@ -28,3 +28,5 @@ skip('it renders', function(assert) {
 
   assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
 });
+
+skip('check (on several platforms) whether we really need the ember-animated-hidden class. It may not be necessary with our microtask-based motions');
