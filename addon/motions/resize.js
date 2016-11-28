@@ -1,3 +1,4 @@
+import velocity from 'dummy/velocity';
 import Motion from '../motion';
 import { task } from 'ember-concurrency';
 
