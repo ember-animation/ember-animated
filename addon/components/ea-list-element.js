@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { componentNodes } from 'liquid-fire/ember-internals';
+import { componentNodes } from 'ember-animated/ember-internals';
 import Sprite from '../sprite';
 import $ from 'jquery';
 

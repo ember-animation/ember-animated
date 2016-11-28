@@ -1,4 +1,4 @@
-import { ownTransform } from 'liquid-fire/transform';
+import { ownTransform } from 'ember-animated/transform';
 
 export function equalBounds(value, expected, message) {
   this.pushResult({

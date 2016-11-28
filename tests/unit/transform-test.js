@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
-import { equalTransform } from '../../helpers/assertions';
+import { equalTransform } from '../helpers/assertions';
 import {
   ownTransform,
   cumulativeTransform,
   Transform
-} from 'liquid-fire/transform';
+} from 'ember-animated/transform';
 import $ from 'jquery';
 
 let environment, parent, target;

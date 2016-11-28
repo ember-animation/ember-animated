@@ -1,4 +1,3 @@
-import { velocity }  from 'liquid-fire/concurrency-helpers';
 import Motion from '../motion';
 import { task } from 'ember-concurrency';
 

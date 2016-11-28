@@ -1,11 +1,11 @@
 import { module, test, skip } from 'qunit';
-import { ownTransform } from 'liquid-fire/transform';
-import Sprite from 'liquid-fire/sprite';
+import { ownTransform } from 'ember-animated/transform';
+import Sprite from 'ember-animated/sprite';
 import $ from 'jquery';
 import {
   equalBounds,
   visuallyConstant
-} from '../../helpers/assertions';
+} from '../helpers/assertions';
 
 let environment, offsetParent, intermediate, target, innerContent;
 
