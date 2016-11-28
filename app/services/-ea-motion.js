@@ -1,1 +1,1 @@
-export { default } from 'liquid-fire/services/motion';
+export { default } from 'ember-animated/services/motion';

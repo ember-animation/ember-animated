@@ -1,1 +1,1 @@
-export { default } from 'liquid-fire/components/animated-each';
+export { default } from 'ember-animated/components/animated-each';

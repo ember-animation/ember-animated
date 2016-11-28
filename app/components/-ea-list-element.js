@@ -1,1 +1,1 @@
-export { default } from 'liquid-fire/components/ea-list-element';
+export { default } from 'ember-animated/components/ea-list-element';

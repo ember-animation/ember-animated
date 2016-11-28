@@ -1,1 +1,1 @@
-export { default } from 'liquid-fire/components/animated-container';
+export { default } from 'ember-animated/components/animated-container';

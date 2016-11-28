@@ -1,7 +1,0 @@
-{{#each versions as |version| ~}}
-  {{#if (lf-or renderWhenFalse version.value) ~}}
-    {{#liquid-child version=version liquidChildDidRender="childDidRender" class=class ~}}
-      {{yield version.value ~}}
-    {{/liquid-child}}
-  {{/if}}
-{{/each}}
