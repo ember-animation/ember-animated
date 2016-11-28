@@ -280,6 +280,17 @@ test("target fixed positioned", function(assert){
   assert.visuallyConstant(target, () => m.lock());
 });
 
+test("static body with margins", function(assert) {
+  let body = $('body');
+  assert.equal(getComputedStyle(body[0]).position, 'static', 'This test cannot work correctly if the body is not statically positioned');
+  body.append(intermediate);
+  intermediate.css({
+    margin: '10px'
+  });
+  let m = animated(target);
+  assert.visuallyConstant(target, () => m.lock());
+});
+
 test("remembers initial bounds", function(assert) {
   let m = animated(target);
   m.measureInitialBounds();

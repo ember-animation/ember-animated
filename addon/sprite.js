@@ -85,10 +85,9 @@ function offsets(element, computedStyle, transform) {
   let left = ownBounds.left;
   let top = ownBounds.top;
 
-  let effectiveOffsetParent = getEffectiveOffsetParent(element, computedStyle);
+  let [effectiveOffsetParent, eopComputedStyle] = getEffectiveOffsetParent(element, computedStyle);
   if (effectiveOffsetParent) {
     let eopBounds = effectiveOffsetParent.getBoundingClientRect();
-    let eopComputedStyle = getComputedStyle(effectiveOffsetParent);
     left -= eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth);
     top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth);
   }
@@ -111,14 +110,27 @@ function offsets(element, computedStyle, transform) {
 // This compensates for the fact that browsers are inconsistent in the
 // way they report offsetLeft & offsetTop for elements with a
 // transformed ancestor beneath their nearest positioned ancestor.
-function getEffectiveOffsetParent(element) {
+//
+// Returns both the effective offset parent and its computed style
+// (since we had to computed that anyway and don't want to compute it
+// again later).
+function getEffectiveOffsetParent(element, computedStyle) {
+  if (computedStyle.position === 'fixed') { return [null, null]; }
   let offsetParent = element.offsetParent;
   let cursor = element.parentElement;
   while (cursor && offsetParent && cursor !== offsetParent) {
     if ($(cursor).css('transform') !== 'none') {
-      return cursor;
+      return [cursor, getComputedStyle(cursor)];
     }
     cursor = cursor.parentElement;
   }
-  return offsetParent;
+  let style = getComputedStyle(offsetParent);
+  if (style.position === 'static') {
+    // You can end up with the body as your effective offset parent
+    // even when the body is statically positioned, which will mess
+    // you up if it has any margins (including collapsed margins from
+    // its descendants).
+    return [null, null];
+  }
+  return [offsetParent, style];
 }
