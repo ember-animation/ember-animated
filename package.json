@@ -44,8 +44,11 @@
     "ember-addon"
   ],
   "dependencies": {
+    "broccoli-funnel": "^1.0.9",
+    "broccoli-merge-trees": "^1.1.5",
     "ember-cli-babel": "^5.1.7",
-    "ember-cli-htmlbars": "^1.0.10"
+    "ember-cli-htmlbars": "^1.0.10",
+    "ember-cli-version-checker": "^1.1.7"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
