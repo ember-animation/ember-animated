@@ -7,7 +7,7 @@ import {
 } from 'ember-animated/transform';
 import $ from 'jquery';
 
-let environment, parent, target;
+let environment, myParent, target;
 const WIDTH = 601;
 const HEIGHT = 402;
 
@@ -16,9 +16,9 @@ module("Unit | Transform", {
     assert.equalTransform = equalTransform;
 
     let fixture = $('#qunit-fixture');
-    fixture.html('<div class="environment"><div class="parent"><div class="target"></div></div></div>');
+    fixture.html('<div class="environment"><div class="myParent"><div class="target"></div></div></div>');
     environment = fixture.find('.environment');
-    parent = fixture.find('.parent');
+    myParent = fixture.find('.myParent');
     target = fixture.find('.target');
     environment.width(WIDTH);
     target.height(HEIGHT);
@@ -86,15 +86,15 @@ test('Translate then scale (origin top left)', function(assert) {
 });
 
 test('Stacked transforms', function(assert) {
-  parent.css('transform', 'translateX(-50px) translateY(-20px)');
+  myParent.css('transform', 'translateX(-50px) translateY(-20px)');
   target.css('transform', 'translateX(123px) translateY(456px)');
   target.css('transform-origin', '0px 0px');
   assert.equalTransform(cumulativeTransform(target), new Transform(1, 0, 0, 1, 123-50, 456-20));
 });
 
 test('Stacked transforms (origin top left)', function(assert) {
-  parent.css('transform', 'translateX(-50px) translateY(-20px)');
-  parent.css('transform-origin', '0px 0px');
+  myParent.css('transform', 'translateX(-50px) translateY(-20px)');
+  myParent.css('transform-origin', '0px 0px');
   target.css('transform', 'translateX(123px) translateY(456px)');
   target.css('transform-origin', '0px 0px');
   assert.equalTransform(cumulativeTransform(target), new Transform(1, 0, 0, 1, 123-50, 456-20));
