@@ -2,12 +2,6 @@ import Ember from 'ember';
 
 const { getViewBounds } = Ember.ViewUtils;
 
-export function initialize() { }
-
-export function containingElement(view) {
-  return getViewBounds(view).parentElement;
-}
-
 export function componentNodes(view) {
   let bounds = getViewBounds(view);
   return {
@@ -15,5 +9,3 @@ export function componentNodes(view) {
     lastNode: bounds.lastNode
   };
 }
-
-export { default as getOutletStateTemplate } from 'ember-animated/templates/version-specific/get-outlet-state';
