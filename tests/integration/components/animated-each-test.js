@@ -3,7 +3,7 @@ import hbs from 'htmlbars-inline-precompile';
 import QUnit from 'qunit';
 import $ from 'jquery';
 
-moduleForComponent('liquid-each', 'Integration | Component | animated each', {
+moduleForComponent('animated-each', 'Integration | Component | animated each', {
   integration: true,
   beforeEach(assert) {
     assert.listContents = function( $elts, expected, message ) {

@@ -1,8 +1,0 @@
-<button {{action (perform addItem) }}>Add Item</button>
-
-{{#each items key="id" as |item|}}
-  <div>
-    {{item.id}}
-    <button {{action (perform removeItem item)}}>X</button>
-  </div>
-{{/each}}

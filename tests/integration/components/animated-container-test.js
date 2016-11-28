@@ -2,7 +2,7 @@ import { moduleForComponent, test, skip } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 import { equalBounds } from '../../helpers/assertions';
-import Motion from 'liquid-fire/motion';
+import Motion from 'ember-animated/motion';
 import { task } from 'ember-concurrency';
 
 

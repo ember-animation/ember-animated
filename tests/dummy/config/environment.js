@@ -5,11 +5,7 @@ module.exports = function(environment) {
     modulePrefix: 'dummy',
     environment: environment,
     rootURL: '/',
-
-    // Personally, hash is nicer for test work. The browser knows not
-    // to do a full page refresh when you manually edit the url.
-    locationType: 'hash',
-
+    locationType: 'auto',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -33,12 +29,10 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.EmberENV.RAISE_ON_DEPRECATION = true;
   }
 
   if (environment === 'test') {
     // Testem prefers this...
-    ENV.rootURL = '/';
     ENV.locationType = 'none';
 
     // keep test console output quieter
@@ -46,11 +40,10 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
-    ENV.EmberENV.RAISE_ON_DEPRECATION = true;
   }
 
   if (environment === 'production') {
-    ENV.rootURL = '/ember-animated';
+
   }
 
   return ENV;
