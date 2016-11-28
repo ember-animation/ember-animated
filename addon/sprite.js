@@ -84,7 +84,6 @@ function offsets(element, computedStyle, transform) {
   let ownBounds = element.getBoundingClientRect();
   let left = ownBounds.left;
   let top = ownBounds.top;
-
   let [effectiveOffsetParent, eopComputedStyle] = getEffectiveOffsetParent(element, computedStyle);
   if (effectiveOffsetParent) {
     let eopBounds = effectiveOffsetParent.getBoundingClientRect();
@@ -125,7 +124,7 @@ function getEffectiveOffsetParent(element, computedStyle) {
     cursor = cursor.parentElement;
   }
   let style = getComputedStyle(offsetParent);
-  if (style.position === 'static') {
+  if (style.position === 'static' && style.transform === 'none') {
     // You can end up with the body as your effective offset parent
     // even when the body is statically positioned, which will mess
     // you up if it has any margins (including collapsed margins from
