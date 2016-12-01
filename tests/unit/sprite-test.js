@@ -140,7 +140,7 @@ test('Padding on offsetParent', function(assert) {
   assert.visuallyConstant(target, () => m.lock());
 });
 
-skip('Border on target', function(assert) {
+test('Border on target', function(assert) {
   target.css('border', '2px solid blue');
   let m = animated(target);
   assert.visuallyConstant(target, () => m.lock());

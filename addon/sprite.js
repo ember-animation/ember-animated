@@ -16,7 +16,8 @@ export default class Sprite {
     if (asContainer) {
       this._imposedStyle = {
         width: element.offsetWidth,
-        height: element.offsetHeight
+        height: element.offsetHeight,
+        'box-sizing': 'border-box'
       };
     } else {
       let computedStyle = getComputedStyle(element);
@@ -26,7 +27,8 @@ export default class Sprite {
         left,
         width: element.offsetWidth,
         height: element.offsetHeight,
-        position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute'
+        position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
+        'box-sizing': 'border-box'
       };
     }
     let predecessor = inFlight.get(element);
