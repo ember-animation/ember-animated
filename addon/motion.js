@@ -1,7 +1,7 @@
-import $ from 'jquery';
 import { task } from 'ember-concurrency';
 import Ember from 'ember';
-import { rAF } from './concurrency-helpers';
+
+const motions = new WeakMap();
 
 export default Ember.Object.extend({
   init() {
@@ -50,10 +50,10 @@ export default Ember.Object.extend({
   // --- Begin private methods ---
 
   _setupMotionList() {
-    let $elt = $(this.sprite.element);
-    let motionList = $elt.data('lfMotions');
+    let element = this.sprite.element;
+    let motionList = motions.get(element);
     if (!motionList) {
-      $elt.data('lfMotions', motionList = []);
+      motions.set(element, motionList = []);
     }
     motionList.unshift(this);
     this._motionList = motionList;
@@ -70,7 +70,7 @@ export default Ember.Object.extend({
       let index = this._motionList.indexOf(this);
       this._motionList.splice(index, 1);
       if (this._motionList.length === 0) {
-        $(this.sprite.element).data('lfMotions', null);
+        motions.delete(this.sprite.element);
       }
     }
   })
