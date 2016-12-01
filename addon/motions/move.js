@@ -1,37 +1,35 @@
 import Motion from '../motion';
+import Tween from '../tween';
 import { task } from 'ember-concurrency';
 import { rAF } from '../concurrency-helpers';
 
-function ease(p) {
-  return 0.5 - Math.cos( p * Math.PI ) / 2;
-}
 
 export default Motion.extend({
   animate: task(function *() {
-    // Taking a queue from velocity, we don't directly use the rAF
-    // high resolution timestamps because of the way they get off
-    // under stress.
-    let startTime = (new Date()).getTime();
-    let duration = this.opts.duration;
-    if (duration == null) {
-      duration = 1000;
-    }
-    let runTime = 0;
+    let duration = this.opts.duration == null ? 1000 : this.opts.duration;
+    let sprite = this.sprite;
+    let initial = sprite.initialBounds;
+    let final = sprite.finalBounds;
 
-    let initialX = this.sprite.transform.tx;
-    let initialY = this.sprite.transform.ty;
-    let dx = this.sprite.finalBounds.left - this.sprite.initialBounds.left;
-    let dy = this.sprite.finalBounds.top - this.sprite.initialBounds.top;
+    let x = new Tween(
+      sprite.transform.tx,
+      sprite.transform.tx + final.left - initial.left,
+      duration
+    );
 
-    while (runTime < duration) {
-      this.sprite.reveal();
+    let y = new Tween(
+      sprite.transform.ty,
+      sprite.transform.ty + final.top - initial.top,
+      duration
+    );
+
+    sprite.reveal();
+    while (!x.done) {
       yield rAF();
-      runTime = (new Date()).getTime() - startTime;
-      let fraction = runTime / duration;
-      let eased = ease(fraction);
-      let newX = initialX + dx * eased;
-      let newY = initialY + dy * eased;
-      this.sprite.translate(newX - this.sprite.transform.tx, newY - this.sprite.transform.ty);
+      sprite.translate(
+        x.currentValue - sprite.transform.tx,
+        y.currentValue - sprite.transform.ty
+      );
     }
   })
 });
