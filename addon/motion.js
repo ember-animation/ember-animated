@@ -50,6 +50,10 @@ export default Ember.Object.extend({
     return this.get('_run').perform();
   },
 
+  join() {
+    return this.get('_run.last');
+  },
+
   // --- Begin private methods ---
 
   _setupMotionList() {
