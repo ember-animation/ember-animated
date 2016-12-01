@@ -26,16 +26,19 @@ export default Ember.Component.extend({
     let items = this.get('items') || [];
     this._prevItems = items.slice();
 
-    if (this._currentComponents.length > 0) {
+    let firstTime = this._firstTime;
+    this._firstTime = false;
+
+    if (!firstTime) {
       this._notifyContainer('lock');
     }
 
     let currentSprites = flatMap(this._currentComponents, component => component.sprites());
     currentSprites.forEach(sprite => sprite.measureInitialBounds());
     currentSprites.forEach(sprite => sprite.lock());
-    this.get('animate').perform(prevItems, items, currentSprites);
+    this.get('animate').perform(prevItems, items, currentSprites, firstTime);
   },
-  animate: task(function * (prevItems, items, currentSprites) {
+  animate: task(function * (prevItems, items, currentSprites, firstTime) {
     yield afterRender();
 
     let [keptSprites, removedSprites] = partition(
@@ -72,8 +75,7 @@ export default Ember.Component.extend({
 
     console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}`);
 
-    if (this._firstTime) {
-      this._firstTime = false;
+    if (firstTime) {
       insertedSprites.forEach(sprite => {
         sprite.reveal();
       });
@@ -84,7 +86,7 @@ export default Ember.Component.extend({
           top: sprite.finalBounds.top
         };
         sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
-        let move = Move.create(sprite, { duration: 500 });
+        let move = Move.create(sprite);
         tasks.push(move.run());
       });
     }
@@ -99,9 +101,7 @@ export default Ember.Component.extend({
         top: sprite.initialBounds.top
       };
       let move = Move.create(sprite);
-      tasks.push(move.run().then(() => {
-        sprite.remove();
-      }));
+      tasks.push(move.run());
     });
 
     let results = yield allSettled(tasks);
@@ -113,6 +113,10 @@ export default Ember.Component.extend({
         }, 0);
       }
     });
+
+    // removed sprites couldn't have been picked up by subsequent
+    // concurrent transitions, so we always clean up our own.
+    removedSprites.forEach(sprite => sprite.remove());
 
     // Last one out close the door on your way out.
     if (this.get('animate.concurrency') === 1) {
