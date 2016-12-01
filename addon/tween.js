@@ -4,7 +4,9 @@ const currentCurves = [];
 /*
   A Tween automatically recalculates on demand at most once per
   animation frame. As long as you're using the rAF helper from
-  './concurrency-helpers', it will always be fresh.
+  './concurrency-helpers', it will always be fresh. When many
+  concurrent Tweens are running over the same duration at the same
+  time, we can avoid a lot of duplicate work and keep them in sync.
 */
 
 export default class Tween {
