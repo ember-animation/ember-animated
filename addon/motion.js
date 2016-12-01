@@ -23,13 +23,11 @@ export default Ember.Object.extend({
   interrupt: task(function * (motions) {
     // Default implementation stops all other motions on this elemnt.
     motions.forEach(m => m.cancel());
-    yield null;
   }),
 
   // Start your animation here. It should be a cancelable task if you
   // want to be able to interrupt it.
   animate: task(function * () {
-    yield null;
   }),
 
 
