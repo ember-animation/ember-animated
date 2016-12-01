@@ -101,9 +101,7 @@ export default Ember.Component.extend({
         top: sprite.initialBounds.top
       };
       let move = Move.create(sprite);
-      tasks.push(move.run().then(() => {
-        sprite.remove();
-      }));
+      tasks.push(move.run());
     });
 
     let results = yield allSettled(tasks);
@@ -115,6 +113,10 @@ export default Ember.Component.extend({
         }, 0);
       }
     });
+
+    // removed sprites couldn't have been picked up by subsequent
+    // concurrent transitions, so we always clean up our own.
+    removedSprites.forEach(sprite => sprite.remove());
 
     // Last one out close the door on your way out.
     if (this.get('animate.concurrency') === 1) {
