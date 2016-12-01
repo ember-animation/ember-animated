@@ -10,29 +10,22 @@ if (window.Promise) {
   Promise = RSVP.Promise;
 }
 
-// This is a requestAnimationFrame polyfill, wrapped in a cancelable
-// Promise interface that's designed to resolve via the microtask
-// queue (like real spec-compliant Promises are supposed to). This
-// lets us use rAF within ember-concurrency correctly. RSVP promises
-// within Ember do not resolve on the microtask queue, because Ember
-// schedules them inside backburner.
+// This is a cancelable way to requestAnimationFrame that's designed
+// to resolve via the microtask queue (like real spec-compliant
+// Promises are supposed to). This lets us use rAF within
+// ember-concurrency correctly. RSVP promises within Ember do not
+// resolve on the microtask queue, because Ember schedules them inside
+// backburner.
 export function rAF() {
-
   if (typeof requestAnimationFrame === 'undefined') {
-    // If we don't have a real requestAnimationFrame, we just try to
-    // run at 60hz
-    let timer;
-    let promise = new Promise(resolve => {
-      timer = setTimeout(resolve, 17);  // 17ms is 60hz
-    });
-    promise.__ec_cancel__ = () => {
-      clearTimeout(timer);
-    };
-    return promise;
+    throw new Error("missing requestAnimationFrame");
   } else {
     let frame;
     let promise = new Promise(resolve => {
-      frame = requestAnimationFrame(resolve);
+      frame = requestAnimationFrame(function(clock) {
+        currentFrameClock = clock;
+        resolve();
+      });
     });
     promise.__ec_cancel__ = () => {
       cancelAnimationFrame(frame);
@@ -40,6 +33,12 @@ export function rAF() {
     return promise;
   }
 }
+
+// rAF guarantees that callbacks within the same frame will see the
+// same clock. We stash it here so that arbitrary code can easily ask
+// "did I already do that this frame?" without needing to thread the
+// clock values around.
+export let currentFrameClock = null;
 
 export function microwait() {
   return new Promise(resolve => resolve());
