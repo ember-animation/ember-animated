@@ -26,16 +26,19 @@ export default Ember.Component.extend({
     let items = this.get('items') || [];
     this._prevItems = items.slice();
 
-    if (this._currentComponents.length > 0) {
+    let firstTime = this._firstTime;
+    this._firstTime = false;
+
+    if (!firstTime) {
       this._notifyContainer('lock');
     }
 
     let currentSprites = flatMap(this._currentComponents, component => component.sprites());
     currentSprites.forEach(sprite => sprite.measureInitialBounds());
     currentSprites.forEach(sprite => sprite.lock());
-    this.get('animate').perform(prevItems, items, currentSprites);
+    this.get('animate').perform(prevItems, items, currentSprites, firstTime);
   },
-  animate: task(function * (prevItems, items, currentSprites) {
+  animate: task(function * (prevItems, items, currentSprites, firstTime) {
     yield afterRender();
 
     let [keptSprites, removedSprites] = partition(
@@ -72,8 +75,7 @@ export default Ember.Component.extend({
 
     console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}`);
 
-    if (this._firstTime) {
-      this._firstTime = false;
+    if (firstTime) {
       insertedSprites.forEach(sprite => {
         sprite.reveal();
       });
