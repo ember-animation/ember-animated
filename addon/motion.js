@@ -11,13 +11,6 @@ export default Ember.Object.extend({
 
   // --- Begin Hooks you should Implement ---
 
-  // In the measure hook, you can read from the DOM but should not
-  // modify it. This allows all concurrent Motions to read before
-  // writing without thrashing. Note that you don't need to do anything
-  // here to measure your own element's position -- you already have
-  // initial and final geometry on `this`.
-  measure() {},
-
   // If any other motions exist for this element, the first hook
   // called will be `interrupt`. Here you can inspect the other
   // running motions if you want and save any state on `this` in order
@@ -67,8 +60,6 @@ export default Ember.Object.extend({
   },
 
   _run: task(function * (){
-    this.measure();
-    yield rAF();
     try {
       let others = this._motionList.filter(m => m !== this);
       if (others.length > 0) {
