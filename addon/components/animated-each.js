@@ -84,7 +84,7 @@ export default Ember.Component.extend({
           top: sprite.finalBounds.top
         };
         sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
-        let move = Move.create(sprite, { duration: 500 });
+        let move = Move.create(sprite);
         tasks.push(move.run());
       });
     }
