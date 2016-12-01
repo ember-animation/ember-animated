@@ -27,7 +27,7 @@ export default Ember.Object.extend({
   //
   // May return a Promise if you want to block. Your animate hook
   // will not run until it resolves.
-  interrupting: task(function * (motions) {
+  interrupt: task(function * (motions) {
     // Default implementation stops all other motions on this elemnt.
     motions.forEach(m => m.cancel());
     yield null;
@@ -68,7 +68,7 @@ export default Ember.Object.extend({
     try {
       let others = this._motionList.filter(m => m !== this);
       if (others.length > 0) {
-        yield this.get('interrupting').perform(others);
+        yield this.get('interrupt').perform(others);
       }
       yield this.get('animate').perform();
     } finally {
