@@ -21,6 +21,35 @@ export default class Tween {
   get done() {
     return this.curve.done;
   }
+  plus(otherTween) {
+    return new DerivedTween(
+      [this, otherTween],
+      (a,b) => a.currentValue + b.currentValue
+    );
+  }
+}
+
+class DerivedTween {
+  constructor(inputs, combinator) {
+    this.inputs = inputs.map(t => {
+      if (t.done) {
+        // If one of our inputs has already finished, we can just keep
+        // its final value around and drop the reference to the actual
+        // Tween. This prevents long chains of derived tweens from
+        // growing without bound during continuous animations.
+        return { currentValue: t.currentValue };
+      } else {
+        return t;
+      }
+    });
+    this.combinator = combinator;
+  }
+  get currentValue() {
+    return this.combinator(...this.inputs);
+  }
+  get done() {
+    return !this.inputs.find(t => !t.done);
+  }
 }
 
 class MotionCurve {
@@ -51,8 +80,8 @@ class MotionCurve {
     if (this._lastTick !== currentFrameClock) {
       this._lastTick = currentFrameClock;
       this._runTime = (new Date()).getTime() - this.startTime;
-      this._timeProgress = this._runTime / this.duration;
-      this._spaceProgress = this.ease(this._timeProgress);
+      this._timeProgress = Math.min(this._runTime / this.duration, 1);
+      this._spaceProgress = Math.min(this.ease(this._timeProgress), 1);
       this._done = this._timeProgress >= 1;
     }
   }
