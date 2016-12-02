@@ -1,23 +1,22 @@
 import Motion from '../motion';
 import Tween from '../tween';
-import { task } from 'ember-concurrency';
 import { rAF } from '../concurrency-helpers';
 
-export default Motion.extend({
-  init() {
-    this._super(...arguments);
+export default class Move extends Motion {
+  constructor(sprite, opts) {
+    super(sprite, opts);
     this.prior = null;
     this.xTween = null;
     this.yTween = null;
-  },
+  }
 
   interrupted(motions) {
     // We only need to track the prior Move we are replacing here,
     // because it will have done the same for any earlier ones.
     this.prior = motions.find(m => m instanceof this.constructor);
-  },
+  }
 
-  animate: task(function *() {
+  * animate() {
     let duration = this.opts.duration == null ? 2000 : this.opts.duration;
     let sprite = this.sprite;
 
@@ -56,5 +55,5 @@ export default Motion.extend({
         this.yTween.currentValue - sprite.transform.ty
       );
     }
-  })
-});
+  }
+}

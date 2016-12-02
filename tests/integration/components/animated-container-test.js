@@ -3,7 +3,6 @@ import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 import { equalBounds } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
-import { task } from 'ember-concurrency';
 import {
   macroWait,
   waitForAnimations
@@ -82,11 +81,11 @@ test('measures at the appropriate time', function(assert) {
   let insideBounds;
   let motionSawHeight;
 
-  this.set('TestMotion', Motion.extend({
-    animate: task(function * () {
+  this.set('TestMotion', class extends Motion {
+    * animate() {
       motionSawHeight = this.sprite.finalBounds.height;
-    })
-  }));
+    }
+  });
 
   this.render(hbs`
     {{#animated-container motion=TestMotion as |container|}}
@@ -123,13 +122,13 @@ test('measures at the appropriate time', function(assert) {
 test('unlocks only after motion is done', function(assert) {
   let finishMotion;
 
-  this.set('TestMotion', Motion.extend({
-    animate: task(function * () {
+  this.set('TestMotion', class extends Motion {
+    * animate() {
       yield new Ember.RSVP.Promise(resolve => {
         finishMotion = resolve;
       });
-    })
-  }));
+    }
+  });
 
   this.render(hbs`
     {{#animated-container motion=TestMotion as |container|}}
@@ -165,10 +164,9 @@ test('unlocks only after motion is done', function(assert) {
 });
 
 test('unlocks only after unlock message is received', function(assert) {
-  this.set('TestMotion', Motion.extend({
-    animate: task(function * () {
-    })
-  }));
+  this.set('TestMotion', class extends Motion {
+    * animate() {}
+  });
 
   this.render(hbs`
     {{#animated-container motion=TestMotion as |container|}}

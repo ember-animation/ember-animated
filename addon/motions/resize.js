@@ -1,21 +1,20 @@
 import Motion from '../motion';
 import Tween from '../tween';
-import { task } from 'ember-concurrency';
 import { rAF } from '../concurrency-helpers';
 
-export default Motion.extend({
-  init() {
-    this._super(...arguments);
+export default class Resize extends Motion {
+  constructor(sprite, opts) {
+    super(sprite, opts);
     this.prior = null;
     this.widthTween = null;
     this.heightTween = null;
-  },
+  }
 
   interrupted(motions) {
     this.prior = motions.find(m => m instanceof this.constructor);
-  },
+  }
 
-  animate: task(function *() {
+  * animate() {
     let sprite = this.sprite;
     let element = sprite.element;
     let duration = this.opts.duration;
@@ -44,5 +43,5 @@ export default Motion.extend({
       element.style.width = this.widthTween.currentValue + 'px';
       element.style.height = this.heightTween.currentValue + 'px';
     }
-  })
-});
+  }
+}

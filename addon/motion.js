@@ -1,14 +1,18 @@
-import { task } from 'ember-concurrency';
 import { rAF } from './concurrency-helpers';
-import Ember from 'ember';
 
 const motions = new WeakMap();
 
-export default Ember.Object.extend({
-  init() {
-    this._super(...arguments);
+export default class Motion {
+
+  static create(sprite, opts={}) {
+    return new this(sprite, opts);
+  }
+
+  constructor(sprite, opts) {
+    this.sprite = sprite;
+    this.opts = opts;
     this._setupMotionList();
-  },
+  }
 
   // --- Begin Hooks you should Implement ---
 
@@ -17,19 +21,29 @@ export default Ember.Object.extend({
   // `this` in order to influence your own animation. This hook is
   // skipped if there were no other motions.
   interrupted(/* motions */) {
-  },
+  }
 
-  // Start your animation here. It should be a cancelable task if you
-  // want to be able to interrupt it.
-  animate: task(function * () {
-  }),
+  // Implement your animation here. It must be a generator function
+  // that yields promises (just like an ember-concurrency task, except
+  // you don't need to wrap in `task()` here and you therefore don't
+  // get the extra features provided by EC tasks.
+  * animate() {
+  }
 
 
   // --- Begin public methods you may call ---
 
-  run() {
-    return this.get('_run').perform();
-  },
+  * run() {
+    try {
+      let others = this._motionList.filter(m => m !== this);
+      if (others.length > 0) {
+        this.interrupted(others);
+      }
+      yield * this.animate();
+    } finally {
+      rAF().then(() => this._clearMotionList());
+    }
+  }
 
   // --- Begin private methods ---
 
@@ -41,7 +55,7 @@ export default Ember.Object.extend({
     }
     motionList.unshift(this);
     this._motionList = motionList;
-  },
+  }
 
   _clearMotionList() {
     let index = this._motionList.indexOf(this);
@@ -49,21 +63,6 @@ export default Ember.Object.extend({
     if (this._motionList.length === 0) {
       motions.delete(this.sprite.element);
     }
-  },
-
-  _run: task(function * (){
-    try {
-      let others = this._motionList.filter(m => m !== this);
-      if (others.length > 0) {
-        this.interrupted(others);
-      }
-      yield this.get('animate').perform();
-    } finally {
-      rAF().then(() => this._clearMotionList());
-    }
-  })
-}).reopenClass({
-  create(sprite, opts={}) {
-    return this._super({ sprite, opts });
   }
-});
+
+}
