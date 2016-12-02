@@ -312,7 +312,7 @@ test("tracks owning component", function(assert) {
   assert.equal(m.component, c);
 });
 
-skip("polyfills WeakMap as needed", function(assert) {
+skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
   assert.ok(false);
 });
 

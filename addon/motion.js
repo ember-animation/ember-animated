@@ -4,11 +4,7 @@ const motions = new WeakMap();
 
 export default class Motion {
 
-  static create(sprite, opts={}) {
-    return new this(sprite, opts);
-  }
-
-  constructor(sprite, opts) {
+  constructor(sprite, opts={}) {
     this.sprite = sprite;
     this.opts = opts;
     this._setupMotionList();
@@ -27,19 +23,19 @@ export default class Motion {
   // that yields promises (just like an ember-concurrency task, except
   // you don't need to wrap in `task()` here and you therefore don't
   // get the extra features provided by EC tasks.
-  * animate() {
+  async animate() {
   }
 
 
   // --- Begin public methods you may call ---
 
-  * run() {
+  async run() {
     try {
       let others = this._motionList.filter(m => m !== this);
       if (others.length > 0) {
         this.interrupted(others);
       }
-      yield * this.animate();
+      await this.animate();
     } finally {
       rAF().then(() => this._clearMotionList());
     }

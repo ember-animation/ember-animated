@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from '../templates/components/animated-each';
-import { task } from 'ember-concurrency';
+import { task, allSettled } from 'ember-concurrency';
 import { afterRender } from '../concurrency-helpers';
 import Move from '../motions/move';
 
@@ -59,7 +59,7 @@ export default Ember.Component.extend({
     insertedSprites.forEach(sprite => sprite.measureFinalBounds());
     keptSprites.forEach(sprite => sprite.measureFinalBounds());
     this._notifyContainer('measure');
-    let motionGenerators = [];
+    let motionPromises = [];
 
     // Update our permanent state so that if we're interrupted after
     // this point we are already consistent. AFAIK, we can't be
@@ -79,7 +79,7 @@ export default Ember.Component.extend({
     // [inserted, removed, replaced] = matchReplacements(prevItems, items, inserted, kept, removed);
     // [inserted, removed, replaced] = yield this.get('motionService.farMatch').perform(inserted, removed, replaced);
 
-    console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}`);
+    // console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}`);
 
     if (firstTime) {
       insertedSprites.forEach(sprite => {
@@ -92,27 +92,27 @@ export default Ember.Component.extend({
           top: sprite.finalBounds.top
         };
         sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
-        let move = Move.create(sprite);
-        motionGenerators.push(move.run());
+        let move = new Move(sprite);
+        motionPromises.push(move.run());
       });
     }
 
     keptSprites.forEach(sprite => {
-      let move = Move.create(sprite);
-      motionGenerators.push(move.run());
+      let move = new Move(sprite);
+      motionPromises.push(move.run());
     });
     removedSprites.forEach(sprite => {
       sprite.finalBounds = {
         left: sprite.initialBounds.left + 1000,
         top: sprite.initialBounds.top
       };
-      let move = Move.create(sprite);
+      let move = new Move(sprite);
       // Removal motions have different lifetimes than the kept or
       // inserted motions because an interrupting animation
       this.get('runThenRemove').perform(move, sprite);
     });
 
-    let results = yield allSettled(motionGenerators);
+    let results = yield allSettled(motionPromises);
 
     results.forEach(result => {
       if (result.state === 'rejected' && result.reason.name !== 'TaskCancelation') {

@@ -82,7 +82,7 @@ test('measures at the appropriate time', function(assert) {
   let motionSawHeight;
 
   this.set('TestMotion', class extends Motion {
-    * animate() {
+    async animate() {
       motionSawHeight = this.sprite.finalBounds.height;
     }
   });
@@ -123,8 +123,8 @@ test('unlocks only after motion is done', function(assert) {
   let finishMotion;
 
   this.set('TestMotion', class extends Motion {
-    * animate() {
-      yield new Ember.RSVP.Promise(resolve => {
+    async animate() {
+      return new Ember.RSVP.Promise(resolve => {
         finishMotion = resolve;
       });
     }
@@ -165,7 +165,7 @@ test('unlocks only after motion is done', function(assert) {
 
 test('unlocks only after unlock message is received', function(assert) {
   this.set('TestMotion', class extends Motion {
-    * animate() {}
+    async animate() {}
   });
 
   this.render(hbs`

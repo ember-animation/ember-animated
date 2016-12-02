@@ -16,7 +16,7 @@ export default class Move extends Motion {
     this.prior = motions.find(m => m instanceof this.constructor);
   }
 
-  * animate() {
+  async animate() {
     let duration = this.opts.duration == null ? 2000 : this.opts.duration;
     let sprite = this.sprite;
 
@@ -49,7 +49,7 @@ export default class Move extends Motion {
 
     sprite.reveal();
     while (!this.xTween.done) {
-      yield rAF();
+      await rAF();
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
         this.yTween.currentValue - sprite.transform.ty
