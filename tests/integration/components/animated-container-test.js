@@ -3,7 +3,7 @@ import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 import { equalBounds } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 
 
 moduleForComponent('animated-container', 'Integration | Component | animated container', {
@@ -11,6 +11,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
   beforeEach(assert) {
     assert.equalBounds = equalBounds;
     let here = this;
+    this.inject.service('-ea-motion', { as: 'motionService' });
     this.register('component:grab-container', Ember.Component.extend({
       didReceiveAttrs() {
         here.set('grabbed', this.get('cont'));
@@ -74,13 +75,12 @@ test('locks size', function(assert) {
 });
 
 test('measures at the appropriate time', function(assert) {
-  let done = assert.async();
   let insideBounds;
+  let motionSawHeight;
 
   this.set('TestMotion', Motion.extend({
     animate: task(function * () {
-      assert.equal(this.sprite.finalBounds.height, insideBounds.height);
-      yield done();
+      motionSawHeight = this.sprite.finalBounds.height;
     })
   }));
 
@@ -98,7 +98,10 @@ test('measures at the appropriate time', function(assert) {
 
   this.get('grabbed.lock')();
 
-  Ember.run.later(() => {
+  // Deliberately waiting a bit to make sure the container doesn't
+  // jump the gun and measure too soon.
+  return timeout(10).then(() => {
+
     this.$('.inside').css({
       height: 600
     });
@@ -106,11 +109,16 @@ test('measures at the appropriate time', function(assert) {
     insideBounds = bounds(this.$('.inside'));
 
     this.get('grabbed.measure')();
+    this.get('grabbed.unlock')();
+    return this.get('motionService.waitUntilIdle').perform();
+  }).then(() => {
+    assert.equal(motionSawHeight, insideBounds.height);
   });
-
 });
 
-skip('unlocks only after motion is done');
+skip('unlocks only after motion is done', function() {
+
+});
 
 skip('unlocks only after unlock message is received');
 

@@ -1,4 +1,4 @@
-import { moduleForComponent, skip } from 'ember-qunit';
+import { moduleForComponent, test, skip } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import QUnit from 'qunit';
 import $ from 'jquery';
@@ -18,7 +18,7 @@ moduleForComponent('animated-each', 'Integration | Component | animated each', {
   }
 });
 
-skip('it renders', function(assert) {
+test('it renders', function(assert) {
   this.set('items', ['a', 'b', 'c']);
   this.render(hbs`
     {{#animated-each items as |item|}}

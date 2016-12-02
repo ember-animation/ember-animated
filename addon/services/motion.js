@@ -36,6 +36,20 @@ export default Ember.Service.extend({
     this.propertyDidChange('isAnimating');
   }).observes('isAnimatingSync'),
 
+  waitUntilIdle: task(function * () {
+    // we are idle if we experience two frames in a row with nothing
+    // animating.
+    while (true) {
+      yield rAF();
+      if (!this.get('isAnimatingSync')) {
+        yield rAF();
+        if (!this.get('isAnimatingSync')) {
+          return;
+        }
+      }
+    }
+  }),
+
   farMatch: task(function * (inserted, removed, replaced) {
     let mine = { inserted, removed, replaced };
     this._rendezvous.push(mine);
