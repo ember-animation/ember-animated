@@ -4,7 +4,10 @@ import Ember from 'ember';
 import { equalBounds } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
 import { task } from 'ember-concurrency';
-import { macroWait } from 'ember-animated/concurrency-helpers';
+import {
+  macroWait,
+  waitForAnimations
+} from 'ember-animated/test-helpers';
 
 
 moduleForComponent('animated-container', 'Integration | Component | animated container', {
@@ -12,7 +15,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
   beforeEach(assert) {
     assert.equalBounds = equalBounds;
     let here = this;
-    this.inject.service('-ea-motion', { as: 'motionService' });
+    this.waitForAnimations = waitForAnimations;
     this.register('component:grab-container', Ember.Component.extend({
       didReceiveAttrs() {
         here.set('grabbed', this.get('cont'));
@@ -111,7 +114,7 @@ test('measures at the appropriate time', function(assert) {
 
     this.get('grabbed.measure')();
     this.get('grabbed.unlock')();
-    return this.get('motionService.waitUntilIdle').perform();
+    return this.waitForAnimations();
   }).then(() => {
     assert.equal(motionSawHeight, insideBounds.height);
   });
@@ -155,7 +158,7 @@ test('unlocks only after motion is done', function(assert) {
   return macroWait().then(() => {
     assert.equal(this.$('.animated-container').height(), beforeHeight, "still at previous height");
     finishMotion();
-    return this.get('motionService.waitUntilIdle').perform();
+    return this.waitForAnimations();
   }).then(() => {
     assert.equal(this.$('.animated-container').height(), afterHeight, "now at final height");
   });
