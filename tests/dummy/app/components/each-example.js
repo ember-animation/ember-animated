@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { task, taskGroup, timeout } from 'ember-concurrency';
 
 export default Ember.Component.extend({
   currentSort: numeric,
@@ -14,6 +15,20 @@ export default Ember.Component.extend({
       return v;
     }
   }),
+
+  chaos: taskGroup().restartable(),
+
+  startChaos: task(function * () {
+    while (true) {
+      yield timeout(1000);
+      this.send('addItem');
+      yield timeout(1000);
+      this.send('removeItem', this.get('items')[Math.floor(Math.random()*this.get('items.length'))]);
+    }
+  }).group('chaos'),
+
+  stopChaos: task(function * () {}).group('chaos'),
+
   actions: {
     addItem() {
       let items = this.get('items');

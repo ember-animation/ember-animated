@@ -2,6 +2,11 @@
   <button {{action "addItem"}}>Add Item</button>
   <button {{action "shuffle"}}>Shuffle</button>
   <button {{action "sortNumeric"}}>Sort</button>
+  {{#if chaos.isIdle}}
+    <button {{action (perform startChaos)}}>Auto</button>
+  {{else}}
+    <button {{action (perform stopChaos)}}>Stop</button>
+  {{/if}}
 
   {{#animated-container as |c|}}
     {{#animated-each items notify=c key="id" rules=rules as |item|}}
