@@ -8,12 +8,18 @@ import Sprite from '../sprite';
 export default Ember.Component.extend({
   layout,
   classNames: ['animated-container'],
+  motionService: Ember.inject.service('-ea-motion'),
 
   init() {
     this._super();
     this._signals = null;
     this._signalPromise = null;
     this._signalResolve= null;
+    this.get('motionService').register(this);
+  },
+
+  willDestroyElement() {
+    this.get('motionService').unregister(this);
   },
 
   isAnimating: Ember.computed.alias('animate.isRunning'),
