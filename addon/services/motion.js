@@ -23,9 +23,10 @@ export default Ember.Service.extend({
     return this.get('isAnimatingSync');
   }),
 
-  // Synchronously updated version of isAnimating.
+  // Synchronously updated version of isAnimating. If you try to
+  // depend on this in a template you will get double-render errors
+  // (because the act of rendering can cause animations to begin).
   isAnimatingSync: Ember.computed('_animators.@each.isAnimating', function() {
-    console.log('computed isAnimatingSync');
     return this.get('_animators').any(animator => animator.get('isAnimating'));
   }),
 
