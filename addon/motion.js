@@ -27,16 +27,8 @@ export default Ember.Object.extend({
 
   // --- Begin public methods you may call ---
 
-  cancel() {
-    this.get('_run').cancelAll();
-  },
-
   run() {
     return this.get('_run').perform();
-  },
-
-  join() {
-    return this.get('_run.last');
   },
 
   // --- Begin private methods ---
