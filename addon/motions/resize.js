@@ -11,10 +11,9 @@ export default Motion.extend({
     this.heightTween = null;
   },
 
-  interrupt: task(function * (motions) {
+  interrupted(motions) {
     this.prior = motions.find(m => m instanceof this.constructor);
-    motions.forEach(motion => motion.cancel());
-  }),
+  },
 
   animate: task(function *() {
     let sprite = this.sprite;

@@ -55,10 +55,10 @@ export default Ember.Component.extend({
     this._notifyContainer('measure');
     let tasks = [];
 
-    // Update our permanent state here before we actualy animate. This
-    // leaves us consistent in case we re-enter before the animation
-    // finishes (we allow this task to be re-entrant, because some
-    // Motions may choose not to interrupt already running Motions).
+    // Update our permanent state so that if we're interrupted after
+    // this point we are already consistent. AFAIK, we can't be
+    // interrupted before this point because Ember won't fire
+    // `didReceiveAttrs` multiple times before `afterRender` happens.
     this._updateComponentLists();
 
     // Then lock everything down
@@ -101,7 +101,9 @@ export default Ember.Component.extend({
         top: sprite.initialBounds.top
       };
       let move = Move.create(sprite);
-      tasks.push(move.run());
+      // Removal motions have different lifetimes than the kept or
+      // inserted motions because an interrupting animation
+      this.get('_runThenRemove').perform(move, sprite);
     });
 
     let results = yield allSettled(tasks);
@@ -114,15 +116,17 @@ export default Ember.Component.extend({
       }
     });
 
-    // removed sprites couldn't have been picked up by subsequent
-    // concurrent transitions, so we always clean up our own.
-    removedSprites.forEach(sprite => sprite.remove());
+    keptSprites.forEach(sprite => sprite.unlock());
+    insertedSprites.forEach(sprite => sprite.unlock());
+    this._notifyContainer('unlock');
 
-    // Last one out close the door on your way out.
-    if (this.get('animate.concurrency') === 1) {
-      keptSprites.forEach(sprite => sprite.unlock());
-      insertedSprites.forEach(sprite => sprite.unlock());
-      this._notifyContainer('unlock');
+  }).restartable(),
+
+  _runThenRemove: task(function * (motion, sprite) {
+    try {
+      yield motion.run();
+    } finally {
+      sprite.remove();
     }
   }),
 

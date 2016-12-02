@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import Ember from 'ember';
 import {
   ownTransform,
   cumulativeTransform,
@@ -60,13 +61,12 @@ export default class Sprite {
     $(this.element).css('transform', t.serialize());
   }
   unlock() {
-    if (inFlight.get(this.element) === this) {
-      inFlight.delete(this.element);
-      if (this._styleCache) {
-        $(this.element).attr('style', this._styleCache);
-      } else {
-        this.element.attributes.removeNamedItem('style');
-      }
+    Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", inFlight.get(this.element) === this, { id: "ember-animated-sprite-unlock" });
+    inFlight.delete(this.element);
+    if (this._styleCache) {
+      $(this.element).attr('style', this._styleCache);
+    } else {
+      this.element.attributes.removeNamedItem('style');
     }
   }
   reveal() {

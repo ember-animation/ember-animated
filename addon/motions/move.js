@@ -11,12 +11,11 @@ export default Motion.extend({
     this.yTween = null;
   },
 
-  interrupt: task(function * (motions) {
+  interrupted(motions) {
     // We only need to track the prior Move we are replacing here,
     // because it will have done the same for any earlier ones.
     this.prior = motions.find(m => m instanceof this.constructor);
-    motions.forEach(motion => motion.cancel());
-  }),
+  },
 
   animate: task(function *() {
     let duration = this.opts.duration == null ? 2000 : this.opts.duration;

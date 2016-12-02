@@ -12,19 +12,12 @@ export default Ember.Object.extend({
 
   // --- Begin Hooks you should Implement ---
 
-  // If any other motions exist for this element, the first hook
-  // called will be `interrupt`. Here you can inspect the other
-  // running motions if you want and save any state on `this` in order
-  // to influence your own animation, and you can call `cancel` on the
-  // other animations, or you can call `cancel` on on yourself, in
-  // case you discover the running motions are just fine.
-  //
-  // May return a Promise if you want to block. Your animate hook
-  // will not run until it resolves.
-  interrupt: task(function * (motions) {
-    // Default implementation stops all other motions on this elemnt.
-    motions.forEach(m => m.cancel());
-  }),
+  // Here you can inspect the other motions on this element that have
+  // been interrupted during this frame. You should save any state on
+  // `this` in order to influence your own animation. This hook is
+  // skipped if there were no other motions.
+  interrupted(/* motions */) {
+  },
 
   // Start your animation here. It should be a cancelable task if you
   // want to be able to interrupt it.
@@ -70,7 +63,7 @@ export default Ember.Object.extend({
     try {
       let others = this._motionList.filter(m => m !== this);
       if (others.length > 0) {
-        yield this.get('interrupt').perform(others);
+        this.interrupted(others);
       }
       yield this.get('animate').perform();
     } finally {
