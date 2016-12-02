@@ -3,7 +3,8 @@ import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 import { equalBounds } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
+import { macroWait } from 'ember-animated/concurrency-helpers';
 
 
 moduleForComponent('animated-container', 'Integration | Component | animated container', {
@@ -100,7 +101,7 @@ test('measures at the appropriate time', function(assert) {
 
   // Deliberately waiting a bit to make sure the container doesn't
   // jump the gun and measure too soon.
-  return timeout(10).then(() => {
+  return macroWait().then(() => {
 
     this.$('.inside').css({
       height: 600
@@ -116,11 +117,87 @@ test('measures at the appropriate time', function(assert) {
   });
 });
 
-skip('unlocks only after motion is done', function() {
+test('unlocks only after motion is done', function(assert) {
+  let finishMotion;
 
+  this.set('TestMotion', Motion.extend({
+    animate: task(function * () {
+      yield new Ember.RSVP.Promise(resolve => {
+        finishMotion = resolve;
+      });
+    })
+  }));
+
+  this.render(hbs`
+    {{#animated-container motion=TestMotion as |container|}}
+      <div class="inside">
+        {{grab-container cont=container}}
+      </div>
+    {{/animated-container}}
+  `);
+
+  this.$('.inside').css({
+    height: 200
+  });
+
+  let beforeHeight = this.$('.inside').height();
+
+  this.get('grabbed.lock')();
+
+  this.$('.inside').css({
+    height: 400
+  });
+
+  let afterHeight = this.$('.inside').height();
+
+  this.get('grabbed.measure')();
+  this.get('grabbed.unlock')();
+  return macroWait().then(() => {
+    assert.equal(this.$('.animated-container').height(), beforeHeight, "still at previous height");
+    finishMotion();
+    return this.get('motionService.waitUntilIdle').perform();
+  }).then(() => {
+    assert.equal(this.$('.animated-container').height(), afterHeight, "now at final height");
+  });
 });
 
-skip('unlocks only after unlock message is received');
+test('unlocks only after unlock message is received', function(assert) {
+  this.set('TestMotion', Motion.extend({
+    animate: task(function * () {
+    })
+  }));
+
+  this.render(hbs`
+    {{#animated-container motion=TestMotion as |container|}}
+      <div class="inside">
+        {{grab-container cont=container}}
+      </div>
+    {{/animated-container}}
+  `);
+
+  this.$('.inside').css({
+    height: 200
+  });
+
+  let beforeHeight = this.$('.inside').height();
+
+  this.get('grabbed.lock')();
+
+  this.$('.inside').css({
+    height: 400
+  });
+
+  let afterHeight = this.$('.inside').height();
+
+  this.get('grabbed.measure')();
+  return macroWait().then(() => {
+    assert.equal(this.$('.animated-container').height(), beforeHeight, "still at previous height");
+    this.get('grabbed.unlock')();
+    return macroWait();
+  }).then(() => {
+    assert.equal(this.$('.animated-container').height(), afterHeight, "now at final height");
+  });
+});
 
 
 skip("Accounts for margin collapse between self and child");
