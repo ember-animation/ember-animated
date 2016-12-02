@@ -1,4 +1,5 @@
 import { task } from 'ember-concurrency';
+import { rAF } from './concurrency-helpers';
 import Ember from 'ember';
 
 const motions = new WeakMap();
@@ -57,6 +58,14 @@ export default Ember.Object.extend({
     this._motionList = motionList;
   },
 
+  _clearMotionList() {
+    let index = this._motionList.indexOf(this);
+    this._motionList.splice(index, 1);
+    if (this._motionList.length === 0) {
+      motions.delete(this.sprite.element);
+    }
+  },
+
   _run: task(function * (){
     try {
       let others = this._motionList.filter(m => m !== this);
@@ -65,11 +74,7 @@ export default Ember.Object.extend({
       }
       yield this.get('animate').perform();
     } finally {
-      let index = this._motionList.indexOf(this);
-      this._motionList.splice(index, 1);
-      if (this._motionList.length === 0) {
-        motions.delete(this.sprite.element);
-      }
+      rAF().then(() => this._clearMotionList());
     }
   })
 }).reopenClass({
