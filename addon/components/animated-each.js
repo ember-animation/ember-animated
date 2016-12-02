@@ -16,11 +16,17 @@ export default Ember.Component.extend({
     this._leavingComponents = [];
     this._prevItems = [];
     this._firstTime = true;
+    this.get('motionService').register(this);
   },
+
+  isAnimating: Ember.computed.or('animate.isRunning', 'runThenRemove.isRunning'),
+
   willDestroyElement() {
     let removed = flatMap(this._currentComponents, component => component.sprites());
     this.get('motionService.farMatch').perform([], removed, []);
+    this.get('motionService').unregister(this);
   },
+
   didReceiveAttrs() {
     let prevItems = this._prevItems;
     let items = this.get('items') || [];
@@ -103,7 +109,7 @@ export default Ember.Component.extend({
       let move = Move.create(sprite);
       // Removal motions have different lifetimes than the kept or
       // inserted motions because an interrupting animation
-      this.get('_runThenRemove').perform(move, sprite);
+      this.get('runThenRemove').perform(move, sprite);
     });
 
     let results = yield allSettled(tasks);
@@ -122,7 +128,7 @@ export default Ember.Component.extend({
 
   }).restartable(),
 
-  _runThenRemove: task(function * (motion, sprite) {
+  runThenRemove: task(function * (motion, sprite) {
     try {
       yield motion.run();
     } finally {

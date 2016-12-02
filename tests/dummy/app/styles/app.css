@@ -1,3 +1,13 @@
+.motion-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+}
+
+.motion-indicator.active {
+    background-color: green;
+}
+
 .scenario-each > .animated-container {
     overflow: hidden;
     transform: translateZ(0);

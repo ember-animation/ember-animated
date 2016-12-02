@@ -16,6 +16,8 @@ export default Ember.Component.extend({
     this._signalResolve= null;
   },
 
+  isAnimating: Ember.computed.alias('animate.isRunning'),
+
   animate: task(function * () {
     yield* this.waitForSignal('measured');
     yield (this.motion || Resize).create(this.sprite).run();
