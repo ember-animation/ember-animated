@@ -1,6 +1,6 @@
 import RSVP from 'rsvp';
 import Ember from 'ember';
-
+import { makeCancelable } from './cancelation';
 
 export let Promise;
 if (window.Promise) {
@@ -27,12 +27,11 @@ export function rAF() {
         resolve();
       });
     });
-    promise.__ec_cancel__ = () => {
-      cancelAnimationFrame(frame);
-    };
+    makeCancelable(promise, () => cancelAnimationFrame(frame));
     return promise;
   }
 }
+
 
 // rAF guarantees that callbacks within the same frame will see the
 // same clock. We stash it here so that arbitrary code can easily ask
