@@ -19,20 +19,20 @@ module("Unit | Motion", {
 });
 
 test('Can be canceled within ember-concurrency tasks', function(assert) {
-  const TestMotion = Motion.extend({
-    animate: task(function * () {
+  class TestMotion extends Motion {
+    async animate() {
       this.frames = 0;
       while (true) {
-        yield rAF();
+        await rAF();
         this.frames++;
       }
-    })
-  });
+    }
+  }
 
   let HostObject = Ember.Object.extend({
     animate: task(function * () {
       let sprite = new Sprite($('#qunit-fixture > .target')[0], this);
-      this.motion = TestMotion.create(sprite);
+      this.motion = new TestMotion(sprite);
       yield this.motion.run();
     })
   });
