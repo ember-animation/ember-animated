@@ -100,6 +100,14 @@ module.exports = {
     if (app.env === 'test') {
       this._shouldIncludeTestHelpers = true;
     }
+
+    // This is here so I can experiment with changes in regenerator
+    // runtime. It won't work reliably in cases where apps are using
+    // babel's includePolyfill, so we need a strategy for that if we
+    // end up shipping based on a forked regenerator.
+    this._findHost().__ember_maybe_import_regenerator_included = true;
+    this.import('vendor/regenerator-runtime.js');
+
     this.import('vendor/ember-animated.css');
   }
 };
