@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import layout from '../templates/components/animated-each';
-import { task, allSettled } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { afterRender } from '../concurrency-helpers';
 import Move from '../motions/move';
+import parallel from '../parallel';
 
 export default Ember.Component.extend({
   layout,
@@ -59,7 +60,7 @@ export default Ember.Component.extend({
     insertedSprites.forEach(sprite => sprite.measureFinalBounds());
     keptSprites.forEach(sprite => sprite.measureFinalBounds());
     this._notifyContainer('measure');
-    let motionPromises = [];
+    let motionGenerators = [];
 
     // Update our permanent state so that if we're interrupted after
     // this point we are already consistent. AFAIK, we can't be
@@ -93,13 +94,13 @@ export default Ember.Component.extend({
         };
         sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
         let move = new Move(sprite);
-        motionPromises.push(move.run());
+        motionGenerators.push(move.run());
       });
     }
 
     keptSprites.forEach(sprite => {
       let move = new Move(sprite);
-      motionPromises.push(move.run());
+      motionGenerators.push(move.run());
     });
     removedSprites.forEach(sprite => {
       sprite.finalBounds = {
@@ -112,15 +113,7 @@ export default Ember.Component.extend({
       this.get('runThenRemove').perform(move, sprite);
     });
 
-    let results = yield allSettled(motionPromises);
-
-    results.forEach(result => {
-      if (result.state === 'rejected' && result.reason.name !== 'TaskCancelation') {
-        setTimeout(function() {
-          throw result.reason;
-        }, 0);
-      }
-    });
+    yield * parallel(motionGenerators, onError);
 
     keptSprites.forEach(sprite => sprite.unlock());
     insertedSprites.forEach(sprite => sprite.unlock());
@@ -183,4 +176,12 @@ function flatMap(list, fn) {
     results.push(fn(list[i]));
   }
   return [].concat(...results);
+}
+
+function onError(reason) {
+  if (reason.name !== 'TaskCancelation') {
+    setTimeout(function() {
+      throw reason;
+    }, 0);
+  }
 }

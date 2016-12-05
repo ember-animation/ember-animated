@@ -31,15 +31,19 @@ function race(waiting) {
         cancels.push(value.__ec_cancel__);
       }
       Promise.resolve(value).then(value => {
+        cancels = null;
         resolve({ state: 'fulfilled', value, index });
       }, reason => {
+        cancels = null;
         resolve({ state: 'rejected', reason, index });
       });
     }
   });
   p.__ec_cancel__ = () => {
-    for (let i = 0; i < cancels.length; i++) {
-      cancels[i]();
+    if (cancels) {
+      for (let i = 0; i < cancels.length; i++) {
+        cancels[i]();
+      }
     }
   };
   return p;
@@ -61,19 +65,17 @@ export default function * parallel(generators, onError) {
     let resolved = yield race(waiting);
     let { index } = resolved;
     let entry = waiting[index];
+    waiting.splice(index, 1);
 
-    if (entry.intermediate.done) {
-      // the generator had already finished, but had returned a
-      // promise to us, which has now resolved.
-      waiting.splice(index, 1);
-    } else {
+    // This condition is needed because we wait for both non-done
+    // generators and done generators that returned a final promise.
+    if (!entry.intermediate.done) {
       wake(entry, resolved, onError);
-      if (entry.intermediate.done && !isPromise(entry.intermediate.value)) {
-        // generator finished and returned a non-promise, so we can
-        // clear it out immediately.
-        waiting.splice(index, 1);
+      if (!entry.intermediate.done || isPromise(entry.intermediate.value)) {
+        // we keep waiting if the generator isn't done *or* if the
+        // final return value was a promise.
+        waiting.push(entry);
       }
     }
   }
-
 }

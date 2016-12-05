@@ -14,7 +14,7 @@ export default class Resize extends Motion {
     this.prior = motions.find(m => m instanceof this.constructor);
   }
 
-  async animate() {
+  * animate() {
     let sprite = this.sprite;
     let element = sprite.element;
     let duration = this.opts.duration;
@@ -39,7 +39,7 @@ export default class Resize extends Motion {
     }
 
     while (!this.widthTween.done) {
-      await rAF();
+      yield rAF();
       element.style.width = this.widthTween.currentValue + 'px';
       element.style.height = this.heightTween.currentValue + 'px';
     }

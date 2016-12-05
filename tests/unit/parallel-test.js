@@ -214,3 +214,98 @@ test('can cancel all waiting promises', function(assert) {
     assert.logEquals(['third canceled', 'fourth canceled']);
   });
 });
+
+['forward', 'reverse'].forEach(order => {
+  test(`handles multiple immediate resolutions (${order})`, function(assert) {
+    let resolvers = [null, null];
+    let expected = ['hello', 'world'];
+
+    function * first() {
+      assert.log(yield new Promise(resolve => {
+        resolvers[0] = () => resolve('hello');
+      }));
+    }
+    function * second() {
+      assert.log(yield new Promise(resolve => {
+        resolvers[1] = () => resolve('world');
+      }));
+    }
+    let g = parallel([first(), second()]);
+    let state = g.next();
+    assert.ok(!state.done, 'not done');
+    if (order === 'reverse') {
+      resolvers = resolvers.reverse();
+      expected = expected.reverse();
+    }
+    resolvers[0]();
+    resolvers[1]();
+    return state.value.then(v => {
+      state = g.next(v);
+      assert.ok(!state.done, 'still not done');
+      return state.value
+    }).then(v => {
+      state = g.next(v);
+      assert.ok(state.done, 'should be done');
+      assert.logEquals(expected);
+    });
+  });
+});
+
+test('fairness', function(assert) {
+  function * first() {
+    yield;
+    assert.log(1);
+    yield;
+    assert.log(2);
+    yield;
+    assert.log(3);
+  }
+  function * second() {
+    yield;
+    assert.log(4);
+    yield;
+    assert.log(5);
+    yield;
+    assert.log(6);
+  }
+  let g = parallel([first(), second()]);
+  let state = g.next();
+  let steps = 0;
+
+  function step() {
+    if (steps++ > 6) {
+      throw new Error("exceeded expected step limit");
+    }
+    return state.value.then(v => {
+      state = g.next(v);
+      if (!state.done) {
+        return step();
+      }
+    });
+  }
+
+  return step().then(() => {
+    assert.logEquals([1, 4, 2, 5, 3, 6]);
+  });
+});
+
+test("wakes child generators within a single microtask wait", function(assert) {
+  let resolve;
+  function * example() {
+    yield new Promise(r => resolve = r);
+    assert.log('awake');
+  }
+  let g = parallel([example()]);
+  let state = g.next();
+  assert.ok(!state.done, 'not done');
+  resolve();
+  Promise.resolve().then(() => {
+    assert.log("microtask boundary");
+  });
+  return state.value.then(v => {
+    state = g.next(v);
+    assert.ok(state.done, 'done');
+    assert.logEquals(['awake', 'microtask boundary']);
+  });
+
+});

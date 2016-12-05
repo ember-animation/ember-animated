@@ -23,19 +23,19 @@ export default class Motion {
   // that yields promises (just like an ember-concurrency task, except
   // you don't need to wrap in `task()` here and you therefore don't
   // get the extra features provided by EC tasks.
-  async animate() {
+  * animate() {
   }
 
 
   // --- Begin public methods you may call ---
 
-  async run() {
+  * run() {
     try {
       let others = this._motionList.filter(m => m !== this);
       if (others.length > 0) {
         this.interrupted(others);
       }
-      await this.animate();
+      yield * this.animate();
     } finally {
       rAF().then(() => this._clearMotionList());
     }
