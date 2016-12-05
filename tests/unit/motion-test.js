@@ -23,7 +23,7 @@ test('Can be canceled within ember-concurrency tasks', function(assert) {
     * animate() {
       this.frames = 0;
       while (true) {
-        yieldn rAF();
+        yield rAF();
         this.frames++;
       }
     }
