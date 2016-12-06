@@ -13,7 +13,7 @@ module.exports = {
       },
       npm: {
         devDependencies: {
-          "ember-getowner-polyfill": "https://github.com/ef4/ember-getowner-polyfill.git#true-polyfill",
+          "ember-getowner-polyfill": "https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665",
           "ember-hash-helper-polyfill": "0.1.1"
         }
       }
@@ -30,7 +30,7 @@ module.exports = {
       },
       npm: {
         devDependencies: {
-          "ember-getowner-polyfill": "https://github.com/ef4/ember-getowner-polyfill.git#true-polyfill",
+          "ember-getowner-polyfill": "https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665",
           "ember-hash-helper-polyfill": "0.1.1"
         }
       }
