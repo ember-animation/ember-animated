@@ -66,7 +66,9 @@ test('locks size', function(assert) {
 
   let original = bounds(this.$('.animated-container'));
 
-  this.get('grabbed.lock')();
+  Ember.run(() => {
+    this.get('grabbed.lock')();
+  });
 
   this.$('.inside').css({
     height: 600
@@ -99,7 +101,9 @@ test('measures at the appropriate time', function(assert) {
     height: 210
   });
 
-  this.get('grabbed.lock')();
+  Ember.run(() => {
+    this.get('grabbed.lock')();
+  });
 
   // Deliberately waiting a bit to make sure the container doesn't
   // jump the gun and measure too soon.
@@ -143,17 +147,20 @@ test('unlocks only after motion is done', function(assert) {
   });
 
   let beforeHeight = this.$('.inside').height();
+  let afterHeight;
 
-  this.get('grabbed.lock')();
+  Ember.run(() => {
+    this.get('grabbed.lock')();
 
-  this.$('.inside').css({
-    height: 400
+    this.$('.inside').css({
+      height: 400
+    });
+
+    afterHeight = this.$('.inside').height();
+
+    this.get('grabbed.measure')();
+    this.get('grabbed.unlock')();
   });
-
-  let afterHeight = this.$('.inside').height();
-
-  this.get('grabbed.measure')();
-  this.get('grabbed.unlock')();
   return macroWait().then(() => {
     assert.equal(this.$('.animated-container').height(), beforeHeight, "still at previous height");
     finishMotion();
@@ -182,7 +189,9 @@ test('unlocks only after unlock message is received', function(assert) {
 
   let beforeHeight = this.$('.inside').height();
 
-  this.get('grabbed.lock')();
+  Ember.run(() => {
+    this.get('grabbed.lock')();
+  });
 
   this.$('.inside').css({
     height: 400
@@ -190,7 +199,10 @@ test('unlocks only after unlock message is received', function(assert) {
 
   let afterHeight = this.$('.inside').height();
 
-  this.get('grabbed.measure')();
+  Ember.run(() => {
+    this.get('grabbed.measure')();
+  });
+
   return macroWait().then(() => {
     assert.equal(this.$('.animated-container').height(), beforeHeight, "still at previous height");
     this.get('grabbed.unlock')();

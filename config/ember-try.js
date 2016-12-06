@@ -10,6 +10,12 @@ module.exports = {
         resolutions: {
           'ember': '~1.13.0'
         }
+      },
+      npm: {
+        devDependencies: {
+          "ember-getowner-polyfill": "https://github.com/ef4/ember-getowner-polyfill.git#true-polyfill",
+          "ember-hash-helper-polyfill": "0.1.1"
+        }
       }
     },
     {
@@ -20,6 +26,12 @@ module.exports = {
         },
         resolutions: {
           'ember': 'lts-2-4'
+        }
+      },
+      npm: {
+        devDependencies: {
+          "ember-getowner-polyfill": "https://github.com/ef4/ember-getowner-polyfill.git#true-polyfill",
+          "ember-hash-helper-polyfill": "0.1.1"
         }
       }
     },
