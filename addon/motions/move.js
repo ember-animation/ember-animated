@@ -19,6 +19,7 @@ export default class Move extends Motion {
   * animate() {
     let duration = this.opts.duration == null ? 2000 : this.opts.duration;
     let sprite = this.sprite;
+    let revealed = false;
 
     if (!this.prior) {
       // when starting a new move we start from its current position
@@ -47,9 +48,12 @@ export default class Move extends Motion {
       this.yTween = new Tween(0, final.top - initial.top, duration).plus(this.prior.yTween);
     }
 
-    sprite.reveal();
     while (!this.xTween.done) {
       yield rAF();
+      if (!revealed) {
+        sprite.reveal();
+        revealed = true;
+      }
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
         this.yTween.currentValue - sprite.transform.ty
