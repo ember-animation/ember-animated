@@ -37,7 +37,7 @@ class DerivedTween {
         // its final value around and drop the reference to the actual
         // Tween. This prevents long chains of derived tweens from
         // growing without bound during continuous animations.
-        return { currentValue: t.currentValue };
+        return { currentValue: t.currentValue, done: true };
       } else {
         return t;
       }
