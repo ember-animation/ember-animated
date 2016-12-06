@@ -1,6 +1,5 @@
 import RSVP from 'rsvp';
 import Ember from 'ember';
-import { makeCancelable } from './cancelation';
 
 export let Promise;
 if (window.Promise) {
@@ -27,7 +26,7 @@ export function rAF() {
         resolve();
       });
     });
-    makeCancelable(promise, () => cancelAnimationFrame(frame));
+    promise.__ec_cancel__ = () => cancelAnimationFrame(frame);
     return promise;
   }
 }
