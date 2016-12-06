@@ -1511,7 +1511,13 @@ ember-cli-valid-component-name@^1.0.0:
   dependencies:
     silent-error "^1.0.0"
 
-ember-cli-version-checker@^1.0.2, ember-cli-version-checker@^1.1.4, ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.1.7:
+ember-cli-version-checker@^1.0.2, ember-cli-version-checker@^1.1.4, ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.2.0.tgz#caa286b77d1b485df5d2f62c67a6f19aa8b582c4"
+  dependencies:
+    semver "^5.3.0"
+
+ember-cli-version-checker@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.1.7.tgz#cbabacb5eef2635048d5208fab05b032e5313d1a"
   dependencies:
@@ -1599,12 +1605,12 @@ ember-cli@2.9.1:
     walk-sync "^0.3.0"
     yam "0.0.22"
 
-ember-concurrency@^0.7.15:
+"ember-concurrency@https://github.com/ef4/ember-concurrency.git#master":
   version "0.7.15"
-  resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-0.7.15.tgz#a35577e20220e9ddc93b0b801dbb9fd7554aca49"
+  resolved "https://github.com/ef4/ember-concurrency.git#1f9eeea2664b5507e26d5010846e0255a0665329"
   dependencies:
     ember-cli-babel "^5.1.5"
-    ember-getowner-polyfill "1.0.1"
+    ember-getowner-polyfill "https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665"
     ember-maybe-import-regenerator "^0.1.4"
 
 ember-disable-prototype-extensions@^1.1.0:
@@ -1619,11 +1625,19 @@ ember-export-application-global@^1.0.5:
   dependencies:
     ember-cli-babel "^5.1.10"
 
-ember-getowner-polyfill@1.0.1:
+"ember-getowner-polyfill@https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665":
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-1.0.1.tgz#f60a31d25d642461dac4b4746184afaf7f5084ae"
+  resolved "https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665"
   dependencies:
-    ember-cli-babel "^5.1.5"
+    ember-cli-babel "^5.1.6"
+    ember-cli-version-checker "^1.2.0"
+
+ember-hash-helper-polyfill@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/ember-hash-helper-polyfill/-/ember-hash-helper-polyfill-0.1.1.tgz#141d4ac1f4d1404cc1b8ee2d76941b38a9b9a512"
+  dependencies:
+    ember-cli-babel "^5.1.3"
+    ember-cli-version-checker "^1.1.4"
 
 ember-load-initializers@^0.5.1:
   version "0.5.1"
@@ -4308,7 +4322,7 @@ sane@^1.1.1:
     walker "~1.0.5"
     watch "~0.10.0"
 
-"semver@2 >=2.2.1 || 3.x || 4 || 5", "semver@2 || 3 || 4 || 5", "semver@2.x || 3.x || 4 || 5", "semver@4 || 5", "semver@^2.3.0 || 3.x || 4 || 5", semver@^5.1.0, semver@^5.1.1:
+"semver@2 >=2.2.1 || 3.x || 4 || 5", "semver@2 || 3 || 4 || 5", "semver@2.x || 3.x || 4 || 5", "semver@4 || 5", "semver@^2.3.0 || 3.x || 4 || 5", semver@^5.1.0, semver@^5.1.1, semver@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.3.0.tgz#9b2ce5d3de02d17c6012ad326aa6b4d0cf54f94f"
 

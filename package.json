@@ -33,6 +33,8 @@
     "ember-concurrency": "https://github.com/ef4/ember-concurrency.git#master",
     "ember-disable-prototype-extensions": "^1.1.0",
     "ember-export-application-global": "^1.0.5",
+    "ember-getowner-polyfill": "https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665",
+    "ember-hash-helper-polyfill": "0.1.1",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
     "loader.js": "^4.0.10"
