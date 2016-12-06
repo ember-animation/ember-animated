@@ -33,8 +33,7 @@ function cancelGenerator(generator) {
   }
 }
 
-function cancel() {
-  let waiting = this.__ea_waiting__.waiting;
+function cancel(waiting) {
   if (!waiting) { return; }
   for (let i = 0; i < waiting.length; i++) {
     let entry = waiting[i];
@@ -48,22 +47,20 @@ function cancel() {
 
 
 function race(waiting) {
-  let bucket = { waiting };
   let p = new Promise(resolve => {
     for (let index = 0; index < waiting.length; index++) {
       let entry = waiting[index];
       let value = entry.intermediate.value;
       Promise.resolve(value).then(value => {
-        bucket.waiting = null;
+        waiting = null;
         resolve({ state: 'fulfilled', value, index });
       }, reason => {
-        bucket.waiting = null;
+        waiting = null;
         resolve({ state: 'rejected', reason, index });
       });
     }
   });
-  p.__ec_cancel__ = cancel;
-  p.__ea_waiting__ = bucket;
+  p.__ec_cancel__ = () => cancel(waiting);
   return p;
 }
 
