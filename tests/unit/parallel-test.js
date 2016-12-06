@@ -1,5 +1,5 @@
 import { module, test, skip } from 'qunit';
-import parallel from 'ember-animated/parallel';
+import parallel, { cancelGenerator } from 'ember-animated/parallel';
 import { Promise } from 'ember-animated/concurrency-helpers';
 
 module("Unit | parallel", {
@@ -210,7 +210,7 @@ test('can cancel all waiting promises', function(assert) {
   }).then(v => {
     state = g.next(v);
     assert.ok(!state.done, 'not done 3');
-    state.value.__ec_cancel__();
+    cancelGenerator(g);
     assert.logEquals(['third canceled', 'fourth canceled']);
   });
 });
@@ -319,7 +319,7 @@ test("interrupted generators still run finally", function(assert) {
     }
   }
   let g = parallel([example()]);
-  let state = g.next();
-  state.value.__ec_cancel__();
+  g.next();
+  cancelGenerator(g);
   assert.logEquals(['finally ran']);
 });

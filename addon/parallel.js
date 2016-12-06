@@ -21,7 +21,7 @@ function wake(entry, resolved, onError) {
  }
 }
 
-function cancelGenerator(generator) {
+export function cancelGenerator(generator) {
   let e = new Error('TaskCancelation');
   e.message = 'TaskCancelation';
   try {
@@ -34,7 +34,6 @@ function cancelGenerator(generator) {
 }
 
 function cancel(waiting) {
-  if (!waiting) { return; }
   for (let i = 0; i < waiting.length; i++) {
     let entry = waiting[i];
     let value = entry.intermediate.value;
@@ -47,21 +46,17 @@ function cancel(waiting) {
 
 
 function race(waiting) {
-  let p = new Promise(resolve => {
+  return new Promise(resolve => {
     for (let index = 0; index < waiting.length; index++) {
       let entry = waiting[index];
       let value = entry.intermediate.value;
       Promise.resolve(value).then(value => {
-        waiting = null;
         resolve({ state: 'fulfilled', value, index });
       }, reason => {
-        waiting = null;
         resolve({ state: 'rejected', reason, index });
       });
     }
   });
-  p.__ec_cancel__ = () => cancel(waiting);
-  return p;
 }
 
 export default function * parallel(generators, onError) {
@@ -76,21 +71,25 @@ export default function * parallel(generators, onError) {
     }
   }
 
-  while (waiting.length > 0) {
-    let resolved = yield race(waiting);
-    let { index } = resolved;
-    let entry = waiting[index];
-    waiting.splice(index, 1);
+  try {
+    while (waiting.length > 0) {
+      let resolved = yield race(waiting);
+      let { index } = resolved;
+      let entry = waiting[index];
+      waiting.splice(index, 1);
 
-    // This condition is needed because we wait for both non-done
-    // generators and done generators that returned a final promise.
-    if (!entry.intermediate.done) {
-      wake(entry, resolved, onError);
-      if (!entry.intermediate.done || isPromise(entry.intermediate.value)) {
-        // we keep waiting if the generator isn't done *or* if the
-        // final return value was a promise.
-        waiting.push(entry);
+      // This condition is needed because we wait for both non-done
+      // generators and done generators that returned a final promise.
+      if (!entry.intermediate.done) {
+        wake(entry, resolved, onError);
+        if (!entry.intermediate.done || isPromise(entry.intermediate.value)) {
+          // we keep waiting if the generator isn't done *or* if the
+          // final return value was a promise.
+          waiting.push(entry);
+        }
       }
     }
+  } finally {
+    cancel(waiting);
   }
 }
