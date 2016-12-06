@@ -10,28 +10,6 @@ const inFlight = new WeakMap();
 
 export default class Sprite {
   constructor(element, component, asContainer=false) {
-    this.component = component;
-    this.element = element;
-    this._parentElement = element.parentElement;
-    let transform = ownTransform(element);
-    if (asContainer) {
-      this._imposedStyle = {
-        width: element.offsetWidth,
-        height: element.offsetHeight,
-        'box-sizing': 'border-box'
-      };
-    } else {
-      let computedStyle = getComputedStyle(element);
-      let { top, left } = offsets(element, computedStyle, transform);
-      this._imposedStyle = {
-        top,
-        left,
-        width: element.offsetWidth,
-        height: element.offsetHeight,
-        position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
-        'box-sizing': 'border-box'
-      };
-    }
     let predecessor = inFlight.get(element);
     if (predecessor) {
       // When we finish, we want to be able to set the style back to
@@ -41,10 +19,49 @@ export default class Sprite {
     } else {
       this._styleCache = $(element).attr('style') || null;
     }
+    this.component = component;
+    this.element = element;
+    this._parentElement = element.parentElement;
     this.initialBounds = null;
     this.finalBounds = null;
-    this.transform = transform;
+    if (asContainer) {
+      this._initAsContainer();
+    } else {
+      this._initAsContained(predecessor);
+    }
   }
+
+  _initAsContainer() {
+    this._imposedStyle = {
+      width: this.element.offsetWidth,
+      height: this.element.offsetHeight,
+      'box-sizing': 'border-box'
+    };
+  }
+
+  _initAsContained(predecessor) {
+    let computedStyle = getComputedStyle(this.element);
+    let top, left;
+    if (predecessor) {
+      this.transform = predecessor.transform;
+      top = predecessor._imposedStyle.top;
+      left = predecessor._imposedStyle.left;
+    } else {
+      this.transform = ownTransform(this.element);
+      let offsets = findOffsets(this.element, computedStyle, this.transform);
+      top = offsets.top;
+      left = offsets.left;
+    }
+    this._imposedStyle = {
+      top,
+      left,
+      width: this.element.offsetWidth,
+      height: this.element.offsetHeight,
+      position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
+      'box-sizing': 'border-box'
+    };
+  }
+
   measureInitialBounds() {
     this.initialBounds = this.element.getBoundingClientRect();
   }
@@ -82,7 +99,7 @@ export default class Sprite {
   }
 }
 
-function offsets(element, computedStyle, transform) {
+function findOffsets(element, computedStyle, transform) {
   let ownBounds = element.getBoundingClientRect();
   let left = ownBounds.left;
   let top = ownBounds.top;
