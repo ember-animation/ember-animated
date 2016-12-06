@@ -32,8 +32,6 @@ before_install:
   - npm install -g yarn@0.16.1
   - yarn --version
   - bower --version
-  - yarn global add phantomjs-prebuilt
-  - phantomjs --version
 
 install:
   - yarn install
