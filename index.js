@@ -6,8 +6,33 @@ var path = require('path');
 var mergeTrees = require('broccoli-merge-trees');
 var Funnel = require('broccoli-funnel');
 
+function modernFeatures() {
+  if (process.env.MODERN_BROWSER) {
+    return [
+      'es6.forOf',
+      'regenerator',
+      'es6.arrowFunctions',
+      'es6.constants',
+      'es6.blockScoping',
+      'es6.templateLiterals',
+      'es6.classes'
+    ];
+  } else {
+    return [];
+  }
+}
+
 module.exports = {
   name: 'ember-animated',
+
+  modernFeatures: modernFeatures,
+
+  options: {
+    babel: {
+      blacklist: modernFeatures()
+    }
+  },
+
 
   init: function() {
     if (this._super.init) {
