@@ -33,10 +33,13 @@ export default Ember.Component.extend({
     addItem() {
       let items = this.get('items');
       // This deliberately uses stable keys but unstable objects
-      this.set('items', items.concat([makeRandomItem()]).sort(this.currentSort).map(elt => ({ id: elt.id })));
+      let item = makeRandomItem();
+      this.set('message', `add ${item.id}`);
+      this.set('items', items.concat([item]).sort(this.currentSort).map(elt => ({ id: elt.id })));
     },
     removeItem(which) {
       let items = this.get('items');
+      this.set('message', `remove ${which.id}`);
       this.set('items', items.filter(i => i !== which));
     },
     replaceItem(which) {
