@@ -11,13 +11,13 @@ export default Ember.Component.extend({
   motionService: Ember.inject.service('-ea-motion'),
 
   init() {
-    this._super();
     this._enteringComponents = [];
     this._currentComponents = [];
     this._leavingComponents = [];
     this._prevItems = [];
     this._firstTime = true;
     this.get('motionService').register(this);
+    this._super();
   },
 
   isAnimating: Ember.computed.or('animate.isRunning', 'runThenRemove.isRunning'),
