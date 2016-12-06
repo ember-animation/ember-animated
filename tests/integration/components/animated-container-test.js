@@ -124,7 +124,7 @@ test('unlocks only after motion is done', function(assert) {
 
   this.set('TestMotion', class extends Motion {
     *animate() {
-      return new Ember.RSVP.Promise(resolve => {
+      yield new Ember.RSVP.Promise(resolve => {
         finishMotion = resolve;
       });
     }

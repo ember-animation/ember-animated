@@ -123,7 +123,7 @@ export default Ember.Component.extend({
 
   runThenRemove: task(function * (motion, sprite) {
     try {
-      yield motion.run();
+      yield * motion.run();
     } finally {
       sprite.remove();
     }
