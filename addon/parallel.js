@@ -21,31 +21,49 @@ function wake(entry, resolved, onError) {
  }
 }
 
+function cancelGenerator(generator) {
+  let e = new Error('TaskCancelation');
+  e.message = 'TaskCancelation';
+  try {
+    generator.throw(e);
+  } catch(err) {
+    if (err.message !== 'TaskCancelation') {
+      throw err;
+    }
+  }
+}
+
+function cancel() {
+  let waiting = this.__ea_waiting__.waiting;
+  if (!waiting) { return; }
+  for (let i = 0; i < waiting.length; i++) {
+    let entry = waiting[i];
+    let value = entry.intermediate.value;
+    if (isPromise(value) && value.__ec_cancel__) {
+      value.__ec_cancel__();
+    }
+    cancelGenerator(entry.generator);
+  }
+}
+
+
 function race(waiting) {
-  let cancels = []
+  let bucket = { waiting };
   let p = new Promise(resolve => {
     for (let index = 0; index < waiting.length; index++) {
       let entry = waiting[index];
       let value = entry.intermediate.value;
-      if (isPromise(value) && value.__ec_cancel__) {
-        cancels.push(value.__ec_cancel__);
-      }
       Promise.resolve(value).then(value => {
-        cancels = null;
+        bucket.waiting = null;
         resolve({ state: 'fulfilled', value, index });
       }, reason => {
-        cancels = null;
+        bucket.waiting = null;
         resolve({ state: 'rejected', reason, index });
       });
     }
   });
-  p.__ec_cancel__ = () => {
-    if (cancels) {
-      for (let i = 0; i < cancels.length; i++) {
-        cancels[i]();
-      }
-    }
-  };
+  p.__ec_cancel__ = cancel;
+  p.__ea_waiting__ = bucket;
   return p;
 }
 
