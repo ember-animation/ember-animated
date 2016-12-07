@@ -114,16 +114,19 @@ export default Ember.Component.extend({
       let move = new Move(sprite);
       motionGenerators.push(move.run());
     });
+
+    let removalGenerators = [];
     removedSprites.forEach(sprite => {
       sprite.finalBounds = {
         left: sprite.initialBounds.left + 1000,
         top: sprite.initialBounds.top
       };
       let move = new Move(sprite);
-      // Removal motions have different lifetimes than the kept or
-      // inserted motions because an interrupting animation
-      this.get('runThenRemove').perform(move, sprite);
+      removalGenerators.push(move.run());
     });
+    // Removal motions have different lifetimes than the kept or
+    // inserted motions because an interrupting animation
+    this.get('runThenRemove').perform(removalGenerators, removedSprites);
 
     yield * parallel(motionGenerators, onError);
 
@@ -133,11 +136,11 @@ export default Ember.Component.extend({
 
   }).restartable(),
 
-  runThenRemove: task(function * (motion, sprite) {
+  runThenRemove: task(function * (generators, sprites) {
     try {
-      yield * motion.run();
+      yield * parallel(generators);
     } finally {
-      sprite.remove();
+      sprites.forEach(sprite => sprite.remove());
     }
   }),
 
