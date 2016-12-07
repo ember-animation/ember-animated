@@ -1,3 +1,15 @@
+/*
+   A Sprite is our handle to a DOM element that we want to animate.
+
+   It manages locking and unlocking the element (which means taking it
+   in and out of static document flow so it's readily animatable).
+
+   It tracks the sprite's current transform.
+
+   It tracks the sprite's initial and/or final bounds, as measured
+   from the actual pre- and/or post-animation DOM.
+*/
+
 import $ from 'jquery';
 import Ember from 'ember';
 import {
@@ -61,7 +73,6 @@ export default class Sprite {
       };
     }
   }
-
   measureInitialBounds() {
     this.initialBounds = this.element.getBoundingClientRect();
   }
