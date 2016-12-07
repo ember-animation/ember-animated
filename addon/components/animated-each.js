@@ -77,10 +77,10 @@ export default Ember.Component.extend({
       sprite.lock();
     });
 
-    // [inserted, removed, replaced] = matchReplacements(prevItems, items, inserted, kept, removed);
-    // [inserted, removed, replaced] = yield this.get('motionService.farMatch').perform(inserted, removed, replaced);
+    let matchedSpritePairs;
+    [insertedSprites, removedSprites, matchedSpritePairs] = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
 
-    // console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}`);
+    //console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}, matched=${matchedSprites.length}`);
 
     if (firstTime) {
       insertedSprites.forEach(sprite => {
@@ -98,6 +98,14 @@ export default Ember.Component.extend({
         motionGenerators.push(move.run());
       });
     }
+
+    matchedSpritePairs.forEach(([oldSprite, newSprite]) => {
+      newSprite.translate(oldSprite.initialBounds.left - newSprite.finalBounds.left, oldSprite.initialBounds.top - newSprite.finalBounds.top);
+      newSprite.initialBounds = oldSprite.initialBounds;
+      newSprite.reveal();
+      keptSprites.push(newSprite);
+      oldSprite.remove();
+    });
 
     keptSprites.forEach(sprite => {
       let move = new Move(sprite);
