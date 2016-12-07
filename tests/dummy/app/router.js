@@ -9,6 +9,7 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('each');
   this.route('container-only');
+  this.route('two-lists');
 });
 
 export default Router;
