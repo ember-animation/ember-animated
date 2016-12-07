@@ -94,6 +94,7 @@ export default Ember.Component.extend({
         };
         sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
         let move = new Move(sprite);
+        sprite.reveal();
         motionGenerators.push(move.run());
       });
     }
