@@ -73,11 +73,6 @@ export default Ember.Component.extend({
     // Then lock everything down
     keptSprites.forEach(sprite => sprite.lock());
     insertedSprites.forEach(sprite => sprite.lock());
-    // Including ghost copies of the deleted components
-    removedSprites.forEach(sprite => {
-      sprite.append();
-      sprite.lock();
-    });
 
     let matchedSpritePairs;
     [insertedSprites, removedSprites, matchedSpritePairs] = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
@@ -107,7 +102,6 @@ export default Ember.Component.extend({
       newSprite.initialBounds = oldSprite.initialBounds;
       newSprite.reveal();
       keptSprites.push(newSprite);
-      oldSprite.remove();
     });
 
     keptSprites.forEach(sprite => {
@@ -117,6 +111,8 @@ export default Ember.Component.extend({
 
     let removalGenerators = [];
     removedSprites.forEach(sprite => {
+      sprite.append();
+      sprite.lock();
       sprite.finalBounds = {
         left: sprite.initialBounds.left + 1000,
         top: sprite.initialBounds.top
