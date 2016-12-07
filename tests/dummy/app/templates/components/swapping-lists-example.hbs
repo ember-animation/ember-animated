@@ -3,7 +3,7 @@
     <button {{action "swap"}}>Swap</button>
   </div>
 
-  {{#if showLeft}}
+  {{#if leftItems}}
     {{#animated-container class="left" as |c|}}
       {{#animated-each leftItems notify=c as |item|}}
         <div>

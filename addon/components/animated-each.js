@@ -2,6 +2,7 @@ import Ember from 'ember';
 import layout from '../templates/components/animated-each';
 import { task } from 'ember-concurrency';
 import { afterRender } from '../concurrency-helpers';
+import { continueMotions } from '../motion';
 import Move from '../motions/move';
 import parallel from '../parallel';
 
@@ -101,6 +102,7 @@ export default Ember.Component.extend({
     }
 
     matchedSpritePairs.forEach(([oldSprite, newSprite]) => {
+      continueMotions(oldSprite.element, newSprite.element);
       newSprite.translate(oldSprite.initialBounds.left - newSprite.finalBounds.left, oldSprite.initialBounds.top - newSprite.finalBounds.top);
       newSprite.initialBounds = oldSprite.initialBounds;
       newSprite.reveal();

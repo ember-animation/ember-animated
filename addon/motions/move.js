@@ -38,13 +38,16 @@ export default class Move extends Motion {
       );
     } else {
       // When interrupting an existing move, we create differential
-      // tweens that go from zero to the difference between our final
-      // destination and the earlier move's final destination. Then we
-      // add that to the prior tweens.
-      let initial = this.prior.sprite.finalBounds;
-      let final = sprite.finalBounds;
-      this.xTween = new Tween(0, final.left - initial.left, duration).plus(this.prior.xTween);
-      this.yTween = new Tween(0, final.top - initial.top, duration).plus(this.prior.yTween);
+      // tweens based on the difference in final bounds between the
+      // old and new tweens.
+      let initialView = this.prior.sprite.finalBounds;
+      let finalView = sprite.finalBounds;
+      let transformDiffX = sprite.transform.tx - this.prior.xTween.currentValue;
+      let transformDiffY = sprite.transform.ty - this.prior.yTween.currentValue;
+      let viewDiffX = finalView.left - initialView.left;
+      let viewDiffY = finalView.top - initialView.top;
+      this.xTween = new Tween(transformDiffX, transformDiffX + viewDiffX, duration).plus(this.prior.xTween);
+      this.yTween = new Tween(transformDiffY, transformDiffY + viewDiffY, duration).plus(this.prior.yTween);
     }
 
     while (!this.xTween.done) {

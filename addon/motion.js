@@ -1,6 +1,7 @@
 import { rAF } from './concurrency-helpers';
 
 const motions = new WeakMap();
+const bridges = new WeakMap();
 
 export default class Motion {
 
@@ -32,6 +33,9 @@ export default class Motion {
   * run() {
     try {
       let others = this._motionList.filter(m => m !== this);
+      if (this._inheritedMotionList) {
+        others = others.concat(this._inheritedMotionList);
+      }
       if (others.length > 0) {
         this.interrupted(others);
       }
@@ -51,6 +55,13 @@ export default class Motion {
     }
     motionList.unshift(this);
     this._motionList = motionList;
+    let bridge = bridges.get(element);
+    if (bridge) {
+      let inheritedMotions = motions.get(bridge);
+      if (inheritedMotions) {
+        this._inheritedMotionList = inheritedMotions;
+      }
+    }
   }
 
   _clearMotionList() {
@@ -61,4 +72,13 @@ export default class Motion {
     }
   }
 
+}
+
+export function continueMotions(oldElement, newElement) {
+  bridges.set(newElement, oldElement);
+  rAF().then(() => {
+    if (bridges.get(newElement) === oldElement) {
+      bridges.delete(newElement);
+    }
+  });
 }
