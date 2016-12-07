@@ -2,7 +2,6 @@ import Ember from 'ember';
 import layout from '../templates/components/animated-each';
 import { task } from 'ember-concurrency';
 import { afterRender } from '../concurrency-helpers';
-import { continueMotions } from '../motion';
 import Move from '../motions/move';
 import parallel from '../parallel';
 
@@ -62,7 +61,6 @@ export default Ember.Component.extend({
     insertedSprites.forEach(sprite => sprite.measureFinalBounds());
     keptSprites.forEach(sprite => sprite.measureFinalBounds());
     this._notifyContainer('measure');
-    let motionGenerators = [];
 
     // Update our permanent state so that if we're interrupted after
     // this point we are already consistent. AFAIK, we can't be
@@ -77,59 +75,14 @@ export default Ember.Component.extend({
     let matchedSpritePairs;
     [insertedSprites, removedSprites, matchedSpritePairs] = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
 
-    //console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}, matched=${matchedSpritePairs.length}`);
-
-    if (firstTime) {
-      insertedSprites.forEach(sprite => {
-        sprite.reveal();
-      });
-    } else {
-      insertedSprites.forEach(sprite => {
-        sprite.initialBounds = {
-          left: sprite.finalBounds.left + 1000,
-          top: sprite.finalBounds.top
-        };
-        sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
-        let move = new Move(sprite);
-        sprite.reveal();
-        motionGenerators.push(move.run());
-      });
-    }
-
-    matchedSpritePairs.forEach(([oldSprite, newSprite]) => {
-      continueMotions(oldSprite.element, newSprite.element);
-      newSprite.translate(oldSprite.initialBounds.left - newSprite.finalBounds.left, oldSprite.initialBounds.top - newSprite.finalBounds.top);
-      newSprite.initialBounds = oldSprite.initialBounds;
-      newSprite.reveal();
-      keptSprites.push(newSprite);
-    });
-
-    keptSprites.forEach(sprite => {
-      let move = new Move(sprite);
-      motionGenerators.push(move.run());
-    });
-
-    let removalGenerators = [];
-    removedSprites.forEach(sprite => {
-      sprite.append();
-      sprite.lock();
-      sprite.finalBounds = {
-        left: sprite.initialBounds.left + 1000,
-        top: sprite.initialBounds.top
-      };
-      let move = new Move(sprite);
-      removalGenerators.push(move.run());
-    });
     // Removal motions have different lifetimes than the kept or
     // inserted motions because an interrupting animation doesn't cancel them.
-    this.get('runThenRemove').perform(removalGenerators, removedSprites);
+    this.get('runThenRemove').perform(createRemovalMotions(removedSprites), removedSprites);
 
-    yield * parallel(motionGenerators, onError);
-
+    yield * parallel(createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs), onError);
     keptSprites.forEach(sprite => sprite.unlock());
     insertedSprites.forEach(sprite => sprite.unlock());
     this._notifyContainer('unlock');
-
   }).restartable(),
 
   runThenRemove: task(function * (generators, sprites) {
@@ -195,4 +148,52 @@ function onError(reason) {
       throw reason;
     }, 0);
   }
+}
+
+function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs) {
+  let generators = [];
+  if (firstTime) {
+    insertedSprites.forEach(sprite => {
+      sprite.reveal();
+    });
+  } else {
+    insertedSprites.forEach(sprite => {
+      sprite.initialBounds = {
+        left: sprite.finalBounds.left + 1000,
+        top: sprite.finalBounds.top
+      };
+      sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
+      let move = new Move(sprite);
+      sprite.reveal();
+      generators.push(move.run());
+    });
+  }
+
+  matchedSpritePairs.forEach(([oldSprite, newSprite]) => {
+    newSprite.replaces(oldSprite);
+    newSprite.reveal();
+    keptSprites.push(newSprite);
+  });
+
+  keptSprites.forEach(sprite => {
+    let move = new Move(sprite);
+    generators.push(move.run());
+  });
+
+  return generators;
+}
+
+function createRemovalMotions(removedSprites) {
+  let removalGenerators = [];
+  removedSprites.forEach(sprite => {
+    sprite.append();
+    sprite.lock();
+    sprite.finalBounds = {
+      left: sprite.initialBounds.left + 1000,
+      top: sprite.initialBounds.top
+    };
+    let move = new Move(sprite);
+    removalGenerators.push(move.run());
+  });
+  return removalGenerators;
 }

@@ -5,6 +5,8 @@ import {
   cumulativeTransform,
   Transform
 } from './transform';
+import { continueMotions } from './motion';
+
 
 const inFlight = new WeakMap();
 
@@ -65,6 +67,11 @@ export default class Sprite {
   }
   measureFinalBounds() {
     this.finalBounds = this.element.getBoundingClientRect();
+  }
+  replaces(otherSprite) {
+    continueMotions(otherSprite.element, this.element);
+    this.translate(otherSprite.initialBounds.left - this.finalBounds.left, otherSprite.initialBounds.top - this.finalBounds.top);
+    this.initialBounds = otherSprite.initialBounds;
   }
   lock() {
     $(this.element).css(this._imposedStyle);
