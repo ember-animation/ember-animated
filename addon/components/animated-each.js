@@ -125,7 +125,7 @@ export default Ember.Component.extend({
       removalGenerators.push(move.run());
     });
     // Removal motions have different lifetimes than the kept or
-    // inserted motions because an interrupting animation
+    // inserted motions because an interrupting animation doesn't cancel them.
     this.get('runThenRemove').perform(removalGenerators, removedSprites);
 
     yield * parallel(motionGenerators, onError);
