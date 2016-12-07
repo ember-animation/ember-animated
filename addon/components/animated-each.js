@@ -47,6 +47,7 @@ export default Ember.Component.extend({
     currentSprites.forEach(sprite => sprite.lock());
     this.get('animate').perform(prevItems, items, currentSprites, firstTime);
   },
+
   animate: task(function * (prevItems, items, currentSprites, firstTime) {
     yield afterRender();
 
