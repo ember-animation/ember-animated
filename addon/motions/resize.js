@@ -16,7 +16,6 @@ export default class Resize extends Motion {
 
   * animate() {
     let sprite = this.sprite;
-    let element = sprite.element;
     let duration = this.opts.duration;
     if (this.opts.duration == null) {
       duration = 2000;
@@ -40,8 +39,10 @@ export default class Resize extends Motion {
 
     while (!this.widthTween.done) {
       yield rAF();
-      element.style.width = this.widthTween.currentValue + 'px';
-      element.style.height = this.heightTween.currentValue + 'px';
+      sprite.applyStyles({
+        width:this.widthTween.currentValue,
+        height: this.heightTween.currentValue
+      });
     }
   }
 }

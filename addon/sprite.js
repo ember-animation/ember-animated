@@ -13,15 +13,17 @@ export default class Sprite {
     let predecessor = inFlight.get(element);
     if (predecessor) {
       // When we finish, we want to be able to set the style back to
-      // whatever it was before any Sprites starting locking
-      // things.
+      // whatever it was before any Sprites starting locking things,
+      // so inheriting the state from our predecessor is important for
+      // correctness.
       this._styleCache = predecessor._styleCache;
+      this._parentElement = predecessor._parentElement;
     } else {
       this._styleCache = $(element).attr('style') || null;
+      this._parentElement = element.parentElement;
     }
     this.component = component;
     this.element = element;
-    this._parentElement = element.parentElement;
     this.initialBounds = null;
     this.finalBounds = null;
     if (asContainer) {
@@ -40,26 +42,22 @@ export default class Sprite {
   }
 
   _initAsContained(predecessor) {
-    let computedStyle = getComputedStyle(this.element);
-    let top, left;
     if (predecessor) {
       this.transform = predecessor.transform;
-      top = predecessor._imposedStyle.top;
-      left = predecessor._imposedStyle.left;
+      this._imposedStyle = predecessor._imposedStyle;
     } else {
+      let computedStyle = getComputedStyle(this.element);
       this.transform = ownTransform(this.element);
-      let offsets = findOffsets(this.element, computedStyle, this.transform);
-      top = offsets.top;
-      left = offsets.left;
+      let { top, left } = findOffsets(this.element, computedStyle, this.transform);
+      this._imposedStyle = {
+        top,
+        left,
+        width: this.element.offsetWidth,
+        height: this.element.offsetHeight,
+        position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
+        'box-sizing': 'border-box'
+      };
     }
-    this._imposedStyle = {
-      top,
-      left,
-      width: this.element.offsetWidth,
-      height: this.element.offsetHeight,
-      position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
-      'box-sizing': 'border-box'
-    };
   }
 
   measureInitialBounds() {
@@ -72,10 +70,16 @@ export default class Sprite {
     $(this.element).css(this._imposedStyle);
     inFlight.set(this.element, this);
   }
+  applyStyles(styles) {
+    Object.assign(this._imposedStyle, styles);
+    $(this.element).css(styles);
+  }
   translate(dx, dy) {
     let t = this.transform.mult(new Transform(1, 0, 0, 1, dx, dy));
     this.transform = t;
-    $(this.element).css('transform', t.serialize());
+    this.applyStyles({
+      transform: t.serialize()
+    });
   }
   unlock() {
     Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", inFlight.get(this.element) === this, { id: "ember-animated-sprite-unlock" });
