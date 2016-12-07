@@ -5,7 +5,7 @@ const bridges = new WeakMap();
 
 export default class Motion {
 
-  constructor(sprite, opts={}) {
+  constructor(sprite, opts) {
     this.sprite = sprite;
     this.opts = opts;
     this._setupMotionList();

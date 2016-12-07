@@ -212,6 +212,36 @@ test('unlocks only after unlock message is received', function(assert) {
   });
 });
 
+test('passes provided options to motion', function(assert) {
+  let motionOpts;
+  this.set('TestMotion', class extends Motion {
+    *animate() {
+      motionOpts = this.opts;
+    }
+  });
+
+  this.render(hbs`
+    {{#animated-container motion=TestMotion as |container|}}
+      <div class="inside">
+        {{grab-container cont=container}}
+      </div>
+    {{/animated-container}}
+  `);
+
+  Ember.run(() => {
+    this.get('grabbed.lock')();
+  });
+
+  return macroWait().then(() => {
+    this.get('grabbed.measure')({ duration: 500 });
+    this.get('grabbed.unlock')();
+    return this.waitForAnimations();
+  }).then(() => {
+    assert.deepEqual(motionOpts, { duration: 500 });
+  });
+});
+
+
 
 skip("Accounts for margin collapse between self and child");
 skip("Accounts for margin collapse between own margins when becoming empty");

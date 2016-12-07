@@ -9,6 +9,7 @@ export default Ember.Component.extend({
   layout,
   tagName: '',
   motionService: Ember.inject.service('-ea-motion'),
+  duration: 2000,
 
   init() {
     this._enteringComponents = [];
@@ -60,7 +61,7 @@ export default Ember.Component.extend({
     let insertedSprites = flatMap(this._enteringComponents, component => component.sprites());
     insertedSprites.forEach(sprite => sprite.measureFinalBounds());
     keptSprites.forEach(sprite => sprite.measureFinalBounds());
-    this._notifyContainer('measure');
+    this._notifyContainer('measure', { duration: this.get('duration') });
 
     // Update our permanent state so that if we're interrupted after
     // this point we are already consistent. AFAIK, we can't be
@@ -77,9 +78,9 @@ export default Ember.Component.extend({
 
     // Removal motions have different lifetimes than the kept or
     // inserted motions because an interrupting animation doesn't cancel them.
-    this.get('runThenRemove').perform(createRemovalMotions(removedSprites), removedSprites);
+    this.get('runThenRemove').perform(createRemovalMotions(removedSprites, this.get('duration')), removedSprites);
 
-    yield * parallel(createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs), onError);
+    yield * parallel(createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs, this.get('duration')), onError);
     keptSprites.forEach(sprite => sprite.unlock());
     insertedSprites.forEach(sprite => sprite.unlock());
     this._notifyContainer('unlock');
@@ -100,10 +101,10 @@ export default Ember.Component.extend({
     this._leavingComponents = [];
   },
 
-  _notifyContainer(method) {
+  _notifyContainer(method, opts) {
     var target = this.get('notify');
     if (target && target[method]) {
-      return target[method]();
+      return target[method](opts);
     }
   },
 
@@ -150,7 +151,7 @@ function onError(reason) {
   }
 }
 
-function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs) {
+function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs, duration) {
   let generators = [];
   if (firstTime) {
     insertedSprites.forEach(sprite => {
@@ -163,7 +164,7 @@ function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePai
         top: sprite.finalBounds.top
       };
       sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
-      let move = new Move(sprite);
+      let move = new Move(sprite, { duration });
       sprite.reveal();
       generators.push(move.run());
     });
@@ -176,14 +177,14 @@ function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePai
   });
 
   keptSprites.forEach(sprite => {
-    let move = new Move(sprite);
+    let move = new Move(sprite, { duration });
     generators.push(move.run());
   });
 
   return generators;
 }
 
-function createRemovalMotions(removedSprites) {
+function createRemovalMotions(removedSprites, duration) {
   let removalGenerators = [];
   removedSprites.forEach(sprite => {
     sprite.append();
@@ -192,7 +193,7 @@ function createRemovalMotions(removedSprites) {
       left: sprite.initialBounds.left + 1000,
       top: sprite.initialBounds.top
     };
-    let move = new Move(sprite);
+    let move = new Move(sprite, { duration });
     removalGenerators.push(move.run());
   });
   return removalGenerators;

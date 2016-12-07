@@ -17,9 +17,6 @@ export default class Resize extends Motion {
   * animate() {
     let sprite = this.sprite;
     let duration = this.opts.duration;
-    if (this.opts.duration == null) {
-      duration = 2000;
-    }
 
     if (!this.prior) {
       this.widthTween = new Tween(sprite.initialBounds.width, sprite.finalBounds.width, duration);

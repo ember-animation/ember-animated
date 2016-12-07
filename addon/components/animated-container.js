@@ -25,8 +25,8 @@ export default Ember.Component.extend({
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
   animate: task(function * () {
-    yield* this.waitForSignal('measured');
-    yield* new (this.motion || Resize)(this.sprite).run();
+    let opts = yield* this.waitForSignal('measured');
+    yield* new (this.motion || Resize)(this.sprite, opts).run();
     yield* this.waitForSignal('unlock');
     this.sprite.unlock();
   }).restartable(),
@@ -35,9 +35,9 @@ export default Ember.Component.extend({
     this._signals = [];
   },
 
-  receivedSignal(name) {
+  receivedSignal(name, opts) {
     if (!this._signals) { return; }
-    this._signals.push(name);
+    this._signals.push({name, opts});
     let s = this._signalResolve;
     this._signalResolve = null;
     this._signalPromise = null;
@@ -47,7 +47,8 @@ export default Ember.Component.extend({
   },
 
   waitForSignal: function * (name) {
-    while (this._signals.indexOf(name) < 0) {
+    let signal;
+    while (!(signal = this._signals.find(s => s.name === name))) {
       if (!this._signalPromise) {
         this._signalPromise = new Promise(resolve => {
           this._signalResolve = resolve;
@@ -55,6 +56,7 @@ export default Ember.Component.extend({
       }
       yield this._signalPromise;
     }
+    return signal.opts;
   },
 
   actions: {
@@ -66,13 +68,13 @@ export default Ember.Component.extend({
       sprite.lock();
       this.get('animate').perform();
     },
-    measure() {
+    measure(opts) {
       if (this.sprite) {
         this.sprite.unlock();
         this.sprite.measureFinalBounds();
         this.sprite.lock();
       }
-      this.receivedSignal('measured');
+      this.receivedSignal('measured', opts);
     },
     unlock() {
       this.receivedSignal('unlock');
