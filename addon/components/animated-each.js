@@ -160,11 +160,7 @@ function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePai
     });
   } else {
     insertedSprites.forEach(sprite => {
-      sprite.initialBounds = {
-        left: sprite.finalBounds.left + 1000,
-        top: sprite.finalBounds.top
-      };
-      sprite.translate(sprite.initialBounds.left - sprite.finalBounds.left, sprite.initialBounds.top - sprite.finalBounds.top);
+      sprite.startTranslatedBy(1000, 0);
       let move = new Move(sprite, { duration });
       sprite.reveal();
       generators.push(move.run());
@@ -172,7 +168,7 @@ function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePai
   }
 
   matchedSpritePairs.forEach(([oldSprite, newSprite]) => {
-    newSprite.replaces(oldSprite);
+    newSprite.startAt(oldSprite);
     newSprite.reveal();
     keptSprites.push(newSprite);
   });
@@ -190,10 +186,7 @@ function createRemovalMotions(removedSprites, duration) {
   removedSprites.forEach(sprite => {
     sprite.append();
     sprite.lock();
-    sprite.finalBounds = {
-      left: sprite.initialBounds.left + 1000,
-      top: sprite.initialBounds.top
-    };
+    sprite.endTranslatedBy(1000, 0);
     let move = new Move(sprite, { duration });
     removalGenerators.push(move.run());
   });

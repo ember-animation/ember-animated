@@ -68,10 +68,23 @@ export default class Sprite {
   measureFinalBounds() {
     this.finalBounds = this.element.getBoundingClientRect();
   }
-  replaces(otherSprite) {
+  startAt(otherSprite) {
     continueMotions(otherSprite.element, this.element);
     this.translate(otherSprite.initialBounds.left - this.finalBounds.left, otherSprite.initialBounds.top - this.finalBounds.top);
     this.initialBounds = otherSprite.initialBounds;
+  }
+  startTranslatedBy(dx, dy) {
+    this.initialBounds = {
+      left: this.finalBounds.left + dx,
+      top: this.finalBounds.top + dy
+    };
+    this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
+  }
+  endTranslatedBy(dx, dy) {
+    this.finalBounds = {
+      left: this.initialBounds.left + dx,
+      top: this.initialBounds.top + dy
+    };
   }
   lock() {
     $(this.element).css(this._imposedStyle);
