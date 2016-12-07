@@ -51,7 +51,7 @@ export default Ember.Service.extend({
   }),
 
   // Warning, this mutates the incoming arrays. You should treat them
-  // as gone once you pass them in, and use the returned valued
+  // as gone once you pass them in, and use the returned values
   // instead.
   farMatch: task(function * (inserted, removed) {
     let matched = [];
