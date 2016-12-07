@@ -23,8 +23,9 @@ export default Ember.Component.extend({
   isAnimating: Ember.computed.or('animate.isRunning', 'runThenRemove.isRunning'),
 
   willDestroyElement() {
-    let removed = flatMap(this._currentComponents, component => component.sprites());
-    this.get('motionService.farMatch').perform([], removed, []);
+    let removedSprites = flatMap(this._currentComponents, component => component.sprites());
+    removedSprites.forEach(sprite => sprite.measureInitialBounds());
+    this.get('motionService.farMatch').perform([], removedSprites);
     this.get('motionService').unregister(this);
   },
 
@@ -80,7 +81,7 @@ export default Ember.Component.extend({
     let matchedSpritePairs;
     [insertedSprites, removedSprites, matchedSpritePairs] = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
 
-    //console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}, matched=${matchedSprites.length}`);
+    //console.log(`inserted=${insertedSprites.length}, kept=${keptSprites.length}, removed=${removedSprites.length}, matched=${matchedSpritePairs.length}`);
 
     if (firstTime) {
       insertedSprites.forEach(sprite => {

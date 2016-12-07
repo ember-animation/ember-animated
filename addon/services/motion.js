@@ -55,14 +55,14 @@ export default Ember.Service.extend({
   // instead.
   farMatch: task(function * (inserted, removed) {
     let matched = [];
-    let mine = { inserted, removed };
+    let mine = { inserted, removed, matched };
     this._rendezvous.push(mine);
     yield microwait();
     if (this.get('farMatch.concurrency') > 1) {
       this._rendezvous.forEach(target => {
         if (target === mine) { return; }
-        performMatches(mine, target, matched);
-        performMatches(target, mine, matched);
+        performMatches(mine, target);
+        performMatches(target, mine);
       });
     }
     this._rendezvous.splice(this._rendezvous.indexOf(mine));
@@ -71,13 +71,13 @@ export default Ember.Service.extend({
 
 });
 
-function performMatches(insertedSource, removedSource, matched) {
+function performMatches(insertedSource, removedSource) {
   insertedSource.inserted.slice().forEach(sprite => {
     let match = removedSource.removed.find(mySprite => sprite.component.item.id === mySprite.component.item.id);
     if (match) {
       removedSource.removed.splice(removedSource.removed.indexOf(match), 1);
       insertedSource.inserted.splice(insertedSource.inserted.indexOf(sprite), 1);
-      matched.push([match, sprite]);
+      insertedSource.matched.push([match, sprite]);
     }
   });
 

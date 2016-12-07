@@ -10,6 +10,7 @@ Router.map(function() {
   this.route('each');
   this.route('container-only');
   this.route('two-lists');
+  this.route('swapping-lists');
 });
 
 export default Router;
