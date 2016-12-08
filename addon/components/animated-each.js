@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import layout from '../templates/components/animated-each';
 import { task } from 'ember-concurrency';
-import { afterRender } from '../concurrency-helpers';
+import { afterRender, rAF } from '../concurrency-helpers';
 import Move from '../motions/move';
 import parallel from '../parallel';
 
@@ -15,17 +15,21 @@ export default Ember.Component.extend({
     this._enteringComponents = [];
     this._currentComponents = [];
     this._leavingComponents = [];
+    this._removalMotions = new Map();
     this._prevItems = [];
     this._firstTime = true;
     this.get('motionService').register(this);
     this._super();
   },
 
-  isAnimating: Ember.computed.or('animate.isRunning', 'runThenRemove.isRunning'),
+  isAnimating: Ember.computed.alias('animate.isRunning'),
 
   willDestroyElement() {
     let removedSprites = flatMap(this._currentComponents, component => component.sprites());
     removedSprites.forEach(sprite => sprite.measureInitialBounds());
+    for (let sprite of this._removalMotions.keys()) {
+      removedSprites.push(sprite);
+    }
     this.get('motionService.farMatch').perform([], removedSprites);
     this.get('motionService').unregister(this);
   },
@@ -56,6 +60,10 @@ export default Ember.Component.extend({
       sprite => this._leavingComponents.indexOf(sprite.component) < 0
     );
 
+    for (let sprite of this._removalMotions.keys()) {
+      removedSprites.push(sprite);
+    }
+
     // Briefly unlock everybody
     keptSprites.forEach(sprite => sprite.unlock());
     // so we can measure the final static layout
@@ -79,23 +87,57 @@ export default Ember.Component.extend({
     // any removed sprites that matched elsewhere will get handled elsewhere
     removedSprites = removedSprites.filter(sprite => !farMatches.get(sprite))
 
-    // Removal motions have different lifetimes than the kept or
-    // inserted motions because an interrupting animation doesn't cancel them.
-    this.get('runThenRemove').perform(createRemovalMotions(removedSprites, this.get('duration')), removedSprites);
 
-    yield * parallel(createMotions(firstTime, insertedSprites, keptSprites, farMatches, this.get('duration')), onError);
+    for (let motions of createMotions(firstTime, insertedSprites, keptSprites, removedSprites, farMatches, this.get('duration'))) {
+      if (!Array.isArray(motions)) {
+        motions = [motions];
+      }
+      yield * parallel(motions.map(m => this._runMotion(m, insertedSprites, removedSprites)), onError);
+    }
+
     keptSprites.forEach(sprite => sprite.unlock());
-    insertedSprites.forEach(sprite => sprite.unlock());
+    insertedSprites.forEach(sprite => {
+      sprite.unlock();
+      sprite.reveal(); // inserted sprites get revealed when their
+                       // first motion begins. If they didn't get any
+                       // motions, we have a catch-all here.
+    });
     this._notifyContainer('unlock');
   }).restartable(),
 
-  runThenRemove: task(function * (generators, sprites) {
-    try {
-      yield * parallel(generators);
-    } finally {
-      sprites.forEach(sprite => sprite.remove());
+  _runMotion(motion, insertedSprites, removedSprites) {
+    if (removedSprites.indexOf(motion.sprite) !== -1) {
+      return this._runWithRemoval(motion);
     }
-  }),
+    if (insertedSprites.indexOf(motion.sprite) !== -1) {
+      motion.sprite.reveal();
+    }
+    return motion.run();
+  },
+
+  * _runWithRemoval(motion) {
+    let motionCounts = this._removalMotions;
+    let count = motionCounts.get(motion.sprite) || 0;
+    if (count === 0) {
+      motion.sprite.append();
+      motion.sprite.lock();
+    }
+    count++;
+    motionCounts.set(motion.sprite, count);
+    try {
+      yield * motion.run();
+    } finally {
+      rAF().then(() => {
+        let count = motionCounts.get(motion.sprite);
+        if (count > 1) {
+          motionCounts.set(motion.sprite, --count);
+        } else {
+          motion.sprite.remove();
+          motionCounts.delete(motion.sprite)
+        }
+      });
+    }
+  },
 
   _updateComponentLists() {
     this._currentComponents = this._currentComponents.concat(this._enteringComponents)
@@ -154,39 +196,28 @@ function onError(reason) {
   }
 }
 
-function createMotions(firstTime, insertedSprites, keptSprites, farMatches, duration) {
-  let generators = [];
+function * createMotions(firstTime, insertedSprites, keptSprites, removedSprites, farMatches, duration) {
+  let motions = [];
 
   insertedSprites.forEach(sprite => {
     let oldSprite = farMatches.get(sprite);
     if (oldSprite) {
       sprite.startAt(oldSprite);
-      let move = new Move(sprite, { duration });
-      generators.push(move.run());
+      motions.push(new Move(sprite, { duration }));
     } else if (!firstTime) {
       sprite.startTranslatedBy(1000, 0);
-      let move = new Move(sprite, { duration });
-      generators.push(move.run());
+      motions.push(new Move(sprite, { duration }));
     }
-    sprite.reveal();
   });
 
   keptSprites.forEach(sprite => {
-    let move = new Move(sprite, { duration });
-    generators.push(move.run());
+    motions.push(new Move(sprite, { duration }));
   });
 
-  return generators;
-}
-
-function createRemovalMotions(removedSprites, duration) {
-  let removalGenerators = [];
   removedSprites.forEach(sprite => {
-    sprite.append();
-    sprite.lock();
     sprite.endTranslatedBy(1000, 0);
-    let move = new Move(sprite, { duration });
-    removalGenerators.push(move.run());
+    motions.push(new Move(sprite, { duration }));
   });
-  return removalGenerators;
+
+  yield motions;
 }
