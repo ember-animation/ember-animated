@@ -1511,17 +1511,17 @@ ember-cli-valid-component-name@^1.0.0:
   dependencies:
     silent-error "^1.0.0"
 
-ember-cli-version-checker@^1.0.2, ember-cli-version-checker@^1.1.4, ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.2.0.tgz#caa286b77d1b485df5d2f62c67a6f19aa8b582c4"
-  dependencies:
-    semver "^5.3.0"
-
-ember-cli-version-checker@^1.1.7:
+ember-cli-version-checker@^1.0.2, ember-cli-version-checker@^1.1.4, ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.1.7.tgz#cbabacb5eef2635048d5208fab05b032e5313d1a"
   dependencies:
     semver "^4.2.2"
+
+ember-cli-version-checker@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.2.0.tgz#caa286b77d1b485df5d2f62c67a6f19aa8b582c4"
+  dependencies:
+    semver "^5.3.0"
 
 ember-cli@2.9.1:
   version "2.9.1"
@@ -1605,12 +1605,12 @@ ember-cli@2.9.1:
     walk-sync "^0.3.0"
     yam "0.0.22"
 
-"ember-concurrency@https://github.com/ef4/ember-concurrency.git#master":
+"ember-concurrency@https://github.com/machty/ember-concurrency.git#ac93f89f3aea7c31cb5fcc623de37ea66cb90648":
   version "0.7.15"
-  resolved "https://github.com/ef4/ember-concurrency.git#1f9eeea2664b5507e26d5010846e0255a0665329"
+  resolved "https://github.com/machty/ember-concurrency.git#ac93f89f3aea7c31cb5fcc623de37ea66cb90648"
   dependencies:
     ember-cli-babel "^5.1.5"
-    ember-getowner-polyfill "https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665"
+    ember-getowner-polyfill "^1.1.0"
     ember-maybe-import-regenerator "^0.1.4"
 
 ember-disable-prototype-extensions@^1.1.0:
@@ -1625,9 +1625,9 @@ ember-export-application-global@^1.0.5:
   dependencies:
     ember-cli-babel "^5.1.10"
 
-"ember-getowner-polyfill@https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665":
-  version "1.0.1"
-  resolved "https://github.com/rwjblue/ember-getowner-polyfill.git#07a018d7ec3b4528025d6429739d8f122cb75665"
+ember-getowner-polyfill@1.1.1, ember-getowner-polyfill@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-1.1.1.tgz#6bb6603827dd2f8f33be2434570a86cc9e5273ff"
   dependencies:
     ember-cli-babel "^5.1.6"
     ember-cli-version-checker "^1.2.0"
