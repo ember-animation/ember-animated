@@ -316,6 +316,10 @@ skip("polyfills WeakMap as needed (and remember to adjust eslint config)", funct
   assert.ok(false);
 });
 
+skip("polyfills Map as needed (and remember to adjust eslint config)", function(assert) {
+  assert.ok(false);
+});
+
 skip("polyfills rAF as needed", function(assert) {
   assert.ok(false);
 });

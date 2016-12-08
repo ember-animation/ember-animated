@@ -13,6 +13,7 @@ module.exports = {
     'require-yield': 0
   },
   globals: {
-    WeakMap: false
+    WeakMap: false,
+    Map: false
   }
 };

@@ -50,12 +50,9 @@ export default Ember.Service.extend({
     }
   }),
 
-  // Warning, this mutates the incoming arrays. You should treat them
-  // as gone once you pass them in, and use the returned values
-  // instead.
   farMatch: task(function * (inserted, removed) {
-    let matched = [];
-    let mine = { inserted, removed, matched };
+    let matches = new Map();
+    let mine = { inserted, removed, matches };
     this._rendezvous.push(mine);
     yield microwait();
     if (this.get('farMatch.concurrency') > 1) {
@@ -66,7 +63,7 @@ export default Ember.Service.extend({
       });
     }
     this._rendezvous.splice(this._rendezvous.indexOf(mine));
-    return [inserted, removed, matched];
+    return matches;
   })
 
 });
@@ -75,9 +72,8 @@ function performMatches(insertedSource, removedSource) {
   insertedSource.inserted.slice().forEach(sprite => {
     let match = removedSource.removed.find(mySprite => sprite.component.item.id === mySprite.component.item.id);
     if (match) {
-      removedSource.removed.splice(removedSource.removed.indexOf(match), 1);
-      insertedSource.inserted.splice(insertedSource.inserted.indexOf(sprite), 1);
-      insertedSource.matched.push([match, sprite]);
+      insertedSource.matches.set(sprite, match);
+      removedSource.matches.set(match, sprite);
     }
   });
 

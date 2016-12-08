@@ -74,14 +74,16 @@ export default Ember.Component.extend({
     keptSprites.forEach(sprite => sprite.lock());
     insertedSprites.forEach(sprite => sprite.lock());
 
-    let matchedSpritePairs;
-    [insertedSprites, removedSprites, matchedSpritePairs] = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
+    let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
+
+    // any removed sprites that matched elsewhere will get handled elsewhere
+    removedSprites = removedSprites.filter(sprite => !farMatches.get(sprite))
 
     // Removal motions have different lifetimes than the kept or
     // inserted motions because an interrupting animation doesn't cancel them.
     this.get('runThenRemove').perform(createRemovalMotions(removedSprites, this.get('duration')), removedSprites);
 
-    yield * parallel(createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs, this.get('duration')), onError);
+    yield * parallel(createMotions(firstTime, insertedSprites, keptSprites, farMatches, this.get('duration')), onError);
     keptSprites.forEach(sprite => sprite.unlock());
     insertedSprites.forEach(sprite => sprite.unlock());
     this._notifyContainer('unlock');
@@ -152,25 +154,24 @@ function onError(reason) {
   }
 }
 
-function createMotions(firstTime, insertedSprites, keptSprites, matchedSpritePairs, duration) {
+function createMotions(firstTime, insertedSprites, keptSprites, farMatches, duration) {
   let generators = [];
-  if (firstTime) {
-    insertedSprites.forEach(sprite => {
-      sprite.reveal();
-    });
-  } else {
-    insertedSprites.forEach(sprite => {
-      sprite.startTranslatedBy(1000, 0);
-      let move = new Move(sprite, { duration });
-      sprite.reveal();
-      generators.push(move.run());
-    });
-  }
 
-  matchedSpritePairs.forEach(([oldSprite, newSprite]) => {
-    newSprite.startAt(oldSprite);
-    newSprite.reveal();
-    keptSprites.push(newSprite);
+  insertedSprites.forEach(sprite => {
+    let oldSprite = farMatches.get(sprite);
+    if (oldSprite) {
+      sprite.startAt(oldSprite);
+      sprite.reveal();
+      // fixme: mutation
+      keptSprites.push(sprite);
+    } else {
+      if (!firstTime) {
+        sprite.startTranslatedBy(1000, 0);
+        let move = new Move(sprite, { duration });
+        generators.push(move.run());
+      }
+      sprite.reveal();
+    }
   });
 
   keptSprites.forEach(sprite => {
