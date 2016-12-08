@@ -161,17 +161,14 @@ function createMotions(firstTime, insertedSprites, keptSprites, farMatches, dura
     let oldSprite = farMatches.get(sprite);
     if (oldSprite) {
       sprite.startAt(oldSprite);
-      sprite.reveal();
-      // fixme: mutation
-      keptSprites.push(sprite);
-    } else {
-      if (!firstTime) {
-        sprite.startTranslatedBy(1000, 0);
-        let move = new Move(sprite, { duration });
-        generators.push(move.run());
-      }
-      sprite.reveal();
+      let move = new Move(sprite, { duration });
+      generators.push(move.run());
+    } else if (!firstTime) {
+      sprite.startTranslatedBy(1000, 0);
+      let move = new Move(sprite, { duration });
+      generators.push(move.run());
     }
+    sprite.reveal();
   });
 
   keptSprites.forEach(sprite => {
