@@ -37,20 +37,37 @@ export default class Move extends Motion {
         duration
       );
     } else {
-      // When interrupting an existing move, we create differential
-      // tweens based on the difference in final bounds between the
-      // old and new tweens.
-      let initialView = this.prior.sprite.finalBounds;
-      let finalView = sprite.finalBounds;
+      // Here we are interrupting a prior Move.
+
+      // The transformDiffs account for the fact that our old and new
+      // tweens may be measuring from different origins.
       let transformDiffX = sprite.transform.tx - this.prior.xTween.currentValue;
       let transformDiffY = sprite.transform.ty - this.prior.yTween.currentValue;
-      let viewDiffX = finalView.left - initialView.left;
-      let viewDiffY = finalView.top - initialView.top;
-      this.xTween = new Tween(transformDiffX, transformDiffX + viewDiffX, duration).plus(this.prior.xTween);
-      this.yTween = new Tween(transformDiffY, transformDiffY + viewDiffY, duration).plus(this.prior.yTween);
+
+      // The viewDiffs account for the visual difference between where
+      // the old tween was going and where the new tween is going.
+      let viewDiffX;
+      let viewDiffY;
+      {
+        let initialView = this.prior.sprite.finalBounds;
+        let finalView = sprite.finalBounds;
+        viewDiffX = finalView.left - initialView.left;
+        viewDiffY = finalView.top - initialView.top;
+      }
+
+      // If our interrupting move is actually going to the same place
+      // we were already going, we don't really want to extend the
+      // time of the overall animation (it looks funny when you're
+      // waiting around for nothing to happen).
+      let durationX = viewDiffX === 0 ? 0 : duration;
+      let durationY = viewDiffY === 0 ? 0 : duration;
+
+      // We add our new differential tweens to the prior tweens.
+      this.xTween = new Tween(transformDiffX, transformDiffX + viewDiffX, durationX).plus(this.prior.xTween);
+      this.yTween = new Tween(transformDiffY, transformDiffY + viewDiffY, durationY).plus(this.prior.yTween);
     }
 
-    while (!this.xTween.done) {
+    while (!this.xTween.done || !this.yTween.done) {
       yield rAF();
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
