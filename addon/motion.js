@@ -1,4 +1,7 @@
-import { rAF } from './concurrency-helpers';
+import {
+  rAF,
+  Promise
+} from './concurrency-helpers';
 
 const motions = new WeakMap();
 const bridges = new WeakMap();
@@ -9,6 +12,10 @@ export default class Motion {
     this.sprite = sprite;
     this.opts = opts;
     this._setupMotionList();
+    this._promise = new Promise((resolve, reject) => {
+      this._resolve = resolve
+      this._reject = reject;
+    });
   }
 
   // --- Begin Hooks you should Implement ---
@@ -40,7 +47,12 @@ export default class Motion {
         this.interrupted(others);
       }
       yield * this.animate();
+    } catch (err) {
+      if (err.message !== 'TaskCancelation') {
+        this._reject(err);
+      }
     } finally {
+      this._resolve();
       rAF().then(() => this._clearMotionList());
     }
   }

@@ -1,9 +1,8 @@
 import Ember from 'ember';
 import layout from '../templates/components/animated-each';
 import { task } from 'ember-concurrency';
-import { afterRender, rAF } from '../concurrency-helpers';
+import { afterRender } from '../concurrency-helpers';
 import Move from '../motions/move';
-import parallel from '../parallel';
 import TransitionContext from '../transition-context';
 
 export default Ember.Component.extend({
@@ -95,12 +94,10 @@ export default Ember.Component.extend({
       transition = defaultTransition;
     }
 
-    for (let motions of transition.call(new TransitionContext(insertedSprites, keptSprites, removedSprites, farMatches), this.get('duration'))) {
-      if (!Array.isArray(motions)) {
-        motions = [motions];
-      }
-      yield * parallel(motions.map(m => this._runMotion(m, insertedSprites, removedSprites)), onError);
-    }
+    let context = new TransitionContext(this.get('duration'), insertedSprites, keptSprites, removedSprites, farMatches, this._removalMotions);
+
+    yield * transition.call(context);
+    yield * context._runToCompletion();
 
     keptSprites.forEach(sprite => sprite.unlock());
     insertedSprites.forEach(sprite => {
@@ -111,40 +108,6 @@ export default Ember.Component.extend({
     });
     this._notifyContainer('unlock');
   }).restartable(),
-
-  _runMotion(motion, insertedSprites, removedSprites) {
-    if (removedSprites.indexOf(motion.sprite) !== -1) {
-      return this._runWithRemoval(motion);
-    }
-    if (insertedSprites.indexOf(motion.sprite) !== -1) {
-      motion.sprite.reveal();
-    }
-    return motion.run();
-  },
-
-  * _runWithRemoval(motion) {
-    let motionCounts = this._removalMotions;
-    let count = motionCounts.get(motion.sprite) || 0;
-    if (count === 0) {
-      motion.sprite.append();
-      motion.sprite.lock();
-    }
-    count++;
-    motionCounts.set(motion.sprite, count);
-    try {
-      yield * motion.run();
-    } finally {
-      rAF().then(() => {
-        let count = motionCounts.get(motion.sprite);
-        if (count > 1) {
-          motionCounts.set(motion.sprite, --count);
-        } else {
-          motion.sprite.remove();
-          motionCounts.delete(motion.sprite)
-        }
-      });
-    }
-  },
 
   _updateComponentLists() {
     this._currentComponents = this._currentComponents.concat(this._enteringComponents)
@@ -195,51 +158,61 @@ function flatMap(list, fn) {
   return [].concat(...results);
 }
 
-function onError(reason) {
-  if (reason.name !== 'TaskCancelation') {
-    setTimeout(function() {
-      throw reason;
-    }, 0);
-  }
-}
 
-
-function * defaultFirstTransition(duration) {
-  let motions = [];
-
+function * defaultFirstTransition() {
   this.insertedSprites.forEach(sprite => {
     let oldSprite = this.matchFor(sprite);
     if (oldSprite) {
       sprite.startAt(oldSprite);
-      motions.push(new Move(sprite, { duration }));
+      this.run(Move, sprite);
     }
   });
-
-  yield motions;
 }
 
-function * defaultTransition(duration) {
-  let motions = [];
-
+function * defaultTransition() {
   this.insertedSprites.forEach(sprite => {
     let oldSprite = this.matchFor(sprite);
     if (oldSprite) {
       sprite.startAt(oldSprite);
-      motions.push(new Move(sprite, { duration }));
+      this.run(Move, sprite);
     } else {
       sprite.startTranslatedBy(1000, 0);
-      motions.push(new Move(sprite, { duration }));
+      this.run(Move, sprite);
     }
   });
 
   this.keptSprites.forEach(sprite => {
-    motions.push(new Move(sprite, { duration }));
+    this.run(Move, sprite);
   });
 
   this.removedSprites.forEach(sprite => {
     sprite.endTranslatedBy(1000, 0);
-    motions.push(new Move(sprite, { duration }));
+    this.run(Move, sprite);
   });
 
-  yield motions;
 }
+
+
+function equalBounds(a, b) {
+  return ['bottom', 'height', 'left', 'right', 'top', 'width'].every(field => Math.abs(a[field] - b[field]) < 0.25);
+}
+
+function * serialExample() {
+  for (let sprite of this.keptSprites) {
+    if (!equalBounds(sprite.initialBounds, sprite.finalBounds)) {
+      yield this.run(Move, sprite, { duration: this.duration })
+    }
+  }
+  for (let sprite of this.insertedSprites) {
+    sprite.startTranslatedBy(1000, 0);
+    this.run(Move, sprite);
+  }
+}
+
+
+// How to compose motions together? Generator-based transition seems
+// weird because of nonstandard control flow (doesn't match EC). I
+// could match EC if yield really means block-for-this promise, but
+// then I need a way to start animations.
+//
+//   yield this.(new Motion())
