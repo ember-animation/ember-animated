@@ -2,8 +2,8 @@ import Ember from 'ember';
 import layout from '../templates/components/animated-each';
 import { task } from 'ember-concurrency';
 import { afterRender } from '../concurrency-helpers';
-import Move from '../motions/move';
 import TransitionContext from '../transition-context';
+import { first as firstTransition, subsequent as subsequentTransition } from '../transitions/default-list-transitions';
 
 export default Ember.Component.extend({
   layout,
@@ -89,9 +89,9 @@ export default Ember.Component.extend({
 
     let transition;
     if (firstTime) {
-      transition = defaultFirstTransition;
+      transition = firstTransition;
     } else {
-      transition = defaultTransition;
+      transition = subsequentTransition;
     }
 
     let context = new TransitionContext(this.get('duration'), insertedSprites, keptSprites, removedSprites, farMatches, this._removalMotions);
@@ -157,62 +157,3 @@ function flatMap(list, fn) {
   }
   return [].concat(...results);
 }
-
-
-function * defaultFirstTransition() {
-  this.insertedSprites.forEach(sprite => {
-    let oldSprite = this.matchFor(sprite);
-    if (oldSprite) {
-      sprite.startAt(oldSprite);
-      this.animate(Move, sprite);
-    }
-  });
-}
-
-function * defaultTransition() {
-  this.insertedSprites.forEach(sprite => {
-    let oldSprite = this.matchFor(sprite);
-    if (oldSprite) {
-      sprite.startAt(oldSprite);
-      this.animate(Move, sprite);
-    } else {
-      sprite.startTranslatedBy(1000, 0);
-      this.animate(Move, sprite);
-    }
-  });
-
-  this.keptSprites.forEach(sprite => {
-    this.animate(Move, sprite);
-  });
-
-  this.removedSprites.forEach(sprite => {
-    sprite.endTranslatedBy(1000, 0);
-    this.animate(Move, sprite);
-  });
-
-}
-
-
-function equalBounds(a, b) {
-  return ['bottom', 'height', 'left', 'right', 'top', 'width'].every(field => Math.abs(a[field] - b[field]) < 0.25);
-}
-
-function * serialExample() {
-  for (let sprite of this.keptSprites) {
-    if (!equalBounds(sprite.initialBounds, sprite.finalBounds)) {
-      yield this.animate(Move, sprite, { duration: this.duration })
-    }
-  }
-  for (let sprite of this.insertedSprites) {
-    sprite.startTranslatedBy(1000, 0);
-    this.animate(Move, sprite);
-  }
-}
-
-
-// How to compose motions together? Generator-based transition seems
-// weird because of nonstandard control flow (doesn't match EC). I
-// could match EC if yield really means block-for-this promise, but
-// then I need a way to start animations.
-//
-//   yield this.(new Motion())

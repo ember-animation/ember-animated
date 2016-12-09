@@ -33,7 +33,7 @@ test('Can be canceled within ember-concurrency tasks', function(assert) {
     animate: task(function * () {
       let sprite = new Sprite($('#qunit-fixture > .target')[0], this);
       this.motion = new TestMotion(sprite);
-      yield * this.motion.run();
+      yield * this.motion._run();
     })
   });
 
