@@ -4,6 +4,7 @@ import { task } from 'ember-concurrency';
 import { afterRender, rAF } from '../concurrency-helpers';
 import Move from '../motions/move';
 import parallel from '../parallel';
+import TransitionContext from '../transition-context';
 
 export default Ember.Component.extend({
   layout,
@@ -87,8 +88,14 @@ export default Ember.Component.extend({
     // any removed sprites that matched elsewhere will get handled elsewhere
     removedSprites = removedSprites.filter(sprite => !farMatches.get(sprite))
 
+    let transition;
+    if (firstTime) {
+      transition = defaultFirstTransition;
+    } else {
+      transition = defaultTransition;
+    }
 
-    for (let motions of createMotions(firstTime, insertedSprites, keptSprites, removedSprites, farMatches, this.get('duration'))) {
+    for (let motions of transition.call(new TransitionContext(insertedSprites, keptSprites, removedSprites, farMatches), this.get('duration'))) {
       if (!Array.isArray(motions)) {
         motions = [motions];
       }
@@ -196,25 +203,40 @@ function onError(reason) {
   }
 }
 
-function * createMotions(firstTime, insertedSprites, keptSprites, removedSprites, farMatches, duration) {
+
+function * defaultFirstTransition(duration) {
   let motions = [];
 
-  insertedSprites.forEach(sprite => {
-    let oldSprite = farMatches.get(sprite);
+  this.insertedSprites.forEach(sprite => {
+    let oldSprite = this.matchFor(sprite);
     if (oldSprite) {
       sprite.startAt(oldSprite);
       motions.push(new Move(sprite, { duration }));
-    } else if (!firstTime) {
+    }
+  });
+
+  yield motions;
+}
+
+function * defaultTransition(duration) {
+  let motions = [];
+
+  this.insertedSprites.forEach(sprite => {
+    let oldSprite = this.matchFor(sprite);
+    if (oldSprite) {
+      sprite.startAt(oldSprite);
+      motions.push(new Move(sprite, { duration }));
+    } else {
       sprite.startTranslatedBy(1000, 0);
       motions.push(new Move(sprite, { duration }));
     }
   });
 
-  keptSprites.forEach(sprite => {
+  this.keptSprites.forEach(sprite => {
     motions.push(new Move(sprite, { duration }));
   });
 
-  removedSprites.forEach(sprite => {
+  this.removedSprites.forEach(sprite => {
     sprite.endTranslatedBy(1000, 0);
     motions.push(new Move(sprite, { duration }));
   });
