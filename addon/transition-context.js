@@ -21,7 +21,7 @@ export default class TransitionContext {
   get removedSprite() {
     return this.removedSprites[0];
   }
-  run(MotionClass, sprite, opts) {
+  animate(MotionClass, sprite, opts) {
     if (!opts) {
       opts = { duration: this.duration }
     } else {
@@ -31,8 +31,7 @@ export default class TransitionContext {
       }
     }
     let motion = new MotionClass(sprite, opts);
-    let generator = this._runMotion(motion);
-    this._generators.push(generator);
+    this._generators.push(this._runMotion(motion));
     return motion._promise;
   }
   _runMotion(motion) {
@@ -42,9 +41,9 @@ export default class TransitionContext {
     if (this.insertedSprites.indexOf(motion.sprite) !== -1) {
       motion.sprite.reveal();
     }
-    return motion.run();
+    return motion._run();
   }
-  * _runWithRemoval(motion) {
+  *_runWithRemoval(motion) {
     let motionCounts = this._removalMotions;
     let count = motionCounts.get(motion.sprite) || 0;
     if (count === 0) {
@@ -54,7 +53,7 @@ export default class TransitionContext {
     count++;
     motionCounts.set(motion.sprite, count);
     try {
-      yield * motion.run();
+      yield * motion._run();
     } finally {
       rAF().then(() => {
         let count = motionCounts.get(motion.sprite);
@@ -67,7 +66,7 @@ export default class TransitionContext {
       });
     }
   }
-  * _runToCompletion() {
+  *_runToCompletion() {
     yield * parallel(this._generators, onError)
   }
 }

@@ -35,9 +35,12 @@ export default class Motion {
   }
 
 
-  // --- Begin public methods you may call ---
+  // --- Begin private methods ---
 
-  * run() {
+
+  // this is private because the public way to run a motion is
+  // TransitionContext#animate.
+  * _run() {
     try {
       let others = this._motionList.filter(m => m !== this);
       if (this._inheritedMotionList) {
@@ -57,7 +60,7 @@ export default class Motion {
     }
   }
 
-  // --- Begin private methods ---
+
 
   _setupMotionList() {
     let element = this.sprite.element;

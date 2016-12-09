@@ -164,7 +164,7 @@ function * defaultFirstTransition() {
     let oldSprite = this.matchFor(sprite);
     if (oldSprite) {
       sprite.startAt(oldSprite);
-      this.run(Move, sprite);
+      this.animate(Move, sprite);
     }
   });
 }
@@ -174,20 +174,20 @@ function * defaultTransition() {
     let oldSprite = this.matchFor(sprite);
     if (oldSprite) {
       sprite.startAt(oldSprite);
-      this.run(Move, sprite);
+      this.animate(Move, sprite);
     } else {
       sprite.startTranslatedBy(1000, 0);
-      this.run(Move, sprite);
+      this.animate(Move, sprite);
     }
   });
 
   this.keptSprites.forEach(sprite => {
-    this.run(Move, sprite);
+    this.animate(Move, sprite);
   });
 
   this.removedSprites.forEach(sprite => {
     sprite.endTranslatedBy(1000, 0);
-    this.run(Move, sprite);
+    this.animate(Move, sprite);
   });
 
 }
@@ -200,12 +200,12 @@ function equalBounds(a, b) {
 function * serialExample() {
   for (let sprite of this.keptSprites) {
     if (!equalBounds(sprite.initialBounds, sprite.finalBounds)) {
-      yield this.run(Move, sprite, { duration: this.duration })
+      yield this.animate(Move, sprite, { duration: this.duration })
     }
   }
   for (let sprite of this.insertedSprites) {
     sprite.startTranslatedBy(1000, 0);
-    this.run(Move, sprite);
+    this.animate(Move, sprite);
   }
 }
 

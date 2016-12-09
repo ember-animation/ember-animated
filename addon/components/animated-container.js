@@ -26,7 +26,7 @@ export default Ember.Component.extend({
 
   animate: task(function * () {
     let opts = yield* this.waitForSignal('measured');
-    yield* new (this.motion || Resize)(this.sprite, opts).run();
+    yield* new (this.motion || Resize)(this.sprite, opts)._run();
     yield* this.waitForSignal('unlock');
     this.sprite.unlock();
   }).restartable(),
