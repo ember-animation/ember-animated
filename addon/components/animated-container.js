@@ -15,7 +15,12 @@ export default Ember.Component.extend({
     this._signals = null;
     this._signalPromise = null;
     this._signalResolve= null;
+    this._inserted = false;
     this.get('motionService').register(this);
+  },
+
+  didInsertElement() {
+    this._inserted = true;
   },
 
   willDestroyElement() {
@@ -61,6 +66,7 @@ export default Ember.Component.extend({
 
   actions: {
     lock() {
+      if (!this._inserted){ return; }
       let sprite = new Sprite(this.element, this, true);
       this.sprite = sprite;
       this.resetSignals();
