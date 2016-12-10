@@ -1,8 +1,8 @@
-import { module, test, skip } from 'qunit';
-import parallel, { cancelGenerator } from 'ember-animated/parallel';
+import { module, test } from 'qunit';
+import { Scheduler, cancelGenerator } from 'ember-animated/micro-routines';
 import { Promise } from 'ember-animated/concurrency-helpers';
 
-module("Unit | parallel", {
+module("Unit | micro-routines", {
   beforeEach(assert) {
     assert._logBuffer = [];
     assert.log = function(message) {
@@ -14,6 +14,12 @@ module("Unit | parallel", {
   }
 });
 
+function spawnAll(funcs, onError) {
+  let scheduler = new Scheduler(onError);
+  funcs.forEach(f => scheduler.spawn(f()));
+  return scheduler.run();
+}
+
 test('starts each generator immediately', function(assert) {
   function * first() {
     assert.log(1);
@@ -21,7 +27,7 @@ test('starts each generator immediately', function(assert) {
   function * second() {
     assert.log(2);
   }
-  let g = parallel([first(), second()]);
+  let g = spawnAll([first, second])
   let result = g.next();
   assert.ok(result.done, 'should be done already');
   assert.logEquals([1, 2]);
@@ -42,7 +48,7 @@ test('starts each generator immediately', function(assert) {
         resolvers[1] = () => resolve('world');
       }));
     }
-    let g = parallel([first(), second()]);
+    let g = spawnAll([first, second]);
     let state = g.next();
     assert.ok(!state.done, 'not done');
     if (order === 'reverse') {
@@ -68,7 +74,7 @@ test('finishes immediately after returning non promise', function(assert) {
   function * example() {
     yield new Promise(r => resolve = r);
   }
-  let g = parallel([example()]);
+  let g = spawnAll([example]);
   let state = g.next();
   assert.ok(!state.done, 'not done');
   resolve();
@@ -78,48 +84,42 @@ test('finishes immediately after returning non promise', function(assert) {
   });
 });
 
-test('waits for returned promise', function(assert) {
-  let resolveFirst, resolveSecond;
+test('throws on immediately returned promise', function(assert) {
+  function * example() {
+    return new Promise(() => null);
+  }
+  assert.throws(() => {
+    spawnAll([example])
+  }, "nope");
+});
+
+test('fires error handler on returned promise', function(assert) {
+  let resolveFirst;
+  let error;
   function * example() {
     yield new Promise(r => resolveFirst = r);
-    return new Promise(r => resolveSecond = r);
+    return new Promise(() => null);
   }
-  let g = parallel([example()]);
+  let g = spawnAll([example], err => error = err)
   let state = g.next();
   assert.ok(!state.done, 'not done');
   resolveFirst();
   return state.value.then(v => {
     state = g.next(v);
-    assert.ok(!state.done, 'still not done');
-    resolveSecond();
-    return state.value;
-  }).then(v => {
-    state = g.next(v);
     assert.ok(state.done, 'done');
+    assert.ok(error && error.message === "You may not return a Promise from an animation generator. Yield promises instead.", 'Found error message');
   });
 });
 
-test('handles immediate exception', function(assert) {
-  let resolve;
+test('spawn throws immediate exceptions', function(assert) {
   function * first() {
     let b = new Error("boom");
     b.message = 'boom';
     throw b;
   }
-  function * second() {
-    assert.log(2);
-    yield new Promise(r => resolve = r);
-    assert.log(3);
-  }
-  let g = parallel([first(), second()], reason => assert.log(reason.message));
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  resolve();
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(state.done, 'done');
-    assert.logEquals(['boom', 2, 3]);
-  });
+  assert.throws(() => {
+    spawnAll([first]);
+  }, /boom/);
 });
 
 ['forward', 'reverse'].forEach(order => {
@@ -137,7 +137,7 @@ test('handles immediate exception', function(assert) {
       yield new Promise(r => resolvers[1] = r);
       assert.log(3);
     }
-    let g = parallel([first(), second()], reason => assert.log(reason.message));
+    let g = spawnAll([first, second], reason => assert.log(reason.message));
     let state = g.next();
     assert.ok(!state.done, 'not done');
     if (order === 'reverse') {
@@ -170,7 +170,7 @@ test('throws exceptions into child generators', function(assert) {
       assert.log(err);
     }
   }
-  let g = parallel([example()]);
+  let g = spawnAll([example]);
   let state = g.next();
   assert.ok(!state.done, 'not done');
   reject('something');
@@ -195,10 +195,10 @@ test('can cancel all waiting promises', function(assert) {
     yield new Promise(r => resolveSecond = r);
     let fourth = new Promise(() => null);
     fourth.__ec_cancel__ = () => assert.log('fourth canceled');
-    return fourth;
+    yield fourth;
   }
 
-  let g = parallel([example1(), example2()]);
+  let g = spawnAll([example1, example2]);
   let state = g.next();
   assert.ok(!state.done, 'not done');
   resolveFirst();
@@ -230,7 +230,7 @@ test('can cancel all waiting promises', function(assert) {
         resolvers[1] = () => resolve('world');
       }));
     }
-    let g = parallel([first(), second()]);
+    let g = spawnAll([first, second]);
     let state = g.next();
     assert.ok(!state.done, 'not done');
     if (order === 'reverse') {
@@ -268,7 +268,7 @@ test('fairness', function(assert) {
     yield;
     assert.log(6);
   }
-  let g = parallel([first(), second()]);
+  let g = spawnAll([first, second]);
   let state = g.next();
   let steps = 0;
 
@@ -289,27 +289,6 @@ test('fairness', function(assert) {
   });
 });
 
-skip("wakes child generators within a single microtask wait", function(assert) {
-  let resolve;
-  function * example() {
-    yield new Promise(r => resolve = r);
-    assert.log('awake');
-  }
-  let g = parallel([example()]);
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  resolve();
-  Promise.resolve().then(() => {
-    assert.log("microtask boundary");
-  });
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(state.done, 'done');
-    assert.logEquals(['awake', 'microtask boundary']);
-  });
-
-});
-
 test("interrupted generators still run finally", function(assert) {
   function * example() {
     try {
@@ -318,8 +297,56 @@ test("interrupted generators still run finally", function(assert) {
       assert.log("finally ran");
     }
   }
-  let g = parallel([example()]);
+  let g = spawnAll([example]);
   g.next();
   cancelGenerator(g);
   assert.logEquals(['finally ran']);
+});
+
+test("routines can spawn more routines synchronously", function(assert) {
+  let scheduler = new Scheduler();
+  let count = 0;
+  function * example() {
+    if (count < 3) {
+      count++;
+      scheduler.spawn(example());
+    }
+  }
+  scheduler.spawn(example());
+  let g = scheduler.run();
+  let state = g.next();
+  assert.ok(state.done, 'done')
+  assert.equal(count, 3);
+});
+
+test("routines can spawn more routines asynchronously", function(assert) {
+  let scheduler = new Scheduler();
+  let resolve, resolve2;
+  function * example() {
+    yield new Promise(r => resolve = r);
+    assert.log("will spawn");
+    scheduler.spawn(second());
+    assert.log("did spawn");
+  }
+  function * second() {
+    assert.log("sync start");
+    yield new Promise(r => resolve2 = r);
+    assert.log("final");
+  }
+  scheduler.spawn(example());
+  let g = scheduler.run();
+  let state = g.next();
+  assert.ok(!state.done, 'not done')
+  resolve();
+  return state.value.then(v => {
+    state = g.next(v);
+    assert.ok(!state.done, 'not done 2');
+    assert.logEquals(["will spawn", "sync start", "did spawn"]);
+    resolve2();
+    return state.value
+  }).then(v => {
+    state = g.next(v);
+    assert.ok(state.done, 'done')
+    assert.logEquals(["will spawn", "sync start", "did spawn", "final"]);
+  });
 });

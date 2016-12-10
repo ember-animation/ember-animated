@@ -1,11 +1,11 @@
 import { rAF } from './concurrency-helpers';
-import parallel from './parallel';
+import { Scheduler } from './micro-routines';
 
 
 export default class TransitionContext {
   constructor(duration, insertedSprites, keptSprites, removedSprites, farMatches, removalMotions) {
     this.duration = duration;
-    this._generators = [];
+    this._scheduler = new Scheduler(onError);
     this.insertedSprites = insertedSprites;
     this.keptSprites = keptSprites;
     this.removedSprites = removedSprites;
@@ -31,19 +31,19 @@ export default class TransitionContext {
       }
     }
     let motion = new MotionClass(sprite, opts);
-    this._generators.push(this._runMotion(motion));
+    this._scheduler.spawn(this._motionGenerator(motion));
     return motion._promise;
   }
-  _runMotion(motion) {
+  _motionGenerator(motion) {
     if (this.removedSprites.indexOf(motion.sprite) !== -1) {
-      return this._runWithRemoval(motion);
+      return this._removalMotionGenerator(motion);
     }
     if (this.insertedSprites.indexOf(motion.sprite) !== -1) {
       motion.sprite.reveal();
     }
     return motion._run();
   }
-  *_runWithRemoval(motion) {
+  *_removalMotionGenerator(motion) {
     let motionCounts = this._removalMotions;
     let count = motionCounts.get(motion.sprite) || 0;
     if (count === 0) {
@@ -66,8 +66,9 @@ export default class TransitionContext {
       });
     }
   }
-  *_runToCompletion() {
-    yield * parallel(this._generators, onError)
+  *_runToCompletion(transition) {
+    this._scheduler.spawn(transition.call(this));
+    yield * this._scheduler.run();
   }
 }
 

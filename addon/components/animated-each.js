@@ -95,9 +95,7 @@ export default Ember.Component.extend({
     }
 
     let context = new TransitionContext(this.get('duration'), insertedSprites, keptSprites, removedSprites, farMatches, this._removalMotions);
-
-    yield * transition.call(context);
-    yield * context._runToCompletion();
+    yield * context._runToCompletion(transition);
 
     keptSprites.forEach(sprite => sprite.unlock());
     insertedSprites.forEach(sprite => {
