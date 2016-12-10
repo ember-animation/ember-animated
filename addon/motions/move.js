@@ -29,12 +29,12 @@ export default class Move extends Motion {
       this.xTween = new Tween(
         sprite.transform.tx,
         sprite.transform.tx + final.left - initial.left,
-        duration
+        final.left === initial.left ? 0 : duration
       );
       this.yTween = new Tween(
         sprite.transform.ty,
         sprite.transform.ty + final.top - initial.top,
-        duration
+        final.top === initial.top ? 0 : duration
       );
     } else {
       // Here we are interrupting a prior Move.
