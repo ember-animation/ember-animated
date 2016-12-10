@@ -1,7 +1,9 @@
 import Ember from 'ember';
 import { task, taskGroup, timeout } from 'ember-concurrency';
+import rules from 'ember-animated/transitions/default-list-transitions';
 
 export default Ember.Component.extend({
+  rules,
   currentSort: numeric,
   items: Ember.computed({
     get() {

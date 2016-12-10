@@ -3,7 +3,6 @@ import layout from '../templates/components/animated-each';
 import { task } from 'ember-concurrency';
 import { afterRender } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
-import { first as firstTransition, subsequent as subsequentTransition } from '../transitions/default-list-transitions';
 
 export default Ember.Component.extend({
   layout,
@@ -42,17 +41,19 @@ export default Ember.Component.extend({
     let firstTime = this._firstTime;
     this._firstTime = false;
 
-    if (!firstTime) {
-      this._notifyContainer('lock');
-    }
+    let transition = this._transitionFor(firstTime, prevItems, items);
+    this.set('willTransition', !!transition);
+    if (!transition) { return; }
+
+    this._notifyContainer('lock');
 
     let currentSprites = flatMap(this._currentComponents, component => component.sprites());
     currentSprites.forEach(sprite => sprite.measureInitialBounds());
     currentSprites.forEach(sprite => sprite.lock());
-    this.get('animate').perform(prevItems, items, currentSprites, firstTime);
+    this.get('animate').perform(currentSprites, transition);
   },
 
-  animate: task(function * (prevItems, items, currentSprites, firstTime) {
+  animate: task(function * (currentSprites, transition) {
     yield afterRender();
 
     let [keptSprites, removedSprites] = partition(
@@ -87,13 +88,6 @@ export default Ember.Component.extend({
     // any removed sprites that matched elsewhere will get handled elsewhere
     removedSprites = removedSprites.filter(sprite => !farMatches.get(sprite))
 
-    let transition;
-    if (firstTime) {
-      transition = firstTransition;
-    } else {
-      transition = subsequentTransition;
-    }
-
     let context = new TransitionContext(this.get('duration'), insertedSprites, keptSprites, removedSprites, farMatches, this._removalMotions);
     yield * context._runToCompletion(transition);
 
@@ -112,6 +106,14 @@ export default Ember.Component.extend({
     if (target && target[method]) {
       return target[method](opts);
     }
+  },
+
+  _transitionFor(firstTime, oldItems, newItems) {
+    let rules = this.get('rules');
+    if (!rules) {
+      return null;
+    }
+    return rules(firstTime, oldItems, newItems);
   },
 
   actions: {

@@ -34,3 +34,11 @@ export function * subsequent() {
   });
 
 }
+
+export default function rules(firstTime) {
+  if (firstTime) {
+    return first;
+  } else {
+    return subsequent;
+  }
+}

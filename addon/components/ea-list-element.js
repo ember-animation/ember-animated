@@ -6,9 +6,11 @@ import $ from 'jquery';
 export default Ember.Component.extend({
   tagName: '',
   didInsertElement() {
-    this._forEachElement(elt => {
-      $(elt).addClass('ember-animated-hidden');
-    });
+    if (this.get('willTransition')) {
+      this._forEachElement(elt => {
+        $(elt).addClass('ember-animated-hidden');
+      });
+    }
     this.sendAction("entering", this);
   },
   willDestroyElement() {
