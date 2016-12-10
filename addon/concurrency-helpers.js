@@ -5,7 +5,7 @@ export let Promise;
 if (window.Promise) {
   Promise = window.Promise;
 } else {
-  Ember.warn("Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.", false, "ember-animated-missing-microtask");
+  Ember.warn("Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.", false, { id: "ember-animated-missing-microtask" });
   Promise = RSVP.Promise;
 }
 

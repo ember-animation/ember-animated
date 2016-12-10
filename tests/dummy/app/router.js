@@ -11,6 +11,7 @@ Router.map(function() {
   this.route('container-only');
   this.route('two-lists');
   this.route('swapping-lists');
+  this.route('bind');
 });
 
 export default Router;

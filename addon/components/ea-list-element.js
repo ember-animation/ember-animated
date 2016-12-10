@@ -24,7 +24,7 @@ export default Ember.Component.extend({
       if (node.nodeType === Node.ELEMENT_NODE) {
         fn(node);
       } else if (! /^\s*$/.test(node.textContent)) {
-        Ember.warn("Found bare text content inside a liquid-each", false, "ember-animated-bare-text");
+        Ember.warn("Found bare text content inside an animator", false, { id: "ember-animated-bare-text" });
       }
       if (node === lastNode){ break; }
       node = node.nextSibling;
