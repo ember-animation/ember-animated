@@ -97,13 +97,6 @@ export default Ember.Component.extend({
     let context = new TransitionContext(this.get('duration'), insertedSprites, keptSprites, removedSprites, farMatches, this._removalMotions);
     yield * context._runToCompletion(transition);
 
-    keptSprites.forEach(sprite => sprite.unlock());
-    insertedSprites.forEach(sprite => {
-      sprite.unlock();
-      sprite.reveal(); // inserted sprites get revealed when their
-                       // first motion begins. If they didn't get any
-                       // motions, we have a catch-all here.
-    });
     this._notifyContainer('unlock');
   }).restartable(),
 

@@ -32,9 +32,12 @@ export default class Sprite {
       // correctness.
       this._styleCache = predecessor._styleCache;
       this._parentElement = predecessor._parentElement;
+      this._revealed = predecessor._revealed;
     } else {
-      this._styleCache = $(element).attr('style') || null;
+      let $elt = $(element);
+      this._styleCache = $elt.attr('style') || null;
       this._parentElement = element.parentElement;
+      this._revealed = !$elt.hasClass('ember-animated-hidden');
     }
     this.component = component;
     this.element = element;
@@ -122,7 +125,10 @@ export default class Sprite {
     }
   }
   reveal() {
-    $(this.element).removeClass('ember-animated-hidden');
+    if (!this._revealed) {
+      this._revealed = true;
+      $(this.element).removeClass('ember-animated-hidden');
+    }
   }
   append() {
     $(this._parentElement).append(this.element);
