@@ -1,23 +1,24 @@
 import Component from 'ember-component';
-import { toUp } from 'ember-animated/transitions/move-over'
-import { task, timeout } from 'ember-concurrency';
+import { toUp, toDown } from 'ember-animated/transitions/move-over'
 
 export default Component.extend({
   rules,
-  counter: 0,
-  clock: task(function *() {
-    while (true) {
-      yield timeout(1000);
-      this.set('counter', this.get('counter') + 1);
-    }
-  }).on('didInsertElement'),
+  counter: 20,
   actions: {
-    bump() {
+    increment() {
       this.set('counter', this.get('counter') + 1);
+    },
+    decrement() {
+      this.set('counter', this.get('counter') - 1);
     }
+
   }
 });
 
-function rules(/* firstTime, oldItems, newItems */) {
-  return toUp;
+function rules(firstTime, oldItems, newItems) {
+  if (oldItems[0] < newItems[0]) {
+    return toDown;
+  } else {
+    return toUp;
+  }
 }

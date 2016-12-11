@@ -1,9 +1,10 @@
 <div class="scenario-bind">
   {{#animated-container as |c|}}
-    {{#animated-bind counter rules=rules notify=c duration=500 as |v|}}
+    {{#animated-bind counter rules=rules notify=c duration=1000 as |v|}}
       <span>{{v}}</span>
     {{/animated-bind}}
   {{/animated-container}}
 
-  <button {{action "bump"}}>Bump</button>
+  <button {{action "increment"}}>+</button>
+  <button {{action "decrement"}}>-</button>
 </div>

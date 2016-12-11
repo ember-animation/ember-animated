@@ -33,12 +33,14 @@
 }
 
 .scenario-bind .animated-container {
-    overflow: hidden;
-    transform: translateZ(0);
     font-size: 3rem;
     float: left;
 }
 
 .scenario-bind button {
     float: left;
+}
+
+.scenario-bind span {
+    border: 1px solid blue;
 }
