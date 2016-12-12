@@ -1,6 +1,7 @@
 import {
   rAF,
-  Promise
+  Promise,
+  microwait
 } from './concurrency-helpers';
 
 const motions = new WeakMap();
@@ -75,8 +76,15 @@ export default class Motion {
     if (!motionList) {
       motions.set(element, motionList = []);
     }
-    motionList.unshift(this);
     this._motionList = motionList;
+    // we wait here so that if multiple motions are started
+    // simultaneously, the latter ones don't see the earlier ones as
+    // interrupted.
+    microwait().then(() => {
+      if (this._motionList) {
+        this._motionList.unshift(this);
+      }
+    });
     let bridge = bridges.get(element);
     if (bridge) {
       let inheritedMotions = motions.get(bridge);
@@ -92,6 +100,7 @@ export default class Motion {
     if (this._motionList.length === 0) {
       motions.delete(this.sprite.element);
     }
+    this._motionList = null;
   }
 
 }
