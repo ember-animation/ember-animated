@@ -6,10 +6,12 @@ export default function * serialExample() {
   }
 
   for (let sprite of this.keptSprites) {
-    yield this.animate(Move, sprite, { duration: this.duration / this.keptSprites.length })
+    let move = new Move(sprite);
+    move.duration = this.duration / this.keptSprites.length;
+    yield this.animate(move);
   }
 
   for (let sprite of this.insertedSprites) {
-    this.animate(Move, sprite);
+    this.animate(new Move(sprite));
   }
 }

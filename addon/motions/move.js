@@ -17,7 +17,7 @@ export default class Move extends Motion {
   }
 
   * animate() {
-    let duration = this.opts.duration;
+    let duration = this.duration;
     let sprite = this.sprite;
 
     if (!this.prior) {

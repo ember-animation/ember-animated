@@ -11,6 +11,13 @@ export default class Motion {
   constructor(sprite, opts) {
     this.sprite = sprite;
     this.opts = opts;
+
+    // You can set this property directly if you want to. If you leave
+    // it null the transition will apply its own overall duration,
+    // which is often what you want.
+    this.duration = null;
+
+
     this._setupMotionList();
     this._promise = new Promise((resolve, reject) => {
       this._resolve = resolve

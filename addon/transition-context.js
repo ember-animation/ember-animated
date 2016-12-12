@@ -21,16 +21,10 @@ export default class TransitionContext {
   get removedSprite() {
     return this.removedSprites[0];
   }
-  animate(MotionClass, sprite, opts) {
-    if (!opts) {
-      opts = { duration: this.duration }
-    } else {
-      if (opts.duration == null) {
-        opts = Object.assign({}, opts);
-        opts.duration = this.duration;
-      }
+  animate(motion) {
+    if (motion.duration == null) {
+      motion.duration = this.duration;
     }
-    let motion = new MotionClass(sprite, opts);
     this._scheduler.spawn(this._motionGenerator(motion));
     return motion._promise;
   }
