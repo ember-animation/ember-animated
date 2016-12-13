@@ -29,7 +29,10 @@ export function * subsequent() {
   });
 
   this.removedSprites.forEach(sprite => {
-    sprite.endTranslatedBy(1000, 0);
+    // the 200 here is purely so I can easily see that the elements
+    // are being properly removed immediately after they get far
+    // enough
+    sprite.endTranslatedBy(window.outerWidth - sprite.initialBounds.left - 200, 0);
     this.animate(new Move(sprite));
   });
 
