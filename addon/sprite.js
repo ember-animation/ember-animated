@@ -34,15 +34,11 @@ export default class Sprite {
       this._styleCache = predecessor._styleCache;
       this._parentElement = predecessor._parentElement;
       this._revealed = predecessor._revealed;
-      this._needsAppend = predecessor._needsAppend;
-      this._markedForDestruction = predecessor._markedForDestruction;
     } else {
       let $elt = $(element);
       this._styleCache = $elt.attr('style') || null;
       this._parentElement = element.parentElement;
       this._revealed = !$elt.hasClass('ember-animated-hidden');
-      this._needsAppend = false;
-      this._markedForDestruction = false;
     }
     this.element = element;
     this.owner = null;
@@ -129,27 +125,6 @@ export default class Sprite {
       this.element.attributes.removeNamedItem('style');
     }
   }
-  motionEnded() {
-    if (this._markedForDestruction) {
-      rAF().then(() => {
-        if (inFlight.get(this.element) === this) {
-          if (this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-        }
-      })
-    }
-  }
-  isMarkedForDestruction() {
-    return this._markedForDestruction
-  }
-  markedForDestruction() {
-    // todo: remove this
-    if (!this._markedForDestruction) {
-      this._markedForDestruction = true;
-      this._needsAppend = true;
-    }
-  }
   stillInFlight() {
     return inFlight.get(this.element) === this;
   }
@@ -165,10 +140,6 @@ export default class Sprite {
     }
   }
   reveal() {
-    if (this._needsAppend) {
-      $(this._parentElement).append(this.element);
-      this.lock();
-    }
     if (!this._revealed) {
       this._revealed = true;
       $(this.element).removeClass('ember-animated-hidden');
