@@ -167,13 +167,20 @@ export default Ember.Component.extend({
     let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
 
     // any removed sprites that matched elsewhere will get handled elsewhere
-    //removedSprites = removedSprites.filter(sprite => !farMatches.get(sprite))
+    let unmatchedRemovedSprites = removedSprites.filter(sprite => {
+      if (farMatches.get(sprite)) {
+        sprite.hide();
+        return false;
+      } else {
+        return true;
+      }
+    })
 
     let context = new TransitionContext(
       this.get('duration'),
       insertedSprites,
       keptSprites,
-      removedSprites,
+      unmatchedRemovedSprites,
       farMatches
     );
     let cycle = this._cycleCounter++;
