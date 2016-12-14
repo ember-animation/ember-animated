@@ -5,7 +5,7 @@
 
   {{#if leftItems}}
     {{#animated-container class="left" as |c|}}
-      {{#animated-each leftItems notify=c rules=rules as |item|}}
+      {{#animated-each leftItems notify=c rules=rules key="id" as |item|}}
         <div>
           {{item.id}}
         </div>
@@ -13,7 +13,7 @@
     {{/animated-container}}
   {{else}}
     {{#animated-container class="right" as |c|}}
-      {{#animated-each rightItems notify=c rules=rules as |item|}}
+      {{#animated-each rightItems notify=c rules=rules key="id" as |item|}}
         <div>
           {{item.id}}
         </div>

@@ -84,13 +84,14 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
-    // let removedSprites = [];
-    // for (let element of this._ownElements()) {
-    //   let sprite = new Sprite(element);
-    //   sprite.measureInitialBounds();
-    //   removedSprites.push(sprite);
-    // }
-    // this.get('motionService.farMatch').perform([], removedSprites);
+    let removedSprites = [];
+    for (let element of this._ownElements()) {
+      let sprite = new Sprite(element);
+      sprite.owner = this._elementToChild.get(element);
+      sprite.measureInitialBounds();
+      removedSprites.push(sprite);
+    }
+    this.get('motionService.farMatch').perform([], removedSprites);
     this.get('motionService').unregister(this);
   },
 
