@@ -18,12 +18,13 @@ import {
   Transform
 } from './transform';
 import { continueMotions } from './motion';
+import { rAF } from './concurrency-helpers';
 
 
 const inFlight = new WeakMap();
 
 export default class Sprite {
-  constructor(element, component, asContainer=false) {
+  constructor(element, asContainer=false) {
     let predecessor = inFlight.get(element);
     if (predecessor) {
       // When we finish, we want to be able to set the style back to
@@ -33,13 +34,16 @@ export default class Sprite {
       this._styleCache = predecessor._styleCache;
       this._parentElement = predecessor._parentElement;
       this._revealed = predecessor._revealed;
+      this._needsAppend = predecessor._needsAppend;
+      this._markedForDestruction = predecessor._markedForDestruction;
     } else {
       let $elt = $(element);
       this._styleCache = $elt.attr('style') || null;
       this._parentElement = element.parentElement;
       this._revealed = !$elt.hasClass('ember-animated-hidden');
+      this._needsAppend = false;
+      this._markedForDestruction = false;
     }
-    this.component = component;
     this.element = element;
     this.initialBounds = null;
     this.finalBounds = null;
@@ -124,18 +128,38 @@ export default class Sprite {
       this.element.attributes.removeNamedItem('style');
     }
   }
+  motionEnded() {
+    if (this._markedForDestruction) {
+      rAF().then(() => {
+        if (inFlight.get(this.element) === this) {
+          if (this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+        }
+      })
+    }
+  }
+  isMarkedForDestruction() {
+    return this._markedForDestruction
+  }
+  markedForDestruction() {
+    if (!this._markedForDestruction) {
+      this._markedForDestruction = true;
+      this._needsAppend = true;
+    }
+  }
+  hide() {
+    this._revealed = false;
+    $(this.element).addClass('ember-animated-hidden');
+  }
   reveal() {
+    if (this._needsAppend) {
+      $(this._parentElement).append(this.element);
+      this.lock();
+    }
     if (!this._revealed) {
       this._revealed = true;
       $(this.element).removeClass('ember-animated-hidden');
-    }
-  }
-  append() {
-    $(this._parentElement).append(this.element);
-  }
-  remove() {
-    if (this.element.parentNode) {
-      this.element.parentNode.removeChild(this.element);
     }
   }
 }

@@ -1,8 +1,5 @@
 {{#each items key=key as |item| ~}}
-  {{#-ea-list-element entering=(action "childEntering")
-                       leaving=(action "childLeaving")
-                           item=item
-                  willTransition=willTransition ~}}
+  {{#-ea-list-element item=item elementToItem=_elementToItem ~}}
     {{yield item ~}}
   {{/-ea-list-element ~}}
 {{/each}}

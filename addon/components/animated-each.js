@@ -3,6 +3,8 @@ import layout from '../templates/components/animated-each';
 import { task } from 'ember-concurrency';
 import { afterRender } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
+import Sprite from '../sprite';
+import { componentNodes } from 'ember-animated/ember-internals';
 
 export default Ember.Component.extend({
   layout,
@@ -11,22 +13,34 @@ export default Ember.Component.extend({
   duration: 2000,
 
   init() {
-    this._enteringComponents = [];
-    this._currentComponents = [];
-    this._leavingComponents = [];
-    this._removalMotions = new Map();
+    this._elementToItem = new WeakMap();
     this._prevItems = [];
     this._firstTime = true;
+    this._inserted = false;
     this.get('motionService').register(this);
     this._super();
   },
 
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
+  * _ownElements() {
+    if (!this._inserted) { return; }
+    let { firstNode, lastNode } = componentNodes(this);
+    let node = firstNode;
+    while (node) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        yield node;
+      }
+      if (node === lastNode){ break; }
+      node = node.nextSibling;
+    }
+  },
+
   willDestroyElement() {
-    let removedSprites = flatMap(this._currentComponents, component => component.sprites());
-    removedSprites.forEach(sprite => sprite.measureInitialBounds());
-    for (let sprite of this._removalMotions.keys()) {
+    let removedSprites = [];
+    for (let element of this._ownElements()) {
+      let sprite = new Sprite(element);
+      sprite.measureInitialBounds();
       removedSprites.push(sprite);
     }
     this.get('motionService.farMatch').perform([], removedSprites);
@@ -47,10 +61,20 @@ export default Ember.Component.extend({
 
     this._notifyContainer('lock');
 
-    let currentSprites = flatMap(this._currentComponents, component => component.sprites());
-    currentSprites.forEach(sprite => sprite.measureInitialBounds());
+    let currentSprites = [];
+    for (let element of this._ownElements()) {
+      let sprite = new Sprite(element);
+      sprite.measureInitialBounds();
+      currentSprites.push(sprite);
+    }
+    // this needs to be separate from the previous loop -- we need to
+    // measure all of them before we start locking any of them
     currentSprites.forEach(sprite => sprite.lock());
     this.get('animate').perform(currentSprites, transition);
+  },
+
+  didInsertElement() {
+    this._inserted = true;
   },
 
   animate: task(function * (currentSprites, transition) {
@@ -58,26 +82,26 @@ export default Ember.Component.extend({
 
     let [keptSprites, removedSprites] = partition(
       currentSprites,
-      sprite => this._leavingComponents.indexOf(sprite.component) < 0
+      sprite => !sprite.isMarkedForDestruction() && !!sprite.element.parentElement
     );
 
-    for (let sprite of this._removalMotions.keys()) {
-      removedSprites.push(sprite);
-    }
+    removedSprites.forEach(sprite => sprite.markedForDestruction());
 
     // Briefly unlock everybody
     keptSprites.forEach(sprite => sprite.unlock());
+
     // so we can measure the final static layout
-    let insertedSprites = flatMap(this._enteringComponents, component => component.sprites());
+    let insertedSprites = [];
+    for (let element of this._ownElements()) {
+      if (!currentSprites.find(sprite => sprite.element === element)) {
+        let sprite = new Sprite(element);
+        sprite.hide();
+        insertedSprites.push(sprite);
+      }
+    }
     insertedSprites.forEach(sprite => sprite.measureFinalBounds());
     keptSprites.forEach(sprite => sprite.measureFinalBounds());
     this._notifyContainer('measure', { duration: this.get('duration') });
-
-    // Update our permanent state so that if we're interrupted after
-    // this point we are already consistent. AFAIK, we can't be
-    // interrupted before this point because Ember won't fire
-    // `didReceiveAttrs` multiple times before `afterRender` happens.
-    this._updateComponentLists();
 
     // Then lock everything down
     keptSprites.forEach(sprite => sprite.lock());
@@ -88,18 +112,11 @@ export default Ember.Component.extend({
     // any removed sprites that matched elsewhere will get handled elsewhere
     removedSprites = removedSprites.filter(sprite => !farMatches.get(sprite))
 
-    let context = new TransitionContext(this.get('duration'), insertedSprites, keptSprites, removedSprites, farMatches, this._removalMotions);
+    let context = new TransitionContext(this.get('duration'), insertedSprites, keptSprites, removedSprites, farMatches);
     yield * context._runToCompletion(transition);
 
     this._notifyContainer('unlock');
   }).restartable(),
-
-  _updateComponentLists() {
-    this._currentComponents = this._currentComponents.concat(this._enteringComponents)
-      .filter(c => this._leavingComponents.indexOf(c) === -1);
-    this._enteringComponents = [];
-    this._leavingComponents = [];
-  },
 
   _notifyContainer(method, opts) {
     var target = this.get('notify');
@@ -114,17 +131,7 @@ export default Ember.Component.extend({
       return null;
     }
     return rules(firstTime, oldItems, newItems);
-  },
-
-  actions: {
-    childEntering(component) {
-      this._enteringComponents.push(component);
-    },
-    childLeaving(component) {
-      this._leavingComponents.push(component);
-    }
   }
-
 }).reopenClass({
   positionalParams: ['items']
 });
@@ -141,12 +148,4 @@ function partition(list, pred) {
     }
   });
   return [matched, unmatched];
-}
-
-function flatMap(list, fn) {
-  let results = [];
-  for (let i = 0; i < list.length; i++) {
-    results.push(fn(list[i]));
-  }
-  return [].concat(...results);
 }

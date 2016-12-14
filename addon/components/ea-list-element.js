@@ -1,20 +1,15 @@
 import Ember from 'ember';
 import { componentNodes } from 'ember-animated/ember-internals';
-import Sprite from '../sprite';
-import $ from 'jquery';
 
 export default Ember.Component.extend({
   tagName: '',
+
   didInsertElement() {
-    if (this.get('willTransition')) {
-      this._forEachElement(elt => {
-        $(elt).addClass('ember-animated-hidden');
-      });
-    }
-    this.sendAction("entering", this);
-  },
-  willDestroyElement() {
-    this.sendAction("leaving", this);
+    let mapping = this.get('elementToItem');
+    let item = this.get('item');
+    this._forEachElement(elt => {
+      mapping.set(elt, item);
+    });
   },
 
   _forEachElement(fn) {
@@ -29,13 +24,6 @@ export default Ember.Component.extend({
       if (node === lastNode){ break; }
       node = node.nextSibling;
     }
-  },
-
-  sprites() {
-    let list = [];
-    this._forEachElement(elt => {
-      list.push(new Sprite(elt, this));
-    });
-    return list;
   }
+
 });
