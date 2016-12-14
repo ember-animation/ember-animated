@@ -120,7 +120,7 @@ export default class Sprite {
     });
   }
   unlock() {
-    Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", inFlight.get(this.element) === this, { id: "ember-animated-sprite-unlock" });
+    Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", this.stillInFlight(), { id: "ember-animated-sprite-unlock" });
     inFlight.delete(this.element);
     if (this._styleCache) {
       $(this.element).attr('style', this._styleCache);
@@ -143,14 +143,25 @@ export default class Sprite {
     return this._markedForDestruction
   }
   markedForDestruction() {
+    // todo: remove this
     if (!this._markedForDestruction) {
       this._markedForDestruction = true;
       this._needsAppend = true;
     }
   }
+  stillInFlight() {
+    return inFlight.get(this.element) === this;
+  }
   hide() {
     this._revealed = false;
     $(this.element).addClass('ember-animated-hidden');
+  }
+  display(flag) {
+    if (flag) {
+      $(this.element).removeClass('ember-animated-none');
+    } else {
+      $(this.element).addClass('ember-animated-none');
+    }
   }
   reveal() {
     if (this._needsAppend) {

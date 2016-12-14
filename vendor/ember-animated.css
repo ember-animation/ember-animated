@@ -1,3 +1,7 @@
 .ember-animated-hidden {
     visibility: hidden
 }
+
+.ember-animated-none {
+    display: none
+}

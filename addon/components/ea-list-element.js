@@ -1,14 +1,19 @@
 import Ember from 'ember';
 import { componentNodes } from 'ember-animated/ember-internals';
 
+/*
+   This component has one job: tracking which DOM elements correspond
+   with which list elements.
+*/
+
 export default Ember.Component.extend({
   tagName: '',
 
-  didInsertElement() {
-    let mapping = this.get('elementToItem');
-    let item = this.get('item');
+  didRender() {
+    let mapping = this.get('elementToChild');
+    let child = this.get('child');
     this._forEachElement(elt => {
-      mapping.set(elt, item);
+      mapping.set(elt, child);
     });
   },
 
