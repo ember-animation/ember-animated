@@ -128,8 +128,9 @@ export default Ember.Component.extend({
     let removedSprites = [];
 
     currentSprites.forEach(sprite => {
-      let state = this._elementToChild.get(sprite.element).state;
-      switch (state) {
+      let child = this._elementToChild.get(sprite.element);
+      sprite.owner = child;
+      switch (child.state) {
       case 'kept':
         keptSprites.push(sprite);
         break;
@@ -137,7 +138,7 @@ export default Ember.Component.extend({
         removedSprites.push(sprite);
         break;
       default:
-        Ember.warn(`Likely ember-animation bug: saw unexpected child state ${state}`);
+        Ember.warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
       }
     });
 
@@ -150,6 +151,7 @@ export default Ember.Component.extend({
     for (let element of this._ownElements()) {
       if (!currentSprites.find(sprite => sprite.element === element)) {
         let sprite = new Sprite(element);
+        sprite.owner = this._elementToChild.get(element);
         sprite.hide();
         insertedSprites.push(sprite);
       }
@@ -197,10 +199,7 @@ export default Ember.Component.extend({
       sprite.reveal();
     });
 
-    removedSprites.forEach(sprite => {
-      let child = this._elementToChild.get(sprite.element);
-      child.flagForRemoval();
-    })
+    removedSprites.forEach(sprite => sprite.owner.flagForRemoval());
 
     if (removedSprites.length > 0) {
       // trigger a rerender to reap our removed children
@@ -212,13 +211,11 @@ export default Ember.Component.extend({
 
   _motionStarted(sprite, cycle) {
     sprite.reveal();
-    let child = this._elementToChild.get(sprite.element);
-    child.block(cycle);
+    sprite.owner.block(cycle);
   },
 
   _motionEnded(sprite, cycle) {
-    let child = this._elementToChild.get(sprite.element);
-    child.unblock(cycle);
+    sprite.owner.unblock(cycle);
   },
 
   _notifyContainer(method, opts) {

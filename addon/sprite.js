@@ -45,6 +45,7 @@ export default class Sprite {
       this._markedForDestruction = false;
     }
     this.element = element;
+    this.owner = null;
     this.initialBounds = null;
     this.finalBounds = null;
     if (asContainer) {
