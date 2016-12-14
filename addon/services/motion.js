@@ -70,7 +70,7 @@ export default Ember.Service.extend({
 
 function performMatches(insertedSource, removedSource) {
   insertedSource.inserted.slice().forEach(sprite => {
-    let match = removedSource.removed.find(mySprite => sprite.component.item.id === mySprite.component.item.id);
+    let match = removedSource.removed.find(mySprite => sprite.owner.id === mySprite.owner.id);
     if (match) {
       insertedSource.matches.set(sprite, match);
       removedSource.matches.set(match, sprite);
