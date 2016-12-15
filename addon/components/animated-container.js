@@ -9,6 +9,7 @@ export default Ember.Component.extend({
   layout,
   classNames: ['animated-container'],
   motionService: Ember.inject.service('-ea-motion'),
+  onInitialRender: false,
 
   init() {
     this._super();
@@ -29,9 +30,11 @@ export default Ember.Component.extend({
 
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
-  animate: task(function * () {
+  animate: task(function * (useMotion) {
     let opts = yield* this.waitForSignal('measured');
-    yield* new (this.motion || Resize)(this.sprite, opts)._run();
+    if (useMotion) {
+      yield* new (this.motion || Resize)(this.sprite, opts)._run();
+    }
     yield* this.waitForSignal('unlock');
     this.sprite.unlock();
   }).restartable(),
@@ -72,13 +75,21 @@ export default Ember.Component.extend({
       this.resetSignals();
       sprite.measureInitialBounds();
       sprite.lock();
-      this.get('animate').perform();
+      this.get('animate').perform(true);
     },
     measure(opts) {
       if (this.sprite) {
         this.sprite.unlock();
         this.sprite.measureFinalBounds();
         this.sprite.lock();
+      } else {
+        let sprite = new Sprite(this.element, this, true);
+        this.sprite = sprite;
+        this.resetSignals();
+        sprite.measureFinalBounds();
+        sprite.initialBounds = { width: 0, height: 0 };
+        sprite.lock();
+        this.get('animate').perform(this.get('onInitialRender'));
       }
       this.receivedSignal('measured', opts);
     },
