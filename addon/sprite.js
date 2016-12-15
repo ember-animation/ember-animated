@@ -18,7 +18,6 @@ import {
   Transform
 } from './transform';
 import { continueMotions } from './motion';
-import { rAF } from './concurrency-helpers';
 
 
 const inFlight = new WeakMap();

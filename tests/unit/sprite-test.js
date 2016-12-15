@@ -306,12 +306,6 @@ test("measures and remembers final bounds", function(assert) {
   assert.ok(m.initialBounds.left + 100 - m.finalBounds.left < 0.01, 'Bounds reflect movement');
 });
 
-test("tracks owning component", function(assert) {
-  let c = {};
-  let m = animated(target, c);
-  assert.equal(m.component, c);
-});
-
 skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
   assert.ok(false);
 });
