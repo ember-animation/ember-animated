@@ -62,7 +62,7 @@ export default Ember.Service.extend({
         performMatches(target, mine);
       });
     }
-    this._rendezvous.splice(this._rendezvous.indexOf(mine));
+    this._rendezvous.splice(this._rendezvous.indexOf(mine), 1);
     return matches;
   })
 
