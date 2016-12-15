@@ -10,7 +10,7 @@ export default Ember.Component.extend({
   layout,
   tagName: '',
   motionService: Ember.inject.service('-ea-motion'),
-  duration: 2000,
+  duration: null,
 
   init() {
     this._elementToChild = new WeakMap();
@@ -22,6 +22,15 @@ export default Ember.Component.extend({
     this.get('motionService').register(this);
     this._super();
   },
+
+  durationWithDefault: Ember.computed('duration', function() {
+    let d = this.get('duration');
+    if (d == null) {
+      return 2000;
+    } else {
+      return d;
+    }
+  }),
 
   renderedChildren: Ember.computed('items.[]', function() {
     let getKey = this.get('keyGetter');
@@ -158,7 +167,7 @@ export default Ember.Component.extend({
     }
     insertedSprites.forEach(sprite => sprite.measureFinalBounds());
     keptSprites.forEach(sprite => sprite.measureFinalBounds());
-    this._notifyContainer('measure', { duration: this.get('duration') });
+    this._notifyContainer('measure', { duration: this.get('durationWithDefault') });
 
     // Then lock everything down
     keptSprites.forEach(sprite => sprite.lock());
@@ -178,7 +187,7 @@ export default Ember.Component.extend({
     })
 
     let context = new TransitionContext(
-      this.get('duration'),
+      this.get('durationWithDefault'),
       insertedSprites,
       keptSprites,
       unmatchedRemovedSprites,
