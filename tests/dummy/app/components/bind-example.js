@@ -5,6 +5,7 @@ export default Component.extend({
   rules,
   rules2,
   counter: 20,
+  showBoth: true,
   actions: {
     increment() {
       this.set('counter', this.get('counter') + 1);

@@ -65,22 +65,6 @@ export default function * moveOver(dimension, direction) {
     throw new Error("Unimplemented");
   }
 
-  // if we're interrupting a previous move-over that went in the
-  // opposite direction, some removedSprites may already be offscreen
-  // and would come back onscreen if we didn't drop them here. Also,
-  // by not animating a removed sprite we make it eligible to be GCed
-  // if our animation is interrupted and restarts.
-  let leavingSprites;
-  {
-    let viewportPosition = position(viewport);
-    let viewportSize = size(viewport);
-    leavingSprites = this.removedSprites.filter(sprite => {
-      let p = position(sprite.initialBounds);
-      let s = size(sprite.initialBounds);
-      return p + s >= viewportPosition && p <= viewportPosition + viewportSize;
-    });
-  }
-
   if (this.insertedSprite) {
 
     // Offset is how far out of place we're going to start the inserted sprite.
@@ -89,7 +73,7 @@ export default function * moveOver(dimension, direction) {
     // if any leaving sprites still hang outside the viewport to the
     // left, they add to our offset because the new sprite will be to
     // their left.
-    leavingSprites.forEach(sprite => {
+    this.removedSprites.forEach(sprite => {
       let o = position(viewport) - position(sprite.initialBounds);
       if (o > offset) {
         offset = o;
@@ -103,12 +87,12 @@ export default function * moveOver(dimension, direction) {
 
     startTranslatedBy(this.insertedSprite, -offset);
 
-    if (leavingSprites.length > 0) {
-      endTranslatedBy(leavingSprites[0], offset);
-      let move = new Move(leavingSprites[0]);
+    if (this.removedSprites.length > 0) {
+      endTranslatedBy(this.removedSprites[0], offset);
+      let move = new Move(this.removedSprites[0]);
       this.animate(move);
-      for (let i = 1; i < leavingSprites.length; i++) {
-        this.animate(new Follow(leavingSprites[i], { source: move }));
+      for (let i = 1; i < this.removedSprites.length; i++) {
+        this.animate(new Follow(this.removedSprites[i], { source: move }));
       }
       this.animate(new Follow(this.insertedSprite, { source: move }));
     } else {
@@ -117,7 +101,7 @@ export default function * moveOver(dimension, direction) {
   } else if (this.keptSprite) {
     let move = new Move(this.keptSprite);
     this.animate(move);
-    leavingSprites.forEach(sprite => {
+    this.removedSprites.forEach(sprite => {
       this.animate(new Follow(sprite, { source: move }));
     });
   } else {
