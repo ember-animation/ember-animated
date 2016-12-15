@@ -16,6 +16,9 @@ export default class TransitionContext {
   get insertedSprite() {
     return this.insertedSprites[0];
   }
+  get keptSprite() {
+    return this.keptSprites[0];
+  }
   get removedSprite() {
     return this.removedSprites[0];
   }

@@ -35,12 +35,20 @@
 .scenario-bind .animated-container {
     font-size: 3rem;
     float: left;
+    margin: 3rem;
 }
 
 .scenario-bind button {
     float: left;
+    font-size: 3rem;
 }
 
 .scenario-bind span {
     border: 1px solid blue;
+}
+
+.scenario-bind > .animated-container {
+    border: 1px solid red;
+    overflow: hidden;
+    transform: translateZ(0);
 }

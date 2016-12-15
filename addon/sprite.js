@@ -101,6 +101,9 @@ export default class Sprite {
       top: this.initialBounds.top + dy
     };
   }
+  endRelativeTo(otherSprite) {
+    this.endTranslatedBy(otherSprite.finalBounds.left - otherSprite.initialBounds.left, otherSprite.finalBounds.top - otherSprite.initialBounds.top);
+  }
   lock() {
     $(this.element).css(this._imposedStyle);
     inFlight.set(this.element, this);

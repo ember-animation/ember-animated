@@ -5,6 +5,15 @@
     {{/animated-bind}}
   {{/animated-container}}
 
+  {{#if showBoth}}
+    {{#animated-container as |c|}}
+      {{#animated-bind counter rules=rules2 notify=c duration=1000 as |v|}}
+        <span>{{v}}</span>
+      {{/animated-bind}}
+    {{/animated-container}}
+  {{/if}}
+
   <button {{action "increment"}}>+</button>
   <button {{action "decrement"}}>-</button>
+  {{input type="checkbox" checked=showBoth}}
 </div>

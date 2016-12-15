@@ -1,8 +1,9 @@
 import Component from 'ember-component';
-import { toUp, toDown } from 'ember-animated/transitions/move-over'
+import { toUp, toDown, toLeft, toRight } from 'ember-animated/transitions/move-over'
 
 export default Component.extend({
   rules,
+  rules2,
   counter: 20,
   actions: {
     increment() {
@@ -16,9 +17,19 @@ export default Component.extend({
 });
 
 function rules(firstTime, oldItems, newItems) {
+  if (firstTime) { return; }
   if (oldItems[0] < newItems[0]) {
     return toDown;
   } else {
     return toUp;
+  }
+}
+
+function rules2(firstTime, oldItems, newItems) {
+  if (firstTime) { return; }
+  if (oldItems[0] < newItems[0]) {
+    return toLeft;
+  } else {
+    return toRight;
   }
 }
