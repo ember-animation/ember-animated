@@ -1,5 +1,8 @@
+<div class="hero-detail">
 {{#link-to "hero.index"}}Back to list{{/link-to}}
 
 <h2>{{model.name}}</h2>
-
-<img src={{model.avatarUrl}}>
+{{#animated-bind model rules=rules as |m|}}
+  <img src={{m.avatarUrl}}>
+{{/animated-bind}}
+</div>
