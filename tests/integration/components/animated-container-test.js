@@ -146,7 +146,7 @@ test('unlocks only after motion is done', function(assert) {
     height: 200
   });
 
-  let beforeHeight = this.$('.inside').height();
+  let beforeHeight = height(this.$('.inside'));
   let afterHeight;
 
   Ember.run(() => {
@@ -156,17 +156,17 @@ test('unlocks only after motion is done', function(assert) {
       height: 400
     });
 
-    afterHeight = this.$('.inside').height();
+    afterHeight = height(this.$('.inside'));
 
     this.get('grabbed.measure')();
     this.get('grabbed.unlock')();
   });
   return macroWait().then(() => {
-    assert.equal(this.$('.animated-container').height(), beforeHeight, "still at previous height");
+    assert.equal(height(this.$('.animated-container')), beforeHeight, "still at previous height");
     finishMotion();
     return this.waitForAnimations();
   }).then(() => {
-    assert.equal(this.$('.animated-container').height(), afterHeight, "now at final height");
+    assert.equal(height(this.$('.animated-container')), afterHeight, "now at final height");
   });
 });
 
@@ -187,7 +187,7 @@ test('unlocks only after unlock message is received', function(assert) {
     height: 200
   });
 
-  let beforeHeight = this.$('.inside').height();
+  let beforeHeight = height(this.$('.inside'));
 
   Ember.run(() => {
     this.get('grabbed.lock')();
@@ -197,18 +197,18 @@ test('unlocks only after unlock message is received', function(assert) {
     height: 400
   });
 
-  let afterHeight = this.$('.inside').height();
+  let afterHeight = height(this.$('.inside'));
 
   Ember.run(() => {
     this.get('grabbed.measure')();
   });
 
   return macroWait().then(() => {
-    assert.equal(this.$('.animated-container').height(), beforeHeight, "still at previous height");
+    assert.equal(height(this.$('.animated-container')), beforeHeight, "still at previous height");
     this.get('grabbed.unlock')();
     return macroWait();
   }).then(() => {
-    assert.equal(this.$('.animated-container').height(), afterHeight, "now at final height");
+    assert.equal(height(this.$('.animated-container')), afterHeight, "now at final height");
   });
 });
 
@@ -247,8 +247,8 @@ test('can animate initial render', function(assert) {
   this.set('TestMotion', class extends Motion {
     *animate() {
       assert.ok(staticHeight > 0, 'we should have a static height');
-      assert.equal(this.sprite.initialBounds.height, 0);
-      assert.equal(this.sprite.finalBounds.height, staticHeight);
+      assert.equal(this.sprite.initialBounds.height, 0, 'initial height');
+      assert.equal(this.sprite.finalBounds.height, staticHeight, 'final height');
       motionRan = true;
     }
   });
@@ -260,10 +260,10 @@ test('can animate initial render', function(assert) {
       this.get('cont.lock')();
     },
     didRender() {
-      staticHeight = this.$('.inner').height();
+      staticHeight = height(this.$('.inner'));
       this.get('cont.measure')();
       this.$('.inner').css('height', 200);
-      finalHeight = this.$('.inner').height();
+      finalHeight = height(this.$('.inner'));
       this.get('cont.unlock')();
     }
   }));
@@ -277,7 +277,7 @@ test('can animate initial render', function(assert) {
   `);
 
   return this.waitForAnimations().then(() => {
-    assert.equal(this.$('.animated-container').height(), finalHeight, 'ends up unlocked');
+    assert.equal(height(this.$('.animated-container')), finalHeight, 'ends up unlocked');
     assert.ok(motionRan, 'motion ran');
   });
 });
@@ -298,10 +298,10 @@ test('locks on initial render even when not animating', function(assert) {
       this.get('cont.lock')();
     },
     didRender() {
-      staticHeight = this.$('.inner').height();
+      staticHeight = height(this.$('.inner'));
       this.get('cont.measure')();
       this.$('.inner').css('height', 200);
-      finalHeight = this.$('.inner').height();
+      finalHeight = height(this.$('.inner'));
 
       unlock = this.get('cont.unlock');
     }
@@ -316,11 +316,11 @@ test('locks on initial render even when not animating', function(assert) {
   `);
 
   return macroWait().then(() => {
-    assert.equal(this.$('.animated-container').height(), staticHeight, 'gets locked');
+    assert.equal(height(this.$('.animated-container')), staticHeight, 'gets locked');
     unlock();
     return this.waitForAnimations();
   }).then(() => {
-    assert.equal(this.$('.animated-container').height(), finalHeight, 'ends up unlocked');
+    assert.equal(height(this.$('.animated-container')), finalHeight, 'ends up unlocked');
     assert.ok(!motionRan, 'motion did not run');
   });
 });
@@ -333,4 +333,8 @@ skip("Accounts for margin collapse between own margins when becoming empty");
 
 function bounds($elt) {
   return $elt[0].getBoundingClientRect();
+}
+
+function height($elt) {
+  return bounds($elt).height;
 }
