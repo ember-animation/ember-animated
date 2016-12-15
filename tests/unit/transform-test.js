@@ -1,9 +1,8 @@
 import { module, test } from 'qunit';
 import { equalTransform } from '../helpers/assertions';
-import {
+import Transform, {
   ownTransform,
   cumulativeTransform,
-  Transform
 } from 'ember-animated/transform';
 import $ from 'jquery';
 

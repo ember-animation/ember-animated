@@ -16,7 +16,7 @@ import $ from 'jquery';
       0 0  1
 */
 
-export class Transform {
+export default class Transform {
   constructor(a, b, c, d, tx, ty) {
     // WARNING: never mutate an existing Transform. Some of them are
     // shared. Operations need to return new Transforms instead.

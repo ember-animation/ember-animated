@@ -12,10 +12,9 @@
 
 import $ from 'jquery';
 import Ember from 'ember';
-import {
+import Transform, {
   ownTransform,
   cumulativeTransform,
-  Transform
 } from './transform';
 import { continueMotions } from './motion';
 
