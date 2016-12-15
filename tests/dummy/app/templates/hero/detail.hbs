@@ -3,10 +3,11 @@
 
   <h2>{{model.name}}</h2>
 
-  {{#animated-bind model rules=rules as |m|}}
-    <img src={{m.avatarUrl}}>
-  {{/animated-bind}}
-
+  {{#animated-container as |c|}}
+    {{#animated-bind model rules=rules notify=c as |m|}}
+      <img src={{m.avatarUrl}}>
+    {{/animated-bind}}
+  {{/animated-container}}
   <p>
     This is after the image.
   </p>
