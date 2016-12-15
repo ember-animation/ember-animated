@@ -2,7 +2,7 @@
   {{#each model as |person|}}
     {{#link-to "hero.detail" person.id tagName="div"}}
       {{#animated-container as |c|}}
-        {{#animated-bind person rules=rules notify=c as |p|}}
+        {{#animated-bind person rules=rules notify=c duration=500 as |p|}}
           <img src={{p.avatarUrl}}>
         {{/animated-bind}}
       {{/animated-container}}
