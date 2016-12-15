@@ -12,6 +12,9 @@ Router.map(function() {
   this.route('two-lists');
   this.route('swapping-lists');
   this.route('bind');
+  this.route('hero', function(){
+    this.route('detail', { path: '/:id' });
+  });
 });
 
 export default Router;

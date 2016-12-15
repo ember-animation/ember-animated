@@ -52,3 +52,7 @@
     overflow: hidden;
     transform: translateZ(0);
 }
+
+.hero-list > div {
+    cursor: pointer;
+}

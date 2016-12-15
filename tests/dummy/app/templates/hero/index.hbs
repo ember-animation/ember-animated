@@ -1,0 +1,8 @@
+<div class="hero-list">
+  {{#each model as |person|}}
+    {{#link-to "hero.detail" person.id tagName="div"}}
+      <img width=60 src={{person.avatarUrl}}>
+      {{person.name}}
+    {{/link-to}}
+  {{/each}}
+</div>
