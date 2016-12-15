@@ -33,6 +33,7 @@
     "ember-concurrency": "https://github.com/machty/ember-concurrency.git#ac93f89f3aea7c31cb5fcc623de37ea66cb90648",
     "ember-disable-prototype-extensions": "^1.1.0",
     "ember-export-application-global": "^1.0.5",
+    "ember-faker": "^1.1.1",
     "ember-getowner-polyfill": "1.1.1",
     "ember-hash-helper-polyfill": "0.1.1",
     "ember-load-initializers": "^0.5.1",

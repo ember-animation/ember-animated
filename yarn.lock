@@ -1511,13 +1511,13 @@ ember-cli-valid-component-name@^1.0.0:
   dependencies:
     silent-error "^1.0.0"
 
-ember-cli-version-checker@^1.0.2, ember-cli-version-checker@^1.1.4, ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.1.7:
+ember-cli-version-checker@^1.0.2, ember-cli-version-checker@^1.1.4, ember-cli-version-checker@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.1.7.tgz#cbabacb5eef2635048d5208fab05b032e5313d1a"
   dependencies:
     semver "^4.2.2"
 
-ember-cli-version-checker@^1.2.0:
+ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.2.0.tgz#caa286b77d1b485df5d2f62c67a6f19aa8b582c4"
   dependencies:
@@ -1624,6 +1624,10 @@ ember-export-application-global@^1.0.5:
   resolved "https://registry.yarnpkg.com/ember-export-application-global/-/ember-export-application-global-1.1.1.tgz#f257d5271268932a89d7392679ce4db89d7154af"
   dependencies:
     ember-cli-babel "^5.1.10"
+
+ember-faker@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ember-faker/-/ember-faker-1.1.1.tgz#90ca83edef385d8f43bed3ceaed263b59f68773c"
 
 ember-getowner-polyfill@1.1.1, ember-getowner-polyfill@^1.1.0:
   version "1.1.1"
