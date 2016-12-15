@@ -241,10 +241,95 @@ test('passes provided options to motion', function(assert) {
   });
 });
 
+test('can animate initial render', function(assert) {
+  let staticHeight, finalHeight, motionRan;
+
+  this.set('TestMotion', class extends Motion {
+    *animate() {
+      assert.ok(staticHeight > 0, 'we should have a static height');
+      assert.equal(this.sprite.initialBounds.height, 0);
+      assert.equal(this.sprite.finalBounds.height, staticHeight);
+      motionRan = true;
+    }
+  });
+
+  // This component simulates what animated-each does: the initial
+  // lock happens before our container has any DOM, and then the measure happens right at didRender.
+  this.register('component:test-child', Ember.Component.extend({
+    didReceiveAttrs() {
+      this.get('cont.lock')();
+    },
+    didRender() {
+      staticHeight = this.$('.inner').height();
+      this.get('cont.measure')();
+      this.$('.inner').css('height', 200);
+      finalHeight = this.$('.inner').height();
+      this.get('cont.unlock')();
+    }
+  }));
+
+  this.render(hbs`
+    {{#animated-container motion=TestMotion onInitialRender=true as |container|}}
+      {{#test-child cont=container}}
+        <div class="inner" style="height: 100px"></div>
+      {{/test-child}}
+    {{/animated-container}}
+  `);
+
+  return this.waitForAnimations().then(() => {
+    assert.equal(this.$('.animated-container').height(), finalHeight, 'ends up unlocked');
+    assert.ok(motionRan, 'motion ran');
+  });
+});
+
+test('locks on initial render even when not animating', function(assert) {
+  let unlock, staticHeight, finalHeight, motionRan;
+
+  this.set('TestMotion', class extends Motion {
+    *animate() {
+      motionRan = true;
+    }
+  });
+
+  // This component simulates what animated-each does: the initial
+  // lock happens before our container has any DOM, and then the measure happens right at didRender.
+  this.register('component:test-child', Ember.Component.extend({
+    didReceiveAttrs() {
+      this.get('cont.lock')();
+    },
+    didRender() {
+      staticHeight = this.$('.inner').height();
+      this.get('cont.measure')();
+      this.$('.inner').css('height', 200);
+      finalHeight = this.$('.inner').height();
+
+      unlock = this.get('cont.unlock');
+    }
+  }));
+
+  this.render(hbs`
+    {{#animated-container motion=TestMotion as |container|}}
+      {{#test-child cont=container}}
+        <div class="inner" style="height: 100px"></div>
+      {{/test-child}}
+    {{/animated-container}}
+  `);
+
+  return macroWait().then(() => {
+    assert.equal(this.$('.animated-container').height(), staticHeight, 'gets locked');
+    unlock();
+    return this.waitForAnimations();
+  }).then(() => {
+    assert.equal(this.$('.animated-container').height(), finalHeight, 'ends up unlocked');
+    assert.ok(!motionRan, 'motion did not run');
+  });
+});
 
 
 skip("Accounts for margin collapse between self and child");
 skip("Accounts for margin collapse between own margins when becoming empty");
+
+
 
 function bounds($elt) {
   return $elt[0].getBoundingClientRect();
