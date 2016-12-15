@@ -11,6 +11,8 @@ export default Ember.Component.extend({
   tagName: '',
   motionService: Ember.inject.service('-ea-motion'),
   duration: null,
+  use: null,
+  rules: null,
 
   init() {
     this._elementToChild = new WeakMap();
@@ -242,11 +244,14 @@ export default Ember.Component.extend({
   },
 
   _transitionFor(firstTime, oldItems, newItems) {
-    let rules = this.get('rules');
-    if (!rules) {
-      return null;
+    let transition = this.get('use');
+    if (transition) {
+      return transition;
     }
-    return rules(firstTime, oldItems, newItems);
+    let rules = this.get('rules');
+    if (rules) {
+      return rules(firstTime, oldItems, newItems);
+    }
   }
 }).reopenClass({
   positionalParams: ['items']
