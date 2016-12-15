@@ -1,8 +1,9 @@
 import Ember from 'ember';
-import rules from 'ember-animated/transitions/default-list-transitions';
+import Move from 'ember-animated/motions/move';
+import TurnAround from '../motions/turn-around';
 
 export default Ember.Component.extend({
-  rules,
+  transition,
   leftItems: Ember.computed({
     get() {
       let result = [];
@@ -51,4 +52,20 @@ function numeric(a,b) { return a.id - b.id; }
 
 function makeRandomItem() {
   return { id: Math.round(Math.random()*1000) };
+}
+
+function * transition() {
+  this.insertedSprites.forEach(sprite => {
+    let oldSprite = this.matchFor(sprite);
+    if (oldSprite) {
+      sprite.startAt(oldSprite);
+      this.animate(new Move(sprite));
+      this.animate(new TurnAround(sprite));
+    }
+  });
+
+  this.keptSprites.forEach(sprite => {
+    this.animate(new Move(sprite));
+  });
+
 }
