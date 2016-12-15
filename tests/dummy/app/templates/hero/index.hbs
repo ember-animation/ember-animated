@@ -1,11 +1,9 @@
 <div class="hero-list">
   {{#each model as |person|}}
     {{#link-to "hero.detail" person.id tagName="div"}}
-      {{#animated-container as |c|}}
-        {{#animated-bind person rules=rules notify=c as |p|}}
-          <img src={{p.avatarUrl}}>
-        {{/animated-bind}}
-      {{/animated-container}}
+      {{#animated-bind person rules=rules as |p|}}
+        <img src={{p.avatarUrl}}>
+      {{/animated-bind}}
       <p>{{person.name}}</p>
     {{/link-to}}
   {{/each}}
