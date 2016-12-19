@@ -75,6 +75,7 @@ export default Ember.Component.extend({
       this.resetSignals();
       sprite.measureInitialBounds();
       sprite.lock();
+      handleMarginCollapse(sprite);
       this.get('animate').perform(true);
     },
     measure(opts) {
@@ -98,3 +99,46 @@ export default Ember.Component.extend({
     }
   }
 });
+
+function handleMarginCollapse(sprite) {
+  let element = sprite.element;
+  let cs = getComputedStyle(element);
+
+  if (cs.borderTopWidth === '0px' && cs.paddingTop === '0px') {
+    // our first child block's top margin may be collapsing with our own.
+    let marginTop = parseFloat(cs.marginTop);
+    for (let i = 0; i < element.children.length; i++) {
+      let child = element.children[i];
+      let childCS = getComputedStyle(child);
+      if (childCS.display === 'block' && (childCS.position === 'static' || childCS.position === 'relative')) {
+        // we found the first child block
+        let childMarginTop = parseFloat(childCS.marginTop);
+        if (childMarginTop > marginTop) {
+          sprite.applyStyles({
+            marginTop: childMarginTop + 'px'
+          });
+        }
+        break;
+      }
+    }
+  }
+
+  if (cs.borderBottomWidth === '0px' && cs.paddingBottom === '0px') {
+    // our last child block's bottom margin may be collapsing with our own.
+    let marginBottom = parseFloat(cs.marginBottom);
+    for (let i = element.children.length - 1; i >= 0; i--) {
+      let child = element.children[i];
+      let childCS = getComputedStyle(child);
+      if (childCS.display === 'block' && (childCS.position === 'static' || childCS.position === 'relative')) {
+        // we found the first child block
+        let childMarginBottom = parseFloat(childCS.marginBottom);
+        if (childMarginBottom > marginBottom) {
+          sprite.applyStyles({
+            marginBottom: childMarginBottom + 'px'
+          });
+        }
+        break;
+      }
+    }
+  }
+}

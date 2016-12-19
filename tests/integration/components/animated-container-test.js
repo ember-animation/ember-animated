@@ -1,7 +1,7 @@
-import { moduleForComponent, test, skip } from 'ember-qunit';
+import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
-import { equalBounds } from '../../helpers/assertions';
+import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
 import {
   macroWait,
@@ -13,6 +13,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
   integration: true,
   beforeEach(assert) {
     assert.equalBounds = equalBounds;
+    assert.visuallyConstant = visuallyConstant;
     let here = this;
     this.waitForAnimations = waitForAnimations;
     this.register('component:grab-container', Ember.Component.extend({
@@ -326,10 +327,69 @@ test('locks on initial render even when not animating', function(assert) {
 });
 
 
-skip("Accounts for margin collapse between self and child");
-skip("Accounts for margin collapse between own margins when becoming empty");
+test("Accounts for top margin collapse between self and child", function(assert) {
+  this.render(hbs`
+    {{#animated-container as |container|}}
+      <div class="inside" style="margin-top: 10px; height: 100px;">
+        {{grab-container cont=container}}
+      </div>
+    {{/animated-container}}
+  `);
+
+  assert.visuallyConstant(this.$('.animated-container'), () => {
+    this.get('grabbed.lock')();
+    this.$('.inside').css('position', 'absolute');
+  });
+});
+
+test("No top margin collapse when we have a border", function(assert) {
+  this.render(hbs`
+    {{#animated-container style="border: 1px solid black" as |container|}}
+      <div class="inside" style="margin-top: 10px; height: 100px;">
+        {{grab-container cont=container}}
+      </div>
+    {{/animated-container}}
+  `);
+
+  assert.visuallyConstant(this.$('.animated-container'), () => {
+    this.get('grabbed.lock')();
+    this.$('.inside').css('position', 'absolute');
+  });
+});
+
+test("No top margin collapse when our margin already exceeds child's", function(assert) {
+  this.render(hbs`
+    {{#animated-container style="margin-top: 11px" as |container|}}
+      <div class="inside" style="margin-top: 10px; height: 100px;">
+        {{grab-container cont=container}}
+      </div>
+    {{/animated-container}}
+  `);
+
+  assert.visuallyConstant(this.$('.animated-container'), () => {
+    this.get('grabbed.lock')();
+    this.$('.inside').css('position', 'absolute');
+  });
+});
 
 
+test("Accounts for bottom margin collapse between self and child", function(assert) {
+  this.render(hbs`
+    <div style="border: 1px solid black">
+      {{#animated-container as |container|}}
+        <div class="inside" style="margin-bottom: 10px; height: 100px;">
+          {{grab-container cont=container}}
+        </div>
+      {{/animated-container}}
+      <div class="after">This comes after</div>
+    </div>
+  `);
+
+  assert.visuallyConstant(this.$('.after'), () => {
+    this.get('grabbed.lock')();
+    this.$('.inside').css('position', 'absolute');
+  });
+});
 
 function bounds($elt) {
   return $elt[0].getBoundingClientRect();
