@@ -1,0 +1,16 @@
+<button {{action "addCollection"}}>New Collection</button>
+{{#animated-container as |outer|}}
+  {{#animated-each collections rules=rules key="title" notify=outer as |collection|}}
+    <div>
+      <h2>{{collection.title}}</h2>
+      <button {{action "addMember" collection}}>Add</button>
+      {{#if false}}
+      {{#animated-container tagName="ul" as |inner|}}
+        {{#animated-each collection.members rules=rules key="name" notify=inner as |member|}}
+          <li>{{member.name}}</li>
+        {{/animated-each}}
+      {{/animated-container}}
+      {{/if}}
+    </div>
+  {{/animated-each}}
+{{/animated-container}}

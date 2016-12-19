@@ -15,6 +15,7 @@ Router.map(function() {
   this.route('hero', function(){
     this.route('detail', { path: '/:id' });
   });
+  this.route('nested');
 });
 
 export default Router;
