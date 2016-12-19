@@ -100,45 +100,53 @@ export default Ember.Component.extend({
   }
 });
 
-function handleMarginCollapse(sprite) {
-  let element = sprite.element;
-  let cs = getComputedStyle(element);
-
+function collapsedTopMargin(element, cs) {
+  let margin = parseFloat(cs.marginTop);
   if (cs.borderTopWidth === '0px' && cs.paddingTop === '0px') {
     // our first child block's top margin may be collapsing with our own.
-    let marginTop = parseFloat(cs.marginTop);
     for (let i = 0; i < element.children.length; i++) {
       let child = element.children[i];
       let childCS = getComputedStyle(child);
       if (childCS.display === 'block' && (childCS.position === 'static' || childCS.position === 'relative')) {
         // we found the first child block
-        let childMarginTop = parseFloat(childCS.marginTop);
-        if (childMarginTop > marginTop) {
-          sprite.applyStyles({
-            marginTop: childMarginTop + 'px'
-          });
+        let childMargin = collapsedTopMargin(child, childCS);
+        if (childMargin > margin) {
+          return childMargin;
         }
         break;
       }
     }
   }
+  return margin;
+}
 
+function collapsedBottomMargin(element, cs) {
+  let margin = parseFloat(cs.marginBottom);
   if (cs.borderBottomWidth === '0px' && cs.paddingBottom === '0px') {
-    // our last child block's bottom margin may be collapsing with our own.
-    let marginBottom = parseFloat(cs.marginBottom);
+    // our first child block's top margin may be collapsing with our own.
     for (let i = element.children.length - 1; i >= 0; i--) {
       let child = element.children[i];
       let childCS = getComputedStyle(child);
       if (childCS.display === 'block' && (childCS.position === 'static' || childCS.position === 'relative')) {
-        // we found the first child block
-        let childMarginBottom = parseFloat(childCS.marginBottom);
-        if (childMarginBottom > marginBottom) {
-          sprite.applyStyles({
-            marginBottom: childMarginBottom + 'px'
-          });
+        // we found the last child block
+        let childMargin = collapsedBottomMargin(child, childCS);
+        if (childMargin > margin) {
+          return childMargin;
         }
         break;
       }
     }
   }
+  return margin;
+}
+
+function handleMarginCollapse(sprite) {
+  let element = sprite.element;
+  let cs = getComputedStyle(element);
+  let marginTop = collapsedTopMargin(element, cs);
+  let marginBottom = collapsedBottomMargin(element, cs);
+  sprite.applyStyles({
+    marginTop: marginTop + 'px',
+    marginBottom: marginBottom + 'px'
+  });
 }

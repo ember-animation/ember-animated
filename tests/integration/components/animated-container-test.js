@@ -342,6 +342,22 @@ test("Accounts for top margin collapse between self and child", function(assert)
   });
 });
 
+test("Accounts for top margin collapse between self and descendant", function(assert) {
+  this.render(hbs`
+    {{#animated-container as |container|}}
+      <div class="inside">
+        <div style="margin-top: 10px; height: 100px;"></div>
+        {{grab-container cont=container}}
+      </div>
+    {{/animated-container}}
+  `);
+
+  assert.visuallyConstant(this.$('.animated-container'), () => {
+    this.get('grabbed.lock')();
+    this.$('.inside').css('position', 'absolute');
+  });
+});
+
 test("No top margin collapse when we have a border", function(assert) {
   this.render(hbs`
     {{#animated-container style="border: 1px solid black" as |container|}}
