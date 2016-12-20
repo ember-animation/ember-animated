@@ -35,9 +35,14 @@ export default Ember.Component.extend({
   }),
 
   renderedChildren: Ember.computed('items.[]', function() {
+    let firstTime = this._firstTime;
+    this._firstTime = false;
+
     let getKey = this.get('keyGetter');
     let oldChildren = this._renderedChildren;
+    let oldItems = this._prevItems;
     let newItems = this.get('items');
+    this._prevItems = newItems.slice();
 
     let oldIndices = new Map();
     oldChildren.forEach((child, index) => {
@@ -68,6 +73,14 @@ export default Ember.Component.extend({
         })
     );
     this._renderedChildren = newChildren;
+
+    if (!isStable(oldItems, newItems, getKey)) {
+      let transition = this._transitionFor(firstTime, oldItems, newItems);
+      if (transition) {
+        this.kickoff(transition);
+      }
+    }
+
     return newChildren;
   }),
 
@@ -106,18 +119,7 @@ export default Ember.Component.extend({
     this.get('motionService').unregister(this);
   },
 
-  didReceiveAttrs() {
-    let prevItems = this._prevItems;
-    let items = this.get('items') || [];
-    this._prevItems = items.slice();
-
-    let firstTime = this._firstTime;
-    this._firstTime = false;
-
-    let transition = this._transitionFor(firstTime, prevItems, items);
-    this.set('willTransition', !!transition);
-    if (!transition) { return; }
-
+  kickoff(transition) {
     this._notifyContainer('lock');
 
     let currentSprites = [];
@@ -129,6 +131,7 @@ export default Ember.Component.extend({
     // this needs to be separate from the previous loop -- we need to
     // measure all of them before we start locking any of them
     currentSprites.forEach(sprite => sprite.lock());
+
     this.get('animate').perform(currentSprites, transition);
   },
 
@@ -291,4 +294,16 @@ class Child {
   get shouldRemove() {
     return this.state === 'removing' && this.removalBlockers < 1;
   }
+}
+
+function isStable(before, after, keyGetter) {
+  if (before.length !== after.length) {
+    return false;
+  }
+  for (let i = 0; i < before.length; i++) {
+    if (keyGetter(before[i]) !== keyGetter(after[i])) {
+      return false;
+    }
+  }
+  return true;
 }
