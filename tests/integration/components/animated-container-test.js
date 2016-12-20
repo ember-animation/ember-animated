@@ -1,4 +1,4 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { moduleForComponent, test, skip } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
@@ -17,6 +17,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
     let here = this;
     this.waitForAnimations = waitForAnimations;
     this.register('component:grab-container', Ember.Component.extend({
+      tagName: '',
       didReceiveAttrs() {
         here.set('grabbed', this.get('cont'));
       }
@@ -404,6 +405,97 @@ test("Accounts for bottom margin collapse between self and child", function(asse
   assert.visuallyConstant(this.$('.after'), () => {
     this.get('grabbed.lock')();
     this.$('.inside').css('position', 'absolute');
+  });
+});
+
+
+skip("Accounts for own margin collapse as first content appears", function(assert) {
+  let resolveMotion;
+  let motion = new Ember.RSVP.Promise(resolve => {
+    resolveMotion = resolve;
+  });
+  this.set('TestMotion', class extends Motion {
+    *animate() {
+      this.sprite.applyStyles({
+        width: this.sprite.finalBounds.width,
+        height: this.sprite.finalBounds.height
+      });
+      resolveMotion();
+    }
+  });
+
+  this.render(hbs`
+    <style type="text/css">
+      .example {
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+    </style>
+    {{#animated-container class="example" motion=TestMotion as |container|}}
+      <div class="inside" style="height: 0px"></div>
+      {{grab-container cont=container}}
+    {{/animated-container}}
+  `);
+
+  assert.visuallyConstant(this.$('.animated-container'), () => {
+    this.get('grabbed.lock')();
+    this.$('.inside').css('height', '100px');
+  });
+
+  this.get('grabbed.measure')();
+
+  return motion.then(() => {
+    let bounds = this.$('.animated-container')[0].getBoundingClientRect();
+    this.get('grabbed.unlock')();
+    return macroWait().then(() => {
+      let newBounds = this.$('.animated-container')[0].getBoundingClientRect();
+      assert.equalBounds(newBounds, bounds, 'bounds check during unlock');
+    });
+  });
+});
+
+skip("Accounts for own margin collapse as last content is removed", function(assert) {
+  let resolveMotion;
+  let motion = new Ember.RSVP.Promise(resolve => {
+    resolveMotion = resolve;
+  });
+  this.set('TestMotion', class extends Motion {
+    *animate() {
+      this.sprite.applyStyles({
+        width: this.sprite.finalBounds.width,
+        height: this.sprite.finalBounds.height
+      });
+      resolveMotion();
+    }
+  });
+
+  this.render(hbs`
+    <style type="text/css">
+      .example {
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+    </style>
+    {{#animated-container class="example" motion=TestMotion as |container|}}
+      <div class="inside" style="height: 100px"></div>
+      {{grab-container cont=container}}
+    {{/animated-container}}
+  `);
+
+  assert.visuallyConstant(this.$('.animated-container'), () => {
+    this.get('grabbed.lock')();
+    this.$('.inside').css('height', '0px');
+  });
+
+  this.get('grabbed.measure')();
+
+  return motion.then(() => {
+    let bounds = this.$('.animated-container')[0].getBoundingClientRect();
+    this.get('grabbed.unlock')();
+    return macroWait().then(() => {
+      let newBounds = this.$('.animated-container')[0].getBoundingClientRect();
+      assert.equalBounds(newBounds, bounds, 'bounds check during unlock');
+    });
   });
 });
 
