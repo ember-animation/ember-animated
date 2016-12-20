@@ -25,6 +25,10 @@ function firstChildBlock(element) {
   for (let i = 0; i < element.children.length; i++) {
     let child = element.children[i];
     let childCS = getComputedStyle(child);
+    if (childCS.clear !== 'none') {
+      // an intervening block with clearance prevents margin collapse
+      return;
+    }
     if (isChildBlock(childCS)) {
       return [child, childCS];
     }
@@ -35,6 +39,10 @@ function lastChildBlock(element) {
   for (let i = element.children.length - 1; i >= 0; i--) {
     let child = element.children[i];
     let childCS = getComputedStyle(child);
+    if (childCS.clear !== 'none') {
+      // an intervening block with clearance prevents margin collapse
+      return;
+    }
     if (isChildBlock(childCS)) {
       return [child, childCS];
     }
@@ -45,7 +53,7 @@ function lastChildBlock(element) {
 function isChildBlock(cs) {
   return cs.display === 'block' && (
     cs.position === 'static' || cs.position === 'relative'
-  );
+  ) && cs.float === 'none' && cs.overflow === 'visible';
 }
 
 export function collapsedMargin(element, cs, which) {
