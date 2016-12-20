@@ -71,7 +71,8 @@ export default class Sprite {
         width: this.element.offsetWidth,
         height: this.element.offsetHeight,
         position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
-        'box-sizing': 'border-box'
+        'box-sizing': 'border-box',
+        margin: 0
       };
     }
   }
@@ -158,9 +159,6 @@ function findOffsets(element, computedStyle, transform) {
     left -= eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth);
     top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth);
   }
-
-  left -= parseFloat(computedStyle.marginLeft);
-  top -= parseFloat(computedStyle.marginTop);
 
   if (effectiveOffsetParent) {
     let eopTransform = cumulativeTransform(effectiveOffsetParent);
