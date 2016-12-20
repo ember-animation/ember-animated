@@ -23,15 +23,15 @@ export default Ember.Controller.extend({
   ]),
   actions: {
     addMember(collection) {
-      Ember.set(collection, 'members', collection.members.concat({
+      collection.members.unshiftObject({
         name: String(counter++)
-      }));
+      });
     },
     addCollection() {
-      this.set('collections', this.get('collections').concat({
+      this.get('collections').unshiftObject({
         title: String(counter++),
         members: Ember.A()
-      }));
+      });
     }
   }
 });
