@@ -17,13 +17,13 @@ import Transform, {
   cumulativeTransform,
 } from './transform';
 import { continueMotions } from './motion';
+import { collapsedChildren } from './margin-collapse';
 
 
 const inFlight = new WeakMap();
 
-export default class Sprite {
-  constructor(element, asContainer=false) {
-    let predecessor = inFlight.get(element);
+class BaseSprite {
+  constructor(element, predecessor) {
     if (predecessor) {
       // When we finish, we want to be able to set the style back to
       // whatever it was before any Sprites starting locking things,
@@ -42,40 +42,8 @@ export default class Sprite {
     this.owner = null;
     this.initialBounds = null;
     this.finalBounds = null;
-    if (asContainer) {
-      this._initAsContainer();
-    } else {
-      this._initAsContained(predecessor);
-    }
   }
 
-  _initAsContainer() {
-    this._imposedStyle = {
-      width: this.element.offsetWidth,
-      height: this.element.offsetHeight,
-      'box-sizing': 'border-box'
-    };
-  }
-
-  _initAsContained(predecessor) {
-    if (predecessor) {
-      this.transform = predecessor.transform;
-      this._imposedStyle = predecessor._imposedStyle;
-    } else {
-      let computedStyle = getComputedStyle(this.element);
-      this.transform = ownTransform(this.element);
-      let { top, left } = findOffsets(this.element, computedStyle, this.transform);
-      this._imposedStyle = {
-        top,
-        left,
-        width: this.element.offsetWidth,
-        height: this.element.offsetHeight,
-        position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
-        'box-sizing': 'border-box',
-        margin: 0
-      };
-    }
-  }
   measureInitialBounds() {
     this.initialBounds = this.element.getBoundingClientRect();
   }
@@ -111,13 +79,6 @@ export default class Sprite {
     Object.assign(this._imposedStyle, styles);
     $(this.element).css(styles);
   }
-  translate(dx, dy) {
-    let t = this.transform.mult(new Transform(1, 0, 0, 1, dx, dy));
-    this.transform = t;
-    this.applyStyles({
-      transform: t.serialize()
-    });
-  }
   unlock() {
     Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", this.stillInFlight(), { id: "ember-animated-sprite-unlock" });
     inFlight.delete(this.element);
@@ -145,6 +106,72 @@ export default class Sprite {
     if (!this._revealed) {
       this._revealed = true;
       $(this.element).removeClass('ember-animated-hidden');
+    }
+  }
+}
+
+export class ContainerSprite extends BaseSprite {
+  constructor(element) {
+    let predecessor = inFlight.get(element);
+    super(element, predecessor);
+    this._imposedStyle = {
+      width: this.element.offsetWidth,
+      height: this.element.offsetHeight,
+      'box-sizing': 'border-box'
+    };
+  }
+}
+
+export default class Sprite extends BaseSprite {
+  constructor(element) {
+    let predecessor = inFlight.get(element);
+    super(element, predecessor);
+    if (predecessor) {
+      this.transform = predecessor.transform;
+      this._imposedStyle = predecessor._imposedStyle;
+    } else {
+      let computedStyle = getComputedStyle(this.element);
+      this.transform = ownTransform(this.element);
+      let { top, left } = findOffsets(this.element, computedStyle, this.transform);
+      this._imposedStyle = {
+        top,
+        left,
+        width: this.element.offsetWidth,
+        height: this.element.offsetHeight,
+        position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
+        'box-sizing': 'border-box',
+        margin: 0
+      };
+    }
+  }
+  translate(dx, dy) {
+    let t = this.transform.mult(new Transform(1, 0, 0, 1, dx, dy));
+    this.transform = t;
+    this.applyStyles({
+      transform: t.serialize()
+    });
+  }
+  lock() {
+    super.lock();
+    this._handleMarginCollapse();
+  }
+  unlock() {
+    super.unlock();
+    this._clearMarginCollapse();
+  }
+  _handleMarginCollapse() {
+    let element = this.element;
+    let cs = getComputedStyle(element);
+
+    for (let [ descendant ] of collapsedChildren(element, cs, 'Top')) {
+      $(descendant).addClass('ember-animated-top-collapse');
+    }
+  }
+  _clearMarginCollapse() {
+    let element = this.element;
+    let cs = getComputedStyle(element);
+    for (let [ descendant ] of collapsedChildren(element, cs, 'Top')) {
+      $(descendant).removeClass('ember-animated-top-collapse');
     }
   }
 }

@@ -306,6 +306,27 @@ test("measures and remembers final bounds", function(assert) {
   assert.ok(m.initialBounds.left + 100 - m.finalBounds.left < 0.01, 'Bounds reflect movement');
 });
 
+test("target's margins collapse with its children", function(assert){
+  innerContent.css({
+    marginTop: 10,
+    marginBottom: 20
+  });
+  let m = animated(target);
+  assert.visuallyConstant(target, () => {
+    assert.visuallyConstant(innerContent, () => {
+      m.lock();
+    }, 'inner content bounds');
+  }, 'target bounds')
+
+  assert.visuallyConstant(target, () => {
+    assert.visuallyConstant(innerContent, () => {
+      m.unlock();
+    }, 'inner content bounds unlock');
+  }, 'target bounds unlock')
+
+
+});
+
 skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
   assert.ok(false);
 });

@@ -10,11 +10,11 @@ export function equalBounds(value, expected, message) {
   });
 }
 
-function constantBounds(target, fn) {
+function constantBounds(target, fn, message = 'bounds should not change') {
   let before = target[0].getBoundingClientRect();
   fn();
   let after = target[0].getBoundingClientRect();
-  equalBounds.call(this, after, before, 'bounds should not change');
+  equalBounds.call(this, after, before, message);
 }
 
 export function equalTransform(value, expected, message) {
@@ -35,15 +35,15 @@ function equalShape(value, expected, message) {
   });
 }
 
-function constantShape(target, fn) {
+function constantShape(target, fn, message = 'shape should not change') {
   let before = ownTransform(target[0]);
   fn();
   let after = ownTransform(target[0]);
-  equalShape.call(this, after, before, 'shape should not change');
+  equalShape.call(this, after, before, message);
 }
 
-export function visuallyConstant(target, fn) {
+export function visuallyConstant(target, fn, message) {
   constantShape.call(this, target, () => {
-    constantBounds.call(this, target, fn);
-  });
+    constantBounds.call(this, target, fn, message);
+  }, message);
 }
