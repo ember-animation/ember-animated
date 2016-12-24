@@ -435,36 +435,44 @@ skip("Accounts for own margin collapse as first content appears", function(asser
       <div class="inside" style="height: 0px"></div>
       {{grab-container cont=container}}
     {{/animated-container}}
+    <div class="after">This comes after</div>
   `);
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    this.get('grabbed.lock')();
-    this.$('.inside').css('height', '100px');
-  });
+    assert.visuallyConstant(this.$('.after'), () => {
+      this.get('grabbed.lock')();
+      this.$('.inside').css('height', '100px');
+    }, 'after bounds');
+  }, 'container bounds');
 
   this.get('grabbed.measure')();
 
   return motion.then(() => {
     let bounds = this.$('.animated-container')[0].getBoundingClientRect();
+    let afterBounds = this.$('.after')[0].getBoundingClientRect();
     this.get('grabbed.unlock')();
     return macroWait().then(() => {
       let newBounds = this.$('.animated-container')[0].getBoundingClientRect();
+      let newAfterBounds = this.$('.after')[0].getBoundingClientRect();
       assert.equalBounds(newBounds, bounds, 'bounds check during unlock');
+      assert.equalBounds(newAfterBounds, afterBounds, 'after bounds check during unlock');
     });
   });
 });
 
 skip("Accounts for own margin collapse as last content is removed", function(assert) {
-  let resolveMotion;
+  let resolveMotion, after;
   let motion = new Ember.RSVP.Promise(resolve => {
     resolveMotion = resolve;
   });
   this.set('TestMotion', class extends Motion {
     *animate() {
+      let top = after[0].getBoundingClientRect().top;
       this.sprite.applyStyles({
         width: this.sprite.finalBounds.width,
         height: this.sprite.finalBounds.height
       });
+      assert.equal(after[0].getBoundingClientRect().top, top - 1, 'only changes by one pixel');
       resolveMotion();
     }
   });
@@ -477,24 +485,32 @@ skip("Accounts for own margin collapse as last content is removed", function(ass
       }
     </style>
     {{#animated-container class="example" motion=TestMotion as |container|}}
-      <div class="inside" style="height: 100px"></div>
+      <div class="inside" style="height: 1px"></div>
       {{grab-container cont=container}}
     {{/animated-container}}
+    <div class="after">This comes after</div>
   `);
 
+  after = this.$('.after');
+
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    this.get('grabbed.lock')();
-    this.$('.inside').css('height', '0px');
-  });
+    assert.visuallyConstant(this.$('.after'), () => {
+      this.get('grabbed.lock')();
+      this.$('.inside').css('height', 0);
+    }, 'after bounds');
+  }, 'container bounds');
 
   this.get('grabbed.measure')();
 
   return motion.then(() => {
     let bounds = this.$('.animated-container')[0].getBoundingClientRect();
+    let afterBounds = this.$('.after')[0].getBoundingClientRect();
     this.get('grabbed.unlock')();
     return macroWait().then(() => {
       let newBounds = this.$('.animated-container')[0].getBoundingClientRect();
+      let newAfterBounds = this.$('.after')[0].getBoundingClientRect();
       assert.equalBounds(newBounds, bounds, 'bounds check during unlock');
+      assert.equalBounds(newAfterBounds, afterBounds, 'after bounds check during unlock');
     });
   });
 });

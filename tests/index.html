@@ -13,6 +13,14 @@
     <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
     <link rel="stylesheet" href="{{rootURL}}assets/dummy.css">
     <link rel="stylesheet" href="{{rootURL}}assets/test-support.css">
+    <style type="text/css">
+      /* These default styles trigger suble browser bugs when it comes
+      to measurement and bounding client rects. */
+      #emberx-testing {
+        width: auto;
+        transform: none;
+      }
+    </style>
 
     {{content-for "head-footer"}}
     {{content-for "test-head-footer"}}
