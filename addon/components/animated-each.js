@@ -77,7 +77,7 @@ export default Ember.Component.extend({
     if (!isStable(oldItems, newItems, getKey)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
       if (transition) {
-        this.kickoff(transition);
+        this.get('animate').perform(transition);
       }
     }
 
@@ -119,7 +119,7 @@ export default Ember.Component.extend({
     this.get('motionService').unregister(this);
   },
 
-  kickoff(transition) {
+  animate: task(function * (transition) {
     this._notifyContainer('lock');
 
     let currentSprites = [];
@@ -132,10 +132,6 @@ export default Ember.Component.extend({
     // measure all of them before we start locking any of them
     currentSprites.forEach(sprite => sprite.lock());
 
-    this.get('animate').perform(currentSprites, transition);
-  },
-
-  animate: task(function * (currentSprites, transition) {
     yield afterRender();
 
     let keptSprites = [];
