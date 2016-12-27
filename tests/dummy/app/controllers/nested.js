@@ -27,6 +27,13 @@ export default Ember.Controller.extend({
         name: String(counter++)
       });
     },
+    addMembers() {
+      this.get('collections').forEach(collection => {
+        collection.members.unshiftObject({
+          name: String(counter++)
+        });
+      });
+    },
     addCollection() {
       this.get('collections').unshiftObject({
         title: String(counter++),

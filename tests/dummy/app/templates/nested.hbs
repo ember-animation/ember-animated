@@ -1,4 +1,5 @@
 <button {{action "addCollection"}}>New Collection</button>
+<button {{action "addMembers"}}>Add many</button>
 {{#animated-container as |outer|}}
   {{#animated-each collections rules=rules key="title" notify=outer as |collection|}}
     <div>
