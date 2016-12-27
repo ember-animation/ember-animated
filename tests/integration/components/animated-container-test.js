@@ -338,7 +338,9 @@ test("Accounts for top margin collapse between self and child", function(assert)
   `);
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    this.get('grabbed.lock')();
+    Ember.run(() => {
+      this.get('grabbed.lock')();
+    });
     this.$('.inside').css('position', 'absolute');
   });
 });
@@ -354,7 +356,9 @@ test("Accounts for top margin collapse between self and descendant", function(as
   `);
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    this.get('grabbed.lock')();
+    Ember.run(() => {
+      this.get('grabbed.lock')();
+    });
     this.$('.inside').css('position', 'absolute');
   });
 });
@@ -369,7 +373,9 @@ test("No top margin collapse when we have a border", function(assert) {
   `);
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    this.get('grabbed.lock')();
+    Ember.run(() => {
+      this.get('grabbed.lock')();
+    });
     this.$('.inside').css('position', 'absolute');
   });
 });
@@ -384,7 +390,9 @@ test("No top margin collapse when our margin already exceeds child's", function(
   `);
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    this.get('grabbed.lock')();
+    Ember.run(() => {
+      this.get('grabbed.lock')();
+    });
     this.$('.inside').css('position', 'absolute');
   });
 });
@@ -403,7 +411,9 @@ test("Accounts for bottom margin collapse between self and child", function(asse
   `);
 
   assert.visuallyConstant(this.$('.after'), () => {
-    this.get('grabbed.lock')();
+    Ember.run(() => {
+      this.get('grabbed.lock')();
+    });
     this.$('.inside').css('position', 'absolute');
   });
 });
@@ -440,7 +450,9 @@ skip("Accounts for own margin collapse as first content appears", function(asser
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
     assert.visuallyConstant(this.$('.after'), () => {
-      this.get('grabbed.lock')();
+      Ember.run(() => {
+        this.get('grabbed.lock')();
+      });
       this.$('.inside').css('height', '100px');
     }, 'after bounds');
   }, 'container bounds');
