@@ -6,6 +6,7 @@ export default Ember.Service.extend({
   init() {
     this._super();
     this._rendezvous = [];
+    this._measurements = [];
     this._animators = Ember.A();
   },
   register(animator) {
@@ -64,7 +65,45 @@ export default Ember.Service.extend({
     }
     this._rendezvous.splice(this._rendezvous.indexOf(mine), 1);
     return matches;
-  })
+  }),
+
+  willAnimate(message) {
+    // TODO narrow down the messaging based on DOM containment.
+    this.get('_animators').forEach(listener => {
+      if (listener.animationStarting) {
+        listener.animationStarting(message);
+      }
+    });
+  },
+
+  staticMeasurement: function * (fn) {
+    let measurement = { fn, resolved: false, value: null };
+    this._measurements.push(measurement);
+
+    // allow all concurrent animators to join in with our single
+    // measurement step instead of having each trigger its own reflow.
+    yield microwait();
+
+    if (!measurement.resolved) {
+      // we are the first concurrent task to wake up, so we do the
+      // actual resolution for everyone.
+      let animators = this.get('_animators');
+      animators.forEach(animator => animator.beginStaticMeasurement());
+      this._measurements.forEach(m => {
+        try {
+          m.value = m.fn();
+        } catch(err) {
+          setTimeout(function() { throw err; }, 0);
+        }
+        m.resolved = true;
+      });
+      animators.forEach(animator => animator.endStaticMeasurement());
+    }
+
+    this._measurements.splice(this._measurements.indexOf(measurement), 1);
+
+    return measurement.value;
+  }
 
 });
 

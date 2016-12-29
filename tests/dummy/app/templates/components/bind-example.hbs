@@ -1,13 +1,13 @@
 <div class="scenario-bind">
-  {{#animated-container as |c|}}
-    {{#animated-bind counter rules=rules notify=c duration=1000 as |v|}}
+  {{#animated-container}}
+    {{#animated-bind counter rules=rules duration=1000 as |v|}}
       <span>{{v}}</span>
     {{/animated-bind}}
   {{/animated-container}}
 
   {{#if showBoth}}
-    {{#animated-container as |c|}}
-      {{#animated-bind counter rules=rules2 notify=c duration=1000 as |v|}}
+    {{#animated-container}}
+      {{#animated-bind counter rules=rules2 duration=1000 as |v|}}
         <span>{{v}}</span>
       {{/animated-bind}}
     {{/animated-container}}

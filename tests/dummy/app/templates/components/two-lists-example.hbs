@@ -1,6 +1,6 @@
 <div class="scenario-two-lists">
-  {{#animated-container as |c|}}
-    {{#animated-each leftItems notify=c rules=rules as |item|}}
+  {{#animated-container}}
+    {{#animated-each leftItems rules=rules as |item|}}
       <div>
         {{item.id}}
         <button {{action "moveRight" item}}>&rarr;</button>
@@ -8,8 +8,8 @@
     {{/animated-each}}
   {{/animated-container}}
 
-  {{#animated-container as |c|}}
-    {{#animated-each rightItems notify=c rules=rules as |item|}}
+  {{#animated-container}}
+    {{#animated-each rightItems rules=rules as |item|}}
       <div>
         <button {{action "moveLeft" item}}>&larr;</button>
         {{item.id}}

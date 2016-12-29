@@ -8,8 +8,8 @@
     <button {{action (perform stopChaos)}}>Stop</button>
   {{/if}}
 
-  {{#animated-container as |c|}}
-    {{#animated-each items notify=c key="id" rules=rules as |item|}}
+  {{#animated-container}}
+    {{#animated-each items key="id" rules=rules as |item|}}
       <div>
         {{item.id}}
         <button {{action "removeItem" item}}>X</button>

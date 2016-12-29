@@ -31,74 +31,58 @@ export default Ember.Component.extend({
 
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
-  animate: task(function * (useMotion) {
-    let opts = yield* this.waitForSignal('measured');
-    if (useMotion) {
-      yield* new (this.motion || Resize)(this.sprite, opts)._run();
-    }
-    yield* this.waitForSignal('unlock');
-    this.sprite.unlock();
-  }).restartable(),
-
-  resetSignals() {
-    this._signals = [];
+  animationStarting(message) {
+    let { duration, task } = message;
+    this.get('animate').perform(duration, task);
   },
 
-  receivedSignal(name, opts) {
-    if (!this._signals) { return; }
-    this._signals.push({name, opts});
-    let s = this._signalResolve;
-    this._signalResolve = null;
-    this._signalPromise = null;
-    if (s) {
-      s();
+  beginStaticMeasurement() {
+    if (this.sprite) {
+      this.sprite.unlock();
     }
   },
 
-  waitForSignal: function * (name) {
-    let signal;
-    while (!(signal = this._signals.find(s => s.name === name))) {
-      if (!this._signalPromise) {
-        this._signalPromise = new Promise(resolve => {
-          this._signalResolve = resolve;
-        });
-      }
-      yield this._signalPromise;
+  endStaticMeasurement() {
+    if (this.sprite) {
+      this.sprite.lock();
     }
-    return signal.opts;
   },
 
-  actions: {
-    lock() {
-      if (!this._inserted){ return; }
-      let sprite = new ContainerSprite(this.element);
+  animate: task(function * (duration, animationTask) {
+    let service = this.get('motionService');
+    let sprite;
+    let useMotion;
+
+    if (this._inserted){
+      sprite = new ContainerSprite(this.element);
       this.sprite = sprite;
-      this.resetSignals();
       sprite.measureInitialBounds();
       sprite.lock();
       handleMarginCollapse(sprite);
-      this.get('animate').perform(true);
-    },
-    measure(opts) {
-      if (this.sprite) {
-        this.sprite.unlock();
-        this.sprite.measureFinalBounds();
-        this.sprite.lock();
-      } else {
-        let sprite = new ContainerSprite(this.element);
-        this.sprite = sprite;
-        this.resetSignals();
-        sprite.measureFinalBounds();
-        sprite.initialBounds = { width: 0, height: 0 };
-        sprite.lock();
-        this.get('animate').perform(this.get('onInitialRender'));
-      }
-      this.receivedSignal('measured', opts);
-    },
-    unlock() {
-      this.receivedSignal('unlock');
+      useMotion = true;
+    } else {
+      useMotion = this.get('onInitialRender');
     }
-  }
+
+    yield * service.staticMeasurement(() => {
+      if (sprite) {
+        sprite.measureFinalBounds();
+      } else {
+        sprite = new ContainerSprite(this.element);
+        this.sprite = sprite;
+        sprite.initialBounds = { width: 0, height: 0 };
+      }
+    });
+
+    if (useMotion) {
+      yield* new (this.motion || Resize)(this.sprite, { duration })._run();
+    }
+
+    yield animationTask;
+
+    this.sprite.unlock();
+    this.sprite = null;
+  }).restartable()
 });
 
 function handleMarginCollapse(sprite) {

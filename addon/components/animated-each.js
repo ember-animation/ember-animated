@@ -21,6 +21,9 @@ export default Ember.Component.extend({
     this._inserted = false;
     this._renderedChildren = [];
     this._cycleCounter = 0;
+    this._keptSprites = null;
+    this._insertedSprites = null;
+    this._removedSprites = null;
     this.get('motionService').register(this);
     this._super();
   },
@@ -119,8 +122,26 @@ export default Ember.Component.extend({
     this.get('motionService').unregister(this);
   },
 
+  beginStaticMeasurement(){
+    if (this._keptSprites) {
+      this._keptSprites.forEach(sprite => sprite.unlock());
+      this._insertedSprites.forEach(sprite => sprite.unlock());
+      this._removedSprites.forEach(sprite => sprite.display(false));
+    }
+  },
+
+  endStaticMeasurement(){
+    if (this._keptSprites) {
+      this._keptSprites.forEach(sprite => sprite.lock());
+      this._insertedSprites.forEach(sprite => sprite.lock());
+      this._removedSprites.forEach(sprite => sprite.display(true));
+    }
+  },
+
   animate: task(function * (transition) {
-    this._notifyContainer('lock');
+    let keptSprites = this._keptSprites = [];
+    let removedSprites = this._removedSprites = [];
+    let insertedSprites = this._insertedSprites = [];
 
     let currentSprites = [];
     for (let element of this._ownElements()) {
@@ -128,14 +149,15 @@ export default Ember.Component.extend({
       sprite.measureInitialBounds();
       currentSprites.push(sprite);
     }
-    // this needs to be separate from the previous loop -- we need to
-    // measure all of them before we start locking any of them
+
+    this.get('motionService').willAnimate({
+      task: this.get('animate.last'),
+      duration: this.get('durationWithDefault')
+    });
+
     currentSprites.forEach(sprite => sprite.lock());
 
     yield afterRender();
-
-    let keptSprites = [];
-    let removedSprites = [];
 
     currentSprites.forEach(sprite => {
       let child = this._elementToChild.get(sprite.element);
@@ -152,28 +174,18 @@ export default Ember.Component.extend({
       }
     });
 
-    // Briefly go into final static layout
-    keptSprites.forEach(sprite => sprite.unlock());
-    removedSprites.forEach(sprite => sprite.display(false));
-
-    // so we can measure it
-    let insertedSprites = [];
-    for (let element of this._ownElements()) {
-      if (!currentSprites.find(sprite => sprite.element === element)) {
-        let sprite = new Sprite(element);
-        sprite.owner = this._elementToChild.get(element);
-        sprite.hide();
-        insertedSprites.push(sprite);
+    yield * this.get('motionService').staticMeasurement(() => {
+      for (let element of this._ownElements()) {
+        if (!currentSprites.find(sprite => sprite.element === element)) {
+          let sprite = new Sprite(element);
+          sprite.owner = this._elementToChild.get(element);
+          sprite.hide();
+          insertedSprites.push(sprite);
+        }
       }
-    }
-    insertedSprites.forEach(sprite => sprite.measureFinalBounds());
-    keptSprites.forEach(sprite => sprite.measureFinalBounds());
-    this._notifyContainer('measure', { duration: this.get('durationWithDefault') });
-
-    // Then lock everything down
-    keptSprites.forEach(sprite => sprite.lock());
-    insertedSprites.forEach(sprite => sprite.lock());
-    removedSprites.forEach(sprite => sprite.display(true));
+      insertedSprites.forEach(sprite => sprite.measureFinalBounds());
+      keptSprites.forEach(sprite => sprite.measureFinalBounds());
+    });
 
     let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
 
@@ -218,12 +230,15 @@ export default Ember.Component.extend({
 
     removedSprites.forEach(sprite => sprite.owner.flagForRemoval());
 
+    this._keptSprites = null;
+    this._removedSprites = null;
+    this._insertedSprites = null;
+
     if (removedSprites.length > 0) {
       // trigger a rerender to reap our removed children
       this.propertyDidChange('renderedChildren');
     }
 
-    this._notifyContainer('unlock');
   }).restartable(),
 
   _motionStarted(sprite, cycle) {
@@ -233,13 +248,6 @@ export default Ember.Component.extend({
 
   _motionEnded(sprite, cycle) {
     sprite.owner.unblock(cycle);
-  },
-
-  _notifyContainer(method, opts) {
-    var target = this.get('notify');
-    if (target && target[method]) {
-      return target[method](opts);
-    }
   },
 
   _transitionFor(firstTime, oldItems, newItems) {

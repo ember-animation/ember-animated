@@ -4,16 +4,16 @@
   </div>
 
   {{#if leftItems}}
-    {{#animated-container class="left" as |c|}}
-      {{#animated-each leftItems notify=c rules=rules key="id" as |item|}}
+    {{#animated-container class="left"}}
+      {{#animated-each leftItems rules=rules key="id" as |item|}}
         <div>
           {{item.id}}
         </div>
       {{/animated-each}}
     {{/animated-container}}
   {{else}}
-    {{#animated-container class="right" as |c|}}
-      {{#animated-each rightItems notify=c rules=rules key="id" as |item|}}
+    {{#animated-container class="right"}}
+      {{#animated-each rightItems rules=rules key="id" as |item|}}
         <div>
           {{item.id}}
         </div>
