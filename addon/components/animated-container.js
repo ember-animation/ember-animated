@@ -62,13 +62,12 @@ export default Ember.Component.extend({
     }
 
     yield * service.staticMeasurement(() => {
-      if (sprite) {
-        sprite.measureFinalBounds();
-      } else {
+      if (!sprite) {
         sprite = new ContainerSprite(this.element);
         this.sprite = sprite;
         sprite.initialBounds = { width: 0, height: 0 };
       }
+      sprite.measureFinalBounds();
     });
 
     if (useMotion) {
