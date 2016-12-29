@@ -1,13 +1,10 @@
 import Ember from 'ember';
-import layout from '../templates/components/animated-container';
 import Resize from '../motions/resize';
 import { task } from 'ember-concurrency';
-import { Promise } from '../concurrency-helpers';
 import { ContainerSprite } from '../sprite';
 import { collapsedMargin } from '../margin-collapse';
 
 export default Ember.Component.extend({
-  layout,
   classNames: ['animated-container'],
   motionService: Ember.inject.service('-ea-motion'),
   onInitialRender: false,
