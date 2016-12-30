@@ -319,10 +319,11 @@ test("static body with scroll", function(assert) {
     width: '200%',
     paddingTop: '50%'
   });
-  body.scrollTop(100);
-  body.scrollLeft(10);
-  assert.equal(body.scrollTop(), 100, 'ensure we really scrolled the body');
-  assert.equal(body.scrollLeft(), 10, 'ensure we really scrolled the body');
+  $(window).scrollTop(100);
+  $(window).scrollLeft(10);
+
+  assert.equal($(window).scrollTop(), 100, 'ensure we really scrolled the body');
+  assert.equal($(window).scrollLeft(), 10, 'ensure we really scrolled the body');
   let m = animated(target);
   assert.visuallyConstant(target, () => m.lock());
 });

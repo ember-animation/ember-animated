@@ -182,8 +182,14 @@ function findOffsets(element, computedStyle, transform) {
   let top = ownBounds.top;
   let effectiveOffsetParent = getEffectiveOffsetParent(element, computedStyle);
   if (effectiveOffsetParent) {
-    left += effectiveOffsetParent.scrollLeft;
-    top += effectiveOffsetParent.scrollTop;
+    if (effectiveOffsetParent.tagName === 'BODY') {
+      // reading scroll off body doesn't reliably work cross browser
+      left += window.scrollX;
+      top += window.scrollY;
+    } else {
+      left += effectiveOffsetParent.scrollLeft;
+      top += effectiveOffsetParent.scrollTop;
+    }
 
     let eopComputedStyle = getComputedStyle(effectiveOffsetParent);
     if (eopComputedStyle.position !== 'static' || eopComputedStyle.transform !== 'none') {
