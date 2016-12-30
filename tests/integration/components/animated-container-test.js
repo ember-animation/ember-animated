@@ -400,20 +400,8 @@ test("Accounts for bottom margin collapse between self and child", function(asse
 });
 
 
-skip("Accounts for own margin collapse as first content appears", function(assert) {
-  let resolveMotion;
-  let motion = new Ember.RSVP.Promise(resolve => {
-    resolveMotion = resolve;
-  });
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      this.sprite.applyStyles({
-        width: this.sprite.finalBounds.width,
-        height: this.sprite.finalBounds.height
-      });
-      resolveMotion();
-    }
-  });
+test("Accounts for own margin collapse as first content appears", function(assert) {
+  assert.expect(1);
 
   this.render(hbs`
     <style type="text/css">
@@ -422,50 +410,29 @@ skip("Accounts for own margin collapse as first content appears", function(asser
         margin-bottom: 20px;
       }
     </style>
-    {{#animated-container class="example" motion=TestMotion}}
-      <div class="inside" style="height: 0px"></div>
+    {{#animated-container class="example"}}
       {{fake-animator}}
     {{/animated-container}}
     <div class="after">This comes after</div>
   `);
 
-  assert.visuallyConstant(this.$('.animated-container'), () => {
-    assert.visuallyConstant(this.$('.after'), () => {
-      Ember.run(() => {
-        this.get('fakeAnimator.animate').perform();
-      });
-      this.$('.inside').css('height', '100px');
-    }, 'after bounds');
-  }, 'container bounds');
+  this.get('fakeAnimator').$().height(0);
 
-  return motion.then(() => {
-    let bounds = this.$('.animated-container')[0].getBoundingClientRect();
-    let afterBounds = this.$('.after')[0].getBoundingClientRect();
-    return macroWait().then(() => {
-      let newBounds = this.$('.animated-container')[0].getBoundingClientRect();
-      let newAfterBounds = this.$('.after')[0].getBoundingClientRect();
-      assert.equalBounds(newBounds, bounds, 'bounds check during unlock');
-      assert.equalBounds(newAfterBounds, afterBounds, 'after bounds check during unlock');
-    });
+  let initialTop = bounds(this.$('.after')).top;
+
+  this.get('fakeAnimator.animate').perform({
+    initialHeight: 0,
+    staticHeight: 1,
+    finalHeight: 1
+  });
+
+  return this.waitForAnimations().then(() => {
+    assert.equal(bounds(this.$('.after')).top, initialTop + 1, 'only changes by one pixel');
   });
 });
 
-skip("Accounts for own margin collapse as last content is removed", function(assert) {
-  let resolveMotion, after;
-  let motion = new Ember.RSVP.Promise(resolve => {
-    resolveMotion = resolve;
-  });
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      let top = after[0].getBoundingClientRect().top;
-      this.sprite.applyStyles({
-        width: this.sprite.finalBounds.width,
-        height: this.sprite.finalBounds.height
-      });
-      assert.equal(after[0].getBoundingClientRect().top, top - 1, 'only changes by one pixel');
-      resolveMotion();
-    }
-  });
+test("Accounts for own margin collapse as last content is removed", function(assert) {
+  assert.expect(1);
 
   this.render(hbs`
     <style type="text/css">
@@ -474,31 +441,24 @@ skip("Accounts for own margin collapse as last content is removed", function(ass
         margin-bottom: 20px;
       }
     </style>
-    {{#animated-container class="example" motion=TestMotion}}
-      <div class="inside" style="height: 1px"></div>
+    {{#animated-container class="example"}}
       {{fake-animator}}
     {{/animated-container}}
     <div class="after">This comes after</div>
   `);
 
-  after = this.$('.after');
+  this.get('fakeAnimator').$().height(1);
 
-  assert.visuallyConstant(this.$('.animated-container'), () => {
-    assert.visuallyConstant(this.$('.after'), () => {
-      this.get('fakeAnimator.animate').perform();
-      this.$('.inside').css('height', 0);
-    }, 'after bounds');
-  }, 'container bounds');
+  let initialTop = bounds(this.$('.after')).top;
 
-  return motion.then(() => {
-    let bounds = this.$('.animated-container')[0].getBoundingClientRect();
-    let afterBounds = this.$('.after')[0].getBoundingClientRect();
-    return macroWait().then(() => {
-      let newBounds = this.$('.animated-container')[0].getBoundingClientRect();
-      let newAfterBounds = this.$('.after')[0].getBoundingClientRect();
-      assert.equalBounds(newBounds, bounds, 'bounds check during unlock');
-      assert.equalBounds(newAfterBounds, afterBounds, 'after bounds check during unlock');
-    });
+  this.get('fakeAnimator.animate').perform({
+    initialHeight: 1,
+    staticHeight: 0,
+    finalHeight: 0
+  });
+
+  return this.waitForAnimations().then(() => {
+    assert.equal(bounds(this.$('.after')).top, initialTop - 1, 'only changes by one pixel');
   });
 });
 

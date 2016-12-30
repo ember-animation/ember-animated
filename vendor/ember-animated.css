@@ -9,3 +9,12 @@
 .ember-animated-top-collapse {
     margin-top: 0px !important;
 }
+
+.animated-container {
+    position: relative;
+}
+
+.animated-container:before, .animated-container:after {
+    content: ' ';
+    display: table;
+}

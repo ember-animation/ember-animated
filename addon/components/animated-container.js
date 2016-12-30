@@ -2,7 +2,6 @@ import Ember from 'ember';
 import Resize from '../motions/resize';
 import { task } from 'ember-concurrency';
 import { ContainerSprite } from '../sprite';
-import { collapsedMargin } from '../margin-collapse';
 
 export default Ember.Component.extend({
   classNames: ['animated-container'],
@@ -55,7 +54,6 @@ export default Ember.Component.extend({
       this.sprite = sprite;
       sprite.measureInitialBounds();
       sprite.lock();
-      handleMarginCollapse(sprite);
       useMotion = true;
     } else {
       useMotion = this.get('onInitialRender');
@@ -80,14 +78,3 @@ export default Ember.Component.extend({
     this.sprite = null;
   }).restartable()
 });
-
-function handleMarginCollapse(sprite) {
-  let element = sprite.element;
-  let cs = getComputedStyle(element);
-  let marginTop = collapsedMargin(element, cs, 'Top');
-  let marginBottom = collapsedMargin(element, cs, 'Bottom');
-  sprite.applyStyles({
-    marginTop: marginTop + 'px',
-    marginBottom: marginBottom + 'px'
-  });
-}

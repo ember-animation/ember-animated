@@ -55,14 +55,3 @@ function isChildBlock(cs) {
     cs.position === 'static' || cs.position === 'relative'
   ) && cs.float === 'none' && cs.overflow === 'visible';
 }
-
-export function collapsedMargin(element, cs, which) {
-  let margin = parseFloat(cs[`margin${which}`]);
-  for (let [, childCS] of collapsedChildren(element, cs, which)) {
-    let childMargin = parseFloat(childCS[`margin${which}`]);
-    if (childMargin > margin) {
-      margin = childMargin;
-    }
-  }
-  return margin;
-}
