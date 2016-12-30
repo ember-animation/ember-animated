@@ -376,8 +376,8 @@ skip("polyfills rAF as needed", function(assert) {
   assert.ok(false);
 });
 
-function animated($elt, component) {
-  return new Sprite($elt[0], component);
+function animated($elt) {
+  return new Sprite($elt[0]);
 }
 
 function addMargins($elt) {

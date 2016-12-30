@@ -31,7 +31,7 @@ test('Can be canceled within ember-concurrency tasks', function(assert) {
 
   let HostObject = Ember.Object.extend({
     animate: task(function * () {
-      let sprite = new Sprite($('#qunit-fixture > .target')[0], this);
+      let sprite = new Sprite($('#qunit-fixture > .target')[0]);
       this.motion = new TestMotion(sprite);
       yield * this.motion._run();
     })
