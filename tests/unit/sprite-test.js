@@ -206,10 +206,7 @@ test("Restores original styles even when two sprites interrupt each other", func
   assert.equal(ownTransform(target[0]).tx, 20, 'translateX');
 });
 
-
-
-
-test("within scrolling contexts", function(assert) {
+test("within scrolling context above offset parent", function(assert) {
   environment.css({
     overflowY: 'scroll',
     height: 400
@@ -220,7 +217,28 @@ test("within scrolling contexts", function(assert) {
   });
   environment.scrollTop(300);
   let m = animated(target);
-  assert.visuallyConstant(target, () => m.lock());
+  assert.visuallyConstant(target, () => {
+    m.lock();
+  });
+});
+
+test("within scrolling offset parent", function(assert) {
+  intermediate.css({
+    height: 4000,
+    width: '200%',
+    paddingTop: 2000
+  });
+  offsetParent.css({
+    overflow: 'scroll',
+    height: 100,
+    width: '100%'
+  });
+  offsetParent.scrollTop(2000);
+  offsetParent.scrollLeft(10);
+  let m = animated(target);
+  assert.visuallyConstant(target, () => {
+    m.lock();
+  });
 });
 
 test("target absolutely positioned", function(assert) {
@@ -287,6 +305,24 @@ test("static body with margins", function(assert) {
   intermediate.css({
     margin: '10px'
   });
+  let m = animated(target);
+  assert.visuallyConstant(target, () => m.lock());
+});
+
+test("static body with scroll", function(assert) {
+  let body = $('body');
+  assert.equal(getComputedStyle(body[0]).position, 'static', 'This test cannot work correctly if the body is not statically positioned');
+  body.append(intermediate);
+  intermediate.css({
+    margin: '10px',
+    height: '200%',
+    width: '200%',
+    paddingTop: '50%'
+  });
+  body.scrollTop(100);
+  body.scrollLeft(10);
+  assert.equal(body.scrollTop(), 100, 'ensure we really scrolled the body');
+  assert.equal(body.scrollLeft(), 10, 'ensure we really scrolled the body');
   let m = animated(target);
   assert.visuallyConstant(target, () => m.lock());
 });

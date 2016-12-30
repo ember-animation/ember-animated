@@ -180,17 +180,21 @@ function findOffsets(element, computedStyle, transform) {
   let ownBounds = element.getBoundingClientRect();
   let left = ownBounds.left;
   let top = ownBounds.top;
-  let [effectiveOffsetParent, eopComputedStyle] = getEffectiveOffsetParent(element, computedStyle);
+  let effectiveOffsetParent = getEffectiveOffsetParent(element, computedStyle);
   if (effectiveOffsetParent) {
-    let eopBounds = effectiveOffsetParent.getBoundingClientRect();
-    left -= eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth);
-    top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth);
-  }
+    left += effectiveOffsetParent.scrollLeft;
+    top += effectiveOffsetParent.scrollTop;
 
-  if (effectiveOffsetParent) {
-    let eopTransform = cumulativeTransform(effectiveOffsetParent);
-    left /= eopTransform.a;
-    top /= eopTransform.d;
+    let eopComputedStyle = getComputedStyle(effectiveOffsetParent);
+    if (eopComputedStyle.position !== 'static' || eopComputedStyle.transform !== 'none') {
+      let eopBounds = effectiveOffsetParent.getBoundingClientRect();
+      left -= eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth);
+      top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth);
+
+      let eopTransform = cumulativeTransform(effectiveOffsetParent);
+      left /= eopTransform.a;
+      top /= eopTransform.d;
+    }
   }
 
   left -= transform.tx;
@@ -202,27 +206,15 @@ function findOffsets(element, computedStyle, transform) {
 // This compensates for the fact that browsers are inconsistent in the
 // way they report offsetLeft & offsetTop for elements with a
 // transformed ancestor beneath their nearest positioned ancestor.
-//
-// Returns both the effective offset parent and its computed style
-// (since we had to computed that anyway and don't want to compute it
-// again later).
 function getEffectiveOffsetParent(element, computedStyle) {
-  if (computedStyle.position === 'fixed') { return [null, null]; }
+  if (computedStyle.position === 'fixed') { return null; }
   let offsetParent = element.offsetParent;
   let cursor = element.parentElement;
   while (cursor && offsetParent && cursor !== offsetParent) {
     if ($(cursor).css('transform') !== 'none') {
-      return [cursor, getComputedStyle(cursor)];
+      return cursor;
     }
     cursor = cursor.parentElement;
   }
-  let style = getComputedStyle(offsetParent);
-  if (style.position === 'static' && style.transform === 'none') {
-    // You can end up with the body as your effective offset parent
-    // even when the body is statically positioned, which will mess
-    // you up if it has any margins (including collapsed margins from
-    // its descendants).
-    return [null, null];
-  }
-  return [offsetParent, style];
+  return offsetParent;
 }
