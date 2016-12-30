@@ -51,11 +51,22 @@ export default Ember.Service.extend({
     }
   }),
 
-  farMatch: task(function * (inserted, removed) {
+  matchDestroyed(removed) {
+    this.get('farMatch').perform([], removed, true);
+  },
+
+  farMatch: task(function * (inserted, removed, longWait=false) {
     let matches = new Map();
     let mine = { inserted, removed, matches };
     this._rendezvous.push(mine);
     yield microwait();
+    if (longWait) {
+      // used by matchDestroyed because it gets called earlier in the
+      // render cycle, so it needs to linger longer in order to
+      // coincide with other farMatches.
+      yield microwait();
+    }
+
     if (this.get('farMatch.concurrency') > 1) {
       this._rendezvous.forEach(target => {
         if (target === mine) { return; }

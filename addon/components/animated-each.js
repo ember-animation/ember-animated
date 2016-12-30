@@ -118,7 +118,7 @@ export default Ember.Component.extend({
       sprite.measureInitialBounds();
       removedSprites.push(sprite);
     }
-    this.get('motionService.farMatch').perform([], removedSprites);
+    this.get('motionService').matchDestroyed(removedSprites);
     this.get('motionService').unregister(this);
   },
 
