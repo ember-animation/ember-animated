@@ -129,10 +129,11 @@ export default class Sprite extends BaseSprite {
     if (predecessor) {
       this.transform = predecessor.transform;
       this._imposedStyle = predecessor._imposedStyle;
+      this._effectiveOffsetParent = predecessor._effectiveOffsetParent;
     } else {
       let computedStyle = getComputedStyle(this.element);
       this.transform = ownTransform(this.element);
-      let { top, left } = findOffsets(this.element, computedStyle, this.transform);
+      let { top, left, effectiveOffsetParent } = findOffsets(this.element, computedStyle, this.transform);
       this._imposedStyle = {
         top,
         left,
@@ -142,7 +143,10 @@ export default class Sprite extends BaseSprite {
         'box-sizing': 'border-box',
         margin: 0
       };
+      this._effectiveOffsetParent = effectiveOffsetParent;
     }
+    this.parentInitialBounds = null;
+    this.parentFinalBounds = null;
   }
   translate(dx, dy) {
     let t = this.transform.mult(new Transform(1, 0, 0, 1, dx, dy));
@@ -172,6 +176,18 @@ export default class Sprite extends BaseSprite {
     let cs = getComputedStyle(element);
     for (let [ descendant ] of collapsedChildren(element, cs, 'Top')) {
       $(descendant).removeClass('ember-animated-top-collapse');
+    }
+  }
+  measureInitialBounds() {
+    super.measureInitialBounds();
+    if (this._effectiveOffsetParent) {
+      this.parentInitialBounds = this._effectiveOffsetParent.getBoundingClientRect();
+    }
+  }
+  measureFinalBounds() {
+    super.measureFinalBounds();
+    if (this._effectiveOffsetParent) {
+      this.parentFinalBounds = this._effectiveOffsetParent.getBoundingClientRect();
     }
   }
 }
@@ -206,7 +222,7 @@ function findOffsets(element, computedStyle, transform) {
   left -= transform.tx;
   top -= transform.ty;
 
-  return { top, left };
+  return { top, left, effectiveOffsetParent };
 }
 
 // This compensates for the fact that browsers are inconsistent in the

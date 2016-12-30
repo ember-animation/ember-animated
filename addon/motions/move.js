@@ -26,14 +26,23 @@ export default class Move extends Motion {
       // bounds we want.
       let initial = sprite.initialBounds;
       let final = sprite.finalBounds;
+
+      let parentDiffX = 0;
+      let parentDiffY = 0;
+      if (sprite.parentInitialBounds && sprite.parentFinalBounds) {
+        parentDiffX = sprite.parentFinalBounds.left - sprite.parentInitialBounds.left;
+        parentDiffY = sprite.parentFinalBounds.top - sprite.parentInitialBounds.top;
+      }
+
       this.xTween = new Tween(
         sprite.transform.tx,
-        sprite.transform.tx + final.left - initial.left,
+        sprite.transform.tx + final.left - initial.left - parentDiffX,
         final.left === initial.left ? 0 : duration
       );
+
       this.yTween = new Tween(
         sprite.transform.ty,
-        sprite.transform.ty + final.top - initial.top,
+        sprite.transform.ty + final.top - initial.top - parentDiffY,
         final.top === initial.top ? 0 : duration
       );
     } else {
