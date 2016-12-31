@@ -112,8 +112,12 @@ export default Ember.Component.extend({
 
   willDestroyElement() {
     let removedSprites = [];
+    let parent;
     for (let element of this._ownElements()) {
-      let sprite = Sprite.positionedStartingAt(element);
+      if (!parent) {
+        parent = Sprite.offsetParentStartingAt(element);
+      }
+      let sprite = Sprite.positionedStartingAt(element, parent);
       sprite.owner = this._elementToChild.get(element);
       removedSprites.push(sprite);
     }
@@ -143,8 +147,12 @@ export default Ember.Component.extend({
     let insertedSprites = this._insertedSprites = [];
 
     let currentSprites = [];
+    let parent;
     for (let element of this._ownElements()) {
-      let sprite = Sprite.positionedStartingAt(element);
+      if (!parent) {
+        parent = Sprite.offsetParentStartingAt(element);
+      }
+      let sprite = Sprite.positionedStartingAt(element, parent);
       currentSprites.push(sprite);
     }
 
@@ -175,13 +183,19 @@ export default Ember.Component.extend({
     yield * this.get('motionService').staticMeasurement(() => {
       for (let element of this._ownElements()) {
         if (!currentSprites.find(sprite => sprite.element === element)) {
-          let sprite = Sprite.positionedEndingAt(element);
+          if (!parent) {
+            parent = Sprite.offsetParentEndingAt(element);
+          }
+          let sprite = Sprite.positionedEndingAt(element, parent);
           sprite.owner = this._elementToChild.get(element);
           sprite.hide();
           insertedSprites.push(sprite);
         }
       }
       keptSprites.forEach(sprite => sprite.measureFinalBounds());
+      if (parent && !parent.finalBounds) {
+        parent.measureFinalBounds();
+      }
     });
 
     let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
@@ -195,6 +209,17 @@ export default Ember.Component.extend({
         return true;
       }
     })
+
+    if (parent && !parent.initialBounds) {
+      // TODO: This is best effort. The parent isn't necessarily in
+      // the initial position at this point, but in practice if people
+      // are properly using animated-containers it will be locked into
+      // that position. We only need this is there were no elements to
+      // begin with. A better solution would figure out what the
+      // offset parent *would* be even when there are no elements,
+      // based on our own placeholder comment nodes.
+      parent.measureInitialBounds();
+    }
 
     let context = new TransitionContext(
       this.get('durationWithDefault'),

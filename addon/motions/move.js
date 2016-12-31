@@ -24,25 +24,18 @@ export default class Move extends Motion {
       // when starting a new move we start from its current position
       // (sprite.transform) and offset that based on the change in
       // bounds we want.
-      let initial = sprite.initialBounds;
-      let final = sprite.finalBounds;
-
-      let parentDiffX = 0;
-      let parentDiffY = 0;
-      if (sprite.parentInitialBounds && sprite.parentFinalBounds) {
-        parentDiffX = sprite.parentFinalBounds.left - sprite.parentInitialBounds.left;
-        parentDiffY = sprite.parentFinalBounds.top - sprite.parentInitialBounds.top;
-      }
+      let initial = sprite.relativeInitialBounds;
+      let final = sprite.relativeFinalBounds;
 
       this.xTween = new Tween(
         sprite.transform.tx,
-        sprite.transform.tx + final.left - initial.left - parentDiffX,
+        sprite.transform.tx + final.left - initial.left,
         final.left === initial.left ? 0 : duration
       );
 
       this.yTween = new Tween(
         sprite.transform.ty,
-        sprite.transform.ty + final.top - initial.top - parentDiffY,
+        sprite.transform.ty + final.top - initial.top,
         final.top === initial.top ? 0 : duration
       );
     } else {
@@ -63,11 +56,6 @@ export default class Move extends Motion {
         let finalView = sprite.finalBounds;
         viewDiffX = finalView.left - initialView.left;
         viewDiffY = finalView.top - initialView.top;
-
-        if (priorSprite.parentFinalBounds && sprite.parentFinalBounds) {
-          viewDiffX -= sprite.parentFinalBounds.left - priorSprite.parentFinalBounds.left;
-          viewDiffY -= sprite.parentFinalBounds.top - priorSprite.parentFinalBounds.top;
-        }
       }
 
       // If our interrupting move is actually going to the same place
@@ -76,6 +64,8 @@ export default class Move extends Motion {
       // waiting around for nothing to happen).
       let durationX = viewDiffX === 0 ? 0 : duration;
       let durationY = viewDiffY === 0 ? 0 : duration;
+
+      // NEXT: use relative bounds here
 
       // We add our new differential tweens to the prior tweens.
       this.xTween = new Tween(transformDiffX, transformDiffX + viewDiffX, durationX).plus(this.prior.xTween);

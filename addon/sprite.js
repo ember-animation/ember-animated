@@ -24,29 +24,42 @@ const inFlight = new WeakMap();
 
 export default class Sprite {
 
-  static positionedStartingAt(element) {
-    return new this(element, true, 'position');
+  static offsetParentStartingAt(element) {
+    return new this(getEffectiveOffsetParent(element), true, null, null);
   }
 
-  static positionedEndingAt(element) {
-    return new this(element, false, 'position');
+  static offsetParentEndingAt(element) {
+    return new this(getEffectiveOffsetParent(element), false, null, null);
+  }
+
+  static endingAt(element) {
+    return new this(element, false, null, null);
+  }
+
+  static positionedStartingAt(element, offsetSprite) {
+    return new this(element, true, 'position', offsetSprite);
+  }
+
+  static positionedEndingAt(element, offsetSprite) {
+    return new this(element, false, 'position', offsetSprite);
   }
 
   static sizedStartingAt(element) {
-    return new this(element, true, 'size');
+    return new this(element, true, 'size', null);
   }
 
   static sizedEndingAt(element) {
-    return new this(element, false, 'size');
+    return new this(element, false, 'size', null);
   }
 
-  constructor(element, inInitialPosition, lockMode) {
+  constructor(element, inInitialPosition, lockMode, offsetSprite) {
     this.element = element;
     this.__$element = null;
     this.owner = null;
+    this._offsetSprite = offsetSprite;
 
     let predecessor = inFlight.get(element);
-    if (predecessor) {
+    if (predecessor && lockMode) {
       // When we finish, we want to be able to set the style back to
       // whatever it was before any Sprites starting locking things,
       // so inheriting the state from our predecessor is important for
@@ -56,10 +69,9 @@ export default class Sprite {
       this._revealed = predecessor._revealed;
       this._transform = predecessor.transform;
       this._imposedStyle = predecessor._imposedStyle;
-      this._effectiveOffsetParent = predecessor._effectiveOffsetParent;
       this._lockMode = predecessor._lockMode;
       if (lockMode !== predecessor._lockMode) {
-        throw new Error("probably bug in ember-animated: can't change lock mode");
+        throw new Error(`probable bug in ember-animated: can't change lock mode from ${predecessor._lockMode} to ${lockMode}`);
       }
     } else {
       this._styleCache = null;
@@ -67,7 +79,6 @@ export default class Sprite {
       this._revealed = null;
       this._transform = null;
       this._imposedStyle = null;
-      this._effectiveOffsetParent = null;
       this._lockMode = lockMode;
       if (lockMode === 'position') {
         this._rememberPosition();
@@ -77,11 +88,11 @@ export default class Sprite {
     }
 
     if (inInitialPosition) {
-      this.initialBounds = element.getBoundingClientRect();
+      this.measureInitialBounds();
       this.finalBounds = null;
     } else {
       this.initialBounds = null;
-      this.finalBounds = element.getBoundingClientRect();
+      this.measureFinalBounds();
     }
 
     if (Ember.testing) { Object.seal(this); }
@@ -122,6 +133,24 @@ export default class Sprite {
     return this._revealed;
   }
 
+  get relativeFinalBounds() {
+    let own = this.finalBounds;
+    if (this._offsetSprite) {
+      return shiftedBounds(own, -this._offsetSprite.finalBounds.left, -this._offsetSprite.finalBounds.top);
+    } else {
+      return own;
+    }
+  }
+
+  get relativeInitialBounds() {
+    let own = this.initialBounds;
+    if (this._offsetSprite) {
+      return shiftedBounds(own, -this._offsetSprite.initialBounds.left, -this._offsetSprite.initialBounds.top);
+    } else {
+      return own;
+    }
+  }
+
   _rememberSize() {
     this._styleCache = this._$element.attr('style') || "";
     this._imposedStyle = {
@@ -134,7 +163,7 @@ export default class Sprite {
   _rememberPosition() {
     this._styleCache = this._$element.attr('style') || "";
     let computedStyle = getComputedStyle(this.element);
-    let { top, left, effectiveOffsetParent } = findOffsets(this.element, computedStyle, this.transform);
+    let { top, left } = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
     this._imposedStyle = {
       top,
       left,
@@ -144,7 +173,6 @@ export default class Sprite {
       'box-sizing': 'border-box',
       margin: 0
     };
-    this._effectiveOffsetParent = effectiveOffsetParent;
   }
 
   lock() {
@@ -245,11 +273,16 @@ export default class Sprite {
   }
 }
 
-function findOffsets(element, computedStyle, transform) {
+function findOffsets(element, computedStyle, transform, offsetSprite) {
   let ownBounds = element.getBoundingClientRect();
   let left = ownBounds.left;
   let top = ownBounds.top;
-  let effectiveOffsetParent = getEffectiveOffsetParent(element, computedStyle);
+  let effectiveOffsetParent;
+
+  if (computedStyle.position !== 'fixed') {
+    effectiveOffsetParent = offsetSprite.element;
+  }
+
   if (effectiveOffsetParent) {
     if (effectiveOffsetParent.tagName === 'BODY') {
       // reading scroll off body doesn't reliably work cross browser
@@ -275,14 +308,13 @@ function findOffsets(element, computedStyle, transform) {
   left -= transform.tx;
   top -= transform.ty;
 
-  return { top, left, effectiveOffsetParent };
+  return { top, left };
 }
 
 // This compensates for the fact that browsers are inconsistent in the
 // way they report offsetLeft & offsetTop for elements with a
 // transformed ancestor beneath their nearest positioned ancestor.
-function getEffectiveOffsetParent(element, computedStyle) {
-  if (computedStyle.position === 'fixed') { return null; }
+function getEffectiveOffsetParent(element) {
   let offsetParent = element.offsetParent;
   let cursor = element.parentElement;
   while (cursor && offsetParent && cursor !== offsetParent) {
