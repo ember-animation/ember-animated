@@ -50,27 +50,6 @@ class BaseSprite {
   measureFinalBounds() {
     this.finalBounds = this.element.getBoundingClientRect();
   }
-  startAt(otherSprite) {
-    continueMotions(otherSprite.element, this.element);
-    this.translate(otherSprite.initialBounds.left - this.finalBounds.left, otherSprite.initialBounds.top - this.finalBounds.top);
-    this.initialBounds = otherSprite.initialBounds;
-  }
-  startTranslatedBy(dx, dy) {
-    this.initialBounds = {
-      left: this.finalBounds.left + dx,
-      top: this.finalBounds.top + dy
-    };
-    this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
-  }
-  endTranslatedBy(dx, dy) {
-    this.finalBounds = {
-      left: this.initialBounds.left + dx,
-      top: this.initialBounds.top + dy
-    };
-  }
-  endRelativeTo(otherSprite) {
-    this.endTranslatedBy(otherSprite.finalBounds.left - otherSprite.initialBounds.left, otherSprite.finalBounds.top - otherSprite.initialBounds.top);
-  }
   lock() {
     $(this.element).css(this._imposedStyle);
     inFlight.set(this.element, this);
@@ -189,6 +168,27 @@ export default class Sprite extends BaseSprite {
     if (this._effectiveOffsetParent) {
       this.parentFinalBounds = this._effectiveOffsetParent.getBoundingClientRect();
     }
+  }
+  startAt(otherSprite) {
+    continueMotions(otherSprite.element, this.element);
+    this.translate(otherSprite.initialBounds.left - this.finalBounds.left, otherSprite.initialBounds.top - this.finalBounds.top);
+    this.initialBounds = otherSprite.initialBounds;
+  }
+  startTranslatedBy(dx, dy) {
+    this.initialBounds = {
+      left: this.finalBounds.left + dx,
+      top: this.finalBounds.top + dy
+    };
+    this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
+  }
+  endTranslatedBy(dx, dy) {
+    this.finalBounds = {
+      left: this.initialBounds.left + dx,
+      top: this.initialBounds.top + dy
+    };
+  }
+  endRelativeTo(otherSprite) {
+    this.endTranslatedBy(otherSprite.finalBounds.left - otherSprite.initialBounds.left, otherSprite.finalBounds.top - otherSprite.initialBounds.top);
   }
 }
 
