@@ -175,17 +175,11 @@ export default class Sprite extends BaseSprite {
     this.initialBounds = otherSprite.initialBounds;
   }
   startTranslatedBy(dx, dy) {
-    this.initialBounds = {
-      left: this.finalBounds.left + dx,
-      top: this.finalBounds.top + dy
-    };
+    this.initialBounds = shiftedBounds(this.finalBounds, dx, dy);
     this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
   }
   endTranslatedBy(dx, dy) {
-    this.finalBounds = {
-      left: this.initialBounds.left + dx,
-      top: this.initialBounds.top + dy
-    };
+    this.finalBounds = shiftedBounds(this.initialBounds, dx, dy);
   }
   endRelativeTo(otherSprite) {
     this.endTranslatedBy(otherSprite.finalBounds.left - otherSprite.initialBounds.left, otherSprite.finalBounds.top - otherSprite.initialBounds.top);
@@ -239,4 +233,15 @@ function getEffectiveOffsetParent(element, computedStyle) {
     cursor = cursor.parentElement;
   }
   return offsetParent;
+}
+
+function shiftedBounds(bounds, dx, dy) {
+  return {
+    top: bounds.top + dy,
+    bottom: bounds.bottom + dy,
+    left: bounds.left + dx,
+    right: bounds.right + dx,
+    width: bounds.width,
+    height: bounds.height
+  };
 }
