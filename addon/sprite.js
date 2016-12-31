@@ -22,8 +22,30 @@ import { collapsedChildren } from './margin-collapse';
 
 const inFlight = new WeakMap();
 
-class BaseSprite {
-  constructor(element, predecessor) {
+export default class Sprite {
+
+  static positionedStartingAt(element) {
+    return new this(element, true, 'position');
+  }
+
+  static positionedEndingAt(element) {
+    return new this(element, false, 'position');
+  }
+
+  static sizedStartingAt(element) {
+    return new this(element, true, 'size');
+  }
+
+  static sizedEndingAt(element) {
+    return new this(element, false, 'size');
+  }
+
+  constructor(element, inInitialPosition, lockMode) {
+    this.element = element;
+    this.__$element = null;
+    this.owner = null;
+
+    let predecessor = inFlight.get(element);
     if (predecessor) {
       // When we finish, we want to be able to set the style back to
       // whatever it was before any Sprites starting locking things,
@@ -32,116 +54,165 @@ class BaseSprite {
       this._styleCache = predecessor._styleCache;
       this._parentElement = predecessor._parentElement;
       this._revealed = predecessor._revealed;
+      this._transform = predecessor.transform;
+      this._imposedStyle = predecessor._imposedStyle;
+      this._effectiveOffsetParent = predecessor._effectiveOffsetParent;
+      this._lockMode = predecessor._lockMode;
+      if (lockMode !== predecessor._lockMode) {
+        throw new Error("probably bug in ember-animated: can't change lock mode");
+      }
     } else {
-      let $elt = $(element);
-      this._styleCache = $elt.attr('style') || null;
-      this._parentElement = element.parentElement;
-      this._revealed = !$elt.hasClass('ember-animated-hidden');
+      this._styleCache = null;
+      this._parentElement = null;
+      this._revealed = null;
+      this._transform = null;
+      this._imposedStyle = null;
+      this._effectiveOffsetParent = null;
+      this._lockMode = lockMode;
+      if (lockMode === 'position') {
+        this._rememberPosition();
+      } else if (this._lockMode === 'size') {
+        this._rememberSize();
+      }
     }
-    this.element = element;
-    this.owner = null;
-    this.initialBounds = null;
-    this.finalBounds = null;
+
+    if (inInitialPosition) {
+      this.initialBounds = element.getBoundingClientRect();
+      this.finalBounds = null;
+    } else {
+      this.initialBounds = null;
+      this.finalBounds = element.getBoundingClientRect();
+    }
+
+    if (Ember.testing) { Object.seal(this); }
   }
 
   measureInitialBounds() {
+    if (this.initialBounds) {
+      throw new Error("Sprite already has initial bounds");
+    }
     this.initialBounds = this.element.getBoundingClientRect();
   }
+
   measureFinalBounds() {
+    if (this.finalBounds) {
+      throw new Error("Sprite already has final bounds");
+    }
     this.finalBounds = this.element.getBoundingClientRect();
   }
-  lock() {
-    $(this.element).css(this._imposedStyle);
-    inFlight.set(this.element, this);
-  }
-  applyStyles(styles) {
-    Object.assign(this._imposedStyle, styles);
-    $(this.element).css(styles);
-  }
-  unlock() {
-    Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", this.stillInFlight(), { id: "ember-animated-sprite-unlock" });
-    inFlight.delete(this.element);
-    if (this._styleCache) {
-      $(this.element).attr('style', this._styleCache);
-    } else {
-      this.element.attributes.removeNamedItem('style');
-    }
-  }
-  stillInFlight() {
-    return inFlight.get(this.element) === this;
-  }
-  hide() {
-    this._revealed = false;
-    $(this.element).addClass('ember-animated-hidden');
-  }
-  display(flag) {
-    if (flag) {
-      $(this.element).removeClass('ember-animated-none');
-    } else {
-      $(this.element).addClass('ember-animated-none');
-    }
-  }
-  reveal() {
-    if (!this._revealed) {
-      this._revealed = true;
-      $(this.element).removeClass('ember-animated-hidden');
-    }
-  }
-}
 
-export class ContainerSprite extends BaseSprite {
-  constructor(element) {
-    let predecessor = inFlight.get(element);
-    super(element, predecessor);
+  get _$element() {
+    if (!this.__$element) {
+      this.__$element = $(this.element);
+    }
+    return this.__$element;
+  }
+
+  get transform() {
+    if (!this._transform) {
+      this._transform = ownTransform(this.element);
+    }
+    return this._transform;
+  }
+
+  get revealed() {
+    if (this._revealed == null) {
+      this._revealed = this._$element.hasClass('ember-animated-hidden');
+    }
+    return this._revealed;
+  }
+
+  _rememberSize() {
+    this._styleCache = this._$element.attr('style') || "";
     this._imposedStyle = {
       width: this.element.offsetWidth,
       height: this.element.offsetHeight,
       'box-sizing': 'border-box'
     };
   }
-}
 
-export default class Sprite extends BaseSprite {
-  constructor(element) {
-    let predecessor = inFlight.get(element);
-    super(element, predecessor);
-    if (predecessor) {
-      this.transform = predecessor.transform;
-      this._imposedStyle = predecessor._imposedStyle;
-      this._effectiveOffsetParent = predecessor._effectiveOffsetParent;
-    } else {
-      let computedStyle = getComputedStyle(this.element);
-      this.transform = ownTransform(this.element);
-      let { top, left, effectiveOffsetParent } = findOffsets(this.element, computedStyle, this.transform);
-      this._imposedStyle = {
-        top,
-        left,
-        width: this.element.offsetWidth,
-        height: this.element.offsetHeight,
-        position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
-        'box-sizing': 'border-box',
-        margin: 0
-      };
-      this._effectiveOffsetParent = effectiveOffsetParent;
-    }
-    this.parentInitialBounds = null;
-    this.parentFinalBounds = null;
+  _rememberPosition() {
+    this._styleCache = this._$element.attr('style') || "";
+    let computedStyle = getComputedStyle(this.element);
+    let { top, left, effectiveOffsetParent } = findOffsets(this.element, computedStyle, this.transform);
+    this._imposedStyle = {
+      top,
+      left,
+      width: this.element.offsetWidth,
+      height: this.element.offsetHeight,
+      position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
+      'box-sizing': 'border-box',
+      margin: 0
+    };
+    this._effectiveOffsetParent = effectiveOffsetParent;
   }
+
+  lock() {
+    if (!this._lockMode) {
+      throw new Error("sprite is not lockable");
+    }
+    this.applyStyles(this._imposedStyle);
+    if (this._lockMode === 'position') {
+      this._handleMarginCollapse();
+    }
+    inFlight.set(this.element, this);
+  }
+
+  unlock() {
+    Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", this.stillInFlight(), { id: "ember-animated-sprite-unlock" });
+    inFlight.delete(this.element);
+    if (this._styleCache.length > 0) {
+      this._$element.attr('style', this._styleCache);
+    } else {
+      this.element.attributes.removeNamedItem('style');
+    }
+    if (this._lockMode === 'position') {
+      this._clearMarginCollapse();
+    }
+  }
+
+  applyStyles(styles) {
+    if (!this._lockMode) {
+      throw new Error("can't apply styles to non-lockable sprite");
+    }
+    if (styles !== this._imposedStyle) {
+      Object.assign(this._imposedStyle, styles);
+    }
+    this._$element.css(styles);
+  }
+
+  stillInFlight() {
+    return inFlight.get(this.element) === this;
+  }
+
+  hide() {
+    this._revealed = false;
+    this._$element.addClass('ember-animated-hidden');
+  }
+
+  reveal() {
+    if (!this.revealed) {
+      this._revealed = true;
+      this._$element.removeClass('ember-animated-hidden');
+    }
+  }
+
+  display(flag) {
+    if (flag) {
+      this._$element.removeClass('ember-animated-none');
+    } else {
+      this._$element.addClass('ember-animated-none');
+    }
+  }
+
   translate(dx, dy) {
     let t = this.transform.mult(new Transform(1, 0, 0, 1, dx, dy));
-    this.transform = t;
+    this._transform = t;
     this.applyStyles({
       transform: t.serialize()
     });
   }
-  lock() {
-    super.lock();
-    this._handleMarginCollapse();
-  }
-  unlock() {
-    super.unlock();
-    this._clearMarginCollapse();
-  }
+
   _handleMarginCollapse() {
     let element = this.element;
     let cs = getComputedStyle(element);
@@ -155,18 +226,6 @@ export default class Sprite extends BaseSprite {
     let cs = getComputedStyle(element);
     for (let [ descendant ] of collapsedChildren(element, cs, 'Top')) {
       $(descendant).removeClass('ember-animated-top-collapse');
-    }
-  }
-  measureInitialBounds() {
-    super.measureInitialBounds();
-    if (this._effectiveOffsetParent) {
-      this.parentInitialBounds = this._effectiveOffsetParent.getBoundingClientRect();
-    }
-  }
-  measureFinalBounds() {
-    super.measureFinalBounds();
-    if (this._effectiveOffsetParent) {
-      this.parentFinalBounds = this._effectiveOffsetParent.getBoundingClientRect();
     }
   }
   startAt(otherSprite) {

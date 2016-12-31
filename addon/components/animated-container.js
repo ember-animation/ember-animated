@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Resize from '../motions/resize';
 import { task } from 'ember-concurrency';
-import { ContainerSprite } from '../sprite';
+import Sprite from '../sprite';
 
 export default Ember.Component.extend({
   classNames: ['animated-container'],
@@ -50,9 +50,8 @@ export default Ember.Component.extend({
     let useMotion;
 
     if (this._inserted){
-      sprite = new ContainerSprite(this.element);
+      sprite = Sprite.sizedStartingAt(this.element);
       this.sprite = sprite;
-      sprite.measureInitialBounds();
       sprite.lock();
       useMotion = true;
     } else {
@@ -61,11 +60,12 @@ export default Ember.Component.extend({
 
     yield * service.staticMeasurement(() => {
       if (!sprite) {
-        sprite = new ContainerSprite(this.element);
+        sprite = Sprite.sizedEndingAt(this.element);
         this.sprite = sprite;
         sprite.initialBounds = { width: 0, height: 0 };
+      } else {
+        sprite.measureFinalBounds();
       }
-      sprite.measureFinalBounds();
     });
 
     if (useMotion) {

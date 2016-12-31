@@ -330,13 +330,11 @@ test("static body with scroll", function(assert) {
 
 test("remembers initial bounds", function(assert) {
   let m = animated(target);
-  m.measureInitialBounds();
   assert.equalBounds(m.initialBounds, target[0].getBoundingClientRect());
 });
 
 test("measures and remembers final bounds", function(assert) {
   let m = animated(target);
-  m.measureInitialBounds();
   target.css('transform', 'translateX(100px)');
   m.measureFinalBounds();
   assert.equalBounds(m.finalBounds, target[0].getBoundingClientRect());
@@ -364,6 +362,13 @@ test("target's margins collapse with its children", function(assert){
 
 });
 
+test("Sprite is sealed in test mode", function(assert) {
+  let m = animated(target);
+  assert.throws(() => {
+    m.somethingExtra = true;
+  });
+});
+
 skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
   assert.ok(false);
 });
@@ -377,7 +382,7 @@ skip("polyfills rAF as needed", function(assert) {
 });
 
 function animated($elt) {
-  return new Sprite($elt[0]);
+  return Sprite.positionedStartingAt($elt[0]);
 }
 
 function addMargins($elt) {

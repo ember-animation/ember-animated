@@ -113,9 +113,8 @@ export default Ember.Component.extend({
   willDestroyElement() {
     let removedSprites = [];
     for (let element of this._ownElements()) {
-      let sprite = new Sprite(element);
+      let sprite = Sprite.positionedStartingAt(element);
       sprite.owner = this._elementToChild.get(element);
-      sprite.measureInitialBounds();
       removedSprites.push(sprite);
     }
     this.get('motionService').matchDestroyed(removedSprites);
@@ -145,8 +144,7 @@ export default Ember.Component.extend({
 
     let currentSprites = [];
     for (let element of this._ownElements()) {
-      let sprite = new Sprite(element);
-      sprite.measureInitialBounds();
+      let sprite = Sprite.positionedStartingAt(element);
       currentSprites.push(sprite);
     }
 
@@ -177,13 +175,12 @@ export default Ember.Component.extend({
     yield * this.get('motionService').staticMeasurement(() => {
       for (let element of this._ownElements()) {
         if (!currentSprites.find(sprite => sprite.element === element)) {
-          let sprite = new Sprite(element);
+          let sprite = Sprite.positionedEndingAt(element);
           sprite.owner = this._elementToChild.get(element);
           sprite.hide();
           insertedSprites.push(sprite);
         }
       }
-      insertedSprites.forEach(sprite => sprite.measureFinalBounds());
       keptSprites.forEach(sprite => sprite.measureFinalBounds());
     });
 
