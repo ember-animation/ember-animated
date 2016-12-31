@@ -382,7 +382,8 @@ skip("polyfills rAF as needed", function(assert) {
 });
 
 function animated($elt) {
-  return Sprite.positionedStartingAt($elt[0]);
+  let parent = Sprite.offsetParentStartingAt($elt[0]);
+  return Sprite.positionedStartingAt($elt[0], parent);
 }
 
 function addMargins($elt) {

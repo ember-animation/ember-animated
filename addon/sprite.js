@@ -25,7 +25,10 @@ const inFlight = new WeakMap();
 export default class Sprite {
 
   static offsetParentStartingAt(element) {
-    return new this(getEffectiveOffsetParent(element), true, null, null);
+    let parent = getEffectiveOffsetParent(element);
+    if (parent) {
+      return new this(parent, true, null, null);
+    }
   }
 
   static offsetParentEndingAt(element) {
