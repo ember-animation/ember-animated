@@ -58,10 +58,16 @@ export default class Move extends Motion {
       let viewDiffX;
       let viewDiffY;
       {
-        let initialView = this.prior.sprite.finalBounds;
+        let priorSprite = this.prior.sprite;
+        let initialView = priorSprite.finalBounds;
         let finalView = sprite.finalBounds;
         viewDiffX = finalView.left - initialView.left;
         viewDiffY = finalView.top - initialView.top;
+
+        if (priorSprite.parentFinalBounds && sprite.parentFinalBounds) {
+          viewDiffX -= sprite.parentFinalBounds.left - priorSprite.parentFinalBounds.left;
+          viewDiffY -= sprite.parentFinalBounds.top - priorSprite.parentFinalBounds.top;
+        }
       }
 
       // If our interrupting move is actually going to the same place
