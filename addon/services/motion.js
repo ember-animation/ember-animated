@@ -90,30 +90,30 @@ export default Ember.Service.extend({
   staticMeasurement: function * (fn) {
     let measurement = { fn, resolved: false, value: null };
     this._measurements.push(measurement);
+    try {
+      // allow all concurrent animators to join in with our single
+      // measurement step instead of having each trigger its own reflow.
+      yield microwait();
 
-    // allow all concurrent animators to join in with our single
-    // measurement step instead of having each trigger its own reflow.
-    yield microwait();
-
-    if (!measurement.resolved) {
-      // we are the first concurrent task to wake up, so we do the
-      // actual resolution for everyone.
-      let animators = this.get('_animators');
-      animators.forEach(animator => animator.beginStaticMeasurement());
-      this._measurements.forEach(m => {
-        try {
-          m.value = m.fn();
-        } catch(err) {
-          setTimeout(function() { throw err; }, 0);
-        }
-        m.resolved = true;
-      });
-      animators.forEach(animator => animator.endStaticMeasurement());
+      if (!measurement.resolved) {
+        // we are the first concurrent task to wake up, so we do the
+        // actual resolution for everyone.
+        let animators = this.get('_animators');
+        animators.forEach(animator => animator.beginStaticMeasurement());
+        this._measurements.forEach(m => {
+          try {
+            m.value = m.fn();
+          } catch(err) {
+            setTimeout(function() { throw err; }, 0);
+          }
+          m.resolved = true;
+        });
+        animators.forEach(animator => animator.endStaticMeasurement());
+      }
+      return measurement.value;
+    } finally {
+      this._measurements.splice(this._measurements.indexOf(measurement), 1);
     }
-
-    this._measurements.splice(this._measurements.indexOf(measurement), 1);
-
-    return measurement.value;
   }
 
 });
