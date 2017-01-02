@@ -9,6 +9,12 @@ export function shiftedBounds(bounds, dx, dy) {
   };
 }
 
+// shifts the coordinates of the given bounds so they are relative to
+// the offset.
+export function relativeBounds(bounds, offset) {
+  return shiftedBounds(bounds, -offset.left, -offset.top);
+}
+
 export const emptyBounds = {
   top: 0,
   bottom: 0,

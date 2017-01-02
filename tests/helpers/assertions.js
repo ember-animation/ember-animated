@@ -1,5 +1,15 @@
 import { ownTransform } from 'ember-animated/transform';
 
+export function approxEqualPixels(value, expected, message) {
+  // Tolerate errors less than a quarter pixels. This prevents any invisible rounding errors from failing our tests.
+  this.pushResult({
+    result: Math.abs(value - expected) < 0.25,
+    actual: value,
+    expected: expected,
+    message: message
+  });
+}
+
 export function equalBounds(value, expected, message) {
   this.pushResult({
     // Tolerate errors less than a quarter pixels. This prevents any invisible rounding errors from failing our tests.

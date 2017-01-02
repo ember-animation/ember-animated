@@ -18,7 +18,7 @@ import Transform, {
 } from './transform';
 import { continueMotions } from './motion';
 import { collapsedChildren } from './margin-collapse';
-import { shiftedBounds, emptyBounds } from './bounds';
+import { shiftedBounds, relativeBounds } from './bounds';
 
 const inFlight = new WeakMap();
 
@@ -26,23 +26,31 @@ export default class Sprite {
 
   static offsetParentStartingAt(element) {
     let parent = getEffectiveOffsetParent(element);
-    if (parent) {
-      return new this(parent, true, null, null);
+    if (!parent) {
+      parent = document.getElementsByTagName('body')[0];
     }
+    return new this(parent, true, null, null);
   }
 
   static offsetParentEndingAt(element) {
     let parent = getEffectiveOffsetParent(element);
-    if (parent) {
-      return new this(getEffectiveOffsetParent(element), false, null, null);
+    if (!parent) {
+      parent = document.getElementsByTagName('body')[0];
     }
+    return new this(parent, false, null, null);
   }
 
   static positionedStartingAt(element, offsetSprite) {
+    if (!offsetSprite.initialBounds) {
+      throw new Error("offset sprite must have initial bounds");
+    }
     return new this(element, true, 'position', offsetSprite);
   }
 
   static positionedEndingAt(element, offsetSprite) {
+    if (!offsetSprite.finalBounds) {
+      throw new Error("offset sprite must have final bounds");
+    }
     return new this(element, false, 'position', offsetSprite);
   }
 
@@ -100,18 +108,34 @@ export default class Sprite {
     if (Ember.testing) { Object.seal(this); }
   }
 
+  getCurrentBounds() {
+    if (this._offsetSprite) {
+      return relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.getCurrentBounds());
+    } else {
+      return this.element.getBoundingClientRect();
+    }
+  }
+
   measureInitialBounds() {
     if (this.initialBounds) {
       throw new Error("Sprite already has initial bounds");
     }
-    this.initialBounds = this.element.getBoundingClientRect();
+    if (this._offsetSprite) {
+      this.initialBounds = relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.initialBounds);
+    } else {
+      this.initialBounds = this.element.getBoundingClientRect();
+    }
   }
 
   measureFinalBounds() {
     if (this.finalBounds) {
       throw new Error("Sprite already has final bounds");
     }
-    this.finalBounds = this.element.getBoundingClientRect();
+    if (this._offsetSprite) {
+      this.finalBounds = relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.finalBounds);
+    } else {
+      this.finalBounds = this.element.getBoundingClientRect();
+    }
   }
 
   get _$element() {
@@ -133,40 +157,6 @@ export default class Sprite {
       this._revealed = this._$element.hasClass('ember-animated-hidden');
     }
     return this._revealed;
-  }
-
-  get offsetInitialBounds() {
-    if (this._offsetSprite) {
-      return this._offsetSprite.initialBounds;
-    } else {
-      return emptyBounds;
-    }
-  }
-
-  get offsetFinalBounds() {
-    if (this._offsetSprite) {
-      return this._offsetSprite.finalBounds;
-    } else {
-      return emptyBounds;
-    }
-  }
-
-  get relativeFinalBounds() {
-    let own = this.finalBounds;
-    if (this._offsetSprite) {
-      return shiftedBounds(own, -this._offsetSprite.finalBounds.left, -this._offsetSprite.finalBounds.top);
-    } else {
-      return own;
-    }
-  }
-
-  get relativeInitialBounds() {
-    let own = this.initialBounds;
-    if (this._offsetSprite) {
-      return shiftedBounds(own, -this._offsetSprite.initialBounds.left, -this._offsetSprite.initialBounds.top);
-    } else {
-      return own;
-    }
   }
 
   _rememberSize() {
@@ -286,9 +276,7 @@ export default class Sprite {
       offsetY = this._offsetSprite.finalBounds.top - this._offsetSprite.initialBounds.top;
     }
     this.initialBounds = shiftedBounds(this.finalBounds, dx-offsetX, dy-offsetY);
-    let relInit = this.relativeInitialBounds;
-    let relFinal = this.relativeFinalBounds;
-    this.translate(relInit.left - relFinal.left, relInit.top - relFinal.top);
+    this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
   }
   endTranslatedBy(dx, dy) {
     this.finalBounds = shiftedBounds(this.initialBounds, dx, dy);

@@ -4,7 +4,8 @@ import Sprite from 'ember-animated/sprite';
 import $ from 'jquery';
 import {
   equalBounds,
-  visuallyConstant
+  visuallyConstant,
+  approxEqualPixels
 } from '../helpers/assertions';
 
 let environment, offsetParent, intermediate, target, innerContent;
@@ -13,6 +14,7 @@ module("Unit | Sprite", {
   beforeEach(assert) {
     assert.visuallyConstant = visuallyConstant;
     assert.equalBounds = equalBounds;
+    assert.approxEqualPixels = approxEqualPixels;
 
     let fixture = $('#qunit-fixture');
     fixture.html(`
@@ -330,16 +332,79 @@ test("static body with scroll", function(assert) {
 
 test("remembers initial bounds", function(assert) {
   let m = sprite(target);
-  assert.equalBounds(m.initialBounds, target[0].getBoundingClientRect());
+  assert.approxEqualPixels(m.initialBounds.top, $('.sibling').height(), 'top relative to parent');
+  assert.approxEqualPixels(m.initialBounds.left, 0, 'left relative to parent');
 });
 
 test("measures and remembers final bounds", function(assert) {
   let m = sprite(target);
   target.css('transform', 'translateX(100px)');
   m.measureFinalBounds();
-  assert.equalBounds(m.finalBounds, target[0].getBoundingClientRect());
-  assert.ok(m.initialBounds.left + 100 - m.finalBounds.left < 0.01, 'Bounds reflect movement');
+  assert.approxEqualPixels(m.finalBounds.top, m.initialBounds.top, 'top constant');
+  assert.approxEqualPixels(m.initialBounds.left + 100, m.finalBounds.left, 'left reflects movement');
 });
+
+test("requires an initial position sprite to have an initial positioned offset measurement", function(assert) {
+  let parent = Sprite.offsetParentEndingAt(target[0]);
+  assert.throws(() => {
+    Sprite.positionedStartingAt(target[0], parent);
+  }, /must have initial bounds/);
+});
+
+test("requires a final position sprite to have a final positioned offset measurement", function(assert) {
+  let parent = Sprite.offsetParentStartingAt(target[0]);
+  assert.throws(() => {
+    Sprite.positionedEndingAt(target[0], parent);
+  }, /must have final bounds/);
+});
+
+test("can initialize in final position", function(assert) {
+  let parent = Sprite.offsetParentEndingAt(target[0]);
+  let m = Sprite.positionedEndingAt(target[0], parent);
+  assert.approxEqualPixels(m.finalBounds.top, $('.sibling').height(), 'top relative to parent');
+  assert.approxEqualPixels(m.finalBounds.left, 0, 'left relative to parent');
+});
+
+test("can get current bounds", function(assert) {
+  let m = sprite(target);
+  target.css('transform', 'translateX(100px) translateY(120px)');
+  let b = m.getCurrentBounds();
+  assert.approxEqualPixels(b.top - 120, m.initialBounds.top, 'top reflects movement');
+  assert.approxEqualPixels(b.left - 100, m.initialBounds.left, 'left reflects movement');
+});
+
+test("current bounds are unaffected by parent movement", function(assert) {
+  let m = sprite(target);
+  offsetParent.css('transform', 'translateX(100px) translateY(120px)');
+  let b = m.getCurrentBounds();
+  assert.approxEqualPixels(b.top, m.initialBounds.top, 'top constant');
+  assert.approxEqualPixels(b.left, m.initialBounds.left, 'left constant');
+});
+
+test("start translated", function(assert) {
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+  let m = Sprite.positionedEndingAt(target[0], parent);
+  m.startTranslatedBy(100, 200);
+  assert.approxEqualPixels(m.initialBounds.left - 100, m.finalBounds.left, 'left');
+  assert.approxEqualPixels(m.initialBounds.top - 200, m.finalBounds.top, 'top');
+  assert.equalBounds(m.initialBounds, m.getCurrentBounds(), 'current matches initial');
+});
+
+test("start translated, accounts for parent motion", function(assert) {
+  let parent = makeParent(target);
+  offsetParent.css('transform', 'translateX(100px) translateY(120px)');
+  parent.measureFinalBounds();
+
+  let m = Sprite.positionedEndingAt(target[0], parent);
+  m.startTranslatedBy(300, 320);
+
+  assert.approxEqualPixels(m.initialBounds.left - 300 + 100, m.finalBounds.left, 'left');
+  assert.approxEqualPixels(m.initialBounds.top - 320 + 120, m.finalBounds.top, 'top');
+  assert.equalBounds(m.initialBounds, m.getCurrentBounds(), 'current matches initial');
+});
+
+
 
 test("target's margins collapse with its children", function(assert){
   innerContent.css({
@@ -358,7 +423,6 @@ test("target's margins collapse with its children", function(assert){
       m.unlock();
     }, 'inner content bounds unlock');
   }, 'target bounds unlock')
-
 
 });
 
@@ -381,9 +445,18 @@ skip("polyfills rAF as needed", function(assert) {
   assert.ok(false);
 });
 
-function sprite($elt) {
-  let parent = Sprite.offsetParentStartingAt($elt[0]);
+function makeParent($elt) {
+  return Sprite.offsetParentStartingAt($elt[0]);
+}
+
+function makeSprite($elt, parent) {
   return Sprite.positionedStartingAt($elt[0], parent);
+}
+
+function sprite($elt) {
+  let parent = makeParent($elt);
+  parent.measureFinalBounds();
+  return makeSprite($elt, parent);
 }
 
 function addMargins($elt) {
