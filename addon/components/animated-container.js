@@ -2,6 +2,7 @@ import Ember from 'ember';
 import Resize from '../motions/resize';
 import { task } from 'ember-concurrency';
 import Sprite from '../sprite';
+import { emptyBounds } from '../bounds';
 
 export default Ember.Component.extend({
   classNames: ['animated-container'],
@@ -62,7 +63,7 @@ export default Ember.Component.extend({
       if (!sprite) {
         sprite = Sprite.sizedEndingAt(this.element);
         this.sprite = sprite;
-        sprite.initialBounds = { width: 0, height: 0 };
+        sprite.initialBounds = emptyBounds;
       } else {
         sprite.measureFinalBounds();
       }

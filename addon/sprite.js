@@ -18,7 +18,7 @@ import Transform, {
 } from './transform';
 import { continueMotions } from './motion';
 import { collapsedChildren } from './margin-collapse';
-
+import { shiftedBounds, emptyBounds } from './bounds';
 
 const inFlight = new WeakMap();
 
@@ -32,11 +32,10 @@ export default class Sprite {
   }
 
   static offsetParentEndingAt(element) {
-    return new this(getEffectiveOffsetParent(element), false, null, null);
-  }
-
-  static endingAt(element) {
-    return new this(element, false, null, null);
+    let parent = getEffectiveOffsetParent(element);
+    if (parent) {
+      return new this(getEffectiveOffsetParent(element), false, null, null);
+    }
   }
 
   static positionedStartingAt(element, offsetSprite) {
@@ -134,6 +133,22 @@ export default class Sprite {
       this._revealed = this._$element.hasClass('ember-animated-hidden');
     }
     return this._revealed;
+  }
+
+  get offsetInitialBounds() {
+    if (this._offsetSprite) {
+      return this._offsetSprite.initialBounds;
+    } else {
+      return emptyBounds;
+    }
+  }
+
+  get offsetFinalBounds() {
+    if (this._offsetSprite) {
+      return this._offsetSprite.finalBounds;
+    } else {
+      return emptyBounds;
+    }
   }
 
   get relativeFinalBounds() {
@@ -261,12 +276,19 @@ export default class Sprite {
   }
   startAt(otherSprite) {
     continueMotions(otherSprite.element, this.element);
-    this.translate(otherSprite.initialBounds.left - this.finalBounds.left, otherSprite.initialBounds.top - this.finalBounds.top);
-    this.initialBounds = otherSprite.initialBounds;
+    this.startTranslatedBy(otherSprite.initialBounds.left - this.finalBounds.left, otherSprite.initialBounds.top - this.finalBounds.top);
   }
   startTranslatedBy(dx, dy) {
-    this.initialBounds = shiftedBounds(this.finalBounds, dx, dy);
-    this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
+    let offsetX = 0;
+    let offsetY = 0;
+    if (this._offsetSprite) {
+      offsetX = this._offsetSprite.finalBounds.left - this._offsetSprite.initialBounds.left;
+      offsetY = this._offsetSprite.finalBounds.top - this._offsetSprite.initialBounds.top;
+    }
+    this.initialBounds = shiftedBounds(this.finalBounds, dx-offsetX, dy-offsetY);
+    let relInit = this.relativeInitialBounds;
+    let relFinal = this.relativeFinalBounds;
+    this.translate(relInit.left - relFinal.left, relInit.top - relFinal.top);
   }
   endTranslatedBy(dx, dy) {
     this.finalBounds = shiftedBounds(this.initialBounds, dx, dy);
@@ -327,15 +349,4 @@ function getEffectiveOffsetParent(element) {
     cursor = cursor.parentElement;
   }
   return offsetParent;
-}
-
-function shiftedBounds(bounds, dx, dy) {
-  return {
-    top: bounds.top + dy,
-    bottom: bounds.bottom + dy,
-    left: bounds.left + dx,
-    right: bounds.right + dx,
-    width: bounds.width,
-    height: bounds.height
-  };
 }

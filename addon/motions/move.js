@@ -1,6 +1,7 @@
 import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
+import { shiftedBounds } from '../bounds';
 
 export default class Move extends Motion {
   constructor(sprite, opts) {
@@ -47,13 +48,23 @@ export default class Move extends Motion {
       let transformDiffY = sprite.transform.ty - this.prior.yTween.currentValue;
 
       // The viewDiffs account for the visual difference between where
-      // the old tween was going and where the new tween is going.
+      // the old tween was going and where the new tween is going, all
+      // relative to our sprite's offset parent.
       let viewDiffX;
       let viewDiffY;
       {
         let priorSprite = this.prior.sprite;
-        let initialView = priorSprite.finalBounds;
-        let finalView = sprite.finalBounds;
+
+        let a = sprite.offsetInitialBounds;
+
+        // TODO: this is nearly correct, but it's assuming that
+        // priorSprite.finalBounds is really where we would have ended
+        // up, which in absolute terms may no longer be correct. Need
+        // to refactor sprite coordinates so their public API is
+        // always in relative units, with a method for switching
+        // between references frames.
+        let initialView = shiftedBounds(priorSprite.finalBounds, -a.left, -a.top);
+        let finalView = sprite.relativeFinalBounds;
         viewDiffX = finalView.left - initialView.left;
         viewDiffY = finalView.top - initialView.top;
       }
@@ -64,8 +75,6 @@ export default class Move extends Motion {
       // waiting around for nothing to happen).
       let durationX = viewDiffX === 0 ? 0 : duration;
       let durationY = viewDiffY === 0 ? 0 : duration;
-
-      // NEXT: use relative bounds here
 
       // We add our new differential tweens to the prior tweens.
       this.xTween = new Tween(transformDiffX, transformDiffX + viewDiffX, durationX).plus(this.prior.xTween);
