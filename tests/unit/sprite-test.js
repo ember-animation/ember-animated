@@ -53,96 +53,96 @@ module("Unit | Sprite", {
 });
 
 test('Simple case', function(assert) {
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Scaled ancestor', function(assert) {
   environment.css('transform', 'scale(0.5)');
   environment.css('transform-origin', '0 0');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Translated ancestor', function(assert) {
   environment.css('transform', 'translateX(500px) translateY(500px)');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Scaled offsetParent', function(assert) {
   offsetParent.css('transform', 'scale(0.5)');
   offsetParent.css('transform-origin', '0 0');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Translated ancestor beneath offsetParent', function(assert) {
   intermediate.css('transform', 'translateX(10px)');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Translated ancestor with border beneath offsetParent', function(assert) {
   intermediate.css('transform', 'translateX(10px)');
   intermediate.css('border', '1px solid green');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Translated ancestor with margins beneath offsetParent', function(assert) {
   intermediate.css('transform', 'translateX(10px)');
   addMargins(intermediate);
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 
 test('Translated offsetParent', function(assert) {
   offsetParent.css('transform', 'translateX(500px) translateY(500px)');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Target translated', function(assert) {
   target.css('transform', 'translateX(500px) translateY(500px)');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Target scaled', function(assert) {
   target.css('transform', 'scale(0.5)');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 skip('Target rotated', function(assert) {
   target.css('transform', 'rotate(30deg)');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Margins on target', function(assert) {
   addMargins(target);
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Margins on offsetParent', function(assert) {
   addMargins(offsetParent);
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Padding on offsetParent', function(assert) {
   addPadding(offsetParent);
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test('Border on target', function(assert) {
   target.css('border', '2px solid blue');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
@@ -151,12 +151,12 @@ test('Border on target, border-box mode', function(assert) {
     border: '2px solid blue',
     'box-sizing': 'border-box'
   });
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test("No leaked styles", function(assert) {
-  let m = animated(target);
+  let m = sprite(target);
   m.lock();
   m.unlock();
   // TODO: we are clearing the styles, but we leave an empty attribute
@@ -173,7 +173,7 @@ test("Restores original styles", function(assert) {
     height: '11px',
     transform: 'translateX(20px)'
   });
-  let m = animated(target);
+  let m = sprite(target);
   m.lock();
   m.unlock();
   assert.equal(target.css('position'), 'relative', 'position');
@@ -193,9 +193,9 @@ test("Restores original styles even when two sprites interrupt each other", func
     height: '11px',
     transform: 'translateX(20px)'
   });
-  let m = animated(target);
+  let m = sprite(target);
   m.lock();
-  let m2 = animated(target);
+  let m2 = sprite(target);
   m2.lock();
   m2.unlock();
   assert.equal(target.css('position'), 'relative', 'position');
@@ -216,7 +216,7 @@ test("within scrolling context above offset parent", function(assert) {
     height: 600
   });
   environment.scrollTop(300);
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => {
     m.lock();
   });
@@ -235,7 +235,7 @@ test("within scrolling offset parent", function(assert) {
   });
   offsetParent.scrollTop(2000);
   offsetParent.scrollLeft(10);
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => {
     m.lock();
   });
@@ -247,7 +247,7 @@ test("target absolutely positioned", function(assert) {
     top: 100,
     left: 200
   });
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
@@ -260,7 +260,7 @@ test("target absolutely positioned, border on offsetParent", function(assert) {
   offsetParent.css({
     border: '1px solid green'
   });
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
@@ -272,7 +272,7 @@ test("target absolutely positioned with transformed ancestor beneath nearest pos
     left: 200
   });
   intermediate.css('transform', 'translateX(10px)');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
@@ -284,7 +284,7 @@ test("target absolutely positioned with transformed ancestor with border beneath
   });
   intermediate.css('transform', 'translateX(10px)');
   intermediate.css('border', '1px solid green');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
@@ -294,7 +294,7 @@ test("target fixed positioned", function(assert){
     top: 100,
     left: 200
   });
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
@@ -305,7 +305,7 @@ test("static body with margins", function(assert) {
   intermediate.css({
     margin: '10px'
   });
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
@@ -324,17 +324,17 @@ test("static body with scroll", function(assert) {
 
   assert.equal($(window).scrollTop(), 100, 'ensure we really scrolled the body');
   assert.equal($(window).scrollLeft(), 10, 'ensure we really scrolled the body');
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => m.lock());
 });
 
 test("remembers initial bounds", function(assert) {
-  let m = animated(target);
+  let m = sprite(target);
   assert.equalBounds(m.initialBounds, target[0].getBoundingClientRect());
 });
 
 test("measures and remembers final bounds", function(assert) {
-  let m = animated(target);
+  let m = sprite(target);
   target.css('transform', 'translateX(100px)');
   m.measureFinalBounds();
   assert.equalBounds(m.finalBounds, target[0].getBoundingClientRect());
@@ -346,7 +346,7 @@ test("target's margins collapse with its children", function(assert){
     marginTop: 10,
     marginBottom: 20
   });
-  let m = animated(target);
+  let m = sprite(target);
   assert.visuallyConstant(target, () => {
     assert.visuallyConstant(innerContent, () => {
       m.lock();
@@ -363,7 +363,7 @@ test("target's margins collapse with its children", function(assert){
 });
 
 test("Sprite is sealed in test mode", function(assert) {
-  let m = animated(target);
+  let m = sprite(target);
   assert.throws(() => {
     m.somethingExtra = true;
   });
@@ -381,7 +381,7 @@ skip("polyfills rAF as needed", function(assert) {
   assert.ok(false);
 });
 
-function animated($elt) {
+function sprite($elt) {
   let parent = Sprite.offsetParentStartingAt($elt[0]);
   return Sprite.positionedStartingAt($elt[0], parent);
 }
