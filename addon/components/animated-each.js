@@ -45,7 +45,8 @@ export default Ember.Component.extend({
     let oldChildren = this._renderedChildren;
     let oldItems = this._prevItems;
     let newItems = this.get('items');
-    this._prevItems = newItems.slice();
+    this._prevItems = newItems ? newItems.slice() : [];
+    if (!newItems) { newItems = []; }
 
     let oldIndices = new Map();
     oldChildren.forEach((child, index) => {

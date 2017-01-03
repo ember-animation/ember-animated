@@ -33,6 +33,15 @@ test('it renders', function(assert) {
   assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
 });
 
+test('it renders when list is missing', function(assert) {
+  assert.expect(0);
+  this.render(hbs`
+    {{#animated-each items as |item|}}
+      <div class="test-child">{{item}}</div>
+    {{/animated-each}}
+  `);
+});
+
 test('it can transition at first render', function(assert) {
   let transitionCounter = 0;
   this.set('items', ['a', 'b', 'c']);
