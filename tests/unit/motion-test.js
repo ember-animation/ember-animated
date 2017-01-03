@@ -1,10 +1,12 @@
 import { module, test } from 'qunit';
-import Ember from 'ember';
-import { task } from 'ember-concurrency';
 import Sprite from 'ember-animated/sprite';
 import Motion from 'ember-animated/motion';
-import { rAF } from 'ember-animated/concurrency-helpers';
+import { rAF, microwait } from 'ember-animated/concurrency-helpers';
+import { MotionTester } from 'ember-animated/test-helpers';
 import $ from 'jquery';
+import Ember from 'ember';
+
+let tester;
 
 module("Unit | Motion", {
   beforeEach() {
@@ -12,6 +14,7 @@ module("Unit | Motion", {
     fixture.html(`
         <div class="target"></div>
     `);
+    tester = MotionTester.create();
   },
   afterEach() {
     $('#qunit-fixture').empty();
@@ -29,33 +32,66 @@ test('Can be canceled within ember-concurrency tasks', function(assert) {
     }
   }
 
-  let HostObject = Ember.Object.extend({
-    animate: task(function * () {
-      let sprite = new Sprite($('#qunit-fixture > .target')[0]);
-      this.motion = new TestMotion(sprite);
-      yield * this.motion._run();
-    })
-  });
-
-  let hostObject;
-  Ember.run(() => {
-    hostObject = HostObject.create();
-    hostObject.get('animate').perform();
-  });
+  let sprite = new Sprite($('#qunit-fixture > .target')[0]);
+  let motion = new TestMotion(sprite);
+  tester.run(motion);
 
   return rAF().then(() => rAF()).then(() => {
     // we waited two frames, which is enough for the animation to
     // start up, then wait for its own rAF, then increment the frame
     // counter.
-    let frames = hostObject.motion.frames;
+    let frames = motion.frames;
     assert.ok(frames > 0, "animation is running");
-    hostObject.get('animate').cancelAll();
+    tester.get('runner').cancelAll();
     return rAF().then(() => rAF()).then(() => {
       // We deliberately waited two frames here to guarantee the
       // animation is really stopped. If we only waited one frame, we
       // could miss it if it's rAF happens to resolve later than ours.
-      assert.equal(hostObject.motion.frames, frames, "stopped animating");
+      assert.equal(motion.frames, frames, "stopped animating");
     });
   });
 
+});
+
+test('results in Task failure when animation throws asynchronously', function(assert) {
+  class TestMotion extends Motion {
+    * animate() {
+      yield microwait();
+      throw new Error("simulated failure");
+    }
+  }
+
+  let sprite = new Sprite($('#qunit-fixture > .target')[0]);
+  let motion = new TestMotion(sprite);
+  let done = assert.async();
+  Ember.run(() => {
+    tester.run(motion).then(() => {
+      assert.ok(false, "Not supposed to succeed");
+      done();
+    }, error => {
+      assert.equal(error ? error.message : undefined, 'simulated failure');
+      done();
+    });
+  });
+});
+
+test('results in Task failure when animation throws synchronously', function(assert) {
+  class TestMotion extends Motion {
+    * animate() {
+      throw new Error("simulated failure");
+    }
+  }
+
+  let sprite = new Sprite($('#qunit-fixture > .target')[0]);
+  let motion = new TestMotion(sprite);
+  let done = assert.async();
+  Ember.run(() => {
+    tester.run(motion).then(() => {
+      assert.ok(false, "Not supposed to succeed");
+      done();
+    }, error => {
+      assert.equal(error ? error.message : undefined, 'simulated failure');
+      done();
+    });
+  });
 });
