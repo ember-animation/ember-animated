@@ -181,6 +181,10 @@ export default Ember.Component.extend({
     });
 
     yield * this.get('motionService').staticMeasurement(() => {
+      if (parent && !parent.finalBounds) {
+        parent.measureFinalBounds();
+      }
+
       for (let element of this._ownElements()) {
         if (!currentSprites.find(sprite => sprite.element === element)) {
           if (!parent) {
@@ -193,9 +197,6 @@ export default Ember.Component.extend({
         }
       }
       keptSprites.forEach(sprite => sprite.measureFinalBounds());
-      if (parent && !parent.finalBounds) {
-        parent.measureFinalBounds();
-      }
     });
 
     let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);

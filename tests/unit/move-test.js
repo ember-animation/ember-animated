@@ -1,39 +1,27 @@
 import { module, test } from 'qunit';
 import Sprite from 'ember-animated/sprite';
 import $ from 'jquery';
-import Ember from 'ember';
-import { task } from 'ember-concurrency';
 import Move from 'ember-animated/motions/move';
+import Ember from 'ember';
 import {
   equalBounds,
+  approxEqualPixels
 } from '../helpers/assertions';
+import { TimeControl, MotionTester } from 'ember-animated/test-helpers';
 
-let Harness = Ember.Object.extend({
-  beforeAnimation(){},
-  afterAnimation(){},
-  run(sprite) {
-    let p;
-    Ember.run(() => {
-      p = this.get('_run').perform(sprite);
-    });
-    return p;
-  },
-  _run: task(function * (sprite) {
-    let motion = new Move(sprite);
-    motion.duration = 1;
-    this.beforeAnimation(sprite);
-    yield * motion._run();
-    this.afterAnimation(sprite);
-  })
-});
-
-let harness, environment, offsetParent, target, innerContent;
+let tester, environment, offsetParent, target, innerContent, time;
 
 module("Unit | Move", {
   beforeEach(assert) {
     assert.equalBounds = equalBounds;
+    assert.approxEqualPixels = approxEqualPixels;
 
-    harness = new Harness();
+    time = new TimeControl();
+
+    tester = new MotionTester({
+      motion: Move
+    });
+
     let fixture = $('#qunit-fixture');
     fixture.html(`
 <div class="environment">
@@ -55,7 +43,11 @@ module("Unit | Move", {
       position: 'relative'
     });
     innerContent.height(400);
+  },
+  afterEach() {
+    time.finished();
   }
+
 });
 
 test("simple motion", function(assert) {
@@ -72,13 +64,58 @@ test("simple motion", function(assert) {
   s.measureFinalBounds();
   s.lock();
 
-  harness.beforeAnimation = sprite => {
-    assert.equalBounds(sprite.element.getBoundingClientRect(), startBounds);
+  tester.beforeAnimation = () => {
+    assert.equalBounds(s.element.getBoundingClientRect(), startBounds);
   };
 
-  harness.afterAnimation = sprite => {
-    assert.equalBounds(sprite.element.getBoundingClientRect(), endBounds);
+  tester.afterAnimation = () => {
+    assert.equalBounds(s.element.getBoundingClientRect(), endBounds);
   };
 
-  return harness.run(s);
+  let done = assert.async();
+  Ember.run(() => {
+    tester.run(s, { duration: 60 }).finally(done);
+    time.advance(60);
+  });
+});
+
+test("simple motion, interrupted", function(assert) {
+  let p = Sprite.offsetParentStartingAt(target[0]);
+  p.measureFinalBounds();
+  let s = Sprite.positionedStartingAt(target[0], p);
+
+  target.css({
+    left: 300,
+    top: 400,
+    position: 'relative'
+  });
+
+  s.measureFinalBounds();
+  s.lock();
+
+
+  Ember.run(() => {
+    tester.run(s, { duration: 1000 });
+  });
+
+  return time.advance(500).then(() => {
+    assert.approxEqualPixels(s.getCurrentBounds().top, s.initialBounds.top + 200, 'top');
+    assert.approxEqualPixels(s.getCurrentBounds().left, s.initialBounds.left + 150, 'left');
+    let newSprite = Sprite.positionedStartingAt(target[0], p);
+    newSprite.lock();
+    target.css({
+      left: 400,
+      top: 500
+    });
+    newSprite.unlock();
+    newSprite.measureFinalBounds();
+    newSprite.lock();
+
+    Ember.run(() => {
+      tester.run(newSprite, { duration: 1000 });
+    });
+    assert.approxEqualPixels(newSprite.getCurrentBounds().top, s.initialBounds.top + 200, 'top continuity');
+    assert.approxEqualPixels(newSprite.getCurrentBounds().left, s.initialBounds.left + 150, 'left continuity');
+    return time.advance(1000);
+  });
 });

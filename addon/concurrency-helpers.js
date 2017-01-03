@@ -52,3 +52,10 @@ export function afterRender() {
   };
   return promise;
 }
+
+// This provides a unified place to hook into time control for testing.
+export let clock = {
+  now() {
+    return (new Date()).getTime();
+  }
+}

@@ -25,8 +25,8 @@ export default class Move extends Motion {
       // when starting a new move we start from its current position
       // (sprite.transform) and offset that based on the change in
       // bounds we want.
-      let initial = sprite.relativeInitialBounds;
-      let final = sprite.relativeFinalBounds;
+      let initial = sprite.initialBounds;
+      let final = sprite.finalBounds;
 
       this.xTween = new Tween(
         sprite.transform.tx,
@@ -41,6 +41,7 @@ export default class Move extends Motion {
       );
     } else {
       // Here we are interrupting a prior Move.
+      debugger;
 
       // The transformDiffs account for the fact that our old and new
       // tweens may be measuring from different origins.
@@ -54,17 +55,8 @@ export default class Move extends Motion {
       let viewDiffY;
       {
         let priorSprite = this.prior.sprite;
-
-        let a = sprite.offsetInitialBounds;
-
-        // TODO: this is nearly correct, but it's assuming that
-        // priorSprite.finalBounds is really where we would have ended
-        // up, which in absolute terms may no longer be correct. Need
-        // to refactor sprite coordinates so their public API is
-        // always in relative units, with a method for switching
-        // between references frames.
-        let initialView = shiftedBounds(priorSprite.finalBounds, -a.left, -a.top);
-        let finalView = sprite.relativeFinalBounds;
+        let initialView = priorSprite.finalBounds;
+        let finalView = sprite.finalBounds;
         viewDiffX = finalView.left - initialView.left;
         viewDiffY = finalView.top - initialView.top;
       }

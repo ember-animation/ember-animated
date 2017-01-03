@@ -1,4 +1,4 @@
-import { rAF, currentFrameClock } from './concurrency-helpers';
+import { rAF, currentFrameClock, clock } from './concurrency-helpers';
 const currentCurves = [];
 
 /*
@@ -69,7 +69,7 @@ class MotionCurve {
   }
 
   constructor(duration) {
-    this.startTime = (new Date()).getTime();
+    this.startTime = clock.now();
     this.duration = duration;
     this._tick();
   }
@@ -79,7 +79,7 @@ class MotionCurve {
   _tick() {
     if (this._lastTick !== currentFrameClock) {
       this._lastTick = currentFrameClock;
-      this._runTime = (new Date()).getTime() - this.startTime;
+      this._runTime = clock.now() - this.startTime;
       this._timeProgress = Math.min(this._runTime / this.duration, 1);
       this._spaceProgress = Math.min(this.ease(this._timeProgress), 1);
       this._done = this._timeProgress >= 1;

@@ -1,5 +1,7 @@
 import Ember from 'ember';
 import RSVP from 'rsvp';
+import { clock, rAF } from './concurrency-helpers';
+import { task } from 'ember-concurrency';
 import Motion from './motion';
 import Sprite from './sprite';
 
@@ -24,6 +26,29 @@ export function waitForAnimations() {
   });
   return idle;
 }
+
+let origNow = clock.now;
+
+export class TimeControl {
+  constructor() {
+    if (clock.now !== origNow) {
+      throw new Error("Only one TimeControl may be active at a time");
+    }
+    this._timer = 0;
+    clock.now = () => this.now();
+  }
+  finished() {
+    clock.now = origNow;
+  }
+  now() {
+    return this._timer;
+  }
+  advance(ms) {
+    this._timer += ms;
+    return rAF().then(() => rAF());
+  }
+}
+
 export const MotionTester = Ember.Object.extend({
   motion: null,
   duration: 1,
