@@ -1,7 +1,6 @@
 import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
-import { shiftedBounds } from '../bounds';
 
 export default class Move extends Motion {
   constructor(sprite, opts) {
