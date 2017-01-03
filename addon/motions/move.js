@@ -41,7 +41,6 @@ export default class Move extends Motion {
       );
     } else {
       // Here we are interrupting a prior Move.
-      debugger;
 
       // The transformDiffs account for the fact that our old and new
       // tweens may be measuring from different origins.
