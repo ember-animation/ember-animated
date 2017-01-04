@@ -59,7 +59,9 @@ export default class Motion {
       }
       yield * this.animate();
     } catch (err) {
-      this._reject(err);
+      if (err.message !== 'TaskCancelation') {
+        this._reject(err);
+      }
       throw err;
     } finally {
       this._resolve();
