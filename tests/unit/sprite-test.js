@@ -208,6 +208,45 @@ test("Restores original styles even when two sprites interrupt each other", func
   assert.equal(ownTransform(target[0]).tx, 20, 'translateX');
 });
 
+test("external style mutations persist across unlock: added property that does not collide with our imposed styles", function(assert) {
+  let m = sprite(target);
+  m.lock();
+  target[0].style.borderWidth = '123px';
+  m.unlock();
+  assert.equal(target[0].style.borderWidth, '123px');
+});
+
+test("external style mutations persist across unlock: changed properties that collide with our imposed styles", function(assert) {
+  target.css({
+    top: '3231px',
+    left: '2423px',
+    width: '5453px',
+    height: '6564px',
+    position: 'absolute',
+    'box-sizing': 'content-box',
+    margin: '8px'
+  });
+  let m = sprite(target);
+  m.lock();
+  target.css({
+    top: '3232px',
+    left: '2424px',
+    width: '5454px',
+    height: '6565px',
+    position: 'fixed',
+    'box-sizing': 'border-box',
+    margin: '9px'
+  });
+  m.unlock();
+  assert.equal(target.css('top'), '3232px', 'top');
+  assert.equal(target.css('left'), '2424px', 'left');
+  assert.equal(target.css('width'), '5454px', 'width');
+  assert.equal(target.css('height'), '6565px', 'height');
+  assert.equal(target.css('position'), 'fixed', 'position');
+  assert.equal(target.css('box-sizing'), 'border-box', 'box-sizing');
+  assert.equal(target.css('margin'), '9px', 'margin');
+});
+
 test("within scrolling context above offset parent", function(assert) {
   environment.css({
     overflowY: 'scroll',

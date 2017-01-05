@@ -92,16 +92,20 @@ export default class Sprite {
       this._lockMode = lockMode;
       if (lockMode === 'position') {
         this._rememberPosition();
+        this._cacheOriginalStyles();
       } else if (this._lockMode === 'size') {
         this._rememberSize();
+        this._cacheOriginalStyles();
       }
     }
 
     if (inInitialPosition) {
       this.measureInitialBounds();
       this.finalBounds = null;
+      this._finalPosition = null;
     } else {
       this.initialBounds = null;
+      this._initialPosition = null;
       this.measureFinalBounds();
     }
 
@@ -116,6 +120,18 @@ export default class Sprite {
     }
   }
 
+  // This deliberately only tracks inline styles, because it's only
+  // important when the user is manipulating inline styles.
+  _getCurrentPosition() {
+    let style = this.element.style;
+    return {
+      top: style.top,
+      left: style.left,
+      bottom: style.bottom,
+      right: style.right
+    };
+  }
+
   measureInitialBounds() {
     if (this.initialBounds) {
       throw new Error("Sprite already has initial bounds");
@@ -125,6 +141,7 @@ export default class Sprite {
     } else {
       this.initialBounds = this.element.getBoundingClientRect();
     }
+    this._initialPosition = this._getCurrentPosition();
   }
 
   measureFinalBounds() {
@@ -136,6 +153,7 @@ export default class Sprite {
     } else {
       this.finalBounds = this.element.getBoundingClientRect();
     }
+    this._finalPosition = this._getCurrentPosition();
   }
 
   get _$element() {
@@ -160,32 +178,74 @@ export default class Sprite {
   }
 
   _rememberSize() {
-    this._styleCache = this._$element.attr('style') || "";
-    this._imposedStyle = {
-      width: this.element.offsetWidth,
-      height: this.element.offsetHeight,
-      'box-sizing': 'border-box'
-    };
+    this._imposedStyle = {};
+
+    // If the user has already provided an inline width or height,
+    // they are taking the wheel and we have to trust them to do
+    // something reasonable.
+    //
+    // I'm not using getComputedStyle here because its width and
+    // height are fairly useless for our purposes (we want "computed"
+    // values, but for backward compat with CSS 2.0, getComputedStyle
+    // actually returns the "used" values for width and height).
+
+    if (this.element.style.width === "") {
+      this._imposedStyle.width = this.element.offsetWidth;
+      // TODO: do a more sophisticated size measurement so we don't
+      // need to impose border-box. If we're only imposing width OR
+      // height and we weren't originally in border box, we can get an
+      // incorrect change in the non-imposed dimension.
+      this._imposedStyle['box-sizing'] = 'border-box';
+    }
+    if (this.element.style.height === "") {
+      this._imposedStyle.height = this.element.offsetHeight;
+      this._imposedStyle['box-sizing'] = 'border-box';
+    }
   }
 
   _rememberPosition() {
-    this._styleCache = this._$element.attr('style') || "";
+    let offsets;
     let computedStyle = getComputedStyle(this.element);
-    let { top, left } = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
-    this._imposedStyle = {
-      top,
-      left,
-      width: this.element.offsetWidth,
-      height: this.element.offsetHeight,
-      position: computedStyle.position === 'fixed' ? 'fixed' : 'absolute',
-      'box-sizing': 'border-box',
-      margin: 0
-    };
+
+    this._rememberSize();
+
+    if (computedStyle.position !== 'absolute' && computedStyle.position !== 'fixed') {
+      this._imposedStyle.position = 'absolute';
+    }
+
+    if (computedStyle.top === 'auto' && computedStyle.bottom === 'auto') {
+      offsets = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
+      this._imposedStyle.top = offsets.top;
+      this._imposedStyle.marginTop = 0;
+    }
+
+    if (computedStyle.left === 'auto' && computedStyle.right === 'auto') {
+      if (!offsets) {
+        offsets = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
+      }
+      this._imposedStyle.left = offsets.left;
+      this._imposedStyle.marginLeft = 0;
+    }
+  }
+
+  _cacheOriginalStyles() {
+    let cache = {};
+    let style = this.element.style;
+    Object.keys(this._imposedStyle).forEach(property => {
+      cache[property] = style[property];
+    });
+    this._styleCache = cache;
   }
 
   lock() {
-    if (!this._lockMode) {
-      throw new Error("sprite is not lockable");
+    if (this._initialPosition) {
+      // In case the user has caused our inline-style-driven position
+      // to drift, we put it back.
+      let style = this.element.style;
+      style.top = this._initialPosition.top;
+      style.left = this._initialPosition.left;
+      style.right = this._initialPosition.right;
+      style.bottom = this._initialPosition.bottom;
     }
     this.applyStyles(this._imposedStyle);
     if (this._lockMode === 'position') {
@@ -197,11 +257,21 @@ export default class Sprite {
   unlock() {
     Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", this.stillInFlight(), { id: "ember-animated-sprite-unlock" });
     inFlight.delete(this.element);
-    if (this._styleCache.length > 0) {
-      this._$element.attr('style', this._styleCache);
-    } else {
-      this.element.attributes.removeNamedItem('style');
+    let style = this.element.style;
+    let cache = this._styleCache;
+    Object.keys(cache).forEach(property => {
+      style[property] = cache[property];
+    });
+    if (this._finalPosition) {
+      // In case the user has caused our inline-style-driven position
+      // to drift, we put it back.
+      let style = this.element.style;
+      style.top = this._finalPosition.top;
+      style.left = this._finalPosition.left;
+      style.right = this._finalPosition.right;
+      style.bottom = this._finalPosition.bottom;
     }
+
     if (this._lockMode === 'position') {
       this._clearMarginCollapse();
     }
@@ -212,7 +282,12 @@ export default class Sprite {
       throw new Error("can't apply styles to non-lockable sprite");
     }
     if (styles !== this._imposedStyle) {
-      Object.assign(this._imposedStyle, styles);
+      Object.keys(styles).forEach(property => {
+        if (this._imposedStyle[property] == null) {
+          this._styleCache[property] = this.element.style[property];
+        }
+        this._imposedStyle[property] = styles[property];
+      });
     }
     this._$element.css(styles);
   }
