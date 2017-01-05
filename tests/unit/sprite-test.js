@@ -161,9 +161,8 @@ test("No leaked styles", function(assert) {
   let m = sprite(target);
   m.lock();
   m.unlock();
-  // TODO: we are clearing the styles, but we leave an empty attribute
-  // behind. Seems like a jquery or browser bug.
-  assert.equal(target.attr('style'), undefined);
+  // some browsers result in empty string and some in undefined
+  assert.ok(!target.attr('style'), 'empty style');
 });
 
 test("Restores original styles", function(assert) {
@@ -224,7 +223,7 @@ test("external style mutations persist across unlock: changed properties that co
     height: '6564px',
     position: 'absolute',
     'box-sizing': 'content-box',
-    margin: '8px'
+    marginTop: '8px'
   });
   let m = sprite(target);
   m.lock();
@@ -235,7 +234,7 @@ test("external style mutations persist across unlock: changed properties that co
     height: '6565px',
     position: 'fixed',
     'box-sizing': 'border-box',
-    margin: '9px'
+    marginTop: '9px'
   });
   m.unlock();
   assert.equal(target.css('top'), '3232px', 'top');
@@ -244,7 +243,7 @@ test("external style mutations persist across unlock: changed properties that co
   assert.equal(target.css('height'), '6565px', 'height');
   assert.equal(target.css('position'), 'fixed', 'position');
   assert.equal(target.css('box-sizing'), 'border-box', 'box-sizing');
-  assert.equal(target.css('margin'), '9px', 'margin');
+  assert.equal(target.css('marginTop'), '9px', 'margin');
 });
 
 test("within scrolling context above offset parent", function(assert) {

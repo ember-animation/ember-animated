@@ -46,7 +46,8 @@ export default Ember.Component.extend({
 
   _deps: Ember.computed('watch', function() {
     let w = this.get('watch');
-    if (w) {
+    // Firefox has an `Object.prototype.watch` that can troll us here
+    if (w instanceof String) {
       return w.split(/\s*,\s*/);
     }
   }),
