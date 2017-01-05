@@ -17,6 +17,7 @@ export default Ember.Component.extend({
   init() {
     this._elementToChild = new WeakMap();
     this._prevItems = [];
+    this._prevSignature = [];
     this._firstTime = true;
     this._inserted = false;
     this._renderedChildren = [];
@@ -25,8 +26,30 @@ export default Ember.Component.extend({
     this._insertedSprites = null;
     this._removedSprites = null;
     this.get('motionService').register(this);
+    this._installObservers();
     this._super();
   },
+
+  _installObservers() {
+    let key = this.get('key');
+    if (key != null && key !== '@index' && key !== '@identity') {
+      this.addObserver(`items.@each.${key}`, this, this._invalidateRenderedChildren);
+    }
+
+    let deps = this.get('_deps');
+    if (deps) {
+      for (let dep of deps) {
+        this.addObserver(`items.@each.${dep}`, this, this._invalidateRenderedChildren);
+      }
+    }
+  },
+
+  _deps: Ember.computed('watch', function() {
+    let w = this.get('watch');
+    if (w) {
+      return w.split(/\s*,\s*/);
+    }
+  }),
 
   durationWithDefault: Ember.computed('duration', function() {
     let d = this.get('duration');
@@ -37,6 +60,27 @@ export default Ember.Component.extend({
     }
   }),
 
+  _invalidateRenderedChildren() {
+    this.propertyDidChange('renderedChildren');
+  },
+
+  _identitySignature(items, getKey) {
+    if (!items) { return []; }
+    let deps = this.get('_deps');
+    let signature = [];
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
+      signature.push(getKey(item));
+      if (deps) {
+        for (let j = 0; j < deps.length; j++) {
+          let dep = deps[j];
+          signature.push(Ember.get(item, dep));
+        }
+      }
+    }
+    return signature;
+  },
+
   renderedChildren: Ember.computed('items.[]', function() {
     let firstTime = this._firstTime;
     this._firstTime = false;
@@ -44,8 +88,11 @@ export default Ember.Component.extend({
     let getKey = this.get('keyGetter');
     let oldChildren = this._renderedChildren;
     let oldItems = this._prevItems;
+    let oldSignature = this._prevSignature;
     let newItems = this.get('items');
+    let newSignature = this._identitySignature(newItems, getKey);
     this._prevItems = newItems ? newItems.slice() : [];
+    this._prevSignature = newSignature;
     if (!newItems) { newItems = []; }
 
     let oldIndices = new Map();
@@ -78,7 +125,7 @@ export default Ember.Component.extend({
     );
     this._renderedChildren = newChildren;
 
-    if (!isStable(oldItems, newItems, getKey)) {
+    if (!isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
       if (transition) {
         this.get('animate').perform(transition);
@@ -324,12 +371,12 @@ class Child {
   }
 }
 
-function isStable(before, after, keyGetter) {
+function isStable(before, after) {
   if (before.length !== after.length) {
     return false;
   }
   for (let i = 0; i < before.length; i++) {
-    if (keyGetter(before[i]) !== keyGetter(after[i])) {
+    if (before[i] !== after[i]) {
       return false;
     }
   }

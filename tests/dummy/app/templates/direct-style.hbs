@@ -1,0 +1,14 @@
+<div class="scenario-direct-style">
+  <div>
+    <button {{action "go"}}>Go</button>
+  </div>
+
+  {{#animated-container}}
+    {{#animated-each items rules=rules key="id" watch="style" as |item|}}
+      <div class="scenario-direct-style--item" style={{item.style}} >
+        {{item.id}}
+      </div>
+    {{/animated-each}}
+  {{/animated-container}}
+
+</div>

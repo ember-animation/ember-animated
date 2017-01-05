@@ -16,6 +16,7 @@ Router.map(function() {
     this.route('detail', { path: '/:id' });
   });
   this.route('nested');
+  this.route('direct-style');
 });
 
 export default Router;

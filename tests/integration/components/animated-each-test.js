@@ -116,7 +116,7 @@ test('it updates when list is mutated', function(assert) {
 // change, (2) if you somehow trigger rerender anyway, you can end up
 // with duplicate list entries. To avoid this we would need to do more
 // preemptive copying.
-skip('it animates when an id is mutated', function(assert) {
+test('it animates when an id is mutated', function(assert) {
   let transitionCounter = 0;
   this.set('items', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
   this.set('transition', function * () {

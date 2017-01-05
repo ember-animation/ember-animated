@@ -70,3 +70,7 @@
     width: 120px;
     height: 120px;
 }
+
+.scenario-direct-style--item {
+    position: absolute;
+}

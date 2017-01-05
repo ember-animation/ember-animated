@@ -11,10 +11,10 @@ export default Ember.Component.extend({
       for (let i = 0; i < 10; i++) {
         result.push(makeRandomItem());
       }
-      return result.sort(numeric);
+      return Ember.A(result.sort(numeric));
     },
     set(k,v) {
-      return v;
+      return Ember.A(v);
     }
   }),
 
@@ -50,7 +50,7 @@ export default Ember.Component.extend({
       this.set('items', items.slice(0, index).concat([makeRandomItem()]).concat(items.slice(index+1)));
     },
     mutate(item) {
-      Ember.set(item, 'extra', !item.extra);
+      Ember.set(item, 'id', makeRandomItem().id);
     },
     sortNumeric() {
       let items = this.get('items');
