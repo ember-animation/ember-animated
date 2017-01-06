@@ -13,6 +13,7 @@ export default class Tween {
   constructor(initialValue, finalValue, duration) {
     this.curve = MotionCurve.findOrCreate(duration);
     this.initialValue = initialValue;
+    this.finalValue = finalValue;
     this.diff = finalValue - initialValue;
   }
   get currentValue() {
@@ -31,18 +32,29 @@ export default class Tween {
 
 class DerivedTween {
   constructor(inputs, combinator) {
+    this._finalValue = null;
     this.inputs = inputs.map(t => {
       if (t.done) {
         // If one of our inputs has already finished, we can just keep
         // its final value around and drop the reference to the actual
         // Tween. This prevents long chains of derived tweens from
         // growing without bound during continuous animations.
-        return { currentValue: t.currentValue, done: true };
+        return { currentValue: t.currentValue, done: true, finalValue: t.finalValue };
       } else {
         return t;
       }
     });
     this.combinator = combinator;
+  }
+  get finalValue() {
+    if (this._finalValue == null) {
+      let accum = 0;
+      for (let i = 0; i < this.inputs.length; i++) {
+        accum += this.inputs[i].finalValue;
+      }
+      this._finalValue = accum;
+    }
+    return this._finalValue;
   }
   get currentValue() {
     return this.combinator(...this.inputs);

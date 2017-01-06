@@ -20,46 +20,62 @@ export default class Move extends Motion {
     let duration = this.duration;
     let sprite = this.sprite;
 
+    // How far our sprite needs to move.
+    let dx, dy;
+    {
+      let initial = sprite.initialBounds;
+      let final = sprite.finalBounds;
+      dx = final.left - initial.left;
+      dy = final.top - initial.top;
+    }
+
     if (!this.prior) {
       // when starting a new move we start from its current position
       // (sprite.transform) and offset that based on the change in
       // bounds we want.
-      let initial = sprite.initialBounds;
-      let final = sprite.finalBounds;
-
       this.xTween = new Tween(
         sprite.transform.tx,
-        sprite.transform.tx + final.left - initial.left,
-        final.left === initial.left ? 0 : duration
+        sprite.transform.tx + dx,
+        dx === 0 ? 0 : duration
       );
 
       this.yTween = new Tween(
         sprite.transform.ty,
-        sprite.transform.ty + final.top - initial.top,
-        final.top === initial.top ? 0 : duration
+        sprite.transform.ty + dy,
+        dy === 0 ? 0 : duration
       );
     } else {
       // Here we are interrupting a prior Move.
 
+      let priorXTween = this.prior.xTween;
+      let priorYTween = this.prior.yTween;
+
       // The transformDiffs account for the fact that our old and new
       // tweens may be measuring from different origins.
-      let transformDiffX = sprite.transform.tx - this.prior.xTween.currentValue;
-      let transformDiffY = sprite.transform.ty - this.prior.yTween.currentValue;
+      let transformDiffX = sprite.transform.tx - priorXTween.currentValue;
+      let transformDiffY = sprite.transform.ty - priorYTween.currentValue;
 
-      // The viewDiff accounts for the visual difference between where
-      // the old tween was going and where the new tween is going.
-      let viewDiff = sprite.difference('finalBounds', this.prior.sprite, 'finalBounds');
+      // We adjust our move distances so that they cancel out the
+      // remainder of the previous move.
+      dx -= priorXTween.finalValue - priorXTween.currentValue;
+      dy -= priorYTween.finalValue - priorYTween.currentValue;
 
       // If our interrupting move is actually going to the same place
       // we were already going, we don't really want to extend the
       // time of the overall animation (it looks funny when you're
       // waiting around for nothing to happen).
-      let durationX = viewDiff.dx === 0 ? 0 : duration;
-      let durationY = viewDiff.dy === 0 ? 0 : duration;
+      let durationX = dx === 0 ? 0 : duration;
+      let durationY = dy === 0 ? 0 : duration;
 
-      // We add our new differential tweens to the prior tweens.
-      this.xTween = new Tween(transformDiffX, transformDiffX + viewDiff.dx, durationX).plus(this.prior.xTween);
-      this.yTween = new Tween(transformDiffY, transformDiffY + viewDiff.dy, durationY).plus(this.prior.yTween);
+      // We add our new differential tweens to the prior tweens. This
+      // is the magic that gives us smooth continuity. At the very
+      // start, the old tween will dominate because the new tween
+      // hasn't ramped up its motion yet. As the old tween finishes,
+      // the new tween begins to dominate. Because of the adjustments
+      // we did above, the sum of both tweens will end up right where
+      // we want to be.
+      this.xTween = new Tween(transformDiffX, transformDiffX + dx, durationX).plus(this.prior.xTween);
+      this.yTween = new Tween(transformDiffY, transformDiffY + dy, durationY).plus(this.prior.yTween);
     }
 
     while (!this.xTween.done || !this.yTween.done) {
