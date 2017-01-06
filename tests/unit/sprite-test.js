@@ -339,8 +339,7 @@ test("User-positioned relative sprite, interrupted", function(assert) {
   // simulates first render
   target.css({
     top: '6px',
-    left: '7px',
-    transform: 'translateX(23px) translateY(24px)'
+    left: '7px'
   });
 
   m.unlock();
@@ -360,8 +359,8 @@ test("User-positioned relative sprite, interrupted", function(assert) {
   m2.measureFinalBounds();
   m2.lock();
 
-  assert.approxEqualPixels(m2.initialBounds.top + 14, m2.finalBounds.top, 'top');
-  assert.approxEqualPixels(m2.initialBounds.left + 15, m2.finalBounds.left, 'left');
+  assert.approxEqualPixels(m2.initialBounds.top + 13, m2.finalBounds.top, 'top');
+  assert.approxEqualPixels(m2.initialBounds.left + 14, m2.finalBounds.left, 'left');
 
   assert.equalBounds(
     target[0].getBoundingClientRect(),
