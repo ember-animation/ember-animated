@@ -1,9 +1,10 @@
 import Ember from 'ember';
 import { task } from 'ember-concurrency';
-import { afterRender } from 'ember-animated/concurrency-helpers';
 
 export default Ember.Component.extend({
+  motionService: Ember.inject.service('-ea-motion'),
   currentSort: numeric,
+  duration: 1000,
   items: Ember.computed({
     get() {
       let result = [];
@@ -17,20 +18,20 @@ export default Ember.Component.extend({
     }
   }),
   addItem: task(function * () {
-      this.get('notify.lock')();
-      let items = this.get('items');
-      this.set('items', items.concat([makeRandomItem()]).sort(this.currentSort).map(elt => ({ id: elt.id })));
-      yield afterRender();
-      yield this.get('notify.measure')();
-      yield this.get('notify.unlock')();
+    this.get('motionService').willAnimate({
+      task: this.get('addItem.last'),
+      duration: this.get('duration')
+    });
+    let items = this.get('items');
+    this.set('items', items.concat([makeRandomItem()]).sort(this.currentSort).map(elt => ({ id: elt.id })));
   }),
   removeItem: task(function * (which) {
-    this.get('notify.lock')();
+    this.get('motionService').willAnimate({
+      task: this.get('removeItem.last'),
+      duration: this.get('duration')
+    });
     let items = this.get('items');
     this.set('items', items.filter(i => i !== which));
-    yield afterRender();
-    yield this.get('notify.measure')();
-    yield this.get('notify.unlock')();
   })
 });
 
