@@ -73,4 +73,11 @@
 
 .scenario-direct-style--item {
     position: absolute;
+    text-align: center;
+    padding: 4px;
+}
+
+.scenario-direct-style--frame {
+    border: 1px solid blue;
+    color: transparent;
 }

@@ -9,10 +9,13 @@ let Item = Ember.Object.extend({
 
 export default Ember.Controller.extend({
   rules,
-  items: Ember.A([
-    Item.create({ id: 1, x: somewhere(), y: somewhere() }),
-    Item.create({ id: 2, x: somewhere(), y: somewhere() })
-  ]),
+  items: Ember.computed(function() {
+    let items = Ember.A();
+    for (let i = 0; i < 4; i++) {
+      items.push(Item.create({ id: i, x: somewhere(), y: somewhere() }));
+    }
+    return items;
+  }),
   actions: {
     go() {
       this.get('items').forEach(i => {
