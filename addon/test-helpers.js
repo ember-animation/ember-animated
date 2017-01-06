@@ -86,6 +86,7 @@ export const MotionTester = Ember.Object.extend({
 
     return this.get('runner').perform(motion);
   },
+  isAnimating: Ember.computed.alias('runner.isRunning'),
   runner: task(function * (motion) {
     this.beforeAnimation(motion);
     yield * motion._run();

@@ -5,7 +5,8 @@ import Move from 'ember-animated/motions/move';
 import Ember from 'ember';
 import {
   equalBounds,
-  approxEqualPixels
+  approxEqualPixels,
+  visuallyConstant
 } from '../helpers/assertions';
 import { TimeControl, MotionTester } from 'ember-animated/test-helpers';
 
@@ -15,6 +16,7 @@ module("Unit | Move", {
   beforeEach(assert) {
     assert.equalBounds = equalBounds;
     assert.approxEqualPixels = approxEqualPixels;
+    assert.visuallyConstant = visuallyConstant;
 
     time = new TimeControl();
 
@@ -80,14 +82,19 @@ test("simple motion", function(assert) {
 });
 
 test("simple motion, interrupted", function(assert) {
+  target.css({
+    marginLeft: 0,
+    marginTop: 0,
+    position: 'relative'
+  });
+
   let p = Sprite.offsetParentStartingAt(target[0]);
   p.measureFinalBounds();
   let s = Sprite.positionedStartingAt(target[0], p);
 
   target.css({
     left: 300,
-    top: 400,
-    position: 'relative'
+    top: 400
   });
 
   s.measureFinalBounds();
@@ -116,6 +123,42 @@ test("simple motion, interrupted", function(assert) {
     });
     assert.approxEqualPixels(newSprite.getCurrentBounds().top, s.initialBounds.top + 200, 'top continuity');
     assert.approxEqualPixels(newSprite.getCurrentBounds().left, s.initialBounds.left + 150, 'left continuity');
-    return time.advance(1000);
+    return time.advance(1005).then(() => {
+      assert.visuallyConstant(target, () => {
+        newSprite.unlock();
+      });
+    });
+  });
+});
+
+test("interrupting with same destination does not extend animation time", function(assert) {
+  let p = Sprite.offsetParentStartingAt(target[0]);
+  p.measureFinalBounds();
+  let s = Sprite.positionedStartingAt(target[0], p);
+  s.lock();
+  $('#qunit-fixture').find('.sibling').css('height', 50);
+  s.unlock();
+  s.measureFinalBounds();
+  s.lock();
+
+  Ember.run(() => {
+    tester.run(s, { duration: 1000 });
+  });
+
+  return time.advance(500).then(() => {
+    assert.approxEqualPixels(s.getCurrentBounds().top, s.initialBounds.top + 25, 'top');
+    let newSprite = Sprite.positionedStartingAt(target[0], p);
+    newSprite.lock();
+    newSprite.unlock();
+    newSprite.measureFinalBounds();
+
+    newSprite.lock();
+
+    Ember.run(() => {
+      tester.run(newSprite, { duration: 1000 });
+    });
+    return time.advance(501).then(() => {
+      assert.ok(!tester.get('isAnimating'), "should be finished by now");
+    });
   });
 });
