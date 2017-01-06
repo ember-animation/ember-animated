@@ -169,6 +169,29 @@ export default class Sprite {
     this._finalPosition = this._getCurrentPosition();
   }
 
+  // this.difference('initialBounds', other, 'finalBounds') means "the
+  // difference between this sprite's initial bounds and the other
+  // sprite's final bounds".
+  //
+  // It works this way because each sprite has its own local
+  // coordinate system.
+  difference(which, otherSprite, otherWhich) {
+    let x = this[which].left;
+    let y = this[which].top;
+    if (this._offsetSprite) {
+      x += this._offsetSprite[which].left;
+      y += this._offsetSprite[which].top;
+    }
+    if (otherSprite._offsetSprite) {
+      x -= otherSprite._offsetSprite[otherWhich].left;
+      y -= otherSprite._offsetSprite[otherWhich].top;
+    }
+    return {
+      dx: x - otherSprite[otherWhich].left,
+      dy: y - otherSprite[otherWhich].top
+    };
+  }
+
   get _$element() {
     if (!this.__$element) {
       this.__$element = $(this.element);
@@ -369,7 +392,8 @@ export default class Sprite {
   }
   startAt(otherSprite) {
     continueMotions(otherSprite.element, this.element);
-    this.startTranslatedBy(otherSprite.initialBounds.left - this.finalBounds.left, otherSprite.initialBounds.top - this.finalBounds.top);
+    let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
+    this.startTranslatedBy(-diff.dx, -diff.dy);
   }
   startTranslatedBy(dx, dy) {
     let offsetX = 0;

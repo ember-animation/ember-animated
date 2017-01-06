@@ -46,29 +46,20 @@ export default class Move extends Motion {
       let transformDiffX = sprite.transform.tx - this.prior.xTween.currentValue;
       let transformDiffY = sprite.transform.ty - this.prior.yTween.currentValue;
 
-      // The viewDiffs account for the visual difference between where
-      // the old tween was going and where the new tween is going, all
-      // relative to our sprite's offset parent.
-      let viewDiffX;
-      let viewDiffY;
-      {
-        let priorSprite = this.prior.sprite;
-        let initialView = priorSprite.finalBounds;
-        let finalView = sprite.finalBounds;
-        viewDiffX = finalView.left - initialView.left;
-        viewDiffY = finalView.top - initialView.top;
-      }
+      // The viewDiff accounts for the visual difference between where
+      // the old tween was going and where the new tween is going.
+      let viewDiff = sprite.difference('finalBounds', this.prior.sprite, 'finalBounds');
 
       // If our interrupting move is actually going to the same place
       // we were already going, we don't really want to extend the
       // time of the overall animation (it looks funny when you're
       // waiting around for nothing to happen).
-      let durationX = viewDiffX === 0 ? 0 : duration;
-      let durationY = viewDiffY === 0 ? 0 : duration;
+      let durationX = viewDiff.dx === 0 ? 0 : duration;
+      let durationY = viewDiff.dy === 0 ? 0 : duration;
 
       // We add our new differential tweens to the prior tweens.
-      this.xTween = new Tween(transformDiffX, transformDiffX + viewDiffX, durationX).plus(this.prior.xTween);
-      this.yTween = new Tween(transformDiffY, transformDiffY + viewDiffY, durationY).plus(this.prior.yTween);
+      this.xTween = new Tween(transformDiffX, transformDiffX + viewDiff.dx, durationX).plus(this.prior.xTween);
+      this.yTween = new Tween(transformDiffY, transformDiffY + viewDiff.dy, durationY).plus(this.prior.yTween);
     }
 
     while (!this.xTween.done || !this.yTween.done) {
