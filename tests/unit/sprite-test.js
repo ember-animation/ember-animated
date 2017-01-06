@@ -207,6 +207,171 @@ test("Restores original styles even when two sprites interrupt each other", func
   assert.equal(ownTransform(target[0]).tx, 20, 'translateX');
 });
 
+test("User-positioned absolute sprite", function(assert) {
+  target.css({
+    position: 'absolute',
+    top: '5px',
+    left: '6px',
+    transform: 'translateX(22px) translateY(23px)'
+  });
+
+  let initialBounds = target[0].getBoundingClientRect();
+
+  let m = sprite(target);
+  assert.visuallyConstant(target, () => {
+    m.lock();
+  });
+
+  target.css({
+    top: '6px',
+    left: '7px',
+    transform: 'translateX(23px) translateY(24px)'
+  });
+
+  m.unlock();
+  m.measureFinalBounds();
+
+  m.lock();
+  assert.equalBounds(
+    target[0].getBoundingClientRect(),
+    initialBounds,
+    'locking brings it back into initial position'
+  );
+
+  assert.approxEqualPixels(m.initialBounds.top + 2, m.finalBounds.top, 'top');
+  assert.approxEqualPixels(m.initialBounds.left + 2, m.finalBounds.left, 'left');
+
+});
+
+test("User-positioned absolute sprite, interrupted", function(assert) {
+  // initial position
+  target.css({
+    position: 'absolute',
+    top: '5px',
+    left: '6px',
+    transform: 'translateX(22px) translateY(23px)'
+  });
+  let initialBounds = target[0].getBoundingClientRect();
+  let m = sprite(target);
+  m.lock();
+
+  // simulates first render
+  target.css({
+    top: '6px',
+    left: '7px',
+    transform: 'translateX(23px) translateY(24px)'
+  });
+
+  m.unlock();
+  m.measureFinalBounds();
+  m.lock();
+
+  let m2 = sprite(target);
+  m2.lock();
+
+  // simulates second render
+  target.css({
+    top: '18px',
+    left: '20px',
+    transform: 'translateX(24px) translateY(25px)'
+  });
+
+  m2.unlock();
+  m2.measureFinalBounds();
+  m2.lock();
+
+  assert.approxEqualPixels(m2.initialBounds.top + 15, m2.finalBounds.top, 'top');
+  assert.approxEqualPixels(m2.initialBounds.left + 16, m2.finalBounds.left, 'left');
+
+  assert.equalBounds(
+    target[0].getBoundingClientRect(),
+    initialBounds,
+    'locking brings it back into initial position'
+  );
+
+});
+
+test("User-positioned relative sprite", function(assert) {
+  target.css({
+    position: 'relative',
+    top: '5px',
+    left: '6px'
+  });
+
+  let initialBounds = target[0].getBoundingClientRect();
+
+  let m = sprite(target);
+  assert.visuallyConstant(target, () => {
+    m.lock();
+  });
+
+  target.css({
+    top: '6px',
+    left: '7px'
+  });
+
+  m.unlock();
+  m.measureFinalBounds();
+
+  m.lock();
+  assert.equalBounds(
+    target[0].getBoundingClientRect(),
+    initialBounds,
+    'locking brings it back into initial position'
+  );
+
+  assert.approxEqualPixels(m.finalBounds.top, m.initialBounds.top + 1, 'top');
+  assert.approxEqualPixels(m.finalBounds.left, m.initialBounds.left + 1, 'left');
+
+});
+
+test("User-positioned relative sprite, interrupted", function(assert) {
+  // initial position
+  target.css({
+    position: 'relative',
+    top: '5px',
+    left: '6px'
+  });
+  let initialBounds = target[0].getBoundingClientRect();
+  let m = sprite(target);
+  m.lock();
+
+  // simulates first render
+  target.css({
+    top: '6px',
+    left: '7px',
+    transform: 'translateX(23px) translateY(24px)'
+  });
+
+  m.unlock();
+  m.measureFinalBounds();
+  m.lock();
+
+  let m2 = sprite(target);
+  m2.lock();
+
+  // simulates second render
+  target.css({
+    top: '18px',
+    left: '20px'
+  });
+
+  m2.unlock();
+  m2.measureFinalBounds();
+  m2.lock();
+
+  assert.approxEqualPixels(m2.initialBounds.top + 14, m2.finalBounds.top, 'top');
+  assert.approxEqualPixels(m2.initialBounds.left + 15, m2.finalBounds.left, 'left');
+
+  assert.equalBounds(
+    target[0].getBoundingClientRect(),
+    initialBounds,
+    'locking brings it back into initial position'
+  );
+
+});
+
+
 test("external style mutations persist across unlock: added property that does not collide with our imposed styles", function(assert) {
   let m = sprite(target);
   m.lock();

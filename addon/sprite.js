@@ -8,6 +8,7 @@
 
    It tracks the sprite's initial and/or final bounds, as measured
    from the actual pre- and/or post-animation DOM.
+
 */
 
 import $ from 'jquery';
@@ -128,8 +129,20 @@ export default class Sprite {
       top: style.top,
       left: style.left,
       bottom: style.bottom,
-      right: style.right
+      right: style.right,
+      transform: style.transform
     };
+  }
+
+  _reapplyPosition(pos) {
+    if (pos) {
+      let style = this.element.style;
+      style.top = pos.top;
+      style.left = pos.left;
+      style.right = pos.right;
+      style.bottom = pos.bottom;
+      style.transform = pos.transform;
+    }
   }
 
   measureInitialBounds() {
@@ -203,9 +216,22 @@ export default class Sprite {
     }
   }
 
-  _rememberPosition() {
+  _lazyOffsets(computedStyle) {
     let offsets;
+    return () => {
+      if (!offsets) {
+          offsets = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
+      }
+      return offsets;
+    }
+  }
+
+  _rememberPosition() {
     let computedStyle = getComputedStyle(this.element);
+    let style = this.element.style;
+    let offsets = this._lazyOffsets(computedStyle);
+    let tx = 0;
+    let ty = 0;
 
     this._rememberSize();
 
@@ -213,18 +239,30 @@ export default class Sprite {
       this._imposedStyle.position = 'absolute';
     }
 
-    if (computedStyle.top === 'auto' && computedStyle.bottom === 'auto') {
-      offsets = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
-      this._imposedStyle.top = offsets.top;
+    if (style.top === ""  && style.bottom === "") {
+      // The user had no preexisting inline vertical positioning, so we take over.
+      this._imposedStyle.top = offsets().top;
       this._imposedStyle.marginTop = 0;
+    } else if (this._imposedStyle.position) {
+      // the user has inline styles for controlling vertical position,
+      // but the element was not absolutely positioned, so we apply an
+      // offseting transform.
+      ty = offsets().top - parseFloat(computedStyle.top);
     }
 
-    if (computedStyle.left === 'auto' && computedStyle.right === 'auto') {
-      if (!offsets) {
-        offsets = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
-      }
-      this._imposedStyle.left = offsets.left;
+    if (style.left === "" && style.bottom === "") {
+      // The user had no preexisting inline horizontal positioning, so we take over.
+      this._imposedStyle.left = offsets().left;
       this._imposedStyle.marginLeft = 0;
+    } else if (this._imposedStyle.position) {
+      // the user has inline styles for controlling vertical position,
+      // but the element was not absolutely positioned, so we apply an
+      // offseting transform.
+      tx = offsets().left - parseFloat(computedStyle.left);
+    }
+    if (tx || ty) {
+      this._transform = this.transform.mult(new Transform(1, 0, 0, 1, tx, ty));
+      this._imposedStyle.transform = this.transform.serialize();
     }
   }
 
@@ -238,15 +276,10 @@ export default class Sprite {
   }
 
   lock() {
-    if (this._initialPosition) {
-      // In case the user has caused our inline-style-driven position
-      // to drift, we put it back.
-      let style = this.element.style;
-      style.top = this._initialPosition.top;
-      style.left = this._initialPosition.left;
-      style.right = this._initialPosition.right;
-      style.bottom = this._initialPosition.bottom;
-    }
+    // In case the user has caused our inline-style-driven position
+    // to drift, we put it back.
+    this._reapplyPosition(this._initialPosition);
+
     this.applyStyles(this._imposedStyle);
     if (this._lockMode === 'position') {
       this._handleMarginCollapse();
@@ -262,15 +295,10 @@ export default class Sprite {
     Object.keys(cache).forEach(property => {
       style[property] = cache[property];
     });
-    if (this._finalPosition) {
-      // In case the user has caused our inline-style-driven position
-      // to drift, we put it back.
-      let style = this.element.style;
-      style.top = this._finalPosition.top;
-      style.left = this._finalPosition.left;
-      style.right = this._finalPosition.right;
-      style.bottom = this._finalPosition.bottom;
-    }
+
+    // In case the user has caused our inline-style-driven position
+    // to drift, we put it back.
+    this._reapplyPosition(this._finalPosition);
 
     if (this._lockMode === 'position') {
       this._clearMarginCollapse();
