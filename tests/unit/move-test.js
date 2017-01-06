@@ -20,7 +20,7 @@ module("Unit | Move", {
 
     time = new TimeControl();
 
-    tester = new MotionTester({
+    tester = MotionTester.create({
       motion: Move
     });
 
