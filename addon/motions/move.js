@@ -36,17 +36,16 @@ export default class Move extends Motion {
       this.xTween = new Tween(
         sprite.transform.tx,
         sprite.transform.tx + dx,
-        dx === 0 ? 0 : duration
+        fuzzyZero(dx) ? 0 : duration
       );
 
       this.yTween = new Tween(
         sprite.transform.ty,
         sprite.transform.ty + dy,
-        dy === 0 ? 0 : duration
+        fuzzyZero(dy) ? 0 : duration
       );
     } else {
       // Here we are interrupting a prior Move.
-
       let priorXTween = this.prior.xTween;
       let priorYTween = this.prior.yTween;
 
@@ -64,8 +63,8 @@ export default class Move extends Motion {
       // we were already going, we don't really want to extend the
       // time of the overall animation (it looks funny when you're
       // waiting around for nothing to happen).
-      let durationX = dx === 0 ? 0 : duration;
-      let durationY = dy === 0 ? 0 : duration;
+      let durationX = fuzzyZero(dx) ? 0 : duration;
+      let durationY = fuzzyZero(dy) ? 0 : duration;
 
       // We add our new differential tweens to the prior tweens. This
       // is the magic that gives us smooth continuity. At the very
@@ -86,4 +85,10 @@ export default class Move extends Motion {
       );
     }
   }
+}
+
+// Because sitting around while your sprite animates by 3e-15 pixels
+// is no fun.
+function fuzzyZero(number) {
+  return Math.abs(number) < 0.00001;
 }
