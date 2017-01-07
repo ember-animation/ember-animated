@@ -91,5 +91,5 @@ export const MotionTester = Ember.Object.extend({
     this.beforeAnimation(motion);
     yield * motion._run();
     this.afterAnimation(motion);
-  })
+  }).restartable()
 });
