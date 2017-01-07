@@ -31,7 +31,7 @@
     "ember-cli-test-loader": "^1.1.0",
     "ember-cli-uglify": "^1.2.0",
     "ember-concurrency": "next",
-    "ember-data": "^2.10.0",
+    "ember-data": "2.11.0-beta.1",
     "ember-disable-prototype-extensions": "^1.1.0",
     "ember-export-application-global": "^1.0.5",
     "ember-faker": "^1.1.1",

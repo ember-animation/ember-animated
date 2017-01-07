@@ -1657,9 +1657,9 @@ ember-concurrency@next:
     ember-getowner-polyfill "^1.1.0"
     ember-maybe-import-regenerator "^0.1.4"
 
-ember-data@^2.10.0:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/ember-data/-/ember-data-2.10.0.tgz#9d6e23ba21ab242afc03a2ac77e8071bc51a5c62"
+ember-data@2.11.0-beta.1:
+  version "2.11.0-beta.1"
+  resolved "https://registry.yarnpkg.com/ember-data/-/ember-data-2.11.0-beta.1.tgz#f6a85709b5c7b95bd17c763be8fe56566c8e3faa"
   dependencies:
     amd-name-resolver "0.0.5"
     babel-plugin-feature-flags "^0.2.1"
