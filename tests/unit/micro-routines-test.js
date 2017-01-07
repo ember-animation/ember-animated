@@ -1,5 +1,11 @@
-import { module, test } from 'qunit';
-import { Scheduler, cancelGenerator } from 'ember-animated/micro-routines';
+import { module, test, skip } from 'qunit';
+import {
+  spawn,
+  fork,
+  logErrors,
+  Scheduler,
+  cancelGenerator
+} from 'ember-animated/micro-routines';
 import { Promise } from 'ember-animated/concurrency-helpers';
 
 module("Unit | micro-routines", {
@@ -84,7 +90,7 @@ test('finishes immediately after returning non promise', function(assert) {
   });
 });
 
-test('throws on immediately returned promise', function(assert) {
+skip('throws on immediately returned promise', function(assert) {
   function * example() {
     return new Promise(() => null);
   }
@@ -93,7 +99,7 @@ test('throws on immediately returned promise', function(assert) {
   }, "nope");
 });
 
-test('fires error handler on returned promise', function(assert) {
+skip('fires error handler on returned promise', function(assert) {
   let resolveFirst;
   let error;
   function * example() {
@@ -111,13 +117,13 @@ test('fires error handler on returned promise', function(assert) {
   });
 });
 
-test('spawn throws immediate exceptions', function(assert) {
+skip('spawn handles immediate exceptions', function(assert) {
   function * first() {
     let b = new Error("boom");
     b.message = 'boom';
     throw b;
   }
-  assert.throws(() => {
+  return assert.throws(() => {
     spawnAll([first]);
   }, /boom/);
 });
@@ -390,5 +396,83 @@ test("routines can spawn more routines asynchronously", function(assert) {
     state = g.next(v);
     assert.ok(state.done, 'done')
     assert.logEquals(["will spawn", "sync start", "did spawn", "final"]);
+  });
+});
+
+test('spawn starts synchronously', function(assert) {
+  let p = spawn(function * () {
+    assert.log("hello world");
+  });
+  assert.logEquals(['hello world']);
+  return p;
+});
+
+test('spawn synchronous exception', function(assert) {
+  let p = spawn(function * () {
+    throw new Error('boom');
+  });
+  return p.then(() => {
+    assert.ok(false, "should not get here");
+  }, err => {
+    assert.equal(err.message, 'boom');
+  });
+});
+
+test('spawn: asynchronous exception', function(assert) {
+  let resolve;
+  let p = spawn(function * () {
+    yield new Promise(r => resolve = r);
+    throw new Error('boom');
+  });
+  resolve();
+  return p.then(() => {
+    assert.ok(false, "should not get here");
+  }, err => {
+    assert.equal(err.message, 'boom');
+  });
+});
+
+test('spawned task can enable error logging', function(assert) {
+  let p = spawn(function * () {
+    logErrors(err => {
+      assert.log('handled message: ' + err.message);
+    });
+    throw new Error('boom');
+  });
+
+  return p.then(() => {
+    assert.ok(false, "should not get here");
+  }, err => {
+    assert.equal(err.message, 'boom');
+    assert.logEquals(['handled message: boom']);
+  });
+});
+
+test('top-level fork forbidden', function(assert) {
+  assert.throws(() => {
+    fork(function *() {
+      assert.log("hello world");
+    });
+  }, /cannot fork/);
+  assert.logEquals([]);
+});
+
+test('fork a child', function(assert) {
+  let resolve;
+  let p = spawn(function * () {
+    assert.log("parent started");
+    fork(function * () {
+      assert.log("child started");
+      yield new Promise(r => resolve = r);
+      assert.log("child finishing");
+    });
+    assert.log("parent finishing");
+    return 42;
+  })
+  assert.logEquals(["parent started", "child started", "parent finishing"]);
+  resolve();
+  return p.then(exitStatus => {
+    assert.equal(exitStatus, 42);
+    assert.logEquals(["parent started", "child started", "parent finishing", "child finishing"]);
   });
 });

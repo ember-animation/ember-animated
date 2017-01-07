@@ -1,4 +1,56 @@
 import { Promise } from './concurrency-helpers';
+let current;
+
+function withCurrent(routine, fn) {
+  let prior = current;
+  current = routine;
+  try {
+    return fn();
+  } finally {
+    current = prior;
+  }
+}
+
+export function logErrors(fn) {
+  if (!current) {
+    throw new Error("You may only call logErrors from within a running microroutine");
+  }
+  current.scheduler._onError = fn;
+}
+
+export function spawn(generator) {
+  return _await((function *() {
+    let scheduler = new Scheduler();
+    let main = scheduler.spawn(generator());
+    yield * scheduler.run();
+    return main;
+  })());
+}
+
+function _await(generator, nextMethod='next', nextValue) {
+  return new Promise(resolve => {
+    // this handles the case where the generator throws and we want
+    // our promises to be rejected.
+    resolve(generator[nextMethod](nextValue));
+  }).then(state => {
+    if (state.done) {
+      return state.value;
+    }
+    return Promise.resolve(state.value).then(value => {
+      return _await(generator, 'next', value);
+    }, err => {
+      return _await(generator, 'throw', err);
+    });
+  });
+}
+
+
+export function fork(generator) {
+  if (!current) {
+    throw new Error("cannot fork because we're not inside a microroutine");
+  }
+  return current.scheduler.spawn(generator());
+}
 
 export class Scheduler {
   constructor(onError) {
@@ -6,14 +58,13 @@ export class Scheduler {
     this._routines = [];
   }
   spawn(generator) {
-    let routine = new MicroRoutine(generator);
-    if (routine.state.done) {
-      if (isPromise(routine.state.value)) {
-        throw new Error("You may not return a Promise from an animation generator. Yield promises instead.");
+    return new Promise((resolve, reject) => {
+      let routine = new MicroRoutine(generator, this, resolve, reject);
+      routine.wake({ state: 'fulfilled', value: undefined, index: -1 });
+      if (!routine.state.done) {
+        this._routines.push(routine);
       }
-    } else {
-      this._routines.push(routine);
-    }
+    });
   }
   * run() {
     try {
@@ -22,14 +73,8 @@ export class Scheduler {
         let { index } = resolved;
         let routine = this._routines[index];
         this._routines.splice(index, 1);
-        routine.wake(resolved, this._onError);
-        if (routine.state.done) {
-          if (isPromise(routine.state.value)) {
-            if (this._onError) {
-              this._onError(new Error("You may not return a Promise from an animation generator. Yield promises instead."));
-            }
-          }
-        } else {
+        routine.wake(resolved);
+        if (!routine.state.done) {
           this._routines.push(routine);
         }
       }
@@ -39,25 +84,33 @@ export class Scheduler {
   }
 }
 
+
 class MicroRoutine {
-  constructor(generator) {
+  constructor(generator, scheduler, resolve, reject) {
     this.generator = generator;
-    this.state = this.generator.next();
+    this.scheduler = scheduler;
+    this.state = null;
+    this.resolve = resolve;
+    this.reject = reject;
   }
-  wake(resolved, onError) {
+  wake(resolved) {
     try {
       if (resolved.state === 'fulfilled') {
-        this.state = this.generator.next(resolved.value);
+        this.state = withCurrent(this, () => this.generator.next(resolved.value));
       } else {
-        this.state = this.generator.throw(resolved.reason);
+        this.state = withCurrent(this, () => this.generator.throw(resolved.reason));
+      }
+      if (this.state.done) {
+        this.resolve(this.state.value);
       }
     } catch(err) {
       this.state = {
         done: true
       };
-      if (onError) {
-        onError(err);
+      if (this.scheduler._onError) {
+        this.scheduler._onError(err);
       }
+      this.reject(err);
     }
   }
 }
