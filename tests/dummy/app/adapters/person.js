@@ -9,20 +9,22 @@ export default DS.JSONAPIAdapter.extend({
     if (!this._fakePeople) {
       let people = [];
       for (let i = 0; i < 10; i++) {
-        people.push({
+        people.push(Object.seal({
           type: 'person',
           id: String(i),
-          attributes: {
+          attributes: Object.seal({
             name: faker.name.firstName(),
             'avatar-url': faker.internet.avatar()
-          }
-        });
+          })
+        }));
       }
-      this._fakePeople = {
+      // This is a shorthand way to deep copy everything, because
+      // Ember Data will mutate the objects we give it.
+      this._fakePeople = JSON.stringify({
         data: people
-      };
+      });
     }
-    return this._fakePeople;
+    return JSON.parse(this._fakePeople);
   },
   findAll() {
     return this._makeFakePeople();
