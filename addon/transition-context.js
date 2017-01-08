@@ -1,10 +1,9 @@
-import { Scheduler } from './micro-routines';
+import { spawn, fork, logErrors } from './micro-routines';
 
 
 export default class TransitionContext {
   constructor(duration, insertedSprites, keptSprites, removedSprites, farMatches) {
     this.duration = duration;
-    this._scheduler = new Scheduler(onError);
     this.insertedSprites = insertedSprites;
     this.keptSprites = keptSprites;
     this.removedSprites = removedSprites;
@@ -26,20 +25,23 @@ export default class TransitionContext {
     if (motion.duration == null) {
       motion.duration = this.duration;
     }
-    this._scheduler.spawn(this._motionGenerator(motion));
+    let self = this;
+    fork(function * () {
+      self.onMotionStart(motion.sprite);
+      try {
+        yield * motion._run();
+      } finally {
+        self.onMotionEnd(motion.sprite);
+      }
+    });
     return motion._promise;
   }
-  *_motionGenerator(motion) {
-    this.onMotionStart(motion.sprite);
-    try {
-      yield * motion._run();
-    } finally {
-      this.onMotionEnd(motion.sprite);
-    }
-  }
-  *_runToCompletion(transition) {
-    this._scheduler.spawn(transition.call(this));
-    yield * this._scheduler.run();
+  _runToCompletion(transition) {
+    let self = this;
+    return spawn(function * () {
+      logErrors(onError);
+      yield * transition.call(self)
+    });
   }
 }
 
