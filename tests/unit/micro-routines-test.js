@@ -6,7 +6,7 @@ import {
   Scheduler,
   cancelGenerator
 } from 'ember-animated/micro-routines';
-import { Promise } from 'ember-animated/concurrency-helpers';
+import { Promise, microwait } from 'ember-animated/concurrency-helpers';
 
 module("Unit | micro-routines", {
   beforeEach(assert) {
@@ -26,200 +26,6 @@ function spawnAll(funcs, onError) {
   return scheduler.run();
 }
 
-test('starts each generator immediately', function(assert) {
-  function * first() {
-    assert.log(1);
-  }
-  function * second() {
-    assert.log(2);
-  }
-  let g = spawnAll([first, second])
-  let result = g.next();
-  assert.ok(result.done, 'should be done already');
-  assert.logEquals([1, 2]);
-});
-
-['forward', 'reverse'].forEach(order => {
-  test(`resolves in ${order} order`, function(assert) {
-    let resolvers = [null, null];
-    let expected = ['hello', 'world'];
-
-    function * first() {
-      assert.log(yield new Promise(resolve => {
-        resolvers[0] = () => resolve('hello');
-      }));
-    }
-    function * second() {
-      assert.log(yield new Promise(resolve => {
-        resolvers[1] = () => resolve('world');
-      }));
-    }
-    let g = spawnAll([first, second]);
-    let state = g.next();
-    assert.ok(!state.done, 'not done');
-    if (order === 'reverse') {
-      resolvers = resolvers.reverse();
-      expected = expected.reverse();
-    }
-    resolvers[0]();
-    return state.value.then(v => {
-      state = g.next(v);
-      assert.ok(!state.done, 'still not done');
-      resolvers[1]();
-      return state.value
-    }).then(v => {
-      state = g.next(v);
-      assert.ok(state.done, 'should be done');
-      assert.logEquals(expected);
-    });
-  });
-});
-
-test('finishes immediately after returning non promise', function(assert) {
-  let resolve;
-  function * example() {
-    yield new Promise(r => resolve = r);
-  }
-  let g = spawnAll([example]);
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  resolve();
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(state.done, 'done');
-  });
-});
-
-skip('throws on immediately returned promise', function(assert) {
-  function * example() {
-    return new Promise(() => null);
-  }
-  assert.throws(() => {
-    spawnAll([example])
-  }, "nope");
-});
-
-skip('fires error handler on returned promise', function(assert) {
-  let resolveFirst;
-  let error;
-  function * example() {
-    yield new Promise(r => resolveFirst = r);
-    return new Promise(() => null);
-  }
-  let g = spawnAll([example], err => error = err)
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  resolveFirst();
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(state.done, 'done');
-    assert.ok(error && error.message === "You may not return a Promise from an animation generator. Yield promises instead.", 'Found error message');
-  });
-});
-
-skip('spawn handles immediate exceptions', function(assert) {
-  function * first() {
-    let b = new Error("boom");
-    b.message = 'boom';
-    throw b;
-  }
-  return assert.throws(() => {
-    spawnAll([first]);
-  }, /boom/);
-});
-
-['forward', 'reverse'].forEach(order => {
-  test(`handles post-yield exception (${order})`, function(assert) {
-    let resolvers = [null, null];
-    function * first() {
-      assert.log(1);
-      yield new Promise(r => resolvers[0] = r);
-      let e = new Error("boom");
-      e.message = 'boom';
-      throw e;
-    }
-    function * second() {
-      assert.log(2);
-      yield new Promise(r => resolvers[1] = r);
-      assert.log(3);
-    }
-    let g = spawnAll([first, second], reason => assert.log(reason.message));
-    let state = g.next();
-    assert.ok(!state.done, 'not done');
-    if (order === 'reverse') {
-      resolvers = resolvers.reverse();
-    }
-    resolvers[0]();
-    return state.value.then(v => {
-      state = g.next(v);
-      assert.ok(!state.done, 'not done again');
-      resolvers[1]();
-      return state.value;
-    }).then(v => {
-      state = g.next(v);
-      assert.ok(state.done, 'done');
-      if (order === 'forward') {
-        assert.logEquals([1, 2, 'boom', 3]);
-      } else {
-        assert.logEquals([1, 2, 3, 'boom']);
-      }
-    });
-  });
-});
-
-test('throws exceptions into child generators', function(assert) {
-  let reject;
-  function * example() {
-    try {
-      yield new Promise((_, r) => reject = r);
-    } catch(err) {
-      assert.log(err);
-    }
-  }
-  let g = spawnAll([example]);
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  reject('something');
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(state.done, 'done');
-    assert.logEquals(['something']);
-  });
-});
-
-test('can cancel all waiting promises', function(assert) {
-  let resolveFirst, resolveSecond;
-
-  function * example1() {
-    yield new Promise(r => resolveFirst = r);
-    let third = new Promise(() => null);
-    third.__ec_cancel__ = () => assert.log('third canceled');
-    yield third;
-  }
-
-  function * example2() {
-    yield new Promise(r => resolveSecond = r);
-    let fourth = new Promise(() => null);
-    fourth.__ec_cancel__ = () => assert.log('fourth canceled');
-    yield fourth;
-  }
-
-  let g = spawnAll([example1, example2]);
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  resolveFirst();
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(!state.done, 'not done 2');
-    resolveSecond();
-    return state.value;
-  }).then(v => {
-    state = g.next(v);
-    assert.ok(!state.done, 'not done 3');
-    cancelGenerator(g);
-    assert.logEquals(['third canceled', 'fourth canceled']);
-  });
-});
 
 test('sync cancelation propagates to inner scheduler', function(assert) {
   function * example1() {
@@ -399,6 +205,8 @@ test("routines can spawn more routines asynchronously", function(assert) {
   });
 });
 
+// ----------------------------
+
 test('spawn starts synchronously', function(assert) {
   let p = spawn(function * () {
     assert.log("hello world");
@@ -407,11 +215,18 @@ test('spawn starts synchronously', function(assert) {
   return p;
 });
 
-test('spawn synchronous exception', function(assert) {
-  let p = spawn(function * () {
-    throw new Error('boom');
+test('the return value of the top-level spawned task is resolved', function(assert) {
+  return spawn(function * () {
+    return 42;
+  }).then(value => {
+    assert.equal(value, 42);
   });
-  return p.then(() => {
+});
+
+test('spawn synchronous exception', function(assert) {
+  return spawn(function * () {
+    throw new Error('boom');
+  }).then(() => {
     assert.ok(false, "should not get here");
   }, err => {
     assert.equal(err.message, 'boom');
@@ -433,14 +248,12 @@ test('spawn: asynchronous exception', function(assert) {
 });
 
 test('spawned task can enable error logging', function(assert) {
-  let p = spawn(function * () {
+  return spawn(function * () {
     logErrors(err => {
       assert.log('handled message: ' + err.message);
     });
     throw new Error('boom');
-  });
-
-  return p.then(() => {
+  }).then(() => {
     assert.ok(false, "should not get here");
   }, err => {
     assert.equal(err.message, 'boom');
@@ -476,3 +289,183 @@ test('fork a child', function(assert) {
     assert.logEquals(["parent started", "child started", "parent finishing", "child finishing"]);
   });
 });
+
+
+test('fork starts each child immediately', function(assert) {
+  return spawn(function * () {
+    fork(function * () {
+      assert.log(1);
+    });
+    fork(function * () {
+      assert.log(2);
+    });
+    assert.logEquals([1,2]);
+  });
+});
+
+['forward', 'reverse'].forEach(order => {
+  test(`resolves in ${order} order`, function(assert) {
+    let resolvers = [null, null];
+    let expected = ['hello', 'world'];
+    let promises = [null, null];
+
+    function * first() {
+      assert.log(yield new Promise(resolve => {
+        resolvers[0] = () => resolve('hello');
+      }));
+    }
+    function * second() {
+      assert.log(yield new Promise(resolve => {
+        resolvers[1] = () => resolve('world');
+      }));
+    }
+    return spawn(function * () {
+      promises[0] = fork(first);
+      promises[1] = fork(second);
+
+      if (order === 'reverse') {
+        resolvers = resolvers.reverse();
+        expected = expected.reverse();
+        promises = promises.reverse();
+      }
+
+      resolvers[0]();
+      yield promises[0];
+      resolvers[1]();
+      yield promises[1];
+      assert.logEquals(expected);
+    });
+  });
+});
+
+test('forked child immediately returns promise', function(assert) {
+  return spawn(function * () {
+    let value = yield fork(function * example() {
+      return new Promise(resolve => resolve(42));
+    });
+    assert.equal(value, 42);
+  });
+});
+
+test('forked child returns promise', function(assert) {
+  return spawn(function * () {
+    let resolveFirst;
+    let p = fork(function * example() {
+      yield new Promise(r => resolveFirst = r);
+      return new Promise(resolve => resolve(42));
+    });
+    resolveFirst();
+    assert.equal(yield p, 42);
+  });
+});
+
+test('forked child immediately throws', function(assert) {
+  return spawn(function * () {
+    return fork(function * () {
+      let b = new Error("boom");
+      b.message = 'boom';
+      throw b;
+    }).catch(err => {
+      assert.equal(err.message, 'boom');
+    });
+  });
+});
+
+['forward', 'reverse'].forEach(order => {
+  test(`handles post-yield exception (${order})`, function(assert) {
+
+    return spawn(function * () {
+
+      let resolvers = [null, null];
+      let promises = [null, null];
+
+      function * first() {
+        assert.log(1);
+        yield new Promise(r => resolvers[0] = r);
+        let e = new Error("boom");
+        e.message = 'boom';
+        throw e;
+      }
+      function * second() {
+        assert.log(2);
+        yield new Promise(r => resolvers[1] = r);
+        assert.log(3);
+      }
+
+      logErrors(reason => assert.log(reason.message));
+      promises[0] = fork(first);
+      promises[1] = fork(second);
+
+      if (order === 'reverse') {
+        resolvers = resolvers.reverse();
+        promises = promises.reverse();
+      }
+
+      resolvers[0]();
+      yield settle(promises[0]);
+      resolvers[1]();
+      yield settle(promises[1]);
+
+      if (order === 'forward') {
+        assert.logEquals([1, 2, 'boom', 3]);
+      } else {
+        assert.logEquals([1, 2, 3, 'boom']);
+      }
+    });
+  });
+});
+
+test('throws exceptions into child generators', function(assert) {
+  return spawn(function * () {
+    let reject;
+    let p = fork(function * example() {
+      try {
+        yield new Promise((_, r) => reject = r);
+      } catch(err) {
+        assert.log(err);
+      }
+    });
+    reject('something');
+    yield p;
+    assert.logEquals(['something']);
+  });
+});
+
+skip('can cancel all waiting promises within a child', function(assert) {
+  return spawn(function * () {
+
+    let child = fork(function * () {
+
+      let resolveFirst, resolveSecond;
+
+      fork(function * example1() {
+        yield new Promise(r => resolveFirst = r);
+        let third = new Promise(() => null);
+        third.__ec_cancel__ = () => assert.log('third canceled');
+        yield third;
+      });
+
+      fork(function * example2() {
+        yield new Promise(r => resolveSecond = r);
+        let fourth = new Promise(() => null);
+        fourth.__ec_cancel__ = () => assert.log('fourth canceled');
+        yield fourth;
+      });
+
+      resolveFirst();
+      yield microwait();
+      resolveSecond();
+      yield microwait();
+
+      child.__ec_cancel__();
+    }).then(() => {
+      assert.logEquals(['third canceled', 'fourth canceled']);
+    });
+  });
+});
+
+
+
+function settle(promise) {
+  return promise.then(() => null, () => null);
+}
