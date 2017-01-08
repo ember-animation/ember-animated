@@ -28,47 +28,6 @@ function spawnAll(funcs, onError) {
 }
 
 
-test('sync cancelation propagates to inner scheduler', function(assert) {
-  function * example1() {
-    let promise = new Promise(() => null);
-    promise.__ec_cancel__ = () => assert.log('first canceled');
-    yield promise;
-  }
-  function * parent() {
-    yield * spawnAll([example1]);
-  }
-
-  let g = spawnAll([parent]);
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  cancelGenerator(g);
-  assert.logEquals(['first canceled']);
-});
-
-
-test('async cancelation propagates to inner scheduler', function(assert) {
-  let resolveFirst;
-  function * example1() {
-    yield new Promise(resolve => resolveFirst = resolve);
-    let promise = new Promise(() => null);
-    promise.__ec_cancel__ = () => assert.log('second canceled');
-    yield promise;
-  }
-  function * parent() {
-    yield * spawnAll([example1]);
-  }
-
-  let g = spawnAll([parent]);
-  let state = g.next();
-  assert.ok(!state.done, 'not done');
-  resolveFirst();
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(!state.done, 'not done 2');
-    cancelGenerator(g);
-    assert.logEquals(['second canceled']);
-  });
-});
 
 ['forward', 'reverse'].forEach(order => {
   test(`handles multiple immediate resolutions (${order})`, function(assert) {
@@ -487,6 +446,40 @@ test('fairness', function(assert) {
 
   }).then(() => {
     assert.logEquals([1, 4, 2, 5, 3, 6]);
+  });
+});
+
+test('sync cancelation propagates to inner scheduler', function(assert) {
+  return spawn(function * () {
+    let task = spawn(function * () {
+      yield spawn(function * () {
+        let promise = new Promise(() => null);
+        promise.__ec_cancel__ = () => assert.log('first canceled');
+        yield promise;
+      });
+    });
+    cancel(task);
+    yield microwait();
+    assert.logEquals(['first canceled']);
+  });
+});
+
+test('async cancelation propagates to inner scheduler', function(assert) {
+  return spawn(function * () {
+    let resolve;
+    let task = spawn(function * () {
+      yield spawn(function * () {
+        yield new Promise(r => resolve = r);
+        let promise = new Promise(() => null);
+        promise.__ec_cancel__ = () => assert.log('first canceled');
+        yield promise;
+      });
+    });
+    resolve();
+    yield microwait();
+    cancel(task);
+    yield microwait();
+    assert.logEquals(['first canceled']);
   });
 });
 
