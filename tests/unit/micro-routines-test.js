@@ -1,8 +1,9 @@
-import { module, test, skip } from 'qunit';
+import { module, test } from 'qunit';
 import {
   spawn,
   fork,
   logErrors,
+  cancel,
   Scheduler,
   cancelGenerator
 } from 'ember-animated/micro-routines';
@@ -102,44 +103,6 @@ test('async cancelation propagates to inner scheduler', function(assert) {
       assert.ok(state.done, 'should be done');
       assert.logEquals(expected);
     });
-  });
-});
-
-test('fairness', function(assert) {
-  function * first() {
-    yield;
-    assert.log(1);
-    yield;
-    assert.log(2);
-    yield;
-    assert.log(3);
-  }
-  function * second() {
-    yield;
-    assert.log(4);
-    yield;
-    assert.log(5);
-    yield;
-    assert.log(6);
-  }
-  let g = spawnAll([first, second]);
-  let state = g.next();
-  let steps = 0;
-
-  function step() {
-    if (steps++ > 6) {
-      throw new Error("exceeded expected step limit");
-    }
-    return state.value.then(v => {
-      state = g.next(v);
-      if (!state.done) {
-        return step();
-      }
-    });
-  }
-
-  return step().then(() => {
-    assert.logEquals([1, 4, 2, 5, 3, 6]);
   });
 });
 
@@ -431,12 +394,46 @@ test('throws exceptions into child generators', function(assert) {
   });
 });
 
-skip('can cancel all waiting promises within a child', function(assert) {
+test('can cancel all waiting promises from the outside', function(assert) {
   return spawn(function * () {
+    let resolveFirst, resolveSecond;
 
-    let child = fork(function * () {
+    let task = spawn(function * () {
 
-      let resolveFirst, resolveSecond;
+      fork(function * example1() {
+        yield new Promise(r => resolveFirst = r);
+        let third = new Promise(() => null);
+        third.__ec_cancel__ = () => assert.log('third canceled');
+        yield third;
+      });
+
+      fork(function * example2() {
+        yield new Promise(r => resolveSecond = r);
+        let fourth = new Promise(() => null);
+        fourth.__ec_cancel__ = () => assert.log('fourth canceled');
+        yield fourth;
+      });
+
+    });
+
+    resolveFirst();
+    yield microwait();
+    resolveSecond();
+    yield microwait();
+    cancel(task);
+    yield microwait();
+    assert.logEquals(['third canceled', 'fourth canceled']);
+  });
+});
+
+test('can cancel all waiting promises from the inside', function(assert) {
+  return spawn(function * () {
+    let resolveFirst, resolveSecond;
+    let canceled;
+    let didCancel = new Promise(r => canceled = r);
+
+
+    let task = spawn(function * () {
 
       fork(function * example1() {
         yield new Promise(r => resolveFirst = r);
@@ -456,14 +453,42 @@ skip('can cancel all waiting promises within a child', function(assert) {
       yield microwait();
       resolveSecond();
       yield microwait();
-
-      child.__ec_cancel__();
-    }).then(() => {
-      assert.logEquals(['third canceled', 'fourth canceled']);
+      cancel(task);
+      canceled();
+      yield microwait();
+      assert.ok(false, "should not get here (previous yield throws TaskCancelation)");
     });
+
+    yield didCancel;
+    assert.logEquals(['third canceled', 'fourth canceled']);
   });
 });
 
+test('fairness', function(assert) {
+  return spawn(function * () {
+
+    fork(function * first() {
+      yield;
+      assert.log(1);
+      yield;
+      assert.log(2);
+      yield;
+      assert.log(3);
+    });
+
+    fork(function * second() {
+      yield;
+      assert.log(4);
+      yield;
+      assert.log(5);
+      yield;
+      assert.log(6);
+    });
+
+  }).then(() => {
+    assert.logEquals([1, 4, 2, 5, 3, 6]);
+  });
+});
 
 
 function settle(promise) {

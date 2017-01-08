@@ -1,4 +1,4 @@
-import { Promise } from './concurrency-helpers';
+import { Promise, microwait } from './concurrency-helpers';
 let current;
 
 function withCurrent(routine, fn) {
@@ -19,18 +19,33 @@ export function logErrors(fn) {
 }
 
 export function spawn(generator) {
-  return _await((function *() {
+  let g = (function *() {
     let scheduler = new Scheduler();
     let main = scheduler.spawn(generator());
     yield * scheduler.run();
     return main;
-  })());
+  })();
+  let promise = _await(g);
+  promise.__ec_cancel__ = function() {
+    cancelGenerator(g);
+  };
+  return promise;
+}
+
+export function cancel(promise) {
+  let func = promise.__ec_cancel__;
+  if (typeof func !== 'function') {
+    throw new Error("Not a cancelable promise", promise);
+  }
+  microwait().then(() => {
+    func.call(promise);
+  });
 }
 
 function _await(generator, nextMethod='next', nextValue) {
   return new Promise(resolve => {
     // this handles the case where the generator throws and we want
-    // our promises to be rejected.
+    // our promise to be rejected.
     resolve(generator[nextMethod](nextValue));
   }).then(state => {
     if (state.done) {
@@ -43,7 +58,6 @@ function _await(generator, nextMethod='next', nextValue) {
     });
   });
 }
-
 
 export function fork(generator) {
   if (!current) {
@@ -79,7 +93,18 @@ export class Scheduler {
         }
       }
     } finally {
-      cancel(this._routines);
+      this.cancel();
+    }
+  }
+  cancel() {
+    let waiting = this._routines;
+    for (let i = 0; i < waiting.length; i++) {
+      let routine = waiting[i];
+      let value = routine.state.value;
+      if (isPromise(value) && value.__ec_cancel__) {
+        value.__ec_cancel__();
+      }
+      cancelGenerator(routine.generator);
     }
   }
 }
@@ -139,17 +164,6 @@ export function cancelGenerator(generator) {
     if (err.message !== 'TaskCancelation') {
       throw err;
     }
-  }
-}
-
-function cancel(waiting) {
-  for (let i = 0; i < waiting.length; i++) {
-    let routine = waiting[i];
-    let value = routine.state.value;
-    if (isPromise(value) && value.__ec_cancel__) {
-      value.__ec_cancel__();
-    }
-    cancelGenerator(routine.generator);
   }
 }
 
