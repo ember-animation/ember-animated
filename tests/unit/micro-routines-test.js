@@ -3,9 +3,7 @@ import {
   spawn,
   fork,
   logErrors,
-  cancel,
-  Scheduler,
-  cancelGenerator
+  cancel
 } from 'ember-animated/micro-routines';
 import { Promise, microwait } from 'ember-animated/concurrency-helpers';
 
@@ -18,116 +16,16 @@ module("Unit | micro-routines", {
     assert.logEquals = function(value, label) {
       this.deepEqual(this._logBuffer, value, label);
     };
+    assert.logContains = function(expected, message) {
+      this.pushResult({
+        result: this._logBuffer.indexOf(expected) !== -1,
+        actual: this._logBuffer,
+        expected,
+        message
+      });
+    };
   }
 });
-
-function spawnAll(funcs, onError) {
-  let scheduler = new Scheduler(onError);
-  funcs.forEach(f => scheduler.spawn(f()));
-  return scheduler.run();
-}
-
-
-
-['forward', 'reverse'].forEach(order => {
-  test(`handles multiple immediate resolutions (${order})`, function(assert) {
-    let resolvers = [null, null];
-    let expected = ['hello', 'world'];
-
-    function * first() {
-      assert.log(yield new Promise(resolve => {
-        resolvers[0] = () => resolve('hello');
-      }));
-    }
-    function * second() {
-      assert.log(yield new Promise(resolve => {
-        resolvers[1] = () => resolve('world');
-      }));
-    }
-    let g = spawnAll([first, second]);
-    let state = g.next();
-    assert.ok(!state.done, 'not done');
-    if (order === 'reverse') {
-      resolvers = resolvers.reverse();
-      expected = expected.reverse();
-    }
-    resolvers[0]();
-    resolvers[1]();
-    return state.value.then(v => {
-      state = g.next(v);
-      assert.ok(!state.done, 'still not done');
-      return state.value
-    }).then(v => {
-      state = g.next(v);
-      assert.ok(state.done, 'should be done');
-      assert.logEquals(expected);
-    });
-  });
-});
-
-test("interrupted generators still run finally", function(assert) {
-  function * example() {
-    try {
-      yield new Promise(() => null);
-    } finally {
-      assert.log("finally ran");
-    }
-  }
-  let g = spawnAll([example]);
-  g.next();
-  cancelGenerator(g);
-  assert.logEquals(['finally ran']);
-});
-
-test("routines can spawn more routines synchronously", function(assert) {
-  let scheduler = new Scheduler();
-  let count = 0;
-  function * example() {
-    if (count < 3) {
-      count++;
-      scheduler.spawn(example());
-    }
-  }
-  scheduler.spawn(example());
-  let g = scheduler.run();
-  let state = g.next();
-  assert.ok(state.done, 'done')
-  assert.equal(count, 3);
-});
-
-test("routines can spawn more routines asynchronously", function(assert) {
-  let scheduler = new Scheduler();
-  let resolve, resolve2;
-  function * example() {
-    yield new Promise(r => resolve = r);
-    assert.log("will spawn");
-    scheduler.spawn(second());
-    assert.log("did spawn");
-  }
-  function * second() {
-    assert.log("sync start");
-    yield new Promise(r => resolve2 = r);
-    assert.log("final");
-  }
-  scheduler.spawn(example());
-  let g = scheduler.run();
-  let state = g.next();
-  assert.ok(!state.done, 'not done')
-  resolve();
-  return state.value.then(v => {
-    state = g.next(v);
-    assert.ok(!state.done, 'not done 2');
-    assert.logEquals(["will spawn", "sync start", "did spawn"]);
-    resolve2();
-    return state.value
-  }).then(v => {
-    state = g.next(v);
-    assert.ok(state.done, 'done')
-    assert.logEquals(["will spawn", "sync start", "did spawn", "final"]);
-  });
-});
-
-// ----------------------------
 
 test('spawn starts synchronously', function(assert) {
   let p = spawn(function * () {
@@ -480,6 +378,81 @@ test('async cancelation propagates to inner scheduler', function(assert) {
     cancel(task);
     yield microwait();
     assert.logEquals(['first canceled']);
+  });
+});
+
+['forward', 'reverse'].forEach(order => {
+  test(`handles multiple resolutions in a single pass (${order})`, function(assert) {
+    return spawn(function * () {
+      let resolvers = [null, null];
+
+      fork(function * first() {
+        assert.log(yield new Promise(resolve => {
+          resolvers[0] = () => resolve('hello');
+        }));
+      });
+      fork(function * second() {
+        assert.log(yield new Promise(resolve => {
+          resolvers[1] = () => resolve('world');
+        }));
+      });
+      if (order === 'reverse') {
+        resolvers = resolvers.reverse();
+      }
+      resolvers[0]();
+      resolvers[1]();
+      yield microwait();
+      assert.logContains('hello');
+      assert.logContains('world');
+    });
+  });
+});
+
+test("interrupted generators still run finally", function(assert) {
+  return spawn(function * () {
+    let task = spawn(function * () {
+      fork(function * example() {
+        try {
+          yield new Promise(() => null);
+        } finally {
+          assert.log("finally ran");
+        }
+      });
+    });
+    cancel(task);
+    yield microwait();
+    assert.logEquals(['finally ran']);
+  });
+});
+
+test("children can spawn more children synchronously", function(assert) {
+  return spawn(function * () {
+    let count = 0;
+    function * example() {
+      if (count < 3) {
+        count++;
+        fork(example);
+      }
+    }
+    fork(example);
+    assert.equal(count, 3);
+  });
+});
+
+test("children can spawn more children asynchronously", function(assert) {
+  return spawn(function * () {
+    let count = 0;
+    yield spawn(function * () {
+      function * example() {
+        yield microwait();
+        if (count < 3) {
+          count++;
+          fork(example);
+        }
+      }
+      fork(example);
+    });
+    assert.equal(count, 3);
   });
 });
 
