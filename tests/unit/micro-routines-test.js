@@ -1,4 +1,5 @@
 import { module, test } from 'qunit';
+import { installLogging } from '../helpers/assertions';
 import {
   spawn,
   fork,
@@ -9,21 +10,7 @@ import { Promise, microwait } from 'ember-animated/concurrency-helpers';
 
 module("Unit | micro-routines", {
   beforeEach(assert) {
-    assert._logBuffer = [];
-    assert.log = function(message) {
-      this._logBuffer.push(message);
-    }
-    assert.logEquals = function(value, label) {
-      this.deepEqual(this._logBuffer, value, label);
-    };
-    assert.logContains = function(expected, message) {
-      this.pushResult({
-        result: this._logBuffer.indexOf(expected) !== -1,
-        actual: this._logBuffer,
-        expected,
-        message
-      });
-    };
+    installLogging(assert);
   }
 });
 

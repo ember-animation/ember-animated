@@ -57,3 +57,21 @@ export function visuallyConstant(target, fn, message) {
     constantBounds.call(this, target, fn, message);
   }, message);
 }
+
+export function installLogging(assert) {
+  assert._logBuffer = [];
+  assert.log = function(message) {
+    this._logBuffer.push(message);
+  }
+  assert.logEquals = function(value, label) {
+    this.deepEqual(this._logBuffer, value, label);
+  };
+  assert.logContains = function(expected, message) {
+    this.pushResult({
+      result: this._logBuffer.indexOf(expected) !== -1,
+      actual: this._logBuffer,
+      expected,
+      message
+    });
+  };
+}
