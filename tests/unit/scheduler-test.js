@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { installLogging } from '../helpers/assertions';
 import {
   spawn,
-  spawnLinked,
+  spawnChild,
   logErrors,
   stop,
   current,
@@ -89,9 +89,9 @@ test('spawn within spawn', function(assert) {
   });
 });
 
-test('spawn linked child microroutine', function(assert) {
+test('spawn child microroutine', function(assert) {
   return spawn(function * () {
-    yield spawnLinked(function * () {
+    yield spawnChild(function * () {
       assert.log('child ran');
     });
     assert.logEquals(['child ran']);
@@ -112,12 +112,12 @@ test('spawned task can enable error logging', function(assert) {
   });
 });
 
-test('error logging is inherited by linked children', function(assert) {
+test('error logging is inherited by children', function(assert) {
   return spawn(function * () {
     logErrors(err => {
       assert.log('handled message: ' + err.message);
     });
-    spawnLinked(function * () {
+    spawnChild(function * () {
       throw new Error('boom');
     }).catch(() => {
       assert.log('catching here too') // to avoid console noise
@@ -132,7 +132,7 @@ test('propagating child error is logged once', function(assert) {
     logErrors(err => {
       assert.log('handled message: ' + err.message);
     });
-    yield spawnLinked(function * () {
+    yield spawnChild(function * () {
       throw new Error('boom');
     })
   }).catch(err => {
@@ -141,10 +141,10 @@ test('propagating child error is logged once', function(assert) {
   });
 });
 
-test('spawnLinked requires a running microroutine', function(assert) {
+test('spawnChild requires a running microroutine', function(assert) {
   assert.throws(() => {
-    spawnLinked(function * () {});
-  }, /spawnLinked: only works inside a running microroutine/);
+    spawnChild(function * () {});
+  }, /spawnChild: only works inside a running microroutine/);
 });
 
 ['forward', 'reverse'].forEach(order => {
@@ -256,13 +256,13 @@ test('can stop self', function(assert) {
 });
 
 
-test('can cancel all linked microroutines', function(assert) {
+test('can cancel all child microroutines', function(assert) {
   return spawn(function * () {
     let resolveFirst, resolveSecond;
 
     let task = spawn(function * () {
 
-      spawnLinked(function * example1() {
+      spawnChild(function * example1() {
         yield new Promise(r => resolveFirst = r);
         let third = new Promise(() => null);
         third.__ec_cancel__ = () => assert.log('third canceled');
@@ -273,7 +273,7 @@ test('can cancel all linked microroutines', function(assert) {
         }
       });
 
-      spawnLinked(function * example2() {
+      spawnChild(function * example2() {
         yield new Promise(r => resolveSecond = r);
         let fourth = new Promise(() => null);
         fourth.__ec_cancel__ = () => assert.log('fourth canceled');
@@ -300,7 +300,7 @@ test('can cancel all linked microroutines', function(assert) {
   });
 });
 
-test('can cancel all linked, from the inside', function(assert) {
+test('can cancel all children, from the inside', function(assert) {
   return spawn(function * () {
 
     let stopping;
@@ -309,7 +309,7 @@ test('can cancel all linked, from the inside', function(assert) {
     spawn(function * () {
       let resolveFirst, resolveSecond;
 
-      spawnLinked(function * example1() {
+      spawnChild(function * example1() {
         yield new Promise(r => resolveFirst = r);
         let third = new Promise(() => null);
         third.__ec_cancel__ = () => assert.log('third canceled');
@@ -320,7 +320,7 @@ test('can cancel all linked, from the inside', function(assert) {
         }
       });
 
-      spawnLinked(function * example2() {
+      spawnChild(function * example2() {
         yield new Promise(r => resolveSecond = r);
         let fourth = new Promise(() => null);
         fourth.__ec_cancel__ = () => assert.log('fourth canceled');
@@ -350,7 +350,7 @@ test('can cancel all linked, from the inside', function(assert) {
   });
 });
 
-test('all linked microroutines are canceled if we die', function(assert) {
+test('all child microroutines are canceled if we die', function(assert) {
   assert.expect(5);
   return spawn(function * () {
 
@@ -360,7 +360,7 @@ test('all linked microroutines are canceled if we die', function(assert) {
     spawn(function * () {
       let resolveFirst, resolveSecond;
 
-      spawnLinked(function * example1() {
+      spawnChild(function * example1() {
         yield new Promise(r => resolveFirst = r);
         let third = new Promise(() => null);
         third.__ec_cancel__ = () => assert.log('third canceled');
@@ -371,7 +371,7 @@ test('all linked microroutines are canceled if we die', function(assert) {
         }
       });
 
-      spawnLinked(function * example2() {
+      spawnChild(function * example2() {
         yield new Promise(r => resolveSecond = r);
         let fourth = new Promise(() => null);
         fourth.__ec_cancel__ = () => assert.log('fourth canceled');
@@ -405,7 +405,7 @@ test('all linked microroutines are canceled if we die', function(assert) {
 test('fairness', function(assert) {
   return spawn(function * () {
 
-    let a = spawnLinked(function * first() {
+    let a = spawnChild(function * first() {
       yield;
       assert.log(1);
       yield;
@@ -414,7 +414,7 @@ test('fairness', function(assert) {
       assert.log(3);
     });
 
-    let b = spawnLinked(function * second() {
+    let b = spawnChild(function * second() {
       yield;
       assert.log(4);
       yield;
@@ -431,18 +431,18 @@ test('fairness', function(assert) {
   });
 });
 
-test('can wait for all linked children', function (assert) {
+test('can wait for all children', function (assert) {
   return spawn(function * () {
     let resolveFirst, resolveSecond;
 
     let promise = spawn(function * () {
 
-      spawnLinked(function * example1() {
+      spawnChild(function * example1() {
         yield new Promise(r => resolveFirst = r);
         assert.log('first finishing');
       });
 
-      spawnLinked(function * example2() {
+      spawnChild(function * example2() {
         yield new Promise(r => resolveSecond = r);
         assert.log('second finishing');
         throw new Error('boom');

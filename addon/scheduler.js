@@ -9,7 +9,7 @@ API
     starts a new microroutine, which will run independently until it
     finishes or is canceled.
 
-  spawnLinked: GenFn -> CancelablePromise
+  spawnChild: GenFn -> CancelablePromise
 
     starts a new microroutine linked to the current
     microroutine. Throws if your'e not in a current
@@ -45,7 +45,7 @@ export function spawn(genFn) {
   return m.promise;
 }
 
-export function spawnLinked(genFn) {
+export function spawnChild(genFn) {
   let m = new MicroRoutine(genFn, true);
   return m.promise;
 }
@@ -121,7 +121,7 @@ class MicroRoutine {
     microRoutines.set(this.promise, this);
     this.promise.__ec_cancel__ = this.stop.bind(this);
     if (linked) {
-      let parent = ensureCurrent('spawnLinked');
+      let parent = ensureCurrent('spawnChild');
       parent.linked.push(this);
       this.errorLogger = parent.errorLogger;
     } else {
