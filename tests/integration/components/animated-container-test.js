@@ -2,7 +2,8 @@ import { moduleForComponent, test, skip } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
-import { task } from 'ember-concurrency';
+import { task } from 'ember-animated/ember-scheduler';
+import { current } from 'ember-animated/scheduler';
 import Motion from 'ember-animated/motion';
 import {
   macroWait,
@@ -50,7 +51,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
         let service = this.get('motionService');
         service.willAnimate({
           duration: opts.duration == null ? 1 : opts.duration,
-          task: this.get('animate.last')
+          task: current()
         });
         yield * service.staticMeasurement(() => {})
         this.$().height(this.finalHeight);

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from '../templates/components/animated-each';
-import { task } from 'ember-concurrency';
+import { task } from '../ember-scheduler';
 import { afterRender } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
