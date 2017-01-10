@@ -112,3 +112,32 @@ test('task is canceled when object is destroyed', function(assert) {
   });
   assert.logEquals(['task canceled']);
 });
+
+test('restartable task', function(assert) {
+  let Class = Ember.Object.extend({
+    hello: task(function * (shouldBlock) {
+      assert.log("task starting");
+      if (shouldBlock) {
+        let p = new Promise(() => null);
+        p.__ec_cancel__ = () => assert.log("task canceled");
+        try {
+          yield p;
+        } finally {
+          assert.log("task exiting");
+        }
+      }
+    }).restartable()
+  });
+  let object = Class.create();
+  let promise;
+  Ember.run(() => {
+    object.get('hello').perform(true);
+  });
+  Ember.run(() => {
+    promise = object.get('hello').perform(false);
+  });
+  return promise.then(() => {
+    assert.logEquals(['task starting', 'task canceled', 'task exiting', 'task starting']);
+    assert.equal(object.get('hello.concurrency'), 0);
+  });
+});
