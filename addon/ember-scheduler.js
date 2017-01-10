@@ -178,3 +178,8 @@ function rsvpIfy(promise) {
   p.__ec_cancel__ = promise.__ec_cancel__;
   return p;
 }
+
+
+export function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

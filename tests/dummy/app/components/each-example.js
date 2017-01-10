@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { task, taskGroup, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-animated/ember-scheduler';
 import rules from 'ember-animated/transitions/default-list-transitions';
 
 export default Ember.Component.extend({
@@ -18,18 +18,15 @@ export default Ember.Component.extend({
     }
   }),
 
-  chaos: taskGroup().restartable(),
-
-  startChaos: task(function * () {
+  chaos: task(function * (running) {
+    if (!running) { return; }
     while (true) {
       yield timeout(1000);
       this.send('addItem');
       yield timeout(1000);
       this.send('removeItem', this.get('items')[Math.floor(Math.random()*this.get('items.length'))]);
     }
-  }).group('chaos'),
-
-  stopChaos: task(function * () {}).group('chaos'),
+  }).restartable(),
 
   actions: {
     addItem() {
