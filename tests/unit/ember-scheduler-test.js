@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { task } from 'ember-animated/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
 import Ember from 'ember';
-import { Promise } from 'ember-animated/concurrency-helpers';
+import { Promise, microwait } from 'ember-animated/concurrency-helpers';
 
 module("Unit | scheduler Ember layer", {
   beforeEach(assert) {
@@ -182,5 +182,23 @@ test('can perform tasks based on observation', function(assert) {
   });
 
   assert.logEquals(['ok']);
+
+});
+
+test('returns final value from generator function', function(assert) {
+  let Class = Ember.Object.extend({
+    hello: task(function * () {
+      yield microwait();
+      return 42;
+    })
+  });
+  let object = Class.create();
+  let promise;
+  Ember.run(() => {
+    promise = object.get('hello').perform();
+  });
+  return promise.then(value => {
+    assert.equal(value, 42);
+  });
 
 });

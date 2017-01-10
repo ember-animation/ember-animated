@@ -69,7 +69,8 @@ class Task {
             yield maybeWait;
           }
         }
-        yield * withRunLoop(implementation.call(context, ...args));
+        let finalValue = yield * withRunLoop(implementation.call(context, ...args));
+        return finalValue;
       } finally {
         Ember.run.join(() => {
           self._removeInstance(current());
