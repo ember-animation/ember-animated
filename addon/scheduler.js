@@ -73,6 +73,14 @@ export function current() {
   }
 }
 
+export function childrenSettled() {
+  return Promise.all(
+    ensureCurrent('childrenSettled').linked.map(
+      child => child.promise.catch(() => null)
+    )
+  );
+}
+
 let withCurrent, getCurrent;
 {
   let current;

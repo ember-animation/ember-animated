@@ -5,7 +5,8 @@ import {
   spawnLinked,
   logErrors,
   stop,
-  current
+  current,
+  childrenSettled
 } from 'ember-animated/scheduler';
 import { Promise, microwait } from 'ember-animated/concurrency-helpers';
 
@@ -428,4 +429,36 @@ test('fairness', function(assert) {
   }).then(() => {
     assert.logEquals([1, 4, 2, 5, 3, 6]);
   });
+});
+
+test('can wait for all linked children', function (assert) {
+  return spawn(function * () {
+    let resolveFirst, resolveSecond;
+
+    let promise = spawn(function * () {
+
+      spawnLinked(function * example1() {
+        yield new Promise(r => resolveFirst = r);
+        assert.log('first finishing');
+      });
+
+      spawnLinked(function * example2() {
+        yield new Promise(r => resolveSecond = r);
+        assert.log('second finishing');
+        throw new Error('boom');
+      });
+
+      assert.log('awaiting children');
+      yield childrenSettled();
+      assert.log('they finished');
+    });
+
+    resolveFirst();
+    yield microwait();
+    resolveSecond();
+    yield promise;
+
+    assert.logEquals(['awaiting children', 'first finishing', 'second finishing', 'they finished']);
+  });
+
 });
