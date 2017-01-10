@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import Resize from '../motions/resize';
-import { task } from 'ember-concurrency';
+import { task } from '../ember-scheduler';
 import Sprite from '../sprite';
 import { emptyBounds } from '../bounds';
 
