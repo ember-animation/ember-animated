@@ -1,5 +1,5 @@
 import { module, test, skip } from 'qunit';
-import { task } from 'ember-animated/ember-micro-routines';
+import { task } from 'ember-animated/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
 import Ember from 'ember';
 import { Promise } from 'ember-animated/concurrency-helpers';
