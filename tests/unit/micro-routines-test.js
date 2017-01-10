@@ -1,9 +1,10 @@
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 import { installLogging } from '../helpers/assertions';
 import {
   spawn,
   fork,
   logErrors,
+  currentTask,
   cancel
 } from 'ember-animated/micro-routines';
 import { Promise, microwait } from 'ember-animated/concurrency-helpers';
@@ -443,6 +444,28 @@ test("children can spawn more children asynchronously", function(assert) {
   });
 });
 
+
+skip("task can access itself (spawn)", function(assert) {
+  return spawn(function * () {
+    let inside;
+    let outside = spawn(function * () {
+      inside = currentTask();
+    });
+    yield outside;
+    assert.equal(inside, outside, "same promise");
+  });
+});
+
+test("task can access itself (fork)", function(assert) {
+  return spawn(function * () {
+    let inside;
+    let outside = fork(function * () {
+      inside = currentTask();
+    });
+    yield outside;
+    assert.equal(inside, outside, "same promise");
+  });
+});
 
 function settle(promise) {
   return promise.then(() => null, () => null);

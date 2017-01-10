@@ -42,6 +42,12 @@ export function cancel(promise) {
   });
 }
 
+export function currentTask() {
+  if (current) {
+    return current.promise;
+  }
+}
+
 function _await(generator, nextMethod='next', nextValue) {
   return new Promise(resolve => {
     // this handles the case where the generator throws and we want
@@ -72,13 +78,17 @@ export class Scheduler {
     this._routines = [];
   }
   spawn(generator) {
-    return new Promise((resolve, reject) => {
-      let routine = new MicroRoutine(generator, this, resolve, reject);
-      routine.wake({ state: 'fulfilled', value: undefined, index: -1 });
-      if (!routine.state.done) {
-        this._routines.push(routine);
-      }
+    let promise, resolve, reject;
+    promise = new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
     });
+    let routine = new MicroRoutine(generator, this, promise, resolve, reject);
+    routine.wake({ state: 'fulfilled', value: undefined, index: -1 });
+    if (!routine.state.done) {
+      this._routines.push(routine);
+    }
+    return promise;
   }
   * run() {
     try {
@@ -111,10 +121,11 @@ export class Scheduler {
 
 
 class MicroRoutine {
-  constructor(generator, scheduler, resolve, reject) {
+  constructor(generator, scheduler, promise, resolve, reject) {
     this.generator = generator;
     this.scheduler = scheduler;
     this.state = null;
+    this.promise = promise;
     this.resolve = resolve;
     this.reject = reject;
   }
