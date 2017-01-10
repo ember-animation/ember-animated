@@ -24,7 +24,8 @@ export function waitForAnimations() {
   Ember.run(() => {
     idle = Ember.getOwner(this).lookup('service:-ea-motion').get('waitUntilIdle').perform();
   });
-  return idle;
+  // Wrapping in RSVP here so that people chaining off of us stay within a run loop.
+  return Ember.RSVP.Promise.resolve(idle);
 }
 
 let origNow = clock.now;

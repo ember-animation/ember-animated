@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { task } from 'ember-concurrency';
+import { task } from '../ember-scheduler';
 import { microwait, rAF } from '../concurrency-helpers';
 
 export default Ember.Service.extend({
