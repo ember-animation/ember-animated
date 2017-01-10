@@ -69,9 +69,9 @@ class Task {
             yield maybeWait;
           }
         }
-        yield * implementation.call(context, ...args);
+        yield * withRunLoop(implementation.call(context, ...args));
       } finally {
-        Ember.run(() => {
+        Ember.run.join(() => {
           self._removeInstance(current());
         });
       }
@@ -143,5 +143,31 @@ function cancelAllButLast(task, privTask) {
   let instances = privTask.instances;
   for (let i = 0; i < instances.length - 1; i++) {
     stop(instances[i]);
+  }
+}
+
+function * withRunLoop(generator) {
+  let state;
+  let nextValue;
+  let fulfilled = true;
+  while (true) {
+    Ember.run.join(() => {
+      if (fulfilled) {
+        state = generator.next(nextValue);
+      } else {
+        state = generator.throw(nextValue);
+      }
+    });
+
+    if (state.done) {
+      return state.value;
+    }
+    try {
+      nextValue = yield state.value;
+      fulfilled = true;
+    } catch(err) {
+      nextValue = err;
+      fulfilled = false;
+    }
   }
 }
