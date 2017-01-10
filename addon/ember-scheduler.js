@@ -4,6 +4,7 @@ import {
   stop
 } from './scheduler';
 import Ember from 'ember';
+const { set } = Ember;
 
 export function task(fn) {
   return Ember.computed(function() {
@@ -11,30 +12,46 @@ export function task(fn) {
   });
 }
 
+let priv = new WeakMap();
+
 class Task {
   constructor(context, implementation) {
-    this.context = context;
-    this.implementation = implementation;
-    this.instances = [];
-  }
-  get concurrency() {
-    return this.instances.length;
+    priv.set(this, {
+      context,
+      implementation,
+      instances: []
+    });
+    this.concurrency = 0;
+    this.isRunning = false;
   }
   perform(...args) {
     let self = this;
-    cleanupOnDestroy(self.context, this, 'cancelAll');
+    let context = priv.get(this).context;
+    let implementation = priv.get(this).implementation;
+    cleanupOnDestroy(context, this, 'cancelAll');
     let instance = spawn(function * () {
       try {
-        self.instances.push(current());
-        yield * self.implementation.call(self.context, ...args)
+        self._addInstance(current());
+        yield * implementation.call(context, ...args)
       } finally {
-        self.instances.splice(self.instances.indexOf(current()), 1);
+        self._removeInstance(current());
       }
     });
     return instance;
   }
   cancelAll() {
-    this.instances.forEach(i => stop(i));
+    priv.get(this).instances.forEach(i => stop(i));
+  }
+  _addInstance(i) {
+    priv.get(this).instances.push(i);
+    set(this, 'isRunning', true);
+    set(this, 'concurrency', this.concurrency + 1);
+  }
+  _removeInstance(i) {
+    let instances = priv.get(this).instances;
+    instances.splice(instances.indexOf(i), 1);
+    set(this, 'concurrency', this.concurrency - 1);
+    set(this, 'isRunning', this.concurrency < 1);
   }
 }
 
