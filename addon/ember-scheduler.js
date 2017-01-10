@@ -60,9 +60,11 @@ class Task {
             yield maybeWait;
           }
         }
-        yield * implementation.call(context, ...args)
+        yield * implementation.call(context, ...args);
       } finally {
-        self._removeInstance(current());
+        Ember.run(() => {
+          self._removeInstance(current());
+        });
       }
     });
     return instance;
@@ -79,7 +81,7 @@ class Task {
     let instances = priv.get(this).instances;
     instances.splice(instances.indexOf(i), 1);
     set(this, 'concurrency', this.concurrency - 1);
-    set(this, 'isRunning', this.concurrency < 1);
+    set(this, 'isRunning', this.concurrency > 1);
   }
 }
 

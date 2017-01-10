@@ -141,3 +141,30 @@ test('restartable task', function(assert) {
     assert.equal(object.get('hello.concurrency'), 0);
   });
 });
+
+test('can use derived state', function(assert) {
+  let resolve;
+  let Class = Ember.Object.extend({
+    hello: task(function * () {
+      yield new Promise(r => resolve = r);
+    }),
+    message: Ember.computed('hello.isRunning', function() {
+      return this.get('hello.isRunning') ? 'yup' : 'nope';
+    })
+  });
+  let object = Class.create();
+  let promise;
+  Ember.run(() => {
+    assert.equal(object.get('message'), 'nope', 'initial state');
+    promise = object.get('hello').perform();
+    assert.equal(object.get('message'), 'yup', 'running state');
+  });
+  setTimeout(() => {
+    resolve();
+  }, 0);
+  return promise.then(() => {
+    assert.equal(object.get('hello.concurrency'), 0, 'final concurrency');
+    assert.equal(object.get('hello.isRunning'), false, 'final isRunning');
+    assert.equal(object.get('message'), 'nope', 'final state');
+  });
+});
