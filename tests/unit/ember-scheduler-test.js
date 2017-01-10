@@ -1,10 +1,10 @@
-import { module, test, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { task } from 'ember-animated/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
 import Ember from 'ember';
 import { Promise } from 'ember-animated/concurrency-helpers';
 
-module("Unit | micro-routines Ember layer", {
+module("Unit | scheduler Ember layer", {
   beforeEach(assert) {
     installLogging(assert);
   }
@@ -97,7 +97,7 @@ test('can set an observable property on self after yield', function(assert) {
   });
 });
 
-skip('task is canceled when object is destroyed', function(assert) {
+test('task is canceled when object is destroyed', function(assert) {
   let Class = Ember.Object.extend({
     hello: task(function * () {
       let p = new Promise(() => null);

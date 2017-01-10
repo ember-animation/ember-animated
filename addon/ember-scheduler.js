@@ -1,4 +1,8 @@
-import { spawn } from './micro-routines';
+import {
+  spawn,
+  current,
+  stop
+} from './scheduler';
 import Ember from 'ember';
 
 export function task(fn) {
@@ -11,22 +15,26 @@ class Task {
   constructor(context, implementation) {
     this.context = context;
     this.implementation = implementation;
-    this.concurrency = 0;
     this.instances = [];
+  }
+  get concurrency() {
+    return this.instances.length;
   }
   perform(...args) {
     let self = this;
-    cleanupOnDestroy(self.context);
+    cleanupOnDestroy(self.context, this, 'cancelAll');
     let instance = spawn(function * () {
       try {
-        self.concurrency++;
+        self.instances.push(current());
         yield * self.implementation.call(self.context, ...args)
       } finally {
-        self.concurrency--;
+        self.instances.splice(self.instances.indexOf(current()), 1);
       }
     });
-
     return instance;
+  }
+  cancelAll() {
+    this.instances.forEach(i => stop(i));
   }
 }
 
