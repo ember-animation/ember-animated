@@ -20,6 +20,7 @@ function TaskProperty(taskFn) {
     return new Task(this, taskFn, tp);
   });
   this._bufferPolicy = null;
+  this._observes = null;
 }
 
 TaskProperty.prototype = Object.create(ComputedProperty.prototype);
@@ -28,7 +29,15 @@ Object.assign(TaskProperty.prototype, {
   restartable() {
     this._bufferPolicy = cancelAllButLast;
     return this;
-  }
+  },
+  observes(...deps) {
+    this._observes = deps;
+    return this;
+  },
+  setup(proto, taskName) {
+    registerOnPrototype(Ember.addObserver, proto, this._observes, taskName, 'perform', true);
+  },
+
 });
 
 let priv = new WeakMap();
@@ -109,6 +118,25 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
   owner.willDestroy.__ember_processes_destroyers__.push(() => {
     object[cleanupMethodName]();
   });
+}
+function registerOnPrototype(addListenerOrObserver, proto, names, taskName, taskMethod, once) {
+  if (names) {
+    for (let i = 0; i < names.length; ++i) {
+      let name = names[i];
+      addListenerOrObserver(proto, name, null, makeTaskCallback(taskName, taskMethod, once));
+    }
+  }
+}
+function makeTaskCallback(taskName, method, once) {
+  return function() {
+    let task = this.get(taskName);
+
+    if (once) {
+      Ember.run.scheduleOnce('actions', task, method, ...arguments);
+    } else {
+      task[method].apply(task, arguments);
+    }
+  };
 }
 
 function cancelAllButLast(task, privTask) {

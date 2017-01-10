@@ -168,3 +168,19 @@ test('can use derived state', function(assert) {
     assert.equal(object.get('message'), 'nope', 'final state');
   });
 });
+
+test('can perform tasks based on observation', function(assert) {
+  let Class = Ember.Object.extend({
+    hello: task(function * () {
+      assert.log("ok");
+    }).observes('foo')
+  });
+  let object = Class.create();
+
+  Ember.run(() => {
+    object.set('foo', 'bar');
+  });
+
+  assert.logEquals(['ok']);
+
+});
