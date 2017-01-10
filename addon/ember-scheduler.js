@@ -77,7 +77,7 @@ class Task {
         });
       }
     });
-    return instance;
+    return rsvpIfy(instance);
   }
   cancelAll() {
     priv.get(this).instances.forEach(i => stop(i));
@@ -171,4 +171,10 @@ function * withRunLoop(generator) {
       fulfilled = false;
     }
   }
+}
+
+function rsvpIfy(promise) {
+  let p = Ember.RSVP.Promise.resolve(promise);
+  p.__ec_cancel__ = promise.__ec_cancel__;
+  return p;
 }

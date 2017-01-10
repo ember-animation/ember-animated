@@ -7,7 +7,23 @@ import { Promise, microwait } from 'ember-animated/concurrency-helpers';
 module("Unit | scheduler Ember layer", {
   beforeEach(assert) {
     installLogging(assert);
+    assert.insideRunLoop = function(message) {
+      let result = insideRunLoop();
+      this.pushResult({
+        result,
+        actual: result ? 'no exception thrown' : 'autorun exception thrown',
+        expected: 'no exception thrown',
+        message
+      });
+    }
   }
+});
+
+test('sanity check the runloop assertion', function(assert) {
+  assert.ok(!insideRunLoop(), 'should be not inside');
+  Ember.run(() => {
+    assert.ok(insideRunLoop(), 'should be inside');
+  });
 });
 
 test('task starts synchronously and sets on self', function(assert) {
@@ -73,15 +89,12 @@ test('perform resolves appropriately', function(assert) {
   });
 });
 
-test('can set an observable property on self after yield', function(assert) {
+test('still in run loop after yield', function(assert) {
   let resolve;
   let Class = Ember.Object.extend({
     hello: task(function * () {
       yield new Promise(r => resolve = r);
-      this.set('foo', 'bar');
-    }),
-    baz: Ember.computed('foo', function() {
-      return this.get('foo') + 'baz';
+      assert.insideRunLoop();
     })
   });
   let object = Class.create();
@@ -92,9 +105,7 @@ test('can set an observable property on self after yield', function(assert) {
   setTimeout(() => {
     resolve();
   }, 0);
-  return promise.then(() => {
-    assert.equal(object.get('baz'), 'barbaz');
-  });
+  return promise;
 });
 
 test('task is canceled when object is destroyed', function(assert) {
@@ -202,3 +213,58 @@ test('returns final value from generator function', function(assert) {
   });
 
 });
+
+test('task promise resolves inside run loop', function(assert) {
+  let Class = Ember.Object.extend({
+    hello: task(function * () {})
+  });
+  let object = Class.create();
+  let promise;
+  Ember.run(() => {
+    promise = object.get('hello').perform();
+  });
+  return promise.then(() => {
+    assert.insideRunLoop();
+  });
+});
+
+test('nested performs are cancelable', function(assert) {
+  let Class = Ember.Object.extend({
+    outer: task(function * () {
+      try {
+        yield this.get('inner').perform();
+      } finally {
+        assert.log('leaving outer');
+      }
+    }),
+    inner: task(function * () {
+      let p = new Promise(() => null);
+      p.__ec_cancel__ = () => assert.log('canceled');
+      try {
+        yield p;
+      } finally {
+        assert.log('leaving inner');
+      }
+    })
+  });
+  let object = Class.create();
+
+  Ember.run(() => {
+    object.get('outer').perform();
+    object.get('outer').cancelAll();
+  });
+  assert.logEquals(['canceled', 'leaving inner', 'leaving outer']);
+});
+
+
+function insideRunLoop() {
+  try {
+    Ember.run.cancel(Ember.run.schedule('actions', function() {}));
+    return true;
+  } catch(err) {
+    if (!/autorun/.test(err.message)) {
+      throw err;
+    }
+    return false;
+  }
+}

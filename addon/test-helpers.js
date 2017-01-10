@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import RSVP from 'rsvp';
 import { clock, rAF } from './concurrency-helpers';
-import { task } from 'ember-concurrency';
+import { task } from './ember-scheduler';
 import Motion from './motion';
 import Sprite from './sprite';
 
@@ -24,8 +24,7 @@ export function waitForAnimations() {
   Ember.run(() => {
     idle = Ember.getOwner(this).lookup('service:-ea-motion').get('waitUntilIdle').perform();
   });
-  // Wrapping in RSVP here so that people chaining off of us stay within a run loop.
-  return Ember.RSVP.Promise.resolve(idle);
+  return idle;
 }
 
 let origNow = clock.now;
