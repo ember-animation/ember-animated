@@ -119,6 +119,7 @@ class MicroRoutine {
     });
     microRoutines.set(this.promise, this);
     this.promise.__ec_cancel__ = this.stop.bind(this);
+    this.stopped = false;
     if (linked) {
       let parent = ensureCurrent('spawnChild');
       parent.linked.push(this);
@@ -129,6 +130,7 @@ class MicroRoutine {
     this.wake('fulfilled', undefined);
   }
   wake(state, value) {
+    if (this.stopped) { return; }
     try {
       if (state === 'fulfilled') {
         this.state = withCurrent(this, () => this.generator.next(value));
@@ -162,6 +164,7 @@ class MicroRoutine {
     }
   }
   stop() {
+    this.stopped = true;
     if (isPromise(this.state.value) && typeof this.state.value.__ec_cancel__ === 'function') {
       this.state.value.__ec_cancel__();
     }

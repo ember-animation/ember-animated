@@ -235,6 +235,49 @@ test('can be stopped', function(assert) {
   });
 });
 
+test('does not continue if a promise resolves after stop', function(assert) {
+  return spawn(function * () {
+    let resolve;
+    let task = spawn(function * () {
+      try {
+        yield new Promise(r => resolve = r);
+        assert.ok(false, "should never get here (1)");
+      } catch(err) {
+        assert.equal(err.message, 'TaskCancelation');
+        // Here we attempt to keep going after being canceled. Even
+        // when our promise resolves, the runtime should refuse to
+        // reenter our generator.
+        yield new Promise(r => r());
+        assert.ok(false, "should never get here (2)");
+      }
+      assert.ok(false, "should never get here (3)");
+    });
+    stop(task);
+    resolve();
+    yield microwait();
+    assert.ok(true, 'got to end');
+  });
+});
+
+test('promise returned from spawn does not resolve if an inner promise resolves after stop', function(assert) {
+  return spawn(function * () {
+    spawn(function * () {
+      let resolve;
+      let task = spawn(function * () {
+        yield new Promise(r => resolve = r);
+      });
+      stop(task);
+      resolve();
+      yield task;
+      assert.ok(false, "should never get here");
+    });
+    yield microwait();
+    assert.ok(true, 'got to end');
+  });
+});
+
+
+
 test('can access self', function(assert) {
   return spawn(function * () {
     let innerTask;
