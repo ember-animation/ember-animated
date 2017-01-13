@@ -3,6 +3,7 @@ import Resize from '../motions/resize';
 import { task } from '../ember-scheduler';
 import Sprite from '../sprite';
 import { emptyBounds } from '../bounds';
+import { afterRender } from '../concurrency-helpers';
 
 export default Ember.Component.extend({
   classNames: ['animated-container'],
@@ -58,6 +59,8 @@ export default Ember.Component.extend({
     } else {
       useMotion = this.get('onInitialRender');
     }
+
+    yield afterRender();
 
     yield * service.staticMeasurement(() => {
       if (!sprite) {
