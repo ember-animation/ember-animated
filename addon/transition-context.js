@@ -1,4 +1,7 @@
-import { spawn, fork, logErrors } from './micro-routines';
+import {
+  spawnChild,
+  childrenSettled
+} from './scheduler';
 
 
 export default class TransitionContext {
@@ -26,7 +29,7 @@ export default class TransitionContext {
       motion.duration = this.duration;
     }
     let self = this;
-    fork(function * () {
+    return spawnChild(function *() {
       self.onMotionStart(motion.sprite);
       try {
         yield * motion._run();
@@ -34,21 +37,9 @@ export default class TransitionContext {
         self.onMotionEnd(motion.sprite);
       }
     });
-    return motion._promise;
   }
-  _runToCompletion(transition) {
-    let self = this;
-    return spawn(function * () {
-      logErrors(onError);
-      yield * transition.call(self)
-    });
-  }
-}
-
-function onError(reason) {
-  if (reason.name !== 'TaskCancelation') {
-    setTimeout(function() {
-      throw reason;
-    }, 0);
+  *_runToCompletion(transition) {
+    yield * transition.call(this);
+    yield childrenSettled();
   }
 }

@@ -282,7 +282,7 @@ export default Ember.Component.extend({
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);
     context.onMotionEnd = sprite => this._motionEnded(sprite, cycle);
 
-    yield context._runToCompletion(transition);
+    yield * context._runToCompletion(transition);
 
     // The following cleanup ensures that all the sprites that will
     // stay on the page after our animation are unlocked and
