@@ -58,13 +58,13 @@ export default class Motion {
         this.interrupted(others);
       }
       yield * this.animate();
+      this._resolve();
     } catch (err) {
       if (err.message !== 'TaskCancelation') {
         this._reject(err);
       }
       throw err;
     } finally {
-      this._resolve();
       rAF().then(() => this._clearMotionList());
     }
   }
