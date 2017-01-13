@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import layout from '../templates/components/animated-each';
 import { task } from '../ember-scheduler';
+import { current } from '../scheduler';
 import { afterRender } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
@@ -206,7 +207,7 @@ export default Ember.Component.extend({
     }
 
     this.get('motionService').willAnimate({
-      task: this.get('animate.last'),
+      task: current(),
       duration: this.get('durationWithDefault')
     });
 
