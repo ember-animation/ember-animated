@@ -5,6 +5,8 @@ import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/ember-scheduler';
 import { current } from 'ember-animated/scheduler';
 import Motion from 'ember-animated/motion';
+import { afterRender } from 'ember-animated/concurrency-helpers';
+
 import {
   macroWait,
   waitForAnimations
@@ -25,6 +27,9 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
         here.set('fakeAnimator', this);
         this.get('motionService').register(this);
       },
+      willDestroyElement() {
+        this.get('motionService').unregister(this);
+      },
       didInsertElement() {
         if (this.onInitialRender) {
           this.get('animate').perform(this.onInitialRender);
@@ -36,6 +41,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
       endStaticMeasurement() {
         this.$().height(this.initialHeight);
       },
+      isAnimating: Ember.computed.alias('animate.isRunning'),
       animate: task(function * (opts={}) {
 
         // In a typical well-behaved animation, the static height *is*
@@ -53,6 +59,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
           duration: opts.duration == null ? 1 : opts.duration,
           task: current()
         });
+        yield afterRender();
         yield * service.staticMeasurement(() => {})
         this.$().height(this.finalHeight);
         if (opts.block) {
@@ -150,9 +157,12 @@ test('measures at the appropriate time', function(assert) {
 
 test('unlocks only after own motion is done', function(assert) {
   let finishMotion;
+  let startMotion;
+  let startedMotion = new Ember.RSVP.Promise(resolve => startMotion = resolve);
 
   this.set('TestMotion', class extends Motion {
     *animate() {
+      startMotion();
       yield new Ember.RSVP.Promise(resolve => {
         finishMotion = resolve;
       });
@@ -174,7 +184,7 @@ test('unlocks only after own motion is done', function(assert) {
       finalHeight: 300
     });
   });
-  return macroWait().then(() => {
+  return startedMotion.then(() => {
     assert.equal(height(this.$('.animated-container')), 100, "still at previous height");
     finishMotion();
     return this.waitForAnimations();
