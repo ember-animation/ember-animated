@@ -16,8 +16,8 @@ export function task(...args) {
 
 function TaskProperty(taskFn) {
   let tp = this;
-  ComputedProperty.call(this, function() {
-    return new Task(this, taskFn, tp);
+  ComputedProperty.call(this, function(name) {
+    return new Task(this, taskFn, tp, name);
   });
   this._bufferPolicy = null;
   this._observes = null;
@@ -43,12 +43,13 @@ Object.assign(TaskProperty.prototype, {
 let priv = new WeakMap();
 
 class Task {
-  constructor(context, implementation, taskProperty) {
+  constructor(context, implementation, taskProperty, name) {
     priv.set(this, {
       context,
       implementation,
       instances: [],
-      taskProperty
+      taskProperty,
+      name
     });
     this.concurrency = 0;
     this.isRunning = false;
