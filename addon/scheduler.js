@@ -168,7 +168,7 @@ class MicroRoutine {
     if (isPromise(this.state.value) && typeof this.state.value.__ec_cancel__ === 'function') {
       this.state.value.__ec_cancel__();
     }
-    cancelGenerator(this.generator);
+    withCurrent(this, () => cancelGenerator(this.generator));
     this.linked.forEach(microRoutine => {
       microRoutine.stop();
     });

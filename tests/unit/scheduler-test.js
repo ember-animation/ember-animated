@@ -288,6 +288,48 @@ test('can access self', function(assert) {
   });
 });
 
+test('can access self after resolved yield', function(assert) {
+  return spawn(function * () {
+    let innerTask;
+    let task = spawn(function * () {
+      yield new Promise(r => r());
+      innerTask = current();
+    });
+    yield microwait();
+    assert.equal(innerTask, task);
+  });
+});
+
+test('can access self after rejected yield', function(assert) {
+  return spawn(function * () {
+    let innerTask;
+    let task = spawn(function * () {
+      try {
+        yield new Promise((resolve, reject) => reject());
+      } catch(err) {
+        innerTask = current();
+      }
+    });
+    yield microwait();
+    assert.equal(innerTask, task);
+  });
+});
+
+test('can access self during cancelation', function(assert) {
+  return spawn(function * () {
+    let innerTask;
+    let task = spawn(function * () {
+      try {
+        yield new Promise(() => null);
+      } finally {
+        innerTask = current();
+      }
+    });
+    stop(task);
+    assert.equal(innerTask, task);
+  });
+});
+
 test('can stop self', function(assert) {
   return spawn(function * () {
     spawn(function * () {
