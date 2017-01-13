@@ -181,5 +181,5 @@ function rsvpIfy(promise) {
 
 
 export function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Ember.RSVP.Promise(resolve => setTimeout(resolve, ms));
 }
