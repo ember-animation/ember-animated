@@ -80,6 +80,7 @@ export default class Sprite {
       this._revealed = predecessor._revealed;
       this._transform = predecessor.transform;
       this._imposedStyle = predecessor._imposedStyle;
+      this._collapsingChildren = predecessor._collapsingChildren;
       this._lockMode = predecessor._lockMode;
       if (lockMode !== predecessor._lockMode) {
         throw new Error(`probable bug in ember-animated: can't change lock mode from ${predecessor._lockMode} to ${lockMode}`);
@@ -90,6 +91,7 @@ export default class Sprite {
       this._revealed = null;
       this._transform = null;
       this._imposedStyle = null;
+      this._collapsingChildren = null;
       this._lockMode = lockMode;
       if (lockMode === 'position') {
         this._rememberPosition();
@@ -287,6 +289,8 @@ export default class Sprite {
       this._transform = this.transform.mult(new Transform(1, 0, 0, 1, tx, ty));
       this._imposedStyle.transform = this.transform.serialize();
     }
+
+    this._collapsingChildren = collapsedChildren(this.element, computedStyle, 'Top');
   }
 
   _cacheOriginalStyles() {
@@ -376,18 +380,15 @@ export default class Sprite {
   }
 
   _handleMarginCollapse() {
-    let element = this.element;
-    let cs = getComputedStyle(element);
-
-    for (let [ descendant ] of collapsedChildren(element, cs, 'Top')) {
-      $(descendant).addClass('ember-animated-top-collapse');
+    let children = this._collapsingChildren;
+    for (let i = 0; i < children.length; i++) {
+      children[i].classList.add('ember-animated-top-collapse');
     }
   }
   _clearMarginCollapse() {
-    let element = this.element;
-    let cs = getComputedStyle(element);
-    for (let [ descendant ] of collapsedChildren(element, cs, 'Top')) {
-      $(descendant).removeClass('ember-animated-top-collapse');
+    let children = this._collapsingChildren;
+    for (let i = 0; i < children.length; i++) {
+      children[i].classList.remove('ember-animated-top-collapse');
     }
   }
   startAt(otherSprite) {

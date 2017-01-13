@@ -1,10 +1,10 @@
 // takes an element, the element's computed style, and either 'Top' or
 // 'Bottom'.
 //
-// yields [Element, ComputedStyle] for increasingly deep descendants
+// returns list of Element for increasingly deep descendants
 // of the given element whose top (or bottom) margin collapses with
 // the given element's.
-export function *collapsedChildren(element, cs, which) {
+export function collapsedChildren(element, cs, which, children=[]) {
   // margin collapse only happens if we have no border or padding
   if (cs[`border${which}Width`] === '0px' && cs[`padding${which}`] === '0px') {
     let block;
@@ -15,10 +15,11 @@ export function *collapsedChildren(element, cs, which) {
     }
     if (block) {
       let [ child, childCS ] = block;
-      yield block;
-      yield * collapsedChildren(child, childCS, which);
+      children.push(child);
+      collapsedChildren(child, childCS, which, children);
     }
   }
+  return children;
 }
 
 function firstChildBlock(element) {
