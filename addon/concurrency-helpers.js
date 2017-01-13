@@ -16,21 +16,38 @@ if (window.Promise) {
 // resolve on the microtask queue, because Ember schedules them inside
 // backburner.
 export function rAF() {
-  if (typeof requestAnimationFrame === 'undefined') {
-    throw new Error("missing requestAnimationFrame");
-  } else {
-    let frame;
-    let promise = new Promise(resolve => {
-      frame = requestAnimationFrame(function(clock) {
-        currentFrameClock = clock;
-        resolve();
-      });
-    });
-    promise.__ec_cancel__ = () => cancelAnimationFrame(frame);
-    return promise;
+  if (!nextFrame) {
+    nextFrame = requestAnimationFrame(rAFDidFire);
+  }
+  let promise = new Promise(resolve => {
+    nextFrameWaiters.push(resolve);
+  });
+  promise.__ec_cancel__ = removeWaiter.bind(promise);
+  return promise;
+}
+
+function rAFDidFire(clock) {
+  nextFrame = null;
+  currentFrameClock = clock;
+  let waiters = nextFrameWaiters;
+  nextFrameWaiters = [];
+  for (let i = 0; i < waiters.length; i++) {
+    waiters[i]();
   }
 }
 
+function removeWaiter() {
+  let index = nextFrameWaiters.indexOf(this);
+  if (index > -1) {
+    nextFrameWaiters.splice(index, 1);
+  }
+}
+
+let nextFrame;
+let nextFrameWaiters = [];
+if (typeof requestAnimationFrame === 'undefined') {
+  throw new Error("missing requestAnimationFrame");
+}
 
 // rAF guarantees that callbacks within the same frame will see the
 // same clock. We stash it here so that arbitrary code can easily ask
