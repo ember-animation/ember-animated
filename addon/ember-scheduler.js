@@ -91,7 +91,7 @@ class Task {
     let instances = priv.get(this).instances;
     instances.splice(instances.indexOf(i), 1);
     set(this, 'concurrency', this.concurrency - 1);
-    set(this, 'isRunning', this.concurrency > 1);
+    set(this, 'isRunning', this.concurrency > 0);
   }
 }
 
