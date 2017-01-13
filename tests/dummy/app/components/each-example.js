@@ -58,7 +58,14 @@ export default Ember.Component.extend({
       let items = this.get('items');
       this.currentSort = random;
       this.set('items', items.slice().sort(this.currentSort));
+    },
+    startChaos() {
+      this.get('chaos').perform(true);
+    },
+    stopChaos() {
+      this.get('chaos').perform(false);
     }
+
   }
 });
 

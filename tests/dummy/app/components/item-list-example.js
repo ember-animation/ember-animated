@@ -1,5 +1,6 @@
 import Ember from 'ember';
-import { task } from 'ember-concurrency';
+import { task } from 'ember-animated/ember-scheduler';
+import { current } from 'ember-animated/scheduler';
 
 export default Ember.Component.extend({
   motionService: Ember.inject.service('-ea-motion'),
@@ -19,7 +20,7 @@ export default Ember.Component.extend({
   }),
   addItem: task(function * () {
     this.get('motionService').willAnimate({
-      task: this.get('addItem.last'),
+      task: current,
       duration: this.get('duration')
     });
     let items = this.get('items');
@@ -27,12 +28,20 @@ export default Ember.Component.extend({
   }),
   removeItem: task(function * (which) {
     this.get('motionService').willAnimate({
-      task: this.get('removeItem.last'),
+      task: current,
       duration: this.get('duration')
     });
     let items = this.get('items');
     this.set('items', items.filter(i => i !== which));
-  })
+  }),
+  actions: {
+    addItem() {
+      this.get('addItem').perform();
+    },
+    removeItem(which) {
+      this.get('removeItem').perform(which);
+    }
+  }
 });
 
 function numeric(a,b) { return a.id - b.id; }
