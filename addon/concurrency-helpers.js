@@ -44,7 +44,7 @@ export function microwait() {
 
 export function afterRender() {
   let ticket;
-  let promise = new RSVP.Promise(resolve => {
+  let promise = new Promise(resolve => {
     ticket = Ember.run.scheduleOnce('afterRender', resolve);
   });
   promise.__ec_cancel__ = () => {
