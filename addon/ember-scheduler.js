@@ -154,16 +154,27 @@ function * withRunLoop(generator) {
   let fulfilled = true;
   while (true) {
     Ember.run.join(() => {
-      if (fulfilled) {
-        state = generator.next(nextValue);
-      } else {
-        state = generator.throw(nextValue);
+      try {
+        if (fulfilled) {
+          state = generator.next(nextValue);
+        } else {
+          state = generator.throw(nextValue);
+        }
+      } catch (err) {
+        state = {
+          threw: err
+        }
       }
     });
 
     if (state.done) {
       return state.value;
     }
+
+    if (state.threw) {
+      throw state.threw;
+    }
+
     try {
       nextValue = yield state.value;
       fulfilled = true;
