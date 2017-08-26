@@ -1,12 +1,12 @@
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 8,
+    ecmaVersion: 2017,
     sourceType: 'module'
   },
   extends: 'eslint:recommended',
   env: {
-    'browser': true
+    browser: true
   },
   rules: {
     'no-constant-condition': ["error", { checkLoops: false }],

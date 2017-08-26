@@ -6,35 +6,10 @@ var path = require('path');
 var mergeTrees = require('broccoli-merge-trees');
 var Funnel = require('broccoli-funnel');
 
-function modernFeatures() {
-  if (process.env.MODERN_BROWSER) {
-    return [
-      'es6.forOf',
-      'regenerator',
-      'es6.arrowFunctions',
-      'es6.constants',
-      'es6.blockScoping',
-      'es6.templateLiterals',
-      'es6.classes'
-    ];
-  } else {
-    return [];
-  }
-}
-
 module.exports = {
   name: 'ember-animated',
 
-  modernFeatures: modernFeatures,
-
-  options: {
-    babel: {
-      blacklist: modernFeatures()
-    }
-  },
-
-
-  init: function() {
+  init() {
     if (this._super.init) {
       this._super.init.apply(this, arguments);
     }
@@ -65,16 +40,14 @@ module.exports = {
     }
   },
 
-  treeForAddon: function() {
-    var tree = this._super.treeForAddon.apply(this, arguments);
+  treeForAddon: function(tree) {
     tree = this._versionSpecificTree('addon', tree);
     if (!this._shouldIncludeTestHelpers) {
-
       tree = new Funnel(tree, {
         exclude: ['modules/ember-animated/test-helpers.js']
       });
     }
-    return tree;
+    return this._super.treeForAddon.call(this, tree);
   },
 
   treeForAddonTemplates: function() {
@@ -112,7 +85,7 @@ module.exports = {
       destDir = 'version-specific';
       include = ["*.hbs"];
     } else {
-      destDir = 'modules/ember-animated/ember-internals/version-specific';
+      destDir = 'ember-internals/version-specific';
     }
     var funneled = new Funnel(versionSpecificPath, {
       include: include,
