@@ -76,7 +76,7 @@ test("simple motion", function(assert) {
 
   let done = assert.async();
   Ember.run(() => {
-    tester.run(s, { duration: 60 }).finally(done);
+    tester.run(s, { duration: 60 }).then(done, done);
     time.advance(60);
   });
 });

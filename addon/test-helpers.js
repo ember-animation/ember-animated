@@ -24,7 +24,7 @@ export function waitForAnimations() {
   Ember.run(() => {
     idle = Ember.getOwner(this).lookup('service:-ea-motion').get('waitUntilIdle').perform();
   });
-  return idle;
+  return Ember.RSVP.resolve(idle);
 }
 
 let origNow = clock.now;

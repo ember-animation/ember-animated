@@ -214,7 +214,7 @@ test('returns final value from generator function', function(assert) {
 
 });
 
-test('task promise resolves inside run loop', function(assert) {
+test('task promise exposes microtask timing, not ember run loop', function(assert) {
   let Class = Ember.Object.extend({
     hello: task(function * () {})
   });
@@ -224,7 +224,7 @@ test('task promise resolves inside run loop', function(assert) {
     promise = object.get('hello').perform();
   });
   return promise.then(() => {
-    assert.insideRunLoop();
+    assert.ok(!insideRunLoop());
   });
 });
 

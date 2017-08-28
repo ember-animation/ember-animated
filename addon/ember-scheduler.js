@@ -61,7 +61,7 @@ class Task {
     let implementation = privSelf.implementation;
     let policy = privSelf.taskProperty._bufferPolicy;
     cleanupOnDestroy(context, this, 'cancelAll');
-    let instance = spawn(function * () {
+    return spawn(function * () {
       try {
         self._addInstance(current());
         if (policy) {
@@ -78,7 +78,6 @@ class Task {
         });
       }
     });
-    return rsvpIfy(instance);
   }
   cancelAll() {
     priv.get(this).instances.forEach(i => stop(i));
@@ -184,13 +183,6 @@ function * withRunLoop(generator) {
     }
   }
 }
-
-function rsvpIfy(promise) {
-  let p = Ember.RSVP.Promise.resolve(promise);
-  p.__ec_cancel__ = promise.__ec_cancel__;
-  return p;
-}
-
 
 export function timeout(ms) {
   return new Ember.RSVP.Promise(resolve => setTimeout(resolve, ms));
