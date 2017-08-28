@@ -193,26 +193,17 @@ test('unlocks only after own motion is done', function(assert) {
   });
 });
 
-// This is failing due to https://github.com/machty/ember-concurrency/pull/109
-skip('unlocks only after animator\'s motion is done', function(assert) {
+test('unlocks only after animator\'s motion is done', function(assert) {
   let unblock;
   let block = new Ember.RSVP.Promise(resolve => unblock = resolve);
 
-  this.set('TestMotion', class extends Motion {
-    *animate() {}
-  });
-
   this.render(hbs`
-    {{#animated-container motion=TestMotion}}
+    {{#animated-container}}
       <div class="inside">
         {{fake-animator}}
       </div>
     {{/animated-container}}
   `);
-
-  this.$('.inside').css({
-    height: 200
-  });
 
   Ember.run(() => {
     this.get('fakeAnimator.animate').perform({
@@ -224,11 +215,11 @@ skip('unlocks only after animator\'s motion is done', function(assert) {
   });
 
   return macroWait().then(() => {
-    assert.equal(height(this.$('.animated-container')), 100, "still at previous height");
+    assert.equal(height(this.$('.animated-container')), 200, "should be locked at the static height we measured");
     unblock();
     return macroWait();
   }).then(() => {
-    assert.equal(height(this.$('.animated-container')), 300, "now at final height");
+    assert.equal(height(this.$('.animated-container')), 300, "unlocked and reflecting the actual final height of the animator");
   });
 });
 
