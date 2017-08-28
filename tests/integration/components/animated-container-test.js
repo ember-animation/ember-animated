@@ -276,7 +276,10 @@ test('can animate initial render', function(assert) {
   });
 });
 
-// I think this is failing due to https://github.com/machty/ember-concurrency/pull/109
+// We want the container locked during initial render even if the
+// *container* is not animating, because stuff inside the container
+// *may* be animating, and that stuff wants to rely on the container
+// being positioned.
 skip('locks on initial render even when not animating', function(assert) {
   let unblock;
   let block = new Ember.RSVP.Promise(resolve => unblock = resolve);
