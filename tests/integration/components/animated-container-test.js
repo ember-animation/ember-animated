@@ -1,4 +1,4 @@
-import { moduleForComponent, test, skip } from 'ember-qunit';
+import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
@@ -275,44 +275,6 @@ test('can animate initial render', function(assert) {
     assert.equal(height(this.$('.animated-container')), 200, 'ends up unlocked');
   });
 });
-
-// We want the container locked during initial render even if the
-// *container* is not animating, because stuff inside the container
-// *may* be animating, and that stuff wants to rely on the container
-// being positioned.
-skip('locks on initial render even when not animating', function(assert) {
-  let unblock;
-  let block = new Ember.RSVP.Promise(resolve => unblock = resolve);
-  let motionRan = false;
-
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      motionRan = true;
-    }
-  });
-
-  this.set('opts', {
-    initialHeight: 0,
-    staticHeight: 100,
-    finalHeight: 200,
-    block
-  });
-  this.render(hbs`
-    {{#animated-container motion=TestMotion}}
-      {{fake-animator onInitialRender=opts}}
-    {{/animated-container}}
-  `);
-
-  return macroWait().then(() => {
-    assert.equal(height(this.$('.animated-container')), 0, 'initial height');
-    unblock();
-    return this.waitForAnimations();
-  }).then(() => {
-    assert.equal(height(this.$('.animated-container')), 200, 'ends up unlocked');
-    assert.ok(!motionRan, 'motion did not run');
-  });
-});
-
 
 test("Accounts for top margin collapse between self and child", function(assert) {
   this.render(hbs`
