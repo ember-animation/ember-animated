@@ -37,12 +37,15 @@ export default class Resize extends Motion {
       ).plus(this.prior.heightTween);
     }
 
-    while (!this.widthTween.done || !this.heightTween.done) {
+    while (true) {
       yield rAF();
       sprite.applyStyles({
         width:this.widthTween.currentValue,
         height: this.heightTween.currentValue
       });
+      if (this.widthTween.done && this.heightTween.done) {
+        break;
+      }
     }
   }
 }

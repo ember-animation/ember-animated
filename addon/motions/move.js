@@ -77,12 +77,15 @@ export default class Move extends Motion {
       this.yTween = new Tween(transformDiffY, transformDiffY + dy, durationY).plus(this.prior.yTween);
     }
 
-    while (!this.xTween.done || !this.yTween.done) {
+    while (true) {
       yield rAF();
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
         this.yTween.currentValue - sprite.transform.ty
       );
+      if (this.xTween.done && this.yTween.done) {
+        break;
+      }
     }
   }
 }
