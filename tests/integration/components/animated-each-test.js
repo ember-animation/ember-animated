@@ -162,3 +162,87 @@ test('it animates when a watched property is mutated', function(assert) {
     assert.equal(transitionCounter, 2, 'transitionCounter');
   });
 });
+
+test('it can match sprites that are leaving another component', function(assert){
+  assert.expect(5);
+
+  this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
+  this.set('rightItems', A([]));
+
+  this.set('leftTransition', function * () {
+    assert.equal(this.insertedSprites.length, 3, "first transition");
+  });
+
+  this.set('rightTransition', function * () {
+    throw new Error("unexpected transition");
+  });
+
+  this.render(hbs`
+    {{#animated-each leftItems use=leftTransition key="id" as |item|}}
+      <div class="test-child">{{item.id}}</div>
+    {{/animated-each}}
+    {{#animated-each rightItems use=rightTransition key="id" as |item|}}
+      <div class="test-child">{{item.id}}</div>
+    {{/animated-each}}
+  `);
+  return this.waitForAnimations().then(() => {
+
+    this.set('leftTransition', function * () {
+      assert.equal(this.keptSprites.length, 2, "left kept");
+      assert.equal(this.removedSprites.length, 0, "none in removed, because it was captured by the other component");
+    });
+
+    this.set('rightTransition', function * () {
+      assert.equal(this.insertedSprites.length, 1, "right inserted");
+      assert.ok(this.matchFor(this.insertedSprites[0]), "found matching old sprite");
+    });
+
+    this.set('leftItems', A([{ id: 'a'}, {id: 'c'}]));
+    this.set('rightItems', A([{id: 'b'}, ]));
+    return this.waitForAnimations();
+  });
+});
+
+test('it can match sprites that are leaving a destroyed component', function(assert) {
+  assert.expect(3);
+
+  this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
+  this.set('rightItems', A([{id: 'b'}, ]));
+
+  this.set('leftTransition', function * () {
+    assert.equal(this.insertedSprites.length, 3, "first transition");
+  });
+
+  this.set('rightTransition', function * () {
+    throw new Error("unexpected right transition");
+  });
+
+  this.set('leftAlive', true);
+
+  this.render(hbs`
+    {{#if leftAlive}}
+      {{#animated-each leftItems use=leftTransition key="id" as |item|}}
+        <div class="test-child">{{item.id}}</div>
+      {{/animated-each}}
+    {{else}}
+      {{#animated-each rightItems use=rightTransition key="id" as |item|}}
+        <div class="test-child">{{item.id}}</div>
+      {{/animated-each}}
+    {{/if}}
+  `);
+  return this.waitForAnimations().then(() => {
+
+    this.set('leftTransition', function * () {
+      throw new Error("unexpected left transition");
+    });
+
+    this.set('rightTransition', function * () {
+      assert.equal(this.insertedSprites.length, 1, "right inserted");
+      assert.ok(this.matchFor(this.insertedSprites[0]), "found matching old sprite");
+    });
+
+    this.set('leftAlive', false);
+    return this.waitForAnimations();
+  });
+
+});

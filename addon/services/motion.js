@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { task } from '../ember-scheduler';
-import { microwait, rAF } from '../concurrency-helpers';
+import { microwait, rAF, afterRender } from '../concurrency-helpers';
 
 export default Ember.Service.extend({
   init() {
@@ -64,6 +64,7 @@ export default Ember.Service.extend({
       // used by matchDestroyed because it gets called earlier in the
       // render cycle, so it needs to linger longer in order to
       // coincide with other farMatches.
+      yield afterRender();
       yield microwait();
     }
 
