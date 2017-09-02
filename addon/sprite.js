@@ -19,7 +19,7 @@ import Transform, {
 } from './transform';
 import { continueMotions } from './motion';
 import { collapsedChildren } from './margin-collapse';
-import { shiftedBounds, relativeBounds } from './bounds';
+import { shiftedBounds, relativeBounds, scaledBounds } from './bounds';
 
 const inFlight = new WeakMap();
 
@@ -375,9 +375,20 @@ export default class Sprite {
     let t = this.transform.mult(new Transform(1, 0, 0, 1, dx, dy));
     this._transform = t;
     this.applyStyles({
-      transform: t.serialize()
+      transform: t.serialize(),
+      transformOrigin: '0 0'
     });
   }
+
+  scale(scaleX, scaleY) {
+    let t = this.transform.mult(new Transform(scaleX, 0, 0, scaleY, 0, 0));
+    this._transform = t;
+    this.applyStyles({
+      transform: t.serialize(),
+      transformOrigin: '0 0'
+    });
+  }
+
 
   _handleMarginCollapse() {
     let children = this._collapsingChildren;
@@ -411,6 +422,13 @@ export default class Sprite {
   }
   endRelativeTo(otherSprite) {
     this.endTranslatedBy(otherSprite.finalBounds.left - otherSprite.initialBounds.left, otherSprite.finalBounds.top - otherSprite.initialBounds.top);
+  }
+  startScaledTo(otherSprite) {
+    let scaleX = otherSprite.initialBounds.width / this.finalBounds.width;
+    let scaleY = otherSprite.initialBounds.height / this.finalBounds.height;
+    continueMotions(otherSprite.element, this.element);
+    this.initialBounds = scaledBounds(this.initialBounds, scaleX, scaleY);
+    this.scale(scaleX, scaleY);
   }
 }
 

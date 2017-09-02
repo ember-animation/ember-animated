@@ -25,3 +25,16 @@ export const emptyBounds = {
 };
 
 Object.freeze(emptyBounds);
+
+export function scaledBounds(bounds, scaleX, scaleY) {
+  let width = bounds.width * scaleX;
+  let height = bounds.height * scaleY;
+  return {
+    top: bounds.top,
+    bottom: bounds.top + height,
+    left: bounds.left,
+    right: bounds.left + width,
+    width,
+    height
+  }
+}
