@@ -72,7 +72,7 @@ export default class Transform {
 // The optimization should be worthwhile because the majority of
 // things start out with no preexisting Transform, which we can
 // represent as `identity`, which will make identity.mult(something) a
-// no-nop, etc.
+// no-op, etc.
 export const identity = new Transform(1, 0, 0, 1, 0, 0);
 
 const matrixPattern = /matrix\((.*)\)/;
