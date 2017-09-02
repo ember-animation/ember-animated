@@ -53,8 +53,14 @@
     transform: translateZ(0);
 }
 
+.hero-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .hero-list > div {
     cursor: pointer;
+    margin: 10px;
 }
 
 .hero-list img {
