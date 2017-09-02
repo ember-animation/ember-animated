@@ -57,7 +57,8 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
         let service = this.get('motionService');
         service.willAnimate({
           duration: opts.duration == null ? 1 : opts.duration,
-          task: current()
+          task: current(),
+          component: this
         });
         yield afterRender();
         yield * service.staticMeasurement(() => {})

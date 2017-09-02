@@ -208,7 +208,8 @@ export default Ember.Component.extend({
 
     this.get('motionService').willAnimate({
       task: current(),
-      duration: this.get('durationWithDefault')
+      duration: this.get('durationWithDefault'),
+      component: this
     });
 
     currentSprites.forEach(sprite => sprite.lock());

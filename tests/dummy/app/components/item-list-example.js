@@ -21,7 +21,8 @@ export default Ember.Component.extend({
   addItem: task(function * () {
     this.get('motionService').willAnimate({
       task: current,
-      duration: this.get('duration')
+      duration: this.get('duration'),
+      component: this
     });
     let items = this.get('items');
     this.set('items', items.concat([makeRandomItem()]).sort(this.currentSort).map(elt => ({ id: elt.id })));
@@ -29,7 +30,8 @@ export default Ember.Component.extend({
   removeItem: task(function * (which) {
     this.get('motionService').willAnimate({
       task: current,
-      duration: this.get('duration')
+      duration: this.get('duration'),
+      component: this
     });
     let items = this.get('items');
     this.set('items', items.filter(i => i !== which));

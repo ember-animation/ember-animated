@@ -79,11 +79,10 @@ export default Ember.Service.extend({
     return matches;
   }),
 
-  willAnimate(message) {
-    // TODO narrow down the messaging based on DOM containment.
+  willAnimate({ task, duration, component }) {
     this.get('_animators').forEach(listener => {
-      if (listener.animationStarting) {
-        listener.animationStarting(message);
+      if (listener.animationStarting && component !== listener) {
+        listener.animationStarting({ task, duration });
       }
     });
   },
