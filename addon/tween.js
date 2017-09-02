@@ -92,7 +92,7 @@ class MotionCurve {
     if (this._lastTick !== currentFrameClock) {
       this._lastTick = currentFrameClock;
       this._runTime = clock.now() - this.startTime;
-      this._timeProgress = Math.min(this._runTime / this.duration, 1);
+      this._timeProgress = this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
       this._spaceProgress = Math.min(this.ease(this._timeProgress), 1);
       this._done = this._timeProgress >= 1;
     }

@@ -59,22 +59,29 @@ export default class Move extends Motion {
       dx -= priorXTween.finalValue - priorXTween.currentValue;
       dy -= priorYTween.finalValue - priorYTween.currentValue;
 
-      // If our interrupting move is actually going to the same place
-      // we were already going, we don't really want to extend the
-      // time of the overall animation (it looks funny when you're
-      // waiting around for nothing to happen).
-      let durationX = fuzzyZero(dx) ? 0 : duration;
-      let durationY = fuzzyZero(dy) ? 0 : duration;
+      if (fuzzyZero(dx)) {
+        // If our interrupting move is actually going to the same place
+        // we were already going, we don't really want to extend the
+        // time of the overall animation (it looks funny when you're
+        // waiting around for nothing to happen).
+        this.xTween = priorXTween;
+      } else {
+        // We add our new differential tweens to the prior tweens. This
+        // is the magic that gives us smooth continuity. At the very
+        // start, the old tween will dominate because the new tween
+        // hasn't ramped up its motion yet. As the old tween finishes,
+        // the new tween begins to dominate. Because of the adjustments
+        // we did above, the sum of both tweens will end up right where
+        // we want to be.
+        this.xTween = new Tween(transformDiffX, transformDiffX + dx, duration).plus(this.prior.xTween);
+      }
 
-      // We add our new differential tweens to the prior tweens. This
-      // is the magic that gives us smooth continuity. At the very
-      // start, the old tween will dominate because the new tween
-      // hasn't ramped up its motion yet. As the old tween finishes,
-      // the new tween begins to dominate. Because of the adjustments
-      // we did above, the sum of both tweens will end up right where
-      // we want to be.
-      this.xTween = new Tween(transformDiffX, transformDiffX + dx, durationX).plus(this.prior.xTween);
-      this.yTween = new Tween(transformDiffY, transformDiffY + dy, durationY).plus(this.prior.yTween);
+      // Now repeat what we just did above, but for the y dimension.
+      if (fuzzyZero(dy)) {
+        this.yTween = priorYTween;
+      } else {
+        this.yTween = new Tween(transformDiffY, transformDiffY + dy, duration).plus(this.prior.yTween);
+      }
     }
 
     while (true) {
@@ -90,8 +97,9 @@ export default class Move extends Motion {
   }
 }
 
-// Because sitting around while your sprite animates by 3e-15 pixels
-// is no fun.
+// Because sitting around while your sprite animates by tiny fractions
+// of a pixel is no fun.
 function fuzzyZero(number) {
-  return Math.abs(number) < 0.00001;
+  // This magnitude was chosen because differences of 1/10th of a pixel should not matter visually.
+  return Math.abs(number) < 0.1;
 }
