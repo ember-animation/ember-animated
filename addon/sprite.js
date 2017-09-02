@@ -416,7 +416,10 @@ export default class Sprite {
       offsetX = this._offsetSprite.finalBounds.left - this._offsetSprite.initialBounds.left;
       offsetY = this._offsetSprite.finalBounds.top - this._offsetSprite.initialBounds.top;
     }
-    this.initialBounds = shiftedBounds(this.finalBounds, dx-offsetX, dy-offsetY);
+    // if we have already computed initial bounds, we just adjust
+    // them. Otherwise, we derive initialBounds from our own
+    // finalBounds.
+    this.initialBounds = shiftedBounds(this.initialBounds || this.finalBounds, dx-offsetX, dy-offsetY);
     this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
   }
   endTranslatedBy(dx, dy) {
@@ -429,7 +432,10 @@ export default class Sprite {
     let scaleX = otherSprite.initialBounds.width / this.finalBounds.width;
     let scaleY = otherSprite.initialBounds.height / this.finalBounds.height;
     continueMotions(otherSprite.element, this.element);
-    this.initialBounds = scaledBounds(this.initialBounds, scaleX, scaleY);
+    // if we have already computed initial bounds, we just adjust
+    // them. Otherwise, we derive initialBounds from our own
+    // finalBounds.
+    this.initialBounds = scaledBounds(this.initialBounds || this.finalBounds, scaleX, scaleY);
     this.scale(scaleX, scaleY);
   }
 }

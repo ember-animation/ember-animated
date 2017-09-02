@@ -6,8 +6,8 @@ export function * transition() {
   this.insertedSprites.forEach(sprite => {
     let oldSprite = this.matchFor(sprite);
     if (oldSprite) {
-      sprite.startAt(oldSprite);
       sprite.startScaledTo(oldSprite);
+      sprite.startAt(oldSprite);
       this.animate(new Move(sprite));
       this.animate(new Scale(sprite));
     } else {
