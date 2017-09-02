@@ -371,8 +371,10 @@ export default class Sprite {
     }
   }
 
+  // translate the sprite by the given number of screen pixels, regardless of any preexisting transform
   translate(dx, dy) {
-    let t = this.transform.mult(new Transform(1, 0, 0, 1, dx, dy));
+    let t = this.transform;
+    t = t.mult(new Transform(1, 0, 0, 1, dx / t.a, dy / t.d));
     this._transform = t;
     this.applyStyles({
       transform: t.serialize(),
