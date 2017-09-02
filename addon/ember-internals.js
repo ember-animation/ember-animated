@@ -1,6 +1,6 @@
 /*
   This module is intended to encapsulate all the known places where
-  liquid-fire depends on non-public Ember APIs.
+  ember-animated depends on non-public Ember APIs.
 
   See also tests/helpers/ember-testing-internals.js, which does the
   same thing but for code that is only needed in the test environment.
