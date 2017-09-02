@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import rules from 'ember-animated/transitions/default-list-transitions';
+import { transition } from './index';
 
 export default Ember.Controller.extend({
-  rules
+  transition
 });
