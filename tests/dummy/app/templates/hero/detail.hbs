@@ -4,7 +4,7 @@
   <h2>{{model.name}}</h2>
 
   {{#animated-container}}
-    {{#animated-bind model use=transition duration=500 as |m|}}
+    {{#animated-bind model use=transition duration=1000 as |m|}}
       <img src={{m.avatarUrl}}>
     {{/animated-bind}}
   {{/animated-container}}
