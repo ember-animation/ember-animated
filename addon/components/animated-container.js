@@ -16,6 +16,7 @@ export default Ember.Component.extend({
     this._signalPromise = null;
     this._signalResolve= null;
     this._inserted = false;
+    this._startingUp = false;
     this.get('motionService').register(this);
   },
 
@@ -30,7 +31,9 @@ export default Ember.Component.extend({
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
   animationStarting({ duration, task }) {
-    this.get('animate').perform(duration, task);
+    if (!this._startingUp) {
+      this.get('animate').perform(duration, task);
+    }
   },
 
   beginStaticMeasurement() {
@@ -46,6 +49,7 @@ export default Ember.Component.extend({
   },
 
   animate: task(function * (duration, animationTask) {
+    this._startingUp = true;
     let service = this.get('motionService');
     let sprite;
     let useMotion;
@@ -59,7 +63,11 @@ export default Ember.Component.extend({
       useMotion = this.get('onInitialRender');
     }
 
-    yield afterRender();
+    try {
+      yield afterRender();
+    } finally {
+      this._startingUp = false;
+    }
 
     yield * service.staticMeasurement(() => {
       if (!sprite) {
