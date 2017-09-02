@@ -28,6 +28,8 @@ export default Ember.Component.extend({
     this._removedSprites = null;
     this.get('motionService').register(this);
     this._installObservers();
+    this._startingUp = false;
+    this._lastTransition = null;
     this._super();
   },
 
@@ -160,6 +162,15 @@ export default Ember.Component.extend({
     }
   },
 
+  animationStarting() {
+    if (this.get('animate.isRunning') && !this._startingUp) {
+      // A new animation is starting on the page while we are in
+      // progress. We should interrupt ourself in order to adapt to
+      // the changing conditions.
+      this.get('animate').perform(this._lastTransition);
+    }
+  },
+
   willDestroyElement() {
     let removedSprites = [];
     let parent;
@@ -192,6 +203,8 @@ export default Ember.Component.extend({
   },
 
   animate: task(function * (transition) {
+    this._startingUp = true;
+    this._lastTransition = transition;
     let keptSprites = this._keptSprites = [];
     let removedSprites = this._removedSprites = [];
     let insertedSprites = this._insertedSprites = [];
@@ -214,7 +227,11 @@ export default Ember.Component.extend({
 
     currentSprites.forEach(sprite => sprite.lock());
 
-    yield afterRender();
+    try {
+      yield afterRender();
+    } finally {
+      this._startingUp = false;
+    }
 
     currentSprites.forEach(sprite => {
       let child = this._elementToChild.get(sprite.element);
@@ -225,6 +242,12 @@ export default Ember.Component.extend({
         break;
       case 'removing':
         removedSprites.push(sprite);
+        break;
+      case 'new':
+        // This can happen when our animation gets restarted due to
+        // another animation possibly messing with our DOM, as opposed
+        // to restarting because our own data changed.
+        keptSprites.push(sprite);
         break;
       default:
         Ember.warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
