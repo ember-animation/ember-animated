@@ -214,10 +214,10 @@ test('unlocks only after animator\'s motion is done', function(assert) {
     });
   });
 
-  return macroWait().then(() => {
+  return macroWait(60).then(() => {
     assert.equal(height(this.$('.animated-container')), 200, "should be locked at the static height we measured");
     unblock();
-    return macroWait();
+    return macroWait(60);
   }).then(() => {
     assert.equal(height(this.$('.animated-container')), 300, "unlocked and reflecting the actual final height of the animator");
   });

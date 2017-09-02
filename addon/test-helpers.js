@@ -6,10 +6,10 @@ import Motion from './motion';
 import Sprite from './sprite';
 
 
-export function macroWait() {
+export function macroWait(ms) {
   let ticket;
   let promise = new RSVP.Promise(resolve => {
-    ticket = setTimeout(resolve, 0);
+    ticket = setTimeout(resolve, ms);
   });
   promise.__ec_cancel__ = () => {
     clearTimeout(ticket);
