@@ -29,8 +29,7 @@ export default Ember.Component.extend({
 
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
-  animationStarting(message) {
-    let { duration, task } = message;
+  animationStarting({ duration, task }) {
     this.get('animate').perform(duration, task);
   },
 
