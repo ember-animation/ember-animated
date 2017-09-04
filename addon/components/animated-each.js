@@ -325,8 +325,6 @@ export default Ember.Component.extend({
       sprite.reveal();
     });
 
-    removedSprites.forEach(sprite => sprite.owner.flagForRemoval());
-
     this._keptSprites = null;
     this._removedSprites = null;
     this._insertedSprites = null;
