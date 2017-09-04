@@ -3,7 +3,10 @@
     {{#link-to "hero.detail" person.id tagName="div"}}
       {{#animated-container}}
         {{#animated-bind person use=transition duration=1000 as |p|}}
-          <img src={{p.avatarUrl}}>
+          <div class="hero-list-image">
+            <img src={{p.avatarUrl}}>
+            <span>Thumbnail</span>
+          </div>
         {{/animated-bind}}
       {{/animated-container}}
       <p>{{person.name}}</p>

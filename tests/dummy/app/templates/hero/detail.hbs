@@ -5,7 +5,10 @@
 
   {{#animated-container}}
     {{#animated-bind model use=transition duration=1000 as |m|}}
-      <img src={{m.avatarUrl}}>
+      <div class="hero-detail-image">
+        <img src={{m.avatarUrl}}>
+        <span>Big Image</span>
+      </div>
     {{/animated-bind}}
   {{/animated-container}}
   <p>
