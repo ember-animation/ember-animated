@@ -85,6 +85,10 @@ export default Ember.Component.extend({
     return signature;
   },
 
+  // this is where we handle most of the model state management. Based
+  // on the `items` array we were given and our own earlier state, we
+  // update a list of Child models that will be rendered by our
+  // template and decide whether an animation is needed.
   renderedChildren: Ember.computed('items.[]', function() {
     let firstTime = this._firstTime;
     this._firstTime = false;
@@ -162,9 +166,11 @@ export default Ember.Component.extend({
     }
   },
 
+  // This gets called by the motionService when another animator calls
+  // willAnimate from within our descendant components.
   animationStarting() {
     if (this.get('animate.isRunning') && !this._startingUp) {
-      // A new animation is starting on the page while we are in
+      // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
       // the changing conditions.
       this.get('animate').perform(this._lastTransition);
@@ -186,6 +192,9 @@ export default Ember.Component.extend({
     this.get('motionService').unregister(this);
   },
 
+  // this gets called by motionService when we call
+  // staticMeasurement. But also whenever *any other* animator calls
+  // staticMeasurement, even if we're in the middle of animating.
   beginStaticMeasurement(){
     if (this._keptSprites) {
       this._keptSprites.forEach(sprite => sprite.unlock());
@@ -202,13 +211,7 @@ export default Ember.Component.extend({
     }
   },
 
-  animate: task(function * (transition) {
-    this._startingUp = true;
-    this._lastTransition = transition;
-    let keptSprites = this._keptSprites = [];
-    let removedSprites = this._removedSprites = [];
-    let insertedSprites = this._insertedSprites = [];
-
+  _findCurrentSprites() {
     let currentSprites = [];
     let parent;
     for (let element of this._ownElements()) {
@@ -218,48 +221,93 @@ export default Ember.Component.extend({
       let sprite = Sprite.positionedStartingAt(element, parent);
       currentSprites.push(sprite);
     }
+    return { currentSprites, parent };
+  },
 
+  _partitionKeptAndRemovedSprites(currentSprites) {
+    currentSprites.forEach(sprite => {
+      let child = this._elementToChild.get(sprite.element);
+      sprite.owner = child;
+      switch (child.state) {
+      case 'kept':
+        this._keptSprites.push(sprite);
+        break;
+      case 'removing':
+        this._removedSprites.push(sprite);
+        break;
+      case 'new':
+        // This can happen when our animation gets restarted due to
+        // another animation possibly messing with our DOM, as opposed
+        // to restarting because our own data changed.
+        this._keptSprites.push(sprite);
+        break;
+      default:
+        Ember.warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
+      }
+    });
+  },
+
+  animate: task(function * (transition) {
+    // we distinguish the early stage of an animation that happens
+    // before render from what comes after.
+    this._startingUp = true;
+
+    // we remember the transition we're using in case we need to
+    // recalculate based on other animators potentially moving our DOM
+    // around
+    this._lastTransition = transition;
+
+    // Reset the sprite lists. These are component state mostly
+    // because beginStaticMeasurement needs to be able to put
+    // everything into static positioning at any point in time, so
+    // that any animation that's starting up can figure out what the
+    // DOM is going to look like.
+    let keptSprites = this._keptSprites = [];
+    let removedSprites = this._removedSprites = [];
+    let insertedSprites = this._insertedSprites = [];
+
+    // Start by locating our current sprites based off the actual DOM
+    // elements we contain. This records their initial positions.
+    let { currentSprites, parent } = this._findCurrentSprites();
+
+    // Warn the rest of the universe that we're about to animate.
     this.get('motionService').willAnimate({
       task: current(),
       duration: this.get('durationWithDefault'),
       component: this
     });
 
+    // Make all our current sprites absolutely positioned so they won't move during render.
     currentSprites.forEach(sprite => sprite.lock());
 
+    // Wait for Ember to render our latest state.
     try {
       yield afterRender();
     } finally {
+      // At this point we move out of startingUp mode. This is in a
+      // finally block because it's possible our task was interrupted.
       this._startingUp = false;
     }
 
-    currentSprites.forEach(sprite => {
-      let child = this._elementToChild.get(sprite.element);
-      sprite.owner = child;
-      switch (child.state) {
-      case 'kept':
-        keptSprites.push(sprite);
-        break;
-      case 'removing':
-        removedSprites.push(sprite);
-        break;
-      case 'new':
-        // This can happen when our animation gets restarted due to
-        // another animation possibly messing with our DOM, as opposed
-        // to restarting because our own data changed.
-        keptSprites.push(sprite);
-        break;
-      default:
-        Ember.warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
-      }
-    });
+    // fill the keptSprites and removedSprites lists by comparing what
+    // we had in currentSprites with what is still in the DOM now that
+    // rendering happened.
+    this._partitionKeptAndRemovedSprites(currentSprites);
 
+    // perform static measurement. The motionService coordinates this
+    // because all animators need to be simultaneously put into their
+    // static state via beginStaticMeasurement and endStaticMeasurement.
     yield * this.get('motionService').staticMeasurement(() => {
+
+      // we care about the final position of our own DOM parent. That
+      // lets us nest motions correctly.
       if (parent && !parent.finalBounds) {
         parent.measureFinalBounds();
       }
 
       for (let element of this._ownElements()) {
+        // now is when we find all the newly inserted sprites and
+        // remember their final bounds.
         if (!currentSprites.find(sprite => sprite.element === element)) {
           if (!parent) {
             parent = Sprite.offsetParentEndingAt(element);
@@ -270,12 +318,21 @@ export default Ember.Component.extend({
           insertedSprites.push(sprite);
         }
       }
+      // and remember the final bounds of all our kept sprites
       keptSprites.forEach(sprite => sprite.measureFinalBounds());
     });
 
+    // at this point we know all the geometry of our own sprites. But
+    // some of our sprites may match up with sprites that are entering
+    // or leaving other simulatneous animators. So we hit another
+    // coordination point via the motionService
     let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, keptSprites, removedSprites);
 
-    // any removed sprites that matched elsewhere will get handled elsewhere
+    // if any of our removed sprites have matches elsewhere, they
+    // won't be handled by our transition. Instead they will become
+    // the initialBounds for the sprites that they matched in the
+    // other animator. We hide them here because we're not allowed to
+    // animate them anyway, and they were already on their way out.
     let unmatchedRemovedSprites = removedSprites.filter(sprite => {
       if (farMatches.get(sprite)) {
         sprite.hide();
@@ -285,19 +342,23 @@ export default Ember.Component.extend({
       }
     })
 
+    // TODO: This is best effort. The parent isn't necessarily in
+    // the initial position at this point, but in practice if people
+    // are properly using animated-containers it will be locked into
+    // that position. We only need this if there were no elements to
+    // begin with. A better solution would figure out what the
+    // offset parent *would* be even when there are no elements,
+    // based on our own placeholder comment nodes.
     if (parent && !parent.initialBounds) {
-      // TODO: This is best effort. The parent isn't necessarily in
-      // the initial position at this point, but in practice if people
-      // are properly using animated-containers it will be locked into
-      // that position. We only need this if there were no elements to
-      // begin with. A better solution would figure out what the
-      // offset parent *would* be even when there are no elements,
-      // based on our own placeholder comment nodes.
       parent.measureInitialBounds();
     }
 
-    // any inserted sprites that have far matches are treated more
-    // like kept sprites.
+    // if any of our inserted sprites have matching far away sprites,
+    // we treat them like kept sprites. That is, they will get
+    // initialBounds (derived from their far away matching sprite) and
+    // motion continuity via `startAt`, and we will pass them into the
+    // transition context as part of the keptSprites, not the
+    // insertedSprites.
     let matchedInsertedSprites = [];
     let unmatchedInsertedSprites = [];
     insertedSprites.forEach(sprite => {
