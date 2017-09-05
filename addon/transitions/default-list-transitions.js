@@ -1,6 +1,10 @@
 import Move from '../motions/move';
 
 export function * first() {
+  this.insertedSprites.forEach(sprite => {
+    sprite.reveal();
+  });
+
   this.keptSprites.forEach(sprite => {
     this.animate(new Move(sprite));
   });

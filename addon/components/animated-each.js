@@ -285,6 +285,17 @@ export default Ember.Component.extend({
       }
     })
 
+    if (parent && !parent.initialBounds) {
+      // TODO: This is best effort. The parent isn't necessarily in
+      // the initial position at this point, but in practice if people
+      // are properly using animated-containers it will be locked into
+      // that position. We only need this if there were no elements to
+      // begin with. A better solution would figure out what the
+      // offset parent *would* be even when there are no elements,
+      // based on our own placeholder comment nodes.
+      parent.measureInitialBounds();
+    }
+
     // any inserted sprites that have far matches are treated more
     // like kept sprites.
     let matchedInsertedSprites = [];
@@ -309,17 +320,6 @@ export default Ember.Component.extend({
         sprite.startAt(other);
       }
     });
-
-    if (parent && !parent.initialBounds) {
-      // TODO: This is best effort. The parent isn't necessarily in
-      // the initial position at this point, but in practice if people
-      // are properly using animated-containers it will be locked into
-      // that position. We only need this if there were no elements to
-      // begin with. A better solution would figure out what the
-      // offset parent *would* be even when there are no elements,
-      // based on our own placeholder comment nodes.
-      parent.measureInitialBounds();
-    }
 
     let context = new TransitionContext(
       this.get('durationWithDefault'),
