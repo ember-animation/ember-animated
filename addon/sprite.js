@@ -19,7 +19,7 @@ import Transform, {
 } from './transform';
 import { continueMotions } from './motion';
 import { collapsedChildren } from './margin-collapse';
-import { shiftedBounds, relativeBounds, scaledBounds } from './bounds';
+import { shiftedBounds, relativeBounds, resizedBounds } from './bounds';
 
 const inFlight = new WeakMap();
 
@@ -408,6 +408,7 @@ export default class Sprite {
     continueMotions(otherSprite.element, this.element);
     let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
     this.startTranslatedBy(-diff.dx, -diff.dy);
+    this.initialBounds = resizedBounds(this.initialBounds, otherSprite.initialBounds.width, otherSprite.initialBounds.height);
   }
   startTranslatedBy(dx, dy) {
     let offsetX = 0;
@@ -427,16 +428,6 @@ export default class Sprite {
   }
   endRelativeTo(otherSprite) {
     this.endTranslatedBy(otherSprite.finalBounds.left - otherSprite.initialBounds.left, otherSprite.finalBounds.top - otherSprite.initialBounds.top);
-  }
-  startScaledTo(otherSprite) {
-    let scaleX = otherSprite.initialBounds.width / this.finalBounds.width;
-    let scaleY = otherSprite.initialBounds.height / this.finalBounds.height;
-    continueMotions(otherSprite.element, this.element);
-    // if we have already computed initial bounds, we just adjust
-    // them. Otherwise, we derive initialBounds from our own
-    // finalBounds.
-    this.initialBounds = scaledBounds(this.initialBounds || this.finalBounds, scaleX, scaleY);
-    this.scale(scaleX, scaleY);
   }
 }
 

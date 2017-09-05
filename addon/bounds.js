@@ -9,6 +9,18 @@ export function shiftedBounds(bounds, dx, dy) {
   };
 }
 
+export function resizedBounds(bounds, width, height) {
+  return {
+    top: bounds.top,
+    bottom: bounds.top + height,
+    left: bounds.left,
+    right: bounds.left + width,
+    width: width,
+    height: height
+  };
+}
+
+
 // shifts the coordinates of the given bounds so they are relative to
 // the offset.
 export function relativeBounds(bounds, offset) {
@@ -25,16 +37,3 @@ export const emptyBounds = {
 };
 
 Object.freeze(emptyBounds);
-
-export function scaledBounds(bounds, scaleX, scaleY) {
-  let width = bounds.width * scaleX;
-  let height = bounds.height * scaleY;
-  return {
-    top: bounds.top,
-    bottom: bounds.top + height,
-    left: bounds.left,
-    right: bounds.left + width,
-    width,
-    height
-  }
-}

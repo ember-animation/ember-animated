@@ -4,15 +4,13 @@ import Scale from 'ember-animated/motions/scale';
 
 export function * transition() {
   this.insertedSprites.forEach(sprite => {
-    let oldSprite = this.matchFor(sprite);
-    if (oldSprite) {
-      sprite.startScaledTo(oldSprite);
-      sprite.startAt(oldSprite);
-      this.animate(new Move(sprite));
-      this.animate(new Scale(sprite));
-    } else {
-      sprite.reveal();
-    }
+    sprite.reveal();
+  });
+
+  this.keptSprites.forEach(sprite => {
+    sprite.scale(sprite.initialBounds.width / sprite.finalBounds.width, sprite.initialBounds.height / sprite.finalBounds.height);
+    this.animate(new Move(sprite));
+    this.animate(new Scale(sprite));
   });
 }
 
