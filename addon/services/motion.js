@@ -52,12 +52,12 @@ export default Ember.Service.extend({
   }),
 
   matchDestroyed(removed) {
-    this.get('farMatch').perform([], removed, true);
+    this.get('farMatch').perform([], [], removed, true);
   },
 
-  farMatch: task(function * (inserted, removed, longWait=false) {
+  farMatch: task(function * (inserted, kept, removed, longWait=false) {
     let matches = new Map();
-    let mine = { inserted, removed, matches };
+    let mine = { inserted, kept, removed, matches };
     this._rendezvous.push(mine);
     yield microwait();
     if (longWait) {
@@ -118,13 +118,12 @@ export default Ember.Service.extend({
 
 });
 
-function performMatches(insertedSource, removedSource) {
-  insertedSource.inserted.slice().forEach(sprite => {
-    let match = removedSource.removed.find(mySprite => sprite.owner.id === mySprite.owner.id);
+function performMatches(sink, source) {
+  sink.inserted.concat(sink.kept).forEach(sprite => {
+    let match = source.removed.find(mySprite => sprite.owner.id === mySprite.owner.id);
     if (match) {
-      insertedSource.matches.set(sprite, match);
-      removedSource.matches.set(match, sprite);
+      sink.matches.set(sprite, match);
+      source.matches.set(match, sprite);
     }
   });
-
 }

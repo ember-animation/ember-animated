@@ -273,7 +273,7 @@ export default Ember.Component.extend({
       keptSprites.forEach(sprite => sprite.measureFinalBounds());
     });
 
-    let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, removedSprites);
+    let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, keptSprites, removedSprites);
 
     // any removed sprites that matched elsewhere will get handled elsewhere
     let unmatchedRemovedSprites = removedSprites.filter(sprite => {
