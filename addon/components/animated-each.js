@@ -285,6 +285,31 @@ export default Ember.Component.extend({
       }
     })
 
+    // any inserted sprites that have far matches are treated more
+    // like kept sprites.
+    let matchedInsertedSprites = [];
+    let unmatchedInsertedSprites = [];
+    insertedSprites.forEach(sprite => {
+      let other = farMatches.get(sprite);
+      if (other) {
+        sprite.startAt(other);
+        matchedInsertedSprites.push(sprite);
+      } else {
+        unmatchedInsertedSprites.push(sprite);
+      }
+    });
+
+    // if any of our keptSprites are hidden and have far matches, we
+    // let the far matches override their own initialBounds. This
+    // helps handle a common case where a child was leaving but is now
+    // coming back due an interruption.
+    keptSprites.forEach(sprite => {
+      let other = farMatches.get(sprite);
+      if (other && !sprite.revealed) {
+        sprite.startAt(other);
+      }
+    });
+
     if (parent && !parent.initialBounds) {
       // TODO: This is best effort. The parent isn't necessarily in
       // the initial position at this point, but in practice if people
@@ -298,8 +323,8 @@ export default Ember.Component.extend({
 
     let context = new TransitionContext(
       this.get('durationWithDefault'),
-      insertedSprites,
-      keptSprites,
+      unmatchedInsertedSprites,
+      keptSprites.concat(matchedInsertedSprites),
       unmatchedRemovedSprites,
       farMatches
     );

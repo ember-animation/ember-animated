@@ -1,6 +1,11 @@
 <div class="scenario-two-lists">
+  <div class="controls">
+    <label>Swap at start {{input type="checkbox" checked=swapAtStart}}</label>
+    <label>Bounce back {{input type="checkbox" checked=bounceBack}}</label>
+  </div>
+
   {{#animated-container}}
-    {{#animated-each leftItems rules=rules as |item|}}
+    {{#animated-each leftItems use=transition as |item|}}
       <div>
         {{item.id}}
         <button {{action "moveRight" item}}>&rarr;</button>
@@ -9,7 +14,7 @@
   {{/animated-container}}
 
   {{#animated-container}}
-    {{#animated-each rightItems rules=rules as |item|}}
+    {{#animated-each rightItems use=transition as |item|}}
       <div>
         <button {{action "moveLeft" item}}>&larr;</button>
         {{item.id}}
