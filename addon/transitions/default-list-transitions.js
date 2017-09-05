@@ -1,27 +1,15 @@
 import Move from '../motions/move';
 
 export function * first() {
-  this.insertedSprites.forEach(sprite => {
-    let oldSprite = this.matchFor(sprite);
-    if (oldSprite) {
-      sprite.startAt(oldSprite);
-      this.animate(new Move(sprite));
-    } else {
-      sprite.reveal();
-    }
+  this.keptSprites.forEach(sprite => {
+    this.animate(new Move(sprite));
   });
 }
 
 export function * subsequent() {
   this.insertedSprites.forEach(sprite => {
-    let oldSprite = this.matchFor(sprite);
-    if (oldSprite) {
-      sprite.startAt(oldSprite);
-      this.animate(new Move(sprite));
-    } else {
-      sprite.startTranslatedBy(1000, 0);
-      this.animate(new Move(sprite));
-    }
+    sprite.startTranslatedBy(1000, 0);
+    this.animate(new Move(sprite));
   });
 
   this.keptSprites.forEach(sprite => {
