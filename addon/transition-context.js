@@ -5,15 +5,11 @@ import {
 
 
 export default class TransitionContext {
-  constructor(duration, insertedSprites, keptSprites, removedSprites, farMatches) {
+  constructor(duration, insertedSprites, keptSprites, removedSprites) {
     this.duration = duration;
     this.insertedSprites = insertedSprites;
     this.keptSprites = keptSprites;
     this.removedSprites = removedSprites;
-    this._farMatches = farMatches;
-  }
-  matchFor(sprite) {
-    return this._farMatches.get(sprite);
   }
   get insertedSprite() {
     return this.insertedSprites[0];

@@ -325,8 +325,7 @@ export default Ember.Component.extend({
       this.get('durationWithDefault'),
       unmatchedInsertedSprites,
       keptSprites.concat(matchedInsertedSprites),
-      unmatchedRemovedSprites,
-      farMatches
+      unmatchedRemovedSprites
     );
     let cycle = this._cycleCounter++;
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);
