@@ -164,7 +164,7 @@ test('it animates when a watched property is mutated', function(assert) {
 });
 
 test('it can match sprites that are leaving another component', function(assert){
-  assert.expect(5);
+  assert.expect(4);
 
   this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
   this.set('rightItems', A([]));
@@ -193,8 +193,7 @@ test('it can match sprites that are leaving another component', function(assert)
     });
 
     this.set('rightTransition', function * () {
-      assert.equal(this.insertedSprites.length, 1, "right inserted");
-      assert.ok(this.matchFor(this.insertedSprites[0]), "found matching old sprite");
+      assert.equal(this.keptSprites.length, 1, "right found a match");
     });
 
     this.set('leftItems', A([{ id: 'a'}, {id: 'c'}]));
@@ -204,7 +203,7 @@ test('it can match sprites that are leaving another component', function(assert)
 });
 
 test('it can match sprites that are leaving a destroyed component', function(assert) {
-  assert.expect(3);
+  assert.expect(2);
 
   this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
   this.set('rightItems', A([{id: 'b'}, ]));
@@ -237,8 +236,7 @@ test('it can match sprites that are leaving a destroyed component', function(ass
     });
 
     this.set('rightTransition', function * () {
-      assert.equal(this.insertedSprites.length, 1, "right inserted");
-      assert.ok(this.matchFor(this.insertedSprites[0]), "found matching old sprite");
+      assert.equal(this.keptSprites.length, 1, "right found match");
     });
 
     this.set('leftAlive', false);
