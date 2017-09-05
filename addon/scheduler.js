@@ -11,7 +11,7 @@ API
   spawnChild: GenFn -> CancelablePromise
 
     starts a new microroutine linked to the current
-    microroutine. Throws if your'e not in a current
+    microroutine. Throws if you're not in a current
     microroutine.
 
     "Linked" means that if the caller is canceled, the new

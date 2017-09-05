@@ -289,7 +289,7 @@ export default Ember.Component.extend({
       // TODO: This is best effort. The parent isn't necessarily in
       // the initial position at this point, but in practice if people
       // are properly using animated-containers it will be locked into
-      // that position. We only need this is there were no elements to
+      // that position. We only need this if there were no elements to
       // begin with. A better solution would figure out what the
       // offset parent *would* be even when there are no elements,
       // based on our own placeholder comment nodes.
