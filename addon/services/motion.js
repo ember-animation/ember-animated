@@ -80,11 +80,15 @@ export default Ember.Service.extend({
   }),
 
   willAnimate({ task, duration, component }) {
-    this.get('_animators').forEach(listener => {
-      if (listener.animationStarting && component !== listener) {
-        listener.animationStarting({ task, duration });
+    let pointer = component.parentView;
+    let animators = this.get('_animators');
+
+    while (pointer) {
+      if (animators.indexOf(pointer) !== -1 && pointer.animationStarting) {
+        pointer.animationStarting({ task, duration });
       }
-    });
+      pointer = pointer.parentView;
+    }
   },
 
   staticMeasurement: function * (fn) {
