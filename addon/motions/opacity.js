@@ -12,11 +12,11 @@ export default class Opacity extends Motion {
     if (opts && opts.duration != null) {
       this.duration = opts.duration;
     }
-    if (opts && opts.initialOpacity != null) {
-      this.opacityFrom = opts.initialOpacity;
+    if (opts && opts.from != null) {
+      this.opacityFrom = opts.from;
     }
-    if (opts && opts.finalOpacity != null) {
-      this.opacityTo = opts.finalOpacity;
+    if (opts && opts.to != null) {
+      this.opacityTo = opts.to;
     }
   }
 
@@ -26,7 +26,13 @@ export default class Opacity extends Motion {
 
   * animate() {
     let { sprite, duration } = this;
-    this.opacityTween = new Tween(this.opacityFrom, this.opacityTo, duration);
+
+    if (!this.prior) {
+      this.opacityTween = new Tween(this.opacityFrom, this.opacityTo, duration);
+    } else {
+      let interruptedOpacity = this.prior.opacityTween.currentValue;
+      this.opacityTween = new Tween(interruptedOpacity, this.opacityTo, duration);
+    }
 
     while (true) {
       yield rAF();
