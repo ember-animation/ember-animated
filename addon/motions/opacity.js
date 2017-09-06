@@ -7,10 +7,16 @@ export default class Opacity extends Motion {
     super(sprite, opts);
     this.prior = null;
     this.opacityTween = null;
-    this.opacityFrom = opts && opts.initialOpacity || 0;
-    this.opacityTo = opts && opts.initialOpacity || 1;
+    this.opacityFrom = 0;
+    this.opacityTo = 1;
     if (opts && opts.duration != null) {
       this.duration = opts.duration;
+    }
+    if (opts && opts.initialOpacity != null) {
+      this.opacityFrom = opts.initialOpacity;
+    }
+    if (opts && opts.finalOpacity != null) {
+      this.opacityTo = opts.finalOpacity;
     }
   }
 
