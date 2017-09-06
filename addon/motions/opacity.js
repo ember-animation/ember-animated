@@ -47,13 +47,16 @@ export default class Opacity extends Motion {
   }
 }
 
-export class FadeOut extends Opacity {
-  constructor(sprite, opts) {
-    super(sprite, Ember.assign({}, opts, {
-      from: 1,
-      to: 0
-    }));
+function _opacityClassHelper(opacityFrom, opacityTo) {
+  return class extends Opacity {
+    constructor(sprite, opts) {
+      super(sprite, Ember.assign({}, opts, {
+        from: opacityFrom,
+        to: opacityTo
+      }));
+    }
   }
 }
 
-export const FadeIn = Opacity;
+export const FadeIn = _opacityClassHelper(0, 1);
+export const FadeOut = _opacityClassHelper(1, 0);
