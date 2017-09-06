@@ -12,7 +12,7 @@ This library is intended to become a robust foundation for animation in Ember. A
 This repo is tested against Ember versions going back as far as 1.13. For Ember versions older than 2.3, you will also need to install the following addons:
 
  - ember-hash-helper-polyfill
- - ember-getowner-polyfill (newer than b46db82dd445b5cd4c596abd020df9d7c500c85a, which is currently unreleased)
+ - ember-getowner-polyfill (1.1.0+)
 
 ## Running
 
