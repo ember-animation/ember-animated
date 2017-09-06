@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
@@ -45,3 +46,14 @@ export default class Opacity extends Motion {
     }
   }
 }
+
+export class FadeOut extends Opacity {
+  constructor(sprite, opts) {
+    super(sprite, Ember.assign({}, opts, {
+      from: 1,
+      to: 0
+    }));
+  }
+}
+
+export const FadeIn = Opacity;
