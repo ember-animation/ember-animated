@@ -111,3 +111,12 @@
     border: 1px solid blue;
     color: transparent;
 }
+
+.inline-text-scenario .inline {
+    display: inline-block;
+}
+
+.animated-text {
+    display: inline-block;
+    vertical-align: top;
+}

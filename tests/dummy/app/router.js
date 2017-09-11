@@ -17,6 +17,7 @@ Router.map(function() {
   });
   this.route('nested');
   this.route('direct-style');
+  this.route('inline-text');
 });
 
 export default Router;
