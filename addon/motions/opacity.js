@@ -8,8 +8,8 @@ export default class Opacity extends Motion {
     super(sprite, opts);
     this.prior = null;
     this.opacityTween = null;
-    this.opacityFrom = 0;
-    this.opacityTo = 1;
+    this.opacityFrom = null;
+    this.opacityTo = null;
     if (opts && opts.duration != null) {
       this.duration = opts.duration;
     }
@@ -26,21 +26,24 @@ export default class Opacity extends Motion {
   }
 
   * animate() {
-    let { sprite, duration } = this;
+    let { sprite, duration, opacityFrom, opacityTo } = this;
+    let computedOpacityFrom = opacityFrom != null ? opacityFrom : sprite.initialOpacity;
+    let computedOpacityTo = opacityTo != null ? opacityTo : sprite.finalOpacity;
+    let opacityTween = null;
 
     if (!this.prior) {
-      this.opacityTween = new Tween(this.opacityFrom, this.opacityTo, duration);
+      this.opacityTween = opacityTween = new Tween(computedOpacityFrom, computedOpacityTo, duration);
     } else {
       let interruptedOpacity = this.prior.opacityTween.currentValue;
-      this.opacityTween = new Tween(interruptedOpacity, this.opacityTo, duration);
+      this.opacityTween = opacityTween = new Tween(interruptedOpacity, computedOpacityTo, duration);
     }
 
     while (true) {
       yield rAF();
       sprite.applyStyles({
-        opacity: this.opacityTween.currentValue
+        opacity: opacityTween.currentValue
       });
-      if (this.opacityTween.done) {
+      if (opacityTween.done) {
         break;
       }
     }
