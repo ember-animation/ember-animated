@@ -104,9 +104,11 @@ export default class Sprite {
 
     if (inInitialPosition) {
       this.measureInitialBounds();
+      this.finalOpacity = 1;
       this.finalBounds = null;
       this._finalPosition = null;
     } else {
+      this.initialOpacity = 1;
       this.initialBounds = null;
       this._initialPosition = null;
       this.measureFinalBounds();
@@ -156,6 +158,7 @@ export default class Sprite {
     } else {
       this.initialBounds = this.element.getBoundingClientRect();
     }
+    this.initialOpacity = parseInt(getComputedStyle(this.element).opacity, 10);
     this._initialPosition = this._getCurrentPosition();
   }
 
@@ -168,6 +171,7 @@ export default class Sprite {
     } else {
       this.finalBounds = this.element.getBoundingClientRect();
     }
+    this.finalOpacity = parseInt(getComputedStyle(this.element).opacity, 10);
     this._finalPosition = this._getCurrentPosition();
   }
 
