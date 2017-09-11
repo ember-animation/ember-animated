@@ -1,0 +1,7 @@
+{{#animated-bind predicate key=key rules=rules use=use duration=duration as |currentPredicate|}}
+  {{#if currentPredicate}}
+    {{yield}}
+  {{else}}
+    {{yield to="inverse"}}
+  {{/if}}
+{{/animated-bind}}
