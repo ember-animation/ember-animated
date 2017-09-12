@@ -413,7 +413,7 @@ export default class Sprite {
     let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
     this.startTranslatedBy(-diff.dx, -diff.dy);
     this.initialBounds = resizedBounds(this.initialBounds, otherSprite.initialBounds.width, otherSprite.initialBounds.height);
-    this.initialOpacity = this.initialOpacity != null ? this.initialOpacity : otherSprite.initialOpacity;
+    this.initialOpacity = otherSprite.initialOpacity;
   }
   startTranslatedBy(dx, dy) {
     let offsetX = 0;
