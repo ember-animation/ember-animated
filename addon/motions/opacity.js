@@ -27,8 +27,8 @@ export default class Opacity extends Motion {
 
   * animate() {
     let { sprite, duration, opacityFrom, opacityTo } = this;
-    let computedOpacityFrom = opacityFrom != null ? opacityFrom : sprite.initialOpacity;
-    let computedOpacityTo = opacityTo != null ? opacityTo : sprite.finalOpacity;
+    let computedOpacityFrom = opacityFrom != null ? opacityFrom : sprite.initialOpacity != null ? sprite.initialOpacity : 1;
+    let computedOpacityTo = opacityTo != null ? opacityTo : sprite.finalOpacity != null ? sprite.finalOpacity : 1;
     let opacityTween = null;
 
     if (!this.prior) {

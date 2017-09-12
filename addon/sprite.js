@@ -104,11 +104,11 @@ export default class Sprite {
 
     if (inInitialPosition) {
       this.measureInitialBounds();
-      this.finalOpacity = 1;
+      this.finalOpacity = null;
       this.finalBounds = null;
       this._finalPosition = null;
     } else {
-      this.initialOpacity = 1;
+      this.initialOpacity = null;
       this.initialBounds = null;
       this._initialPosition = null;
       this.measureFinalBounds();
@@ -158,7 +158,7 @@ export default class Sprite {
     } else {
       this.initialBounds = this.element.getBoundingClientRect();
     }
-    this.initialOpacity = parseInt(getComputedStyle(this.element).opacity, 10);
+    this.initialOpacity = parseFloat(getComputedStyle(this.element).opacity);
     this._initialPosition = this._getCurrentPosition();
   }
 
@@ -171,7 +171,7 @@ export default class Sprite {
     } else {
       this.finalBounds = this.element.getBoundingClientRect();
     }
-    this.finalOpacity = parseInt(getComputedStyle(this.element).opacity, 10);
+    this.finalOpacity = parseFloat(getComputedStyle(this.element).opacity);
     this._finalPosition = this._getCurrentPosition();
   }
 
@@ -413,6 +413,7 @@ export default class Sprite {
     let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
     this.startTranslatedBy(-diff.dx, -diff.dy);
     this.initialBounds = resizedBounds(this.initialBounds, otherSprite.initialBounds.width, otherSprite.initialBounds.height);
+    this.initialOpacity = this.initialOpacity != null ? this.initialOpacity : otherSprite.initialOpacity;
   }
   startTranslatedBy(dx, dy) {
     let offsetX = 0;
