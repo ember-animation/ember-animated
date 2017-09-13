@@ -188,7 +188,8 @@ export default Ember.Component.extend({
       sprite.owner = this._elementToChild.get(element);
       removedSprites.push(sprite);
     }
-    this.get('motionService').matchDestroyed(removedSprites);
+    let transition = this._transitionFor(this._firstTime, this._prevItems, []);
+    this.get('motionService.matchDestroyed').perform(removedSprites, transition, this.get('durationWithDefault'));
     this.get('motionService').unregister(this);
   },
 

@@ -1,7 +1,8 @@
 import {
   spawn,
   current,
-  stop
+  stop,
+  logErrors
 } from './scheduler';
 import Ember from 'ember';
 const {
@@ -12,7 +13,6 @@ const {
 export function task(...args) {
   return new TaskProperty(...args);
 }
-
 
 function TaskProperty(taskFn) {
   let tp = this;
@@ -62,6 +62,10 @@ class Task {
     let policy = privSelf.taskProperty._bufferPolicy;
     cleanupOnDestroy(context, this, 'cancelAll');
     return spawn(function * () {
+
+      // TODO: without this we get silent errors, with this we get double errors.
+      logErrors(err => { throw err; });
+
       try {
         self._addInstance(current());
         if (policy) {

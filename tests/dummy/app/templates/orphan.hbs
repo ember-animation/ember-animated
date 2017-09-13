@@ -1,0 +1,16 @@
+<button {{action "toggle"}}>Toggle</button>
+
+{{#if showDetail}}
+
+  {{#animated-bind "1" use=transition duration=500}}
+    <h1>1</h1>
+  {{/animated-bind}}
+
+
+  {{#animated-bind "2" use=transition duration=500}}
+    <h1>2</h1>
+  {{/animated-bind}}
+
+{{/if}}
+
+{{animated-orphans}}
