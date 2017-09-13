@@ -124,6 +124,27 @@ test('task is canceled when object is destroyed', function(assert) {
   assert.logEquals(['task canceled']);
 });
 
+
+test('allows object to be safely destroyed by its own task', function(assert) {
+  assert.expect(1);
+  let done = assert.async();
+  let Class = Ember.Object.extend({
+    hello: task(function * () {
+      yield microwait();
+      this.destroy();
+    }),
+    willDestroy() {
+      assert.ok("will destroy ran");
+      done();
+    }
+  });
+  let object = Class.create();
+  Ember.run(() => {
+    object.get('hello').perform();
+  });
+});
+
+
 test('restartable task', function(assert) {
   let Class = Ember.Object.extend({
     hello: task(function * (shouldBlock) {
