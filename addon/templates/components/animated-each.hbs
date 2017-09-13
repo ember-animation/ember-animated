@@ -1,5 +1,5 @@
 {{#each renderedChildren key='id' as |child| ~}}
   {{#-ea-list-element child=child elementToChild=_elementToChild ~}}
-    {{yield child.value (hash mark-sprite=(component "-ea-mark-sprite" animator=this)) ~}}
+    {{yield child.value ~}}
   {{/-ea-list-element ~}}
 {{/each}}

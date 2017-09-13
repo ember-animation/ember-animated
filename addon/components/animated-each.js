@@ -14,6 +14,7 @@ export default Ember.Component.extend({
   duration: null,
   use: null,
   rules: null,
+  _isAnimator: true,
 
   init() {
     this._elementToChild = new WeakMap();

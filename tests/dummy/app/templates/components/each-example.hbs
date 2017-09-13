@@ -9,14 +9,14 @@
   {{/if}}
 
   {{#animated-container}}
-    {{#animated-each items key="id" rules=rules as |item animator|}}
+    {{#animated-each items key="id" rules=rules as |item|}}
       <div>
         {{item.id}}
         <button {{action "removeItem" item}}>X</button>
         <button {{action "replaceItem" item}}>R</button>
-        {{#animator.mark-sprite (concat "mutate-" item.id)}}
+        {{#animated-sprite (concat "mutate-" item.id)}}
           <button {{action "mutate" item}}>M</button>
-        {{/animator.mark-sprite}}
+        {{/animated-sprite}}
       </div>
     {{/animated-each}}
   {{/animated-container}}

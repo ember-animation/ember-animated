@@ -1,15 +1,14 @@
 <div class="inline-text-scenario">
   <button {{action "toggle"}}>Toggle</button>
-
-  {{#if tableMode}}
+  {{#animated-if tableMode duration=500 use=transition}}
     <ul>
-      <li>{{animated-text "framework"}}</li>
-      <li>{{animated-text "ambitious"}}</li>
-      <li>{{animated-text "applications"}}</li>
+      <li>{{animated-text "framework" }}</li>
+      <li>{{animated-text "ambitious" }}</li>
+      <li>{{animated-text "applications" }}</li>
     </ul>
   {{else}}
     <p>
-      A {{animated-text "framework"}} for creating {{animated-text "ambitious"}} web {{animated-text "applications"}}.
+      A {{animated-text "framework" }} for creating {{animated-text "ambitious" }} web {{animated-text "applications" }}.
     </p>
-  {{/if}}
+  {{/animated-if}}
 </div>

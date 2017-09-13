@@ -264,11 +264,11 @@ test('it finds marked sprites at initial render', function(assert){
   });
 
   this.render(hbs`
-    {{#animated-each items use=transition key="id" as |item animator|}}
+    {{#animated-each items use=transition key="id" as |item|}}
       <div class="test-child">
-       {{#animator.mark-sprite item key="altId"}}
+       {{#animated-sprite item key="altId"}}
          <div class="inner-animator">{{innerItem.id}}</div>
-       {{/animator.mark-sprite}}
+       {{/animated-sprite}}
      </div>
     {{/animated-each}}
   `);
@@ -290,11 +290,11 @@ test('it finds inserted/kept/removed marked sprites', function(assert){
   this.set('transition', function * () {});
 
   this.render(hbs`
-    {{#animated-each items use=transition key="id" as |item animator|}}
+    {{#animated-each items use=transition key="id" as |item|}}
       <div class="test-child">
-       {{#animator.mark-sprite item key="altId"}}
+       {{#animated-sprite item key="altId"}}
          <div class="inner-animator">{{innerItem.id}}</div>
-       {{/animator.mark-sprite}}
+       {{/animated-sprite}}
      </div>
     {{/animated-each}}
   `);
