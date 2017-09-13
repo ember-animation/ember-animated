@@ -340,6 +340,26 @@ test('can stop self', function(assert) {
   });
 });
 
+test('can stop self indirectly via yielded promise', function(assert) {
+  assert.expect(3);
+  return spawn(function * () {
+    spawn(function * () {
+      let c = current();
+      try {
+        yield spawn(function * () {
+          stop(c);
+          assert.ok(true, "stop does not throw here");
+          yield new Promise(() => {});
+        })
+      } catch (err) {
+        assert.equal(err.message, 'TaskCancelation');
+        throw err;
+      }
+    });
+    assert.ok(true, "I get here");
+  });
+});
+
 
 test('can cancel all child microroutines', function(assert) {
   return spawn(function * () {
