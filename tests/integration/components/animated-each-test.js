@@ -267,7 +267,7 @@ test('it finds marked sprites at initial render', function(assert){
     {{#animated-each items use=transition key="id" as |item|}}
       <div class="test-child">
        {{#animated-sprite item key="altId"}}
-         <div class="inner-animator">{{innerItem.id}}</div>
+         <div class="inner-animator">{{item.id}}</div>
        {{/animated-sprite}}
      </div>
     {{/animated-each}}
@@ -293,7 +293,7 @@ test('it finds inserted/kept/removed marked sprites', function(assert){
     {{#animated-each items use=transition key="id" as |item|}}
       <div class="test-child">
        {{#animated-sprite item key="altId"}}
-         <div class="inner-animator">{{innerItem.id}}</div>
+         <div class="inner-animator">{{item.id}}</div>
        {{/animated-sprite}}
      </div>
     {{/animated-each}}
@@ -306,6 +306,33 @@ test('it finds inserted/kept/removed marked sprites', function(assert){
       assert.equal(this.removedSprites.length, 2, 'removed');
     });
     this.set('items', A([makeItem('a'), makeItem('b'), makeItem('d')]));
+    return this.waitForAnimations();
+  });
+});
+
+test('it considers marked sprites as kept even when they are being recreated', function(assert){
+  assert.expect(3);
+
+  this.set('items', A([{ id: 'a' }]));
+  this.set('transition', function * () {});
+
+  this.render(hbs`
+    {{#animated-each items use=transition key="id" as |item|}}
+      <div class="test-child">
+       {{#animated-sprite "constant"}}
+         <div class="inner-animator">{{item.id}}</div>
+       {{/animated-sprite}}
+     </div>
+    {{/animated-each}}
+  `);
+
+  return this.waitForAnimations().then(() => {
+    this.set('transition', function * () {
+      assert.equal(this.keptSprites.length, 1, 'kept');
+      assert.equal(this.insertedSprites.length, 1, 'inserted');
+      assert.equal(this.removedSprites.length, 1, 'removed');
+    });
+    this.set('items', A([{ id: 'b' }]));
     return this.waitForAnimations();
   });
 });
