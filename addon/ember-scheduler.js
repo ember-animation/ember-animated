@@ -136,7 +136,13 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
   }
 
   owner.willDestroy.__ember_processes_destroyers__.push(() => {
-    object[cleanupMethodName]();
+    try {
+      object[cleanupMethodName]();
+    } catch (err) {
+      if (err.message !== 'TaskCancelation') {
+        throw err;
+      }
+    }
   });
 }
 function registerOnPrototype(addListenerOrObserver, proto, names, taskName, taskMethod, once) {
