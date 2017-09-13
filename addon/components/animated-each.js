@@ -30,6 +30,7 @@ export default Ember.Component.extend({
     this._installObservers();
     this._startingUp = false;
     this._lastTransition = null;
+    this._spriteMarkers = [];
     this._super();
   },
 
@@ -149,6 +150,18 @@ export default Ember.Component.extend({
     return keyForArray(this.get('key'));
   }),
 
+  registerSpriteMarker(markerComponent) {
+    this._spriteMarkers.push(markerComponent);
+  },
+
+  unregisterSpriteMarker(markerComponent) {
+    let index = this._spriteMarkers.indexOf(markerComponent);
+    if (index !== -1) {
+      this._spriteMarkers.splice(index, 1);
+    }
+  },
+
+
   didInsertElement() {
     this._inserted = true;
   },
@@ -221,6 +234,21 @@ export default Ember.Component.extend({
       let sprite = Sprite.positionedStartingAt(element, parent);
       currentSprites.push(sprite);
     }
+
+    for (let marker of this._spriteMarkers) {
+      let parentSprite, child;
+      for (let element of marker.ownElements()) {
+        if (!parentSprite) {
+          parentSprite = findParentSprite(element, currentSprites, parent.element);
+          child = Child.forMarker(marker, parentSprite);
+          child.state = 'kept';
+        }
+        let sprite = Sprite.positionedStartingAt(element, parentSprite);
+        currentSprites.push(sprite);
+        this._elementToChild.set(element, child);
+      }
+    }
+
     return { currentSprites, parent };
   },
 
@@ -228,6 +256,9 @@ export default Ember.Component.extend({
     currentSprites.forEach(sprite => {
       let child = this._elementToChild.get(sprite.element);
       sprite.owner = child;
+      if (child.parentSprite) {
+        child.state = child.parentSprite.owner.state;
+      }
       switch (child.state) {
       case 'kept':
         this._keptSprites.push(sprite);
@@ -305,9 +336,10 @@ export default Ember.Component.extend({
         parent.measureFinalBounds();
       }
 
+      // now is when we find all the newly inserted sprites and
+      // remember their final bounds.
+
       for (let element of this._ownElements()) {
-        // now is when we find all the newly inserted sprites and
-        // remember their final bounds.
         if (!currentSprites.find(sprite => sprite.element === element)) {
           if (!parent) {
             parent = Sprite.offsetParentEndingAt(element);
@@ -318,6 +350,23 @@ export default Ember.Component.extend({
           insertedSprites.push(sprite);
         }
       }
+
+      for (let marker of this._spriteMarkers) {
+        let parentSprite, child;
+        for (let element of marker.ownElements()) {
+          if (!currentSprites.find(sprite => sprite.element === element)) {
+            if (!parentSprite) {
+              parentSprite = findParentSprite(element, currentSprites.concat(insertedSprites), parent.element);
+              child = Child.forMarker(marker, parentSprite);
+            }
+            let sprite = Sprite.positionedEndingAt(element, parentSprite);
+            sprite.owner = child;
+            sprite.hide();
+            insertedSprites.push(sprite);
+          }
+        }
+      }
+
       // and remember the final bounds of all our kept sprites
       keptSprites.forEach(sprite => sprite.measureFinalBounds());
     });
@@ -454,6 +503,9 @@ class Child {
     this.state = 'new';
     this.removalBlockers = 0;
     this.removalCycle = null;
+
+    // Used by children that represent marked sprites
+    this.parentSprite = null;
   }
 
   block(cycle) {
@@ -478,6 +530,14 @@ class Child {
   get shouldRemove() {
     return this.state === 'removing' && this.removalBlockers < 1;
   }
+
+  static forMarker(markerComponent, parentSprite) {
+    let value = markerComponent.get('item');
+    let id = keyForArray(markerComponent.get('key'))(value);
+    let result = new this(id, value);
+    result.parentSprite = parentSprite;
+    return result;
+  }
 }
 
 function isStable(before, after) {
@@ -490,4 +550,28 @@ function isStable(before, after) {
     }
   }
   return true;
+}
+
+function findParentSprite(element, currentSprites, limitElement) {
+  // walk upward from our marked sprite's element. Stop if you
+  // get to limitElement. `parent` must be defined here because
+  // if we have any sprite markers, we must have at least one
+  // ownElement, because spriteMarkers are descendants of
+  // ownElements.
+  let pointer = element;
+  let parentSprite;
+  while (pointer && pointer !== limitElement) {
+    parentSprite = currentSprites.find(s => s.element === pointer);
+    if (parentSprite) {
+      break;
+    }
+    pointer = pointer.parentNode;
+  }
+  if (!parentSprite) {
+    throw new Error("Bug in animated-each: a marked sprite could not find its parent sprite")
+  }
+  if (parentSprite.element === element) {
+    throw new Error("You used marked-sprite as a direct descendant of an animator component. This is redundant because direct descendants of an animator component are already always marked to be sprites");
+  }
+  return parentSprite;
 }

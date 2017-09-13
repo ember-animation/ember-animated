@@ -244,3 +244,68 @@ test('it can match sprites that are leaving a destroyed component', function(ass
   });
 
 });
+
+test('it finds marked sprites at initial render', function(assert){
+  assert.expect(1);
+
+  function makeItem(id) {
+    return {
+      id,
+      altId: `alt-${id}`
+    };
+  }
+
+  this.set('items', A([makeItem('a'), makeItem('b'), makeItem('c')]));
+
+  this.set('transition', function * () {
+    // we find each of the three "normal" top-level sprites, plus the
+    // marked inner sprite inside each one.
+    assert.equal(this.insertedSprites.length, 6, "first transition");
+  });
+
+  this.render(hbs`
+    {{#animated-each items use=transition key="id" as |item animator|}}
+      <div class="test-child">
+       {{#animator.mark-sprite item key="altId"}}
+         <div class="inner-animator">{{innerItem.id}}</div>
+       {{/animator.mark-sprite}}
+     </div>
+    {{/animated-each}}
+  `);
+
+  return this.waitForAnimations();
+});
+
+test('it finds inserted/kept/removed marked sprites', function(assert){
+  assert.expect(3);
+
+  function makeItem(id) {
+    return {
+      id,
+      altId: `alt-${id}`
+    };
+  }
+
+  this.set('items', A([makeItem('a'), makeItem('b'), makeItem('c')]));
+  this.set('transition', function * () {});
+
+  this.render(hbs`
+    {{#animated-each items use=transition key="id" as |item animator|}}
+      <div class="test-child">
+       {{#animator.mark-sprite item key="altId"}}
+         <div class="inner-animator">{{innerItem.id}}</div>
+       {{/animator.mark-sprite}}
+     </div>
+    {{/animated-each}}
+  `);
+
+  return this.waitForAnimations().then(() => {
+    this.set('transition', function * () {
+      assert.equal(this.insertedSprites.length, 2, 'inserted');
+      assert.equal(this.keptSprites.length, 4, 'kept');
+      assert.equal(this.removedSprites.length, 2, 'removed');
+    });
+    this.set('items', A([makeItem('a'), makeItem('b'), makeItem('d')]));
+    return this.waitForAnimations();
+  });
+});

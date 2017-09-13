@@ -457,7 +457,15 @@ function findOffsets(element, computedStyle, transform, offsetSprite) {
     }
 
     let eopComputedStyle = getComputedStyle(effectiveOffsetParent);
-    if (eopComputedStyle.position !== 'static' || eopComputedStyle.transform !== 'none') {
+
+    // This tests whether our effectiveOffsetParent is actually
+    // controlling our position. It can do that by being
+    // non-statically position or having a transform. Or if our offset
+    // parent is itself a sprite in position lockMode, it will
+    // definitely become non-static during animation.
+    if (eopComputedStyle.position !== 'static' || eopComputedStyle.transform !== 'none' ||
+        (effectiveOffsetParent === offsetSprite.element && offsetSprite._lockMode === 'position')
+       ) {
       let eopBounds = effectiveOffsetParent.getBoundingClientRect();
       left -= eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth);
       top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth);
