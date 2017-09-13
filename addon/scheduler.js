@@ -80,20 +80,35 @@ export function childrenSettled() {
   );
 }
 
-let withCurrent, getCurrent;
+let withCurrent, getCurrent, onStack;
 {
   let current;
+  let prior = [];
   withCurrent = function(routine, fn) {
-    let prior = current;
+    prior.unshift({ microroutine: current });
     current = routine;
     try {
       return fn();
     } finally {
-      current = prior;
+      let restore = prior.shift();
+      current = restore.microroutine;
+      if (restore.throw) {
+        /*
+           Why is this not really "unsafe"? Because if the
+           microroutine that we are restoring has been cancelled, the
+           cancellation takes precedence over any exception that it
+           was going to see, so it's OK that this throw will silently
+           stomp a throw coming out of the above block.
+        */
+        throw restore.throw; // eslint-disable-line no-unsafe-finally
+      }
     }
   };
   getCurrent = function() {
     return current;
+  };
+  onStack = function(microroutine) {
+    return prior.find(entry => entry.microroutine === microroutine);
   };
 }
 
@@ -131,47 +146,70 @@ class MicroRoutine {
   }
   wake(state, value) {
     if (this.stopped) { return; }
-    try {
-      if (state === 'fulfilled') {
-        this.state = withCurrent(this, () => this.generator.next(value));
-      } else {
-        this.state = withCurrent(this, () => this.generator.throw(value));
-      }
-      if (this.state.done) {
-        this.resolve(this.state.value);
-      } else {
-        Promise.resolve(this.state.value).then(
-          value => this.wake('fulfilled', value),
-          reason => this.wake('rejected', reason)
-        );
-      }
-    } catch(err) {
-      this.state = {
-        done: true
-      };
-      this.linked.forEach(microRoutine => {
-        microRoutine.stop();
-      });
-      if (err.message !== 'TaskCancelation') {
-        this.reject(err);
-        if (this.errorLogger) {
-          if (!loggedErrors.get(err)) {
-            loggedErrors.set(err, true);
-            this.errorLogger.call(null, err)
+    withCurrent(this, () => {
+      try {
+        if (state === 'fulfilled') {
+          this.state = this.generator.next(value);
+        } else {
+          this.state = this.generator.throw(value);
+        }
+        if (this.state.done) {
+          this.resolve(this.state.value);
+        } else {
+          Promise.resolve(this.state.value).then(
+            value => this.wake('fulfilled', value),
+            reason => this.wake('rejected', reason)
+          );
+        }
+      } catch(err) {
+        this.state = {
+          done: true
+        };
+        this.linked.forEach(microRoutine => {
+          microRoutine.stop();
+        });
+        if (err.message !== 'TaskCancelation') {
+          this.reject(err);
+          if (this.errorLogger) {
+            if (!loggedErrors.get(err)) {
+              loggedErrors.set(err, true);
+              this.errorLogger.call(null, err)
+            }
           }
         }
       }
-    }
+    })
   }
   stop() {
     this.stopped = true;
-    if (isPromise(this.state.value) && typeof this.state.value.__ec_cancel__ === 'function') {
+    if (this.state && isPromise(this.state.value) && typeof this.state.value.__ec_cancel__ === 'function') {
       this.state.value.__ec_cancel__();
     }
-    withCurrent(this, () => cancelGenerator(this.generator));
     this.linked.forEach(microRoutine => {
       microRoutine.stop();
     });
+    let e = new Error('TaskCancelation');
+    e.message = 'TaskCancelation';
+    if (getCurrent() === this) {
+      // when a microroutine calls stop() resulting it stopping
+      // itself, the stop call throws TaskCancellation to unwind its
+      // own stack.
+      throw e;
+    }
+    let s = onStack(this);
+    if (s) {
+      // because of the synchronous nature of spawn() and stop(), it's
+      // possible that the microroutine we're stopping is already on
+      // the current call stack above us. If we tried to
+      // cancelGenerator it would give a "generator already running"
+      // exception. Instead we save the exception to throw when
+      // control returns back to the stopped microroutine.
+      s.throw = e;
+    } else {
+      // the stopped microroutine is not on our call stack, so we can
+      // throw an exception into it to unwind the generator's stack.
+      withCurrent(this, () => cancelGenerator(this.generator));
+    }
   }
 }
 
