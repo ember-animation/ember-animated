@@ -18,3 +18,7 @@
     content: ' ';
     display: table;
 }
+
+.animated-orphans {
+    position: relative;
+}

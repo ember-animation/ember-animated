@@ -68,7 +68,7 @@ export default Ember.Service.extend({
 
   matchDestroyed: task(function * (removed, transition, duration) {
     let matches = yield this.get('farMatch').perform([], [], removed, true);
-    if (this._orphanManager) {
+    if (this._orphanManager && transition) {
       let unmatchedSprites = removed.filter(sprite => !matches.has(sprite));
       this._orphanManager.get('animateOrphans').perform(unmatchedSprites, transition, duration);
     }
