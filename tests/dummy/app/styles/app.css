@@ -120,3 +120,13 @@
     display: inline-block;
     vertical-align: top;
 }
+
+.scenario-orphan {
+    width: 10em;
+    margin-left: 5em;
+}
+
+.scenario-orphan h1 {
+    background-color: #bbebbb;
+    padding: 0 0.5em;
+}

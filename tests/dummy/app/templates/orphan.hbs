@@ -1,19 +1,21 @@
-<button {{action "toggle"}}>Toggle</button>
+<div class="scenario-orphan">
+  <button {{action "toggle"}}>Toggle</button>
 
-{{#if showDetail}}
+  {{#if showDetail}}
 
-  {{#animated-bind "1" use=transition duration=500}}
-    <h1>1</h1>
-  {{/animated-bind}}
+    {{#animated-bind "1" use=fade duration=500}}
+      <h1>1</h1>
+    {{/animated-bind}}
 
 
-  {{#animated-bind "2" use=transition duration=500}}
-    <h1>2</h1>
-  {{/animated-bind}}
+    {{#animated-bind "2" use=fromSide duration=2000}}
+      <h1>2</h1>
+    {{/animated-bind}}
 
-{{/if}}
+  {{/if}}
 
-{{! make sure the orphans have a different offset parent than their original sprites to make sure we can counteract it }}
-<div style="position: relative; top: 40px">
-  {{animated-orphans}}
+  {{! make sure the orphans have a different offset parent than their original sprites to make sure we can counteract it }}
+  <div style="position: relative; top: 40px">
+    {{animated-orphans}}
+  </div>
 </div>
