@@ -4,6 +4,7 @@ import Motion from 'ember-animated/motion';
 import { rAF, microwait } from 'ember-animated/concurrency-helpers';
 import { MotionTester } from 'ember-animated/test-helpers';
 import $ from 'jquery';
+import { logErrors } from 'ember-animated/scheduler';
 import Ember from 'ember';
 
 let tester;
@@ -56,6 +57,11 @@ test('Can be canceled within ember-concurrency tasks', function(assert) {
 test('results in Task failure when animation throws asynchronously', function(assert) {
   class TestMotion extends Motion {
     * animate() {
+      logErrors(err => {
+        if (err.message !== 'simulated failure') {
+          throw err;
+        }
+      });
       yield microwait();
       throw new Error("simulated failure");
     }
@@ -78,6 +84,11 @@ test('results in Task failure when animation throws asynchronously', function(as
 test('results in Task failure when animation throws synchronously', function(assert) {
   class TestMotion extends Motion {
     * animate() {
+      logErrors(err => {
+        if (err.message !== 'simulated failure') {
+          throw err;
+        }
+      });
       throw new Error("simulated failure");
     }
   }

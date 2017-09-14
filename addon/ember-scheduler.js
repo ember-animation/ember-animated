@@ -5,6 +5,7 @@ import {
   logErrors
 } from './scheduler';
 import Ember from 'ember';
+import  { microwait } from './concurrency-helpers';
 const {
   set,
   ComputedProperty
@@ -63,8 +64,9 @@ class Task {
     cleanupOnDestroy(context, this, 'cancelAll');
     return spawn(function * () {
 
-      // TODO: without this we get silent errors, with this we get double errors.
-      logErrors(err => { throw err; });
+      logErrors(err => {
+        microwait().then(() => { throw err; });
+      });
 
       try {
         self._addInstance(current());
