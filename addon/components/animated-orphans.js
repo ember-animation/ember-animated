@@ -44,13 +44,13 @@ export default Ember.Component.extend({
         [],
         removedSprites
       );
+
+      removedSprites.forEach(s => s.rehome(ownSprite));
+
       context.onMotionStart = sprite => {
         if (sprite.element.parentElement) {
           throw new Error("cloning elements still in dom not implemented");
         }
-        let { dx, dy } = sprite.difference('initialBounds', ownSprite, 'initialBounds');
-        sprite._imposedStyle.left = dx;
-        sprite._imposedStyle.top = dy;
         sprite.lock();
         this.element.appendChild(sprite.element);
       };

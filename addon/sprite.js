@@ -395,6 +395,22 @@ export default class Sprite {
     });
   }
 
+  // Adjust the sprite so it will still be in the same visual position
+  // despite being moved into a new offset parent.
+  rehome(newOffsetSprite) {
+    let screenBounds = shiftedBounds(this.initialBounds, this._offsetSprite.initialBounds.left, this._offsetSprite.initialBounds.top);
+    let newRelativeBounds = shiftedBounds(screenBounds, -newOffsetSprite.initialBounds.left, -newOffsetSprite.initialBounds.top);
+
+    let t = this.transform;
+    t = t.mult(new Transform(1, 0, 0, 1, newRelativeBounds.left/t.a - t.tx, newRelativeBounds.top/t.d - t.ty));
+    this._transform = t;
+    this._imposedStyle.transform = t.serialize();
+    this._imposedStyle.transformOrigin = '0 0';
+    this._imposedStyle.top = 0;
+    this._imposedStyle.left = 0;
+    this._offsetSprite = newOffsetSprite;
+    this.initialBounds = newRelativeBounds;
+  }
 
   _handleMarginCollapse() {
     let children = this._collapsingChildren;

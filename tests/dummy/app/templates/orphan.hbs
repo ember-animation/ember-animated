@@ -1,4 +1,11 @@
 <div class="scenario-orphan">
+
+  {{! make sure the orphans have a different offset parent than their original sprites to make sure we can counteract it }}
+  <div style="position: relative; top: 40px">
+    {{animated-orphans}}
+  </div>
+
+
   <button {{action "toggle"}}>Toggle</button>
 
   {{#if showDetail}}
@@ -14,8 +21,4 @@
 
   {{/if}}
 
-  {{! make sure the orphans have a different offset parent than their original sprites to make sure we can counteract it }}
-  <div style="position: relative; top: 40px">
-    {{animated-orphans}}
-  </div>
 </div>

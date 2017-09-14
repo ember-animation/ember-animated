@@ -129,4 +129,6 @@
 .scenario-orphan h1 {
     background-color: #bbebbb;
     padding: 0 0.5em;
+    margin: 0.5em;
+    transform: translateX(20px);
 }
