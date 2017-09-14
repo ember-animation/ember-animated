@@ -88,6 +88,7 @@ test('it places orphan sprite at correct bounds', async function(assert) {
 
   this.set('showIt', true);
   this.render(hbs`
+{{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
 <div style="position: fixed; top: 0px; left: 0px">
  {{animated-orphans}}
 </div>
