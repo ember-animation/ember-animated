@@ -47,14 +47,8 @@ export default Ember.Component.extend({
 
       removedSprites.forEach(s => s.rehome(ownSprite));
 
-      context.onMotionStart = sprite => {
-        if (sprite.element.parentElement) {
-          throw new Error("cloning elements still in dom not implemented");
-        }
-        sprite.lock();
-        this.element.appendChild(sprite.element);
-      };
-      context.onMotionEnd = () => {};
+      context.onMotionStart = this._onMotionStart.bind(this);
+      context.onMotionEnd = this._onMotionEnd.bind(this);
       spawnChild(function * () {
         yield * context._runToCompletion(transition);
       });
@@ -66,6 +60,16 @@ export default Ember.Component.extend({
       }
     }
     this._orphanTransitions = [];
-  }).restartable()
+  }).restartable(),
+
+  _onMotionStart(sprite) {
+    if (sprite.element.parentElement) {
+      throw new Error("cloning elements still in dom not implemented");
+    }
+    sprite.lock();
+    this.element.appendChild(sprite.element);
+  },
+
+  _onMotionEnd() {}
 
 });
