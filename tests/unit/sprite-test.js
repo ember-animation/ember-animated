@@ -587,9 +587,10 @@ test("start translated", function(assert) {
   let parent = makeParent(target);
   parent.measureFinalBounds();
   let m = Sprite.positionedEndingAt(target[0], parent);
-  m.startTranslatedBy(100, 200);
-  assert.approxEqualPixels(m.initialBounds.left - 100, m.finalBounds.left, 'left');
-  assert.approxEqualPixels(m.initialBounds.top - 200, m.finalBounds.top, 'top');
+  let bounds = target[0].getBoundingClientRect();
+  m.startAtPixel({ x: 400, y: 300 });
+  assert.approxEqualPixels(m.finalBounds.left - m.initialBounds.left, bounds.left - 400, 'left');
+  assert.approxEqualPixels(m.finalBounds.top - m.initialBounds.top, bounds.top - 300, 'top');
   assert.equalBounds(m.initialBounds, m.getCurrentBounds(), 'current matches initial');
 });
 
@@ -599,10 +600,12 @@ test("start translated, accounts for parent motion", function(assert) {
   parent.measureFinalBounds();
 
   let m = Sprite.positionedEndingAt(target[0], parent);
-  m.startTranslatedBy(300, 320);
+  let bounds = target[0].getBoundingClientRect();
+  m.startAtPixel({ x: 400, y: 300 });
 
-  assert.approxEqualPixels(m.initialBounds.left - 300 + 100, m.finalBounds.left, 'left');
-  assert.approxEqualPixels(m.initialBounds.top - 320 + 120, m.finalBounds.top, 'top');
+  assert.approxEqualPixels(m.finalBounds.left - m.initialBounds.left - 100, bounds.left - 400, 'left');
+  assert.approxEqualPixels(m.finalBounds.top - m.initialBounds.top - 120, bounds.top - 300, 'top');
+
   assert.equalBounds(m.initialBounds, m.getCurrentBounds(), 'current matches initial');
 });
 

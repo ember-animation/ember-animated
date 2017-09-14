@@ -357,15 +357,15 @@ export default Ember.Component.extend({
     // if any of our inserted sprites have matching far away sprites,
     // we treat them like kept sprites. That is, they will get
     // initialBounds (derived from their far away matching sprite) and
-    // motion continuity via `startAt`, and we will pass them into the
-    // transition context as part of the keptSprites, not the
+    // motion continuity via `startAtSprite`, and we will pass them
+    // into the transition context as part of the keptSprites, not the
     // insertedSprites.
     let matchedInsertedSprites = [];
     let unmatchedInsertedSprites = [];
     insertedSprites.forEach(sprite => {
       let other = farMatches.get(sprite);
       if (other) {
-        sprite.startAt(other);
+        sprite.startAtSprite(other);
         matchedInsertedSprites.push(sprite);
       } else {
         unmatchedInsertedSprites.push(sprite);
@@ -379,7 +379,7 @@ export default Ember.Component.extend({
     keptSprites.forEach(sprite => {
       let other = farMatches.get(sprite);
       if (other && !sprite.revealed) {
-        sprite.startAt(other);
+        sprite.startAtSprite(other);
       }
     });
 

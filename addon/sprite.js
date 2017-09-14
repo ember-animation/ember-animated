@@ -408,13 +408,32 @@ export default class Sprite {
       children[i].classList.remove('ember-animated-top-collapse');
     }
   }
-  startAt(otherSprite) {
+  startAtSprite(otherSprite) {
     continueMotions(otherSprite.element, this.element);
     let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
     this.startTranslatedBy(-diff.dx, -diff.dy);
     this.initialBounds = resizedBounds(this.initialBounds, otherSprite.initialBounds.width, otherSprite.initialBounds.height);
     this.initialOpacity = otherSprite.initialOpacity;
   }
+
+  startAtPixel({ x, y }) {
+    let dx = 0;
+    let dy = 0;
+    if (x != null) {
+      dx = x - this.finalBounds.left;
+      if (this._offsetSprite) {
+        dx -= this._offsetSprite.finalBounds.left;
+      }
+    }
+    if (y != null) {
+      dy = y - this.finalBounds.top;
+      if (this._offsetSprite) {
+        dy -= this._offsetSprite.finalBounds.top;
+      }
+    }
+    this.startTranslatedBy(dx, dy);
+  }
+
   startTranslatedBy(dx, dy) {
     let offsetX = 0;
     let offsetY = 0;
@@ -428,6 +447,26 @@ export default class Sprite {
     this.initialBounds = shiftedBounds(this.initialBounds || this.finalBounds, dx-offsetX, dy-offsetY);
     this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
   }
+
+  endAtPixel({ x, y }) {
+    let dx = 0;
+    let dy = 0;
+    if (x != null) {
+      dx = x - this.initialBounds.left;
+      if (this._offsetSprite) {
+        dx -= this._offsetSprite.initialBounds.left;
+      }
+    }
+    if (y != null) {
+      dy = y - this.initialBounds.top;
+      if (this._offsetSprite) {
+        dy -= this._offsetSprite.initialBounds.top;
+      }
+    }
+    this.endTranslatedBy(dx, dy);
+  }
+
+
   endTranslatedBy(dx, dy) {
     this.finalBounds = shiftedBounds(this.initialBounds, dx, dy);
   }
