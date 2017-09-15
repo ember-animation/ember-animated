@@ -26,7 +26,10 @@ export default Ember.Component.extend({
     this._keptSprites = null;
     this._insertedSprites = null;
     this._removedSprites = null;
-    this.get('motionService').register(this);
+    this.maybeReanimate = this.maybeReanimate.bind(this);
+    this.get('motionService')
+      .register(this)
+      .observeDescendantAnimations(this, this.maybeReanimate);
     this._installObservers();
     this._startingUp = false;
     this._lastTransition = null;
@@ -168,7 +171,7 @@ export default Ember.Component.extend({
 
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
-  descendantAnimationStarting() {
+  maybeReanimate() {
     if (this.get('animate.isRunning') && !this._startingUp) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
@@ -190,7 +193,9 @@ export default Ember.Component.extend({
     }
     let transition = this._transitionFor(this._firstTime, this._prevItems, []);
     this.get('motionService.matchDestroyed').perform(removedSprites, transition, this.get('durationWithDefault'));
-    this.get('motionService').unregister(this);
+    this.get('motionService')
+      .unregister(this)
+      .unobserveDescendantAnimations(this, this.maybeReanimate);
   },
 
   // this gets called by motionService when we call

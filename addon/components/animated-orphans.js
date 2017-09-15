@@ -18,24 +18,32 @@ export default Ember.Component.extend({
     this._childToTransition = new WeakMap();
     this._inserted = false;
     this._cycleCounter = 0;
+
   },
 
   didInsertElement() {
     this._inserted = true;
-    this.get("motionService").registerOrphanManager(this);
+    this.animateOrphans = this.animateOrphans.bind(this);
+    this.reanimate = this.reanimate.bind(this);
+    this.get("motionService")
+      .register(this)
+      .observeOrphans(this.animateOrphans)
+      .observeAnimations(this.reanimate);
   },
 
   willDestroyElement() {
-    this.get("motionService").unregisterOrphanManager(this);
+    this.get("motionService")
+      .unregister(this)
+      .unobserveOrphans(this.animateOrphans)
+      .unobserveAnimations(this.reanimate);
   },
 
-  animateOrphans: task(function * (removedSprites, transition, duration) {
+  animateOrphans(removedSprites, transition, duration) {
     this._newOrphanTransitions.push({ removedSprites, transition, duration });
     this.get('startAnimation').perform();
-  }),
+  },
 
-  // this is called by the motionService when any other animation is starting
-  animationStarting() {
+  reanimate() {
     this.get('startAnimation').perform();
   },
 

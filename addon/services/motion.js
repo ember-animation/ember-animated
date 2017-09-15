@@ -8,27 +8,79 @@ export default Ember.Service.extend({
     this._rendezvous = [];
     this._measurements = [];
     this._animators = Ember.A();
-    this._orphanManager = null;
+    this._orphanObserver = null;
+    this._animationObservers = [];
+    this._descendantObservers = [];
   },
+
+  // === Notification System ===
+
+  // Ever animator should register and unregister itself so we know
+  // when there are any animations running. Animators are required to
+  // have:
+  //    - an isAnimating property
+  //    - beginStaticMeasurement and endStaticMeasurement methods
   register(animator) {
     this._animators.pushObject(animator);
+    return this;
   },
   unregister(animator) {
     this._animators.removeObject(animator);
+    return this;
   },
-  registerOrphanManager(component) {
-    if (this._orphanManager) {
+
+  // Register to receive any sprites that are orphaned by a destroyed
+  // animator.
+  observeOrphans(fn) {
+    if (this._orphanObserver) {
       throw new Error("Only one animated-orphans component can be used at one time");
     }
-    this._orphanManager = component;
-    // orphan manager is also always an animator
-    this.register(component);
+    this._orphanObserver = fn;
+    return this;
   },
-  unregisterOrphanManager(component) {
-    if (this._orphanManager === component) {
-      this._orphanManager = null;
+  unobserveOrphans(fn) {
+    if (this._orphanObserver === fn) {
+      this._orphanObserver = null;
     }
-    this.unregister(component);
+    return this;
+  },
+
+  // Register to know when an animation is starting anywhere in the app.
+  observeAnimations(fn) {
+    this._animationObservers.push(fn);
+    return this;
+  },
+  unobserveAnimations(fn) {
+    let index = this._animationObservers.indexOf(fn);
+    if (index !== -1) {
+      this._animationObservers.splice(fn, 1);
+    }
+    return this;
+  },
+
+  // Register to know when an animation is starting within the
+  // descendants of the given component
+  observeDescendantAnimations(component, fn) {
+    this._descendantObservers.push({ component, fn });
+    return this;
+  },
+  unobserveDescendantAnimations(component, fn) {
+    let index = this._descendantObservers.find(e => e.component === component && e.fn === fn);
+    if (index !== -1) {
+      this._descendantObservers.splice(fn, 1);
+    }
+    return this;
+  },
+
+  // Register to know when an animation is starting among the
+  // ancestors of the given comoponent. The fn will be told whether
+  // component is going to be destroyed or not at the end of the
+  // animation.
+  observeAncestorAnimations(/*component, fn*/) {
+    return this;
+  },
+  unobserveAncestorAnimations(/*component, fn*/){
+    return this;
   },
 
   // This is a publicly visible property you can use to know if any
@@ -68,9 +120,9 @@ export default Ember.Service.extend({
 
   matchDestroyed: task(function * (removed, transition, duration) {
     let matches = yield this.get('farMatch').perform([], [], removed, true);
-    if (this._orphanManager && transition) {
+    if (this._orphanObserver && transition) {
       let unmatchedSprites = removed.filter(sprite => !matches.has(sprite));
-      this._orphanManager.get('animateOrphans').perform(unmatchedSprites, transition, duration);
+      this._orphanObserver(unmatchedSprites, transition, duration);
     }
   }),
 
@@ -99,21 +151,17 @@ export default Ember.Service.extend({
   }),
 
   willAnimate({ task, duration, component }) {
-    let pointer = component.parentView;
-    let animators = this.get('_animators');
     let message = { task, duration };
+    let ancestors = ancestorsOf(component);
 
-    while (pointer) {
-      if (animators.indexOf(pointer) !== -1 && pointer.descendantAnimationStarting) {
-        pointer.descendantAnimationStarting(message);
+    for (let { component: observingComponent, fn } of this._descendantObservers) {
+      if (ancestors.indexOf(observingComponent) !== -1) {
+        fn(message);
       }
-      pointer = pointer.parentView;
     }
 
-    for (let animator of animators) {
-      if (animator.animationStarting) {
-        animator.animationStarting(message);
-      }
+    for (let fn of this._animationObservers) {
+      fn(message);
     }
   },
 
@@ -156,4 +204,14 @@ function performMatches(sink, source) {
       source.matches.set(match, sprite);
     }
   });
+}
+
+function ancestorsOf(component) {
+  let ancestors = [];
+  let pointer = component.parentView;
+  while (pointer) {
+    ancestors.push(pointer);
+    pointer = pointer.parentView;
+  }
+  return ancestors;
 }

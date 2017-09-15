@@ -17,7 +17,10 @@ export default Ember.Component.extend({
     this._signalResolve= null;
     this._inserted = false;
     this._startingUp = false;
-    this.get('motionService').register(this);
+    this.maybeAnimate = this.maybeAnimate.bind(this);
+    this.get('motionService')
+      .register(this)
+      .observeDescendantAnimations(this, this.maybeAnimate);
   },
 
   didInsertElement() {
@@ -25,12 +28,14 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
-    this.get('motionService').unregister(this);
+    this.get('motionService')
+      .unregister(this)
+      .unobserveDescendantAnimations(this, this.maybeAnimate);
   },
 
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
-  descendantAnimationStarting({ duration, task }) {
+  maybeAnimate({ duration, task }) {
     if (!this._startingUp) {
       this.get('animate').perform(duration, task);
     }
