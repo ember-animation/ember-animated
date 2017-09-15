@@ -152,7 +152,7 @@ export default Ember.Service.extend({
 
   willAnimate({ task, duration, component }) {
     let message = { task, duration };
-    let ancestors = ancestorsOf(component);
+    let ancestors = [...ancestorsOf(component)];
 
     for (let { component: observingComponent, fn } of this._descendantObservers) {
       if (ancestors.indexOf(observingComponent) !== -1) {
@@ -206,12 +206,10 @@ function performMatches(sink, source) {
   });
 }
 
-function ancestorsOf(component) {
-  let ancestors = [];
+function * ancestorsOf(component) {
   let pointer = component.parentView;
   while (pointer) {
-    ancestors.push(pointer);
+    yield pointer;
     pointer = pointer.parentView;
   }
-  return ancestors;
 }
