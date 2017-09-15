@@ -14,7 +14,11 @@ moduleForComponent('animated-orphans', 'Integration | Component | animated orpha
 });
 
 class TestMotion extends Motion {
-  *animate() {}
+  *animate() {
+    if (this.opts && this.opts.shouldBlock) {
+      yield new Promise(() => {});
+    }
+  }
 }
 
 
@@ -112,4 +116,149 @@ test('it places orphan sprite at correct bounds', async function(assert) {
   this.set('showIt', false);
   await this.waitForAnimations();
 
+});
+
+test('makes orphan sprites eligible for far matching back into other animators', async function(assert) {
+  assert.expect(6);
+
+  this.set('showIt', true);
+  this.render(hbs`
+{{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
+<div style="position: fixed; top: 0px; left: 0px">
+ {{animated-orphans}}
+</div>
+
+{{#if showIt}}
+  {{#animated-bind "one" use=t1}}
+    <div class="one">One</div>
+  {{/animated-bind}}
+{{/if}}
+`)
+  await this.waitForAnimations();
+
+  this.set('t1', function * () {
+    assert.equal(this.removedSprites.length, 1, 'first transition removed');
+    assert.equal(this.keptSprites.length, 0, 'first transition kept');
+    assert.equal(this.insertedSprites.length, 0, 'first transition inserted');
+    this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
+  });
+
+  this.set('showIt', false);
+  await macroWait();
+
+  this.set('t1', function * () {
+    assert.equal(this.removedSprites.length, 0, 'second transition removed');
+    assert.equal(this.keptSprites.length, 1, 'second transition kept');
+    assert.equal(this.insertedSprites.length, 0, 'second transition inserted');
+    this.keptSprites.forEach(s => this.animate(new TestMotion(s)));
+  });
+  this.set('showIt', true);
+  await this.waitForAnimations();
+});
+
+test('drops sprites that had not starting animating when interruption occured', async function(assert) {
+  assert.expect(12);
+
+  this.set('showIt', true);
+  this.render(hbs`
+{{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
+<div style="position: fixed; top: 0px; left: 0px">
+ {{animated-orphans}}
+</div>
+
+{{#if showIt}}
+  {{#animated-bind "one" use=t1}}
+    <div class="one">One</div>
+  {{/animated-bind}}
+  {{#animated-bind "two" use=t2}}
+    <div class="one">One</div>
+  {{/animated-bind}}
+{{/if}}
+`)
+  await this.waitForAnimations();
+
+  this.set('t1', function * () {
+    assert.equal(this.removedSprites.length, 1, 'first t1 removed');
+    assert.equal(this.keptSprites.length, 0, 'first t1 kept');
+    assert.equal(this.insertedSprites.length, 0, 'first t1 inserted');
+    this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
+  });
+
+  this.set('t2', function * () {
+    assert.equal(this.removedSprites.length, 1, 'first t2 removed');
+    assert.equal(this.keptSprites.length, 0, 'first t2 kept');
+    assert.equal(this.insertedSprites.length, 0, 'first t2 inserted');
+  });
+
+  this.set('showIt', false);
+  await macroWait();
+
+  this.set('t1', function * () {
+    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
+    assert.equal(this.keptSprites.length, 1, 'second t1 kept');
+    assert.equal(this.insertedSprites.length, 0, 'second t1 inserted');
+  });
+
+  this.set('t2', function * () {
+    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
+    assert.equal(this.keptSprites.length, 0, 'second t1 kept');
+    assert.equal(this.insertedSprites.length, 1, 'second t1 inserted');
+  });
+
+  this.set('showIt', true);
+  await this.waitForAnimations();
+});
+
+test('drops sprites that finished animating when interruption occured', async function(assert) {
+  assert.expect(12);
+
+  this.set('showIt', true);
+  this.render(hbs`
+{{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
+<div style="position: fixed; top: 0px; left: 0px">
+ {{animated-orphans}}
+</div>
+
+{{#if showIt}}
+  {{#animated-bind "one" use=t1}}
+    <div class="one">One</div>
+  {{/animated-bind}}
+  {{#animated-bind "two" use=t2}}
+    <div class="one">One</div>
+  {{/animated-bind}}
+{{/if}}
+`)
+  await this.waitForAnimations();
+
+  this.set('t1', function * () {
+    assert.equal(this.removedSprites.length, 1, 'first t1 removed');
+    assert.equal(this.keptSprites.length, 0, 'first t1 kept');
+    assert.equal(this.insertedSprites.length, 0, 'first t1 inserted');
+    this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
+  });
+
+  this.set('t2', function * () {
+    assert.equal(this.removedSprites.length, 1, 'first t2 removed');
+    assert.equal(this.keptSprites.length, 0, 'first t2 kept');
+    assert.equal(this.insertedSprites.length, 0, 'first t2 inserted');
+    this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: false })));
+  });
+
+  this.set('showIt', false);
+  await macroWait();
+
+  this.set('t1', function * () {
+    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
+    assert.equal(this.keptSprites.length, 1, 'second t1 kept');
+    assert.equal(this.insertedSprites.length, 0, 'second t1 inserted');
+  });
+
+  this.set('t2', function * () {
+    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
+    assert.equal(this.keptSprites.length, 0, 'second t1 kept');
+    assert.equal(this.insertedSprites.length, 1, 'second t1 inserted');
+  });
+
+  this.set('showIt', true);
+  await this.waitForAnimations();
 });
