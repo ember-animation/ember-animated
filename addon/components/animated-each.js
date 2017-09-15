@@ -33,7 +33,6 @@ export default Ember.Component.extend({
       .observeDescendantAnimations(this, this.maybeReanimate)
       .observeAncestorAnimations(this, this.ancestorIsAnimating);
     this._installObservers();
-    this._startingUp = false;
     this._lastTransition = null;
     this._super();
   },
@@ -141,14 +140,14 @@ export default Ember.Component.extend({
     if (!isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
       if (transition) {
-        this.get('animate').perform(transition);
+        this.get('startAnimation').perform(transition);
       }
     }
 
     return newChildren;
   }),
 
-  isAnimating: Ember.computed.alias('animate.isRunning'),
+  isAnimating: Ember.computed.or('startAnimation.isRunning', 'animate.isRunning'),
 
   keyGetter: Ember.computed('key', function() {
     return keyForArray(this.get('key'));
@@ -174,15 +173,15 @@ export default Ember.Component.extend({
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
   maybeReanimate() {
-    if (this.get('animate.isRunning') && !this._startingUp) {
+    if (this.get('animate.isRunning')) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
       // the changing conditions.
-      this.get('animate').perform(this._lastTransition);
+      this.get('startAnimation').perform(this._lastTransition);
     }
   },
 
-  ancestorIsAnimating(ourState) {
+  ancestorIsAnimating(/* ourState */) {
 
   },
 
@@ -259,11 +258,7 @@ export default Ember.Component.extend({
     });
   },
 
-  animate: task(function * (transition) {
-    // we distinguish the early stage of an animation that happens
-    // before render from what comes after.
-    this._startingUp = true;
-
+  startAnimation: task(function * (transition) {
     // we remember the transition we're using in case we need to
     // recalculate based on other animators potentially moving our DOM
     // around
@@ -294,14 +289,11 @@ export default Ember.Component.extend({
     currentSprites.forEach(sprite => sprite.lock());
 
     // Wait for Ember to render our latest state.
-    try {
-      yield afterRender();
-    } finally {
-      // At this point we move out of startingUp mode. This is in a
-      // finally block because it's possible our task was interrupted.
-      this._startingUp = false;
-    }
+    yield afterRender();
+    this.get('animate').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
+  }),
 
+  animate: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites) {
     // fill the keptSprites and removedSprites lists by comparing what
     // we had in currentSprites with what is still in the DOM now that
     // rendering happened.

@@ -53,7 +53,7 @@ export default Ember.Component.extend({
 
   endStaticMeasurement() {},
 
-  isAnimating: Ember.computed.alias('animate.isRunning'),
+  isAnimating: Ember.computed.or('startAnimation.isRunning', 'animate.isRunning'),
 
   startAnimation: task(function * () {
     yield afterRender();
