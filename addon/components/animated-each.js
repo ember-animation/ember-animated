@@ -34,6 +34,7 @@ export default Ember.Component.extend({
       .observeAncestorAnimations(this, this.ancestorIsAnimating);
     this._installObservers();
     this._lastTransition = null;
+    this._ancestorWillDestroyUs = false;
     this._super();
   },
 
@@ -181,26 +182,50 @@ export default Ember.Component.extend({
     }
   },
 
-  ancestorIsAnimating(/* ourState */) {
+  ancestorIsAnimating(ourState) {
+    if (ourState === 'removing' && !this._ancestorWillDestroyUs) {
+      // we just found our we're probably getting destroyed. Abandon
+      // ship!
+      this._ancestorWillDestroyUs = true;
+      this._letSpritesEscape(true);
+    } else if (ourState !== 'removing' && this._ancestorWillDestroyUs) {
+      // we got a reprieve, our destruction was cancelled before it
+      // could happen.
+      this._ancestorWillDestroyUs = false;
+      // treat all our sprites as re-inserted, because we had already handed them off as orphans
+      let transition = this._transitionFor(this._firstTime, [], this._prevItems);
+      if (transition) {
+        this.get('startAnimation').perform(transition);
+      }
+    }
+  },
 
+  _letSpritesEscape(hideThem=false) {
+    let transition = this._transitionFor(this._firstTime, this._prevItems, []);
+    if (transition) {
+      let removedSprites = [];
+      let parent;
+      for (let element of this._ownElements()) {
+        if (!parent) {
+          parent = Sprite.offsetParentStartingAt(element);
+        }
+        let sprite = Sprite.positionedStartingAt(element, parent);
+        sprite.owner = this._elementToChild.get(element);
+        removedSprites.push(sprite);
+        if (hideThem) {
+          sprite.hide();
+        }
+      }
+      this.get('motionService.matchDestroyed').perform(removedSprites, transition, this.get('durationWithDefault'));
+    }
   },
 
   willDestroyElement() {
-    let removedSprites = [];
-    let parent;
-    for (let element of this._ownElements()) {
-      if (!parent) {
-        parent = Sprite.offsetParentStartingAt(element);
-      }
-      let sprite = Sprite.positionedStartingAt(element, parent);
-      sprite.owner = this._elementToChild.get(element);
-      removedSprites.push(sprite);
-    }
-    let transition = this._transitionFor(this._firstTime, this._prevItems, []);
-    this.get('motionService.matchDestroyed').perform(removedSprites, transition, this.get('durationWithDefault'));
+    this._letSpritesEscape();
     this.get('motionService')
       .unregister(this)
-      .unobserveDescendantAnimations(this, this.maybeReanimate);
+      .unobserveDescendantAnimations(this, this.maybeReanimate)
+      .unobserveAncestorAnimations(this, this.ancestorIsAnimating);
   },
 
   // this gets called by motionService when we call
@@ -239,26 +264,35 @@ export default Ember.Component.extend({
     currentSprites.forEach(sprite => {
       let child = this._elementToChild.get(sprite.element);
       sprite.owner = child;
-      switch (child.state) {
-      case 'kept':
-        this._keptSprites.push(sprite);
-        break;
-      case 'removing':
+
+      if (this._ancestorWillDestroyUs) {
         this._removedSprites.push(sprite);
-        break;
-      case 'new':
-        // This can happen when our animation gets restarted due to
-        // another animation possibly messing with our DOM, as opposed
-        // to restarting because our own data changed.
-        this._keptSprites.push(sprite);
-        break;
-      default:
-        Ember.warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
+      } else {
+        switch (child.state) {
+        case 'kept':
+          this._keptSprites.push(sprite);
+          break;
+        case 'removing':
+          this._removedSprites.push(sprite);
+          break;
+        case 'new':
+          // This can happen when our animation gets restarted due to
+          // another animation possibly messing with our DOM, as opposed
+          // to restarting because our own data changed.
+          this._keptSprites.push(sprite);
+          break;
+        default:
+          Ember.warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
+        }
       }
     });
   },
 
   startAnimation: task(function * (transition) {
+    // starting a new animation cancels one that's already
+    // running.
+    this.get('animate').cancelAll();
+
     // we remember the transition we're using in case we need to
     // recalculate based on other animators potentially moving our DOM
     // around
@@ -291,7 +325,7 @@ export default Ember.Component.extend({
     // Wait for Ember to render our latest state.
     yield afterRender();
     this.get('animate').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
-  }),
+  }).restartable(),
 
   animate: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites) {
     // fill the keptSprites and removedSprites lists by comparing what
