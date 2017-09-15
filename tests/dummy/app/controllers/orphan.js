@@ -17,6 +17,9 @@ function * fade() {
   this.insertedSprites.forEach(s => {
     this.animate(new Opacity(s, { from: 0 }));
   });
+  this.keptSprites.forEach(s => {
+    this.animate(new Opacity(s));
+  });
   this.removedSprites.forEach(s => {
     this.animate(new Opacity(s, { to: 0 }));
   });
@@ -26,6 +29,9 @@ function * fade() {
 function * fromSide() {
   this.insertedSprites.forEach(s => {
     s.startAtPixel({ x: window.outerWidth * 0.8 });
+    this.animate(new Move(s));
+  });
+  this.keptSprites.forEach(s => {
     this.animate(new Move(s));
   });
   this.removedSprites.forEach(s => {
