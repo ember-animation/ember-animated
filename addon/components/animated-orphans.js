@@ -49,7 +49,7 @@ export default Ember.Component.extend({
 
   startAnimation: task(function * () {
     yield afterRender();
-    let ownSprite = Sprite.offsetParentStartingAt(this.element);
+    let ownSprite = new Sprite(this.element, true, null, null);
     let activeSprites = this._findActiveSprites(ownSprite);
     this.get('animate').perform(activeSprites, ownSprite);
   }).drop(),
