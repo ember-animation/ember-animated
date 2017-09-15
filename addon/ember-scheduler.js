@@ -31,6 +31,10 @@ Object.assign(TaskProperty.prototype, {
     this._bufferPolicy = cancelAllButLast;
     return this;
   },
+  drop() {
+    this._bufferPolicy = drop;
+    return this;
+  },
   observes(...deps) {
     this._observes = deps;
     return this;
@@ -149,6 +153,13 @@ function makeTaskCallback(taskName, method, once) {
 function cancelAllButLast(task, privTask) {
   let instances = privTask.instances;
   for (let i = 0; i < instances.length - 1; i++) {
+    stop(instances[i]);
+  }
+}
+
+function drop(task, privTask) {
+  let instances = privTask.instances;
+  for (let i = 1; i < instances.length; i++) {
     stop(instances[i]);
   }
 }
