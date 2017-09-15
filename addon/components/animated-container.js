@@ -30,7 +30,7 @@ export default Ember.Component.extend({
 
   isAnimating: Ember.computed.alias('animate.isRunning'),
 
-  animationStarting({ duration, task }) {
+  descendantAnimationStarting({ duration, task }) {
     if (!this._startingUp) {
       this.get('animate').perform(duration, task);
     }

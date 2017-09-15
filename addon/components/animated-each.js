@@ -168,7 +168,7 @@ export default Ember.Component.extend({
 
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
-  animationStarting() {
+  descendantAnimationStarting() {
     if (this.get('animate.isRunning') && !this._startingUp) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to

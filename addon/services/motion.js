@@ -101,12 +101,19 @@ export default Ember.Service.extend({
   willAnimate({ task, duration, component }) {
     let pointer = component.parentView;
     let animators = this.get('_animators');
+    let message = { task, duration };
 
     while (pointer) {
-      if (animators.indexOf(pointer) !== -1 && pointer.animationStarting) {
-        pointer.animationStarting({ task, duration });
+      if (animators.indexOf(pointer) !== -1 && pointer.descendantAnimationStarting) {
+        pointer.descendantAnimationStarting(message);
       }
       pointer = pointer.parentView;
+    }
+
+    for (let animator of animators) {
+      if (animator.animationStarting) {
+        animator.animationStarting(message);
+      }
     }
   },
 
