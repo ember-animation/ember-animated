@@ -65,6 +65,9 @@ class Task {
     let context = privSelf.context;
     let implementation = privSelf.implementation;
     let policy = privSelf.taskProperty._bufferPolicy;
+    if (context.isDestroyed) {
+      throw new Error(`Tried to perform task ${privSelf.name} on an already destroyed object`);
+    }
     cleanupOnDestroy(context, this, 'cancelAll');
     return spawn(function * () {
 
