@@ -11,15 +11,6 @@ export default class TransitionContext {
     this.keptSprites = keptSprites;
     this.removedSprites = removedSprites;
   }
-  get insertedSprite() {
-    return this.insertedSprites[0];
-  }
-  get keptSprite() {
-    return this.keptSprites[0];
-  }
-  get removedSprite() {
-    return this.removedSprites[0];
-  }
   animate(motion) {
     if (motion.duration == null) {
       motion.duration = this.duration;
