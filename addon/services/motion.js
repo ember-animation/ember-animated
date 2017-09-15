@@ -11,6 +11,7 @@ export default Ember.Service.extend({
     this._orphanObserver = null;
     this._animationObservers = [];
     this._descendantObservers = [];
+    this._ancestorObservers = new WeakMap();
   },
 
   // === Notification System ===
@@ -76,10 +77,32 @@ export default Ember.Service.extend({
   // ancestors of the given comoponent. The fn will be told whether
   // component is going to be destroyed or not at the end of the
   // animation.
-  observeAncestorAnimations(/*component, fn*/) {
+  observeAncestorAnimations(component, fn) {
+    let id;
+    for (let ancestorComponent of ancestorsOf(component)) {
+      // when we find an animated list element, we save its ID
+      if (ancestorComponent.isEmberAnimatedListElement) {
+        id = ancestorComponent.get('child.id');
+      } else if (id != null) {
+        // if we found an ID on the last loop, now we've got the list
+        // element's parent which is the actual animator.
+        let observers = this._ancestorObservers.get(ancestorComponent);
+        if (!observers) {
+          this._ancestorObservers.set(ancestorComponent, observers = new Map());
+        }
+        observers.set(fn, id);
+        id = null;
+      }
+    }
     return this;
   },
-  unobserveAncestorAnimations(/*component, fn*/){
+  unobserveAncestorAnimations(component, fn){
+    for (let ancestorComponent of ancestorsOf(component)) {
+      let observers = this._ancestorObservers.get(ancestorComponent);
+      if (observers) {
+        observers.delete(fn);
+      }
+    }
     return this;
   },
 
@@ -150,16 +173,27 @@ export default Ember.Service.extend({
     return matches;
   }),
 
-  willAnimate({ task, duration, component }) {
+  willAnimate({ task, duration, component, children }) {
     let message = { task, duration };
-    let ancestors = [...ancestorsOf(component)];
 
+    // tell any of our ancestors who are observing their descendants
+    let ancestors = [...ancestorsOf(component)];
     for (let { component: observingComponent, fn } of this._descendantObservers) {
       if (ancestors.indexOf(observingComponent) !== -1) {
         fn(message);
       }
     }
 
+    // tell any of our descendants who are observing their ancestors
+    let observers = this._ancestorObservers.get(component);
+    if (observers) {
+      for (let [fn, id] of observers.entries()) {
+        let child = children.find(child => child.id === id);
+        fn(child.state);
+      }
+    }
+
+    // tell anybody who is listenign for all animations
     for (let fn of this._animationObservers) {
       fn(message);
     }

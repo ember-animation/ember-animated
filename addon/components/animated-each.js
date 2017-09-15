@@ -27,9 +27,11 @@ export default Ember.Component.extend({
     this._insertedSprites = null;
     this._removedSprites = null;
     this.maybeReanimate = this.maybeReanimate.bind(this);
+    this.ancestorIsAnimating = this.ancestorIsAnimating.bind(this);
     this.get('motionService')
       .register(this)
-      .observeDescendantAnimations(this, this.maybeReanimate);
+      .observeDescendantAnimations(this, this.maybeReanimate)
+      .observeAncestorAnimations(this, this.ancestorIsAnimating);
     this._installObservers();
     this._startingUp = false;
     this._lastTransition = null;
@@ -180,6 +182,10 @@ export default Ember.Component.extend({
     }
   },
 
+  ancestorIsAnimating(ourState) {
+
+  },
+
   willDestroyElement() {
     let removedSprites = [];
     let parent;
@@ -280,7 +286,8 @@ export default Ember.Component.extend({
     this.get('motionService').willAnimate({
       task: current(),
       duration: this.get('durationWithDefault'),
-      component: this
+      component: this,
+      children: this._renderedChildren
     });
 
     // Make all our current sprites absolutely positioned so they won't move during render.

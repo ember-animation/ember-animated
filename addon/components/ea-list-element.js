@@ -8,6 +8,7 @@ import { componentNodes } from 'ember-animated/ember-internals';
 
 export default Ember.Component.extend({
   tagName: '',
+  isEmberAnimatedListElement: true,
 
   didRender() {
     let mapping = this.get('elementToChild');
