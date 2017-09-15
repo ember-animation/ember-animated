@@ -82,6 +82,7 @@
 
 .hero-detail {
     margin-left: 6rem;
+    margin-top: 6rem;
 }
 
 .hero-detail-image {
@@ -119,4 +120,16 @@
 .animated-text {
     display: inline-block;
     vertical-align: top;
+}
+
+.scenario-orphan {
+    width: 10em;
+    margin-left: 5em;
+}
+
+.scenario-orphan h1 {
+    background-color: #bbebbb;
+    padding: 0 0.5em;
+    margin: 0.5em;
+    transform: translateX(20px);
 }

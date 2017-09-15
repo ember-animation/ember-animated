@@ -18,6 +18,7 @@ Router.map(function() {
   this.route('nested');
   this.route('direct-style');
   this.route('inline-text');
+  this.route('orphan');
 });
 
 export default Router;

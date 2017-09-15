@@ -8,12 +8,27 @@ export default Ember.Service.extend({
     this._rendezvous = [];
     this._measurements = [];
     this._animators = Ember.A();
+    this._orphanManager = null;
   },
   register(animator) {
     this._animators.pushObject(animator);
   },
   unregister(animator) {
     this._animators.removeObject(animator);
+  },
+  registerOrphanManager(component) {
+    if (this._orphanManager) {
+      throw new Error("Only one animated-orphans component can be used at one time");
+    }
+    this._orphanManager = component;
+    // orphan manager is also always an animator
+    this.register(component);
+  },
+  unregisterOrphanManager(component) {
+    if (this._orphanManager === component) {
+      this._orphanManager = null;
+    }
+    this.unregister(component);
   },
 
   // This is a publicly visible property you can use to know if any
@@ -51,9 +66,13 @@ export default Ember.Service.extend({
     }
   }),
 
-  matchDestroyed(removed) {
-    this.get('farMatch').perform([], [], removed, true);
-  },
+  matchDestroyed: task(function * (removed, transition, duration) {
+    let matches = yield this.get('farMatch').perform([], [], removed, true);
+    if (this._orphanManager && transition) {
+      let unmatchedSprites = removed.filter(sprite => !matches.has(sprite));
+      this._orphanManager.get('animateOrphans').perform(unmatchedSprites, transition, duration);
+    }
+  }),
 
   farMatch: task(function * (inserted, kept, removed, longWait=false) {
     let matches = new Map();
@@ -82,12 +101,19 @@ export default Ember.Service.extend({
   willAnimate({ task, duration, component }) {
     let pointer = component.parentView;
     let animators = this.get('_animators');
+    let message = { task, duration };
 
     while (pointer) {
-      if (animators.indexOf(pointer) !== -1 && pointer.animationStarting) {
-        pointer.animationStarting({ task, duration });
+      if (animators.indexOf(pointer) !== -1 && pointer.descendantAnimationStarting) {
+        pointer.descendantAnimationStarting(message);
       }
       pointer = pointer.parentView;
+    }
+
+    for (let animator of animators) {
+      if (animator.animationStarting) {
+        animator.animationStarting(message);
+      }
     }
   },
 

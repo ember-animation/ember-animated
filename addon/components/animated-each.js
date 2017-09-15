@@ -168,7 +168,7 @@ export default Ember.Component.extend({
 
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
-  animationStarting() {
+  descendantAnimationStarting() {
     if (this.get('animate.isRunning') && !this._startingUp) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
@@ -188,7 +188,8 @@ export default Ember.Component.extend({
       sprite.owner = this._elementToChild.get(element);
       removedSprites.push(sprite);
     }
-    this.get('motionService').matchDestroyed(removedSprites);
+    let transition = this._transitionFor(this._firstTime, this._prevItems, []);
+    this.get('motionService.matchDestroyed').perform(removedSprites, transition, this.get('durationWithDefault'));
     this.get('motionService').unregister(this);
   },
 
@@ -356,15 +357,15 @@ export default Ember.Component.extend({
     // if any of our inserted sprites have matching far away sprites,
     // we treat them like kept sprites. That is, they will get
     // initialBounds (derived from their far away matching sprite) and
-    // motion continuity via `startAt`, and we will pass them into the
-    // transition context as part of the keptSprites, not the
+    // motion continuity via `startAtSprite`, and we will pass them
+    // into the transition context as part of the keptSprites, not the
     // insertedSprites.
     let matchedInsertedSprites = [];
     let unmatchedInsertedSprites = [];
     insertedSprites.forEach(sprite => {
       let other = farMatches.get(sprite);
       if (other) {
-        sprite.startAt(other);
+        sprite.startAtSprite(other);
         matchedInsertedSprites.push(sprite);
       } else {
         unmatchedInsertedSprites.push(sprite);
@@ -378,7 +379,7 @@ export default Ember.Component.extend({
     keptSprites.forEach(sprite => {
       let other = farMatches.get(sprite);
       if (other && !sprite.revealed) {
-        sprite.startAt(other);
+        sprite.startAtSprite(other);
       }
     });
 

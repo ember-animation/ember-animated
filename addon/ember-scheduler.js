@@ -1,9 +1,11 @@
 import {
   spawn,
   current,
-  stop
+  stop,
+  logErrors
 } from './scheduler';
 import Ember from 'ember';
+import  { microwait } from './concurrency-helpers';
 const {
   set,
   ComputedProperty
@@ -12,7 +14,6 @@ const {
 export function task(...args) {
   return new TaskProperty(...args);
 }
-
 
 function TaskProperty(taskFn) {
   let tp = this;
@@ -28,6 +29,10 @@ Object.assign(TaskProperty.prototype, {
   constructor: TaskProperty,
   restartable() {
     this._bufferPolicy = cancelAllButLast;
+    return this;
+  },
+  drop() {
+    this._bufferPolicy = drop;
     return this;
   },
   observes(...deps) {
@@ -62,6 +67,11 @@ class Task {
     let policy = privSelf.taskProperty._bufferPolicy;
     cleanupOnDestroy(context, this, 'cancelAll');
     return spawn(function * () {
+
+      logErrors(err => {
+        microwait().then(() => { throw err; });
+      });
+
       try {
         self._addInstance(current());
         if (policy) {
@@ -143,6 +153,13 @@ function makeTaskCallback(taskName, method, once) {
 function cancelAllButLast(task, privTask) {
   let instances = privTask.instances;
   for (let i = 0; i < instances.length - 1; i++) {
+    stop(instances[i]);
+  }
+}
+
+function drop(task, privTask) {
+  let instances = privTask.instances;
+  for (let i = 1; i < instances.length; i++) {
     stop(instances[i]);
   }
 }

@@ -153,6 +153,36 @@ test('restartable task', function(assert) {
   });
 });
 
+test('drop task', function(assert) {
+  let Class = Ember.Object.extend({
+    hello: task(function * (id, blockerPromise) {
+      assert.log(`task ${id} starting`);
+      try {
+        if (blockerPromise) {
+          blockerPromise.__ec_cancel__ = () => assert.log(`task ${id} canceled`);
+          yield blockerPromise;
+        }
+      } finally {
+        assert.log(`task ${id} exiting`);
+      }
+    }).drop()
+  });
+  let object = Class.create();
+  let promise, unblock;
+  Ember.run(() => {
+    promise = object.get('hello').perform('1', new Promise(r => unblock = r));
+  });
+  Ember.run(() => {
+    object.get('hello').perform('2', new Promise(() => {}));
+    unblock();
+  });
+  return promise.then(() => {
+    assert.logEquals(['task 1 starting', 'task 1 exiting']);
+    assert.equal(object.get('hello.concurrency'), 0);
+  });
+});
+
+
 test('can use derived state', function(assert) {
   let resolve;
   let Class = Ember.Object.extend({
