@@ -1,7 +1,7 @@
 <div class="inline-text-scenario">
   <button {{action "toggle"}}>Toggle</button>
 
-  {{#if tableMode}}
+  {{#animated-if tableMode rules=fade duration=1000 }}
     <ul>
       <li>{{animated-text "framework"}}</li>
       <li>{{animated-text "ambitious"}}</li>
@@ -11,5 +11,5 @@
     <p>
       A {{animated-text "framework"}} for creating {{animated-text "ambitious"}} web {{animated-text "applications"}}.
     </p>
-  {{/if}}
+  {{/animated-if}}
 </div>
