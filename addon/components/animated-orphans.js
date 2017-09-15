@@ -147,7 +147,7 @@ export default Ember.Component.extend({
 
   _onFirstMotionStart(activeSprites, cycle, sprite) {
     if (activeSprites.indexOf(sprite) === -1) {
-      if (sprite.element.parentElement) {
+      if (inDOM(sprite.element)) {
         throw new Error("cloning elements still in dom not implemented");
       }
       sprite.lock();
@@ -168,3 +168,16 @@ export default Ember.Component.extend({
   }
 
 });
+
+function inDOM(element) {
+  let pointer = element;
+  while (true) {
+    if (!pointer) {
+      return false;
+    }
+    if (pointer.tagName === 'BODY') {
+      return true;
+    }
+    pointer = pointer.parentElement;
+  }
+}
