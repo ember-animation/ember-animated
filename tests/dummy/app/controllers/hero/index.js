@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Move from 'ember-animated/motions/move';
 import Scale from 'ember-animated/motions/scale';
-import { FadeIn } from 'ember-animated/motions/opacity';
+import { FadeIn, FadeOut } from 'ember-animated/motions/opacity';
 
 export function * transition() {
   this.insertedSprites.forEach(sprite => {
@@ -16,6 +16,11 @@ export function * transition() {
     this.animate(new Move(sprite));
     this.animate(new Scale(sprite));
   });
+
+  this.removedSprites.forEach(sprite => {
+    this.animate(new FadeOut(sprite));
+  });
+
 }
 
 export default Ember.Controller.extend({
