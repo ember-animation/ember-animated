@@ -57,15 +57,15 @@ export default function * moveOver(dimension, direction) {
   } = normalize(dimension, direction);
 
   let viewport;
-  if (this.insertedSprite) {
-    viewport = this.insertedSprite.finalBounds;
-  } else if (this.keptSprite) {
-    viewport = this.keptSprite.finalBounds;
+  if (this.insertedSprites.length) {
+    viewport = this.insertedSprites[0].finalBounds;
+  } else if (this.keptSprites.length) {
+    viewport = this.keptSprites[0].finalBounds;
   } else {
     throw new Error("Unimplemented");
   }
 
-  if (this.insertedSprite) {
+  if (this.insertedSprites.length) {
 
     // Offset is how far out of place we're going to start the inserted sprite.
     let offset = 0;
@@ -83,9 +83,9 @@ export default function * moveOver(dimension, direction) {
     // the new sprite's own width adds to our offset because we want its
     // right edge (not left edge) to start touching the leftmost leaving
     // sprite (or viewport if no leaving sprites)
-    offset += size(this.insertedSprite.finalBounds);
+    offset += size(this.insertedSprites[0].finalBounds);
 
-    startTranslatedBy(this.insertedSprite, -offset);
+    startTranslatedBy(this.insertedSprites[0], -offset);
 
     if (this.removedSprites.length > 0) {
       endTranslatedBy(this.removedSprites[0], offset);
@@ -94,12 +94,12 @@ export default function * moveOver(dimension, direction) {
       for (let i = 1; i < this.removedSprites.length; i++) {
         this.animate(new Follow(this.removedSprites[i], { source: move }));
       }
-      this.animate(new Follow(this.insertedSprite, { source: move }));
+      this.animate(new Follow(this.insertedSprites[0], { source: move }));
     } else {
-      this.animate(new Move(this.insertedSprite));
+      this.animate(new Move(this.insertedSprites[0]));
     }
-  } else if (this.keptSprite) {
-    let move = new Move(this.keptSprite);
+  } else if (this.keptSprites.length) {
+    let move = new Move(this.keptSprites[0]);
     this.animate(move);
     this.removedSprites.forEach(sprite => {
       this.animate(new Follow(sprite, { source: move }));
