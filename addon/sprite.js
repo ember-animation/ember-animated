@@ -102,6 +102,7 @@ export default class Sprite {
       }
     }
 
+    this._lockedToInitialPosition = inInitialPosition;
     if (inInitialPosition) {
       this.measureInitialBounds();
       this.finalOpacity = null;
@@ -153,6 +154,7 @@ export default class Sprite {
     if (this.initialBounds) {
       throw new Error("Sprite already has initial bounds");
     }
+    this._inInitialPosition = true;
     if (this._offsetSprite) {
       this.initialBounds = relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.initialBounds);
     } else {
@@ -166,6 +168,7 @@ export default class Sprite {
     if (this.finalBounds) {
       throw new Error("Sprite already has final bounds");
     }
+    this._inInitialPosition = false;
     if (this._offsetSprite) {
       this.finalBounds = relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.finalBounds);
     } else {
@@ -316,6 +319,7 @@ export default class Sprite {
       this._handleMarginCollapse();
     }
     inFlight.set(this.element, this);
+    this._inInitialPosition = this._lockedToInitialPosition;
   }
 
   unlock() {
@@ -410,6 +414,7 @@ export default class Sprite {
     this._imposedStyle.left = 0;
     this._offsetSprite = newOffsetSprite;
     this.initialBounds = newRelativeBounds;
+    this._inInitialPosition = true;
   }
 
   _handleMarginCollapse() {
@@ -450,18 +455,25 @@ export default class Sprite {
     this.startTranslatedBy(dx, dy);
   }
 
+  // set our initialBounds relative to our finalBounds
   startTranslatedBy(dx, dy) {
+    let priorInitialBounds = this.initialBounds;
     let offsetX = 0;
     let offsetY = 0;
     if (this._offsetSprite) {
       offsetX = this._offsetSprite.finalBounds.left - this._offsetSprite.initialBounds.left;
       offsetY = this._offsetSprite.finalBounds.top - this._offsetSprite.initialBounds.top;
     }
-    // if we have already computed initial bounds, we just adjust
-    // them. Otherwise, we derive initialBounds from our own
-    // finalBounds.
-    this.initialBounds = shiftedBounds(this.initialBounds || this.finalBounds, dx-offsetX, dy-offsetY);
-    this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
+    this.initialBounds = shiftedBounds(this.finalBounds, dx-offsetX, dy-offsetY);
+
+    if (this._inInitialPosition) {
+      // we were already moved into our priorInitiaBounds position, so we need to compensate
+      this.translate(this.initialBounds.left - priorInitialBounds.left, this.initialBounds.top - priorInitialBounds.top);
+    } else {
+      this.translate(this.initialBounds.left - this.finalBounds.left, this.initialBounds.top - this.finalBounds.top);
+      this._inInitialPosition = true;
+    }
+
   }
 
   endAtPixel({ x, y }) {

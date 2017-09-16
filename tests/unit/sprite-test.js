@@ -8,7 +8,7 @@ import {
   approxEqualPixels
 } from '../helpers/assertions';
 
-let environment, offsetParent, intermediate, target, innerContent;
+let environment, offsetParent, intermediate, target, innerContent, external;
 
 module("Unit | Sprite", {
   beforeEach(assert) {
@@ -28,6 +28,9 @@ module("Unit | Sprite", {
     </div>
     <div class="sibling"></div>
   </div>
+  <div class="external-parent">
+    <div class="external"></div>
+  </div>
 </div>
 `);
     environment = fixture.find('.environment');
@@ -35,11 +38,22 @@ module("Unit | Sprite", {
     intermediate = fixture.find('.intermediate');
     target = fixture.find('.target');
     innerContent = fixture.find('.inner-content');
+    external = fixture.find('.external');
     environment.width(600);
     offsetParent.css({
       position: 'relative'
     });
     innerContent.height(400);
+    fixture.find('.external-parent').css({
+      position: 'absolute',
+      left: 500,
+      top: 500,
+      width: 500,
+      height: 500
+    });
+    external.css({
+      height: 100
+    });
 
     // These siblings are a necessary part of the test
     // environment. They are preventing offsetParent from collapsing
@@ -636,6 +650,66 @@ test("Sprite is sealed in test mode", function(assert) {
   assert.throws(() => {
     m.somethingExtra = true;
   });
+});
+
+test("startAtSprite moves into correct position", function(assert) {
+  let externalSprite = Sprite.positionedStartingAt(external[0], makeParent(external));
+
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+
+  let m = Sprite.positionedEndingAt(target[0], parent);
+  m.startAtSprite(externalSprite);
+
+  let have = target[0].getBoundingClientRect();
+  let want = external[0].getBoundingClientRect()
+  assert.approxEqualPixels(have.top, want.top, 'vertical position matches');
+  assert.approxEqualPixels(have.left, want.left, 'horizontal position matches');
+});
+
+test("startAtSprite matches the source sprite's dimensions", function(assert) {
+  let externalSprite = Sprite.positionedStartingAt(external[0], makeParent(external));
+
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+
+  let m = Sprite.positionedEndingAt(target[0], parent);
+  m.startAtSprite(externalSprite);
+
+  let want = external[0].getBoundingClientRect()
+  assert.approxEqualPixels(m.initialBounds.width, want.width, 'width was recorded');
+  assert.approxEqualPixels(m.initialBounds.height, want.height, 'height was recorded');
+});
+
+test("startAtSprite matches the source sprite's opacity", function(assert) {
+  external.css({ opacity: 0.3 });
+  let externalSprite = Sprite.positionedStartingAt(external[0], makeParent(external));
+
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+
+  let m = Sprite.positionedEndingAt(target[0], parent);
+  m.startAtSprite(externalSprite);
+
+  assert.ok(Math.abs(m.initialOpacity - 0.3) < 0.01, 'opacity differs by less than 1%');
+});
+
+test("startAtSprite moves into correct position, even when we already had initialBounds", function(assert) {
+  let externalSprite = Sprite.positionedStartingAt(external[0], makeParent(external));
+
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+
+  let m = Sprite.positionedStartingAt(target[0], parent);
+  target.css('transform', 'translateX(100px) translateY(120px)');
+  m.measureFinalBounds();
+  m.lock();
+  m.startAtSprite(externalSprite);
+
+  let have = target[0].getBoundingClientRect();
+  let want = external[0].getBoundingClientRect()
+  assert.approxEqualPixels(have.top, want.top, 'vertical position matches');
+  assert.approxEqualPixels(have.left, want.left, 'horizontal position matches');
 });
 
 skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
