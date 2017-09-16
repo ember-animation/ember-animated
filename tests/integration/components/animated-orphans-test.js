@@ -119,7 +119,7 @@ test('it places orphan sprite at correct bounds', async function(assert) {
 });
 
 test('makes orphan sprites eligible for far matching back into other animators', async function(assert) {
-  assert.expect(6);
+  assert.expect(15);
 
   this.set('showIt', true);
   this.render(hbs`
@@ -136,20 +136,38 @@ test('makes orphan sprites eligible for far matching back into other animators',
 `)
   await this.waitForAnimations();
 
+  let counter = 0;
+
+  // This transition will run twice. First when the orphaned sprite is
+  // animated as a removedSprite, and then when that is interrupted,
+  // again with the orphaned sprite as a sentSprite.
   this.set('t1', function * () {
-    assert.equal(this.removedSprites.length, 1, 'first transition removed');
-    assert.equal(this.keptSprites.length, 0, 'first transition kept');
-    assert.equal(this.insertedSprites.length, 0, 'first transition inserted');
+    counter++;
+    if (counter === 1) {
+      assert.equal(this.removedSprites.length, 1, 'first removed');
+      assert.equal(this.sentSprites.length, 0, 'first second');
+    } else if (counter === 2) {
+      assert.equal(this.removedSprites.length, 0, 'second removed, old sprite');
+      assert.equal(this.sentSprites.length, 1, 'second sent, old sprite');
+    } else {
+      assert.ok(false, "should only run twice");
+    }
+    assert.equal(this.keptSprites.length, 0, 'both times kept, old sprite');
+    assert.equal(this.insertedSprites.length, 0, 'both times inserted, old sprite');
+    assert.equal(this.receivedSprites.length, 0, 'both times received, old sprite');
     this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
   });
 
   this.set('showIt', false);
   await macroWait();
 
+  // This will first concurrently with the second run of the
   this.set('t1', function * () {
-    assert.equal(this.removedSprites.length, 0, 'second transition removed');
-    assert.equal(this.keptSprites.length, 1, 'second transition kept');
-    assert.equal(this.insertedSprites.length, 0, 'second transition inserted');
+    assert.equal(this.removedSprites.length, 0, 'second removed, new sprite');
+    assert.equal(this.keptSprites.length, 0, 'second kept, new sprite');
+    assert.equal(this.insertedSprites.length, 0, 'second inserted, new sprite');
+    assert.equal(this.sentSprites.length, 0, 'second sent, new sprite');
+    assert.equal(this.receivedSprites.length, 1, 'second received, new sprite');
     this.keptSprites.forEach(s => this.animate(new TestMotion(s)));
   });
   this.set('showIt', true);
@@ -157,7 +175,7 @@ test('makes orphan sprites eligible for far matching back into other animators',
 });
 
 test('drops sprites that had not starting animating when interruption occured', async function(assert) {
-  assert.expect(12);
+  assert.expect(25);
 
   this.set('showIt', true);
   this.render(hbs`
@@ -177,32 +195,63 @@ test('drops sprites that had not starting animating when interruption occured', 
 `)
   await this.waitForAnimations();
 
+  let t1Counter = 0;
+
   this.set('t1', function * () {
-    assert.equal(this.removedSprites.length, 1, 'first t1 removed');
-    assert.equal(this.keptSprites.length, 0, 'first t1 kept');
-    assert.equal(this.insertedSprites.length, 0, 'first t1 inserted');
+    t1Counter++;
+
+    if (t1Counter === 1) {
+      assert.equal(this.removedSprites.length, 1, `t1 removed ${t1Counter}`);
+      assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
+    } else if (t1Counter === 2) {
+      assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
+      assert.equal(this.sentSprites.length, 1, `t1 sent ${t1Counter}`);
+    } else {
+      assert.ok(false, 'should t1 only run twice');
+    }
+
+    assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
+    assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+    assert.equal(this.receivedSprites.length, 0, `t1 received ${t1Counter}`);
+
     this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
   });
 
+  let t2Counter = 0;
+
   this.set('t2', function * () {
-    assert.equal(this.removedSprites.length, 1, 'first t2 removed');
-    assert.equal(this.keptSprites.length, 0, 'first t2 kept');
-    assert.equal(this.insertedSprites.length, 0, 'first t2 inserted');
+    t2Counter++;
+
+    if (t2Counter === 1) {
+      assert.equal(this.removedSprites.length, 1, `t2 removed ${t2Counter}`);
+      assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
+    } else {
+      assert.ok(false, 'should t2 only run once');
+    }
+    assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
+    assert.equal(this.insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
+    assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
   });
 
   this.set('showIt', false);
   await macroWait();
 
   this.set('t1', function * () {
-    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
-    assert.equal(this.keptSprites.length, 1, 'second t1 kept');
-    assert.equal(this.insertedSprites.length, 0, 'second t1 inserted');
+    let t1Counter = 3;
+    assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
+    assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
+    assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
+    assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+    assert.equal(this.receivedSprites.length, 1, `t1 received ${t1Counter}`);
   });
 
   this.set('t2', function * () {
-    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
-    assert.equal(this.keptSprites.length, 0, 'second t1 kept');
-    assert.equal(this.insertedSprites.length, 1, 'second t1 inserted');
+    let t2Counter = 3;
+    assert.equal(this.removedSprites.length, 0, `t2 removed ${t2Counter}`);
+    assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
+    assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
+    assert.equal(this.insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
+    assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
   });
 
   this.set('showIt', true);
@@ -210,7 +259,7 @@ test('drops sprites that had not starting animating when interruption occured', 
 });
 
 test('drops sprites that finished animating when interruption occured', async function(assert) {
-  assert.expect(12);
+  assert.expect(25);
 
   this.set('showIt', true);
   this.render(hbs`
@@ -230,17 +279,43 @@ test('drops sprites that finished animating when interruption occured', async fu
 `)
   await this.waitForAnimations();
 
+  let t1Counter = 0;
+
   this.set('t1', function * () {
-    assert.equal(this.removedSprites.length, 1, 'first t1 removed');
-    assert.equal(this.keptSprites.length, 0, 'first t1 kept');
-    assert.equal(this.insertedSprites.length, 0, 'first t1 inserted');
+    t1Counter++;
+
+    if (t1Counter === 1) {
+      assert.equal(this.removedSprites.length, 1, `t1 removed ${t1Counter}`);
+      assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
+    } else if (t1Counter === 2) {
+      assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
+      assert.equal(this.sentSprites.length, 1, `t1 sent ${t1Counter}`);
+    } else {
+      assert.ok(false, 'should t1 only run twice');
+    }
+
+    assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
+    assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+    assert.equal(this.receivedSprites.length, 0, `t1 received ${t1Counter}`);
+
     this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
   });
 
+  let t2Counter = 0;
+
   this.set('t2', function * () {
-    assert.equal(this.removedSprites.length, 1, 'first t2 removed');
-    assert.equal(this.keptSprites.length, 0, 'first t2 kept');
-    assert.equal(this.insertedSprites.length, 0, 'first t2 inserted');
+    t2Counter++;
+
+    if (t2Counter === 1) {
+      assert.equal(this.removedSprites.length, 1, `t2 removed ${t2Counter}`);
+      assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
+    } else {
+      assert.ok(false, 'should t2 only run once');
+    }
+    assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
+    assert.equal(this.insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
+    assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
+
     this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: false })));
   });
 
@@ -248,15 +323,21 @@ test('drops sprites that finished animating when interruption occured', async fu
   await macroWait();
 
   this.set('t1', function * () {
-    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
-    assert.equal(this.keptSprites.length, 1, 'second t1 kept');
-    assert.equal(this.insertedSprites.length, 0, 'second t1 inserted');
+    let t1Counter = 3;
+    assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
+    assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
+    assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
+    assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+    assert.equal(this.receivedSprites.length, 1, `t1 received ${t1Counter}`);
   });
 
   this.set('t2', function * () {
-    assert.equal(this.removedSprites.length, 0, 'second t1 removed');
-    assert.equal(this.keptSprites.length, 0, 'second t1 kept');
-    assert.equal(this.insertedSprites.length, 1, 'second t1 inserted');
+    let t2Counter = 3;
+    assert.equal(this.removedSprites.length, 0, `t2 removed ${t2Counter}`);
+    assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
+    assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
+    assert.equal(this.insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
+    assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
   });
 
   this.set('showIt', true);

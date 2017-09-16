@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import layout from '../templates/components/animated-orphans';
 import { task } from '../ember-scheduler';
-import { afterRender } from '../concurrency-helpers';
+import { afterRender, microwait } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
 import { spawnChild, childrenSettled } from '../scheduler';
 import Sprite from '../sprite';
+import partition from '../partition';
 
 export default Ember.Component.extend({
   layout,
@@ -81,27 +82,34 @@ export default Ember.Component.extend({
     // are animating away can get interrupted into coming back)
     let farMatches = yield this.get('motionService.farMatch').perform([], [], activeSprites);
 
-    activeSprites = activeSprites.filter(sprite => {
-      if (farMatches.get(sprite)) {
-        sprite.hide();
-        return false;
-      } else {
-        return true;
-      }
-    });
-
     let cycle = this._cycleCounter++;
 
     for (let { transition, duration, sprites } of this._groupActiveSprites(activeSprites)) {
+      let [sentSprites, removedSprites] = partition(sprites, sprite => {
+        let other = farMatches.get(sprite);
+        if (other) {
+          sprite.endAtSprite(other);
+          if (other.revealed && !sprite.revealed) {
+            sprite.startAtSprite(other);
+          }
+          return true;
+        }
+      });
       let context = new TransitionContext(
         duration,
         [],
         [],
-        sprites
+        removedSprites,
+        sentSprites,
+        []
       );
       context.onMotionStart = this._onMotionStart.bind(this, cycle);
       context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
       spawnChild(function * () {
+        // let other animators make their own partitioning decisions
+        // before we start hiding the sent & received sprites yield
+        yield microwait();
+        sentSprites.forEach(s => s.hide());
         yield * context._runToCompletion(transition);
       });
     }
@@ -109,11 +117,26 @@ export default Ember.Component.extend({
     while (this._newOrphanTransitions.length > 0) {
       let entry = this._newOrphanTransitions.shift();
       let { transition, duration, removedSprites } = entry;
+
+      let [sentSprites, unmatchedRemovedSprites] = partition(removedSprites, sprite => {
+        let other = farMatches.get(sprite);
+        if (other) {
+          sprite.endAtSprite(other);
+          if (other.revealed && !sprite.revealed) {
+            sprite.startAtSprite(other);
+          }
+          return true;
+        }
+      });
+
+
       let context = new TransitionContext(
         duration,
         [],
         [],
-        removedSprites
+        unmatchedRemovedSprites,
+        sentSprites,
+        []
       );
       for (let sprite of removedSprites) {
         sprite.rehome(ownSprite);
@@ -122,6 +145,8 @@ export default Ember.Component.extend({
       context.onMotionStart = this._onFirstMotionStart.bind(this, activeSprites, cycle);
       context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
       spawnChild(function * () {
+        yield microwait();
+        sentSprites.forEach(s => s.hide());
         yield * context._runToCompletion(transition);
       });
     }
