@@ -10,6 +10,7 @@ const {
   set,
   ComputedProperty
 } = Ember;
+import { DEBUG } from '@glimmer/env';
 
 export function task(...args) {
   return new TaskProperty(...args);
@@ -70,10 +71,15 @@ class Task {
     }
     cleanupOnDestroy(context, this, 'cancelAll');
     return spawn(function * () {
-
-      logErrors(err => {
-        microwait().then(() => { throw err; });
-      });
+      if (DEBUG) {
+        logErrors(error => {
+          if (Ember.testing) {
+            Ember.Test.adapter.exception(error);
+          } else {
+            microwait().then(() => { throw error; });
+          }
+        });
+      }
 
       try {
         self._addInstance(current());
