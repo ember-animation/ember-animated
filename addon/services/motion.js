@@ -1,8 +1,9 @@
+import { DEBUG } from '@glimmer/env';
 import Ember from 'ember';
 import { task } from '../ember-scheduler';
 import { microwait, rAF, afterRender } from '../concurrency-helpers';
 
-export default Ember.Service.extend({
+const MotionService = Ember.Service.extend({
   init() {
     this._super();
     this._rendezvous = [];
@@ -247,3 +248,40 @@ function * ancestorsOf(component) {
     pointer = pointer.parentView;
   }
 }
+
+if (DEBUG) {
+  let idleFrames = 0;
+  const isIdle = function() {
+    return idleFrames > 2;
+  };
+
+  MotionService.reopen({
+    init() {
+      this._super(...arguments);
+      if (Ember.testing) {
+        Ember.Test.registerWaiter(isIdle);
+      }
+      this.get('idlePoller').perform();
+    },
+
+    willDestroy() {
+      if (Ember.testing) {
+        Ember.Test.unregisterWaiter(isIdle);
+      }
+      this._super(...arguments);
+    },
+
+    idlePoller: task(function * () {
+      while (true) {
+        yield rAF();
+        if (this.get('isAnimatingSync')) {
+          idleFrames = 0;
+        } else {
+          idleFrames++;
+        }
+      }
+    })
+  });
+}
+
+export default MotionService;
