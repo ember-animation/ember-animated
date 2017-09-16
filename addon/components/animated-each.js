@@ -217,7 +217,7 @@ export default Ember.Component.extend({
           sprite.hide();
         }
       }
-      this.get('motionService.matchDestroyed').perform(removedSprites, transition, this.get('durationWithDefault'));
+      this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'));
     }
   },
 
@@ -459,6 +459,9 @@ export default Ember.Component.extend({
     if (removedSprites.length > 0) {
       // trigger a rerender to reap our removed children
       this.propertyDidChange('renderedChildren');
+      // wait for the render to happen before we allow our animation
+      // to be done
+      yield afterRender();
     }
 
   }).restartable(),

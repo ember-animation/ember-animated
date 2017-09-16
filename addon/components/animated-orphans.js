@@ -41,18 +41,11 @@ export default Ember.Component.extend({
 
   animateOrphans(removedSprites, transition, duration) {
     this._newOrphanTransitions.push({ removedSprites, transition, duration });
-    // animateOrphans fires *after* afterRender has already happened,
-    // because it's driven by farMatch and normal animators do
-    // farMatching after render. So we should *not* wait for
-    // afterRender to start animating.
-    this.get('startAnimation').perform(false);
+    this.get('startAnimation').perform();
   },
 
   reanimate() {
-    // reanimate fires *before* afterRender, because it's driven by
-    // willAnimate, which animators call before render. So we *should*
-    // wait for afterRender before we start animating.
-    this.get('startAnimation').perform(true);
+    this.get('startAnimation').perform();
   },
 
   beginStaticMeasurement() {
@@ -63,10 +56,8 @@ export default Ember.Component.extend({
 
   isAnimating: Ember.computed.or('startAnimation.isRunning', 'animate.isRunning'),
 
-  startAnimation: task(function * (waitForRender) {
-    if (waitForRender) {
-      yield afterRender();
-    }
+  startAnimation: task(function * () {
+    yield afterRender();
     let ownSprite = new Sprite(this.element, true, null, null);
     ownSprite.measureFinalBounds();
     let activeSprites = this._findActiveSprites(ownSprite);
@@ -81,7 +72,11 @@ export default Ember.Component.extend({
     // our sprites from prior animation runs are eligible to be
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
-    let farMatches = yield this.get('motionService.farMatch').perform([], [], activeSprites);
+    let farMatches = yield this.get('motionService.farMatch').perform(
+      [],
+      [],
+      activeSprites.concat(...this._newOrphanTransitions.map(t => t.removedSprites))
+    );
 
     let cycle = this._cycleCounter++;
 
@@ -118,7 +113,6 @@ export default Ember.Component.extend({
     while (this._newOrphanTransitions.length > 0) {
       let entry = this._newOrphanTransitions.shift();
       let { transition, duration, removedSprites } = entry;
-
       let [sentSprites, unmatchedRemovedSprites] = partition(removedSprites, sprite => {
         let other = farMatches.get(sprite);
         if (other) {
@@ -129,7 +123,6 @@ export default Ember.Component.extend({
           return true;
         }
       });
-
 
       let context = new TransitionContext(
         duration,

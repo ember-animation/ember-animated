@@ -142,13 +142,18 @@ const MotionService = Ember.Service.extend({
     }
   }),
 
-  matchDestroyed: task(function * (removed, transition, duration) {
-    let matches = yield this.get('farMatch').perform([], [], removed, true);
-    if (this._orphanObserver && transition) {
-      let unmatchedSprites = removed.filter(sprite => !matches.has(sprite));
-      this._orphanObserver(unmatchedSprites, transition, duration);
+  matchDestroyed(removed, transition, duration) {
+    if (this._orphanObserver && transition && removed.length > 0) {
+      // if these orphaned sprites may be capable of animating,
+      // delegate them to the orphanObserver. It will do farMatching
+      // for them.
+      this._orphanObserver(removed, transition, duration);
+    } else {
+      // otherwise, we make them available for far matching but they
+      // can't be animated.
+      this.get('farMatch').perform([], [], removed, true);
     }
-  }),
+  },
 
   farMatch: task(function * (inserted, kept, removed, longWait=false) {
     let matches = new Map();

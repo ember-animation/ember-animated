@@ -9,5 +9,5 @@ export default Ember.Component.extend({
 });
 
 function * transition() {
-  this.keptSprites.forEach(sprite => this.animate(new Move(sprite)));
+  this.sentSprites.forEach(sprite => this.animate(new Move(sprite)));
 }
