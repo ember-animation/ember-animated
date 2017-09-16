@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-let browsers;
+var browsers;
 
 if (process.env.EMBER_ENV === 'development') {
   browsers = [
