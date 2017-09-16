@@ -10,3 +10,19 @@ test('visiting /bind', function(assert) {
     assert.equal(currentURL(), '/bind');
   });
 });
+
+test('clicking the button', function(assert) {
+  let number;
+
+  visit('/bind');
+
+  andThen(function() {
+    number = parseInt(find('.left-count').text().trim());
+  });
+
+  click('button:contains("+")');
+  andThen(function() {
+    let finalNumber = parseInt(find('.left-count').text().trim());
+    assert.equal(finalNumber, number + 1);
+  });
+});

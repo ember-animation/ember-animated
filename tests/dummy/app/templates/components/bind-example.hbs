@@ -1,14 +1,14 @@
 <div class="scenario-bind">
   {{#animated-container}}
     {{#animated-bind counter rules=rules duration=1000 as |v|}}
-      <span>{{v}}</span>
+      <span class="left-count">{{v}}</span>
     {{/animated-bind}}
   {{/animated-container}}
 
   {{#if showBoth}}
     {{#animated-container}}
       {{#animated-bind counter rules=rules2 duration=1000 as |v|}}
-        <span>{{v}}</span>
+        <span class="right-count">{{v}}</span>
       {{/animated-bind}}
     {{/animated-container}}
   {{/if}}
