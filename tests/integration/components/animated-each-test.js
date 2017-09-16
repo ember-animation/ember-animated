@@ -166,7 +166,7 @@ test('it animates when a watched property is mutated', function(assert) {
 });
 
 test('it can match sprites that are leaving another component', function(assert){
-  assert.expect(4);
+  assert.expect(11);
 
   this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
   this.set('rightItems', A([]));
@@ -191,11 +191,19 @@ test('it can match sprites that are leaving another component', function(assert)
 
     this.set('leftTransition', function * () {
       assert.equal(this.keptSprites.length, 2, "left kept");
-      assert.equal(this.removedSprites.length, 0, "none in removed, because it was captured by the other component");
+      assert.equal(this.removedSprites.length, 0, "left removed");
+      assert.equal(this.sentSprites.length, 1, "left sent");
+      assert.equal(this.receivedSprites.length, 0, "left received");
+      assert.equal(this.insertedSprites.length, 0, "left inserted");
     });
 
     this.set('rightTransition', function * () {
-      assert.equal(this.keptSprites.length, 1, "right found a match");
+      assert.equal(this.keptSprites.length, 0, "right kept");
+      assert.equal(this.removedSprites.length, 0, "right removed");
+      assert.equal(this.sentSprites.length, 0, "right sent");
+      assert.equal(this.receivedSprites.length, 1, "right received");
+      assert.equal(this.insertedSprites.length, 0, "right inserted");
+
     });
 
     this.set('leftItems', A([{ id: 'a'}, {id: 'c'}]));
@@ -238,7 +246,7 @@ test('it can match sprites that are leaving a destroyed component', function(ass
     });
 
     this.set('rightTransition', function * () {
-      assert.equal(this.keptSprites.length, 1, "right found match");
+      assert.equal(this.receivedSprites.length, 1, "right found match");
     });
 
     this.set('leftAlive', false);
@@ -355,7 +363,7 @@ test('child animator reacts appropriately if its planned destruction is cancelle
   let innerCounter = 0;
   this.set('innerTransition', function * () {
     innerCounter++;
-    assert.deepEqual(this.keptSprites.map(s => s.owner.id), ['comment-b'], 'kept sprites');
+    assert.deepEqual(this.receivedSprites.map(s => s.owner.id), ['comment-b'], 'received sprites');
     assert.deepEqual(this.insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
     assert.deepEqual(this.removedSprites.map(s => s.owner.id), [], 'removed sprites');
   });
