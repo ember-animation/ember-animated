@@ -4,7 +4,7 @@
   </div>
 
   {{#animated-container}}
-    {{#animated-each items rules=rules key="id" watch="style" as |item|}}
+    {{#animated-each items use=transition key="id" watch="style" as |item|}}
       <div class="scenario-direct-style--item" style={{item.style}} >
         {{item.id}}
       </div>

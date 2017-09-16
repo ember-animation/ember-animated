@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import rules from 'ember-animated/transitions/default-list-transitions';
+import Move from 'ember-animated/motions/move';
 
 let Item = Ember.Object.extend({
   style: Ember.computed('x', 'y', function() {
@@ -8,7 +8,7 @@ let Item = Ember.Object.extend({
 });
 
 export default Ember.Controller.extend({
-  rules,
+  transition,
   items: Ember.computed(function() {
     let items = Ember.A();
     for (let i = 0; i < 4; i++) {
@@ -28,4 +28,8 @@ export default Ember.Controller.extend({
 
 function somewhere() {
   return Math.random() * 300;
+}
+
+function * transition() {
+  this.keptSprites.forEach(s => this.animate(new Move(s)));
 }

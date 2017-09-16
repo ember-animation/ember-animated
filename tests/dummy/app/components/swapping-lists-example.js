@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import rules from 'ember-animated/transitions/default-list-transitions';
+import Move from 'ember-animated/motions/move';
 
 export default Ember.Component.extend({
-  rules,
+  transition,
   init() {
     this._super();
     this.set('leftItems', makeRandomList());
@@ -36,4 +36,8 @@ function makeRandomList() {
   result.push({ id: 800 });
 
   return result.sort(numeric);
+}
+
+function * transition() {
+  this.receivedSprites.forEach(s => this.animate(new Move(s)));
 }
