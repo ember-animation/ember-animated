@@ -40,11 +40,18 @@ export default Ember.Component.extend({
 
   animateOrphans(removedSprites, transition, duration) {
     this._newOrphanTransitions.push({ removedSprites, transition, duration });
-    this.get('startAnimation').perform();
+    // animateOrphans fires *after* afterRender has already happened,
+    // because it's driven by farMatch and normal animators do
+    // farMatching after render. So we should *not* wait for
+    // afterRender to start animating.
+    this.get('startAnimation').perform(false);
   },
 
   reanimate() {
-    this.get('startAnimation').perform();
+    // reanimate fires *before* afterRender, because it's driven by
+    // willAnimate, which animators call before render. So we *should*
+    // wait for afterRender before we start animating.
+    this.get('startAnimation').perform(true);
   },
 
   beginStaticMeasurement() {
@@ -55,8 +62,10 @@ export default Ember.Component.extend({
 
   isAnimating: Ember.computed.or('startAnimation.isRunning', 'animate.isRunning'),
 
-  startAnimation: task(function * () {
-    yield afterRender();
+  startAnimation: task(function * (waitForRender) {
+    if (waitForRender) {
+      yield afterRender();
+    }
     let ownSprite = new Sprite(this.element, true, null, null);
     let activeSprites = this._findActiveSprites(ownSprite);
     this.get('animate').perform(activeSprites, ownSprite);
