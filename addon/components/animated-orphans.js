@@ -68,6 +68,7 @@ export default Ember.Component.extend({
       yield afterRender();
     }
     let ownSprite = new Sprite(this.element, true, null, null);
+    ownSprite.measureFinalBounds();
     let activeSprites = this._findActiveSprites(ownSprite);
     this.get('animate').perform(activeSprites, ownSprite);
   }).drop(),
