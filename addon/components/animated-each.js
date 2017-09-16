@@ -184,7 +184,7 @@ export default Ember.Component.extend({
 
   ancestorIsAnimating(ourState) {
     if (ourState === 'removing' && !this._ancestorWillDestroyUs) {
-      // we just found our we're probably getting destroyed. Abandon
+      // we just found out we're probably getting destroyed. Abandon
       // ship!
       this._ancestorWillDestroyUs = true;
       this._letSpritesEscape(true);
@@ -221,7 +221,10 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
-    this._letSpritesEscape();
+    // if we already got early warning, we already let our sprites escape.
+    if (!this._ancestorWillDestroyUs) {
+      this._letSpritesEscape();
+    }
     this.get('motionService')
       .unregister(this)
       .unobserveDescendantAnimations(this, this.maybeReanimate)

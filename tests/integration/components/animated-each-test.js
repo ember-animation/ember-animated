@@ -260,6 +260,7 @@ test('child animator can animate when a parent animator is planning to remove it
   this.set('items', ['a', 'b', 'c'].map(makeItem));
 
   this.render(hbs`
+    <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
     {{#animated-each items use=outerTransition key="id" as |item|}}
       <div class="test-child">
         {{item.id}}
@@ -312,6 +313,7 @@ test('child animator reacts appropriately if its planned destruction is cancelle
   this.set('items', ['a', 'b', 'c'].map(makeItem));
 
   this.render(hbs`
+    <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
     {{#animated-each items use=outerTransition key="id" as |item|}}
       <div class="test-child">
         {{item.id}}

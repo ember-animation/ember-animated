@@ -156,7 +156,7 @@ export default Ember.Component.extend({
   _onFirstMotionStart(activeSprites, cycle, sprite) {
     if (activeSprites.indexOf(sprite) === -1) {
       if (inDOM(sprite.element)) {
-        throw new Error("cloning elements still in dom not implemented");
+        sprite.element = sprite.element.cloneNode(true);
       }
       sprite.lock();
       this.element.appendChild(sprite.element);
