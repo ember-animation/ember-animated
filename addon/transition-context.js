@@ -5,11 +5,13 @@ import {
 
 
 export default class TransitionContext {
-  constructor(duration, insertedSprites, keptSprites, removedSprites) {
+  constructor(duration, insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites) {
     this.duration = duration;
     this.insertedSprites = insertedSprites;
     this.keptSprites = keptSprites;
     this.removedSprites = removedSprites;
+    this.sentSprites = sentSprites;
+    this.receivedSprites = receivedSprites;
   }
   animate(motion) {
     if (motion.duration == null) {

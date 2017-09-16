@@ -2,10 +2,11 @@ import Ember from 'ember';
 import layout from '../templates/components/animated-each';
 import { task } from '../ember-scheduler';
 import { current } from '../scheduler';
-import { afterRender } from '../concurrency-helpers';
+import { afterRender, microwait } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
 import { componentNodes, keyForArray } from 'ember-animated/ember-internals';
+import partition from '../partition';
 
 export default Ember.Component.extend({
   layout,
@@ -370,20 +371,6 @@ export default Ember.Component.extend({
     // coordination point via the motionService
     let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, keptSprites, removedSprites);
 
-    // if any of our removed sprites have matches elsewhere, they
-    // won't be handled by our transition. Instead they will become
-    // the initialBounds for the sprites that they matched in the
-    // other animator. We hide them here because we're not allowed to
-    // animate them anyway, and they were already on their way out.
-    let unmatchedRemovedSprites = removedSprites.filter(sprite => {
-      if (farMatches.get(sprite)) {
-        sprite.hide();
-        return false;
-      } else {
-        return true;
-      }
-    })
-
     // TODO: This is best effort. The parent isn't necessarily in
     // the initial position at this point, but in practice if people
     // are properly using animated-containers it will be locked into
@@ -395,40 +382,53 @@ export default Ember.Component.extend({
       parent.measureInitialBounds();
     }
 
+    let [sentSprites, unmatchedRemovedSprites] = partition(removedSprites, sprite => {
+      let other = farMatches.get(sprite);
+      if (other) {
+        sprite.endAtSprite(other);
+        if (other.revealed && !sprite.revealed) {
+          sprite.startAtSprite(other);
+        }
+        return true;
+      }
+    });
+
     // if any of our inserted sprites have matching far away sprites,
-    // we treat them like kept sprites. That is, they will get
-    // initialBounds (derived from their far away matching sprite) and
-    // motion continuity via `startAtSprite`, and we will pass them
-    // into the transition context as part of the keptSprites, not the
-    // insertedSprites.
-    let matchedInsertedSprites = [];
-    let unmatchedInsertedSprites = [];
-    insertedSprites.forEach(sprite => {
+    // they become receivedSprites and they get initialBounds
+    // (derived from their far away matching sprite) and motion
+    // continuity via `startAtSprite`.
+    let [receivedSprites, unmatchedInsertedSprites] = partition(insertedSprites, sprite => {
       let other = farMatches.get(sprite);
       if (other) {
         sprite.startAtSprite(other);
-        matchedInsertedSprites.push(sprite);
-      } else {
-        unmatchedInsertedSprites.push(sprite);
+        return true;
       }
     });
 
-    // if any of our keptSprites are hidden and have far matches, we
-    // let the far matches override their own initialBounds. This
-    // helps handle a common case where a child was leaving but is now
-    // coming back due an interruption.
-    keptSprites.forEach(sprite => {
+    let [matchedKeptSprites, unmatchedKeptSprites] = partition(keptSprites, sprite => {
       let other = farMatches.get(sprite);
-      if (other && !sprite.revealed) {
-        sprite.startAtSprite(other);
+      if (other) {
+        if (other.revealed && !sprite.revealed) {
+          sprite.startAtSprite(other);
+        }
+        return true;
       }
     });
+
+    // let other animators make their own partitioning decisions
+    // before we start hiding the sent & received sprites yield
+    yield microwait();
+
+    matchedKeptSprites.forEach(s => s.hide());
+    sentSprites.forEach(s => s.hide());
 
     let context = new TransitionContext(
       this.get('durationWithDefault'),
-      unmatchedInsertedSprites,
-      keptSprites.concat(matchedInsertedSprites),
-      unmatchedRemovedSprites
+      unmatchedInsertedSprites,                      // user-visible insertedSprites
+      unmatchedKeptSprites,                          // user-visible keptSprites
+      unmatchedRemovedSprites,                       // user-visible removedSprites
+      sentSprites,                                   // user-visible sentSprites
+      receivedSprites.concat(matchedKeptSprites)     // user-visible receivedSprites
     );
     let cycle = this._cycleCounter++;
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);

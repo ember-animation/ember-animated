@@ -476,6 +476,13 @@ export default class Sprite {
 
   }
 
+  endAtSprite(otherSprite) {
+    let diff = otherSprite.difference('finalBounds', this, 'initialBounds');
+    this.endTranslatedBy(diff.dx, diff.dy);
+    this._finalBounds = resizedBounds(this.finalBounds, otherSprite.finalBounds.width, otherSprite.finalBounds.height);
+    this.finalOpacity = otherSprite.finalOpacity;
+  }
+
   endAtPixel({ x, y }) {
     let dx = 0;
     let dy = 0;
