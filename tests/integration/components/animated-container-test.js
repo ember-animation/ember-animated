@@ -430,6 +430,28 @@ test("Accounts for own margin collapse as last content is removed", function(ass
   });
 });
 
+test("Uses same timing for measurements as animated-each", async function(assert) {
+  assert.expect(2);
+  this.set('transition', function * () {});
+  this.set('TestMotion', class extends Motion {
+    *animate() {
+      assert.equal(this.sprite.initialBounds.height, 10, 'initial height');
+      assert.equal(this.sprite.finalBounds.height, 20, 'static height');
+    }
+  });
+  this.set('items', ['a']);
+  this.render(hbs`
+    {{#animated-container motion=TestMotion}}
+      {{#animated-each items use=transition as |item|}}
+        <div style="height: 10px"></div>
+      {{/animated-each}}
+    {{/animated-container}}
+  `);
+  await this.waitForAnimations();
+  this.set('items', ['a', 'b']);
+  await this.waitForAnimations();
+});
+
 function bounds($elt) {
   return $elt[0].getBoundingClientRect();
 }

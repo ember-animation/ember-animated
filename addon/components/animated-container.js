@@ -3,7 +3,7 @@ import Resize from '../motions/resize';
 import { task } from '../ember-scheduler';
 import Sprite from '../sprite';
 import { emptyBounds } from '../bounds';
-import { afterRender } from '../concurrency-helpers';
+import { afterRender, microwait } from '../concurrency-helpers';
 
 export default Ember.Component.extend({
   classNames: ['animated-container'],
@@ -70,6 +70,7 @@ export default Ember.Component.extend({
 
     try {
       yield afterRender();
+      yield microwait();
     } finally {
       this._startingUp = false;
     }
