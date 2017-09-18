@@ -142,14 +142,14 @@ export default Ember.Component.extend({
     if (!isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
       if (transition) {
-        this.get('startAnimation').perform(transition);
+        this.get('animate').perform(transition);
       }
     }
 
     return newChildren;
   }),
 
-  isAnimating: Ember.computed.or('startAnimation.isRunning', 'animate.isRunning'),
+  isAnimating: Ember.computed.alias('animate.isRunning'),
 
   keyGetter: Ember.computed('key', function() {
     return keyForArray(this.get('key'));
@@ -175,11 +175,11 @@ export default Ember.Component.extend({
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
   maybeReanimate() {
-    if (this.get('animate.isRunning')) {
+    if (this.get('runAnimation.isRunning')) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
       // the changing conditions.
-      this.get('startAnimation').perform(this._lastTransition);
+      this.get('animate').perform(this._lastTransition);
     }
   },
 
@@ -196,7 +196,7 @@ export default Ember.Component.extend({
       // treat all our sprites as re-inserted, because we had already handed them off as orphans
       let transition = this._transitionFor(this._firstTime, [], this._prevItems);
       if (transition) {
-        this.get('startAnimation').perform(transition);
+        this.get('animate').perform(transition);
       }
     }
   },
@@ -292,11 +292,19 @@ export default Ember.Component.extend({
     });
   },
 
-  startAnimation: task(function * (transition) {
-    // starting a new animation cancels one that's already
-    // running.
-    this.get('animate').cancelAll();
+  animate: task(function * (transition) {
+    let {
+      parent,
+      currentSprites,
+      insertedSprites,
+      keptSprites,
+      removedSprites
+    } = yield * this.startAnimation(transition);
 
+    yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
+  }).restartable(),
+
+  startAnimation: function * (transition) {
     // we remember the transition we're using in case we need to
     // recalculate based on other animators potentially moving our DOM
     // around
@@ -328,10 +336,10 @@ export default Ember.Component.extend({
 
     // Wait for Ember to render our latest state.
     yield afterRender();
-    this.get('animate').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
-  }).restartable(),
+    return { parent, currentSprites, insertedSprites, keptSprites, removedSprites };
+  },
 
-  animate: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites) {
+  runAnimation: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites) {
     // fill the keptSprites and removedSprites lists by comparing what
     // we had in currentSprites with what is still in the DOM now that
     // rendering happened.
@@ -464,7 +472,7 @@ export default Ember.Component.extend({
       yield afterRender();
     }
 
-  }).restartable(),
+  }),
 
   _motionStarted(sprite, cycle) {
     sprite.reveal();
