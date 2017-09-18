@@ -41,11 +41,15 @@ export default Ember.Component.extend({
 
   animateOrphans(removedSprites, transition, duration) {
     this._newOrphanTransitions.push({ removedSprites, transition, duration });
-    this.get('startAnimation').perform();
+    this.reanimate();
   },
 
   reanimate() {
-    this.get('startAnimation').perform();
+    if (!this.get('startAnimation.isRunning')) {
+      let ownSprite = new Sprite(this.element, true, null, null);
+      let activeSprites = this._findActiveSprites(ownSprite);
+      this.get('animate').perform({ ownSprite, activeSprites });
+    }
   },
 
   beginStaticMeasurement() {
@@ -54,17 +58,19 @@ export default Ember.Component.extend({
 
   endStaticMeasurement() {},
 
-  isAnimating: Ember.computed.or('startAnimation.isRunning', 'animate.isRunning'),
+  isAnimating: Ember.computed.alias('animate.isRunning'),
 
-  startAnimation: task(function * () {
+  animate: task(function * ({ ownSprite, activeSprites }) {
+    yield this.get('startAnimation').perform(ownSprite);
+    yield this.get('runAnimation').perform(activeSprites, ownSprite);
+  }).restartable(),
+
+  startAnimation: task(function * (ownSprite) {
     yield afterRender();
-    let ownSprite = new Sprite(this.element, true, null, null);
     ownSprite.measureFinalBounds();
-    let activeSprites = this._findActiveSprites(ownSprite);
-    this.get('animate').perform(activeSprites, ownSprite);
-  }).drop(),
+  }),
 
-  animate: task(function * (activeSprites, ownSprite) {
+  runAnimation: task(function * (activeSprites, ownSprite) {
     // we don't need any static measurements, but we wait for this so
     // we stay on the same timing as all the other animators
     yield * this.get('motionService').staticMeasurement(() => {});
@@ -150,7 +156,7 @@ export default Ember.Component.extend({
     for (let sprite of activeSprites) {
       sprite.element.remove();
     }
-  }).restartable(),
+  }),
 
   _findActiveSprites(ownSprite) {
     if (!this._inserted) { return []; }

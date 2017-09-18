@@ -175,7 +175,7 @@ export default Ember.Component.extend({
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
   maybeReanimate() {
-    if (this.get('runAnimation.isRunning') || this.get('finalizeAnimation.isRunning')) {
+    if (this.get('animate.isRunning') && !this.get('startAnimation.isRunning')) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
       // the changing conditions.
@@ -318,13 +318,13 @@ export default Ember.Component.extend({
       insertedSprites,
       keptSprites,
       removedSprites
-    } = yield * this.startAnimation(transition);
+    } = yield this.get('startAnimation').perform(transition, current());
 
     let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
     yield this.get('finalizeAnimation').perform(insertedSprites, keptSprites, removedSprites, matchingAnimatorsFinished);
   }).restartable(),
 
-  startAnimation: function * (transition) {
+  startAnimation: task(function * (transition, animateTask) {
     // we remember the transition we're using in case we need to
     // recalculate based on other animators potentially moving our DOM
     // around
@@ -345,7 +345,7 @@ export default Ember.Component.extend({
 
     // Warn the rest of the universe that we're about to animate.
     this.get('motionService').willAnimate({
-      task: current(),
+      task: animateTask,
       duration: this.get('durationWithDefault'),
       component: this,
       children: this._renderedChildren
@@ -357,7 +357,7 @@ export default Ember.Component.extend({
     // Wait for Ember to render our latest state.
     yield afterRender();
     return { parent, currentSprites, insertedSprites, keptSprites, removedSprites };
-  },
+  }),
 
   runAnimation: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites) {
     // fill the keptSprites and removedSprites lists by comparing what

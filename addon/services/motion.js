@@ -170,6 +170,7 @@ const MotionService = Ember.Service.extend({
       // coincide with other farMatches.
       yield afterRender();
       yield microwait();
+      yield microwait();
     }
 
     if (this.get('farMatch.concurrency') > 1) {
