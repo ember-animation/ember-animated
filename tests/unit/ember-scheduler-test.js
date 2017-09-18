@@ -315,8 +315,9 @@ test('nested performs are cancelable', function(assert) {
   Ember.run(() => {
     object.get('outer').perform();
     object.get('outer').cancelAll();
+    assert.log('cancelAll returned');
   });
-  assert.logEquals(['canceled', 'leaving inner', 'leaving outer']);
+  assert.logEquals(['canceled', 'leaving inner', 'leaving outer', 'cancelAll returned']);
 });
 
 
