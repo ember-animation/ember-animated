@@ -62,7 +62,8 @@ export default Ember.Component.extend({
 
   animate: task(function * ({ ownSprite, activeSprites }) {
     yield this.get('startAnimation').perform(ownSprite);
-    yield this.get('runAnimation').perform(activeSprites, ownSprite);
+    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(activeSprites, ownSprite);
+    yield this.get('finalizeAnimation').perform(activeSprites, matchingAnimatorsFinished);
   }).restartable(),
 
   startAnimation: task(function * (ownSprite) {
@@ -78,7 +79,7 @@ export default Ember.Component.extend({
     // our sprites from prior animation runs are eligible to be
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
-    let { farMatches } = yield this.get('motionService.farMatch').perform(
+    let { farMatches, matchingAnimatorsFinished } = yield this.get('motionService.farMatch').perform(
       current(),
       [],
       [],
@@ -153,6 +154,11 @@ export default Ember.Component.extend({
     }
 
     yield childrenSettled();
+    return { matchingAnimatorsFinished };
+  }),
+
+  finalizeAnimation: task(function * (activeSprites, matchingAnimatorsFinished) {
+    yield matchingAnimatorsFinished;
     for (let sprite of activeSprites) {
       sprite.element.remove();
     }
