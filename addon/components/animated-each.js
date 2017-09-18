@@ -175,7 +175,7 @@ export default Ember.Component.extend({
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
   maybeReanimate() {
-    if (this.get('runAnimation.isRunning')) {
+    if (this.get('runAnimation.isRunning') || this.get('finalizeAnimation.isRunning')) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
       // the changing conditions.
@@ -292,6 +292,25 @@ export default Ember.Component.extend({
     });
   },
 
+  // The animate task is split into three subtasks that represent
+  // three distinct phases. This is necessary for the proper
+  // coordination of multiple animators.
+  //
+  //   1. During `startAnimation`, we ignore notifications about
+  //   descendant animations (see maybeReanimate), because we're still
+  //   waiting for Ember to finish rendering anyway and we haven't
+  //   kicked off our own animation.
+  //
+  //   2. During `runAnimation`, other animators will know that we are
+  //   actually still animating things, so if they are entangled with
+  //   us they should not finalize. (They get entangled via farMatch,
+  //   meaning some of their sprites and some of our sprites match
+  //   up).
+  //
+  //   3. During `finalizeAnimation`, we are waiting for our entangled
+  //   animators that are still in `runAnimation`, then we are
+  //   cleaning up our own sprite state.
+  //
   animate: task(function * (transition) {
     let {
       parent,
@@ -302,6 +321,7 @@ export default Ember.Component.extend({
     } = yield * this.startAnimation(transition);
 
     yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
+    yield this.get('finalizeAnimation').perform(insertedSprites, keptSprites, removedSprites);
   }).restartable(),
 
   startAnimation: function * (transition) {
@@ -448,7 +468,9 @@ export default Ember.Component.extend({
     context.onMotionEnd = sprite => this._motionEnded(sprite, cycle);
 
     yield * context._runToCompletion(transition);
+  }),
 
+  finalizeAnimation: task(function * (insertedSprites, keptSprites, removedSprites) {
     // The following cleanup ensures that all the sprites that will
     // stay on the page after our animation are unlocked and
     // revealed. We may have already revealed most of them, but if an
