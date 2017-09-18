@@ -320,8 +320,8 @@ export default Ember.Component.extend({
       removedSprites
     } = yield * this.startAnimation(transition);
 
-    yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
-    yield this.get('finalizeAnimation').perform(insertedSprites, keptSprites, removedSprites);
+    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
+    yield this.get('finalizeAnimation').perform(insertedSprites, keptSprites, removedSprites, matchingAnimatorsFinished);
   }).restartable(),
 
   startAnimation: function * (transition) {
@@ -397,7 +397,7 @@ export default Ember.Component.extend({
     // some of our sprites may match up with sprites that are entering
     // or leaving other simulatneous animators. So we hit another
     // coordination point via the motionService
-    let farMatches = yield this.get('motionService.farMatch').perform(
+    let { farMatches, matchingAnimatorsFinished } = yield this.get('motionService.farMatch').perform(
       current(),
       insertedSprites,
       keptSprites,
@@ -468,9 +468,12 @@ export default Ember.Component.extend({
     context.onMotionEnd = sprite => this._motionEnded(sprite, cycle);
 
     yield * context._runToCompletion(transition);
+    return { matchingAnimatorsFinished };
   }),
 
-  finalizeAnimation: task(function * (insertedSprites, keptSprites, removedSprites) {
+  finalizeAnimation: task(function * (insertedSprites, keptSprites, removedSprites, matchingAnimatorsFinished) {
+    yield matchingAnimatorsFinished;
+
     // The following cleanup ensures that all the sprites that will
     // stay on the page after our animation are unlocked and
     // revealed. We may have already revealed most of them, but if an

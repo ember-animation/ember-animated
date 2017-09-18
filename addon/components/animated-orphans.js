@@ -72,7 +72,7 @@ export default Ember.Component.extend({
     // our sprites from prior animation runs are eligible to be
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
-    let farMatches = yield this.get('motionService.farMatch').perform(
+    let { farMatches } = yield this.get('motionService.farMatch').perform(
       current(),
       [],
       [],

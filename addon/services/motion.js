@@ -1,7 +1,7 @@
 import { DEBUG } from '@glimmer/env';
 import Ember from 'ember';
 import { task } from '../ember-scheduler';
-import { microwait, rAF, afterRender } from '../concurrency-helpers';
+import { microwait, rAF, afterRender, allSettled } from '../concurrency-helpers';
 
 const MotionService = Ember.Service.extend({
   init() {
@@ -155,9 +155,10 @@ const MotionService = Ember.Service.extend({
     }
   },
 
-  farMatch: task(function * (task, inserted, kept, removed, longWait=false) {
+  farMatch: task(function * (runAnimationTask, inserted, kept, removed, longWait=false) {
     let matches = new Map();
-    let mine = { inserted, kept, removed, matches };
+    let mine = { inserted, kept, removed, matches, runAnimationTask };
+    let matchingAnimatorsFinished;
     this._rendezvous.push(mine);
     yield microwait();
     if (longWait) {
@@ -169,6 +170,9 @@ const MotionService = Ember.Service.extend({
     }
 
     if (this.get('farMatch.concurrency') > 1) {
+      if (!matchingAnimatorsFinished) {
+        matchingAnimatorsFinished = allSettled(this._rendezvous.map(r => r.runAnimationTask));
+      }
       this._rendezvous.forEach(target => {
         if (target === mine) { return; }
         performMatches(mine, target);
@@ -176,7 +180,7 @@ const MotionService = Ember.Service.extend({
       });
     }
     this._rendezvous.splice(this._rendezvous.indexOf(mine), 1);
-    return matches;
+    return { farMatches: matches, matchingAnimatorsFinished };
   }),
 
   willAnimate({ task, duration, component, children }) {

@@ -76,3 +76,11 @@ export let clock = {
     return (new Date()).getTime();
   }
 }
+
+export function allSettled(promises) {
+  return Promise.all(promises.map(p => {
+    if (p) {
+      return p.catch(() => null);
+    }
+  }));
+}
