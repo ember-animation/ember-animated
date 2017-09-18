@@ -187,6 +187,7 @@ export default Ember.Component.extend({
         sprite.element = sprite.element.cloneNode(true);
       }
       sprite.lock();
+      sprite.reveal();
       this.element.appendChild(sprite.element);
       activeSprites.push(sprite);
       this._elementToChild.set(sprite.element, sprite.owner);
