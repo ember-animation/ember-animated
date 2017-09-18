@@ -13,6 +13,7 @@ const MotionService = Ember.Service.extend({
     this._animationObservers = [];
     this._descendantObservers = [];
     this._ancestorObservers = new WeakMap();
+    this._matchingAnimatorsFinished = null;
   },
 
   // === Notification System ===
@@ -158,8 +159,10 @@ const MotionService = Ember.Service.extend({
   farMatch: task(function * (runAnimationTask, inserted, kept, removed, longWait=false) {
     let matches = new Map();
     let mine = { inserted, kept, removed, matches, runAnimationTask };
-    let matchingAnimatorsFinished;
     this._rendezvous.push(mine);
+    if (this.get('farMatch.concurrency') === 1) {
+      this._matchingAnimatorsFinished = null;
+    }
     yield microwait();
     if (longWait) {
       // used by matchDestroyed because it gets called earlier in the
@@ -170,8 +173,8 @@ const MotionService = Ember.Service.extend({
     }
 
     if (this.get('farMatch.concurrency') > 1) {
-      if (!matchingAnimatorsFinished) {
-        matchingAnimatorsFinished = allSettled(this._rendezvous.map(r => r.runAnimationTask));
+      if (!this._matchingAnimatorsFinished) {
+        this._matchingAnimatorsFinished = allSettled(this._rendezvous.map(r => r.runAnimationTask));
       }
       this._rendezvous.forEach(target => {
         if (target === mine) { return; }
@@ -180,7 +183,10 @@ const MotionService = Ember.Service.extend({
       });
     }
     this._rendezvous.splice(this._rendezvous.indexOf(mine), 1);
-    return { farMatches: matches, matchingAnimatorsFinished };
+    if (this.get('farMatch.concurrency') === 1) {
+      this._matchingAnimatorsFinished = null;
+    }
+    return { farMatches: matches, matchingAnimatorsFinished: this._matchingAnimatorsFinished };
   }),
 
   willAnimate({ task, duration, component, children }) {
