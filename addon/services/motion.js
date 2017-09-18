@@ -151,11 +151,11 @@ const MotionService = Ember.Service.extend({
     } else {
       // otherwise, we make them available for far matching but they
       // can't be animated.
-      this.get('farMatch').perform([], [], removed, true);
+      this.get('farMatch').perform(null, [], [], removed, true);
     }
   },
 
-  farMatch: task(function * (inserted, kept, removed, longWait=false) {
+  farMatch: task(function * (task, inserted, kept, removed, longWait=false) {
     let matches = new Map();
     let mine = { inserted, kept, removed, matches };
     this._rendezvous.push(mine);

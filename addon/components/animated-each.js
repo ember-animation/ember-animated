@@ -377,7 +377,12 @@ export default Ember.Component.extend({
     // some of our sprites may match up with sprites that are entering
     // or leaving other simulatneous animators. So we hit another
     // coordination point via the motionService
-    let farMatches = yield this.get('motionService.farMatch').perform(insertedSprites, keptSprites, removedSprites);
+    let farMatches = yield this.get('motionService.farMatch').perform(
+      current(),
+      insertedSprites,
+      keptSprites,
+      removedSprites
+    );
 
     // TODO: This is best effort. The parent isn't necessarily in
     // the initial position at this point, but in practice if people

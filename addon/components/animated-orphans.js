@@ -3,7 +3,7 @@ import layout from '../templates/components/animated-orphans';
 import { task } from '../ember-scheduler';
 import { afterRender, microwait } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
-import { spawnChild, childrenSettled } from '../scheduler';
+import { spawnChild, childrenSettled, current } from '../scheduler';
 import Sprite from '../sprite';
 import partition from '../partition';
 
@@ -73,6 +73,7 @@ export default Ember.Component.extend({
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
     let farMatches = yield this.get('motionService.farMatch').perform(
+      current(),
       [],
       [],
       activeSprites.concat(...this._newOrphanTransitions.map(t => t.removedSprites))
