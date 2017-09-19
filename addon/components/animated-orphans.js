@@ -6,6 +6,7 @@ import TransitionContext from '../transition-context';
 import { spawnChild, childrenSettled, current } from '../scheduler';
 import Sprite from '../sprite';
 import partition from '../partition';
+import { continueMotions } from '../motion';
 
 export default Ember.Component.extend({
   layout,
@@ -40,7 +41,18 @@ export default Ember.Component.extend({
   },
 
   animateOrphans(removedSprites, transition, duration) {
-    this._newOrphanTransitions.push({ removedSprites, transition, duration });
+    this._newOrphanTransitions.push({
+      removedSprites: removedSprites.map(sprite => {
+        let newElement = sprite.element.cloneNode(true);
+        continueMotions(sprite.element, newElement);
+        sprite.element = newElement;
+        sprite.owner = sprite.owner.clone();
+        sprite.owner.flagForRemoval();
+        return sprite;
+      }),
+      transition,
+      duration
+    });
     this.reanimate();
   },
 
@@ -198,15 +210,11 @@ export default Ember.Component.extend({
 
   _onFirstMotionStart(activeSprites, cycle, sprite) {
     if (activeSprites.indexOf(sprite) === -1) {
-      if (inDOM(sprite.element)) {
-        sprite.element = sprite.element.cloneNode(true);
-      }
       sprite.lock();
       sprite.reveal();
       this.element.appendChild(sprite.element);
       activeSprites.push(sprite);
       this._elementToChild.set(sprite.element, sprite.owner);
-      sprite.owner.flagForRemoval();
     }
     sprite.owner.block(cycle);
   },
@@ -220,16 +228,3 @@ export default Ember.Component.extend({
   }
 
 });
-
-function inDOM(element) {
-  let pointer = element;
-  while (true) {
-    if (!pointer) {
-      return false;
-    }
-    if (pointer.tagName === 'BODY') {
-      return true;
-    }
-    pointer = pointer.parentElement;
-  }
-}

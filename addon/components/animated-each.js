@@ -572,6 +572,10 @@ class Child {
   get shouldRemove() {
     return this.state === 'removing' && this.removalBlockers < 1;
   }
+
+  clone() {
+    return new Child(this.id, this.value);
+  }
 }
 
 function isStable(before, after) {
