@@ -476,6 +476,17 @@ export default class Sprite {
 
   }
 
+  moveToFinalPosition() {
+    if (this._inInitialPosition) {
+      let initial = this.initialBounds;
+      let final = this.finalBounds;
+      let dx = final.left - initial.left;
+      let dy = final.top - initial.top;
+      this.translate(dx, dy);
+      this._inInitialPosition = false;
+    }
+  }
+
   endAtSprite(otherSprite) {
     let diff = otherSprite.difference('finalBounds', this, 'initialBounds');
     this.endTranslatedBy(diff.dx, diff.dy);

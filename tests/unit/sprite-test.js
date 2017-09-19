@@ -712,6 +712,21 @@ test("startAtSprite moves into correct position, even when we already had initia
   assert.approxEqualPixels(have.left, want.left, 'horizontal position matches');
 });
 
+test("moveToFinalPosition moves to correct position", function(assert) {
+  let externalSprite = Sprite.positionedStartingAt(external[0], makeParent(external));
+
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+
+  let want = target[0].getBoundingClientRect();
+  let m = Sprite.positionedEndingAt(target[0], parent);
+  m.startAtSprite(externalSprite);
+  m.moveToFinalPosition();
+  let have = target[0].getBoundingClientRect();
+  assert.approxEqualPixels(have.top, want.top, 'vertical position matches');
+  assert.approxEqualPixels(have.left, want.left, 'horizontal position matches');
+});
+
 skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
   assert.ok(false);
 });
