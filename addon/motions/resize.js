@@ -8,9 +8,6 @@ export default class Resize extends Motion {
     this.prior = null;
     this.widthTween = null;
     this.heightTween = null;
-    if (opts && opts.duration != null) {
-      this.duration = opts.duration;
-    }
   }
 
   interrupted(motions) {

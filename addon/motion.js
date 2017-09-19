@@ -17,6 +17,9 @@ export default class Motion {
     // it null the transition will apply its own overall duration,
     // which is often what you want.
     this.duration = null;
+    if (opts && opts.duration != null) {
+      this.duration = opts.duration;
+    }
 
 
     this._setupMotionList();

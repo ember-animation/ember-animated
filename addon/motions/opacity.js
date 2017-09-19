@@ -10,9 +10,6 @@ export default class Opacity extends Motion {
     this.opacityTween = null;
     this.opacityFrom = null;
     this.opacityTo = null;
-    if (opts && opts.duration != null) {
-      this.duration = opts.duration;
-    }
     if (opts && opts.from != null) {
       this.opacityFrom = opts.from;
     }

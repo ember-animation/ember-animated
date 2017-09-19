@@ -7,9 +7,6 @@ export default class Scale extends Motion {
     super(sprite, opts);
     this.widthTween = null;
     this.heightTween = null;
-    if (opts && opts.duration != null) {
-      this.duration = opts.duration;
-    }
   }
 
   * animate() {
