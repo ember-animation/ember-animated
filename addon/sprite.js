@@ -201,6 +201,15 @@ export default class Sprite {
     };
   }
 
+  set element(value) {
+    this.__element = value;
+    this.__$element = null;
+  }
+
+  get element() {
+    return this.__element;
+  }
+
   get _$element() {
     if (!this.__$element) {
       this.__$element = $(this.element);
