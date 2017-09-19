@@ -13,6 +13,7 @@ This repo is tested against Ember versions going back as far as 1.13. For Ember 
 
  - ember-hash-helper-polyfill
  - ember-getowner-polyfill (1.1.0+)
+ - ember-assign-polyfill
 
 ## Running
 

@@ -26,7 +26,7 @@ function TaskProperty(taskFn) {
 }
 
 TaskProperty.prototype = Object.create(ComputedProperty.prototype);
-Object.assign(TaskProperty.prototype, {
+Ember.assign(TaskProperty.prototype, {
   constructor: TaskProperty,
   restartable() {
     this._bufferPolicy = cancelAllButLast;
