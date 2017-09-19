@@ -26,15 +26,12 @@ export default class Follow extends Move {
 
     this.sprite.endRelativeTo(source.sprite);
 
-    while (true) {
-      yield rAF();
+    while (!this.xTween.done || !this.yTween.done) {
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
         this.yTween.currentValue - sprite.transform.ty
       );
-      if (this.xTween.done && this.yTween.done) {
-        break;
-      }
+      yield rAF();
     }
   }
 }

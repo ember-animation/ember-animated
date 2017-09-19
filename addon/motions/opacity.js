@@ -38,14 +38,11 @@ export default class Opacity extends Motion {
       this.opacityTween = opacityTween = new Tween(interruptedOpacity, computedOpacityTo, duration);
     }
 
-    while (true) {
-      yield rAF();
+    while (!opacityTween.done) {
       sprite.applyStyles({
         opacity: opacityTween.currentValue
       });
-      if (opacityTween.done) {
-        break;
-      }
+      yield rAF();
     }
   }
 }

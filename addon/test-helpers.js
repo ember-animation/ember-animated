@@ -53,7 +53,17 @@ export class TimeControl {
       throw new Error("You can't advance a running TimeControl. Use either runAtSpeed or advance but not both at once.");
     }
     this._timer += ms;
-    return rAF().then(() => rAF());
+    // This waits for three frames because:
+    //
+    //   1. You need at least two rAFs to guarantee that everybody
+    //   else who is running at rAF frequency had a chance to run
+    //   (because you don't know which ones ran before you in the same
+    //   frame).
+    //
+    //   2. Our Tween system doesn't mark Tweens as done until they
+    //   had a whole frame in their "done" state (see comments in
+    //   ./tween.js).
+    return rAF().then(rAF).then(rAF);
   }
   runAtSpeed(factor) {
     this._runningSpeed = factor;

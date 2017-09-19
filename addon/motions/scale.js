@@ -22,12 +22,9 @@ export default class Scale extends Motion {
     this.widthTween = new Tween(sprite.transform.a, sprite.transform.a * widthFactor, duration);
     this.heightTween = new Tween(sprite.transform.d, sprite.transform.d * heightFactor, duration);
 
-    while (true) {
-      yield rAF();
+    while (!this.widthTween.done || !this.heightTween.done) {
       sprite.scale(this.widthTween.currentValue / sprite.transform.a, this.heightTween.currentValue / sprite.transform.d);
-      if (this.widthTween.done && this.heightTween.done) {
-        break;
-      }
+      yield rAF();
     }
   }
 }

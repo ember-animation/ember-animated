@@ -83,6 +83,7 @@ class MotionCurve {
   constructor(duration) {
     this.startTime = clock.now();
     this.duration = duration;
+    this._doneFrames = 0;
     this._tick();
   }
   ease(p) {
@@ -94,7 +95,9 @@ class MotionCurve {
       this._runTime = clock.now() - this.startTime;
       this._timeProgress = this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
       this._spaceProgress = Math.min(this.ease(this._timeProgress), 1);
-      this._done = this._timeProgress >= 1;
+      if (this._timeProgress >= 1) {
+        this._doneFrames++;
+      }
     }
   }
   get runTime() {
@@ -109,8 +112,36 @@ class MotionCurve {
     this._tick();
     return this._spaceProgress;
   }
+
+  // Tweens are not considered done until they have been done for more
+  // than one frame. This allows you to write animations like:
+  //
+  //     while (!tween.done) {
+  //       doSomethingWith(tween.currentValue);
+  //       yield rAF();
+  //     }
+  //
+  // while being sure that doSomethingWith will actually be called at
+  // least once with the final value. The alternative ways to
+  // accomplish that:
+  //
+  //     while (!tween.done) {
+  //       yield rAF(); // <-- may cause flicker
+  //       doSomethingWith(tween.currentValue);
+  //      }
+  //
+  //  or
+  //
+  //     while (!tween.done) {
+  //       doSomethingWith(tween.currentValue);
+  //       yield rAF();
+  //     }
+  //     doSomethingWith(tween.currentValue);
+  //
+  //  Either allow flicker or require animation authors to remember to
+  //  repeat themselves.
   get done() {
     this._tick();
-    return this._done;
+    return this._doneFrames > 1;
   }
 }
