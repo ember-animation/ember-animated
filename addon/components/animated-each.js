@@ -266,6 +266,17 @@ export default Ember.Component.extend({
 
   _partitionKeptAndRemovedSprites(currentSprites) {
     currentSprites.forEach(sprite => {
+
+      if (!sprite.element.parentElement) {
+        // our currentSprites list was created based on what was in
+        // DOM before rendering. Now we are looking after
+        // rendering. So some of the removed sprites may have been
+        // garbage collected out (based on the logic in
+        // renderedChildren()). If so, they will no longer be in the
+        // DOM, and we filter them out here.
+        return;
+      }
+
       let child = this._elementToChild.get(sprite.element);
       sprite.owner = child;
 
