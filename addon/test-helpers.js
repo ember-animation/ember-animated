@@ -35,18 +35,31 @@ export class TimeControl {
       throw new Error("Only one TimeControl may be active at a time");
     }
     this._timer = 0;
+    this._runningSpeed = false;
+    this._runStartedAt = null;
     clock.now = () => this.now();
   }
   finished() {
     clock.now = origNow;
   }
   now() {
+    if (this._runningSpeed) {
+      return (origNow() - this._runStartedAt) * this._runningSpeed;
+    }
     return this._timer;
   }
   advance(ms) {
+    if (this._runningSpeed) {
+      throw new Error("You can't advance a running TimeControl. Use either runAtSpeed or advance but not both at once.");
+    }
     this._timer += ms;
     return rAF().then(() => rAF());
   }
+  runAtSpeed(factor) {
+    this._runningSpeed = factor;
+    this._runStartedAt = origNow();
+  }
+
 }
 
 export const MotionTester = Ember.Object.extend({

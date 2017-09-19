@@ -1,7 +1,18 @@
 import { test } from 'qunit';
 import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { TimeControl } from 'ember-animated/test-helpers';
 
-moduleForAcceptance('Acceptance | hero');
+let time;
+moduleForAcceptance('Acceptance | hero', {
+  beforeEach() {
+    time = new TimeControl();
+    time.runAtSpeed(40);
+  },
+  afterEach() {
+    time.finished();
+    time = null;
+  }
+});
 
 test('visiting /hero', function(assert) {
   visit('/hero');
