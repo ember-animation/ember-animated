@@ -184,10 +184,11 @@ const MotionService = Ember.Service.extend({
       });
     }
     this._rendezvous.splice(this._rendezvous.indexOf(mine), 1);
+    let matchingAnimatorsFinished = this._matchingAnimatorsFinished;
     if (this.get('farMatch.concurrency') === 1) {
       this._matchingAnimatorsFinished = null;
     }
-    return { farMatches: matches, matchingAnimatorsFinished: this._matchingAnimatorsFinished };
+    return { farMatches: matches, matchingAnimatorsFinished };
   }),
 
   willAnimate({ task, duration, component, children }) {
