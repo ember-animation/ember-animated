@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { FadeIn, FadeOut } from 'ember-animated/motions/opacity';
+import { Promise } from 'ember-animated/concurrency-helpers';
 
 export default Ember.Controller.extend({
   tableMode: false,
@@ -14,8 +15,8 @@ export default Ember.Controller.extend({
 function fade(initialRender) {
   if (!initialRender) {
     return function * () {
-      this.insertedSprites.forEach(s => this.animate(new FadeIn(s)));
-      this.removedSprites.forEach(s => this.animate(new FadeOut(s)));
+      yield Promise.all(this.removedSprites.map(s => this.animate(new FadeOut(s, { duration: this.duration / 2}))));
+      this.insertedSprites.map(s => this.animate(new FadeIn(s, { duration: this.duration / 2 })));
     };
   }
 }
