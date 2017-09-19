@@ -121,6 +121,12 @@ export default Ember.Component.extend({
     while (this._newOrphanTransitions.length > 0) {
       let entry = this._newOrphanTransitions.shift();
       let { transition, duration, removedSprites } = entry;
+
+      for (let sprite of removedSprites) {
+        sprite.rehome(ownSprite);
+        this._childToTransition.set(sprite.owner, entry);
+      }
+
       let [sentSprites, unmatchedRemovedSprites] = partition(removedSprites, sprite => {
         let other = farMatches.get(sprite);
         if (other) {
@@ -140,10 +146,6 @@ export default Ember.Component.extend({
         sentSprites,
         []
       );
-      for (let sprite of removedSprites) {
-        sprite.rehome(ownSprite);
-        this._childToTransition.set(sprite.owner, entry);
-      }
       context.onMotionStart = this._onFirstMotionStart.bind(this, activeSprites, cycle);
       context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
       spawnChild(function * () {
