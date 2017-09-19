@@ -111,7 +111,7 @@ export default Ember.Component.extend({
       context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
       spawnChild(function * () {
         // let other animators make their own partitioning decisions
-        // before we start hiding the sent & received sprites yield
+        // before we start hiding the sent & received sprites
         yield microwait();
         sentSprites.forEach(s => s.hide());
         yield * context._runToCompletion(transition);
