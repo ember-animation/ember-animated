@@ -36,13 +36,15 @@ export default class Move extends Motion {
       this.xTween = new Tween(
         sprite.transform.tx,
         sprite.transform.tx + dx,
-        fuzzyZero(dx) ? 0 : duration
+        fuzzyZero(dx) ? 0 : duration,
+        this.opts.easing
       );
 
       this.yTween = new Tween(
         sprite.transform.ty,
         sprite.transform.ty + dy,
-        fuzzyZero(dy) ? 0 : duration
+        fuzzyZero(dy) ? 0 : duration,
+        this.opts.easing
       );
     } else {
       // Here we are interrupting a prior Move.
@@ -73,8 +75,8 @@ export default class Move extends Motion {
       // the new tween begins to dominate. Because of the adjustments
       // we did above, the sum of both tweens will end up right where
       // we want to be.
-      this.xTween = new Tween(transformDiffX, transformDiffX + dx, durationX).plus(this.prior.xTween);
-      this.yTween = new Tween(transformDiffY, transformDiffY + dy, durationY).plus(this.prior.yTween);
+      this.xTween = new Tween(transformDiffX, transformDiffX + dx, durationX, this.opts.easing).plus(this.prior.xTween);
+      this.yTween = new Tween(transformDiffY, transformDiffY + dy, durationY, this.opts.easing).plus(this.prior.yTween);
     }
 
     while (!this.xTween.done || !this.yTween.done) {

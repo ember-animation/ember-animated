@@ -9,7 +9,7 @@ const bridges = new WeakMap();
 
 export default class Motion {
 
-  constructor(sprite, opts) {
+  constructor(sprite, opts = {}) {
     this.sprite = sprite;
     this.opts = opts;
 
@@ -17,10 +17,9 @@ export default class Motion {
     // it null the transition will apply its own overall duration,
     // which is often what you want.
     this.duration = null;
-    if (opts && opts.duration != null) {
+    if (opts.duration != null) {
       this.duration = opts.duration;
     }
-
 
     this._setupMotionList();
     this._promise = new Promise((resolve, reject) => {

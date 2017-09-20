@@ -1,4 +1,5 @@
 import { rAF, currentFrameClock, clock } from './concurrency-helpers';
+import { inAndOut } from './easings/cosine';
 const currentCurves = [];
 
 /*
@@ -10,8 +11,11 @@ const currentCurves = [];
 */
 
 export default class Tween {
-  constructor(initialValue, finalValue, duration) {
-    this.curve = MotionCurve.findOrCreate(duration);
+  constructor(initialValue, finalValue, duration, easing=inAndOut) {
+    if (typeof easing !== 'function') {
+      throw new Error("Tried to make a Tween with an invalid easing function");
+    }
+    this.curve = MotionCurve.findOrCreate(duration, easing);
     this.initialValue = initialValue;
     this.finalValue = finalValue;
     this.diff = finalValue - initialValue;
@@ -67,12 +71,12 @@ class DerivedTween {
 class MotionCurve {
   // we share motion curves among all concurrent motions that have the
   // same duration that start in the same animation frame.
-  static findOrCreate(duration) {
-    let shared = currentCurves.find(c => c.duration === duration);
+  static findOrCreate(duration, easing) {
+    let shared = currentCurves.find(c => c.duration === duration && c.easing === easing);
     if (shared) {
       return shared;
     }
-    let created = new this(duration);
+    let created = new this(duration, easing);
     currentCurves.push(created);
     rAF().then(() => {
       currentCurves.splice(currentCurves.indexOf(created), 1);
@@ -80,21 +84,19 @@ class MotionCurve {
     return created;
   }
 
-  constructor(duration) {
+  constructor(duration, easing) {
     this.startTime = clock.now();
     this.duration = duration;
+    this.easing = easing;
     this._doneFrames = 0;
     this._tick();
-  }
-  ease(p) {
-    return 0.5 - Math.cos( p * Math.PI ) / 2;
   }
   _tick() {
     if (this._lastTick !== currentFrameClock) {
       this._lastTick = currentFrameClock;
       this._runTime = clock.now() - this.startTime;
       this._timeProgress = this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
-      this._spaceProgress = Math.min(this.ease(this._timeProgress), 1);
+      this._spaceProgress = Math.min(this.easing(this._timeProgress), 1);
       if (this._timeProgress >= 1) {
         this._doneFrames++;
       }
