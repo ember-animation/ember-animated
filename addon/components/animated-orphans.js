@@ -88,6 +88,19 @@ export default Ember.Component.extend({
     // we stay on the same timing as all the other animators
     yield * this.get('motionService').staticMeasurement(() => {});
 
+    // Some of the new orphan transitions may be handing us sprites we
+    // already have matches for, in which case our active sprites take
+    // precedence.
+    {
+      let activeIds = Object.create(null);
+      for (let sprite of activeSprites) {
+        activeIds[sprite.owner.id] = true;
+      }
+      for (let entry of this._newOrphanTransitions) {
+        entry.removedSprites = entry.removedSprites.filter(s => !activeIds[s.owner.id]);
+      }
+    }
+
     // our sprites from prior animation runs are eligible to be
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
@@ -133,6 +146,13 @@ export default Ember.Component.extend({
     while (this._newOrphanTransitions.length > 0) {
       let entry = this._newOrphanTransitions.shift();
       let { transition, duration, removedSprites } = entry;
+
+      if (removedSprites.length === 0) {
+        // This can happen due to our filtering based on activeIds
+        // above: some new orphan transitions may have nothing new
+        // that we aren't already animating.
+        continue;
+      }
 
       for (let sprite of removedSprites) {
         sprite.rehome(ownSprite);
@@ -220,6 +240,7 @@ export default Ember.Component.extend({
   },
 
   _onMotionStart(cycle, sprite) {
+    sprite.reveal();
     sprite.owner.block(cycle);
   },
 
