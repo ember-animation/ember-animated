@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import Sprite from 'ember-animated/sprite';
 import $ from 'jquery';
 import Opacity from 'ember-animated/motions/opacity';
-import Ember from 'ember';
 import { TimeControl, MotionTester } from 'ember-animated/test-helpers';
 
 let tester, target, time;
@@ -102,7 +101,12 @@ test("interrupt", async function(assert) {
   target.css('opacity', 0);
   sprite.measureFinalBounds();
   sprite.lock();
-  tester.run(sprite, { duration: 1000 });
+
+  // this asks for { from: 1 }, but we're going to assert that the
+  // motion ignores us due to the interruption and instead picks up
+  // smoothly from where we left off.
+  tester.run(sprite, { duration: 1000, from: 1, to: 0 });
+
   await time.advance(250);
   assert.equal(target.css('opacity'), 0.25);
   await time.advance(250);
