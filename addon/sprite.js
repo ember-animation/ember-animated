@@ -226,7 +226,7 @@ export default class Sprite {
 
   get revealed() {
     if (this._revealed == null) {
-      this._revealed = this._$element.hasClass('ember-animated-hidden');
+      this._revealed = !this._$element.hasClass('ember-animated-hidden');
     }
     return this._revealed;
   }

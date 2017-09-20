@@ -4,8 +4,6 @@ import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 import linear from '../easings/linear';
 
-const { abs, min, max } = Math;
-
 export default class Opacity extends Motion {
   constructor(sprite, opts) {
     super(sprite, opts);
