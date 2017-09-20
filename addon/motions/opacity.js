@@ -2,42 +2,48 @@ import Ember from 'ember';
 import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
+import linear from '../easings/linear';
+
+const { abs, min, max } = Math;
 
 export default class Opacity extends Motion {
   constructor(sprite, opts) {
     super(sprite, opts);
     this.prior = null;
-    this.opacityTween = null;
-    this.opacityFrom = null;
-    this.opacityTo = null;
-    if (opts && opts.from != null) {
-      this.opacityFrom = opts.from;
-    }
-    if (opts && opts.to != null) {
-      this.opacityTo = opts.to;
-    }
+    this.tween = null;
   }
 
   interrupted(motions) {
     this.prior = motions.find(m => m instanceof this.constructor);
   }
 
+  /*
+    This motion defines "duration" as the time it takes to go all the
+    way from 0% to 100% (or 100% to 0%). So motions between values
+    closer than that take proportionately less time.
+  */
   * animate() {
-    let { sprite, duration, opacityFrom, opacityTo } = this;
-    let computedOpacityFrom = opacityFrom != null ? opacityFrom : sprite.initialOpacity != null ? sprite.initialOpacity : 1;
-    let computedOpacityTo = opacityTo != null ? opacityTo : sprite.finalOpacity != null ? sprite.finalOpacity : 1;
-    let opacityTween = null;
+    let { sprite, duration, opts } = this;
+    let to = opts.to != null ? opts.to : sprite.finalOpacity != null ? sprite.finalOpacity : 1;
+    let from;
 
-    if (!this.prior) {
-      this.opacityTween = opacityTween = new Tween(computedOpacityFrom, computedOpacityTo, duration);
+    if (this.prior) {
+      // when we're interrupting a prior opacity motion, we always
+      // take its value as our starting point, regardless of whether
+      // the user set a "from" option.
+      from = this.prior.tween.currentValue;
     } else {
-      let interruptedOpacity = this.prior.opacityTween.currentValue;
-      this.opacityTween = opacityTween = new Tween(interruptedOpacity, computedOpacityTo, duration);
+      // otherwise we start at the user-provided option, the sprite's
+      // found initial opacity, or zero, in that priority order.
+      from = opts.from != null ? opts.from : sprite.initialOpacity != null ? sprite.initialOpacity : 0;
     }
 
-    while (!opacityTween.done) {
+    let proportionalDuration = Math.abs(from - to) * duration;
+    this.tween = new Tween(from, to, proportionalDuration, linear);
+
+    while (!this.tween.done) {
       sprite.applyStyles({
-        opacity: opacityTween.currentValue
+        opacity: this.tween.currentValue
       });
       yield rAF();
     }
