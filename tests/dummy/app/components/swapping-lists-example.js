@@ -40,4 +40,8 @@ function makeRandomList() {
 
 function * transition() {
   this.receivedSprites.forEach(s => this.animate(new Move(s)));
+
+  // without this, they won't reveal until the end of the whole
+  // transition
+  this.insertedSprites.forEach(s => s.reveal());
 }
