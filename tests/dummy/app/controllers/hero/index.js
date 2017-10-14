@@ -1,17 +1,27 @@
 import Ember from 'ember';
-import { FadeIn, FadeOut } from 'ember-animated/motions/opacity';
-
+import Opacity from 'ember-animated/motions/opacity';
 
 function * transition() {
   this.insertedSprites.forEach(sprite => {
-    this.animate(new FadeIn(sprite));
+    this.animate(new Opacity(sprite, { from: 0, to: 1 }));
+  });
+
+  this.receivedSprites.forEach(sprite => {
+    this.animate(new Opacity(sprite, { to: 1 }));
   });
 
   this.removedSprites.forEach(sprite => {
-    this.animate(new FadeOut(sprite));
+    this.animate(new Opacity(sprite, { to: 0 }));
+  });
+}
+
+function * share() {
+  this.sentSprites.forEach(sprite => {
+    this.animate(new Opacity(sprite, { to: 0, duration: 0 }));
   });
 }
 
 export default Ember.Controller.extend({
-  transition
+  transition,
+  share
 });

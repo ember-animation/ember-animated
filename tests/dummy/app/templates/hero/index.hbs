@@ -1,8 +1,9 @@
+{{#animated-bind "index-route" use=transition duration=1000}}
 <div class="hero-list">
   {{#each model as |person|}}
     {{#link-to "hero.detail" person.id tagName="div"}}
       {{#animated-container}}
-        {{#animated-bind person use=transition duration=1000 as |p|}}
+        {{#animated-bind person use=share duration=1000 as |p|}}
           <div class="hero-list-image">
             <img src={{p.avatarUrl}}>
             <span>Thumbnail</span>
@@ -13,3 +14,4 @@
     {{/link-to}}
   {{/each}}
 </div>
+{{/animated-bind}}

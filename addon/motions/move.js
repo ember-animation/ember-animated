@@ -13,7 +13,7 @@ export default class Move extends Motion {
   interrupted(motions) {
     // We only need to track the prior Move we are replacing here,
     // because it will have done the same for any earlier ones.
-    this.prior = motions.find(m => m instanceof this.constructor);
+    this.prior = motions.find(m => m instanceof Move);
   }
 
   * animate() {
@@ -79,6 +79,12 @@ export default class Move extends Motion {
       this.yTween = new Tween(transformDiffY, transformDiffY + dy, durationY, this.opts.easing).plus(this.prior.yTween);
     }
 
+    yield * this._moveIt();
+
+  }
+
+  *_moveIt() {
+    let sprite = this.sprite;
     while (!this.xTween.done || !this.yTween.done) {
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
@@ -93,4 +99,15 @@ export default class Move extends Motion {
 // is no fun.
 function fuzzyZero(number) {
   return Math.abs(number) < 0.00001;
+}
+
+export class ContinuePrior extends Move {
+  * animate() {
+    if (!this.prior) {
+      return;
+    }
+    this.xTween = this.prior.xTween;
+    this.yTween = this.prior.yTween;
+    yield * this._moveIt();
+  }
 }

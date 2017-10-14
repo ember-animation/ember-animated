@@ -43,9 +43,9 @@ export default Ember.Component.extend({
   animateOrphans(removedSprites, transition, duration) {
     this._newOrphanTransitions.push({
       removedSprites: removedSprites.map(sprite => {
-        let newElement = sprite.element.cloneNode(true);
-        continueMotions(sprite.element, newElement);
-        sprite.element = newElement;
+        // we clone the owner objects so that our sprite garbage
+        // collection is entirely detached from the original
+        // animator's
         sprite.owner = sprite.owner.clone();
         sprite.owner.flagForRemoval();
         return sprite;
@@ -144,7 +144,15 @@ export default Ember.Component.extend({
     }
 
     while (this._newOrphanTransitions.length > 0) {
-      let entry = this._newOrphanTransitions.shift();
+      // This is a pop instead of a shift because we want to start the
+      // animations in the reverse order that they were
+      // scheduled. This is a consequence of Ember's
+      // willDestroyElement firing from top to bottom. We want
+      // descendants have a chance to start before their ancestors,
+      // because each one is going to potentially trigger DOM cloning,
+      // so any animated descendants need to get hidden before one of
+      // their ancestors clones them.
+      let entry = this._newOrphanTransitions.pop();
       let { transition, duration, removedSprites } = entry;
 
       if (removedSprites.length === 0) {
@@ -180,6 +188,7 @@ export default Ember.Component.extend({
       );
       context.onMotionStart = this._onFirstMotionStart.bind(this, activeSprites, cycle);
       context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
+      context.prepareSprite = this._prepareSprite.bind(this);
       spawnChild(function * () {
         yield microwait();
         sentSprites.forEach(s => s.hide());
@@ -226,6 +235,14 @@ export default Ember.Component.extend({
       group.sprites.push(sprite);
     }
     return groups;
+  },
+
+  _prepareSprite(sprite) {
+    sprite.hide();
+    let newElement = sprite.element.cloneNode(true);
+    continueMotions(sprite.element, newElement);
+    sprite.element = newElement;
+    return sprite;
   },
 
   _onFirstMotionStart(activeSprites, cycle, sprite) {

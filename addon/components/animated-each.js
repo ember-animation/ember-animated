@@ -188,7 +188,7 @@ export default Ember.Component.extend({
       // we just found out we're probably getting destroyed. Abandon
       // ship!
       this._ancestorWillDestroyUs = true;
-      this._letSpritesEscape(true);
+      this._letSpritesEscape();
     } else if (ourState !== 'removing' && this._ancestorWillDestroyUs) {
       // we got a reprieve, our destruction was cancelled before it
       // could happen.
@@ -201,7 +201,7 @@ export default Ember.Component.extend({
     }
   },
 
-  _letSpritesEscape(hideThem=false) {
+  _letSpritesEscape() {
     let transition = this._transitionFor(this._firstTime, this._prevItems, []);
     if (transition) {
       let removedSprites = [];
@@ -213,9 +213,6 @@ export default Ember.Component.extend({
         let sprite = Sprite.positionedStartingAt(element, parent);
         sprite.owner = this._elementToChild.get(element);
         removedSprites.push(sprite);
-        if (hideThem) {
-          sprite.hide();
-        }
       }
       this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'));
     }
