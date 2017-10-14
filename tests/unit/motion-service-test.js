@@ -1,6 +1,5 @@
 import { moduleFor, test } from 'ember-qunit';
-import { Promise } from 'ember-animated/concurrency-helpers';
-import { macroWait } from 'ember-animated/test-helpers';
+import { Promise, wait } from 'ember-animated/concurrency-helpers';
 
 moduleFor('service:-ea-motion', 'Unit | Service | motion', {
 });
@@ -44,10 +43,10 @@ test('entangles animations with matches', async function(assert) {
   let { matchingAnimatorsFinished: finished2 } = await p2;
   finished2.then(() => log.push('p2 matching animators finished'));
 
-  await macroWait(5);
+  await wait(5);
   log.push('resolving animation 1');
   resolveAnimation1();
-  await macroWait(5);
+  await wait(5);
   log.push('resolving animation 2');
   resolveAnimation2();
   await finished1;
@@ -75,10 +74,10 @@ test('does not entangle animations without matches', async function(assert) {
   matchingAnimatorsFinished = (await p2).matchingAnimatorsFinished;
   matchingAnimatorsFinished.then(() => log.push('p2 matching animators finished'));
 
-  await macroWait(5);
+  await wait(5);
   log.push('resolving animation 1');
   resolveAnimation1();
-  await macroWait(5);
+  await wait(5);
   log.push('resolving animation 2');
   resolveAnimation2();
   await matchingAnimatorsFinished;

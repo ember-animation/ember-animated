@@ -1,21 +1,9 @@
 import Ember from 'ember';
-import RSVP from 'rsvp';
 import { clock, rAF } from './concurrency-helpers';
 import { task } from './ember-scheduler';
 import Motion from './motion';
 import Sprite from './sprite';
 
-
-export function macroWait(ms) {
-  let ticket;
-  let promise = new RSVP.Promise(resolve => {
-    ticket = setTimeout(resolve, ms);
-  });
-  promise.__ec_cancel__ = () => {
-    clearTimeout(ticket);
-  };
-  return promise;
-}
 
 // This method must be installed on a context with an owner. Expected
 // usage is to put it on an integration test context.

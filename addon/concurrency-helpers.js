@@ -59,6 +59,19 @@ export function microwait() {
   return new Promise(resolve => resolve());
 }
 
+export function wait(ms=0) {
+  let ticket;
+  let promise = new RSVP.Promise(resolve => {
+    ticket = setTimeout(resolve, ms);
+  });
+  promise.__ec_cancel__ = () => {
+    clearTimeout(ticket);
+  };
+  return promise;
+}
+
+
+
 export function afterRender() {
   let ticket;
   let promise = new Promise(resolve => {

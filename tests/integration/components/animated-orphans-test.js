@@ -1,7 +1,7 @@
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import { waitForAnimations, macroWait } from 'ember-animated/test-helpers';
-import { Promise } from 'ember-animated/concurrency-helpers';
+import { waitForAnimations } from 'ember-animated/test-helpers';
+import { Promise, wait } from 'ember-animated/concurrency-helpers';
 import { equalBounds } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
 
@@ -79,7 +79,7 @@ test('it runs all orphan transitions in parallel', async function(assert) {
   });
 
   this.set('showIt', false);
-  await macroWait();
+  await wait();
   assert.ok(unblock1, 'unblock1');
   assert.ok(unblock2, 'unblock2');
   unblock1();
@@ -159,7 +159,7 @@ test('makes orphan sprites eligible for far matching back into other animators',
   });
 
   this.set('showIt', false);
-  await macroWait();
+  await wait();
 
   // This will first concurrently with the second run of the
   this.set('t1', function * () {
@@ -234,7 +234,7 @@ test('drops sprites that had not starting animating when interruption occured', 
   });
 
   this.set('showIt', false);
-  await macroWait();
+  await wait();
 
   this.set('t1', function * () {
     let t1Counter = 3;
@@ -320,7 +320,7 @@ test('drops sprites that finished animating when interruption occured', async fu
   });
 
   this.set('showIt', false);
-  await macroWait();
+  await wait();
 
   this.set('t1', function * () {
     let t1Counter = 3;

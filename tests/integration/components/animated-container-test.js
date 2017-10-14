@@ -5,10 +5,9 @@ import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/ember-scheduler';
 import { current } from 'ember-animated/scheduler';
 import Motion from 'ember-animated/motion';
-import { afterRender } from 'ember-animated/concurrency-helpers';
+import { afterRender, wait } from 'ember-animated/concurrency-helpers';
 
 import {
-  macroWait,
   waitForAnimations
 } from 'ember-animated/test-helpers';
 
@@ -215,10 +214,10 @@ test('unlocks only after animator\'s motion is done', function(assert) {
     });
   });
 
-  return macroWait(60).then(() => {
+  return wait(60).then(() => {
     assert.equal(height(this.$('.animated-container')), 200, "should be locked at the static height we measured");
     unblock();
-    return macroWait(60);
+    return wait(60);
   }).then(() => {
     assert.equal(height(this.$('.animated-container')), 300, "unlocked and reflecting the actual final height of the animator");
   });
