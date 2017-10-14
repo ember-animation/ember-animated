@@ -1,3 +1,4 @@
+import { DEBUG } from '@glimmer/env';
 import {
   spawnChild,
   childrenSettled
@@ -31,4 +32,14 @@ export default class TransitionContext {
     yield * transition.call(this);
     yield childrenSettled();
   }
+}
+
+if (DEBUG) {
+  TransitionContext.prototype.printSprites = function (label){
+    let prefix = label ? label + ' ' : '';
+    /* eslint no-console:0 */
+    console.log(prefix + ['inserted', 'kept', 'removed', 'sent', 'received'].map(type => {
+      return type + '=' + this[`${type}Sprites`].map(s => s.owner.id).join(',')
+    }).join(" | "));
+  };
 }
