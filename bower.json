@@ -1,6 +1,5 @@
 {
   "name": "ember-animated",
   "dependencies": {
-    "Faker": "^3.1.0"
   }
 }
