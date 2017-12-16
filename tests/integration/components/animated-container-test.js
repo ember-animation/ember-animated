@@ -311,41 +311,6 @@ test("Accounts for top margin collapse between self and descendant", function(as
   });
 });
 
-test("No top margin collapse when we have a border", function(assert) {
-  this.render(hbs`
-    {{#animated-container style="border: 1px solid black"}}
-      <div class="inside" style="margin-top: 10px; height: 100px;">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  assert.visuallyConstant(this.$('.animated-container'), () => {
-    Ember.run(() => {
-      this.get('fakeAnimator.animate').perform();
-    });
-    this.$('.inside').css('position', 'absolute');
-  });
-});
-
-test("No top margin collapse when our margin already exceeds child's", function(assert) {
-  this.render(hbs`
-    {{#animated-container style="margin-top: 11px"}}
-      <div class="inside" style="margin-top: 10px; height: 100px;">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  assert.visuallyConstant(this.$('.animated-container'), () => {
-    Ember.run(() => {
-      this.get('fakeAnimator.animate').perform();
-    });
-    this.$('.inside').css('position', 'absolute');
-  });
-});
-
-
 test("Accounts for bottom margin collapse between self and child", function(assert) {
   this.render(hbs`
     <div style="border: 1px solid black">
