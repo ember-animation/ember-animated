@@ -645,6 +645,30 @@ test("target's margins collapse with its children", function(assert){
 
 });
 
+test("target not eligible for margin collapse", function(assert){
+  innerContent.css({
+    marginTop: 10,
+    marginBottom: 20
+  });
+  target.css({
+    position: 'absolute'
+  });
+  let m = sprite(target);
+  assert.visuallyConstant(target, () => {
+    assert.visuallyConstant(innerContent, () => {
+      m.lock();
+    }, 'inner content bounds');
+  }, 'target bounds')
+
+  assert.visuallyConstant(target, () => {
+    assert.visuallyConstant(innerContent, () => {
+      m.unlock();
+    }, 'inner content bounds unlock');
+  }, 'target bounds unlock')
+
+});
+
+
 test("Sprite is sealed in test mode", function(assert) {
   let m = sprite(target);
   assert.throws(() => {

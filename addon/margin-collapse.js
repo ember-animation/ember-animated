@@ -6,7 +6,7 @@
 // the given element's.
 export function collapsedChildren(element, cs, which, children=[]) {
   // margin collapse only happens if we have no border or padding
-  if (cs[`border${which}Width`] === '0px' && cs[`padding${which}`] === '0px') {
+  if (isBlock(cs) && cs[`border${which}Width`] === '0px' && cs[`padding${which}`] === '0px') {
     let block;
     if (which === 'Top') {
       block = firstChildBlock(element);
@@ -30,7 +30,7 @@ function firstChildBlock(element) {
       // an intervening block with clearance prevents margin collapse
       return;
     }
-    if (isChildBlock(childCS)) {
+    if (isBlock(childCS)) {
       return [child, childCS];
     }
   }
@@ -44,14 +44,14 @@ function lastChildBlock(element) {
       // an intervening block with clearance prevents margin collapse
       return;
     }
-    if (isChildBlock(childCS)) {
+    if (isBlock(childCS)) {
       return [child, childCS];
     }
   }
 }
 
 
-function isChildBlock(cs) {
+function isBlock(cs) {
   return cs.display === 'block' && (
     cs.position === 'static' || cs.position === 'relative'
   ) && cs.float === 'none' && cs.overflow === 'visible';
