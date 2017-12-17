@@ -75,7 +75,7 @@ const MotionService = Ember.Service.extend({
   },
 
   // Register to know when an animation is starting among the
-  // ancestors of the given comoponent. The fn will be told whether
+  // ancestors of the given component. The fn will be told whether
   // component is going to be destroyed or not at the end of the
   // animation.
   observeAncestorAnimations(component, fn) {
@@ -203,7 +203,7 @@ const MotionService = Ember.Service.extend({
       }
     }
 
-    // tell anybody who is listenign for all animations
+    // tell anybody who is listening for all animations
     for (let fn of this._animationObservers) {
       fn(message);
     }
