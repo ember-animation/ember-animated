@@ -7,7 +7,6 @@ This library is intended to become a robust foundation for animation in Ember. A
 * `git clone <repository-url>` this repository
 * `cd ember-animated`
 * `npm install`
-* `bower install`
 
 This repo is tested against Ember versions going back as far as 1.13. For Ember versions older than 2.3, you will also need to install the following addons:
 

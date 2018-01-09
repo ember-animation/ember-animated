@@ -1,3 +1,7 @@
+.homepage > a {
+    display: block;
+}
+
 .motion-indicator {
     width: 10px;
     height: 10px;
