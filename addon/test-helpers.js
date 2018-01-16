@@ -1,4 +1,8 @@
-import Ember from 'ember';
+import { alias } from '@ember/object/computed';
+import EmberObject from '@ember/object';
+import { resolve } from 'rsvp';
+import { getOwner } from '@ember/application';
+import { run } from '@ember/runloop';
 import { clock, rAF } from './concurrency-helpers';
 import { task } from './ember-scheduler';
 import Motion from './motion';
@@ -9,10 +13,10 @@ import Sprite from './sprite';
 // usage is to put it on an integration test context.
 export function waitForAnimations() {
   let idle;
-  Ember.run(() => {
-    idle = Ember.getOwner(this).lookup('service:-ea-motion').get('waitUntilIdle').perform();
+  run(() => {
+    idle = getOwner(this).lookup('service:-ea-motion').get('waitUntilIdle').perform();
   });
-  return Ember.RSVP.resolve(idle);
+  return resolve(idle);
 }
 
 let origNow = clock.now;
@@ -60,7 +64,7 @@ export class TimeControl {
 
 }
 
-export const MotionTester = Ember.Object.extend({
+export const MotionTester = EmberObject.extend({
   motion: null,
   duration: 1,
   beforeAnimation(){},
@@ -97,7 +101,7 @@ export const MotionTester = Ember.Object.extend({
 
     return this.get('runner').perform(motion);
   },
-  isAnimating: Ember.computed.alias('runner.isRunning'),
+  isAnimating: alias('runner.isRunning'),
   runner: task(function * (motion) {
     this.beforeAnimation(motion);
     yield * motion._run();

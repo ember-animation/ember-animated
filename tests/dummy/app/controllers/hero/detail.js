@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 import Move, { ContinuePrior } from 'ember-animated/motions/move';
 import Scale from 'ember-animated/motions/scale';
 import Opacity from 'ember-animated/motions/opacity';
@@ -28,6 +28,6 @@ function * transition() {
   });
 }
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   transition
 });

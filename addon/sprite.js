@@ -11,6 +11,8 @@
 
 */
 
+import { warn } from '@ember/debug';
+
 import $ from 'jquery';
 import Ember from 'ember';
 import Transform, {
@@ -19,7 +21,11 @@ import Transform, {
 } from './transform';
 import { continueMotions } from './motion';
 import { collapsedChildren } from './margin-collapse';
-import { shiftedBounds, relativeBounds, resizedBounds } from './bounds';
+import {
+  shiftedBounds,
+  relativeBounds,
+  resizedBounds
+} from './bounds';
 
 const inFlight = new WeakMap();
 
@@ -332,7 +338,7 @@ export default class Sprite {
   }
 
   unlock() {
-    Ember.warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", this.stillInFlight(), { id: "ember-animated-sprite-unlock" });
+    warn("Probable bug in ember-animated: an interrupted sprite tried to unlock itself", this.stillInFlight(), { id: "ember-animated-sprite-unlock" });
     inFlight.delete(this.element);
     let style = this.element.style;
     let cache = this._styleCache;

@@ -1,10 +1,11 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
+import Component from '@ember/component';
 import layout from '../templates/components/animated-bind';
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: '',
   layout,
-  items: Ember.computed('value', function() {
+  items: computed('value', function() {
     return [this.get('value')];
   })
 }).reopenClass({

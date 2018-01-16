@@ -1,20 +1,22 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import { computed, set } from '@ember/object';
+import Component from '@ember/component';
 import { task, timeout } from 'ember-animated/ember-scheduler';
 import Move from 'ember-animated/motions/move';
 
-export default Ember.Component.extend({
+export default Component.extend({
   rules,
   currentSort: numeric,
-  items: Ember.computed({
+  items: computed({
     get() {
       let result = [];
       for (let i = 0; i < 10; i++) {
         result.push(makeRandomItem());
       }
-      return Ember.A(result.sort(numeric));
+      return A(result.sort(numeric));
     },
     set(k,v) {
-      return Ember.A(v);
+      return A(v);
     }
   }),
 
@@ -47,7 +49,7 @@ export default Ember.Component.extend({
       this.set('items', items.slice(0, index).concat([makeRandomItem()]).concat(items.slice(index+1)));
     },
     mutate(item) {
-      Ember.set(item, 'id', makeRandomItem().id);
+      set(item, 'id', makeRandomItem().id);
     },
     sortNumeric() {
       let items = this.get('items');

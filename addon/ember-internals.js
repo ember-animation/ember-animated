@@ -6,8 +6,9 @@
   same thing but for code that is only needed in the test environment.
 
  */
-import Ember from 'ember';
-const { get, guidFor } = Ember;
+import { get } from '@ember/object';
+
+import { guidFor } from '@ember/object/internals';
 
 
 // These things are swapped out at build time based on the Ember

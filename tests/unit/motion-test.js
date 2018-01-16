@@ -1,3 +1,4 @@
+import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import Sprite from 'ember-animated/sprite';
 import Motion from 'ember-animated/motion';
@@ -5,7 +6,6 @@ import { rAF, microwait } from 'ember-animated/concurrency-helpers';
 import { MotionTester } from 'ember-animated/test-helpers';
 import $ from 'jquery';
 import { logErrors } from 'ember-animated/scheduler';
-import Ember from 'ember';
 
 let tester;
 
@@ -70,7 +70,7 @@ test('results in Task failure when animation throws asynchronously', function(as
   let sprite = new Sprite($('#qunit-fixture > .target')[0]);
   let motion = new TestMotion(sprite);
   let done = assert.async();
-  Ember.run(() => {
+  run(() => {
     tester.run(motion).then(() => {
       assert.ok(false, "Not supposed to succeed");
       done();
@@ -96,7 +96,7 @@ test('results in Task failure when animation throws synchronously', function(ass
   let sprite = new Sprite($('#qunit-fixture > .target')[0]);
   let motion = new TestMotion(sprite);
   let done = assert.async();
-  Ember.run(() => {
+  run(() => {
     tester.run(motion).then(() => {
       assert.ok(false, "Not supposed to succeed");
       done();

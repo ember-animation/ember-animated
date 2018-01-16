@@ -1,13 +1,15 @@
-import Ember from 'ember';
+import { alias } from '@ember/object/computed';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
 import Resize from '../motions/resize';
 import { task } from '../ember-scheduler';
 import Sprite from '../sprite';
 import { emptyBounds } from '../bounds';
 import { afterRender, microwait } from '../concurrency-helpers';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: ['animated-container'],
-  motionService: Ember.inject.service('-ea-motion'),
+  motionService: service('-ea-motion'),
   onInitialRender: false,
 
   init() {
@@ -33,7 +35,7 @@ export default Ember.Component.extend({
       .unobserveDescendantAnimations(this, this.maybeAnimate);
   },
 
-  isAnimating: Ember.computed.alias('animate.isRunning'),
+  isAnimating: alias('animate.isRunning'),
 
   maybeAnimate({ duration, task }) {
     if (!this._startingUp) {

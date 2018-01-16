@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: ['motion-indicator'],
   classNameBindings: ['motionService.isAnimating:active'],
-  motionService: Ember.inject.service('-ea-motion')
+  motionService: service('-ea-motion')
 });

@@ -1,17 +1,23 @@
-import Ember from 'ember';
+import { alias } from '@ember/object/computed';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
 import layout from '../templates/components/animated-orphans';
 import { task } from '../ember-scheduler';
 import { afterRender, microwait } from '../concurrency-helpers';
 import TransitionContext from '../transition-context';
-import { spawnChild, childrenSettled, current } from '../scheduler';
+import {
+  spawnChild,
+  childrenSettled,
+  current
+} from '../scheduler';
 import Sprite from '../sprite';
 import partition from '../partition';
 import { continueMotions } from '../motion';
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   classNames: ['animated-orphans'],
-  motionService: Ember.inject.service('-ea-motion'),
+  motionService: service('-ea-motion'),
 
   init() {
     this._super();
@@ -70,7 +76,7 @@ export default Ember.Component.extend({
 
   endStaticMeasurement() {},
 
-  isAnimating: Ember.computed.alias('animate.isRunning'),
+  isAnimating: alias('animate.isRunning'),
 
   animate: task(function * ({ ownSprite, activeSprites }) {
     yield this.get('startAnimation').perform(ownSprite);

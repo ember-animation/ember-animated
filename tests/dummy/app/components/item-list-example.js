@@ -1,12 +1,14 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
 import { task } from 'ember-animated/ember-scheduler';
 import { current } from 'ember-animated/scheduler';
 
-export default Ember.Component.extend({
-  motionService: Ember.inject.service('-ea-motion'),
+export default Component.extend({
+  motionService: service('-ea-motion'),
   currentSort: numeric,
   duration: 1000,
-  items: Ember.computed({
+  items: computed({
     get() {
       let result = [];
       for (let i = 0; i < 10; i++) {

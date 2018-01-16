@@ -1,11 +1,12 @@
+import { scheduleOnce, cancel } from '@ember/runloop';
+import { warn } from '@ember/debug';
 import RSVP from 'rsvp';
-import Ember from 'ember';
 
 export let Promise;
 if (window.Promise) {
   Promise = window.Promise;
 } else {
-  Ember.warn("Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.", false, { id: "ember-animated-missing-microtask" });
+  warn("Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.", false, { id: "ember-animated-missing-microtask" });
   Promise = RSVP.Promise;
 }
 
@@ -75,10 +76,10 @@ export function wait(ms=0) {
 export function afterRender() {
   let ticket;
   let promise = new Promise(resolve => {
-    ticket = Ember.run.scheduleOnce('afterRender', resolve);
+    ticket = scheduleOnce('afterRender', resolve);
   });
   promise.__ec_cancel__ = () => {
-    Ember.run.cancel(ticket);
+    cancel(ticket);
   };
   return promise;
 }

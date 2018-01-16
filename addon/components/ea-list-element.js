@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { warn } from '@ember/debug';
+import Component from '@ember/component';
 import { componentNodes } from 'ember-animated/ember-internals';
 
 /*
@@ -6,7 +7,7 @@ import { componentNodes } from 'ember-animated/ember-internals';
    with which list elements.
 */
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: '',
   isEmberAnimatedListElement: true,
 
@@ -25,7 +26,7 @@ export default Ember.Component.extend({
       if (node.nodeType === Node.ELEMENT_NODE) {
         fn(node);
       } else if (! /^\s*$/.test(node.textContent)) {
-        Ember.warn("Found bare text content inside an animator", false, { id: "ember-animated-bare-text" });
+        warn("Found bare text content inside an animator", false, { id: "ember-animated-bare-text" });
       }
       if (node === lastNode){ break; }
       node = node.nextSibling;

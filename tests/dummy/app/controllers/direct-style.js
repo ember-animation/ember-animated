@@ -1,16 +1,19 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import Controller from '@ember/controller';
+import { htmlSafe } from '@ember/string';
+import EmberObject, { computed } from '@ember/object';
 import Move from 'ember-animated/motions/move';
 
-let Item = Ember.Object.extend({
-  style: Ember.computed('x', 'y', function() {
-    return Ember.String.htmlSafe(`top: ${parseFloat(this.get('y'))}px; left: ${parseFloat(this.get('x'))}px; `);
+let Item = EmberObject.extend({
+  style: computed('x', 'y', function() {
+    return htmlSafe(`top: ${parseFloat(this.get('y'))}px; left: ${parseFloat(this.get('x'))}px; `);
   })
 });
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   transition,
-  items: Ember.computed(function() {
-    let items = Ember.A();
+  items: computed(function() {
+    let items = A();
     for (let i = 0; i < 4; i++) {
       items.push(Item.create({ id: i, x: somewhere(), y: somewhere() }));
     }

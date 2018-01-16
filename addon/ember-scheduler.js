@@ -1,3 +1,9 @@
+import { Promise as EmberPromise } from 'rsvp';
+import { join, scheduleOnce } from '@ember/runloop';
+import { addObserver } from '@ember/object/observers';
+import { assign } from '@ember/polyfills';
+import { set } from '@ember/object';
+import ComputedProperty from '@ember/object/computed';
 import {
   spawn,
   current,
@@ -6,10 +12,6 @@ import {
 } from './scheduler';
 import Ember from 'ember';
 import  { microwait } from './concurrency-helpers';
-const {
-  set,
-  ComputedProperty
-} = Ember;
 import { DEBUG } from '@glimmer/env';
 
 export function task(...args) {
@@ -26,7 +28,7 @@ function TaskProperty(taskFn) {
 }
 
 TaskProperty.prototype = Object.create(ComputedProperty.prototype);
-Ember.assign(TaskProperty.prototype, {
+assign(TaskProperty.prototype, {
   constructor: TaskProperty,
   restartable() {
     this._bufferPolicy = cancelAllButLast;
@@ -41,7 +43,7 @@ Ember.assign(TaskProperty.prototype, {
     return this;
   },
   setup(proto, taskName) {
-    registerOnPrototype(Ember.addObserver, proto, this._observes, taskName, 'perform', true);
+    registerOnPrototype(addObserver, proto, this._observes, taskName, 'perform', true);
   },
 
 });
@@ -92,7 +94,7 @@ class Task {
         let finalValue = yield * withRunLoop(implementation.call(context, ...args));
         return finalValue;
       } finally {
-        Ember.run.join(() => {
+        join(() => {
           self._removeInstance(current());
         });
       }
@@ -158,7 +160,7 @@ function makeTaskCallback(taskName, method, once) {
     let task = this.get(taskName);
 
     if (once) {
-      Ember.run.scheduleOnce('actions', task, method, ...arguments);
+      scheduleOnce('actions', task, method, ...arguments);
     } else {
       task[method].apply(task, arguments);
     }
@@ -184,7 +186,7 @@ function * withRunLoop(generator) {
   let nextValue;
   let fulfilled = true;
   while (true) {
-    Ember.run.join(() => {
+    join(() => {
       try {
         if (fulfilled) {
           state = generator.next(nextValue);
@@ -217,5 +219,5 @@ function * withRunLoop(generator) {
 }
 
 export function timeout(ms) {
-  return new Ember.RSVP.Promise(resolve => setTimeout(resolve, ms));
+  return new EmberPromise(resolve => setTimeout(resolve, ms));
 }

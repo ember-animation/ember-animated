@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 import Opacity from 'ember-animated/motions/opacity';
 import Move from 'ember-animated/motions/move';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   showDetail: true,
   fade,
   fromSide,

@@ -1,10 +1,10 @@
+import { set } from '@ember/object';
+import { A } from '@ember/array';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import QUnit from 'qunit';
 import $ from 'jquery';
 import { waitForAnimations } from 'ember-animated/test-helpers';
-import Ember from 'ember';
-const { A } = Ember;
 import { Promise } from 'ember-animated/concurrency-helpers';
 import Motion from 'ember-animated/motion';
 
@@ -131,7 +131,7 @@ test('it animates when an id is mutated', function(assert) {
   `);
 
   return this.waitForAnimations().then(() => {
-    Ember.set(this.get('items')[1], 'id', 'x');
+    set(this.get('items')[1], 'id', 'x');
     return this.waitForAnimations();
   }).then(() => {
     assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
@@ -157,7 +157,7 @@ test('it animates when a watched property is mutated', function(assert) {
   `);
 
   return this.waitForAnimations().then(() => {
-    Ember.set(this.get('items')[0], 'y', 3);
+    set(this.get('items')[0], 'y', 3);
     return this.waitForAnimations();
   }).then(() => {
     assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);

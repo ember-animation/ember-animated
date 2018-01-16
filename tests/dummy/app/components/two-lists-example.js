@@ -1,11 +1,13 @@
-import Ember from 'ember';
+import { later } from '@ember/runloop';
+import { computed } from '@ember/object';
+import Component from '@ember/component';
 import Move from 'ember-animated/motions/move';
 
-export default Ember.Component.extend({
+export default Component.extend({
   bounceBack: false,
   transition,
 
-  leftItems: Ember.computed({
+  leftItems: computed({
     get() {
       let result = [];
       for (let i = 0; i < 10; i++) {
@@ -18,7 +20,7 @@ export default Ember.Component.extend({
     }
   }),
 
-  rightItems: Ember.computed({
+  rightItems: computed({
     get() {
       let result = [];
       for (let i = 0; i < 10; i++) {
@@ -39,7 +41,7 @@ export default Ember.Component.extend({
       this.set('rightItems', rightItems.slice(0, index).concat(rightItems.slice(index+1)));
       this.set('leftItems', leftItems.concat([item]).sort(numeric));
       if (this.get('bounceBack') && bounceCounter > 0) {
-        Ember.run.later(() => this.send('moveRight', item, bounceCounter - 1), 1000);
+        later(() => this.send('moveRight', item, bounceCounter - 1), 1000);
       }
     },
     moveRight(item, bounceCounter=1) {
@@ -49,7 +51,7 @@ export default Ember.Component.extend({
       this.set('leftItems', leftItems.slice(0, index).concat(leftItems.slice(index+1)));
       this.set('rightItems', rightItems.concat([item]).sort(numeric));
       if (this.get('bounceBack') && bounceCounter > 0) {
-        Ember.run.later(() => this.send('moveLeft', item, bounceCounter - 1), 1000);
+        later(() => this.send('moveLeft', item, bounceCounter - 1), 1000);
       }
     }
   }

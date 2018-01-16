@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 import Opacity from 'ember-animated/motions/opacity';
 
 function * transition() {
@@ -21,7 +21,7 @@ function * share() {
   });
 }
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   transition,
   share
 });

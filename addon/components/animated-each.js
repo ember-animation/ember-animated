@@ -1,4 +1,8 @@
-import Ember from 'ember';
+import { warn } from '@ember/debug';
+import { alias } from '@ember/object/computed';
+import { computed, get } from '@ember/object';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
 import layout from '../templates/components/animated-each';
 import { task } from '../ember-scheduler';
 import { current } from '../scheduler';
@@ -8,10 +12,10 @@ import Sprite from '../sprite';
 import { componentNodes, keyForArray } from 'ember-animated/ember-internals';
 import partition from '../partition';
 
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   tagName: '',
-  motionService: Ember.inject.service('-ea-motion'),
+  motionService: service('-ea-motion'),
   duration: null,
   use: null,
   rules: null,
@@ -53,7 +57,7 @@ export default Ember.Component.extend({
     }
   },
 
-  _deps: Ember.computed('watch', function() {
+  _deps: computed('watch', function() {
     let w = this.get('watch');
     // Firefox has an `Object.prototype.watch` that can troll us here
     if (typeof w === 'string') {
@@ -61,7 +65,7 @@ export default Ember.Component.extend({
     }
   }),
 
-  durationWithDefault: Ember.computed('duration', function() {
+  durationWithDefault: computed('duration', function() {
     let d = this.get('duration');
     if (d == null) {
       return 2000;
@@ -84,7 +88,7 @@ export default Ember.Component.extend({
       if (deps) {
         for (let j = 0; j < deps.length; j++) {
           let dep = deps[j];
-          signature.push(Ember.get(item, dep));
+          signature.push(get(item, dep));
         }
       }
     }
@@ -95,7 +99,7 @@ export default Ember.Component.extend({
   // on the `items` array we were given and our own earlier state, we
   // update a list of Child models that will be rendered by our
   // template and decide whether an animation is needed.
-  renderedChildren: Ember.computed('items.[]', function() {
+  renderedChildren: computed('items.[]', function() {
     let firstTime = this._firstTime;
     this._firstTime = false;
 
@@ -149,9 +153,9 @@ export default Ember.Component.extend({
     return newChildren;
   }),
 
-  isAnimating: Ember.computed.alias('animate.isRunning'),
+  isAnimating: alias('animate.isRunning'),
 
-  keyGetter: Ember.computed('key', function() {
+  keyGetter: computed('key', function() {
     return keyForArray(this.get('key'));
   }),
 
@@ -294,7 +298,7 @@ export default Ember.Component.extend({
           this._keptSprites.push(sprite);
           break;
         default:
-          Ember.warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
+          warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
         }
       }
     });

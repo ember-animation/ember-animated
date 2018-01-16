@@ -199,7 +199,7 @@ test('asynchronously returned promise', function(assert) {
       return new Promise(resolve => resolve(42));
     });
     resolveFirst();
-    assert.equal(yield p, 42);
+    assert.equal((yield p), 42);
   });
 });
 

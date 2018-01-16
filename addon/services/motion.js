@@ -1,14 +1,23 @@
+import { registerWaiter, unregisterWaiter } from '@ember/test';
+import { computed } from '@ember/object';
+import { A } from '@ember/array';
+import Service from '@ember/service';
 import { DEBUG } from '@glimmer/env';
 import Ember from 'ember';
 import { task } from '../ember-scheduler';
-import { microwait, rAF, afterRender, allSettled } from '../concurrency-helpers';
+import {
+  microwait,
+  rAF,
+  afterRender,
+  allSettled
+} from '../concurrency-helpers';
 
-const MotionService = Ember.Service.extend({
+const MotionService = Service.extend({
   init() {
     this._super();
     this._rendezvous = [];
     this._measurements = [];
-    this._animators = Ember.A();
+    this._animators = A();
     this._orphanObserver = null;
     this._animationObservers = [];
     this._descendantObservers = [];
@@ -111,14 +120,14 @@ const MotionService = Ember.Service.extend({
   // animations are running. It's timing is deliberately not
   // synchronous, so that you can bind it into a template without
   // getting double-render errors.
-  isAnimating: Ember.computed(function () {
+  isAnimating: computed(function () {
     return this.get('isAnimatingSync');
   }),
 
   // Synchronously updated version of isAnimating. If you try to
   // depend on this in a template you will get double-render errors
   // (because the act of rendering can cause animations to begin).
-  isAnimatingSync: Ember.computed('_animators.@each.isAnimating', function() {
+  isAnimatingSync: computed('_animators.@each.isAnimating', function() {
     return this.get('_animators').any(animator => animator.get('isAnimating'));
   }),
 
@@ -270,14 +279,14 @@ if (DEBUG) {
     init() {
       this._super(...arguments);
       if (Ember.testing) {
-        Ember.Test.registerWaiter(isIdle);
+        registerWaiter(isIdle);
       }
       this.get('idlePoller').perform();
     },
 
     willDestroy() {
       if (Ember.testing) {
-        Ember.Test.unregisterWaiter(isIdle);
+        unregisterWaiter(isIdle);
       }
       this._super(...arguments);
     },

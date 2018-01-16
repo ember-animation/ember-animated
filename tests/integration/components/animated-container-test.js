@@ -1,6 +1,10 @@
+import { Promise as EmberPromise } from 'rsvp';
+import { run } from '@ember/runloop';
+import { alias } from '@ember/object/computed';
+import { inject as service } from '@ember/service';
+import Component from '@ember/component';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import Ember from 'ember';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/ember-scheduler';
 import { current } from 'ember-animated/scheduler';
@@ -19,8 +23,8 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
     assert.visuallyConstant = visuallyConstant;
     let here = this;
     this.waitForAnimations = waitForAnimations;
-    this.register('component:fake-animator', Ember.Component.extend({
-      motionService: Ember.inject.service('-ea-motion'),
+    this.register('component:fake-animator', Component.extend({
+      motionService: service('-ea-motion'),
       init() {
         this._super();
         here.set('fakeAnimator', this);
@@ -40,7 +44,7 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
       endStaticMeasurement() {
         this.$().height(this.initialHeight);
       },
-      isAnimating: Ember.computed.alias('animate.isRunning'),
+      isAnimating: alias('animate.isRunning'),
       animate: task(function * (opts={}) {
 
         // In a typical well-behaved animation, the static height *is*
@@ -114,7 +118,7 @@ test('locks size', function(assert) {
   let original = bounds(this.$('.animated-container'));
 
 
-  Ember.run(() => {
+  run(() => {
     this.get('fakeAnimator.animate').perform();
   });
 
@@ -144,7 +148,7 @@ test('measures at the appropriate time', function(assert) {
     {{/animated-container}}
   `);
 
-  Ember.run(() => {
+  run(() => {
     this.get('fakeAnimator.animate').perform({
       staticHeight: 321
     });
@@ -158,12 +162,12 @@ test('measures at the appropriate time', function(assert) {
 test('unlocks only after own motion is done', function(assert) {
   let finishMotion;
   let startMotion;
-  let startedMotion = new Ember.RSVP.Promise(resolve => startMotion = resolve);
+  let startedMotion = new EmberPromise(resolve => startMotion = resolve);
 
   this.set('TestMotion', class extends Motion {
     *animate() {
       startMotion();
-      yield new Ember.RSVP.Promise(resolve => {
+      yield new EmberPromise(resolve => {
         finishMotion = resolve;
       });
     }
@@ -177,7 +181,7 @@ test('unlocks only after own motion is done', function(assert) {
     {{/animated-container}}
   `);
 
-  Ember.run(() => {
+  run(() => {
     this.get('fakeAnimator.animate').perform({
       initialHeight: 100,
       staticHeight: 200,
@@ -195,7 +199,7 @@ test('unlocks only after own motion is done', function(assert) {
 
 test('unlocks only after animator\'s motion is done', function(assert) {
   let unblock;
-  let block = new Ember.RSVP.Promise(resolve => unblock = resolve);
+  let block = new EmberPromise(resolve => unblock = resolve);
 
   this.render(hbs`
     {{#animated-container}}
@@ -205,7 +209,7 @@ test('unlocks only after animator\'s motion is done', function(assert) {
     {{/animated-container}}
   `);
 
-  Ember.run(() => {
+  run(() => {
     this.get('fakeAnimator.animate').perform({
       block,
       initialHeight: 100,
@@ -239,7 +243,7 @@ test('passes provided duration to motion', function(assert) {
     {{/animated-container}}
   `);
 
-  Ember.run(() => {
+  run(() => {
     this.get('fakeAnimator.animate').perform({
       duration: 456
     });
@@ -286,7 +290,7 @@ test("Accounts for top margin collapse between self and child", function(assert)
   `);
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    Ember.run(() => {
+    run(() => {
       this.get('fakeAnimator.animate').perform();
     });
     this.$('.inside').css('position', 'absolute');
@@ -304,7 +308,7 @@ test("Accounts for top margin collapse between self and descendant", function(as
   `);
 
   assert.visuallyConstant(this.$('.animated-container'), () => {
-    Ember.run(() => {
+    run(() => {
       this.get('fakeAnimator.animate').perform();
     });
     this.$('.inside').css('position', 'absolute');
@@ -324,7 +328,7 @@ test("Accounts for bottom margin collapse between self and child", function(asse
   `);
 
   assert.visuallyConstant(this.$('.after'), () => {
-    Ember.run(() => {
+    run(() => {
       this.get('fakeAnimator.animate').perform();
     });
     this.$('.inside').css('position', 'absolute');

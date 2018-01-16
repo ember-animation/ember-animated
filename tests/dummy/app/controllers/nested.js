@@ -1,12 +1,13 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import Controller from '@ember/controller';
 import Move from 'ember-animated/motions/move';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   rules,
-  collections: Ember.A([
+  collections: A([
     {
       title: 'A',
-      members: Ember.A([
+      members: A([
         { name: 'one' },
         { name: 'two' },
         { name: 'three' }
@@ -14,7 +15,7 @@ export default Ember.Controller.extend({
     },
     {
       title: 'B',
-      members: Ember.A([
+      members: A([
         { name: 'four' },
         { name: 'five' },
         { name: 'six' }
@@ -37,7 +38,7 @@ export default Ember.Controller.extend({
     addCollection() {
       this.get('collections').unshiftObject({
         title: String(counter++),
-        members: Ember.A()
+        members: A()
       });
     }
   }

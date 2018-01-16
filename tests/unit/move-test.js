@@ -1,8 +1,8 @@
+import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import Sprite from 'ember-animated/sprite';
 import $ from 'jquery';
 import Move from 'ember-animated/motions/move';
-import Ember from 'ember';
 import {
   equalBounds,
   approxEqualPixels,
@@ -75,7 +75,7 @@ test("simple motion", function(assert) {
   };
 
   let done = assert.async();
-  Ember.run(() => {
+  run(() => {
     tester.run(s, { duration: 60 }).then(done, done);
     time.advance(60);
   });
@@ -101,7 +101,7 @@ test("simple motion, interrupted", function(assert) {
   s.lock();
 
 
-  Ember.run(() => {
+  run(() => {
     tester.run(s, { duration: 1000 });
   });
 
@@ -118,7 +118,7 @@ test("simple motion, interrupted", function(assert) {
     newSprite.measureFinalBounds();
     newSprite.lock();
 
-    Ember.run(() => {
+    run(() => {
       tester.run(newSprite, { duration: 1000 });
     });
     assert.approxEqualPixels(newSprite.getCurrentBounds().top, s.initialBounds.top + 200, 'top continuity');
@@ -141,7 +141,7 @@ test("interrupting with same destination does not extend animation time", functi
   s.measureFinalBounds();
   s.lock();
 
-  Ember.run(() => {
+  run(() => {
     tester.run(s, { duration: 1000 });
   });
 
@@ -154,7 +154,7 @@ test("interrupting with same destination does not extend animation time", functi
 
     newSprite.lock();
 
-    Ember.run(() => {
+    run(() => {
       tester.run(newSprite, { duration: 1000 });
     });
     return time.advance(501).then(() => {

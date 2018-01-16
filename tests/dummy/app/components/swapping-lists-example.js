@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import Move from 'ember-animated/motions/move';
 
-export default Ember.Component.extend({
+export default Component.extend({
   transition,
   init() {
     this._super();

@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 import Opacity from 'ember-animated/motions/opacity';
 import { Promise } from 'ember-animated/concurrency-helpers';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   tableMode: false,
   fade,
   actions: {
