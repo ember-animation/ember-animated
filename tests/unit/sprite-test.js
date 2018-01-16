@@ -8,7 +8,7 @@ import {
   approxEqualPixels
 } from '../helpers/assertions';
 
-let environment, offsetParent, intermediate, target, innerContent, external;
+let environment, offsetParent, intermediate, target, innerContent, external, priorSibling;
 
 module("Unit | Sprite", {
   beforeEach(assert) {
@@ -39,6 +39,7 @@ module("Unit | Sprite", {
     target = fixture.find('.target');
     innerContent = fixture.find('.inner-content');
     external = fixture.find('.external');
+    priorSibling = fixture.find('.sibling');
     environment.width(600);
     offsetParent.css({
       position: 'relative'
@@ -750,6 +751,57 @@ test("moveToFinalPosition moves to correct position", function(assert) {
   assert.approxEqualPixels(have.top, want.top, 'vertical position matches');
   assert.approxEqualPixels(have.left, want.left, 'horizontal position matches');
 });
+
+test("rehome", function(assert) {
+  // we're going to move the target from being relative to
+  // intermediate to being relative to priorSibling
+  intermediate.css({
+    position: 'relative'
+  });
+  priorSibling.css({
+    position: 'relative'
+  });
+
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+  let m = Sprite.positionedStartingAt(target[0], parent);
+
+  let destination = makeParent(priorSibling);
+
+  assert.visuallyConstant(target, () => {
+    m.rehome(destination);
+    priorSibling[0].appendChild(target[0]);
+    m.lock();
+  }, 'target bounds');
+});
+
+test("rehome a scaled and translated sprite", function(assert) {
+  // we're going to move the target from being relative to
+  // intermediate to being relative to priorSibling
+  intermediate.css({
+    position: 'relative'
+  });
+  priorSibling.css({
+    position: 'relative'
+  });
+  target.css({
+    transform: 'translateX(65px) translateY(75px) scale(0.55)'
+  });
+
+  let parent = makeParent(target);
+  parent.measureFinalBounds();
+  let m = Sprite.positionedStartingAt(target[0], parent);
+
+  let destination = makeParent(priorSibling);
+
+  assert.visuallyConstant(target, () => {
+    m.rehome(destination);
+    priorSibling[0].appendChild(target[0]);
+    m.lock();
+  }, 'target bounds');
+});
+
+
 
 skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
   assert.ok(false);

@@ -1,4 +1,4 @@
-import { module, test, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { TimeControl } from 'ember-animated/test-helpers';
@@ -44,7 +44,7 @@ module('Acceptance | hero', function(hooks) {
     assert.equal(currentURL(), '/hero');
   });
 
-  skip('index to detail with interruption', async function(assert) {
+  test('index to detail with interruption', async function(assert) {
     await visit('/hero');
     time.pause();
     click('.hero-list-image');

@@ -421,7 +421,7 @@ export default class Sprite {
     let newRelativeBounds = shiftedBounds(screenBounds, -newOffsetSprite.initialBounds.left, -newOffsetSprite.initialBounds.top);
 
     let t = this.transform;
-    t = t.mult(new Transform(1, 0, 0, 1, newRelativeBounds.left/t.a - t.tx, newRelativeBounds.top/t.d - t.ty));
+    t = t.mult(new Transform(1, 0, 0, 1, (newRelativeBounds.left - t.tx)/t.a, (newRelativeBounds.top - t.ty)/t.d));
     this._transform = t;
     this._imposedStyle.transform = t.serialize();
     this._imposedStyle.transformOrigin = '0 0';
