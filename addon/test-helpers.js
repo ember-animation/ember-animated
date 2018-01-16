@@ -58,6 +58,7 @@ export class TimeControl {
     return rAF().then(rAF).then(rAF);
   }
   runAtSpeed(factor) {
+    this._timer = this.now();
     this._runningSpeed = factor;
     this._runStartedAt = origNow();
   }
