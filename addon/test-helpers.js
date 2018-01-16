@@ -14,7 +14,7 @@ import Sprite from './sprite';
 export function waitForAnimations() {
   let idle;
   run(() => {
-    idle = getOwner(this).lookup('service:-ea-motion').get('waitUntilIdle').perform();
+    idle = (this.owner || getOwner(this)).lookup('service:-ea-motion').get('waitUntilIdle').perform();
   });
   return resolve(idle);
 }

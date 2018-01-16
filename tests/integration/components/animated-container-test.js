@@ -3,7 +3,9 @@ import { run } from '@ember/runloop';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/ember-scheduler';
@@ -16,14 +18,15 @@ import {
 } from 'ember-animated/test-helpers';
 
 
-moduleForComponent('animated-container', 'Integration | Component | animated container', {
-  integration: true,
-  beforeEach(assert) {
+module('Integration | Component | animated container', function(hooks) {
+  setupRenderingTest(hooks);
+
+  hooks.beforeEach(function(assert) {
     assert.equalBounds = equalBounds;
     assert.visuallyConstant = visuallyConstant;
     let here = this;
     this.waitForAnimations = waitForAnimations;
-    this.register('component:fake-animator', Component.extend({
+    this.owner.register('component:fake-animator', Component.extend({
       motionService: service('-ea-motion'),
       init() {
         this._super();
@@ -71,359 +74,363 @@ moduleForComponent('animated-container', 'Integration | Component | animated con
         }
       })
     }));
-  }
-});
-
-test('simple render', function(assert) {
-  this.render(hbs`
-    {{#animated-container}}
-      <div class="inside">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  this.$('.inside').css({
-    height: 210
   });
 
-  let container = bounds(this.$('.animated-container'));
-  let inside = bounds(this.$('.inside'));
-  assert.equalBounds(container, inside, 'takes size of content');
-
-  this.$('.inside').css({
-    height: 600
-  });
-
-  container = bounds(this.$('.animated-container'));
-  let tallerInside = bounds(this.$('.inside'));
-  assert.equalBounds(container, tallerInside, 'adapts to height of content');
-  assert.ok(tallerInside.height > inside.height, "inside content got taller");
-
-});
-
-test('locks size', function(assert) {
-  this.render(hbs`
-    {{#animated-container}}
-      <div class="inside">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  this.$('.inside').css({
-    height: 210
-  });
-
-  let original = bounds(this.$('.animated-container'));
-
-
-  run(() => {
-    this.get('fakeAnimator.animate').perform();
-  });
-
-  this.$('.inside').css({
-    height: 600
-  });
-
-  let final = bounds(this.$('.animated-container'));
-
-  assert.equalBounds(final, original, 'height can be locked');
-});
-
-test('measures at the appropriate time', function(assert) {
-  let motionSawHeight;
-
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      motionSawHeight = this.sprite.finalBounds.height;
-    }
-  });
-
-  this.render(hbs`
-    {{#animated-container motion=TestMotion}}
-      <div class="inside">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  run(() => {
-    this.get('fakeAnimator.animate').perform({
-      staticHeight: 321
-    });
-  });
-
-  return this.waitForAnimations().then(() => {
-    assert.equal(motionSawHeight, 321);
-  });
-});
-
-test('unlocks only after own motion is done', function(assert) {
-  let finishMotion;
-  let startMotion;
-  let startedMotion = new EmberPromise(resolve => startMotion = resolve);
-
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      startMotion();
-      yield new EmberPromise(resolve => {
-        finishMotion = resolve;
-      });
-    }
-  });
-
-  this.render(hbs`
-    {{#animated-container motion=TestMotion}}
-      <div class="inside">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  run(() => {
-    this.get('fakeAnimator.animate').perform({
-      initialHeight: 100,
-      staticHeight: 200,
-      finalHeight: 300
-    });
-  });
-  return startedMotion.then(() => {
-    assert.equal(height(this.$('.animated-container')), 100, "still at previous height");
-    finishMotion();
-    return this.waitForAnimations();
-  }).then(() => {
-    assert.equal(height(this.$('.animated-container')), 300, "now at final height");
-  });
-});
-
-test('unlocks only after animator\'s motion is done', function(assert) {
-  let unblock;
-  let block = new EmberPromise(resolve => unblock = resolve);
-
-  this.render(hbs`
-    {{#animated-container}}
-      <div class="inside">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  run(() => {
-    this.get('fakeAnimator.animate').perform({
-      block,
-      initialHeight: 100,
-      staticHeight: 200,
-      finalHeight: 300
-    });
-  });
-
-  return wait(60).then(() => {
-    assert.equal(height(this.$('.animated-container')), 200, "should be locked at the static height we measured");
-    unblock();
-    return wait(60);
-  }).then(() => {
-    assert.equal(height(this.$('.animated-container')), 300, "unlocked and reflecting the actual final height of the animator");
-  });
-});
-
-test('passes provided duration to motion', function(assert) {
-  let motionOpts;
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      motionOpts = this.opts;
-    }
-  });
-
-  this.render(hbs`
-    {{#animated-container motion=TestMotion}}
-      <div class="inside">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  run(() => {
-    this.get('fakeAnimator.animate').perform({
-      duration: 456
-    });
-  });
-
-  return this.waitForAnimations().then(() => {
-    assert.deepEqual(motionOpts, { duration: 456 });
-  });
-});
-
-test('can animate initial render', function(assert) {
-  assert.expect(3);
-
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      assert.equal(this.sprite.initialBounds.height, 0, 'initial height');
-      assert.equal(this.sprite.finalBounds.height, 100, 'static height');
-    }
-  });
-
-  this.set('opts', {
-    initialHeight: 0,
-    staticHeight: 100,
-    finalHeight: 200
-  });
-  this.render(hbs`
-    {{#animated-container motion=TestMotion onInitialRender=true}}
-      {{fake-animator onInitialRender=opts}}
-    {{/animated-container}}
-  `);
-
-  return this.waitForAnimations().then(() => {
-    assert.equal(height(this.$('.animated-container')), 200, 'ends up unlocked');
-  });
-});
-
-test("Accounts for top margin collapse between self and child", function(assert) {
-  this.render(hbs`
-    {{#animated-container}}
-      <div class="inside" style="margin-top: 10px; height: 100px;">
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  assert.visuallyConstant(this.$('.animated-container'), () => {
-    run(() => {
-      this.get('fakeAnimator.animate').perform();
-    });
-    this.$('.inside').css('position', 'absolute');
-  });
-});
-
-test("Accounts for top margin collapse between self and descendant", function(assert) {
-  this.render(hbs`
-    {{#animated-container}}
-      <div class="inside">
-        <div style="margin-top: 10px; height: 100px;"></div>
-        {{fake-animator}}
-      </div>
-    {{/animated-container}}
-  `);
-
-  assert.visuallyConstant(this.$('.animated-container'), () => {
-    run(() => {
-      this.get('fakeAnimator.animate').perform();
-    });
-    this.$('.inside').css('position', 'absolute');
-  });
-});
-
-test("Accounts for bottom margin collapse between self and child", function(assert) {
-  this.render(hbs`
-    <div style="border: 1px solid black">
+  test('simple render', async function(assert) {
+    await render(hbs`
       {{#animated-container}}
-        <div class="inside" style="margin-bottom: 10px; height: 100px;">
+        <div class="inside">
           {{fake-animator}}
         </div>
       {{/animated-container}}
-      <div class="after">This comes after</div>
-    </div>
-  `);
+    `);
 
-  assert.visuallyConstant(this.$('.after'), () => {
+    this.$('.inside').css({
+      height: 210
+    });
+
+    let container = bounds(this.$('.animated-container'));
+    let inside = bounds(this.$('.inside'));
+    assert.equalBounds(container, inside, 'takes size of content');
+
+    this.$('.inside').css({
+      height: 600
+    });
+
+    container = bounds(this.$('.animated-container'));
+    let tallerInside = bounds(this.$('.inside'));
+    assert.equalBounds(container, tallerInside, 'adapts to height of content');
+    assert.ok(tallerInside.height > inside.height, "inside content got taller");
+
+  });
+
+  test('locks size', async function(assert) {
+    await render(hbs`
+      {{#animated-container}}
+        <div class="inside">
+          {{fake-animator}}
+        </div>
+      {{/animated-container}}
+    `);
+
+    this.$('.inside').css({
+      height: 210
+    });
+
+    let original = bounds(this.$('.animated-container'));
+
+
     run(() => {
       this.get('fakeAnimator.animate').perform();
     });
-    this.$('.inside').css('position', 'absolute');
+
+    this.$('.inside').css({
+      height: 600
+    });
+
+    let final = bounds(this.$('.animated-container'));
+
+    assert.equalBounds(final, original, 'height can be locked');
   });
-});
 
+  test('measures at the appropriate time', async function(assert) {
+    let motionSawHeight;
 
-test("Accounts for own margin collapse as first content appears", function(assert) {
-  assert.expect(1);
-
-  this.render(hbs`
-    <style type="text/css">
-      .example {
-        margin-top: 10px;
-        margin-bottom: 20px;
+    this.set('TestMotion', class extends Motion {
+      *animate() {
+        motionSawHeight = this.sprite.finalBounds.height;
       }
-    </style>
-    {{#animated-container class="example"}}
-      {{fake-animator}}
-    {{/animated-container}}
-    <div class="after">This comes after</div>
-  `);
+    });
 
-  this.get('fakeAnimator').$().height(0);
+    await render(hbs`
+      {{#animated-container motion=TestMotion}}
+        <div class="inside">
+          {{fake-animator}}
+        </div>
+      {{/animated-container}}
+    `);
 
-  let initialTop = bounds(this.$('.after')).top;
+    run(() => {
+      this.get('fakeAnimator.animate').perform({
+        staticHeight: 321
+      });
+    });
 
-  this.get('fakeAnimator.animate').perform({
-    initialHeight: 0,
-    staticHeight: 1,
-    finalHeight: 1
+    return this.waitForAnimations().then(() => {
+      assert.equal(motionSawHeight, 321);
+    });
   });
 
-  return this.waitForAnimations().then(() => {
-    assert.equal(bounds(this.$('.after')).top, initialTop + 1, 'only changes by one pixel');
-  });
-});
+  test('unlocks only after own motion is done', async function(assert) {
+    let finishMotion;
+    let startMotion;
+    let startedMotion = new EmberPromise(resolve => startMotion = resolve);
 
-test("Accounts for own margin collapse as last content is removed", function(assert) {
-  assert.expect(1);
-
-  this.render(hbs`
-    <style type="text/css">
-      .example {
-        margin-top: 10px;
-        margin-bottom: 20px;
+    this.set('TestMotion', class extends Motion {
+      *animate() {
+        startMotion();
+        yield new EmberPromise(resolve => {
+          finishMotion = resolve;
+        });
       }
-    </style>
-    {{#animated-container class="example"}}
-      {{fake-animator}}
-    {{/animated-container}}
-    <div class="after">This comes after</div>
-  `);
+    });
 
-  this.get('fakeAnimator').$().height(1);
+    await render(hbs`
+      {{#animated-container motion=TestMotion}}
+        <div class="inside">
+          {{fake-animator}}
+        </div>
+      {{/animated-container}}
+    `);
 
-  let initialTop = bounds(this.$('.after')).top;
-
-  this.get('fakeAnimator.animate').perform({
-    initialHeight: 1,
-    staticHeight: 0,
-    finalHeight: 0
+    run(() => {
+      this.get('fakeAnimator.animate').perform({
+        initialHeight: 100,
+        staticHeight: 200,
+        finalHeight: 300
+      });
+    });
+    return startedMotion.then(() => {
+      assert.equal(height(this.$('.animated-container')), 100, "still at previous height");
+      finishMotion();
+      return this.waitForAnimations();
+    }).then(() => {
+      assert.equal(height(this.$('.animated-container')), 300, "now at final height");
+    });
   });
 
-  return this.waitForAnimations().then(() => {
-    assert.equal(bounds(this.$('.after')).top, initialTop - 1, 'only changes by one pixel');
+  test('unlocks only after animator\'s motion is done', async function(assert) {
+    let unblock;
+    let block = new EmberPromise(resolve => unblock = resolve);
+
+    await render(hbs`
+      {{#animated-container}}
+        <div class="inside">
+          {{fake-animator}}
+        </div>
+      {{/animated-container}}
+    `);
+
+    run(() => {
+      this.get('fakeAnimator.animate').perform({
+        block,
+        initialHeight: 100,
+        staticHeight: 200,
+        finalHeight: 300
+      });
+    });
+
+    return wait(60).then(() => {
+      assert.equal(height(this.$('.animated-container')), 200, "should be locked at the static height we measured");
+      unblock();
+      return wait(60);
+    }).then(() => {
+      assert.equal(height(this.$('.animated-container')), 300, "unlocked and reflecting the actual final height of the animator");
+    });
   });
+
+  test('passes provided duration to motion', async function(assert) {
+    let motionOpts;
+    this.set('TestMotion', class extends Motion {
+      *animate() {
+        motionOpts = this.opts;
+      }
+    });
+
+    await render(hbs`
+      {{#animated-container motion=TestMotion}}
+        <div class="inside">
+          {{fake-animator}}
+        </div>
+      {{/animated-container}}
+    `);
+
+    run(() => {
+      this.get('fakeAnimator.animate').perform({
+        duration: 456
+      });
+    });
+
+    return this.waitForAnimations().then(() => {
+      assert.deepEqual(motionOpts, { duration: 456 });
+    });
+  });
+
+  test('can animate initial render', async function(assert) {
+    assert.expect(3);
+
+    this.set('TestMotion', class extends Motion {
+      *animate() {
+        assert.equal(this.sprite.initialBounds.height, 0, 'initial height');
+        assert.equal(this.sprite.finalBounds.height, 100, 'static height');
+      }
+    });
+
+    this.set('opts', {
+      initialHeight: 0,
+      staticHeight: 100,
+      finalHeight: 200
+    });
+    await render(hbs`
+      {{#animated-container motion=TestMotion onInitialRender=true}}
+        {{fake-animator onInitialRender=opts}}
+      {{/animated-container}}
+    `);
+
+    return this.waitForAnimations().then(() => {
+      assert.equal(height(this.$('.animated-container')), 200, 'ends up unlocked');
+    });
+  });
+
+  test("Accounts for top margin collapse between self and child", async function(assert) {
+    await render(hbs`
+      {{#animated-container}}
+        <div class="inside" style="margin-top: 10px; height: 100px;">
+          {{fake-animator}}
+        </div>
+      {{/animated-container}}
+    `);
+
+    assert.visuallyConstant(this.$('.animated-container'), () => {
+      run(() => {
+        this.get('fakeAnimator.animate').perform();
+      });
+      this.$('.inside').css('position', 'absolute');
+    });
+  });
+
+  test("Accounts for top margin collapse between self and descendant", async function(assert) {
+    await render(hbs`
+      {{#animated-container}}
+        <div class="inside">
+          <div style="margin-top: 10px; height: 100px;"></div>
+          {{fake-animator}}
+        </div>
+      {{/animated-container}}
+    `);
+
+    assert.visuallyConstant(this.$('.animated-container'), () => {
+      run(() => {
+        this.get('fakeAnimator.animate').perform();
+      });
+      this.$('.inside').css('position', 'absolute');
+    });
+  });
+
+  test("Accounts for bottom margin collapse between self and child", async function(assert) {
+    await render(hbs`
+      <div style="border: 1px solid black">
+        {{#animated-container}}
+          <div class="inside" style="margin-bottom: 10px; height: 100px;">
+            {{fake-animator}}
+          </div>
+        {{/animated-container}}
+        <div class="after">This comes after</div>
+      </div>
+    `);
+
+    assert.visuallyConstant(this.$('.after'), () => {
+      run(() => {
+        this.get('fakeAnimator.animate').perform();
+      });
+      this.$('.inside').css('position', 'absolute');
+    });
+  });
+
+
+  test("Accounts for own margin collapse as first content appears", async function(assert) {
+    assert.expect(1);
+
+    await render(hbs`
+      <style type="text/css">
+        .example {
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+      </style>
+      {{#animated-container class="example"}}
+        {{fake-animator}}
+      {{/animated-container}}
+      <div class="after">This comes after</div>
+    `);
+
+    this.get('fakeAnimator').$().height(0);
+
+    let initialTop = bounds(this.$('.after')).top;
+
+    run(() => {
+      this.get('fakeAnimator.animate').perform({
+        initialHeight: 0,
+        staticHeight: 1,
+        finalHeight: 1
+      });
+    });
+
+    return this.waitForAnimations().then(() => {
+      assert.equal(bounds(this.$('.after')).top, initialTop + 1, 'only changes by one pixel');
+    });
+  });
+
+  test("Accounts for own margin collapse as last content is removed", async function(assert) {
+    assert.expect(1);
+
+    await render(hbs`
+      <style type="text/css">
+        .example {
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+      </style>
+      {{#animated-container class="example"}}
+        {{fake-animator}}
+      {{/animated-container}}
+      <div class="after">This comes after</div>
+    `);
+
+    this.get('fakeAnimator').$().height(1);
+
+    let initialTop = bounds(this.$('.after')).top;
+
+    run(() => {
+      this.get('fakeAnimator.animate').perform({
+        initialHeight: 1,
+        staticHeight: 0,
+        finalHeight: 0
+      });
+    });
+
+    return this.waitForAnimations().then(() => {
+      assert.equal(bounds(this.$('.after')).top, initialTop - 1, 'only changes by one pixel');
+    });
+  });
+
+  test("Uses same timing for measurements as animated-each", async function(assert) {
+    assert.expect(2);
+    this.set('transition', function * () {});
+    this.set('TestMotion', class extends Motion {
+      *animate() {
+        assert.equal(this.sprite.initialBounds.height, 10, 'initial height');
+        assert.equal(this.sprite.finalBounds.height, 20, 'static height');
+      }
+    });
+    this.set('items', ['a']);
+    await render(hbs`
+      {{#animated-container motion=TestMotion}}
+        {{#animated-each items use=transition as |item|}}
+          <div style="height: 10px"></div>
+        {{/animated-each}}
+      {{/animated-container}}
+    `);
+    await this.waitForAnimations();
+    this.set('items', ['a', 'b']);
+    await this.waitForAnimations();
+  });
+
+  function bounds($elt) {
+    return $elt[0].getBoundingClientRect();
+  }
+
+  function height($elt) {
+    return bounds($elt).height;
+  }
 });
-
-test("Uses same timing for measurements as animated-each", async function(assert) {
-  assert.expect(2);
-  this.set('transition', function * () {});
-  this.set('TestMotion', class extends Motion {
-    *animate() {
-      assert.equal(this.sprite.initialBounds.height, 10, 'initial height');
-      assert.equal(this.sprite.finalBounds.height, 20, 'static height');
-    }
-  });
-  this.set('items', ['a']);
-  this.render(hbs`
-    {{#animated-container motion=TestMotion}}
-      {{#animated-each items use=transition as |item|}}
-        <div style="height: 10px"></div>
-      {{/animated-each}}
-    {{/animated-container}}
-  `);
-  await this.waitForAnimations();
-  this.set('items', ['a', 'b']);
-  await this.waitForAnimations();
-});
-
-function bounds($elt) {
-  return $elt[0].getBoundingClientRect();
-}
-
-function height($elt) {
-  return bounds($elt).height;
-}
