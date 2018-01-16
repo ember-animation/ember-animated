@@ -1,24 +1,25 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
 import { TimeControl } from 'ember-animated/test-helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, visit } from '@ember/test-helpers';
 
 let time;
 
-moduleForAcceptance('Acceptance | orphan', {
-  beforeEach() {
+module('Acceptance | orphan', function(hooks) {
+  setupApplicationTest(hooks);
+
+  hooks.beforeEach = function () {
     time = new TimeControl();
     time.runAtSpeed(40);
-  },
-  afterEach() {
+  };
+
+  hooks.afterEach = function() {
     time.finished();
     time = null;
-  }
-});
+  };
 
-test('visiting /orphan', function(assert) {
-  visit('/orphan');
-
-  andThen(function() {
+  test('visiting /orphan', async function(assert) {
+    await visit('/orphan');
     assert.equal(currentURL(), '/orphan');
   });
 });

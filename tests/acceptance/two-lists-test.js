@@ -1,12 +1,11 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, visit } from '@ember/test-helpers';
 
-moduleForAcceptance('Acceptance | two lists');
-
-test('visiting /two-lists', function(assert) {
-  visit('/two-lists');
-
-  andThen(function() {
+module('Acceptance | two lists', function(hooks){
+  setupApplicationTest(hooks);
+  test('visiting /two-lists', async function(assert) {
+    await visit('/two-lists');
     assert.equal(currentURL(), '/two-lists');
   });
 });

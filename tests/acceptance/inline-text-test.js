@@ -1,12 +1,12 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, visit } from '@ember/test-helpers';
 
-moduleForAcceptance('Acceptance | inline text');
+module('Acceptance | inline text', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('visiting /inline-text', function(assert) {
-  visit('/inline-text');
-
-  andThen(function() {
+  test('visiting /inline-text', async function(assert) {
+    await visit('/inline-text');
     assert.equal(currentURL(), '/inline-text');
   });
 });

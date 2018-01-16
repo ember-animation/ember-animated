@@ -1,12 +1,13 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, visit } from '@ember/test-helpers';
 
-moduleForAcceptance('Acceptance | direct style');
+module('Acceptance | direct style', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('visiting /direct-style', function(assert) {
-  visit('/direct-style');
-
-  andThen(function() {
+  test('visiting /direct-style', async function(assert) {
+    await visit('/direct-style');
     assert.equal(currentURL(), '/direct-style');
   });
+
 });

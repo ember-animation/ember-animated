@@ -1,12 +1,12 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, visit } from '@ember/test-helpers';
 
-moduleForAcceptance('Acceptance | nested');
+module('Acceptance | nested', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('visiting /nested', function(assert) {
-  visit('/nested');
-
-  andThen(function() {
+  test('visiting /nested', async function(assert) {
+    await visit('/nested');
     assert.equal(currentURL(), '/nested');
   });
 });

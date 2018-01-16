@@ -1,12 +1,11 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, visit } from '@ember/test-helpers';
 
-moduleForAcceptance('Acceptance | swapping lists');
-
-test('visiting /swapping-lists', function(assert) {
-  visit('/swapping-lists');
-
-  andThen(function() {
+module('Acceptance | swapping lists', function(hooks){
+  setupApplicationTest(hooks);
+  test('visiting /swapping-lists', async function(assert) {
+    await visit('/swapping-lists');
     assert.equal(currentURL(), '/swapping-lists');
   });
 });

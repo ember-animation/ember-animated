@@ -1,40 +1,37 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
 import { TimeControl } from 'ember-animated/test-helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, click, visit } from '@ember/test-helpers';
+import { findByText } from '../helpers/dom';
 
 let time;
 
-moduleForAcceptance('Acceptance | bind', {
-  beforeEach() {
+module('Acceptance | bind', function(hooks) {
+  setupApplicationTest(hooks);
+  hooks.beforeEach = function() {
     time = new TimeControl();
     time.runAtSpeed(40);
-  },
-  afterEach() {
+  };
+  hooks.afterEach = function() {
     time.finished();
     time = null;
-  }
-});
+  };
 
-test('visiting /bind', function(assert) {
-  visit('/bind');
-
-  andThen(function() {
+  test('visiting /bind', async function(assert) {
+    await visit('/bind');
     assert.equal(currentURL(), '/bind');
   });
-});
 
-test('clicking the button', function(assert) {
-  let number;
+  test('clicking the button', async function(assert) {
+    let number;
 
-  visit('/bind');
+    await visit('/bind');
+    number = parseInt(this.element.querySelector('.left-count').textContent);
 
-  andThen(function() {
-    number = parseInt(find('.left-count').text().trim());
-  });
-
-  click('button:contains("+")');
-  andThen(function() {
-    let finalNumber = parseInt(find('.left-count').text().trim());
+    await click(findByText(this.element, 'button', '+'));
+    let finalNumber = parseInt(this.element.querySelector('.left-count').textContent);
     assert.equal(finalNumber, number + 1);
+
   });
+
 });

@@ -1,12 +1,12 @@
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { test, module } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
+import { currentURL, visit } from '@ember/test-helpers';
 
-moduleForAcceptance('Acceptance | container only');
+module('Acceptance | container only', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('visiting /container-only', function(assert) {
-  visit('/container-only');
-
-  andThen(function() {
+  test('visiting /container-only', async function(assert) {
+    await visit('/container-only');
     assert.equal(currentURL(), '/container-only');
   });
 });
