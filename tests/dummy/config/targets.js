@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 var browsers;
 
 if (process.env.EMBER_ENV === 'development') {
@@ -12,7 +10,7 @@ if (process.env.EMBER_ENV === 'development') {
     'last 1 Chrome versions',
     'last 1 Firefox versions',
     'last 1 Safari versions'
-  ]
+  ];
 }
 
 module.exports = { browsers };
