@@ -36,7 +36,7 @@ export class TimeControl {
   }
   now() {
     if (this._runningSpeed) {
-      return (origNow() - this._runStartedAt) * this._runningSpeed;
+      return (origNow() - this._runStartedAt) * this._runningSpeed + this._timer;
     }
     return this._timer;
   }
@@ -61,7 +61,11 @@ export class TimeControl {
     this._runningSpeed = factor;
     this._runStartedAt = origNow();
   }
-
+  pause() {
+    this._timer = this.now();
+    this._runningSpeed = false;
+    this._runstartedAt = null;
+  }
 }
 
 export const MotionTester = EmberObject.extend({
