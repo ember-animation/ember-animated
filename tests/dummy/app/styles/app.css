@@ -37,6 +37,10 @@
     float: right;
 }
 
+.scenario-swapping-lists .left-item {
+    color: red;
+}
+
 .scenario-bind .animated-container {
     font-size: 3rem;
     float: left;

@@ -1,12 +1,15 @@
 <div class="scenario-swapping-lists">
+  {{animated-orphans}}
   <div>
     <button {{action "swap"}}>Swap</button>
+    <label>{{input type="checkbox" checked=distinguishSides}} Distinguish by color</label>
+    <label>{{input type="checkbox" checked=animateSendingSide}} Animate sending side</label>
   </div>
 
   {{#if leftItems}}
     {{#animated-container class="left"}}
       {{#animated-each leftItems use=transition key="id" as |item|}}
-        <div>
+        <div class={{if distinguishSides "left-item"}} >
           {{item.id}}
         </div>
       {{/animated-each}}

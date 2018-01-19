@@ -1,8 +1,16 @@
 import Component from '@ember/component';
 import Move from 'ember-animated/motions/move';
+import { computed } from '@ember/object';
 
 export default Component.extend({
-  transition,
+  transition: computed('animateSendingSide', function() {
+    if (this.get('animateSendingSide')) {
+      return altTransition;
+    } else {
+      return transition;
+    }
+  }),
+
   init() {
     this._super();
     this.set('leftItems', makeRandomList());
@@ -38,9 +46,17 @@ function makeRandomList() {
   return result.sort(numeric);
 }
 
+
 function * transition() {
   this.receivedSprites.forEach(s => this.animate(new Move(s)));
+  // without this, they won't reveal until the end of the whole
+  // transition
+  this.insertedSprites.forEach(s => s.reveal());
+}
 
+function * altTransition() {
+  this.receivedSprites.forEach(sprite => sprite.moveToFinalPosition());
+  this.sentSprites.forEach(s => this.animate(new Move(s)));
   // without this, they won't reveal until the end of the whole
   // transition
   this.insertedSprites.forEach(s => s.reveal());
