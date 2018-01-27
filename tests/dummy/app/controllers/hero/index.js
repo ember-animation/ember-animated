@@ -16,9 +16,8 @@ function * transition() {
 }
 
 function * share() {
-  this.sentSprites.forEach(sprite => {
-    this.animate(new Opacity(sprite, { to: 0, duration: 0 }));
-  });
+  // TODO: if we don't set a transition, our sprites aren't available
+  // for far matching
 }
 
 export default Controller.extend({
