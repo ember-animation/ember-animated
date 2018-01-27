@@ -100,10 +100,10 @@ export default Component.extend({
     {
       let activeIds = Object.create(null);
       for (let sprite of activeSprites) {
-        activeIds[sprite.owner.id] = true;
+        activeIds[`${sprite.owner.group}/${sprite.owner.id}`] = true;
       }
       for (let entry of this._newOrphanTransitions) {
-        entry.removedSprites = entry.removedSprites.filter(s => !activeIds[s.owner.id]);
+        entry.removedSprites = entry.removedSprites.filter(s => !activeIds[`${s.owner.group}/${s.owner.id}`]);
       }
     }
 

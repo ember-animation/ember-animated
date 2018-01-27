@@ -99,7 +99,7 @@ export default Component.extend({
   // on the `items` array we were given and our own earlier state, we
   // update a list of Child models that will be rendered by our
   // template and decide whether an animation is needed.
-  renderedChildren: computed('items.[]', function() {
+  renderedChildren: computed('items.[]', 'group', function() {
     let firstTime = this._firstTime;
     this._firstTime = false;
 
@@ -109,6 +109,7 @@ export default Component.extend({
     let oldSignature = this._prevSignature;
     let newItems = this.get('items');
     let newSignature = this._identitySignature(newItems, getKey);
+    let group = this.get('group') || '__default__';
     this._prevItems = newItems ? newItems.slice() : [];
     this._prevSignature = newSignature;
     if (!newItems) { newItems = []; }
@@ -127,11 +128,11 @@ export default Component.extend({
       let id = getKey(value);
       let index = oldIndices.get(id);
       if (index != null) {
-        let child = new Child(id, value);
+        let child = new Child(group, id, value);
         child.state = 'kept';
         return child;
       } else {
-        return new Child(id, value);
+        return new Child(group, id, value);
       }
     }).concat(
       oldChildren
@@ -541,7 +542,8 @@ export default Component.extend({
 
 
 class Child {
-  constructor(id, value) {
+  constructor(group, id, value) {
+    this.group = group;
     this.id = id;
     this.value = value;
 
@@ -575,7 +577,7 @@ class Child {
   }
 
   clone() {
-    return new Child(this.id, this.value);
+    return new Child(this.group, this.id, this.value);
   }
 }
 

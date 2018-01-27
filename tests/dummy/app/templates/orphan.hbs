@@ -10,12 +10,12 @@
 
   {{#if showDetail}}
 
-    {{#animated-bind "1" use=fade duration=2000}}
+    {{#animated-bind use=fade duration=2000 group="one" }}
       <h1>1</h1>
     {{/animated-bind}}
 
 
-    {{#animated-bind "2" use=fromSide duration=2000}}
+    {{#animated-bind use=fromSide duration=2000 group="two"}}
       <h1>2</h1>
     {{/animated-bind}}
 

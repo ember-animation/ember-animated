@@ -251,7 +251,11 @@ const MotionService = Service.extend({
 
 function performMatches(sink, source) {
   sink.inserted.concat(sink.kept).forEach(sprite => {
-    let match = source.removed.find(mySprite => sprite.owner.id === mySprite.owner.id);
+    let match = source.removed.find(
+      mySprite =>
+        sprite.owner.group == mySprite.owner.group &&
+          sprite.owner.id === mySprite.owner.id
+    );
     if (match) {
       sink.matches.set(sprite, match);
       sink.otherTasks.set(source.runAnimationTask, true);
