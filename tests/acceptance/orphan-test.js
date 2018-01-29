@@ -8,15 +8,15 @@ let time;
 module('Acceptance | orphan', function(hooks) {
   setupApplicationTest(hooks);
 
-  hooks.beforeEach = function () {
+  hooks.beforeEach(function () {
     time = new TimeControl();
     time.runAtSpeed(40);
-  };
+  });
 
-  hooks.afterEach = function() {
+  hooks.afterEach(function() {
     time.finished();
     time = null;
-  };
+  });
 
   test('visiting /orphan', async function(assert) {
     await visit('/orphan');

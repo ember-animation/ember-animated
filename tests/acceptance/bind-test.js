@@ -8,14 +8,14 @@ let time;
 
 module('Acceptance | bind', function(hooks) {
   setupApplicationTest(hooks);
-  hooks.beforeEach = function() {
+  hooks.beforeEach(function() {
     time = new TimeControl();
     time.runAtSpeed(40);
-  };
-  hooks.afterEach = function() {
+  });
+  hooks.afterEach(function() {
     time.finished();
     time = null;
-  };
+  });
 
   test('visiting /bind', async function(assert) {
     await visit('/bind');

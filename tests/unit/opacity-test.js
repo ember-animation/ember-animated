@@ -13,7 +13,7 @@ function makeSprite() {
 }
 
 module("Unit | Opacity", function(hooks) {
-  hooks.beforeEach/* assert */(function() {
+  hooks.beforeEach(function() {
     time = new TimeControl();
 
     tester = MotionTester.create({
