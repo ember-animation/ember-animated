@@ -35,6 +35,7 @@ module.exports = {
       excludedFiles: [
         'app/**',
         'addon/**',
+        'addon-test-support/**',
         'version-specific-*/**',
         'tests/dummy/app/**'
       ],
