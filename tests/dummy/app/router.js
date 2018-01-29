@@ -19,6 +19,7 @@ Router.map(function() {
   this.route('direct-style');
   this.route('inline-text');
   this.route('orphan');
+  this.route('here-there');
 });
 
 export default Router;

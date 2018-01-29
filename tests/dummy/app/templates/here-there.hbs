@@ -1,0 +1,20 @@
+<div class="scenario-here-there">
+
+  <button {{action "toggle"}}>Toggle</button>
+
+  <label>{{input type="checkbox" checked=groupTogether}} Grouped</label>
+
+  <div>
+    <div class="left">
+      {{#animated-if showLeft use=transition group=howToGroup duration=1000}}
+        <div class="demo-item"></div>
+      {{/animated-if}}
+    </div>
+
+    <div class="right">
+      {{#animated-if showRight use=transition group=howToGroup duration=1000}}
+        <div class="demo-item"></div>
+      {{/animated-if}}
+    </div>
+  </div>
+</div>

@@ -182,3 +182,17 @@
 .ea-time-control--slider {
     width: 100%;
 }
+
+.scenario-here-there > div {
+    display: flex;
+}
+
+.scenario-here-there > div > div {
+    width: 50%;
+}
+
+.scenario-here-there .demo-item {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+}
