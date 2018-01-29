@@ -19,7 +19,7 @@ Router.map(function() {
   this.route('direct-style');
   this.route('inline-text');
   this.route('orphan');
-  this.route('chart-move');
+  this.route('chart');
 });
 
 export default Router;

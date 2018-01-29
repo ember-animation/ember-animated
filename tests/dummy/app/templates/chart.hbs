@@ -1,0 +1,14 @@
+{{#link-to "index"}}
+  Home Page
+{{/link-to}}
+<h2>Chart Demo</h2>
+
+{{!-- <div>{{model.country}}</div> --}}
+<ul>
+  {{#each model as |pop|}}
+    <h3>{{pop.country}}</h3>
+  {{/each}}
+</ul>
+
+
+{{outlet}}
