@@ -94,6 +94,7 @@ module.exports = {
   },
 
   included: function(app) {
+    this._super.apply(this, arguments);
     if (app.env === 'test') {
       this._shouldIncludeTestHelpers = true;
     }
