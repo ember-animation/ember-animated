@@ -1,34 +1,59 @@
 import Route from '@ember/routing/route';
-// import Fetch from 'node_modules/node-fetch'
 import Papa from 'papaparse';
 
 
 
-// requestAnimeAwait();
-
-// let pop = Papa.parse(
-// 	'/dummy/public/population.csv', {
-// 	header: true
-// }).data;
-
-// var pop = [{    
-//     y1800: 144, y1900: 267, country: 'usa'
-// },
-// {
-//     y1800: 174, y1900: 355, country: 'can'
-// }
-// ]
-
 export default Route.extend({
 
     async model() {
-        const response = await fetch(`population.csv`)
-        const text = await response.text();
-        console.log("async/await based");
-        console.log(text);
+        let pop = await loadcsv(`population.csv`);
 
-        let pop = Papa.parse(text, {header: true}).data;
-        return pop;
+        let model = [];
+        
+        forEachColumn( pop, (country, year, population) =>
+            model.push({country, year, population})
+        )
+
+        let gdp = await loadcsv(`gdp_per_capita_ppp.csv`);
+
+
+        forEachColumn(gdp, (country, year, gdp) => {
+            let datapoint = model.find(p => 
+                p.country === country && p.year === year);
+            if(datapoint) {
+                datapoint.gdp = gdp;
+            }
+        })
+
+        let life = await loadcsv(`life_expectancy_at_birth.csv`);
+
+        forEachColumn(life, (country, year, life) => {
+            let datapoint = model.find(p => 
+                p.country === country && p.year === year);
+            if(datapoint) {
+                datapoint.life = life;
+            }
+        })
+
+        return model;
       }
 
 });
+
+async function loadcsv(url) {
+    let response = await fetch(url)
+    let text = await response.text();
+    return Papa.parse(text, {header: true}).data;
+}
+
+function forEachColumn(rows, body) {
+    rows.forEach(row => {
+        Object.keys(row).forEach(key => {
+            if(row[key] && key !== 'country'){
+                body(row.country, key, row[key])
+            }
+        })
+    })
+}
+
+// 
