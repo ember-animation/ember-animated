@@ -34,7 +34,9 @@ export default Route.extend({
                 datapoint.life = life;
             }
         })
-
+        // model now is an array of objects. Each entry is structured thusly:
+        // {country: "Japan", year: "1988", population: "121432942", gdp: "26724", life: "78.54"}
+        
         return model;
       }
 
@@ -56,4 +58,8 @@ function forEachColumn(rows, body) {
     })
 }
 
-// 
+function concatCountryYear(model) {
+    model.forEach(
+
+    )
+}
