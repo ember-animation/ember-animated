@@ -73,6 +73,7 @@ export default class Sprite {
     this.element = element;
     this.__$element = null;
     this.owner = null;
+    this._transform = null;
     this._offsetSprite = offsetSprite;
 
     let predecessor = inFlight.get(element);
@@ -84,7 +85,6 @@ export default class Sprite {
       this._styleCache = predecessor._styleCache;
       this._parentElement = predecessor._parentElement;
       this._revealed = predecessor._revealed;
-      this._transform = predecessor.transform;
       this._imposedStyle = predecessor._imposedStyle;
       this._collapsingChildren = predecessor._collapsingChildren;
       this._lockMode = predecessor._lockMode;
@@ -95,7 +95,6 @@ export default class Sprite {
       this._styleCache = null;
       this._parentElement = null;
       this._revealed = null;
-      this._transform = null;
       this._imposedStyle = null;
       this._collapsingChildren = null;
       this._lockMode = lockMode;
