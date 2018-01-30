@@ -3,10 +3,11 @@ import {
   spawnChild,
   childrenSettled
 } from './scheduler';
-
+import { setOwner } from '@ember/application';
 
 export default class TransitionContext {
-  constructor(duration, insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites) {
+  constructor(owner, duration, insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites) {
+    setOwner(this, owner);
     this._duration = duration;
     this._insertedSprites = insertedSprites;
     this._keptSprites = keptSprites;
