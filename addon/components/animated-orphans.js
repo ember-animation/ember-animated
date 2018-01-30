@@ -227,6 +227,10 @@ export default Component.extend({
       } else {
         let sprite = Sprite.positionedStartingAt(element, ownSprite);
         sprite.owner = child;
+        // we need to flag each existing child for removal at the
+        // start of each animation. That's what reinitializes its
+        // removal blockers count.
+        child.flagForRemoval();
         return sprite;
       }
     }).filter(Boolean);
