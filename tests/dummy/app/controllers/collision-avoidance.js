@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import Move from 'ember-animated/motions/move';
+import MoveWithAvoidance from '../motions/move-with-avoidance';
 
 export default Controller.extend({
   transition,
@@ -27,5 +27,5 @@ export default Controller.extend({
 });
 
 function * transition() {
-  this.keptSprites.forEach(sprite => this.animate(new Move(sprite)));
+  this.keptSprites.forEach(sprite => this.animate(new MoveWithAvoidance(sprite)));
 }
