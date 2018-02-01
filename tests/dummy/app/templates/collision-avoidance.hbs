@@ -1,0 +1,10 @@
+<div class="scenario-collision-avoidance">
+
+  <button {{action "shuffle"}}>Shuffle</button>
+
+  <div>
+    {{#animated-each items use=transition as |item|}}
+      <div class="item">{{item.id}}</div>
+    {{/animated-each}}
+  </div>
+</div>

@@ -20,6 +20,7 @@ Router.map(function() {
   this.route('inline-text');
   this.route('orphan');
   this.route('here-there');
+  this.route('collision-avoidance');
 });
 
 export default Router;

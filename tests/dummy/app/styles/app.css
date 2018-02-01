@@ -196,3 +196,16 @@
     height: 100px;
     background-color: blue;
 }
+
+.scenario-collision-avoidance > div {
+    margin: 4em;
+}
+
+.scenario-collision-avoidance .item {
+    width: 2em;
+    height: 2em;
+    border: 1px solid black;
+    margin-bottom: 4px;
+    text-align: center;
+    line-height: 2em;
+}
