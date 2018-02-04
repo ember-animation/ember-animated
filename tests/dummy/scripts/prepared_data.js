@@ -43,7 +43,7 @@ function forEachColumn(rows, body) {
     rows.forEach(row => {
         Object.keys(row).forEach(key => {
             if(row[key] && key !== 'country'){
-                body(row.country, key, row[key]);
+                body(row.country, parseInt(key, 10), parseInt(row[key], 10));
             }
         })
     })
