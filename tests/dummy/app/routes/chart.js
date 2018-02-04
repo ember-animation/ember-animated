@@ -10,12 +10,11 @@ export default Route.extend({
       }
 });
 
-/********
-Concatonates the 'country' and 'year' key values into one key.
-The new key is 'countryYear'. Each entry in the model array
-will have this new key in replace of the 'country' and 
-'year' keys.
-********/
+/**
+* Concatonates (and replaces) the 'country' and 'year' key-value pairs into 
+* one key-value pair. The new key is 'countryYear' and its value is the 
+* country string concatonated with a ' ' and the year string.
+*/
 function concatCountryYear(model) {
     model.forEach(row => {
         let newKey = row.country + " " + row.year;
@@ -47,13 +46,13 @@ function forEachColumn(rows, body) {
     })
 }
 
-/********
-    Creates an array of objects with data parsed from .csv files.
-    Returns this array as a JSON string.
-    This function was called once to create model_data.txt which stores 
-    the JSON string of the data needed to run the route.
-    Now that the file exists, this function is no longer called.
-********/
+/**
+ * Creates an array of objects with data parsed from .csv files.
+ * Returns this array as a JSON string.
+ * This function was called once to create model_data.txt to store 
+ * the JSON string of the data needed to run the route.
+ * Now that the file exists, this function is no longer called.
+ */
 async function makeJSON(model) {
     let pop = await loadcsv(`population.csv`);
     forEachColumn( pop, (country, year, population) =>
@@ -77,4 +76,33 @@ async function makeJSON(model) {
     })
     concatCountryYear(model);
     return JSON.stringify(model);
+}
+
+/**
+ * Does given object contain the properties life, gdp, and population?
+ * If yes, return true. If no, return false.
+ */
+function hasAllThree(countryYearObj) {
+    if( countryYearObj.life && 
+        countryYearObj.gdp && 
+        countryYearObj.population ) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+/**
+ * Deletes objects of the given array that don't have entries for 
+ * life, gdp, and population.
+ */
+function deleteIncompletes(model) {
+    let index = 0;
+    model.forEach(row => {
+        if( !hasAllThree(row) ) {
+            model.splice(index, 1);
+        }
+        index++;
+    })
 }
