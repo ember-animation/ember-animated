@@ -206,6 +206,19 @@ export default class Sprite {
     };
   }
 
+  // `which` is either "initialBounds" or "finalBounds". This will
+  // give you that value in terms of global absolute pixels (as
+  // opposed to the local coordinate system that the sprite itself is
+  // using). Usually you want to animate relative to the local
+  // coordinate system instead of using this.
+  absolute(which) {
+    if (this._offsetSprite) {
+      return shiftedBounds(this[which], this._offsetSprite[which].left, this._offsetSprite[which].top);
+    } else {
+      return this[which];
+    }
+  }
+
   set element(value) {
     this.__element = value;
     this.__$element = null;
@@ -416,7 +429,7 @@ export default class Sprite {
   // Adjust the sprite so it will still be in the same visual position
   // despite being moved into a new offset parent.
   rehome(newOffsetSprite) {
-    let screenBounds = shiftedBounds(this.initialBounds, this._offsetSprite.initialBounds.left, this._offsetSprite.initialBounds.top);
+    let screenBounds = this.absolute('initialBounds');
     let newRelativeBounds = shiftedBounds(screenBounds, -newOffsetSprite.initialBounds.left, -newOffsetSprite.initialBounds.top);
 
     let t = this.transform;
