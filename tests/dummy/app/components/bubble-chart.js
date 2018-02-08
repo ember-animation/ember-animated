@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import layout from '../templates/components/bouble-chart';
+import layout from '../templates/components/bubble-chart';
 import { computed } from '@ember/object';
 
 export default Component.extend({
