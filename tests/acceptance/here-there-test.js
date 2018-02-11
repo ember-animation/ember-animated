@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { currentURL, visit, click } from '@ember/test-helpers';
-import { TimeControl } from 'ember-animated/test-helpers';
+import { TimeControl } from 'ember-animated/test-support';
 import { animationsSettled } from 'ember-animated/test-support';
 
 module('Acceptance | here there', function(hooks) {

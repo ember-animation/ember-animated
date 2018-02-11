@@ -2,8 +2,7 @@ import { module, test } from 'qunit';
 import Sprite from 'ember-animated/sprite';
 import $ from 'jquery';
 import Opacity from 'ember-animated/motions/opacity';
-import { TimeControl } from 'ember-animated/test-helpers';
-import { MotionTester } from 'ember-animated/test-support';
+import { MotionTester, TimeControl } from 'ember-animated/test-support';
 
 let tester, target, time;
 

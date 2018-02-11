@@ -1,5 +1,5 @@
 import { test, module } from 'qunit';
-import { TimeControl } from 'ember-animated/test-helpers';
+import { TimeControl } from 'ember-animated/test-support';
 import { setupApplicationTest } from 'ember-qunit';
 import { currentURL, click, visit } from '@ember/test-helpers';
 import { findByText } from '../helpers/dom';

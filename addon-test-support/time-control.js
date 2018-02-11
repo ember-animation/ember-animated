@@ -1,8 +1,8 @@
-import { clock, rAF } from './concurrency-helpers';
+import { clock, rAF } from 'ember-animated/concurrency-helpers';
 
 let origNow = clock.now;
 
-export class TimeControl {
+export default class TimeControl {
   constructor() {
     if (clock.now !== origNow) {
       throw new Error("Only one TimeControl may be active at a time");

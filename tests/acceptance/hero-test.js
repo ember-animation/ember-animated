@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
-import { TimeControl } from 'ember-animated/test-helpers';
+import { TimeControl } from 'ember-animated/test-support';
 import { equalBounds } from '../helpers/assertions';
 
 const FAST = 40;
