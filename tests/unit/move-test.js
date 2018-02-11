@@ -8,7 +8,8 @@ import {
   approxEqualPixels,
   visuallyConstant
 } from '../helpers/assertions';
-import { TimeControl, MotionTester } from 'ember-animated/test-helpers';
+import { TimeControl } from 'ember-animated/test-helpers';
+import { MotionTester } from 'ember-animated/test-support';
 
 let tester, environment, offsetParent, target, innerContent, time;
 
