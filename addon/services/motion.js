@@ -273,39 +273,42 @@ function * ancestorsOf(component) {
   }
 }
 
+// This layer will cause everything inside to be stripped from prod builds via dead code elimination.
 if (DEBUG) {
-  let idleFrames = 0;
-  const isIdle = function() {
-    return idleFrames > 2;
-  };
 
-  MotionService.reopen({
-    init() {
-      this._super(...arguments);
-      if (Ember.testing) {
+  // Then within non-production builds, this hooks into Ember's test
+  // system but only when tests are actually running.
+  if (Ember.testing) {
+
+    let idleFrames = 0;
+    const isIdle = function() {
+      return idleFrames > 2;
+    };
+
+    MotionService.reopen({
+      init() {
+        this._super(...arguments);
         registerWaiter(isIdle);
-      }
-      this.get('idlePoller').perform();
-    },
+        this.get('idlePoller').perform();
+      },
 
-    willDestroy() {
-      if (Ember.testing) {
+      willDestroy() {
         unregisterWaiter(isIdle);
-      }
-      this._super(...arguments);
-    },
+        this._super(...arguments);
+      },
 
-    idlePoller: task(function * () {
-      while (true) {
-        yield rAF();
-        if (this.get('isAnimatingSync')) {
-          idleFrames = 0;
-        } else {
-          idleFrames++;
+      idlePoller: task(function * () {
+        while (true) {
+          yield rAF();
+          if (this.get('isAnimatingSync')) {
+            idleFrames = 0;
+          } else {
+            idleFrames++;
+          }
         }
-      }
-    })
-  });
+      })
+    });
+  }
 }
 
 export default MotionService;

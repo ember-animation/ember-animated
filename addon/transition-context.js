@@ -81,4 +81,6 @@ if (DEBUG) {
       return type + '=' + this[`_${type}Sprites`].map(s => s.owner.id).join(',')
     }).join(" | "));
   };
+} else {
+  TransitionContext.prototype.printSprites = function(){};
 }
