@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { waitForAnimations } from 'ember-animated/test-helpers';
+import { animationsSettled } from 'ember-animated/test-support';
 import { Promise, wait } from 'ember-animated/concurrency-helpers';
 import { equalBounds } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
@@ -11,7 +11,6 @@ module('Integration | Component | animated orphans', function(hooks) {
   setupRenderingTest(hooks);
 
   hooks.beforeEach(function(assert) {
-    this.waitForAnimations = waitForAnimations;
     assert.equalBounds = equalBounds;
   });
 
@@ -40,14 +39,14 @@ module('Integration | Component | animated orphans', function(hooks) {
     {{/animated-bind}}
   {{/if}}
   `)
-    await this.waitForAnimations();
+    await animationsSettled();
 
     this.set('t1', function * () {
       assert.equal(this.removedSprites.length, 1, 'second transition');
     });
 
     this.set('showIt', false);
-    await this.waitForAnimations();
+    await animationsSettled();
   });
 
   test('it runs all orphan transitions in parallel', async function(assert) {
@@ -65,7 +64,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     {{/animated-bind}}
   {{/if}}
   `)
-    await this.waitForAnimations();
+    await animationsSettled();
 
     let unblock1, unblock2;
 
@@ -86,7 +85,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     assert.ok(unblock2, 'unblock2');
     unblock1();
     unblock2();
-    await this.waitForAnimations();
+    await animationsSettled();
   });
 
   test('it places orphan sprite at correct bounds', async function(assert) {
@@ -105,7 +104,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     {{/animated-bind}}
   {{/if}}
   `)
-    await this.waitForAnimations();
+    await animationsSettled();
 
     let firstBounds = this.$('.one')[0].getBoundingClientRect();
 
@@ -116,7 +115,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     });
 
     this.set('showIt', false);
-    await this.waitForAnimations();
+    await animationsSettled();
 
   });
 
@@ -136,7 +135,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     {{/animated-bind}}
   {{/if}}
   `)
-    await this.waitForAnimations();
+    await animationsSettled();
 
     let counter = 0;
 
@@ -173,7 +172,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       this.keptSprites.forEach(s => this.animate(new TestMotion(s)));
     });
     this.set('showIt', true);
-    await this.waitForAnimations();
+    await animationsSettled();
   });
 
   test('drops sprites that had not starting animating when interruption occured', async function(assert) {
@@ -195,7 +194,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     {{/animated-bind}}
   {{/if}}
   `)
-    await this.waitForAnimations();
+    await animationsSettled();
 
     let t1Counter = 0;
 
@@ -257,7 +256,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     });
 
     this.set('showIt', true);
-    await this.waitForAnimations();
+    await animationsSettled();
   });
 
   test('drops sprites that finished animating when interruption occured', async function(assert) {
@@ -279,7 +278,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     {{/animated-bind}}
   {{/if}}
   `)
-    await this.waitForAnimations();
+    await animationsSettled();
 
     let t1Counter = 0;
 
@@ -343,6 +342,6 @@ module('Integration | Component | animated orphans', function(hooks) {
     });
 
     this.set('showIt', true);
-    await this.waitForAnimations();
+    await animationsSettled();
   });
 });

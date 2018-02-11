@@ -1,18 +1,4 @@
-import { resolve } from 'rsvp';
-import { getOwner } from '@ember/application';
-import { run } from '@ember/runloop';
 import { clock, rAF } from './concurrency-helpers';
-
-
-// This method must be installed on a context with an owner. Expected
-// usage is to put it on an integration test context.
-export function waitForAnimations() {
-  let idle;
-  run(() => {
-    idle = (this.owner || getOwner(this)).lookup('service:-ea-motion').get('waitUntilIdle').perform();
-  });
-  return resolve(idle);
-}
 
 let origNow = clock.now;
 
