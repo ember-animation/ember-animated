@@ -14,7 +14,16 @@ export default Component.extend({
   }),
   transition,
 
-  layout
+  layout,
+
+  actions: {
+    play() {
+      setInterval(() => {
+        this.set('currentYear', parseInt(this.get('currentYear')) + 1);
+      }, 1000);
+
+    }
+  }
 });
 
 function * transition() {
