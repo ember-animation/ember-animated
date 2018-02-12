@@ -4,10 +4,11 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
 
-  currentYear: 1980,
+  currentYear: 2015,
   points: computed('currentYear', 'model', function(){
     let currentYear = this.get('currentYear');
-    return this.get('model').filter(row => row.year === currentYear);
+    let myRow = this.get('model').filter(row => row.year === currentYear);
+    return myRow.sort((a, b) => b.population - a.population);
   }),
 
   layout
