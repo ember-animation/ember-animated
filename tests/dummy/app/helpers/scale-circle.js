@@ -9,7 +9,7 @@ export function scaleCircle([value], {minValue, maxValue}) {
   let den = maxValue - minValue;
   let fract = num/den;
   let perc = 100 * fract;
-  return `${(perc/12)}%`;
+  return `${(perc)}%`;
 }
 
 export default helper(scaleCircle);
