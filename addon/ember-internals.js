@@ -7,15 +7,17 @@
 
  */
 import { get } from '@ember/object';
-
 import { guidFor } from '@ember/object/internals';
+import Ember from 'ember';
+const { getViewBounds } = Ember.ViewUtils;
 
-
-// These things are swapped out at build time based on the Ember
-// version.
-export {
-  componentNodes
-} from './ember-internals/version-specific';
+export function componentNodes(view) {
+  let bounds = getViewBounds(view);
+  return {
+    firstNode: bounds.firstNode,
+    lastNode: bounds.lastNode
+  };
+}
 
 export function keyForArray(keyPath) {
   switch (keyPath) {
