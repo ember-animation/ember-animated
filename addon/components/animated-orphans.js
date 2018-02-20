@@ -13,7 +13,6 @@ import {
 import Sprite from '../sprite';
 import partition from '../partition';
 import { continueMotions } from '../motion';
-import { getOwner } from '@ember/application';
 
 export default Component.extend({
   layout,
@@ -132,7 +131,6 @@ export default Component.extend({
         }
       });
       let context = new TransitionContext(
-        getOwner(this),
         duration,
         [],
         [],
@@ -187,7 +185,6 @@ export default Component.extend({
       });
 
       let context = new TransitionContext(
-        getOwner(this),
         duration,
         [],
         [],

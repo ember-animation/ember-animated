@@ -11,7 +11,6 @@ import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
 import { componentNodes, keyForArray } from 'ember-animated/ember-internals';
 import partition from '../partition';
-import { getOwner } from '@ember/application';
 
 export default Component.extend({
   layout,
@@ -470,7 +469,6 @@ export default Component.extend({
     sentSprites.forEach(s => s.hide());
 
     let context = new TransitionContext(
-      getOwner(this),
       this.get('durationWithDefault'),
       unmatchedInsertedSprites,                      // user-visible insertedSprites
       unmatchedKeptSprites,                          // user-visible keptSprites
