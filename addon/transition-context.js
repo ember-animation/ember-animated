@@ -12,7 +12,7 @@ export default class TransitionContext {
     this._removedSprites = removedSprites;
     this._sentSprites = sentSprites;
     this._receivedSprites = receivedSprites;
-    this._prepared = new Map();
+    this._prepared = new Set();
   }
 
   // the following things are all accessors in order to make them
@@ -44,7 +44,7 @@ export default class TransitionContext {
     }
     return sprites.map(sprite => {
       if (!this._prepared.has(sprite)){
-        this._prepared.set(sprite, true);
+        this._prepared.add(sprite);
         sprite = this.prepareSprite(sprite);
       }
       return sprite;
