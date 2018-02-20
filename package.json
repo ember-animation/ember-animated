@@ -17,6 +17,7 @@
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
+    "ember-animated-tools": "^0.1.1",
     "ember-assign-polyfill": "^2.0.2",
     "ember-cli": "~2.18.0",
     "ember-cli-dependency-checker": "^2.0.0",
