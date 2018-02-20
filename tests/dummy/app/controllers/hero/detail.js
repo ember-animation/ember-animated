@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
-import { move, continuePrior } from 'ember-animated/motions/move';
-import { scale } from 'ember-animated/motions/scale';
-import { opacity } from 'ember-animated/motions/opacity';
+import move, { continuePrior } from 'ember-animated/motions/move';
+import scale from 'ember-animated/motions/scale';
+import opacity from 'ember-animated/motions/opacity';
 
 function * transition({ receivedSprites, sentSprites, removedSprites }) {
   receivedSprites.forEach(sprite => {

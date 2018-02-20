@@ -1,4 +1,4 @@
-import Move from './move';
+import { Move } from './move';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 

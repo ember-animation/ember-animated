@@ -2,11 +2,11 @@ import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 
-export function scale(sprite, opts) {
+export default function scale(sprite, opts) {
   return new Scale(sprite, opts).run();
 }
 
-export default class Scale extends Motion {
+export class Scale extends Motion {
   constructor(sprite, opts) {
     super(sprite, opts);
     this.widthTween = null;

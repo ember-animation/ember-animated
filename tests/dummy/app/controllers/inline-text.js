@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { opacity } from 'ember-animated/motions/opacity';
+import opacity from 'ember-animated/motions/opacity';
 import { Promise } from 'ember-animated/concurrency-helpers';
 
 export default Controller.extend({

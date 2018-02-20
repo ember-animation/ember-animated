@@ -1,6 +1,6 @@
 import { A } from '@ember/array';
 import Controller from '@ember/controller';
-import { move } from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
 
 export default Controller.extend({
   rules,

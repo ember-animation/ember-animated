@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import Sprite from 'ember-animated/sprite';
 import $ from 'jquery';
-import Opacity from 'ember-animated/motions/opacity';
+import { Opacity } from 'ember-animated/motions/opacity';
 import { MotionTester, TimeControl } from 'ember-animated/test-support';
 
 let tester, target, time;

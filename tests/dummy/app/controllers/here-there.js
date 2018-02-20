@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { computed } from "@ember/object"
 import { not } from "@ember/object/computed"
-import { move } from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
 import { printSprites } from 'ember-animated/debug';
 
 export default Controller.extend({

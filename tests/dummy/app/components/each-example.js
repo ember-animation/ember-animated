@@ -2,7 +2,7 @@ import { A } from '@ember/array';
 import { computed, set } from '@ember/object';
 import Component from '@ember/component';
 import { task, timeout } from 'ember-animated/ember-scheduler';
-import { move } from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
 
 export default Component.extend({
   rules,

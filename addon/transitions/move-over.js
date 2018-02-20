@@ -1,4 +1,4 @@
-import Move from '../motions/move';
+import { Move } from '../motions/move';
 import follow from '../motions/follow';
 
 export const toLeft = moveOver.bind(null, 'x', -1);
@@ -37,7 +37,7 @@ function normalize(dimension, direction) {
   return { position, size, startTranslatedBy, endTranslatedBy };
 }
 
-export function * moveOver(dimension, direction, context) {
+export default function * moveOver(dimension, direction, context) {
   let {
     position,
     size,

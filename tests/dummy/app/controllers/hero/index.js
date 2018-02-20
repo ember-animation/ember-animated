@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { opacity } from 'ember-animated/motions/opacity';
+import opacity from 'ember-animated/motions/opacity';
 
 function * transition({ insertedSprites, receivedSprites, removedSprites }) {
   insertedSprites.forEach(sprite => {

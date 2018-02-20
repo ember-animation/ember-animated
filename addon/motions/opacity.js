@@ -4,12 +4,11 @@ import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 import linear from '../easings/linear';
 
-// TODO make this default
-export function opacity(sprite, opts) {
+export default function opacity(sprite, opts) {
   return new Opacity(sprite, opts).run();
 }
 
-export default class Opacity extends Motion {
+export class Opacity extends Motion {
   constructor(sprite, opts) {
     super(sprite, opts);
     this.prior = null;

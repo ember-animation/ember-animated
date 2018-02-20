@@ -2,7 +2,7 @@ import { A } from '@ember/array';
 import Controller from '@ember/controller';
 import { htmlSafe } from '@ember/string';
 import EmberObject, { computed } from '@ember/object';
-import { move } from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
 
 let Item = EmberObject.extend({
   style: computed('x', 'y', function() {

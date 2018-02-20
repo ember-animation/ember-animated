@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { move } from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
 import { computed } from '@ember/object';
 
 export default Component.extend({

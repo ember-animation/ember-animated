@@ -2,12 +2,11 @@ import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 
-// TODO make this the default export
-export function move(sprite, opts) {
+export default function move(sprite, opts) {
   return new Move(sprite, opts).run();
 }
 
-export default class Move extends Motion {
+export class Move extends Motion {
   constructor(sprite, opts) {
     super(sprite, opts);
     this.prior = null;
