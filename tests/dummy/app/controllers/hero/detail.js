@@ -1,30 +1,30 @@
 import Controller from '@ember/controller';
-import Move, { ContinuePrior } from 'ember-animated/motions/move';
-import Scale from 'ember-animated/motions/scale';
-import Opacity from 'ember-animated/motions/opacity';
+import { move, continuePrior } from 'ember-animated/motions/move';
+import { scale } from 'ember-animated/motions/scale';
+import { opacity } from 'ember-animated/motions/opacity';
 
-function * transition() {
-  this.receivedSprites.forEach(sprite => {
+function * transition({ receivedSprites, sentSprites, removedSprites }) {
+  receivedSprites.forEach(sprite => {
     sprite.scale(sprite.initialBounds.width / sprite.finalBounds.width, sprite.initialBounds.height / sprite.finalBounds.height);
     sprite.applyStyles({
       'z-index': 1
     });
-    this.animate(new Move(sprite));
-    this.animate(new Scale(sprite));
+    move(sprite);
+    scale(sprite);
   });
 
-  this.sentSprites.forEach(sprite => {
+  sentSprites.forEach(sprite => {
     sprite.applyStyles({
       'z-index': 1
     });
-    this.animate(new Move(sprite));
-    this.animate(new Scale(sprite));
+    move(sprite);
+    scale(sprite);
   });
 
-  this.removedSprites.forEach(sprite => {
+  removedSprites.forEach(sprite => {
     sprite.endTranslatedBy(0, 0);
-    this.animate(new ContinuePrior(sprite));
-    this.animate(new Opacity(sprite, { to: 0 }));
+    continuePrior(sprite);
+    opacity(sprite, { to: 0 });
   });
 }
 

@@ -76,6 +76,11 @@ export default class Sprite {
     this._transform = null;
     this._offsetSprite = offsetSprite;
 
+    // This gets set by TransitionContext when a sprite is used within
+    // a TransitionContext. It's a convenience that allows users to
+    // just pass Sprites to Motions without also passing the context.
+    this._transitionContext = null;
+
     let predecessor = inFlight.get(element);
     if (predecessor && lockMode) {
       // When we finish, we want to be able to set the style back to

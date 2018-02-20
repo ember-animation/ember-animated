@@ -47,8 +47,8 @@ module('Integration | Component | animated each', function(hooks) {
   test('it can transition at first render', async function(assert) {
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);
-    this.set('transition', function * () {
-      assert.equal(this.insertedSprites.length, 3);
+    this.set('transition', function * ({ insertedSprites }) {
+      assert.equal(insertedSprites.length, 3);
       transitionCounter++;
     });
     await render(hbs`
@@ -66,11 +66,11 @@ module('Integration | Component | animated each', function(hooks) {
   test('it updates when list is replaced', async function(assert) {
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);
-    this.set('transition', function * () {
+    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
       if (++transitionCounter === 2) {
-        assert.equal(this.keptSprites.length, 2, 'kept sprites');
-        assert.equal(this.insertedSprites.length, 1, 'inserted sprites');
-        assert.equal(this.removedSprites.length, 1, 'removed sprites');
+        assert.equal(keptSprites.length, 2, 'kept sprites');
+        assert.equal(insertedSprites.length, 1, 'inserted sprites');
+        assert.equal(removedSprites.length, 1, 'removed sprites');
       }
     });
     await render(hbs`
@@ -92,11 +92,11 @@ module('Integration | Component | animated each', function(hooks) {
   test('it updates when list is mutated', async function(assert) {
     let transitionCounter = 0;
     this.set('items', A(['a', 'b', 'c']));
-    this.set('transition', function * () {
+    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
       if (++transitionCounter === 2) {
-        assert.equal(this.keptSprites.length, 2, 'kept sprites');
-        assert.equal(this.insertedSprites.length, 1, 'inserted sprites');
-        assert.equal(this.removedSprites.length, 1, 'removed sprites');
+        assert.equal(keptSprites.length, 2, 'kept sprites');
+        assert.equal(insertedSprites.length, 1, 'inserted sprites');
+        assert.equal(removedSprites.length, 1, 'removed sprites');
       }
     });
     await render(hbs`
@@ -116,11 +116,11 @@ module('Integration | Component | animated each', function(hooks) {
     assert.expect(5);
     let transitionCounter = 0;
     this.set('items', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
-    this.set('transition', function * () {
+    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
       if (++transitionCounter === 2) {
-        assert.equal(this.keptSprites.length, 2, 'kept sprites');
-        assert.equal(this.insertedSprites.length, 1, 'inserted sprites');
-        assert.equal(this.removedSprites.length, 1, 'removed sprites');
+        assert.equal(keptSprites.length, 2, 'kept sprites');
+        assert.equal(insertedSprites.length, 1, 'inserted sprites');
+        assert.equal(removedSprites.length, 1, 'removed sprites');
       }
     });
     await render(hbs`
@@ -140,11 +140,11 @@ module('Integration | Component | animated each', function(hooks) {
     assert.expect(5);
     let transitionCounter = 0;
     this.set('items', A([{ id: 'a', x: 1, y: 2}, {id: 'b'}, {id: 'c'}]));
-    this.set('transition', function * () {
+    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
       if (++transitionCounter === 2) {
-        assert.equal(this.keptSprites.length, 3, 'kept sprites');
-        assert.equal(this.insertedSprites.length, 0, 'inserted sprites');
-        assert.equal(this.removedSprites.length, 0, 'removed sprites');
+        assert.equal(keptSprites.length, 3, 'kept sprites');
+        assert.equal(insertedSprites.length, 0, 'inserted sprites');
+        assert.equal(removedSprites.length, 0, 'removed sprites');
       }
     });
     await render(hbs`
@@ -169,8 +169,8 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
     this.set('rightItems', A([]));
 
-    this.set('leftTransition', function * () {
-      assert.equal(this.insertedSprites.length, 3, "first transition");
+    this.set('leftTransition', function * ({ insertedSprites }) {
+      assert.equal(insertedSprites.length, 3, "first transition");
     });
 
     this.set('rightTransition', function * () {
@@ -188,20 +188,20 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    this.set('leftTransition', function * () {
-      assert.equal(this.keptSprites.length, 2, "left kept");
-      assert.equal(this.removedSprites.length, 0, "left removed");
-      assert.equal(this.sentSprites.length, 1, "left sent");
-      assert.equal(this.receivedSprites.length, 0, "left received");
-      assert.equal(this.insertedSprites.length, 0, "left inserted");
+    this.set('leftTransition', function * ({ receivedSprites, insertedSprites, removedSprites, keptSprites, sentSprites }) {
+      assert.equal(keptSprites.length, 2, "left kept");
+      assert.equal(removedSprites.length, 0, "left removed");
+      assert.equal(sentSprites.length, 1, "left sent");
+      assert.equal(receivedSprites.length, 0, "left received");
+      assert.equal(insertedSprites.length, 0, "left inserted");
     });
 
-    this.set('rightTransition', function * () {
-      assert.equal(this.keptSprites.length, 0, "right kept");
-      assert.equal(this.removedSprites.length, 0, "right removed");
-      assert.equal(this.sentSprites.length, 0, "right sent");
-      assert.equal(this.receivedSprites.length, 1, "right received");
-      assert.equal(this.insertedSprites.length, 0, "right inserted");
+    this.set('rightTransition', function * ({ receivedSprites, insertedSprites, removedSprites, keptSprites, sentSprites }) {
+      assert.equal(keptSprites.length, 0, "right kept");
+      assert.equal(removedSprites.length, 0, "right removed");
+      assert.equal(sentSprites.length, 0, "right sent");
+      assert.equal(receivedSprites.length, 1, "right received");
+      assert.equal(insertedSprites.length, 0, "right inserted");
 
     });
 
@@ -216,8 +216,8 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
     this.set('rightItems', A([{id: 'b'}, ]));
 
-    this.set('leftTransition', function * () {
-      assert.equal(this.insertedSprites.length, 3, "first transition");
+    this.set('leftTransition', function * ({ insertedSprites }) {
+      assert.equal(insertedSprites.length, 3, "first transition");
     });
 
     this.set('rightTransition', function * () {
@@ -245,8 +245,8 @@ module('Integration | Component | animated each', function(hooks) {
       throw new Error("unexpected left transition");
     });
 
-    this.set('rightTransition', function * () {
-      assert.equal(this.receivedSprites.length, 1, "right found match");
+    this.set('rightTransition', function * ({ receivedSprites }) {
+      assert.equal(receivedSprites.length, 1, "right found match");
     });
 
     this.set('leftAlive', false);
@@ -280,19 +280,19 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    this.set('outerTransition', function * () {
-      assert.deepEqual(this.keptSprites.map(s => s.owner.id), ['a', 'c'], 'kept sprites');
-      assert.deepEqual(this.insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(this.removedSprites.map(s => s.owner.id), ['b'], 'removed sprites');
+    this.set('outerTransition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+      assert.deepEqual(keptSprites.map(s => s.owner.id), ['a', 'c'], 'kept sprites');
+      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
+      assert.deepEqual(removedSprites.map(s => s.owner.id), ['b'], 'removed sprites');
     });
 
     let innerCounter = 0;
 
-    this.set('innerTransition', function * () {
+    this.set('innerTransition', function * ({ insertedSprites, removedSprites, keptSprites }) {
       innerCounter++;
-      assert.deepEqual(this.keptSprites.map(s => s.owner.id), [], 'kept sprites');
-      assert.deepEqual(this.insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(this.removedSprites.map(s => s.owner.id), ['comment-b'], 'removed sprites');
+      assert.deepEqual(keptSprites.map(s => s.owner.id), [], 'kept sprites');
+      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
+      assert.deepEqual(removedSprites.map(s => s.owner.id), ['comment-b'], 'removed sprites');
     });
 
     this.set('items', ['a', 'c'].map(makeItem));
@@ -337,12 +337,12 @@ module('Integration | Component | animated each', function(hooks) {
     let sawOuter, sawInner;
     let outerIsAnimating = new Promise(r => sawOuter = r);
     let innerIsAnimating = new Promise(r => sawInner = r);
-    this.set('outerTransition', function * () {
-      this.removedSprites.forEach(s => this.animate(new TestMotion(s)));
+    this.set('outerTransition', function * ({ removedSprites }) {
+      removedSprites.forEach(s => new TestMotion(s).run());
       sawOuter();
     });
-    this.set('innerTransition', function * () {
-      this.removedSprites.forEach(s => this.animate(new TestMotion(s)));
+    this.set('innerTransition', function * ({ removedSprites }) {
+      removedSprites.forEach(s => new TestMotion(s).run());
       sawInner();
     });
 
@@ -353,18 +353,18 @@ module('Integration | Component | animated each', function(hooks) {
     await outerIsAnimating;
     await innerIsAnimating;
 
-    this.set('outerTransition', function * () {
-      assert.deepEqual(this.keptSprites.map(s => s.owner.id).sort(), ['a', 'b', 'c'], 'kept sprites');
-      assert.deepEqual(this.insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(this.removedSprites.map(s => s.owner.id), [], 'removed sprites');
+    this.set('outerTransition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+      assert.deepEqual(keptSprites.map(s => s.owner.id).sort(), ['a', 'b', 'c'], 'kept sprites');
+      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
+      assert.deepEqual(removedSprites.map(s => s.owner.id), [], 'removed sprites');
     });
 
     let innerCounter = 0;
-    this.set('innerTransition', function * () {
+    this.set('innerTransition', function * ({ receivedSprites, insertedSprites, removedSprites }) {
       innerCounter++;
-      assert.deepEqual(this.receivedSprites.map(s => s.owner.id), ['comment-b'], 'received sprites');
-      assert.deepEqual(this.insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(this.removedSprites.map(s => s.owner.id), [], 'removed sprites');
+      assert.deepEqual(receivedSprites.map(s => s.owner.id), ['comment-b'], 'received sprites');
+      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
+      assert.deepEqual(removedSprites.map(s => s.owner.id), [], 'removed sprites');
     });
 
 

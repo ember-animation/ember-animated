@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import Opacity from 'ember-animated/motions/opacity';
+import { opacity } from 'ember-animated/motions/opacity';
 import { Promise } from 'ember-animated/concurrency-helpers';
 
 export default Controller.extend({
@@ -14,15 +14,15 @@ export default Controller.extend({
 
 function fade(initialRender) {
   if (!initialRender) {
-    return function * () {
+    return function * ({ removedSprites, insertedSprites, keptSprites }) {
       // We yield Promise.all here because we want to wait for this
       // step before starting what comes after.
-      yield Promise.all(this.removedSprites.map(s => {
+      yield Promise.all(removedSprites.map(s => {
         if (s.revealed) {
-          return this.animate(new Opacity(s, {
+          return opacity(s, {
             to: 0,
             duration: this.duration / 2
-          }));
+          });
         }
       }));
 
@@ -30,10 +30,10 @@ function fade(initialRender) {
       // or kept sprites. Note that we get keptSprites if some things
       // were fading out and then we get interrupted and decide to
       // keep them around after all.
-      this.insertedSprites.concat(this.keptSprites).map(s => this.animate(new Opacity(s, {
+      insertedSprites.concat(keptSprites).map(s => opacity(s, {
         to: 1,
         duration: this.duration / 2
-      })));
+      }));
     };
   }
 }

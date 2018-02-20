@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import Move from 'ember-animated/motions/move';
+import { move } from 'ember-animated/motions/move';
 
 export default Component.extend({
   tagName: '',
@@ -8,6 +8,6 @@ export default Component.extend({
   positionalParams: ['text']
 });
 
-function * transition() {
-  this.sentSprites.forEach(sprite => this.animate(new Move(sprite)));
+function * transition({ sentSprites }) {
+  sentSprites.forEach(move);
 }

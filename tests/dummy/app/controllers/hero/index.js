@@ -1,17 +1,17 @@
 import Controller from '@ember/controller';
-import Opacity from 'ember-animated/motions/opacity';
+import { opacity } from 'ember-animated/motions/opacity';
 
-function * transition() {
-  this.insertedSprites.forEach(sprite => {
-    this.animate(new Opacity(sprite, { from: 0, to: 1 }));
+function * transition({ insertedSprites, receivedSprites, removedSprites }) {
+  insertedSprites.forEach(sprite => {
+    opacity(sprite, { from: 0, to: 1 });
   });
 
-  this.receivedSprites.forEach(sprite => {
-    this.animate(new Opacity(sprite, { to: 1 }));
+  receivedSprites.forEach(sprite => {
+    opacity(sprite, { to: 1 });
   });
 
-  this.removedSprites.forEach(sprite => {
-    this.animate(new Opacity(sprite, { to: 0 }));
+  removedSprites.forEach(sprite => {
+    opacity(sprite, { to: 0 });
   });
 }
 

@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import Move from 'ember-animated/motions/move';
+import { move } from 'ember-animated/motions/move';
 import { computed } from '@ember/object';
 
 export default Component.extend({
@@ -47,17 +47,17 @@ function makeRandomList() {
 }
 
 
-function * transition() {
-  this.receivedSprites.forEach(s => this.animate(new Move(s)));
+function * transition({ receivedSprites, insertedSprites }) {
+  receivedSprites.forEach(move);
   // without this, they won't reveal until the end of the whole
   // transition
-  this.insertedSprites.forEach(s => s.reveal());
+  insertedSprites.forEach(s => s.reveal());
 }
 
-function * altTransition() {
-  this.receivedSprites.forEach(sprite => sprite.moveToFinalPosition());
-  this.sentSprites.forEach(s => this.animate(new Move(s)));
+function * altTransition({ receivedSprites, sentSprites, insertedSprites }) {
+  receivedSprites.forEach(sprite => sprite.moveToFinalPosition());
+  sentSprites.forEach(move);
   // without this, they won't reveal until the end of the whole
   // transition
-  this.insertedSprites.forEach(s => s.reveal());
+  insertedSprites.forEach(s => s.reveal());
 }
