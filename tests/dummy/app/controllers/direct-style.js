@@ -2,7 +2,7 @@ import { A } from '@ember/array';
 import Controller from '@ember/controller';
 import { htmlSafe } from '@ember/string';
 import EmberObject, { computed } from '@ember/object';
-import Move from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
 
 let Item = EmberObject.extend({
   style: computed('x', 'y', function() {
@@ -33,6 +33,6 @@ function somewhere() {
   return Math.random() * 300;
 }
 
-function * transition() {
-  this.keptSprites.forEach(s => this.animate(new Move(s)));
+function * transition({ keptSprites }) {
+  keptSprites.forEach(move);
 }

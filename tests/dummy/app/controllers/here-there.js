@@ -1,7 +1,8 @@
 import Controller from '@ember/controller';
 import { computed } from "@ember/object"
 import { not } from "@ember/object/computed"
-import Move from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
+import { printSprites } from 'ember-animated/debug';
 
 export default Controller.extend({
   showLeft: true,
@@ -19,7 +20,7 @@ export default Controller.extend({
   }
 });
 
-function * transition() {
-  this.printSprites();
-  this.receivedSprites.forEach(sprite => this.animate(new Move(sprite)));
+function * transition({ receivedSprites }) {
+  printSprites(arguments[0]);
+  receivedSprites.forEach(move);
 }

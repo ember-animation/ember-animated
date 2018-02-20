@@ -1,7 +1,7 @@
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import Resize from '../motions/resize';
+import { Resize } from '../motions/resize';
 import { task } from '../ember-scheduler';
 import Sprite from '../sprite';
 import { emptyBounds } from '../bounds';

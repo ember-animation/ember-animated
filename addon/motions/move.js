@@ -2,7 +2,11 @@ import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 
-export default class Move extends Motion {
+export default function move(sprite, opts) {
+  return new Move(sprite, opts).run();
+}
+
+export class Move extends Motion {
   constructor(sprite, opts) {
     super(sprite, opts);
     this.prior = null;
@@ -99,6 +103,11 @@ export default class Move extends Motion {
 // is no fun.
 function fuzzyZero(number) {
   return Math.abs(number) < 0.00001;
+}
+
+
+export function continuePrior(sprite, opts) {
+  return new ContinuePrior(sprite, opts).run();
 }
 
 export class ContinuePrior extends Move {

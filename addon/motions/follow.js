@@ -1,10 +1,14 @@
-import Move from './move';
+import { Move } from './move';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 
+export default function follow(sprite, opts) {
+  return new Follow(sprite, opts).run();
+}
+
 // Because we inherit from Move, if we are interrupted by a Move the
 // new Move will still preserve our momentum.
-export default class Follow extends Move {
+export class Follow extends Move {
   constructor(sprite, opts) {
     super(sprite, opts);
     if (!(this.opts.source instanceof Move)) {

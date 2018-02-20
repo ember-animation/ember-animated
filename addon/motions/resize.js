@@ -2,7 +2,11 @@ import Motion from '../motion';
 import Tween from '../tween';
 import { rAF } from '../concurrency-helpers';
 
-export default class Resize extends Motion {
+export default function resize(sprite, opts) {
+  return new Resize(sprite, opts).run();
+}
+
+export class Resize extends Motion {
   constructor(sprite, opts) {
     super(sprite, opts);
     this.prior = null;

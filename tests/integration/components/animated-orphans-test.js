@@ -22,11 +22,15 @@ module('Integration | Component | animated orphans', function(hooks) {
     }
   }
 
+  function testMotion(sprite, opts) {
+    return new TestMotion(sprite, opts).run();
+  }
+
 
   test('it finds destroyed sprite', async function(assert) {
     assert.expect(2);
-    this.set('t1', function * () {
-      assert.equal(this.removedSprites.length, 0, 'first transition');
+    this.set('t1', function * ({ removedSprites }) {
+      assert.equal(removedSprites.length, 0, 'first transition');
     });
     this.set('showIt', true);
 
@@ -41,8 +45,8 @@ module('Integration | Component | animated orphans', function(hooks) {
   `)
     await animationsSettled();
 
-    this.set('t1', function * () {
-      assert.equal(this.removedSprites.length, 1, 'second transition');
+    this.set('t1', function * ({ removedSprites }) {
+      assert.equal(removedSprites.length, 1, 'second transition');
     });
 
     this.set('showIt', false);
@@ -69,13 +73,13 @@ module('Integration | Component | animated orphans', function(hooks) {
     let unblock1, unblock2;
 
 
-    this.set('t1', function * () {
-      assert.equal(this.removedSprites.length, 1, 't1');
+    this.set('t1', function * ({ removedSprites }) {
+      assert.equal(removedSprites.length, 1, 't1');
       yield new Promise(r => unblock1 = r);
     });
 
-    this.set('t2', function * () {
-      assert.equal(this.removedSprites.length, 1, 't2');
+    this.set('t2', function * ({ removedSprites }) {
+      assert.equal(removedSprites.length, 1, 't2');
       yield new Promise(r => unblock2 = r);
     });
 
@@ -108,10 +112,10 @@ module('Integration | Component | animated orphans', function(hooks) {
 
     let firstBounds = this.$('.one')[0].getBoundingClientRect();
 
-    this.set('t1', function * () {
-      assert.equal(this.removedSprites.length, 1, 'second transition');
-      this.animate(new TestMotion(this.removedSprites[0]));
-      assert.equalBounds(firstBounds, this.removedSprites[0].element.getBoundingClientRect());
+    this.set('t1', function * ({ removedSprites }) {
+      assert.equal(removedSprites.length, 1, 'second transition');
+      testMotion(removedSprites[0])
+      assert.equalBounds(firstBounds, removedSprites[0].element.getBoundingClientRect());
     });
 
     this.set('showIt', false);
@@ -142,34 +146,34 @@ module('Integration | Component | animated orphans', function(hooks) {
     // This transition will run twice. First when the orphaned sprite is
     // animated as a removedSprite, and then when that is interrupted,
     // again with the orphaned sprite as a sentSprite.
-    this.set('t1', function * () {
+    this.set('t1', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       counter++;
       if (counter === 1) {
-        assert.equal(this.removedSprites.length, 1, 'first removed');
-        assert.equal(this.sentSprites.length, 0, 'first second');
+        assert.equal(removedSprites.length, 1, 'first removed');
+        assert.equal(sentSprites.length, 0, 'first second');
       } else if (counter === 2) {
-        assert.equal(this.removedSprites.length, 0, 'second removed, old sprite');
-        assert.equal(this.sentSprites.length, 1, 'second sent, old sprite');
+        assert.equal(removedSprites.length, 0, 'second removed, old sprite');
+        assert.equal(sentSprites.length, 1, 'second sent, old sprite');
       } else {
         assert.ok(false, "should only run twice");
       }
-      assert.equal(this.keptSprites.length, 0, 'both times kept, old sprite');
-      assert.equal(this.insertedSprites.length, 0, 'both times inserted, old sprite');
-      assert.equal(this.receivedSprites.length, 0, 'both times received, old sprite');
-      this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
+      assert.equal(keptSprites.length, 0, 'both times kept, old sprite');
+      assert.equal(insertedSprites.length, 0, 'both times inserted, old sprite');
+      assert.equal(receivedSprites.length, 0, 'both times received, old sprite');
+      removedSprites.forEach(s => testMotion(s, { shouldBlock: true }));
     });
 
     this.set('showIt', false);
     await wait();
 
     // This will first concurrently with the second run of the
-    this.set('t1', function * () {
-      assert.equal(this.removedSprites.length, 0, 'second removed, new sprite');
-      assert.equal(this.keptSprites.length, 0, 'second kept, new sprite');
-      assert.equal(this.insertedSprites.length, 0, 'second inserted, new sprite');
-      assert.equal(this.sentSprites.length, 0, 'second sent, new sprite');
-      assert.equal(this.receivedSprites.length, 1, 'second received, new sprite');
-      this.keptSprites.forEach(s => this.animate(new TestMotion(s)));
+    this.set('t1', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
+      assert.equal(removedSprites.length, 0, 'second removed, new sprite');
+      assert.equal(keptSprites.length, 0, 'second kept, new sprite');
+      assert.equal(insertedSprites.length, 0, 'second inserted, new sprite');
+      assert.equal(sentSprites.length, 0, 'second sent, new sprite');
+      assert.equal(receivedSprites.length, 1, 'second received, new sprite');
+      keptSprites.forEach(testMotion);
     });
     this.set('showIt', true);
     await animationsSettled();
@@ -198,61 +202,61 @@ module('Integration | Component | animated orphans', function(hooks) {
 
     let t1Counter = 0;
 
-    this.set('t1', function * () {
+    this.set('t1', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       t1Counter++;
 
       if (t1Counter === 1) {
-        assert.equal(this.removedSprites.length, 1, `t1 removed ${t1Counter}`);
-        assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
+        assert.equal(removedSprites.length, 1, `t1 removed ${t1Counter}`);
+        assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
       } else if (t1Counter === 2) {
-        assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
-        assert.equal(this.sentSprites.length, 1, `t1 sent ${t1Counter}`);
+        assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+        assert.equal(sentSprites.length, 1, `t1 sent ${t1Counter}`);
       } else {
         assert.ok(false, 'should t1 only run twice');
       }
 
-      assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(this.receivedSprites.length, 0, `t1 received ${t1Counter}`);
+      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.equal(receivedSprites.length, 0, `t1 received ${t1Counter}`);
 
-      this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
+      removedSprites.forEach(s => testMotion(s, { shouldBlock: true }));
     });
 
     let t2Counter = 0;
 
-    this.set('t2', function * () {
+    this.set('t2', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       t2Counter++;
 
       if (t2Counter === 1) {
-        assert.equal(this.removedSprites.length, 1, `t2 removed ${t2Counter}`);
-        assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
+        assert.equal(removedSprites.length, 1, `t2 removed ${t2Counter}`);
+        assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
       } else {
         assert.ok(false, 'should t2 only run once');
       }
-      assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(this.insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
-      assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
+      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
+      assert.equal(insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
+      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
     });
 
     this.set('showIt', false);
     await wait();
 
-    this.set('t1', function * () {
+    this.set('t1', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       let t1Counter = 3;
-      assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
-      assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
-      assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(this.receivedSprites.length, 1, `t1 received ${t1Counter}`);
+      assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+      assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
+      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.equal(receivedSprites.length, 1, `t1 received ${t1Counter}`);
     });
 
-    this.set('t2', function * () {
+    this.set('t2', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       let t2Counter = 3;
-      assert.equal(this.removedSprites.length, 0, `t2 removed ${t2Counter}`);
-      assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
-      assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(this.insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
-      assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
+      assert.equal(removedSprites.length, 0, `t2 removed ${t2Counter}`);
+      assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
+      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
+      assert.equal(insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
+      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
     });
 
     this.set('showIt', true);
@@ -282,63 +286,63 @@ module('Integration | Component | animated orphans', function(hooks) {
 
     let t1Counter = 0;
 
-    this.set('t1', function * () {
+    this.set('t1', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       t1Counter++;
 
       if (t1Counter === 1) {
-        assert.equal(this.removedSprites.length, 1, `t1 removed ${t1Counter}`);
-        assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
+        assert.equal(removedSprites.length, 1, `t1 removed ${t1Counter}`);
+        assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
       } else if (t1Counter === 2) {
-        assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
-        assert.equal(this.sentSprites.length, 1, `t1 sent ${t1Counter}`);
+        assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+        assert.equal(sentSprites.length, 1, `t1 sent ${t1Counter}`);
       } else {
         assert.ok(false, 'should t1 only run twice');
       }
 
-      assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(this.receivedSprites.length, 0, `t1 received ${t1Counter}`);
+      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.equal(receivedSprites.length, 0, `t1 received ${t1Counter}`);
 
-      this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: true })));
+      removedSprites.forEach(s => testMotion(s, { shouldBlock: true }));
     });
 
     let t2Counter = 0;
 
-    this.set('t2', function * () {
+    this.set('t2', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       t2Counter++;
 
       if (t2Counter === 1) {
-        assert.equal(this.removedSprites.length, 1, `t2 removed ${t2Counter}`);
-        assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
+        assert.equal(removedSprites.length, 1, `t2 removed ${t2Counter}`);
+        assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
       } else {
         assert.ok(false, 'should t2 only run once');
       }
-      assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(this.insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
-      assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
+      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
+      assert.equal(insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
+      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
 
-      this.removedSprites.forEach(s => this.animate(new TestMotion(s, { shouldBlock: false })));
+      removedSprites.forEach(s => testMotion(s, { shouldBlock: false }));
     });
 
     this.set('showIt', false);
     await wait();
 
-    this.set('t1', function * () {
+    this.set('t1', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       let t1Counter = 3;
-      assert.equal(this.removedSprites.length, 0, `t1 removed ${t1Counter}`);
-      assert.equal(this.sentSprites.length, 0, `t1 sent ${t1Counter}`);
-      assert.equal(this.keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(this.insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(this.receivedSprites.length, 1, `t1 received ${t1Counter}`);
+      assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+      assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
+      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.equal(receivedSprites.length, 1, `t1 received ${t1Counter}`);
     });
 
-    this.set('t2', function * () {
+    this.set('t2', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       let t2Counter = 3;
-      assert.equal(this.removedSprites.length, 0, `t2 removed ${t2Counter}`);
-      assert.equal(this.sentSprites.length, 0, `t2 sent ${t2Counter}`);
-      assert.equal(this.keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(this.insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
-      assert.equal(this.receivedSprites.length, 0, `t2 received ${t2Counter}`);
+      assert.equal(removedSprites.length, 0, `t2 removed ${t2Counter}`);
+      assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
+      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
+      assert.equal(insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
+      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
     });
 
     this.set('showIt', true);

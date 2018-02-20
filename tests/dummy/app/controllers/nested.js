@@ -1,6 +1,6 @@
 import { A } from '@ember/array';
 import Controller from '@ember/controller';
-import Move from 'ember-animated/motions/move';
+import move from 'ember-animated/motions/move';
 
 export default Controller.extend({
   rules,
@@ -46,32 +46,30 @@ export default Controller.extend({
 
 let counter = 0;
 
-function * first() {
-  this.insertedSprites.forEach(sprite => {
+function * first({ insertedSprites, keptSprites }) {
+  insertedSprites.forEach(sprite => {
     sprite.reveal();
   });
 
-  this.keptSprites.forEach(sprite => {
-    this.animate(new Move(sprite));
-  });
+  keptSprites.forEach(move);
 }
 
-function * subsequent() {
-  this.insertedSprites.forEach(sprite => {
+function * subsequent({ insertedSprites, keptSprites, removedSprites }) {
+  insertedSprites.forEach(sprite => {
     sprite.startAtPixel({ x: window.outerWidth });
-    this.animate(new Move(sprite));
+    move(sprite);
   });
 
-  this.keptSprites.forEach(sprite => {
-    this.animate(new Move(sprite));
+  keptSprites.forEach(sprite => {
+    move(sprite);
   });
 
-  this.removedSprites.forEach(sprite => {
+  removedSprites.forEach(sprite => {
     // the 0.8 here is purely so I can easily see that the elements
     // are being properly removed immediately after they get far
     // enough
     sprite.endAtPixel({ x: window.outerWidth * 0.8 });
-    this.animate(new Move(sprite));
+    move(sprite);
   });
 
 }

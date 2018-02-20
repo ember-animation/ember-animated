@@ -1,3 +1,4 @@
+import { spawnChild } from './scheduler';
 import {
   rAF,
   Promise,
@@ -28,6 +29,22 @@ export default class Motion {
     });
   }
 
+  run() {
+    let context = this.sprite._transitionContext;
+    if (this.duration == null) {
+      this.duration = context.duration;
+    }
+    let self = this;
+    return spawnChild(function *() {
+      context.onMotionStart(self.sprite);
+      try {
+        yield * self._run();
+      } finally {
+        context.onMotionEnd(self.sprite);
+      }
+    });
+  }
+
   // --- Begin Hooks you should Implement ---
 
   // Here you can inspect the other motions on this element that have
@@ -48,8 +65,6 @@ export default class Motion {
   // --- Begin private methods ---
 
 
-  // this is private because the public way to run a motion is
-  // TransitionContext#animate.
   * _run() {
     try {
       let others = this._motionList.filter(m => m !== this);
