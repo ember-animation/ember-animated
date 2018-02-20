@@ -63,10 +63,10 @@ module.exports = {
 
     if ((emberVersion.gt('2.9.0-beta') && emberVersion.lt('2.9.0'))|| emberVersion.gt('2.10.0-alpha')) {
       return this._withVersionSpecific(which, tree, '2.9');
-    } else if (!emberVersion.lt('1.13.0')) {
-      return this._withVersionSpecific(which, tree, '1.13');
+    } else if (!emberVersion.lt('2.4.0')) {
+      return this._withVersionSpecific(which, tree, '2.4');
     } else {
-      throw new Error("This version of ember-animated supports Ember versions >= 1.13.0.");
+      throw new Error("This version of ember-animated supports Ember versions >= 2.4.0.");
     }
   },
 

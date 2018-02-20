@@ -32,8 +32,6 @@
     "ember-disable-prototype-extensions": "^1.1.2",
     "ember-export-application-global": "^2.0.0",
     "ember-faker": "^1.2.1",
-    "ember-getowner-polyfill": "1.2.2",
-    "ember-hash-helper-polyfill": "0.1.2",
     "ember-load-initializers": "^1.0.0",
     "ember-resolver": "^4.0.0",
     "ember-source": "~2.18.0",
