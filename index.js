@@ -40,13 +40,7 @@ module.exports = {
   },
 
   treeForAddon: function(tree) {
-    tree = this._versionSpecificTree('addon', tree);
-    if (!this._shouldIncludeTestHelpers) {
-      tree = new Funnel(tree, {
-        exclude: ['modules/ember-animated/test-helpers.js']
-      });
-    }
-    return this._super.treeForAddon.call(this, tree);
+    return this._super.treeForAddon.call(this, this._versionSpecificTree('addon', tree));
   },
 
   treeForAddonTemplates: function() {
@@ -93,12 +87,8 @@ module.exports = {
     return mergeTrees([tree, funneled]);
   },
 
-  included: function(app) {
+  included: function() {
     this._super.apply(this, arguments);
-    if (app.env === 'test') {
-      this._shouldIncludeTestHelpers = true;
-    }
-
     this.import('vendor/ember-animated.css');
   }
 };
