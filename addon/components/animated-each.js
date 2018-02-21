@@ -75,7 +75,7 @@ export default Component.extend({
   }),
 
   _invalidateRenderedChildren() {
-    this.propertyDidChange('renderedChildren');
+    this.notifyPropertyChange('renderedChildren');
   },
 
   _identitySignature(items, getKey) {
@@ -509,7 +509,7 @@ export default Component.extend({
 
     if (removedSprites.length > 0) {
       // trigger a rerender to reap our removed children
-      this.propertyDidChange('renderedChildren');
+      this.notifyPropertyChange('renderedChildren');
       // wait for the render to happen before we allow our animation
       // to be done
       yield afterRender();

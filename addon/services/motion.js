@@ -134,7 +134,7 @@ const MotionService = Service.extend({
   // Invalidation support for isAnimating
   _invalidateIsAnimating: task(function * () {
     yield rAF();
-    this.propertyDidChange('isAnimating');
+    this.notifyPropertyChange('isAnimating');
   }).observes('isAnimatingSync'),
 
   waitUntilIdle: task(function * () {
