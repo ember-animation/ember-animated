@@ -8,6 +8,7 @@ import $ from 'jquery';
 import { animationsSettled } from 'ember-animated/test-support';
 import { Promise } from 'ember-animated/concurrency-helpers';
 import Motion from 'ember-animated/motion';
+import { run } from '@ember/runloop';
 
 module('Integration | Component | animated each', function(hooks) {
   setupRenderingTest(hooks);
@@ -106,7 +107,9 @@ module('Integration | Component | animated each', function(hooks) {
     `);
 
     await animationsSettled();
-    this.get('items').replace(1, 1, ['x']);
+    run(() => {
+      this.get('items').replace(1, 1, ['x']);
+    });
     await animationsSettled();
     assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 2, 'transitionCounter');
@@ -130,7 +133,9 @@ module('Integration | Component | animated each', function(hooks) {
     `);
 
     await animationsSettled();
-    set(this.get('items')[1], 'id', 'x');
+    run(() => {
+      set(this.get('items')[1], 'id', 'x');
+    });
     await animationsSettled();
     assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 2, 'transitionCounter');
@@ -155,7 +160,9 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    set(this.get('items')[0], 'y', 3);
+    run(() => {
+      set(this.get('items')[0], 'y', 3);
+    });
 
     await animationsSettled();
 
