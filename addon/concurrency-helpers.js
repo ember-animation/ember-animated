@@ -1,4 +1,4 @@
-import { scheduleOnce, cancel } from '@ember/runloop';
+import { schedule, cancel } from '@ember/runloop';
 import { warn } from '@ember/debug';
 import RSVP from 'rsvp';
 
@@ -76,7 +76,7 @@ export function wait(ms=0) {
 export function afterRender() {
   let ticket;
   let promise = new Promise(resolve => {
-    ticket = scheduleOnce('afterRender', resolve);
+    ticket = schedule('afterRender', resolve);
   });
   promise.__ec_cancel__ = () => {
     cancel(ticket);
