@@ -14,14 +14,14 @@ export default Controller.extend({
 
 function fade(initialRender) {
   if (!initialRender) {
-    return function * ({ removedSprites, insertedSprites, keptSprites }) {
+    return function * ({ removedSprites, insertedSprites, keptSprites, duration }) {
       // We yield Promise.all here because we want to wait for this
       // step before starting what comes after.
       yield Promise.all(removedSprites.map(s => {
         if (s.revealed) {
           return opacity(s, {
             to: 0,
-            duration: this.duration / 2
+            duration: duration / 2
           });
         }
       }));
@@ -32,7 +32,7 @@ function fade(initialRender) {
       // keep them around after all.
       insertedSprites.concat(keptSprites).map(s => opacity(s, {
         to: 1,
-        duration: this.duration / 2
+        duration: duration / 2
       }));
     };
   }
