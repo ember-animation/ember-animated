@@ -74,7 +74,7 @@ function * subsequent({ insertedSprites, keptSprites, removedSprites }) {
 
 }
 
-function rules(firstTime) {
+function rules({ firstTime }) {
   if (firstTime) {
     return first;
   } else {

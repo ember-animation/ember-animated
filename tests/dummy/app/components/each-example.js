@@ -82,7 +82,7 @@ function random() {
 }
 
 
-function rules(firstTime) {
+function rules({ firstTime }) {
   if (!firstTime) {
     return function * ({ insertedSprites, keptSprites, removedSprites }) {
       insertedSprites.forEach(sprite => {

@@ -533,7 +533,7 @@ export default Component.extend({
     }
     let rules = this.get('rules');
     if (rules) {
-      return rules(firstTime, oldItems, newItems);
+      return rules({firstTime, oldItems, newItems});
     }
   }
 }).reopenClass({

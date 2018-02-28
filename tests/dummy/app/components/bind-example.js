@@ -17,7 +17,7 @@ export default Component.extend({
   }
 });
 
-function rules(firstTime, oldItems, newItems) {
+function rules({ firstTime, oldItems, newItems }) {
   if (firstTime) { return; }
   if (oldItems[0] < newItems[0]) {
     return toDown;
@@ -26,7 +26,7 @@ function rules(firstTime, oldItems, newItems) {
   }
 }
 
-function rules2(firstTime, oldItems, newItems) {
+function rules2({ firstTime, oldItems, newItems }) {
   if (firstTime) { return; }
   if (oldItems[0] < newItems[0]) {
     return toLeft;
