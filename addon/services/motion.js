@@ -1,9 +1,6 @@
-import { registerWaiter, unregisterWaiter } from '@ember/test';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
-import { DEBUG } from '@glimmer/env';
-import Ember from 'ember';
 import { task } from '../ember-scheduler';
 import {
   microwait,
@@ -270,44 +267,6 @@ function * ancestorsOf(component) {
   while (pointer) {
     yield pointer;
     pointer = pointer.parentView;
-  }
-}
-
-// This layer will cause everything inside to be stripped from prod builds via dead code elimination.
-if (DEBUG) {
-
-  // Then within non-production builds, this hooks into Ember's test
-  // system but only when tests are actually running.
-  if (Ember.testing) {
-
-    let idleFrames = 0;
-    const isIdle = function() {
-      return idleFrames > 2;
-    };
-
-    MotionService.reopen({
-      init() {
-        this._super(...arguments);
-        registerWaiter(isIdle);
-        this.get('idlePoller').perform();
-      },
-
-      willDestroy() {
-        unregisterWaiter(isIdle);
-        this._super(...arguments);
-      },
-
-      idlePoller: task(function * () {
-        while (true) {
-          yield rAF();
-          if (this.get('isAnimatingSync')) {
-            idleFrames = 0;
-          } else {
-            idleFrames++;
-          }
-        }
-      })
-    });
   }
 }
 
