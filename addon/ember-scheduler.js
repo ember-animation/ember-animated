@@ -115,7 +115,8 @@ class Task {
     set(this, 'isRunning', this.concurrency > 0);
   }
   _safeInvokeCallback(method, args) {
-    if (!this.isDestroyed) {
+    let { context } = priv.get(this);
+    if (!context.isDestroyed) {
       this[method].apply(this, args);
     }
   }
