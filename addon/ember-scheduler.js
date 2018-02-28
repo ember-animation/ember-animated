@@ -114,6 +114,11 @@ class Task {
     set(this, 'concurrency', this.concurrency - 1);
     set(this, 'isRunning', this.concurrency > 0);
   }
+  _safeInvokeCallback(method, args) {
+    if (!this.isDestroyed) {
+      this[method].apply(this, args);
+    }
+  }
 }
 
 // cribbed from machty's ember-concurrency
@@ -156,13 +161,13 @@ function registerOnPrototype(addListenerOrObserver, proto, names, taskName, task
   }
 }
 function makeTaskCallback(taskName, method, once) {
-  return function() {
+  return function(...args) {
     let task = this.get(taskName);
 
     if (once) {
-      scheduleOnce('actions', task, method, ...arguments);
+      scheduleOnce('actions', task, '_safeInvokeCallback', method, args);
     } else {
-      task[method].apply(task, arguments);
+      task._safeInvokeCallback(method, args);
     }
   };
 }
