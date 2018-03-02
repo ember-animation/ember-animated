@@ -2,7 +2,7 @@ import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { Resize } from '../motions/resize';
-import { task } from '../ember-scheduler';
+import { task } from '../-private/ember-scheduler';
 import Sprite from '../sprite';
 import { emptyBounds } from '../-private/bounds';
 import { afterRender, microwait } from '..';

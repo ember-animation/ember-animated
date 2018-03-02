@@ -1,6 +1,6 @@
 import { alias } from '@ember/object/computed';
 import EmberObject from '@ember/object';
-import { task } from 'ember-animated/ember-scheduler';
+import { task } from 'ember-animated/-private/ember-scheduler';
 import Motion from 'ember-animated/motion';
 import Sprite from 'ember-animated/sprite';
 

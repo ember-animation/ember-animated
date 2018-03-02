@@ -1,7 +1,7 @@
 import EmberObject, { computed } from '@ember/object';
 import { run, later, cancel, schedule } from '@ember/runloop';
 import { module, test } from 'qunit';
-import { task } from 'ember-animated/ember-scheduler';
+import { task } from 'ember-animated/-private/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
 import { Promise, microwait } from 'ember-animated';
 

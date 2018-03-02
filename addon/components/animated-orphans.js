@@ -2,7 +2,7 @@ import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import layout from '../templates/components/animated-orphans';
-import { task } from '../ember-scheduler';
+import { task } from '../-private/ember-scheduler';
 import { afterRender, microwait } from '..';
 import TransitionContext from '../transition-context';
 import {

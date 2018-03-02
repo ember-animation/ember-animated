@@ -9,9 +9,9 @@ import {
   current,
   stop,
   logErrors
-} from './scheduler';
+} from '../scheduler';
 import Ember from 'ember';
-import  { microwait } from '.';
+import  { microwait } from '..';
 import { DEBUG } from '@glimmer/env';
 
 export function task(...args) {

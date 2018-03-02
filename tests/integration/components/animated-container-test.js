@@ -8,7 +8,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
-import { task } from 'ember-animated/ember-scheduler';
+import { task } from 'ember-animated/-private/ember-scheduler';
 import { current } from 'ember-animated/scheduler';
 import Motion from 'ember-animated/motion';
 import { afterRender, wait } from 'ember-animated';

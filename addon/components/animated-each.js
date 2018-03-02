@@ -4,7 +4,7 @@ import { computed, get } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import layout from '../templates/components/animated-each';
-import { task } from '../ember-scheduler';
+import { task } from '../-private/ember-scheduler';
 import { current } from '../scheduler';
 import { afterRender, microwait } from '..';
 import TransitionContext from '../transition-context';

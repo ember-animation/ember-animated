@@ -1,7 +1,7 @@
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
-import { task } from '../ember-scheduler';
+import { task } from '../-private/ember-scheduler';
 import {
   microwait,
   rAF,

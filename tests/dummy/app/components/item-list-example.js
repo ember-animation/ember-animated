@@ -1,7 +1,7 @@
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import { task } from 'ember-animated/ember-scheduler';
+import { task } from 'ember-animated/-private/ember-scheduler';
 import { current } from 'ember-animated/scheduler';
 
 export default Component.extend({
