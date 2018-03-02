@@ -20,7 +20,7 @@ import Transform, {
   cumulativeTransform,
 } from './transform';
 import { continueMotions } from './motion';
-import { collapsedChildren } from './margin-collapse';
+import { collapsedChildren } from './-private/margin-collapse';
 import {
   shiftedBounds,
   relativeBounds,
