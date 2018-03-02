@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { Resize } from '../motions/resize';
 import { task } from '../-private/ember-scheduler';
-import Sprite from '../sprite';
+import Sprite from '../-private/sprite';
 import { emptyBounds } from '../-private/bounds';
 import { afterRender, microwait } from '..';
 

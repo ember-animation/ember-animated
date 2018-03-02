@@ -1,6 +1,6 @@
 import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
-import Sprite from 'ember-animated/sprite';
+import Sprite from 'ember-animated/-private/sprite';
 import { rAF, microwait, Motion } from 'ember-animated';
 import { MotionTester } from 'ember-animated/test-support';
 import $ from 'jquery';

@@ -2,7 +2,7 @@ import { alias } from '@ember/object/computed';
 import EmberObject from '@ember/object';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { Motion } from 'ember-animated';
-import Sprite from 'ember-animated/sprite';
+import Sprite from 'ember-animated/-private/sprite';
 
 export default EmberObject.extend({
   motion: null,

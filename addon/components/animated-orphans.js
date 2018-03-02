@@ -10,7 +10,7 @@ import {
   childrenSettled,
   current
 } from '../-private/scheduler';
-import Sprite from '../sprite';
+import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
 
 export default Component.extend({

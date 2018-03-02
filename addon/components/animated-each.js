@@ -8,7 +8,7 @@ import { task } from '../-private/ember-scheduler';
 import { current } from '../-private/scheduler';
 import { afterRender, microwait } from '..';
 import TransitionContext from '../transition-context';
-import Sprite from '../sprite';
+import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
 import afterInitialRender from 'ember-animated/rules/after-initial-render';

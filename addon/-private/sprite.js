@@ -18,14 +18,14 @@ import Ember from 'ember';
 import Transform, {
   ownTransform,
   cumulativeTransform,
-} from './transform';
-import { continueMotions } from '.';
-import { collapsedChildren } from './-private/margin-collapse';
+} from '../transform';
+import { continueMotions } from '..';
+import { collapsedChildren } from './margin-collapse';
 import {
   shiftedBounds,
   relativeBounds,
   resizedBounds
-} from './-private/bounds';
+} from './bounds';
 
 const inFlight = new WeakMap();
 

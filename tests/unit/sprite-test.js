@@ -1,6 +1,6 @@
 import { module, test, skip } from 'qunit';
 import { ownTransform } from 'ember-animated/transform';
-import Sprite from 'ember-animated/sprite';
+import Sprite from 'ember-animated/-private/sprite';
 import $ from 'jquery';
 import {
   equalBounds,

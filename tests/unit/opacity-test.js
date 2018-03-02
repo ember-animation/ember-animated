@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import Sprite from 'ember-animated/sprite';
+import Sprite from 'ember-animated/-private/sprite';
 import $ from 'jquery';
 import { Opacity } from 'ember-animated/motions/opacity';
 import { MotionTester, TimeControl } from 'ember-animated/test-support';
