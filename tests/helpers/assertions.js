@@ -1,4 +1,4 @@
-import { ownTransform } from 'ember-animated/transform';
+import { ownTransform } from 'ember-animated/-private/transform';
 
 export function approxEqualPixels(value, expected, message) {
   // Tolerate errors less than a quarter pixels. This prevents any invisible rounding errors from failing our tests.

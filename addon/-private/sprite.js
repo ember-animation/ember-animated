@@ -18,7 +18,7 @@ import Ember from 'ember';
 import Transform, {
   ownTransform,
   cumulativeTransform,
-} from '../transform';
+} from './transform';
 import { continueMotions } from '..';
 import { collapsedChildren } from './margin-collapse';
 import {

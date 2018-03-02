@@ -1,5 +1,5 @@
 import { module, test, skip } from 'qunit';
-import { ownTransform } from 'ember-animated/transform';
+import { ownTransform } from 'ember-animated/-private/transform';
 import Sprite from 'ember-animated/-private/sprite';
 import $ from 'jquery';
 import {

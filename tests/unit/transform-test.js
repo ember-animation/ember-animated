@@ -3,7 +3,7 @@ import { equalTransform } from '../helpers/assertions';
 import Transform, {
   ownTransform,
   cumulativeTransform,
-} from 'ember-animated/transform';
+} from 'ember-animated/-private/transform';
 import $ from 'jquery';
 
 let environment, myParent, target;
