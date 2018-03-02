@@ -25,7 +25,7 @@ import {
   shiftedBounds,
   relativeBounds,
   resizedBounds
-} from './bounds';
+} from './-private/bounds';
 
 const inFlight = new WeakMap();
 
