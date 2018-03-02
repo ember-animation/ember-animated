@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
-import { TimeControl } from 'ember-animated/test-support';
+import { TimeControl, animationsSettled } from 'ember-animated/test-support';
 import { equalBounds } from '../helpers/assertions';
 
 const FAST = 40;
@@ -34,13 +34,29 @@ module('Acceptance | hero', function(hooks) {
 
   test('index to detail', async function(assert) {
     await visit('/hero');
-    await click('.hero-list-image');
+    time.pause();
+    click('.hero-list-image');
+    await time.advance(50);
+    let orphans = this.element.querySelectorAll('.animated-orphans .hero-list-image').length;
+    let hiddenOrphans = this.element.querySelectorAll('.animated-orphans .hero-list-image.ember-animated-hidden').length;
+    assert.equal(orphans, 10, 'orphans');
+    assert.equal(hiddenOrphans, 1, 'hidden orphans');
+    time.runAtSpeed(FAST);
+    await animationsSettled();
     assert.equal(currentURL(), '/hero/0');
   });
 
   test('detail to index', async function(assert) {
     await visit('/hero/0');
-    await click('.hero-detail a');
+    time.pause();
+    click('.hero-detail a');
+    await time.advance(50);
+    let images = this.element.querySelectorAll('.hero-list .hero-list-image').length;
+    let hiddenImages = this.element.querySelectorAll('.hero-list .hero-list-image.ember-animated-hidden').length;
+    assert.equal(images, 10, 'images');
+    assert.equal(hiddenImages, 1, 'hidden images');
+    time.runAtSpeed(FAST);
+    await animationsSettled();
     assert.equal(currentURL(), '/hero');
   });
 
