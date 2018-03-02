@@ -11,6 +11,7 @@ import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
 import { componentNodes, keyForArray } from 'ember-animated/ember-internals';
 import partition from '../partition';
+import afterInitialRender from 'ember-animated/rules/after-initial-render';
 
 export default Component.extend({
   layout,
@@ -527,14 +528,9 @@ export default Component.extend({
   },
 
   _transitionFor(firstTime, oldItems, newItems) {
-    let transition = this.get('use');
-    if (transition) {
-      return transition;
-    }
-    let rules = this.get('rules');
-    if (rules) {
-      return rules({firstTime, oldItems, newItems});
-    }
+    let use = this.get('use');
+    let rules = this.get('rules') || afterInitialRender;
+    return rules({firstTime, oldItems, newItems, use});
   }
 }).reopenClass({
   positionalParams: ['items']

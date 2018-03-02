@@ -9,6 +9,7 @@ import { animationsSettled } from 'ember-animated/test-support';
 import { Promise } from 'ember-animated/concurrency-helpers';
 import Motion from 'ember-animated/motion';
 import { run } from '@ember/runloop';
+import always from 'ember-animated/rules/always';
 
 module('Integration | Component | animated each', function(hooks) {
   setupRenderingTest(hooks);
@@ -52,8 +53,9 @@ module('Integration | Component | animated each', function(hooks) {
       assert.equal(insertedSprites.length, 3);
       transitionCounter++;
     });
+    this.set('always', always);
     await render(hbs`
-      {{#animated-each items use=transition as |item|}}
+      {{#animated-each items rules=always use=transition as |item|}}
         <div class="test-child">{{item}}</div>
       {{/animated-each}}
     `);
@@ -68,7 +70,7 @@ module('Integration | Component | animated each', function(hooks) {
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);
     this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
-      if (++transitionCounter === 2) {
+      if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
         assert.equal(insertedSprites.length, 1, 'inserted sprites');
         assert.equal(removedSprites.length, 1, 'removed sprites');
@@ -87,19 +89,20 @@ module('Integration | Component | animated each', function(hooks) {
     await animationsSettled();
 
     assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
-    assert.equal(transitionCounter, 2, 'transitionCounter');
+    assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it updates when list is mutated', async function(assert) {
     let transitionCounter = 0;
     this.set('items', A(['a', 'b', 'c']));
     this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
-      if (++transitionCounter === 2) {
+      if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
         assert.equal(insertedSprites.length, 1, 'inserted sprites');
         assert.equal(removedSprites.length, 1, 'removed sprites');
       }
     });
+    this.set('always', always);
     await render(hbs`
       {{#animated-each items use=transition as |item|}}
         <div class="test-child">{{item}}</div>
@@ -112,7 +115,7 @@ module('Integration | Component | animated each', function(hooks) {
     });
     await animationsSettled();
     assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
-    assert.equal(transitionCounter, 2, 'transitionCounter');
+    assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it animates when an id is mutated', async function(assert) {
@@ -120,7 +123,7 @@ module('Integration | Component | animated each', function(hooks) {
     let transitionCounter = 0;
     this.set('items', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
     this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
-      if (++transitionCounter === 2) {
+      if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
         assert.equal(insertedSprites.length, 1, 'inserted sprites');
         assert.equal(removedSprites.length, 1, 'removed sprites');
@@ -138,7 +141,7 @@ module('Integration | Component | animated each', function(hooks) {
     });
     await animationsSettled();
     assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
-    assert.equal(transitionCounter, 2, 'transitionCounter');
+    assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it animates when a watched property is mutated', async function(assert) {
@@ -146,12 +149,13 @@ module('Integration | Component | animated each', function(hooks) {
     let transitionCounter = 0;
     this.set('items', A([{ id: 'a', x: 1, y: 2}, {id: 'b'}, {id: 'c'}]));
     this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
-      if (++transitionCounter === 2) {
+      if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 3, 'kept sprites');
         assert.equal(insertedSprites.length, 0, 'inserted sprites');
         assert.equal(removedSprites.length, 0, 'removed sprites');
       }
     });
+
     await render(hbs`
       {{#animated-each items use=transition key="id" watch="x,y" as |item|}}
         <div class="test-child">{{item.id}}</div>
@@ -167,7 +171,7 @@ module('Integration | Component | animated each', function(hooks) {
     await animationsSettled();
 
     assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
-    assert.equal(transitionCounter, 2, 'transitionCounter');
+    assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it can match sprites that are leaving another component', async function(assert) {
@@ -184,11 +188,13 @@ module('Integration | Component | animated each', function(hooks) {
       throw new Error("unexpected transition");
     });
 
+    this.set('always', always);
+
     await render(hbs`
-      {{#animated-each leftItems use=leftTransition key="id" as |item|}}
+      {{#animated-each leftItems rules=always use=leftTransition key="id" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
-      {{#animated-each rightItems use=rightTransition key="id" as |item|}}
+      {{#animated-each rightItems rules=always use=rightTransition key="id" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
     `);
@@ -232,14 +238,15 @@ module('Integration | Component | animated each', function(hooks) {
     });
 
     this.set('leftAlive', true);
+    this.set('always', always);
 
     await render(hbs`
       {{#if leftAlive}}
-        {{#animated-each leftItems use=leftTransition key="id" as |item|}}
+        {{#animated-each leftItems rules=always use=leftTransition key="id" as |item|}}
           <div class="test-child">{{item.id}}</div>
         {{/animated-each}}
       {{else}}
-        {{#animated-each rightItems use=rightTransition key="id" as |item|}}
+        {{#animated-each rightItems rules=always use=rightTransition key="id" as |item|}}
           <div class="test-child">{{item.id}}</div>
         {{/animated-each}}
       {{/if}}

@@ -6,6 +6,7 @@ import { animationsSettled } from 'ember-animated/test-support';
 import { Promise, wait } from 'ember-animated/concurrency-helpers';
 import { equalBounds } from '../../helpers/assertions';
 import Motion from 'ember-animated/motion';
+import always from 'ember-animated/rules/always';
 
 module('Integration | Component | animated orphans', function(hooks) {
   setupRenderingTest(hooks);
@@ -28,10 +29,7 @@ module('Integration | Component | animated orphans', function(hooks) {
 
 
   test('it finds destroyed sprite', async function(assert) {
-    assert.expect(2);
-    this.set('t1', function * ({ removedSprites }) {
-      assert.equal(removedSprites.length, 0, 'first transition');
-    });
+    assert.expect(1);
     this.set('showIt', true);
 
     await render(hbs`
@@ -127,6 +125,8 @@ module('Integration | Component | animated orphans', function(hooks) {
     assert.expect(15);
 
     this.set('showIt', true);
+    this.set('always', always);
+
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
   <div style="position: fixed; top: 0px; left: 0px">
@@ -134,7 +134,7 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1}}
+    {{#animated-value "one" use=t1 rules=always}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -181,7 +181,7 @@ module('Integration | Component | animated orphans', function(hooks) {
 
   test('drops sprites that had not starting animating when interruption occured', async function(assert) {
     assert.expect(25);
-
+    this.set('always', always);
     this.set('showIt', true);
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
@@ -190,10 +190,10 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1}}
+    {{#animated-value "one" use=t1 rules=always}}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2}}
+    {{#animated-value "two" use=t2 rules=always}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -265,7 +265,7 @@ module('Integration | Component | animated orphans', function(hooks) {
 
   test('drops sprites that finished animating when interruption occured', async function(assert) {
     assert.expect(25);
-
+    this.set('always', always);
     this.set('showIt', true);
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
@@ -274,10 +274,10 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1}}
+    {{#animated-value "one" use=t1 rules=always}}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2}}
+    {{#animated-value "two" use=t2 rules=always}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
