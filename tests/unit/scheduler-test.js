@@ -7,7 +7,7 @@ import {
   stop,
   current,
   childrenSettled
-} from 'ember-animated/scheduler';
+} from 'ember-animated/-private/scheduler';
 import { Promise, microwait } from 'ember-animated';
 
 module("Unit | scheduler", function(hooks) {

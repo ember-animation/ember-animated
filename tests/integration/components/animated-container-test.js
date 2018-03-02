@@ -9,7 +9,7 @@ import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/-private/ember-scheduler';
-import { current } from 'ember-animated/scheduler';
+import { current } from 'ember-animated/-private/scheduler';
 import { Motion, afterRender, wait } from 'ember-animated';
 import { animationsSettled } from 'ember-animated/test-support';
 

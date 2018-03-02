@@ -4,7 +4,7 @@ import Sprite from 'ember-animated/sprite';
 import { rAF, microwait, Motion } from 'ember-animated';
 import { MotionTester } from 'ember-animated/test-support';
 import $ from 'jquery';
-import { logErrors } from 'ember-animated/scheduler';
+import { logErrors } from 'ember-animated/-private/scheduler';
 
 let tester;
 

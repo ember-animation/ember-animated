@@ -1,4 +1,4 @@
-import { spawnChild } from '../scheduler';
+import { spawnChild } from './scheduler';
 import {
   rAF,
   Promise,

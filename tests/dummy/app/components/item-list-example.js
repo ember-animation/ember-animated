@@ -2,7 +2,7 @@ import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { task } from 'ember-animated/-private/ember-scheduler';
-import { current } from 'ember-animated/scheduler';
+import { current } from 'ember-animated/-private/scheduler';
 
 export default Component.extend({
   motionService: service('-ea-motion'),

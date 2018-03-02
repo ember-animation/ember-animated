@@ -9,7 +9,7 @@ import {
   spawnChild,
   childrenSettled,
   current
-} from '../scheduler';
+} from '../-private/scheduler';
 import Sprite from '../sprite';
 import partition from '../-private/partition';
 

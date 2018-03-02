@@ -37,7 +37,7 @@ API
 
 */
 
-import { Promise } from '.';
+import { Promise } from '..';
 
 export function spawn(genFn) {
   let m = new MicroRoutine(genFn, false);
