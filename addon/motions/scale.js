@@ -1,6 +1,5 @@
-import Motion from '../motion';
+import { Motion, rAF } from '..';
 import Tween from '../tween';
-import { rAF } from '..';
 
 export default function scale(sprite, opts) {
   return new Scale(sprite, opts).run();

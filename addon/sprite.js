@@ -19,7 +19,7 @@ import Transform, {
   ownTransform,
   cumulativeTransform,
 } from './transform';
-import { continueMotions } from './motion';
+import { continueMotions } from '.';
 import { collapsedChildren } from './-private/margin-collapse';
 import {
   shiftedBounds,

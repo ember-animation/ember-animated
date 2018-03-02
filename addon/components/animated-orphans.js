@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import layout from '../templates/components/animated-orphans';
 import { task } from '../-private/ember-scheduler';
-import { afterRender, microwait } from '..';
+import { afterRender, microwait, continueMotions } from '..';
 import TransitionContext from '../transition-context';
 import {
   spawnChild,
@@ -12,7 +12,6 @@ import {
 } from '../scheduler';
 import Sprite from '../sprite';
 import partition from '../partition';
-import { continueMotions } from '../motion';
 
 export default Component.extend({
   layout,

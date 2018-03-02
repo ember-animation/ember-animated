@@ -3,9 +3,8 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { animationsSettled } from 'ember-animated/test-support';
-import { Promise, wait } from 'ember-animated';
+import { Promise, wait, Motion } from 'ember-animated';
 import { equalBounds } from '../../helpers/assertions';
-import Motion from 'ember-animated/motion';
 import always from 'ember-animated/rules/always';
 
 module('Integration | Component | animated orphans', function(hooks) {

@@ -1,7 +1,6 @@
 import { assign } from '@ember/polyfills';
-import Motion from '../motion';
+import { Motion, rAF } from '..';
 import Tween from '../tween';
-import { rAF } from '..';
 import linear from '../easings/linear';
 
 export default function opacity(sprite, opts) {

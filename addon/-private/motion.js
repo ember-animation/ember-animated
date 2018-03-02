@@ -1,9 +1,9 @@
-import { spawnChild } from './scheduler';
+import { spawnChild } from '../scheduler';
 import {
   rAF,
   Promise,
   microwait
-} from '.';
+} from '..';
 
 const motions = new WeakMap();
 const bridges = new WeakMap();
