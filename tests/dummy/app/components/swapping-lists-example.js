@@ -56,8 +56,7 @@ function * transition({ receivedSprites, insertedSprites }) {
   insertedSprites.forEach(s => s.reveal());
 }
 
-function * altTransition({ receivedSprites, sentSprites, insertedSprites }) {
-  receivedSprites.forEach(sprite => sprite.moveToFinalPosition());
+function * altTransition({ sentSprites, insertedSprites }) {
   sentSprites.forEach(move);
   // without this, they won't reveal until the end of the whole
   // transition
