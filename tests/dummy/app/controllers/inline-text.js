@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import opacity from 'ember-animated/motions/opacity';
-import { Promise } from 'ember-animated/concurrency-helpers';
+import { Promise } from 'ember-animated';
 
 export default Controller.extend({
   tableMode: false,

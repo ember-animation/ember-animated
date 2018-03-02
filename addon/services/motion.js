@@ -7,7 +7,7 @@ import {
   rAF,
   afterRender,
   allSettled
-} from '../concurrency-helpers';
+} from '..';
 
 const MotionService = Service.extend({
   init() {

@@ -6,7 +6,7 @@ import hbs from 'htmlbars-inline-precompile';
 import QUnit, { module, test } from 'qunit';
 import $ from 'jquery';
 import { animationsSettled } from 'ember-animated/test-support';
-import { Promise } from 'ember-animated/concurrency-helpers';
+import { Promise } from 'ember-animated';
 import Motion from 'ember-animated/motion';
 import { run } from '@ember/runloop';
 import always from 'ember-animated/rules/always';

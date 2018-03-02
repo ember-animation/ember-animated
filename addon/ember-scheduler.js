@@ -11,7 +11,7 @@ import {
   logErrors
 } from './scheduler';
 import Ember from 'ember';
-import  { microwait } from './concurrency-helpers';
+import  { microwait } from '.';
 import { DEBUG } from '@glimmer/env';
 
 export function task(...args) {

@@ -1,4 +1,4 @@
-import { clock, rAF } from 'ember-animated/concurrency-helpers';
+import { clock, rAF } from 'ember-animated';
 
 let origNow = clock.now;
 

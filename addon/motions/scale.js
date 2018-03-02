@@ -1,6 +1,6 @@
 import Motion from '../motion';
 import Tween from '../tween';
-import { rAF } from '../concurrency-helpers';
+import { rAF } from '..';
 
 export default function scale(sprite, opts) {
   return new Scale(sprite, opts).run();

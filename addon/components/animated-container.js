@@ -5,7 +5,7 @@ import { Resize } from '../motions/resize';
 import { task } from '../ember-scheduler';
 import Sprite from '../sprite';
 import { emptyBounds } from '../bounds';
-import { afterRender, microwait } from '../concurrency-helpers';
+import { afterRender, microwait } from '..';
 
 export default Component.extend({
   classNames: ['animated-container'],

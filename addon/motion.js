@@ -3,7 +3,7 @@ import {
   rAF,
   Promise,
   microwait
-} from './concurrency-helpers';
+} from '.';
 
 const motions = new WeakMap();
 const bridges = new WeakMap();

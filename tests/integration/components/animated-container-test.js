@@ -11,7 +11,7 @@ import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/ember-scheduler';
 import { current } from 'ember-animated/scheduler';
 import Motion from 'ember-animated/motion';
-import { afterRender, wait } from 'ember-animated/concurrency-helpers';
+import { afterRender, wait } from 'ember-animated';
 import { animationsSettled } from 'ember-animated/test-support';
 
 module('Integration | Component | animated container', function(hooks) {

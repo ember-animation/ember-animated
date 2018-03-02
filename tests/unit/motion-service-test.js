@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { Promise, wait } from 'ember-animated/concurrency-helpers';
+import { Promise, wait } from 'ember-animated';
 
 module('Unit | Service | motion', function(hooks) {
   setupTest(hooks);

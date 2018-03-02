@@ -6,7 +6,7 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-each';
 import { task } from '../ember-scheduler';
 import { current } from '../scheduler';
-import { afterRender, microwait } from '../concurrency-helpers';
+import { afterRender, microwait } from '..';
 import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
 import { componentNodes, keyForArray } from 'ember-animated/ember-internals';
