@@ -1,15 +1,15 @@
 <div class="scenario-bind">
   {{#animated-container}}
-    {{#animated-bind counter rules=rules duration=1000 as |v|}}
+    {{#animated-value counter rules=rules duration=1000 as |v|}}
       <span class="left-count">{{v}}</span>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/animated-container}}
 
   {{#if showBoth}}
     {{#animated-container}}
-      {{#animated-bind counter rules=rules2 duration=1000 as |v|}}
+      {{#animated-value counter rules=rules2 duration=1000 as |v|}}
         <span class="right-count">{{v}}</span>
-      {{/animated-bind}}
+      {{/animated-value}}
     {{/animated-container}}
   {{/if}}
 

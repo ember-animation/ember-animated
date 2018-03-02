@@ -1,6 +1,6 @@
 import { computed } from '@ember/object';
 import Component from '@ember/component';
-import layout from '../templates/components/animated-bind';
+import layout from '../templates/components/animated-value';
 
 export default Component.extend({
   tagName: '',

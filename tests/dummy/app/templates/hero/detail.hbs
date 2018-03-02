@@ -4,12 +4,12 @@
   <h2>{{model.name}}</h2>
 
   {{#animated-container}}
-    {{#animated-bind model use=transition duration=1000 as |m|}}
+    {{#animated-value model use=transition duration=1000 as |m|}}
       <div class="hero-detail-image">
         <img src={{m.avatarUrl}}>
         <span>Big Image</span>
       </div>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/animated-container}}
   <p>
     This is after the image.

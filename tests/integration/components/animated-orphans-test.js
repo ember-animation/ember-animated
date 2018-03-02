@@ -38,9 +38,9 @@ module('Integration | Component | animated orphans', function(hooks) {
   {{animated-orphans}}
 
   {{#if showIt}}
-    {{#animated-bind "one" use=t1}}
+    {{#animated-value "one" use=t1}}
       <span class="one">One</span>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/if}}
   `)
     await animationsSettled();
@@ -60,12 +60,12 @@ module('Integration | Component | animated orphans', function(hooks) {
   {{animated-orphans}}
 
   {{#if showIt}}
-    {{#animated-bind "one" use=t1}}
+    {{#animated-value "one" use=t1}}
       <span class="one">One</span>
-    {{/animated-bind}}
-    {{#animated-bind "two" use=t2}}
+    {{/animated-value}}
+    {{#animated-value "two" use=t2}}
       <span class="two">Two</span>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/if}}
   `)
     await animationsSettled();
@@ -103,9 +103,9 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-bind "one" use=t1}}
+    {{#animated-value "one" use=t1}}
       <div class="one">One</div>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/if}}
   `)
     await animationsSettled();
@@ -134,9 +134,9 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-bind "one" use=t1}}
+    {{#animated-value "one" use=t1}}
       <div class="one">One</div>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/if}}
   `)
     await animationsSettled();
@@ -190,12 +190,12 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-bind "one" use=t1}}
+    {{#animated-value "one" use=t1}}
       <div class="one">One</div>
-    {{/animated-bind}}
-    {{#animated-bind "two" use=t2}}
+    {{/animated-value}}
+    {{#animated-value "two" use=t2}}
       <div class="one">One</div>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/if}}
   `)
     await animationsSettled();
@@ -274,12 +274,12 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-bind "one" use=t1}}
+    {{#animated-value "one" use=t1}}
       <div class="one">One</div>
-    {{/animated-bind}}
-    {{#animated-bind "two" use=t2}}
+    {{/animated-value}}
+    {{#animated-value "two" use=t2}}
       <div class="one">One</div>
-    {{/animated-bind}}
+    {{/animated-value}}
   {{/if}}
   `)
     await animationsSettled();

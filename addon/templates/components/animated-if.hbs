@@ -1,7 +1,7 @@
-{{#animated-bind predicate key=key rules=rules use=use duration=duration group=realGroup as |currentPredicate|}}
+{{#animated-value predicate key=key rules=rules use=use duration=duration group=realGroup as |currentPredicate|}}
   {{#if currentPredicate}}
     {{yield}}
   {{else}}
     {{yield to="inverse"}}
   {{/if}}
-{{/animated-bind}}
+{{/animated-value}}
