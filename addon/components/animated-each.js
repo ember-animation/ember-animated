@@ -7,7 +7,7 @@ import layout from '../templates/components/animated-each';
 import { task } from '../-private/ember-scheduler';
 import { current } from '../-private/scheduler';
 import { afterRender, microwait } from '..';
-import TransitionContext from '../transition-context';
+import TransitionContext from '../-private/transition-context';
 import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';

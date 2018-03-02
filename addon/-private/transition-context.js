@@ -1,4 +1,4 @@
-import {  childrenSettled } from './-private/scheduler';
+import { childrenSettled } from './scheduler';
 
 export default class TransitionContext {
   constructor(duration, insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites) {

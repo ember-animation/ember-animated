@@ -4,7 +4,7 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-orphans';
 import { task } from '../-private/ember-scheduler';
 import { afterRender, microwait, continueMotions } from '..';
-import TransitionContext from '../transition-context';
+import TransitionContext from '../-private/transition-context';
 import {
   spawnChild,
   childrenSettled,
