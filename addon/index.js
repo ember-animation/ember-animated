@@ -7,3 +7,5 @@ export {
   allSettled,
   Promise
 } from './-private/concurrency-helpers';
+
+export { printSprites } from './-private/debug';
