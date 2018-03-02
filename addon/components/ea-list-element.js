@@ -1,6 +1,6 @@
 import { warn } from '@ember/debug';
 import Component from '@ember/component';
-import { componentNodes } from 'ember-animated/ember-internals';
+import { componentNodes } from '../-private/ember-internals';
 
 /*
    This component has one job: tracking which DOM elements correspond

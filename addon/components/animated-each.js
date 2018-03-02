@@ -9,7 +9,7 @@ import { current } from '../scheduler';
 import { afterRender, microwait } from '..';
 import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
-import { componentNodes, keyForArray } from 'ember-animated/ember-internals';
+import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../partition';
 import afterInitialRender from 'ember-animated/rules/after-initial-render';
 
