@@ -2,7 +2,7 @@
   <div style="position: absolute">{{animated-orphans}}</div>
   <button {{action "toggle"}}>Toggle</button>
 
-  {{#animated-if tableMode rules=fade duration=1000 }}
+  {{#animated-if tableMode use=fade duration=1000 }}
     <ul>
       <li>{{animated-text "framework"}}</li>
       <li>{{animated-text "ambitious"}}</li>

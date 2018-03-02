@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import opacity from 'ember-animated/motions/opacity';
+import always from 'ember-animated/rules/always';
 
 function * transition({ insertedSprites, receivedSprites, removedSprites }) {
   insertedSprites.forEach(sprite => {
@@ -22,5 +23,6 @@ function * share() {
 
 export default Controller.extend({
   transition,
-  share
+  share,
+  always
 });

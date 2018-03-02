@@ -1,10 +1,12 @@
 import Controller from '@ember/controller';
 import opacity from 'ember-animated/motions/opacity';
 import move from 'ember-animated/motions/move';
+import always from 'ember-animated/rules/always';
 
 export default Controller.extend({
   showDetail: true,
   fade,
+  always,
   fromSide,
   actions: {
     toggle() {
