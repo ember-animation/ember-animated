@@ -11,7 +11,7 @@ import {
   current
 } from '../scheduler';
 import Sprite from '../sprite';
-import partition from '../partition';
+import partition from '../-private/partition';
 
 export default Component.extend({
   layout,

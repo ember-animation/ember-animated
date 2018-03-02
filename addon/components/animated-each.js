@@ -10,7 +10,7 @@ import { afterRender, microwait } from '..';
 import TransitionContext from '../transition-context';
 import Sprite from '../sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
-import partition from '../partition';
+import partition from '../-private/partition';
 import afterInitialRender from 'ember-animated/rules/after-initial-render';
 
 export default Component.extend({
