@@ -1,6 +1,5 @@
 import { Move } from './move';
-import Tween from '../tween';
-import { rAF } from '..';
+import { rAF, Tween } from '..';
 
 export default function follow(sprite, opts) {
   return new Follow(sprite, opts).run();

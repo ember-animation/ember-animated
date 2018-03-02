@@ -1,5 +1,4 @@
-import { Motion, rAF } from '..';
-import Tween from '../tween';
+import { Motion, rAF, Tween } from '..';
 
 export default function scale(sprite, opts) {
   return new Scale(sprite, opts).run();

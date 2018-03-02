@@ -14,3 +14,5 @@ export {
   default as Motion,
   continueMotions
 } from './-private/motion';
+
+export { default as Tween } from './-private/tween';

@@ -1,5 +1,5 @@
-import { rAF, currentFrameClock, clock } from './-private/concurrency-helpers';
-import { inAndOut } from './easings/cosine';
+import { rAF, currentFrameClock, clock } from './concurrency-helpers';
+import { inAndOut } from '../easings/cosine';
 const currentCurves = [];
 
 /*
