@@ -472,12 +472,14 @@ export default Component.extend({
       unmatchedInsertedSprites = [];
     }
 
-    if (unmatchedInsertedSprites.length === 0 &&
-        unmatchedKeptSprites.length === 0 &&
-        unmatchedRemovedSprites.length === 0 &&
-        sentSprites.length === 0 &&
-        receivedSprites.length === 0 &&
-        matchedKeptSprites.length === 0) {
+    // Early exit if nothing is happening.
+    if (!transition ||
+        ( unmatchedInsertedSprites.length === 0 &&
+          unmatchedKeptSprites.length === 0 &&
+          unmatchedRemovedSprites.length === 0 &&
+          sentSprites.length === 0 &&
+          receivedSprites.length === 0 &&
+          matchedKeptSprites.length === 0)) {
       return { matchingAnimatorsFinished };
     }
 
@@ -493,7 +495,7 @@ export default Component.extend({
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);
     context.onMotionEnd = sprite => this._motionEnded(sprite, cycle);
 
-    yield * context._runToCompletion(transition || function*(){});
+    yield * context._runToCompletion(transition);
     return { matchingAnimatorsFinished };
   }),
 

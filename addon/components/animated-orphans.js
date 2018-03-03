@@ -144,7 +144,7 @@ export default Component.extend({
         // before we start hiding the sent & received sprites
         yield microwait();
         sentSprites.forEach(s => s.hide());
-        yield * context._runToCompletion(transition || function*(){});
+        yield * context._runToCompletion(transition);
       });
     }
 
@@ -183,21 +183,30 @@ export default Component.extend({
         }
       });
 
-      let context = new TransitionContext(
-        duration,
-        [],
-        [],
-        unmatchedRemovedSprites,
-        sentSprites,
-        []
-      );
-      context.onMotionStart = this._onFirstMotionStart.bind(this, activeSprites, cycle);
-      context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
-      context.prepareSprite = this._prepareSprite.bind(this);
+      let self = this;
       spawnChild(function * () {
         yield microwait();
         sentSprites.forEach(s => s.hide());
-        yield * context._runToCompletion(transition || function*(){});
+
+        // now that we've hidden any sent sprites, we can bail out
+        // early if there is no transition they want to run
+        if (!transition) {
+          return;
+        }
+
+        let context = new TransitionContext(
+          duration,
+          [],
+          [],
+          unmatchedRemovedSprites,
+          sentSprites,
+          []
+        );
+        context.onMotionStart = self._onFirstMotionStart.bind(self, activeSprites, cycle);
+        context.onMotionEnd = self._onMotionEnd.bind(self, cycle);
+        context.prepareSprite = self._prepareSprite.bind(self);
+
+        yield * context._runToCompletion(transition);
       });
     }
 
