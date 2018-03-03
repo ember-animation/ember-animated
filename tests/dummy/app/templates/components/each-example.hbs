@@ -9,7 +9,7 @@
   {{/if}}
 
   {{#animated-container}}
-    {{#animated-each items key="id" rules=rules as |item|}}
+    {{#animated-each items key="id" use=transition as |item|}}
       <div>
         {{item.id}}
         <button {{action "removeItem" item}}>X</button>

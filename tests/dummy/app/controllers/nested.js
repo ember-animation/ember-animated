@@ -3,7 +3,26 @@ import Controller from '@ember/controller';
 import move from 'ember-animated/motions/move';
 
 export default Controller.extend({
-  rules,
+
+  transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+    insertedSprites.forEach(sprite => {
+      sprite.startAtPixel({ x: window.outerWidth });
+      move(sprite);
+    });
+
+    keptSprites.forEach(sprite => {
+      move(sprite);
+    });
+
+    removedSprites.forEach(sprite => {
+      // the 0.8 here is purely so I can easily see that the elements
+      // are being properly removed immediately after they get far
+      // enough
+      sprite.endAtPixel({ x: window.outerWidth * 0.8 });
+      move(sprite);
+    });
+  },
+
   collections: A([
     {
       title: 'A',
@@ -45,39 +64,3 @@ export default Controller.extend({
 });
 
 let counter = 0;
-
-function * first({ insertedSprites, keptSprites }) {
-  insertedSprites.forEach(sprite => {
-    sprite.reveal();
-  });
-
-  keptSprites.forEach(move);
-}
-
-function * subsequent({ insertedSprites, keptSprites, removedSprites }) {
-  insertedSprites.forEach(sprite => {
-    sprite.startAtPixel({ x: window.outerWidth });
-    move(sprite);
-  });
-
-  keptSprites.forEach(sprite => {
-    move(sprite);
-  });
-
-  removedSprites.forEach(sprite => {
-    // the 0.8 here is purely so I can easily see that the elements
-    // are being properly removed immediately after they get far
-    // enough
-    sprite.endAtPixel({ x: window.outerWidth * 0.8 });
-    move(sprite);
-  });
-
-}
-
-function rules({ firstTime }) {
-  if (firstTime) {
-    return first;
-  } else {
-    return subsequent;
-  }
-}

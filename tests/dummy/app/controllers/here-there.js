@@ -6,7 +6,11 @@ import move from 'ember-animated/motions/move';
 export default Controller.extend({
   showLeft: true,
   showRight: not('showLeft'),
-  transition,
+
+  transition: function * ({ receivedSprites }) {
+    receivedSprites.forEach(move);
+  },
+
   howToGroup: computed('groupTogether', function() {
     if (this.get('groupTogether')) {
       return 'together';
@@ -18,7 +22,3 @@ export default Controller.extend({
     }
   }
 });
-
-function * transition({ receivedSprites }) {
-  receivedSprites.forEach(move);
-}

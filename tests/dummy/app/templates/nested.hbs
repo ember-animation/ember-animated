@@ -1,13 +1,13 @@
 <button {{action "addCollection"}}>New Collection</button>
 <button {{action "addMembers"}}>Add many</button>
 {{#animated-container}}
-  {{#animated-each collections rules=rules key="title" as |collection|}}
+  {{#animated-each collections use=transition key="title" as |collection|}}
     <div>
       <h2>{{collection.title}}</h2>
       <button {{action "addMember" collection}}>Add</button>
 
       {{#animated-container tagName="ul"}}
-        {{#animated-each collection.members rules=rules key="name" as |member|}}
+        {{#animated-each collection.members use=transition key="name" as |member|}}
           <li>{{member.name}}</li>
         {{/animated-each}}
       {{/animated-container}}

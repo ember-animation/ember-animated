@@ -35,7 +35,7 @@ export default class Motion {
       this.duration = context.duration;
     }
     let self = this;
-    return spawnChild(function *() {
+    return spawnChild(function * () {
       context.onMotionStart(self.sprite);
       try {
         yield * self._run();

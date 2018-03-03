@@ -5,7 +5,23 @@ import { task, timeout } from 'ember-animated/-private/ember-scheduler';
 import move from 'ember-animated/motions/move';
 
 export default Component.extend({
-  rules,
+  transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+    insertedSprites.forEach(sprite => {
+      sprite.startAtPixel({ x: window.outerWidth });
+      move(sprite);
+    });
+
+    keptSprites.forEach(move);
+
+    removedSprites.forEach(sprite => {
+      // the 0.8 here is purely so I can easily see that the elements
+      // are being properly removed immediately after they get far
+      // enough
+      sprite.endAtPixel({ x: window.outerWidth * 0.8 });
+      move(sprite);
+    });
+  },
+
   currentSort: numeric,
   items: computed({
     get() {
@@ -79,26 +95,4 @@ function makeRandomItem() {
 
 function random() {
   return Math.random() - 0.5;
-}
-
-
-function rules({ firstTime }) {
-  if (!firstTime) {
-    return function * ({ insertedSprites, keptSprites, removedSprites }) {
-      insertedSprites.forEach(sprite => {
-        sprite.startAtPixel({ x: window.outerWidth });
-        move(sprite);
-      });
-
-      keptSprites.forEach(move);
-
-      removedSprites.forEach(sprite => {
-        // the 0.8 here is purely so I can easily see that the elements
-        // are being properly removed immediately after they get far
-        // enough
-        sprite.endAtPixel({ x: window.outerWidth * 0.8 });
-        move(sprite);
-      });
-    }
-  }
 }

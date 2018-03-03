@@ -5,13 +5,13 @@ import move from 'ember-animated/motions/move';
 export default Controller.extend({
   showDetail: true,
 
-  fade: function*({ insertedSprites, receivedSprites, removedSprites }) {
+  fade: function * ({ insertedSprites, receivedSprites, removedSprites }) {
     insertedSprites.forEach(s => opacity(s, { from: 0 }));
     receivedSprites.forEach(s => opacity(s));
     removedSprites.forEach(s => opacity(s, { to: 0 }));
   },
 
-  fromSide: function*({ insertedSprites, receivedSprites, removedSprites }) {
+  fromSide: function * ({ insertedSprites, receivedSprites, removedSprites }) {
     insertedSprites.forEach(s => {
       s.startAtPixel({ x: window.outerWidth * 0.8 });
       move(s);

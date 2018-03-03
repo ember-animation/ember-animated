@@ -5,11 +5,25 @@ import { computed } from '@ember/object';
 export default Component.extend({
   transition: computed('animateSendingSide', function() {
     if (this.get('animateSendingSide')) {
-      return altTransition;
+      return this.moveSent;
     } else {
-      return transition;
+      return this.moveReceived;
     }
   }),
+
+  moveReceived: function * ({ receivedSprites, insertedSprites }) {
+    receivedSprites.forEach(move);
+    // without this, they won't reveal until the end of the whole
+    // transition
+    insertedSprites.forEach(s => s.reveal());
+  },
+
+  moveSent: function * ({ sentSprites, insertedSprites }) {
+    sentSprites.forEach(move);
+    // without this, they won't reveal until the end of the whole
+    // transition
+    insertedSprites.forEach(s => s.reveal());
+  },
 
   init() {
     this._super();
@@ -44,19 +58,4 @@ function makeRandomList() {
   result.push({ id: 800 });
 
   return result.sort(numeric);
-}
-
-
-function * transition({ receivedSprites, insertedSprites }) {
-  receivedSprites.forEach(move);
-  // without this, they won't reveal until the end of the whole
-  // transition
-  insertedSprites.forEach(s => s.reveal());
-}
-
-function * altTransition({ sentSprites, insertedSprites }) {
-  sentSprites.forEach(move);
-  // without this, they won't reveal until the end of the whole
-  // transition
-  insertedSprites.forEach(s => s.reveal());
 }

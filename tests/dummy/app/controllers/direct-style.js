@@ -11,7 +11,10 @@ let Item = EmberObject.extend({
 });
 
 export default Controller.extend({
-  transition,
+  transition: function * ({ keptSprites }) {
+    keptSprites.forEach(move);
+  },
+
   items: computed(function() {
     let items = A();
     for (let i = 0; i < 4; i++) {
@@ -31,8 +34,4 @@ export default Controller.extend({
 
 function somewhere() {
   return Math.random() * 300;
-}
-
-function * transition({ keptSprites }) {
-  keptSprites.forEach(move);
 }

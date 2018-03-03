@@ -3,11 +3,9 @@ import move from 'ember-animated/motions/move';
 
 export default Component.extend({
   tagName: '',
-  transition,
+  transition: function * ({ sentSprites }) {
+    sentSprites.forEach(move);
+  }
 }).reopenClass({
   positionalParams: ['text']
 });
-
-function * transition({ sentSprites }) {
-  sentSprites.forEach(move);
-}
