@@ -147,9 +147,7 @@ export default Component.extend({
 
     if (!isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
-      if (transition) {
-        this.get('animate').perform(transition);
-      }
+      this.get('animate').perform(transition);
     }
 
     return newChildren;
@@ -201,27 +199,23 @@ export default Component.extend({
       this._ancestorWillDestroyUs = false;
       // treat all our sprites as re-inserted, because we had already handed them off as orphans
       let transition = this._transitionFor(this._firstTime, [], this._prevItems);
-      if (transition) {
-        this.get('animate').perform(transition);
-      }
+      this.get('animate').perform(transition);
     }
   },
 
   _letSpritesEscape() {
     let transition = this._transitionFor(this._firstTime, this._prevItems, []);
-    if (transition) {
-      let removedSprites = [];
-      let parent;
-      for (let element of this._ownElements()) {
-        if (!parent) {
-          parent = Sprite.offsetParentStartingAt(element);
-        }
-        let sprite = Sprite.positionedStartingAt(element, parent);
-        sprite.owner = this._elementToChild.get(element);
-        removedSprites.push(sprite);
+    let removedSprites = [];
+    let parent;
+    for (let element of this._ownElements()) {
+      if (!parent) {
+        parent = Sprite.offsetParentStartingAt(element);
       }
-      this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'));
+      let sprite = Sprite.positionedStartingAt(element, parent);
+      sprite.owner = this._elementToChild.get(element);
+      removedSprites.push(sprite);
     }
+    this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'));
   },
 
   willDestroyElement() {
@@ -481,7 +475,7 @@ export default Component.extend({
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);
     context.onMotionEnd = sprite => this._motionEnded(sprite, cycle);
 
-    yield * context._runToCompletion(transition);
+    yield * context._runToCompletion(transition || function*(){});
     return { matchingAnimatorsFinished };
   }),
 
@@ -531,6 +525,15 @@ export default Component.extend({
     let use = this.get('use');
     let rules = this.get('rules') || afterInitialRender;
     return rules({firstTime, oldItems, newItems, use});
+
+
+    // let use = this.get('use');
+    // let rules = this.get('rules')
+    // if (rules) {
+    //   return rules({firstTime, oldItems, newItems, use});
+    // } else {
+    //   return use;
+    // }
   }
 }).reopenClass({
   positionalParams: ['items']

@@ -16,13 +16,7 @@ function * transition({ insertedSprites, receivedSprites, removedSprites }) {
   });
 }
 
-function * share() {
-  // TODO: if we don't set a transition, our sprites aren't available
-  // for far matching
-}
-
 export default Controller.extend({
   transition,
-  share,
   always
 });

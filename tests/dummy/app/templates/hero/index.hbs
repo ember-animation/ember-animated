@@ -1,9 +1,9 @@
-{{#animated-value "index-route" use=transition duration=1000}}
+{{#animated-value "index-route" rules=always use=transition duration=1000}}
 <div class="hero-list">
   {{#each model as |person|}}
     {{#link-to "hero.detail" person.id tagName="div"}}
       {{#animated-container}}
-        {{#animated-value person use=share rules=always duration=1000 as |p|}}
+        {{#animated-value person rules=always duration=1000 as |p|}}
           <div class="hero-list-image">
             <img src={{p.avatarUrl}}>
             <span>Thumbnail</span>

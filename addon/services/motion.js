@@ -149,7 +149,7 @@ const MotionService = Service.extend({
   }),
 
   matchDestroyed(removed, transition, duration) {
-    if (this._orphanObserver && transition && removed.length > 0) {
+    if (this._orphanObserver && removed.length > 0) {
       // if these orphaned sprites may be capable of animating,
       // delegate them to the orphanObserver. It will do farMatching
       // for them.

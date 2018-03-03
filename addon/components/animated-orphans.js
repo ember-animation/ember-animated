@@ -144,7 +144,7 @@ export default Component.extend({
         // before we start hiding the sent & received sprites
         yield microwait();
         sentSprites.forEach(s => s.hide());
-        yield * context._runToCompletion(transition);
+        yield * context._runToCompletion(transition || function*(){});
       });
     }
 
@@ -197,7 +197,7 @@ export default Component.extend({
       spawnChild(function * () {
         yield microwait();
         sentSprites.forEach(s => s.hide());
-        yield * context._runToCompletion(transition);
+        yield * context._runToCompletion(transition || function*(){});
       });
     }
 
