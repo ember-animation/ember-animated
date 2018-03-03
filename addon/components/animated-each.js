@@ -468,7 +468,9 @@ export default Component.extend({
     // initialInsertion=true.
     if (firstTime && !this.get('initialInsertion')) {
       // Here we are effectively hiding the inserted sprites from the
-      // user's transition function.
+      // user's transition function and just immediately revealing
+      // them in their final positions instead.
+      unmatchedInsertedSprites.forEach(s => s.reveal());
       unmatchedInsertedSprites = [];
     }
 

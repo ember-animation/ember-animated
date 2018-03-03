@@ -44,6 +44,7 @@ module('Acceptance | swapping lists', function(hooks){
 
     let hidden = this.element.querySelectorAll('.right > div.ember-animated-hidden').length;
     assert.ok(hidden >= 3, `expected at least 3 elements in right list to be hidden, found ${hidden}`);
+    assert.ok(hidden < 10, `expected at least one element in right list to be visible, found ${10-hidden}`);
 
     let orphans = this.element.querySelectorAll('.animated-orphans > div').length;
     assert.ok(orphans >= 3, `expected at least 3 orphan elements to be in motion, found ${orphans}`);
