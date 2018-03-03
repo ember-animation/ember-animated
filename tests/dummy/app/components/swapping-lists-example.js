@@ -1,10 +1,8 @@
 import Component from '@ember/component';
 import move from 'ember-animated/motions/move';
 import { computed } from '@ember/object';
-import always from 'ember-animated/rules/always';
 
 export default Component.extend({
-  always,
   transition: computed('animateSendingSide', function() {
     if (this.get('animateSendingSide')) {
       return altTransition;

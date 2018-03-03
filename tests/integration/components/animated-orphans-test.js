@@ -5,7 +5,6 @@ import hbs from 'htmlbars-inline-precompile';
 import { animationsSettled } from 'ember-animated/test-support';
 import { Promise, wait, Motion } from 'ember-animated';
 import { equalBounds } from '../../helpers/assertions';
-import always from 'ember-animated/rules/always';
 
 module('Integration | Component | animated orphans', function(hooks) {
   setupRenderingTest(hooks);
@@ -124,7 +123,6 @@ module('Integration | Component | animated orphans', function(hooks) {
     assert.expect(15);
 
     this.set('showIt', true);
-    this.set('always', always);
 
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
@@ -133,7 +131,7 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1 rules=always}}
+    {{#animated-value "one" use=t1 }}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -178,9 +176,8 @@ module('Integration | Component | animated orphans', function(hooks) {
     await animationsSettled();
   });
 
-  test('drops sprites that had not starting animating when interruption occured', async function(assert) {
-    assert.expect(25);
-    this.set('always', always);
+  test('drops sprites that had not started animating when interruption occured', async function(assert) {
+    assert.expect(20);
     this.set('showIt', true);
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
@@ -189,10 +186,10 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1 rules=always}}
+    {{#animated-value "one" use=t1}}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2 rules=always}}
+    {{#animated-value "two" use=t2}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -238,7 +235,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     });
 
     this.set('showIt', false);
-    await wait();
+    await wait(); // fixme timecontrols instead
 
     this.set('t1', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
       let t1Counter = 3;
@@ -249,13 +246,8 @@ module('Integration | Component | animated orphans', function(hooks) {
       assert.equal(receivedSprites.length, 1, `t1 received ${t1Counter}`);
     });
 
-    this.set('t2', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
-      let t2Counter = 3;
-      assert.equal(removedSprites.length, 0, `t2 removed ${t2Counter}`);
-      assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
-      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
-      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
+    this.set('t2', function * () {
+      assert.ok(false, 't2 run 3 is not supposed to transition');
     });
 
     this.set('showIt', true);
@@ -263,8 +255,8 @@ module('Integration | Component | animated orphans', function(hooks) {
   });
 
   test('drops sprites that finished animating when interruption occured', async function(assert) {
-    assert.expect(25);
-    this.set('always', always);
+    assert.expect(20);
+
     this.set('showIt', true);
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
@@ -273,10 +265,10 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1 rules=always}}
+    {{#animated-value "one" use=t1 }}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2 rules=always}}
+    {{#animated-value "two" use=t2 }}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -335,13 +327,8 @@ module('Integration | Component | animated orphans', function(hooks) {
       assert.equal(receivedSprites.length, 1, `t1 received ${t1Counter}`);
     });
 
-    this.set('t2', function * ({ insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites }) {
-      let t2Counter = 3;
-      assert.equal(removedSprites.length, 0, `t2 removed ${t2Counter}`);
-      assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
-      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(insertedSprites.length, 1, `t2 inserted ${t2Counter}`);
-      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
+    this.set('t2', function * () {
+      assert.ok(false, "t2 third time should not transition");
     });
 
     this.set('showIt', true);

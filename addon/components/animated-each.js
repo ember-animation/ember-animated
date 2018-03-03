@@ -11,7 +11,6 @@ import TransitionContext from '../-private/transition-context';
 import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
-import afterInitialRender from 'ember-animated/rules/after-initial-render';
 
 export default Component.extend({
   layout,
@@ -20,6 +19,7 @@ export default Component.extend({
   duration: null,
   use: null,
   rules: null,
+  initialInsertion: false,
 
   init() {
     this._elementToChild = new WeakMap();
@@ -147,7 +147,7 @@ export default Component.extend({
 
     if (!isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
-      this.get('animate').perform(transition);
+      this.get('animate').perform(transition, firstTime);
     }
 
     return newChildren;
@@ -319,7 +319,7 @@ export default Component.extend({
   //   animators that are still in `runAnimation`, then we are
   //   cleaning up our own sprite state.
   //
-  animate: task(function * (transition) {
+  animate: task(function * (transition, firstTime) {
     let {
       parent,
       currentSprites,
@@ -328,7 +328,7 @@ export default Component.extend({
       removedSprites
     } = yield this.get('startAnimation').perform(transition, current());
 
-    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites);
+    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites, firstTime);
     yield this.get('finalizeAnimation').perform(insertedSprites, keptSprites, removedSprites, matchingAnimatorsFinished);
   }).restartable(),
 
@@ -367,7 +367,7 @@ export default Component.extend({
     return { parent, currentSprites, insertedSprites, keptSprites, removedSprites };
   }),
 
-  runAnimation: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites) {
+  runAnimation: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites, firstTime) {
     // fill the keptSprites and removedSprites lists by comparing what
     // we had in currentSprites with what is still in the DOM now that
     // rendering happened.
@@ -463,6 +463,24 @@ export default Component.extend({
     matchedKeptSprites.forEach(s => s.hide());
     sentSprites.forEach(s => s.hide());
 
+    // By default, we don't treat sprites as "inserted" when our
+    // component first renders. You can override that by setting
+    // initialInsertion=true.
+    if (firstTime && !this.get('initialInsertion')) {
+      // Here we are effectively hiding the inserted sprites from the
+      // user's transition function.
+      unmatchedInsertedSprites = [];
+    }
+
+    if (unmatchedInsertedSprites.length === 0 &&
+        unmatchedKeptSprites.length === 0 &&
+        unmatchedRemovedSprites.length === 0 &&
+        sentSprites.length === 0 &&
+        receivedSprites.length === 0 &&
+        matchedKeptSprites.length === 0) {
+      return { matchingAnimatorsFinished };
+    }
+
     let context = new TransitionContext(
       this.get('durationWithDefault'),
       unmatchedInsertedSprites,                      // user-visible insertedSprites
@@ -522,18 +540,12 @@ export default Component.extend({
   },
 
   _transitionFor(firstTime, oldItems, newItems) {
-    let use = this.get('use');
-    let rules = this.get('rules') || afterInitialRender;
-    return rules({firstTime, oldItems, newItems, use});
-
-
-    // let use = this.get('use');
-    // let rules = this.get('rules')
-    // if (rules) {
-    //   return rules({firstTime, oldItems, newItems, use});
-    // } else {
-    //   return use;
-    // }
+    let rules = this.get('rules')
+    if (rules) {
+      return rules({firstTime, oldItems, newItems});
+    } else {
+      return this.get('use');
+    }
   }
 }).reopenClass({
   positionalParams: ['items']

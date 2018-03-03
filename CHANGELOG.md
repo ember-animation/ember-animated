@@ -6,8 +6,7 @@
  - BREAKING: the signature for defining a Motion has changed. By convention, your default export should be function that creates and starts the motion, and you should also offer a named export for your Motion subclass so that others can extend from it.
  - BREAKING: rules functions get named arguments instead of positional arguments.
  - BREAKING: renamed animated-bind component to animated-value. "bind" made sense in the context of early Ember, it's not really a thing people say anymore.
- - ENHANCEMENT: rules functions get an additional argument, "use", which is the same `use` parameter that was passed to animator component. This lets us have some generic rules functions like `ember-animated/rules/always` and `ember-animated/rules/after-initial-render`.
- - BREAKING: the default rules have changed from `always` to `after-initial-render` because that is by far the common case.
+ - BREAKING: we only provide insertedSprites at initial render if you set initialInsertion=true. Received sprites are always still provided, because that's what they're for.
  - BREAKING: moved around many internal modules to make it clear what things are publicy importable. 
 
 

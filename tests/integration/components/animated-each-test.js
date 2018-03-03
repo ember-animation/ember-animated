@@ -8,7 +8,6 @@ import $ from 'jquery';
 import { animationsSettled } from 'ember-animated/test-support';
 import { Promise, Motion } from 'ember-animated';
 import { run } from '@ember/runloop';
-import always from 'ember-animated/rules/always';
 
 module('Integration | Component | animated each', function(hooks) {
   setupRenderingTest(hooks);
@@ -52,9 +51,8 @@ module('Integration | Component | animated each', function(hooks) {
       assert.equal(insertedSprites.length, 3);
       transitionCounter++;
     });
-    this.set('always', always);
     await render(hbs`
-      {{#animated-each items rules=always use=transition as |item|}}
+      {{#animated-each items use=transition initialInsertion=true as |item|}}
         <div class="test-child">{{item}}</div>
       {{/animated-each}}
     `);
@@ -101,7 +99,7 @@ module('Integration | Component | animated each', function(hooks) {
         assert.equal(removedSprites.length, 1, 'removed sprites');
       }
     });
-    this.set('always', always);
+
     await render(hbs`
       {{#animated-each items use=transition as |item|}}
         <div class="test-child">{{item}}</div>
@@ -174,26 +172,24 @@ module('Integration | Component | animated each', function(hooks) {
   });
 
   test('it can match sprites that are leaving another component', async function(assert) {
-    assert.expect(11);
+    assert.expect(10);
 
     this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
     this.set('rightItems', A([]));
 
-    this.set('leftTransition', function * ({ insertedSprites }) {
-      assert.equal(insertedSprites.length, 3, "first transition");
+    this.set('leftTransition', function * () {
+      throw new Error("unexpected transition");
     });
 
     this.set('rightTransition', function * () {
       throw new Error("unexpected transition");
     });
 
-    this.set('always', always);
-
     await render(hbs`
-      {{#animated-each leftItems rules=always use=leftTransition key="id" as |item|}}
+      {{#animated-each leftItems use=leftTransition key="id" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
-      {{#animated-each rightItems rules=always use=rightTransition key="id" as |item|}}
+      {{#animated-each rightItems use=rightTransition key="id" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
     `);
@@ -223,13 +219,13 @@ module('Integration | Component | animated each', function(hooks) {
   });
 
   test('it can match sprites that are leaving a destroyed component', async function(assert) {
-    assert.expect(2);
+    assert.expect(1);
 
     this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
     this.set('rightItems', A([{id: 'b'}, ]));
 
-    this.set('leftTransition', function * ({ insertedSprites }) {
-      assert.equal(insertedSprites.length, 3, "first transition");
+    this.set('leftTransition', function * () {
+      throw new Error("unexpected left transition");
     });
 
     this.set('rightTransition', function * () {
@@ -237,15 +233,14 @@ module('Integration | Component | animated each', function(hooks) {
     });
 
     this.set('leftAlive', true);
-    this.set('always', always);
 
     await render(hbs`
       {{#if leftAlive}}
-        {{#animated-each leftItems rules=always use=leftTransition key="id" as |item|}}
+        {{#animated-each leftItems use=leftTransition key="id" as |item|}}
           <div class="test-child">{{item.id}}</div>
         {{/animated-each}}
       {{else}}
-        {{#animated-each rightItems rules=always use=rightTransition key="id" as |item|}}
+        {{#animated-each rightItems use=rightTransition key="id" as |item|}}
           <div class="test-child">{{item.id}}</div>
         {{/animated-each}}
       {{/if}}

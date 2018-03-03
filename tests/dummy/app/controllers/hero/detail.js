@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import move, { continuePrior } from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
 import opacity from 'ember-animated/motions/opacity';
-import always from 'ember-animated/rules/always';
 
 function * transition({ receivedSprites, sentSprites, removedSprites }) {
   receivedSprites.forEach(sprite => {
@@ -30,6 +29,5 @@ function * transition({ receivedSprites, sentSprites, removedSprites }) {
 }
 
 export default Controller.extend({
-  transition,
-  always
+  transition
 });
