@@ -7,7 +7,7 @@ export default class TimeControl {
     if (clock.now !== origNow) {
       throw new Error("Only one TimeControl may be active at a time");
     }
-    this._timer = 0;
+    this._timer = origNow();
     this._runningSpeed = false;
     this._runStartedAt = null;
     clock.now = () => this.now();
