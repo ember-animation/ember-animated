@@ -4,7 +4,6 @@ import Component from '@ember/component';
 import { Resize } from '../motions/resize';
 import { task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
-import { emptyBounds } from '../-private/bounds';
 import { afterRender, microwait } from '..';
 
 export default Component.extend({
@@ -81,7 +80,6 @@ export default Component.extend({
       if (!sprite) {
         sprite = Sprite.sizedEndingAt(this.element);
         this.sprite = sprite;
-        sprite.initialBounds = emptyBounds;
       } else {
         sprite.measureFinalBounds();
       }
