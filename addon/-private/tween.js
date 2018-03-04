@@ -1,5 +1,5 @@
 import { rAF, currentFrameClock, clock } from './concurrency-helpers';
-import { inAndOut } from '../easings/cosine';
+import { easeInAndOut } from '../easings/cosine';
 const currentCurves = [];
 
 /*
@@ -11,7 +11,7 @@ const currentCurves = [];
 */
 
 export default class Tween {
-  constructor(initialValue, finalValue, duration, easing=inAndOut) {
+  constructor(initialValue, finalValue, duration, easing=easeInAndOut) {
     if (typeof easing !== 'function') {
       throw new Error("Tried to make a Tween with an invalid easing function");
     }

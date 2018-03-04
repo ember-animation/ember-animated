@@ -3,12 +3,13 @@ import { computed, set } from '@ember/object';
 import Component from '@ember/component';
 import { task, timeout } from 'ember-animated/-private/ember-scheduler';
 import move from 'ember-animated/motions/move';
+import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 
 export default Component.extend({
   transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
     insertedSprites.forEach(sprite => {
       sprite.startAtPixel({ x: window.outerWidth });
-      move(sprite);
+      move(sprite, { easing: easeOut });
     });
 
     keptSprites.forEach(move);
@@ -18,7 +19,7 @@ export default Component.extend({
       // are being properly removed immediately after they get far
       // enough
       sprite.endAtPixel({ x: window.outerWidth * 0.8 });
-      move(sprite);
+      move(sprite, { easing: easeIn });
     });
   },
 
