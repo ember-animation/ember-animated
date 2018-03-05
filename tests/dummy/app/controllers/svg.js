@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import move from 'ember-animated/motions/move';
-import { printSprites } from 'ember-animated';
+import moveCircle from '../motions/move-circle';
 
 export default Controller.extend({
   bubbles: computed(function() {
@@ -11,15 +10,14 @@ export default Controller.extend({
         id,
         x: Math.floor(Math.random()*100),
         y: Math.floor(Math.random()*100),
-        radius: 10
+        radius: Math.floor(Math.random()*50)
       });
     }
     return list;
   }),
 
   moveThem: function * ({ keptSprites }) {
-    printSprites(arguments[0]);
-    keptSprites.forEach(move);
+    keptSprites.forEach(moveCircle);
   },
 
   actions: {

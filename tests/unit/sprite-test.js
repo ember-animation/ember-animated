@@ -1063,6 +1063,31 @@ module("Unit | Sprite | rendering", function(hooks) {
 
   });
 
+  test("can read initial and final SVG dimensions", async function(assert) {
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <circle class="target" r="50" cx="100" cy="200" fill="blue" />
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+    sprite.lock();
+
+    target.setAttribute('cx', '120');
+
+    sprite.unlock();
+
+    parent.measureFinalBounds();
+    sprite.measureFinalBounds();
+
+    assert.equal(sprite.getInitialDimension('cx'), 100, 'cx initial');
+    assert.equal(sprite.getFinalDimension('cx'), 120, 'cx final');
+
+  });
 
 
 });

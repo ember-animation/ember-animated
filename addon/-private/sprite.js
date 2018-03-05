@@ -176,6 +176,16 @@ export default class Sprite {
     return this._finalOpacity;
   }
 
+  // This is mostly intended for use with SVG, where you can say things like getInitialDimension('x')
+  getInitialDimension(name) {
+    return this._initialPosition[name];
+  }
+
+  // This is mostly intended for use with SVG, where you can say things like getFinalDimension('x')
+  getFinalDimension(name) {
+    return this._finalPosition[name];
+  }
+
   getCurrentBounds() {
     if (this._offsetSprite) {
       return relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.getCurrentBounds());
@@ -192,13 +202,13 @@ export default class Sprite {
     if (isSVG(this.element)) {
       let { element } = this;
       return {
-        x: element.getAttribute('x'),
-        y: element.getAttribute('y'),
-        cx: element.getAttribute('cx'),
-        cy: element.getAttribute('cy'),
-        r: element.getAttribute('r'),
-        width: element.getAttribute('width'),
-        height: element.getAttribute('height'),
+        x: getSVGLength(element, 'x'),
+        y: getSVGLength(element, 'y'),
+        cx: getSVGLength(element, 'cx'),
+        cy: getSVGLength(element, 'cy'),
+        r: getSVGLength(element, ('r')),
+        width: getSVGLength(element, 'width'),
+        height: getSVGLength(element, 'height'),
         transform: element.getAttribute('transform')
       }
     } else {
@@ -217,13 +227,13 @@ export default class Sprite {
     if (!pos) { return; }
     if (isSVG(this.element)) {
       let { element } = this;
-      setAttribute(element, 'x', pos);
-      setAttribute(element, 'y', pos);
-      setAttribute(element, 'cx', pos);
-      setAttribute(element, 'cy', pos);
-      setAttribute(element, 'r', pos);
-      setAttribute(element, 'width', pos);
-      setAttribute(element, 'height', pos);
+      setSVGLength(element, 'x', pos);
+      setSVGLength(element, 'y', pos);
+      setSVGLength(element, 'cx', pos);
+      setSVGLength(element, 'cy', pos);
+      setSVGLength(element, 'r', pos);
+      setSVGLength(element, 'width', pos);
+      setSVGLength(element, 'height', pos);
       setAttribute(element, 'transform', pos);
     } else {
       let style = this.element.style;
@@ -724,6 +734,18 @@ function getEffectiveOffsetParent(element) {
     cursor = cursor.parentElement;
   }
   return offsetParent;
+}
+
+function getSVGLength(element, property) {
+  if (element[property]) {
+    return element[property].baseVal.value;
+  }
+}
+
+function setSVGLength(element, property, values) {
+  if (typeof values[property] == 'number') {
+    element[property].baseVal.value = values[property];
+  }
 }
 
 function setAttribute(element, attrName, values) {
