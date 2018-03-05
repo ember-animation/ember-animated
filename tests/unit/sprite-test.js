@@ -1,16 +1,20 @@
 import { module, test, skip } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
 import { ownTransform } from 'ember-animated/-private/transform';
 import Sprite from 'ember-animated/-private/sprite';
+import hbs from 'htmlbars-inline-precompile';
 import $ from 'jquery';
+import { bounds } from 'ember-animated/test-support';
 import {
   equalBounds,
   visuallyConstant,
-  approxEqualPixels
+  approxEqualPixels,
 } from '../helpers/assertions';
 
 let environment, offsetParent, intermediate, target, innerContent, external, priorSibling;
 
 module("Unit | Sprite", function(hooks) {
+
   hooks.beforeEach(function(assert) {
     assert.visuallyConstant = visuallyConstant;
     assert.equalBounds = equalBounds;
@@ -384,7 +388,6 @@ module("Unit | Sprite", function(hooks) {
     );
 
   });
-
 
   test("external style mutations persist across unlock: added property that does not collide with our imposed styles", function(assert) {
     let m = sprite(target);
@@ -846,4 +849,220 @@ module("Unit | Sprite", function(hooks) {
       paddingBottom: '11px'
     });
   }
+});
+
+module("Unit | Sprite | rendering", function(hooks) {
+  setupRenderingTest(hooks);
+
+
+  hooks.beforeEach(function(assert) {
+    assert.visuallyConstant = visuallyConstant;
+    assert.equalBounds = equalBounds;
+    assert.approxEqualPixels = approxEqualPixels;
+  });
+
+  test("svg elements can use the top <svg> tag as their offset parent", async function(assert) {
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    assert.equal(parent.element, this.element.querySelector('svg'), 'the offset parent sprite should be the <svg> element')
+  });
+
+  test("svg elements can use a nested <svg> tag as their offset parent", async function(assert) {
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <svg class="inside">
+    <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
+  </svg>
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    assert.equal(parent.element, this.element.querySelector('.inside'), 'the offset parent sprite should be the inside <svg> element')
+  });
+
+  test("svg elements skip over <g> when finding their offset parent", async function(assert) {
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <svg class="inside">
+    <g>
+      <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
+    </g>
+  </svg>
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    assert.equal(parent.element, this.element.querySelector('.inside'), 'the offset parent sprite should be the inside <svg> element')
+  });
+
+
+  test("SVG rect with manipulated size", async function(assert) {
+
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+    let initialBounds = bounds(target);
+
+    assert.visuallyConstant([target], () => {
+      sprite.lock();
+    });
+
+    target.setAttribute('width', '45');
+    target.setAttribute('height', '58');
+
+    sprite.unlock();
+
+    parent.measureFinalBounds();
+    sprite.measureFinalBounds();
+
+    sprite.lock();
+
+    assert.equalBounds(
+      bounds(target),
+      initialBounds,
+      'locking brings it back into initial position'
+    );
+
+    assert.approxEqualPixels(sprite.initialBounds.height + 8, sprite.finalBounds.height, 'height');
+    assert.approxEqualPixels(sprite.initialBounds.width + 5, sprite.finalBounds.width, 'width');
+
+  });
+
+  test("SVG rect with manipulated x and y", async function(assert) {
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+    let initialBounds = bounds(target);
+
+    assert.visuallyConstant([target], () => {
+      sprite.lock();
+    });
+
+    target.setAttribute('x', '120');
+    target.setAttribute('y', '190');
+
+    sprite.unlock();
+
+    parent.measureFinalBounds();
+    sprite.measureFinalBounds();
+
+    sprite.lock();
+
+    assert.equalBounds(
+      bounds(target),
+      initialBounds,
+      'locking brings it back into initial position'
+    );
+
+    assert.approxEqualPixels(sprite.initialBounds.top - 10, sprite.finalBounds.top, 'top');
+    assert.approxEqualPixels(sprite.initialBounds.left + 20, sprite.finalBounds.left, 'left');
+
+  });
+
+  test("SVG circle with manipulated position", async function(assert) {
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <circle class="target" r="50" cx="100" cy="200" fill="blue" />
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+    let initialBounds = bounds(target);
+
+    assert.visuallyConstant([target], () => {
+      sprite.lock();
+    });
+
+    target.setAttribute('cx', '120');
+    target.setAttribute('cy', '190');
+
+    sprite.unlock();
+
+    parent.measureFinalBounds();
+    sprite.measureFinalBounds();
+
+    sprite.lock();
+
+    assert.equalBounds(
+      bounds(target),
+      initialBounds,
+      'locking brings it back into initial position'
+    );
+
+    assert.approxEqualPixels(sprite.initialBounds.top - 10, sprite.finalBounds.top, 'top');
+    assert.approxEqualPixels(sprite.initialBounds.left + 20, sprite.finalBounds.left, 'left');
+
+  });
+
+  test("SVG circle with manipulated radius", async function(assert) {
+
+    await this.render(hbs`
+<svg width=1000 height=1000>
+  <circle class="target" r="50" cx="100" cy="200" fill="blue" />
+</svg>
+`);
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+    let initialBounds = bounds(target);
+
+    assert.visuallyConstant([target], () => {
+      sprite.lock();
+    });
+
+    target.setAttribute('r', '60');
+
+    sprite.unlock();
+
+    parent.measureFinalBounds();
+    sprite.measureFinalBounds();
+
+    sprite.lock();
+
+    assert.equalBounds(
+      bounds(target),
+      initialBounds,
+      'locking brings it back into initial position'
+    );
+
+    assert.approxEqualPixels(sprite.initialBounds.width + 20, sprite.finalBounds.width, 'width');
+    assert.approxEqualPixels(sprite.initialBounds.height + 20, sprite.finalBounds.height, 'height');
+
+  });
+
+
+
 });

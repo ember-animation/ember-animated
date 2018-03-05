@@ -189,18 +189,43 @@ export default class Sprite {
   // This deliberately only tracks inline styles, because it's only
   // important when the user is manipulating inline styles.
   _getCurrentPosition() {
-    let style = this.element.style;
-    return {
-      top: style.top,
-      left: style.left,
-      bottom: style.bottom,
-      right: style.right,
-      transform: style.transform
-    };
+    if (isSVG(this.element)) {
+      let { element } = this;
+      return {
+        x: element.getAttribute('x'),
+        y: element.getAttribute('y'),
+        cx: element.getAttribute('cx'),
+        cy: element.getAttribute('cy'),
+        r: element.getAttribute('r'),
+        width: element.getAttribute('width'),
+        height: element.getAttribute('height'),
+        transform: element.getAttribute('transform')
+      }
+    } else {
+      let style = this.element.style;
+      return {
+        top: style.top,
+        left: style.left,
+        bottom: style.bottom,
+        right: style.right,
+        transform: style.transform
+      };
+    }
   }
 
   _reapplyPosition(pos) {
-    if (pos) {
+    if (!pos) { return; }
+    if (isSVG(this.element)) {
+      let { element } = this;
+      setAttribute(element, 'x', pos);
+      setAttribute(element, 'y', pos);
+      setAttribute(element, 'cx', pos);
+      setAttribute(element, 'cy', pos);
+      setAttribute(element, 'r', pos);
+      setAttribute(element, 'width', pos);
+      setAttribute(element, 'height', pos);
+      setAttribute(element, 'transform', pos);
+    } else {
       let style = this.element.style;
       style.top = pos.top;
       style.left = pos.left;
@@ -296,6 +321,13 @@ export default class Sprite {
   _rememberSize() {
     this._imposedStyle = {};
 
+    if (isSVG(this.element)) {
+      // we're not doing anything to lock the width & height
+      // SVGElements. it seems rare that we'd need to, since svg
+      // layout tends to be pretty literal.
+      return;
+    }
+
     // If the user has already provided an inline width or height,
     // they are taking the wheel and we have to trust them to do
     // something reasonable.
@@ -337,6 +369,12 @@ export default class Sprite {
     let ty = 0;
 
     this._rememberSize();
+
+    if (isSVG(this.element)) {
+      // svg elements are effectively always already absolutely
+      // positioned by their own coordinates.
+      return;
+    }
 
     if (computedStyle.position !== 'absolute' && computedStyle.position !== 'fixed') {
       this._imposedStyle.position = 'absolute';
@@ -386,9 +424,7 @@ export default class Sprite {
     this._reapplyPosition(this._initialPosition);
 
     this.applyStyles(this._imposedStyle);
-    if (this._lockMode === 'position') {
-      this._handleMarginCollapse();
-    }
+    this._handleMarginCollapse();
     inFlight.set(this.element, this);
     this._inInitialPosition = this._lockedToInitialPosition;
   }
@@ -406,9 +442,7 @@ export default class Sprite {
     // to drift, we put it back.
     this._reapplyPosition(this._finalPosition);
 
-    if (this._lockMode === 'position') {
-      this._clearMarginCollapse();
-    }
+    this._clearMarginCollapse();
   }
 
   // This is your general purpose hook for changing CSS properties of
@@ -502,15 +536,19 @@ export default class Sprite {
   }
 
   _handleMarginCollapse() {
-    let children = this._collapsingChildren;
-    for (let i = 0; i < children.length; i++) {
-      children[i].classList.add('ember-animated-top-collapse');
+    if (this._collapsingChildren) {
+      let children = this._collapsingChildren;
+      for (let i = 0; i < children.length; i++) {
+        children[i].classList.add('ember-animated-top-collapse');
+      }
     }
   }
   _clearMarginCollapse() {
-    let children = this._collapsingChildren;
-    for (let i = 0; i < children.length; i++) {
-      children[i].classList.remove('ember-animated-top-collapse');
+    if (this._collapsingChildren) {
+      let children = this._collapsingChildren;
+      for (let i = 0; i < children.length; i++) {
+        children[i].classList.remove('ember-animated-top-collapse');
+      }
     }
   }
   startAtSprite(otherSprite) {
@@ -648,10 +686,35 @@ function findOffsets(element, computedStyle, transform, offsetSprite) {
   return { top, left };
 }
 
-// This compensates for the fact that browsers are inconsistent in the
-// way they report offsetLeft & offsetTop for elements with a
-// transformed ancestor beneath their nearest positioned ancestor.
+const SVGNamespace = "http://www.w3.org/2000/svg";
+
+// We have special handling for SVG elements inside SVG documents. An
+// <svg> tag itself whose parent is not SVG doesn't need special
+// handling -- it participates in normal HTML positioning.
+function isSVG(element) {
+  return element.namespaceURI === SVGNamespace && element.parentElement.namespaceURI === SVGNamespace;
+}
+
+// This distinguishes HTML vs SVG rules, and for HTML it compensates
+// for the fact that browsers are inconsistent in the way they report
+// offsetLeft & offsetTop for elements with a transformed ancestor
+// beneath their nearest positioned ancestor.
 function getEffectiveOffsetParent(element) {
+
+  if (isSVG(element)) {
+    let cursor = element.parentElement;
+    while (cursor && cursor.namespaceURI === SVGNamespace) {
+      if (cursor.tagName === 'svg') {
+        return cursor;
+      }
+      cursor = cursor.parentElement;
+    }
+    // we should never fall through here -- presumably we must find an
+    // <svg> tag somewhere before we exit the svg namespace. But if we
+    // do fall through, I'll just let this continue into the regular
+    // HTML rules below.
+  }
+
   let offsetParent = element.offsetParent;
   let cursor = element.parentElement;
   while (cursor && offsetParent && cursor !== offsetParent) {
@@ -661,4 +724,12 @@ function getEffectiveOffsetParent(element) {
     cursor = cursor.parentElement;
   }
   return offsetParent;
+}
+
+function setAttribute(element, attrName, values) {
+  if (values[attrName]) {
+    element.setAttribute(attrName, values[attrName]);
+  } else {
+    element.removeAttribute(attrName);
+  }
 }

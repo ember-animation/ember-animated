@@ -11,7 +11,7 @@ import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { current } from 'ember-animated/-private/scheduler';
 import { Motion, afterRender, wait } from 'ember-animated';
-import { animationsSettled } from 'ember-animated/test-support';
+import { animationsSettled, bounds as _bounds } from 'ember-animated/test-support';
 
 module('Integration | Component | animated container', function(hooks) {
   setupRenderingTest(hooks);
@@ -413,7 +413,7 @@ module('Integration | Component | animated container', function(hooks) {
   });
 
   function bounds($elt) {
-    return $elt[0].getBoundingClientRect();
+    return _bounds($elt[0]);
   }
 
   function height($elt) {
