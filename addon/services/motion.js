@@ -8,6 +8,7 @@ import {
   afterRender,
   allSettled
 } from '..';
+import { WILDCARD } from '../components/animated-beacon';
 
 const MotionService = Service.extend({
   init() {
@@ -250,8 +251,11 @@ function performMatches(sink, source) {
   sink.inserted.concat(sink.kept).forEach(sprite => {
     let match = source.removed.find(
       mySprite =>
-        sprite.owner.group == mySprite.owner.group &&
-          sprite.owner.id === mySprite.owner.id
+        sprite.owner.group == mySprite.owner.group && (
+          sprite.owner.id === WILDCARD ||
+            mySprite.owner.id === WILDCARD ||
+            sprite.owner.id === mySprite.owner.id
+        )
     );
     if (match) {
       sink.matches.set(sprite, match);

@@ -1,0 +1,12 @@
+<div class="scenario-beacon">
+  {{#animated-beacon group="beacon-test"}}
+    <button {{action "launch"}}>Launch</button>
+  {{/animated-beacon}}
+</div>
+
+
+{{#animated-if showingModal group="beacon-test" use=transition duration=500}}
+  <div class="scenario-beacon-modal" {{action "dismiss"}}>
+      Hi
+  </div>
+{{/animated-if}}

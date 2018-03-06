@@ -146,3 +146,21 @@
     height: 100px;
     background-color: blue;
 }
+
+.scenario-beacon {
+    position: absolute;
+    top: 30%;
+    left: 10%;
+}
+
+.scenario-beacon-modal {
+    position: absolute;
+    left: 30%;
+    top: 40%;
+    width: 20em;
+    min-height: 10em;
+    background-color: #c4c4ff;
+    box-sizing: border-box;
+    padding: 2em;
+    border-radius: 5px;
+}

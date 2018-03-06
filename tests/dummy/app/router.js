@@ -21,6 +21,7 @@ Router.map(function() {
   this.route('orphan');
   this.route('here-there');
   this.route('svg');
+  this.route('beacon');
 });
 
 export default Router;

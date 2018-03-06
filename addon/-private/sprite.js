@@ -186,6 +186,7 @@ export default class Sprite {
     return this._finalPosition[name];
   }
 
+  // TODO: this is used only in tests, and it's a temptation toward DOM thrashing. Remove it.
   getCurrentBounds() {
     if (this._offsetSprite) {
       return relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.getCurrentBounds());
