@@ -17,12 +17,14 @@
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
+    "caniuse-lite": "^1.0.30000812",
     "ember-animated-tools": "^0.1.1",
     "ember-cli": "~3.0.0",
     "ember-cli-dependency-checker": "^2.0.0",
     "ember-cli-eslint": "^4.2.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
+    "ember-cli-postcss": "^3.7.1",
     "ember-cli-qunit": "^4.1.1",
     "ember-cli-shims": "^1.2.0",
     "ember-cli-sri": "^2.1.0",
@@ -32,7 +34,6 @@
     "ember-export-application-global": "^2.0.0",
     "ember-faker": "^1.2.1",
     "ember-load-initializers": "^1.0.0",
-    "ember-maybe-import-regenerator": "^0.1.6",
     "ember-resolver": "^4.0.0",
     "ember-source": "~3.0.0",
     "ember-source-channel-url": "^1.0.1",
@@ -40,7 +41,9 @@
     "eslint": "~4.15.0",
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-node": "^5.2.1",
-    "loader.js": "^4.2.3"
+    "loader.js": "^4.2.3",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-import": "^11.1.0"
   },
   "keywords": [
     "ember-addon"
@@ -49,7 +52,7 @@
     "ember-cli-babel": "^6.11.0",
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-version-checker": "^1.1.7",
-    "ember-maybe-import-regenerator": "^0.1.5"
+    "ember-maybe-import-regenerator": "^0.1.6"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
