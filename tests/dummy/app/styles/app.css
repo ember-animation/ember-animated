@@ -1,1 +1,18 @@
 @import "dev";
+
+:root {
+    --highlightColor: #fd367e;
+    --tertiaryColor: #932b77;
+    --secondaryColor: #4e1184;
+    --primaryColor: #0e1555;
+}
+
+body {
+    margin: 0;
+    background-color: var(--primaryColor);
+}
+
+header {
+    background-color: var(--highlightColor);
+    height: 3rem;
+}

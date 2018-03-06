@@ -7,6 +7,9 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('docs', { path: '/' }, function() {
+  });
+
   this.route('dev', function() {
     this.route('each');
     this.route('container-only');
