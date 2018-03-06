@@ -52,7 +52,7 @@ export default Component.extend({
     if (!element) {
       return;
     }
-    let group = this.get('group');
+    let group = this.get('group') || '__default__';
 
     let outboundSprite = Sprite.positionedStartingAt(element, Sprite.offsetParentStartingAt(element));
     outboundSprite.owner = { group, id: WILDCARD };
