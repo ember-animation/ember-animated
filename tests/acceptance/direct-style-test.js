@@ -6,8 +6,8 @@ module('Acceptance | direct style', function(hooks) {
   setupApplicationTest(hooks);
 
   test('visiting /direct-style', async function(assert) {
-    await visit('/direct-style');
-    assert.equal(currentURL(), '/direct-style');
+    await visit('/dev/direct-style');
+    assert.equal(currentURL(), '/dev/direct-style');
   });
 
 });

@@ -23,17 +23,17 @@ module('Acceptance | hero', function(hooks) {
   });
 
   test('visiting /hero', async function(assert) {
-    await visit('/hero');
-    assert.equal(currentURL(), '/hero');
+    await visit('/dev/hero');
+    assert.equal(currentURL(), '/dev/hero');
   });
 
   test('visiting /hero/1', async function(assert) {
-    await visit('/hero/1');
-    assert.equal(currentURL(), '/hero/1');
+    await visit('/dev/hero/1');
+    assert.equal(currentURL(), '/dev/hero/1');
   });
 
   test('index to detail', async function(assert) {
-    await visit('/hero');
+    await visit('/dev/hero');
     time.pause();
     click('.hero-list-image');
     await time.advance(50);
@@ -43,11 +43,11 @@ module('Acceptance | hero', function(hooks) {
     assert.equal(hiddenOrphans, 1, 'hidden orphans');
     time.runAtSpeed(FAST);
     await animationsSettled();
-    assert.equal(currentURL(), '/hero/0');
+    assert.equal(currentURL(), '/dev/hero/0');
   });
 
   test('detail to index', async function(assert) {
-    await visit('/hero/0');
+    await visit('/dev/hero/0');
     time.pause();
     click('.hero-detail a');
     await time.advance(50);
@@ -57,22 +57,22 @@ module('Acceptance | hero', function(hooks) {
     assert.equal(hiddenImages, 1, 'hidden images');
     time.runAtSpeed(FAST);
     await animationsSettled();
-    assert.equal(currentURL(), '/hero');
+    assert.equal(currentURL(), '/dev/hero');
   });
 
   test('index to detail with interruption', async function(assert) {
-    await visit('/hero');
+    await visit('/dev/hero');
     time.pause();
     click('.hero-list-image');
     await time.advance(50);
     let beforeInterruption = document.querySelector('.hero-detail-image').getBoundingClientRect();
-    let back = visit('/hero');
+    let back = visit('/dev/hero');
     await time.advance(0);
     let afterInterruption = document.querySelector('.hero-detail-image').getBoundingClientRect();
     assert.equalBounds(afterInterruption, beforeInterruption, "visual continuity at interruption")
     time.runAtSpeed(FAST);
     await back;
-    assert.equal(currentURL(), '/hero');
+    assert.equal(currentURL(), '/dev/hero');
   });
 
 

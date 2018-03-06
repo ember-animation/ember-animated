@@ -18,14 +18,14 @@ module('Acceptance | bind', function(hooks) {
   });
 
   test('visiting /bind', async function(assert) {
-    await visit('/bind');
-    assert.equal(currentURL(), '/bind');
+    await visit('/dev/bind');
+    assert.equal(currentURL(), '/dev/bind');
   });
 
   test('clicking the button', async function(assert) {
     let number;
 
-    await visit('/bind');
+    await visit('/dev/bind');
     number = parseInt(this.element.querySelector('.left-count').textContent);
 
     await click(findByText(this.element, 'button', '+'));

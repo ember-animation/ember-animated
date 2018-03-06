@@ -15,13 +15,13 @@ module('Acceptance | inline text', function(hooks) {
 
 
   test('visiting /inline-text', async function(assert) {
-    await visit('/inline-text');
-    assert.equal(currentURL(), '/inline-text');
+    await visit('/dev/inline-text');
+    assert.equal(currentURL(), '/dev/inline-text');
   });
 
   test('/inline-text first transition', async function(assert) {
     assert.expect(0);
-    await visit('/inline-text');
+    await visit('/dev/inline-text');
     time = new TimeControl();
     time.runAtSpeed(40);
     await click(this.element.querySelector('button'));
@@ -30,7 +30,7 @@ module('Acceptance | inline text', function(hooks) {
 
   test('/inline-text second transition', async function(assert) {
     assert.expect(0);
-    await visit('/inline-text');
+    await visit('/dev/inline-text');
     time = new TimeControl();
     time.runAtSpeed(40);
     await click(this.element.querySelector('button'));

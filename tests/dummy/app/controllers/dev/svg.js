@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import moveCircle from '../motions/move-circle';
+import moveCircle from 'dummy/motions/move-circle';
 
 export default Controller.extend({
   bubbles: computed(function() {

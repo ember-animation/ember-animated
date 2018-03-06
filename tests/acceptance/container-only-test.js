@@ -6,7 +6,7 @@ module('Acceptance | container only', function(hooks) {
   setupApplicationTest(hooks);
 
   test('visiting /container-only', async function(assert) {
-    await visit('/container-only');
-    assert.equal(currentURL(), '/container-only');
+    await visit('/dev/container-only');
+    assert.equal(currentURL(), '/dev/container-only');
   });
 });

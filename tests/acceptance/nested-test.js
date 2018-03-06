@@ -6,7 +6,7 @@ module('Acceptance | nested', function(hooks) {
   setupApplicationTest(hooks);
 
   test('visiting /nested', async function(assert) {
-    await visit('/nested');
-    assert.equal(currentURL(), '/nested');
+    await visit('/dev/nested');
+    assert.equal(currentURL(), '/dev/nested');
   });
 });
