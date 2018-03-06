@@ -147,12 +147,6 @@
     background-color: blue;
 }
 
-.scenario-beacon {
-    position: absolute;
-    top: 30%;
-    left: 10%;
-}
-
 .scenario-beacon-modal {
     position: absolute;
     left: 30%;
