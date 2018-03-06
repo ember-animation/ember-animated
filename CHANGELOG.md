@@ -1,4 +1,4 @@
-# master
+# 0.1.0
 
  - BREAKING: removed waitForAnimations in favor of animationsSettled. It works better with new style async Ember tests.
  - BREAKING: transitions now received the TransitionContext as an argument instead of as `this`.
