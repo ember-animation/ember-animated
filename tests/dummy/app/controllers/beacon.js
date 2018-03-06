@@ -1,21 +1,14 @@
 import Controller from '@ember/controller';
 import move from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
+import { parallel } from 'ember-animated';
 
 export default Controller.extend({
   showingModal: false,
 
   transition: function * ({ receivedSprites, sentSprites }) {
-    receivedSprites.forEach(sprite => {
-      sprite.scale(sprite.initialBounds.width / sprite.finalBounds.width, sprite.initialBounds.height / sprite.finalBounds.height);
-      scale(sprite);
-      move(sprite);
-    });
-
-    sentSprites.forEach(sprite => {
-      scale(sprite);
-      move(sprite);
-    });
+    receivedSprites.forEach(parallel(scale, move));
+    sentSprites.forEach(parallel(scale, move));
   },
 
   actions: {

@@ -10,9 +10,7 @@ export default Controller.extend({
       move(sprite);
     });
 
-    keptSprites.forEach(sprite => {
-      move(sprite);
-    });
+    keptSprites.forEach(move);
 
     removedSprites.forEach(sprite => {
       // the 0.8 here is purely so I can easily see that the elements

@@ -228,3 +228,31 @@ function cancelGenerator(generator) {
 function isPromise(thing) {
   return thing && typeof thing.then === 'function';
 }
+
+// composes several promise-returning functions into a single
+// promise-returning function that executes all in parallel.
+//
+// This allows point-free style, like:
+//   sprites.forEach(parallel(move, scale)).
+//
+export function parallel(...functions) {
+  return function(...args) {
+    return Promise.all(functions.map(f => f.apply(this, args)));
+  }
+}
+
+// composes several promise-returning functions into a single
+// promise-returning function that executes all in series.
+//
+// This allows point-free style, like:
+//   sprites.forEach(serial(scale, move)).
+//
+export function serial(...functions) {
+  return function (...args) {
+    return spawnChild(function * () {
+      for (let fn of functions) {
+        yield fn.apply(this, args);
+      }
+    });
+  };
+}

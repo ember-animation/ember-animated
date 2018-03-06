@@ -121,10 +121,12 @@ export default class Sprite {
       this.measureInitialBounds();
       this._finalOpacity = null;
       this._finalBounds = null;
+      this._originalFinalBounds = null;
       this._finalPosition = null;
     } else {
       this._initialOpacity = null;
       this._initialBounds = null;
+      this._originalInitialBounds = null;
       this._initialPosition = null;
       this.measureFinalBounds();
     }
@@ -184,6 +186,23 @@ export default class Sprite {
   // This is mostly intended for use with SVG, where you can say things like getFinalDimension('x')
   getFinalDimension(name) {
     return this._finalPosition[name];
+  }
+
+  // Some things methods (like startAtSprite, startAtPixel, etc) can
+  // set or alter the initialBounds. This gives you access to the
+  // original value (which may be undefined if this sprite didn't have
+  // any initial bounds, which is the case for newly inserted
+  // sprites).
+  get originalInitialBounds() {
+    return this._originalInitialBounds;
+  }
+
+  // Some things (like endAtSprite) can alter the finalBounds. This
+  // gives you access to the original value (which may be undefined if
+  // the sprite didn't have any final bounds, which is the case for
+  // removedSprites).
+  get originalFinalBounds() {
+    return this._originalFinalBounds;
   }
 
   // TODO: this is used only in tests, and it's a temptation toward DOM thrashing. Remove it.
@@ -258,6 +277,7 @@ export default class Sprite {
     }
     this._initialOpacity = parseFloat(getComputedStyle(this.element).opacity);
     this._initialPosition = this._getCurrentPosition();
+    this._originalInitialBounds = this._initialBounds;
   }
 
   measureFinalBounds() {
@@ -272,6 +292,7 @@ export default class Sprite {
     }
     this._finalOpacity = parseFloat(getComputedStyle(this.element).opacity);
     this._finalPosition = this._getCurrentPosition();
+    this._originalFinalBounds = this._finalBounds;
   }
 
   // this.difference('initialBounds', other, 'finalBounds') means "the
