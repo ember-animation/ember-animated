@@ -206,7 +206,13 @@ const MotionService = Service.extend({
     if (observers) {
       for (let [fn, id] of observers.entries()) {
         let child = children.find(child => child.id === id);
-        fn(child.state);
+        if (child) {
+          fn(child.state);
+        } // the else case here applies to descendants that are about
+          // to be unrendered (not animated away -- immediately
+          // dropped). They will still have an opportunity to animate
+          // too, but they do it via their own willDestroyElement
+          // hook, not the this early-warning hook.
       }
     }
 
