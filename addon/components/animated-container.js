@@ -19,6 +19,7 @@ export default Component.extend({
     this._inserted = false;
     this._startingUp = false;
     this.maybeAnimate = this.maybeAnimate.bind(this);
+    this.sprite = null;
     this.get('motionService')
       .register(this)
       .observeDescendantAnimations(this, this.maybeAnimate);
