@@ -1,9 +1,22 @@
-import { assign } from '@ember/polyfills';
 import { Motion, rAF, Tween } from '..';
 import linear from '../easings/linear';
 
 export default function opacity(sprite, opts) {
   return new Opacity(sprite, opts).run();
+}
+
+export function fadeIn(sprite, opts) {
+  let innerOpts = Object.assign({
+    to: 1
+  }, opts);
+  return opacity(sprite, innerOpts);
+}
+
+export function fadeOut(sprite, opts) {
+  let innerOpts = Object.assign({
+    to: 0
+  }, opts);
+  return opacity(sprite, innerOpts);
 }
 
 export class Opacity extends Motion {
@@ -49,17 +62,3 @@ export class Opacity extends Motion {
     }
   }
 }
-
-function _opacityClassHelper(opacityFrom, opacityTo) {
-  return class extends Opacity {
-    constructor(sprite, opts) {
-      super(sprite, assign({}, opts, {
-        from: opacityFrom,
-        to: opacityTo
-      }));
-    }
-  };
-}
-
-export const FadeIn = _opacityClassHelper(0, 1);
-export const FadeOut = _opacityClassHelper(1, 0);
