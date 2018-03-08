@@ -62,7 +62,7 @@ const MotionService = Service.extend({
   unobserveAnimations(fn) {
     let index = this._animationObservers.indexOf(fn);
     if (index !== -1) {
-      this._animationObservers.splice(fn, 1);
+      this._animationObservers.splice(index, 1);
     }
     return this;
   },
