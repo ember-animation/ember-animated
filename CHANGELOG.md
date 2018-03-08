@@ -1,3 +1,7 @@
+# master
+
+ - BREAKING: Sprite no longer has initialOpacity and finalOpacity. These are now covered by initialComputedStyle and finalComputedStyle, which are also extensible to track many other CSS properties.
+
 # 0.1.0
 
  - BREAKING: removed waitForAnimations in favor of animationsSettled. It works better with new style async Ember tests.

@@ -29,6 +29,13 @@ import {
 } from './bounds';
 
 
+export const COPIED_CSS_PROPERTIES = [
+  'opacity',
+  'font-size',
+  'color',
+  'letter-spacing'
+];
+
 const inFlight = new WeakMap();
 
 export default class Sprite {
@@ -119,12 +126,12 @@ export default class Sprite {
     this._lockedToInitialPosition = inInitialPosition;
     if (inInitialPosition) {
       this.measureInitialBounds();
-      this._finalOpacity = null;
+      this._finalComputedStyle = null;
       this._finalBounds = null;
       this._originalFinalBounds = null;
       this._finalPosition = null;
     } else {
-      this._initialOpacity = null;
+      this._initialComputedStyle = null;
       this._initialBounds = null;
       this._originalInitialBounds = null;
       this._initialPosition = null;
@@ -166,16 +173,30 @@ export default class Sprite {
     return this._finalBounds;
   }
 
-  // a Number representing this sprite's opacity at the start of the
-  // transition.
-  get initialOpacity() {
-    return this._initialOpacity;
+  // A snapshot of the sprite's computed style at the start of the
+  // transition. We don't copy every possible property, see
+  // COPIED_CSS_PROPERTIES.
+  //
+  // This is powered by getComputedStyle, so the property names and
+  // values will follow those semantics.
+  //
+  // Not every sprite will have an initialComputedStyle
+  // (`insertedSprites` do not).
+  get initialComputedStyle() {
+    return this._initialComputedStyle;
   }
 
-  // a Number representing this sprite's opacity at the end of the
-  // transition.
-  get finalOpacity() {
-    return this._finalOpacity;
+  // A snapshot of the sprite's computed style at the end of the
+  // transition. We don't copy every possible property, see
+  // COPIED_CSS_PROPERTIES.
+  //
+  // This is powered by getComputedStyle, so the property names and
+  // values will follow those semantics.
+  //
+  // Not every sprite will have a finalComputedStyle
+  // (`removedSprites` do not).
+  get finalComputedStyle() {
+    return this._finalComputedStyle;
   }
 
   // This is mostly intended for use with SVG, where you can say things like getInitialDimension('x')
@@ -275,7 +296,7 @@ export default class Sprite {
     } else {
       this._initialBounds = this.element.getBoundingClientRect();
     }
-    this._initialOpacity = parseFloat(getComputedStyle(this.element).opacity);
+    this._initialComputedStyle = copyComputedStyle(this.element);
     this._initialPosition = this._getCurrentPosition();
     this._originalInitialBounds = this._initialBounds;
   }
@@ -290,7 +311,7 @@ export default class Sprite {
     } else {
       this._finalBounds = this.element.getBoundingClientRect();
     }
-    this._finalOpacity = parseFloat(getComputedStyle(this.element).opacity);
+    this._finalComputedStyle = copyComputedStyle(this.element);
     this._finalPosition = this._getCurrentPosition();
     this._originalFinalBounds = this._finalBounds;
   }
@@ -588,7 +609,7 @@ export default class Sprite {
     let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
     this.startTranslatedBy(-diff.dx, -diff.dy);
     this._initialBounds = resizedBounds(this._initialBounds, otherSprite.initialBounds.width, otherSprite.initialBounds.height);
-    this._initialOpacity = otherSprite.initialOpacity;
+    this._initialComputedStyle = otherSprite.initialComputedStyle;
   }
 
   startAtPixel({ x, y }) {
@@ -645,7 +666,7 @@ export default class Sprite {
     let diff = otherSprite.difference('finalBounds', this, 'initialBounds');
     this.endTranslatedBy(diff.dx, diff.dy);
     this._finalBounds = resizedBounds(this._finalBounds, otherSprite.finalBounds.width, otherSprite.finalBounds.height);
-    this._finalOpacity = otherSprite.finalOpacity;
+    this._finalComputedStyle = otherSprite.finalComputedStyle;
   }
 
   endAtPixel({ x, y }) {
@@ -776,4 +797,16 @@ function setAttribute(element, attrName, values) {
   } else {
     element.removeAttribute(attrName);
   }
+}
+
+// getComputedStyle returns a *live* CSSStyleDeclaration that will
+// keep changing as the element changes. So we use this to copy off a
+// snapshot of the properties we potentially care about.
+function copyComputedStyle(element) {
+  let computed = getComputedStyle(element);
+  let output = Object.create(null);
+  for (let property of COPIED_CSS_PROPERTIES) {
+    output[property] = computed[property];
+  }
+  return output;
 }

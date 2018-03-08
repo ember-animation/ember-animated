@@ -719,7 +719,7 @@ module("Unit | Sprite", function(hooks) {
     let m = Sprite.positionedEndingAt(target[0], parent);
     m.startAtSprite(externalSprite);
 
-    assert.ok(Math.abs(m.initialOpacity - 0.3) < 0.01, 'opacity differs by less than 1%');
+    assert.ok(Math.abs(parseFloat(m.initialComputedStyle.opacity) - 0.3) < 0.01, 'opacity differs by less than 1%');
   });
 
   test("startAtSprite moves into correct position, even when we already had initialBounds", function(assert) {

@@ -37,7 +37,7 @@ export class Opacity extends Motion {
   */
   * animate() {
     let { sprite, duration, opts } = this;
-    let to = opts.to != null ? opts.to : sprite.finalOpacity != null ? sprite.finalOpacity : 1;
+    let to = opts.to != null ? opts.to : sprite.finalComputedStyle != null ? parseFloat(sprite.finalComputedStyle.opacity) : 1;
     let from;
 
     if (this.prior) {
@@ -48,7 +48,7 @@ export class Opacity extends Motion {
     } else {
       // otherwise we start at the user-provided option, the sprite's
       // found initial opacity, or zero, in that priority order.
-      from = opts.from != null ? opts.from : sprite.initialOpacity != null ? sprite.initialOpacity : 0;
+      from = opts.from != null ? opts.from : sprite.initialComputedStyle != null ? parseFloat(sprite.initialComputedStyle.opacity) : 0;
     }
 
     let proportionalDuration = Math.abs(from - to) * duration;
