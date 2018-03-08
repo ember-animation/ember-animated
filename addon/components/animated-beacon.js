@@ -72,6 +72,6 @@ export default Component.extend({
       [],
       [outboundSprite]
     );
-  })
+  }).restartable()
 
 });
