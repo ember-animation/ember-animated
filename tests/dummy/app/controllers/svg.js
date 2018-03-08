@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import moveCircle from '../motions/move-circle';
+import moveSVG from 'ember-animated/motions/move-svg';
+import { parallel } from 'ember-animated';
 
 export default Controller.extend({
   bubbles: computed(function() {
@@ -17,7 +18,13 @@ export default Controller.extend({
   }),
 
   moveThem: function * ({ keptSprites }) {
-    keptSprites.forEach(moveCircle);
+    keptSprites.forEach(
+      parallel(
+        moveSVG.property('cx'),
+        moveSVG.property('cy'),
+        moveSVG.property('r')
+      )
+    );
   },
 
   actions: {
