@@ -1,4 +1,4 @@
-import { ownTransform } from 'ember-animated/-private/transform';
+import { cumulativeTransform } from 'ember-animated/-private/transform';
 
 export function approxEqualPixels(value, expected, message) {
   // Tolerate errors less than a quarter pixels. This prevents any invisible rounding errors from failing our tests.
@@ -46,9 +46,9 @@ function equalShape(value, expected, message) {
 }
 
 function constantShape(target, fn, message = 'shape should not change') {
-  let before = ownTransform(target[0]);
+  let before = cumulativeTransform(target[0]);
   fn();
-  let after = ownTransform(target[0]);
+  let after = cumulativeTransform(target[0]);
   equalShape.call(this, after, before, message);
 }
 

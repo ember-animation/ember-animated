@@ -2,6 +2,7 @@ import { getContext } from '@ember/test-helpers';
 import { resolve } from 'rsvp';
 import { run } from '@ember/runloop';
 import { relativeBounds } from 'ember-animated/-private/bounds';
+import { cumulativeTransform } from 'ember-animated/-private/transform';
 import TimeControl from './time-control';
 
 export { TimeControl };
@@ -23,14 +24,41 @@ export function bounds(element) {
   return relativeBounds(element.getBoundingClientRect(), document.querySelector('#ember-testing').getBoundingClientRect());
 }
 
-function checkFields(fields, tolerance, value, expected, message) {
-  this.pushResult({
+// This gives you the linear part of the cumulative transformations
+// applies to the element, which together form a 2x2 matrix that
+// determines its shape.
+export function shape(element) {
+  let transform = cumulativeTransform(element);
+  return {
+    a: transform.a,
+    b: transform.b,
+    c: transform.c,
+    d: transform.d
+  }
+}
 
+function checkFields(fields, tolerance, value, expected, message) {
+
+  let filteredActual = Object.create(null);
+  let filteredExpected = Object.create(null);
+  fields.forEach(field => {
+    filteredActual[field] = value[field];
+    filteredExpected[field] = expected[field];
+  });
+
+  this.pushResult({
     result: fields.every(field => Math.abs(value[field] - expected[field]) < tolerance),
-    actual: value,
-    expected: expected,
+    actual: filteredActual,
+    expected: filteredExpected,
     message: message
   });
+}
+
+export async function visuallyConstant(target, fn, message) {
+  let before = Object.assign({}, bounds(target), shape(target));
+  await fn();
+  let after = Object.assign({}, bounds(target), shape(target));
+  checkFields.call(this, ['a', 'b', 'c', 'd', 'top', 'left', 'width', 'height'], 0.25, before, after, message);
 }
 
 export let time;
@@ -49,6 +77,8 @@ export function setupAnimationTest(hooks) {
     assert.closePosition = checkFields.bind(assert, ['left', 'top']);
     assert.closeSize = checkFields.bind(assert, ['height', 'width'])
     assert.closeBounds = checkFields.bind(assert, ['height', 'left', 'top', 'width']);
+
+    assert.visuallyConstant = visuallyConstant;
 
   });
   hooks.afterEach(function() {

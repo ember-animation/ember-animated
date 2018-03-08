@@ -1,19 +1,23 @@
 import { module, test, skip } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { ownTransform } from 'ember-animated/-private/transform';
+import { shiftedBounds } from 'ember-animated/-private/bounds';
 import Sprite from 'ember-animated/-private/sprite';
 import hbs from 'htmlbars-inline-precompile';
 import $ from 'jquery';
-import { bounds } from 'ember-animated/test-support';
+import { bounds, setupAnimationTest } from 'ember-animated/test-support';
+import { render } from '@ember/test-helpers';
 import {
   equalBounds,
   visuallyConstant,
   approxEqualPixels,
 } from '../helpers/assertions';
 
-let environment, offsetParent, intermediate, target, innerContent, external, priorSibling;
 
 module("Unit | Sprite", function(hooks) {
+
+  let environment, offsetParent, intermediate, target, innerContent, external, priorSibling;
+
 
   hooks.beforeEach(function(assert) {
     assert.visuallyConstant = visuallyConstant;
@@ -805,7 +809,6 @@ module("Unit | Sprite", function(hooks) {
   });
 
 
-
   skip("polyfills WeakMap as needed (and remember to adjust eslint config)", function(assert) {
     assert.ok(false);
   });
@@ -851,15 +854,10 @@ module("Unit | Sprite", function(hooks) {
   }
 });
 
-module("Unit | Sprite | rendering", function(hooks) {
+module("Unit | Sprite", function(hooks) {
   setupRenderingTest(hooks);
+  setupAnimationTest(hooks);
 
-
-  hooks.beforeEach(function(assert) {
-    assert.visuallyConstant = visuallyConstant;
-    assert.equalBounds = equalBounds;
-    assert.approxEqualPixels = approxEqualPixels;
-  });
 
   test("svg elements can use the top <svg> tag as their offset parent", async function(assert) {
 
@@ -922,7 +920,7 @@ module("Unit | Sprite | rendering", function(hooks) {
 
     let initialBounds = bounds(target);
 
-    assert.visuallyConstant([target], () => {
+    await assert.visuallyConstant(target, () => {
       sprite.lock();
     });
 
@@ -942,8 +940,14 @@ module("Unit | Sprite | rendering", function(hooks) {
       'locking brings it back into initial position'
     );
 
-    assert.approxEqualPixels(sprite.initialBounds.height + 8, sprite.finalBounds.height, 'height');
-    assert.approxEqualPixels(sprite.initialBounds.width + 5, sprite.finalBounds.width, 'width');
+    assert.equalSize(
+      {
+        width: sprite.initialBounds.width + 5,
+        height: sprite.initialBounds.height + 8
+      },
+      sprite.finalBounds,
+      'measured bounds show the size change'
+    );
 
   });
 
@@ -961,7 +965,7 @@ module("Unit | Sprite | rendering", function(hooks) {
 
     let initialBounds = bounds(target);
 
-    assert.visuallyConstant([target], () => {
+    await assert.visuallyConstant(target, () => {
       sprite.lock();
     });
 
@@ -981,8 +985,12 @@ module("Unit | Sprite | rendering", function(hooks) {
       'locking brings it back into initial position'
     );
 
-    assert.approxEqualPixels(sprite.initialBounds.top - 10, sprite.finalBounds.top, 'top');
-    assert.approxEqualPixels(sprite.initialBounds.left + 20, sprite.finalBounds.left, 'left');
+    assert.equalBounds(
+      shiftedBounds(sprite.initialBounds, 20, -10),
+      sprite.finalBounds,
+      'measured bounds show the position change'
+    );
+
 
   });
 
@@ -1000,7 +1008,7 @@ module("Unit | Sprite | rendering", function(hooks) {
 
     let initialBounds = bounds(target);
 
-    assert.visuallyConstant([target], () => {
+    await assert.visuallyConstant(target, () => {
       sprite.lock();
     });
 
@@ -1020,9 +1028,11 @@ module("Unit | Sprite | rendering", function(hooks) {
       'locking brings it back into initial position'
     );
 
-    assert.approxEqualPixels(sprite.initialBounds.top - 10, sprite.finalBounds.top, 'top');
-    assert.approxEqualPixels(sprite.initialBounds.left + 20, sprite.finalBounds.left, 'left');
-
+    assert.equalBounds(
+      shiftedBounds(sprite.initialBounds, 20, -10),
+      sprite.finalBounds,
+      'measured bounds detect the change'
+    );
   });
 
   test("SVG circle with manipulated radius", async function(assert) {
@@ -1039,7 +1049,7 @@ module("Unit | Sprite | rendering", function(hooks) {
 
     let initialBounds = bounds(target);
 
-    assert.visuallyConstant([target], () => {
+    await assert.visuallyConstant(target, () => {
       sprite.lock();
     });
 
@@ -1058,9 +1068,11 @@ module("Unit | Sprite | rendering", function(hooks) {
       'locking brings it back into initial position'
     );
 
-    assert.approxEqualPixels(sprite.initialBounds.width + 20, sprite.finalBounds.width, 'width');
-    assert.approxEqualPixels(sprite.initialBounds.height + 20, sprite.finalBounds.height, 'height');
-
+    assert.equalSize(
+      { width: sprite.initialBounds.width + 20, height: sprite.initialBounds.height + 20 },
+      sprite.finalBounds,
+      'measured bounds detect the change'
+    );
   });
 
   test("can read initial and final SVG dimensions", async function(assert) {
@@ -1088,6 +1100,60 @@ module("Unit | Sprite | rendering", function(hooks) {
     assert.equal(sprite.getFinalDimension('cx'), 120, 'cx final');
 
   });
+
+  test("rehome a sprite out of a scaled and translated parent", async function(assert) {
+    await render(hbs`
+      <div class="sibling" style="position: relative"></div>
+      <div class="intermediate" style="position: relative; transform: translateX(65px) translateY(75px) scale(0.55)">
+        <div class="target">This is some content</div>
+      </div>
+`);
+
+    // we're going to move the target from being relative to
+    // intermediate to being relative to sibling
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+
+    let destination = new Sprite(this.element.querySelector('.sibling'), true);
+
+    await assert.visuallyConstant(target, async () => {
+      sprite.rehome(destination);
+      destination.element.appendChild(target);
+      sprite.lock();
+    }, 'target bounds');
+  });
+
+  skip("rehome a sprite within a shared scaled and translated context", async function(assert) {
+    await render(hbs`
+      <div class="environment" style="transform: translateX(65px) translateY(75px) scale(0.55)">
+        <div class="sibling" style="position: relative"></div>
+        <div class="intermediate" style="position: relative">
+          <div class="target">This is some content</div>
+       </div>
+      </div>
+`);
+
+    // we're going to move the target from being relative to
+    // intermediate to being relative to sibling
+
+    let target = this.element.querySelector('.target');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+
+    let destination = new Sprite(this.element.querySelector('.sibling'), true);
+
+    await assert.visuallyConstant(target, async () => {
+      sprite.rehome(destination);
+      destination.element.appendChild(target);
+      sprite.lock();
+    }, 'target bounds');
+  });
+
+
 
 
 });
