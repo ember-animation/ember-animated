@@ -76,7 +76,7 @@ const MotionService = Service.extend({
   unobserveDescendantAnimations(component, fn) {
     let index = this._descendantObservers.find(e => e.component === component && e.fn === fn);
     if (index !== -1) {
-      this._descendantObservers.splice(fn, 1);
+      this._descendantObservers.splice(index, 1);
     }
     return this;
   },
