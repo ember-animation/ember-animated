@@ -46,9 +46,6 @@ function removeWaiter() {
 
 let nextFrame;
 let nextFrameWaiters = [];
-if (typeof requestAnimationFrame === 'undefined') {
-  throw new Error("missing requestAnimationFrame");
-}
 
 // rAF guarantees that callbacks within the same frame will see the
 // same clock. We stash it here so that arbitrary code can easily ask

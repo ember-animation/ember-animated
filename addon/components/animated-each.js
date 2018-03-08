@@ -145,7 +145,7 @@ export default Component.extend({
     );
     this._renderedChildren = newChildren;
 
-    if (!isStable(oldSignature, newSignature)) {
+    if (typeof FastBoot === 'undefined' && !isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
       this.get('animate').perform(transition, firstTime);
     }
