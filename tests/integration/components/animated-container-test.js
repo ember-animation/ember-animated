@@ -5,13 +5,13 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { current } from 'ember-animated/-private/scheduler';
 import { Motion, afterRender, wait } from 'ember-animated';
-import { animationsSettled, bounds as _bounds } from 'ember-animated/test-support';
+import { setupAnimationTest, time, animationsSettled, bounds as _bounds } from 'ember-animated/test-support';
 
 module('Integration | Component | animated container', function(hooks) {
   setupRenderingTest(hooks);
@@ -419,4 +419,71 @@ module('Integration | Component | animated container', function(hooks) {
   function height($elt) {
     return bounds($elt).height;
   }
+});
+
+module('Integration | Component | animated container', function(hooks) {
+  setupRenderingTest(hooks);
+  setupAnimationTest(hooks);
+
+  test("has visual continuity at start", async function(assert) {
+    this.set('transition', function * () {});
+    await this.render(hbs`
+      {{#animated-container}}
+        {{#animated-if showThing use=transition duration=1000}}
+          <div>Content</div>
+        {{/animated-if}}
+      {{/animated-container}}
+    `);
+    await animationsSettled();
+    let before = _bounds(this.element.querySelector('.animated-container'));
+    time.pause();
+    this.set('showThing', true);
+    await settled();
+    await time.advance(10);
+    let after = _bounds(this.element.querySelector('.animated-container'));
+    assert.closeSize(5, after, before);
+  });
+
+  test("has visual continuity at end", async function(assert) {
+    this.set('transition', function * () {});
+    await this.render(hbs`
+      {{#animated-container}}
+        {{#animated-if showThing use=transition duration=1000}}
+          <div>Content</div>
+        {{/animated-if}}
+      {{/animated-container}}
+    `);
+    await animationsSettled();
+    time.pause();
+    this.set('showThing', true);
+    await settled();
+    await time.advance(990);
+    let before = _bounds(this.element.querySelector('.animated-container'));
+    time.runAtSpeed(40);
+    await animationsSettled();
+    let after = _bounds(this.element.querySelector('.animated-container'));
+    assert.closeSize(5, after, before);
+  });
+
+  test("has visual continuity at start when inside scaling", async function(assert) {
+    this.set('transition', function * () {});
+    await this.render(hbs`
+      <div style="transform: scale(0.5)">
+        {{#animated-container}}
+          {{#animated-if showThing use=transition duration=1000}}
+            <div>Content</div>
+          {{/animated-if}}
+        {{/animated-container}}
+      </div>
+    `);
+    await animationsSettled();
+    let before = _bounds(this.element.querySelector('.animated-container'));
+    time.pause();
+    this.set('showThing', true);
+    await settled();
+    await time.advance(10);
+    let after = _bounds(this.element.querySelector('.animated-container'));
+    assert.closeSize(5, after, before);
+  });
+
 });
