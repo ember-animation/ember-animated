@@ -58,14 +58,34 @@ export function microwait() {
 }
 
 export function wait(ms=0) {
-  let ticket;
-  let promise = new RSVP.Promise(resolve => {
-    ticket = setTimeout(resolve, ms);
-  });
-  promise.__ec_cancel__ = () => {
-    clearTimeout(ticket);
-  };
-  return promise;
+  if (clock.now === originalClock) {
+    let ticket;
+    let promise = new RSVP.Promise(resolve => {
+      ticket = setTimeout(resolve, ms);
+    });
+    promise.__ec_cancel__ = () => {
+      clearTimeout(ticket);
+    };
+    return promise;
+  } else {
+    let canceled = false;
+    let started = clock.now();
+    let promise = new RSVP.Promise(resolve => {
+      function checkIt() {
+        if (!canceled) {
+          if (clock.now() - started > ms) {
+            resolve();
+          }
+          rAF().then(checkIt);
+        }
+      }
+      checkIt();
+    });
+    promise.__ec_cancel__ = () => {
+      canceled = true;
+    };
+    return promise;
+  }
 }
 
 
@@ -87,6 +107,8 @@ export let clock = {
     return (new Date()).getTime();
   }
 }
+
+const originalClock = clock.now;
 
 export function allSettled(promises) {
   return Promise.all(promises.map(p => {
