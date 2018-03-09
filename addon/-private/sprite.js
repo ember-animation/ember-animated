@@ -161,6 +161,18 @@ export default class Sprite {
     return this._initialBounds;
   }
 
+  // like initialBounds, but relative to the screen, not the offset
+  // parent. Most of the time you *don't* want this one, because your
+  // motion will be more robust to ancestor motion if you do
+  // everything in relative terms.
+  get absoluteInitialBounds() {
+    if (this._offsetSprite) {
+      return shiftedBounds(this._initialBounds, this._offsetSprite.initialBounds.left, this._offsetSprite.initialBounds.top);
+    } else {
+      return this._initialBounds;
+    }
+  }
+
   // A DOMRect representing the place where this sprite will end the
   // transition. Not every sprite has finalBounds (a sprite that is
   // about to be destroyed will not -- it will only have
@@ -175,6 +187,19 @@ export default class Sprite {
   get finalBounds() {
     return this._finalBounds;
   }
+
+  // like initialBounds, but relative to the screen, not the offset
+  // parent. Most of the time you *don't* want this one, because your
+  // motion will be more robust to ancestor motion if you do
+  // everything in relative terms.
+  get absoluteFinalBounds() {
+    if (this._offsetSprite) {
+      return shiftedBounds(this._finalBounds, this._offsetSprite.finalBounds.left, this._offsetSprite.finalBounds.top);
+    } else {
+      return this._finalBounds;
+    }
+  }
+
 
   // A snapshot of the sprite's computed style at the start of the
   // transition. We don't copy every possible property, see
@@ -602,7 +627,7 @@ export default class Sprite {
   // Adjust the sprite so it will still be in the same visual position
   // despite being moved into a new offset parent.
   rehome(newOffsetSprite) {
-    let screenBounds = shiftedBounds(this._initialBounds, this._offsetSprite.initialBounds.left, this._offsetSprite.initialBounds.top);
+    let screenBounds = this.absoluteInitialBounds;
     let newRelativeBounds = shiftedBounds(screenBounds, -newOffsetSprite.initialBounds.left, -newOffsetSprite.initialBounds.top);
 
     let initialAmbientTransform = this._offsetSprite.cumulativeTransform;
