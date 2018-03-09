@@ -85,6 +85,7 @@ export default class Sprite {
     this.__$element = null;
     this.owner = null;
     this._transform = null;
+    this._cumulativeTransform = null;
     this._offsetSprite = offsetSprite;
 
     // This gets set by TransitionContext when a sprite is used within
@@ -130,11 +131,13 @@ export default class Sprite {
       this._finalBounds = null;
       this._originalFinalBounds = null;
       this._finalPosition = null;
+      this._finalCumulativeTransform = null;
     } else {
       this._initialComputedStyle = null;
       this._initialBounds = null;
       this._originalInitialBounds = null;
       this._initialPosition = null;
+      this._initialCumulativeTransform = null;
       this.measureFinalBounds();
     }
 
@@ -207,6 +210,19 @@ export default class Sprite {
   // This is mostly intended for use with SVG, where you can say things like getFinalDimension('x')
   getFinalDimension(name) {
     return this._finalPosition[name];
+  }
+
+  // analogous to initialBounds, this is a snapshot of the cumulative
+  // effect of all transforms on this sprite at the start of
+  // animation.
+  get initialCumulativeTransform() {
+    return this._initialCumulativeTransform;
+  }
+
+  // analogous to finalBounds, this is a snapshot of the cumulative
+  // effect of all transforms on this sprite at the end of animation.
+  get finalCumulativeTransform() {
+    return this._finalCumulativeTransform;
   }
 
   // Some things methods (like startAtSprite, startAtPixel, etc) can
@@ -299,6 +315,7 @@ export default class Sprite {
     this._initialComputedStyle = copyComputedStyle(this.element);
     this._initialPosition = this._getCurrentPosition();
     this._originalInitialBounds = this._initialBounds;
+    this._initialCumulativeTransform = cumulativeTransform(this.element);
   }
 
   measureFinalBounds() {
@@ -314,6 +331,7 @@ export default class Sprite {
     this._finalComputedStyle = copyComputedStyle(this.element);
     this._finalPosition = this._getCurrentPosition();
     this._originalFinalBounds = this._finalBounds;
+    this._finalCumulativeTransform = cumulativeTransform(this.element);
   }
 
   // this.difference('initialBounds', other, 'finalBounds') means "the
@@ -362,6 +380,17 @@ export default class Sprite {
       this._transform = ownTransform(this.element);
     }
     return this._transform;
+  }
+
+  // This is different from `this.transform` because it's the product
+  // of our own transform and all ancestor transforms. It's what you
+  // need if you want to understand how many real screen pixels there
+  // are to every local pixel in the sprite.
+  get cumulativeTransform() {
+    if (!this._cumulativeTransform) {
+      this._cumulativeTransform = cumulativeTransform(this.element);
+    }
+    return this._cumulativeTransform;
   }
 
   get revealed() {
@@ -576,8 +605,8 @@ export default class Sprite {
     let screenBounds = shiftedBounds(this._initialBounds, this._offsetSprite.initialBounds.left, this._offsetSprite.initialBounds.top);
     let newRelativeBounds = shiftedBounds(screenBounds, -newOffsetSprite.initialBounds.left, -newOffsetSprite.initialBounds.top);
 
-    let initialAmbientTransform = cumulativeTransform(this._offsetSprite.element);
-    let finalAmbientTransform = cumulativeTransform(newOffsetSprite.element);
+    let initialAmbientTransform = this._offsetSprite.cumulativeTransform;
+    let finalAmbientTransform = newOffsetSprite.cumulativeTransform;
 
     let t = this.transform;
     t = t.mult(new Transform(initialAmbientTransform.a / finalAmbientTransform.a, 0, 0, initialAmbientTransform.d / finalAmbientTransform.d, (newRelativeBounds.left - t.tx)/t.a, (newRelativeBounds.top - t.ty)/t.d));
@@ -613,6 +642,7 @@ export default class Sprite {
     this.startTranslatedBy(-diff.dx, -diff.dy);
     this._initialBounds = resizedBounds(this._initialBounds, otherSprite.initialBounds.width, otherSprite.initialBounds.height);
     this._initialComputedStyle = otherSprite.initialComputedStyle;
+    this._initialCumulativeTransform = otherSprite.initialCumulativeTransform;
   }
 
   startAtPixel({ x, y }) {
@@ -670,6 +700,7 @@ export default class Sprite {
     this.endTranslatedBy(diff.dx, diff.dy);
     this._finalBounds = resizedBounds(this._finalBounds, otherSprite.finalBounds.width, otherSprite.finalBounds.height);
     this._finalComputedStyle = otherSprite.finalComputedStyle;
+    this._finalCumulativeTransform = otherSprite.finalCumulativeTransform;
   }
 
   endAtPixel({ x, y }) {
