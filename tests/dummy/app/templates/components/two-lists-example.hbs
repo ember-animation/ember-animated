@@ -1,22 +1,31 @@
 <div class="scenario-two-lists">
+  {{animated-orphans}}
   <div class="controls">
     <label>Bounce back {{input type="checkbox" checked=bounceBack}}</label>
   </div>
 
   {{#animated-container}}
     {{#animated-each leftItems use=transition as |item|}}
-      <div>
+      <div class="flyer" {{action "move" item}}>
         {{item.id}}
-        <button {{action "move" item}}>&rarr;</button>
+        {{#animated-container}}
+          {{#animated-value item group="arrow" use=faceLeft}}
+            <div>&rarr;</div>
+          {{/animated-value}}
+        {{/animated-container}}
       </div>
     {{/animated-each}}
   {{/animated-container}}
 
   {{#animated-container}}
     {{#animated-each rightItems use=transition as |item|}}
-      <div>
-        <button {{action "move" item}}>&larr;</button>
+      <div class="flyer" {{action "move" item}}>
         {{item.id}}
+        {{#animated-container}}
+          {{#animated-value item group="arrow" use=faceRight}}
+            <div style="transform: rotate(180deg)">&rarr;</div>
+          {{/animated-value}}
+        {{/animated-container}}
       </div>
     {{/animated-each}}
   {{/animated-container}}

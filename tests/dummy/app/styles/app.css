@@ -12,6 +12,19 @@
     border: 1px solid red;
 }
 
+.scenario-two-lists .flyer {
+    width: 3em;
+    height: 3em;
+    border: 1px solid black;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    margin-bottom: 2px;
+}
+
 .scenario-two-lists > .animated-container {
     width:40%;
     float: left;

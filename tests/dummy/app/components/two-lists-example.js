@@ -2,11 +2,13 @@ import { later } from '@ember/runloop';
 import { computed } from '@ember/object';
 import Component from '@ember/component';
 import move from 'ember-animated/motions/move';
+import { printSprites } from 'ember-animated';
+import rotate from '../motions/rotate';
 
 export default Component.extend({
   bounceBack: false,
 
-  transition: function * ({ keptSprites, sentSprites, receivedSprites }) {
+  transition: function * ({ keptSprites, sentSprites }) {
     // The parts of each list that haven't changed moves to accomodate
     // inserted and removed peers
     keptSprites.forEach(move);
@@ -14,16 +16,15 @@ export default Component.extend({
     // Elements that are leaving our list get animated into their new
     // positions in the other list.
     sentSprites.forEach(move);
+  },
 
-    // Elements that are arriving in our list don't animate (the other
-    // list's sentSprites will animate instead). But we want them to
-    // start in their final position so that when they're revealed
-    // they're already in the right place.
-    //
-    // Without this, they would get the default behavior for
-    // receivedSprites, which is starting at the same location as the
-    // corresponding element in the other list.
-    receivedSprites.forEach(sprite => sprite.moveToFinalPosition());
+
+  faceRight: function * (context) {
+    yield * turn(1, context);
+  },
+
+  faceLeft: function * (context) {
+    yield * turn(-1, context);
   },
 
   leftItems: computed({
@@ -76,4 +77,15 @@ function numeric(a,b) { return a.id - b.id; }
 
 function makeRandomItem() {
   return { id: Math.round(Math.random()*1000) };
+}
+
+function * turn (direction, { sentSprites }) {
+  printSprites(arguments[1]);
+  sentSprites.forEach(sprite => {
+    sprite.applyStyles({
+      zIndex: 1
+    });
+    move(sprite);
+    rotate(sprite, { direction });
+  });
 }
