@@ -292,7 +292,7 @@ export default class Sprite {
         width: getSVGLength(element, 'width'),
         height: getSVGLength(element, 'height'),
         transform: element.getAttribute('transform')
-      }
+      };
     } else {
       let style = this.element.style;
       return {
@@ -465,7 +465,7 @@ export default class Sprite {
           offsets = findOffsets(this.element, computedStyle, this.transform, this._offsetSprite);
       }
       return offsets;
-    }
+    };
   }
 
   _rememberPosition() {

@@ -544,7 +544,7 @@ export default Component.extend({
   },
 
   _transitionFor(firstTime, oldItems, newItems) {
-    let rules = this.get('rules')
+    let rules = this.get('rules');
     if (rules) {
       return rules({firstTime, oldItems, newItems});
     } else {

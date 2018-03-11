@@ -62,7 +62,7 @@ module('Integration | Component | animated container', function(hooks) {
           component: this
         });
         yield afterRender();
-        yield * service.staticMeasurement(() => {})
+        yield * service.staticMeasurement(() => {});
         this.$().height(this.finalHeight);
         if (opts.block) {
           yield opts.block;

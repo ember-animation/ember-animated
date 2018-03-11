@@ -106,7 +106,7 @@ export let clock = {
   now() {
     return (new Date()).getTime();
   }
-}
+};
 
 const originalClock = clock.now;
 

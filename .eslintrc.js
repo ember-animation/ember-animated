@@ -16,7 +16,8 @@ module.exports = {
   },
   rules: {
     'no-constant-condition': ["error", { checkLoops: false }],
-    'require-yield': 0
+    'require-yield': 0,
+    semi: ["error", "always"]
   },
   globals: {
     WeakMap: false,

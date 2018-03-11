@@ -69,7 +69,7 @@ module('Acceptance | hero', function(hooks) {
     let back = visit('/hero');
     await time.advance(0);
     let afterInterruption = document.querySelector('.hero-detail-image').getBoundingClientRect();
-    assert.equalBounds(afterInterruption, beforeInterruption, "visual continuity at interruption")
+    assert.equalBounds(afterInterruption, beforeInterruption, "visual continuity at interruption");
     time.runAtSpeed(FAST);
     await back;
     assert.equal(currentURL(), '/hero');

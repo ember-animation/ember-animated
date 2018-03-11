@@ -24,7 +24,7 @@ export default class Motion {
 
     this._setupMotionList();
     this._promise = new Promise((resolve, reject) => {
-      this._resolve = resolve
+      this._resolve = resolve;
       this._reject = reject;
     });
   }

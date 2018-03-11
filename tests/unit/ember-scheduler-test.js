@@ -16,7 +16,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
         expected: 'no exception thrown',
         message
       });
-    }
+    };
   });
 
   test('sanity check the runloop assertion', function(assert) {

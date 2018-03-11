@@ -34,7 +34,7 @@ export function shape(element) {
     b: transform.b,
     c: transform.c,
     d: transform.d
-  }
+  };
 }
 
 function checkFields(fields, tolerance, value, expected, message) {
@@ -70,12 +70,12 @@ export function setupAnimationTest(hooks) {
 
     // equal checks use a quarter pixel tolerance because we don't care about rounding errors
     assert.equalPosition = checkFields.bind(assert, ['left', 'top'], 0.25);
-    assert.equalSize = checkFields.bind(assert, ['height', 'width'], 0.25)
+    assert.equalSize = checkFields.bind(assert, ['height', 'width'], 0.25);
     assert.equalBounds = checkFields.bind(assert, ['height', 'left', 'top', 'width'], 0.25);
 
     // closeness checks accept a custom pixel tolerance
     assert.closePosition = checkFields.bind(assert, ['left', 'top']);
-    assert.closeSize = checkFields.bind(assert, ['height', 'width'])
+    assert.closeSize = checkFields.bind(assert, ['height', 'width']);
     assert.closeBounds = checkFields.bind(assert, ['height', 'left', 'top', 'width']);
 
     assert.visuallyConstant = visuallyConstant;

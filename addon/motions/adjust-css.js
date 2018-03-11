@@ -51,7 +51,7 @@ export class AdjustCSS extends Motion {
       return {
         value: 0,
         unit: 'px'
-      }
+      };
     }
     let m = /(\d+(?:\.\d+)?)(\w+)/.exec(s);
     if (!m) {
@@ -60,6 +60,6 @@ export class AdjustCSS extends Motion {
     return {
       value: parseFloat(m[1]),
       unit: m[2] || ''
-    }
+    };
   }
 }

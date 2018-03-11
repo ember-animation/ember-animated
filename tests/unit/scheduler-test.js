@@ -79,7 +79,7 @@ module("Unit | scheduler", function(hooks) {
       assert.log("parent finishing");
       yield child;
       return 42;
-    })
+    });
     assert.logEquals(["parent started", "child started", "parent finishing"]);
     resolve();
     return p.then(exitStatus => {
@@ -119,7 +119,7 @@ module("Unit | scheduler", function(hooks) {
       spawnChild(function * () {
         throw new Error('boom');
       }).catch(() => {
-        assert.log('catching here too') // to avoid console noise
+        assert.log('catching here too'); // to avoid console noise
       });
     }).then(() => {
       assert.logEquals(['handled message: boom', 'catching here too']);
@@ -133,7 +133,7 @@ module("Unit | scheduler", function(hooks) {
       });
       yield spawnChild(function * () {
         throw new Error('boom');
-      })
+      });
     }).catch(err => {
       assert.equal(err.message, 'boom');
       assert.logEquals(['handled message: boom']);
@@ -349,7 +349,7 @@ module("Unit | scheduler", function(hooks) {
             stop(c);
             assert.ok(true, "stop does not throw here");
             yield new Promise(() => {});
-          })
+          });
         } catch (err) {
           assert.equal(err.message, 'TaskCancelation');
           throw err;

@@ -269,7 +269,7 @@ module('Integration | Component | animated each', function(hooks) {
       return {
         id,
         comments: [{ id: `comment-${id}`}]
-      }
+      };
     }
 
     this.set('items', ['a', 'b', 'c'].map(makeItem));
@@ -305,7 +305,7 @@ module('Integration | Component | animated each', function(hooks) {
 
     this.set('items', ['a', 'c'].map(makeItem));
     await animationsSettled();
-    assert.equal(innerCounter, 1, "inner transition should run once")
+    assert.equal(innerCounter, 1, "inner transition should run once");
   });
 
   test('child animator reacts appropriately if its planned destruction is cancelled', async function(assert) {
@@ -322,7 +322,7 @@ module('Integration | Component | animated each', function(hooks) {
       return {
         id,
         comments: [{ id: `comment-${id}`}]
-      }
+      };
     }
 
     this.set('items', ['a', 'b', 'c'].map(makeItem));
@@ -380,6 +380,6 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('items', ['a', 'b', 'c'].map(makeItem));
 
     await animationsSettled();
-    assert.equal(innerCounter, 1, "inner transition should run once")
+    assert.equal(innerCounter, 1, "inner transition should run once");
   });
 });

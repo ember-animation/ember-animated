@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { toUp, toDown, toLeft, toRight } from 'ember-animated/transitions/move-over'
+import { toUp, toDown, toLeft, toRight } from 'ember-animated/transitions/move-over';
 
 export default Component.extend({
   rules({ oldItems, newItems }) {

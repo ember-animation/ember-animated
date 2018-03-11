@@ -22,10 +22,10 @@ if (DEBUG) {
             s.element.parentElement.classList.contains('animated-orphans');
         }
         return s.owner.id;
-      }).join(',')
+      }).join(',');
     }).join(" | ");
     console.log(prefix + spriteSummary +  (isOrphan ? ' | (orphan)' : ''));
-  }
+  };
 } else {
   printSprites = function(){};
 }

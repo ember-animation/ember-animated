@@ -173,12 +173,12 @@ class MicroRoutine {
           if (this.errorLogger) {
             if (!loggedErrors.get(err)) {
               loggedErrors.set(err, true);
-              this.errorLogger.call(null, err)
+              this.errorLogger.call(null, err);
             }
           }
         }
       }
-    })
+    });
   }
   stop() {
     this.stopped = true;
@@ -238,7 +238,7 @@ function isPromise(thing) {
 export function parallel(...functions) {
   return function(...args) {
     return Promise.all(functions.map(f => f.apply(this, args)));
-  }
+  };
 }
 
 // composes several promise-returning functions into a single

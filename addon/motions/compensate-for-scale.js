@@ -16,7 +16,7 @@ export class CompensateForScale extends Motion {
     let duration = this.duration;
 
     let widthFactor = sprite.finalCumulativeTransform.a / sprite.initialCumulativeTransform.a;
-    let heightFactor = sprite.finalCumulativeTransform.d / sprite.initialCumulativeTransform.d
+    let heightFactor = sprite.finalCumulativeTransform.d / sprite.initialCumulativeTransform.d;
 
     this.widthTween = new Tween(sprite.transform.a, sprite.transform.a * widthFactor, duration);
     this.heightTween = new Tween(sprite.transform.d, sprite.transform.d * heightFactor, duration);

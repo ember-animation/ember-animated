@@ -9,7 +9,7 @@ const adjust = 1/2 + 1 / Math.PI;
 
 const cutover = 1 / (2 * adjust);
 const b = (2 - Math.PI) / 4;
-const m = (Math.PI / 2) * adjust
+const m = (Math.PI / 2) * adjust;
 
 export function easeIn(t) {
   if (t < cutover) {

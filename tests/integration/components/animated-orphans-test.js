@@ -38,7 +38,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       <span class="one">One</span>
     {{/animated-value}}
   {{/if}}
-  `)
+  `);
     await animationsSettled();
 
     this.set('t1', function * ({ removedSprites }) {
@@ -63,7 +63,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       <span class="two">Two</span>
     {{/animated-value}}
   {{/if}}
-  `)
+  `);
     await animationsSettled();
 
     let unblock1, unblock2;
@@ -103,14 +103,14 @@ module('Integration | Component | animated orphans', function(hooks) {
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
-  `)
+  `);
     await animationsSettled();
 
     let firstBounds = this.$('.one')[0].getBoundingClientRect();
 
     this.set('t1', function * ({ removedSprites }) {
       assert.equal(removedSprites.length, 1, 'second transition');
-      testMotion(removedSprites[0])
+      testMotion(removedSprites[0]);
       assert.equalBounds(firstBounds, removedSprites[0].element.getBoundingClientRect());
     });
 
@@ -135,7 +135,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
-  `)
+  `);
     await animationsSettled();
 
     let counter = 0;
@@ -193,7 +193,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
-  `)
+  `);
     await animationsSettled();
 
     let t1Counter = 0;
@@ -272,7 +272,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
-  `)
+  `);
     await animationsSettled();
 
     let t1Counter = 0;

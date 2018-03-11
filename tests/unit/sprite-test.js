@@ -643,13 +643,13 @@ module("Unit | Sprite", function(hooks) {
       assert.visuallyConstant(innerContent, () => {
         m.lock();
       }, 'inner content bounds');
-    }, 'target bounds')
+    }, 'target bounds');
 
     assert.visuallyConstant(target, () => {
       assert.visuallyConstant(innerContent, () => {
         m.unlock();
       }, 'inner content bounds unlock');
-    }, 'target bounds unlock')
+    }, 'target bounds unlock');
 
   });
 
@@ -666,13 +666,13 @@ module("Unit | Sprite", function(hooks) {
       assert.visuallyConstant(innerContent, () => {
         m.lock();
       }, 'inner content bounds');
-    }, 'target bounds')
+    }, 'target bounds');
 
     assert.visuallyConstant(target, () => {
       assert.visuallyConstant(innerContent, () => {
         m.unlock();
       }, 'inner content bounds unlock');
-    }, 'target bounds unlock')
+    }, 'target bounds unlock');
 
   });
 
@@ -694,7 +694,7 @@ module("Unit | Sprite", function(hooks) {
     m.startAtSprite(externalSprite);
 
     let have = target[0].getBoundingClientRect();
-    let want = external[0].getBoundingClientRect()
+    let want = external[0].getBoundingClientRect();
     assert.approxEqualPixels(have.top, want.top, 'vertical position matches');
     assert.approxEqualPixels(have.left, want.left, 'horizontal position matches');
   });
@@ -708,7 +708,7 @@ module("Unit | Sprite", function(hooks) {
     let m = Sprite.positionedEndingAt(target[0], parent);
     m.startAtSprite(externalSprite);
 
-    let want = external[0].getBoundingClientRect()
+    let want = external[0].getBoundingClientRect();
     assert.approxEqualPixels(m.initialBounds.width, want.width, 'width was recorded');
     assert.approxEqualPixels(m.initialBounds.height, want.height, 'height was recorded');
   });
@@ -739,7 +739,7 @@ module("Unit | Sprite", function(hooks) {
     m.startAtSprite(externalSprite);
 
     let have = target[0].getBoundingClientRect();
-    let want = external[0].getBoundingClientRect()
+    let want = external[0].getBoundingClientRect();
     assert.approxEqualPixels(have.top, want.top, 'vertical position matches');
     assert.approxEqualPixels(have.left, want.left, 'horizontal position matches');
   });
@@ -869,7 +869,7 @@ module("Unit | Sprite", function(hooks) {
 
     let target = this.element.querySelector('.target');
     let parent = Sprite.offsetParentStartingAt(target);
-    assert.equal(parent.element, this.element.querySelector('svg'), 'the offset parent sprite should be the <svg> element')
+    assert.equal(parent.element, this.element.querySelector('svg'), 'the offset parent sprite should be the <svg> element');
   });
 
   test("svg elements can use a nested <svg> tag as their offset parent", async function(assert) {
@@ -884,7 +884,7 @@ module("Unit | Sprite", function(hooks) {
 
     let target = this.element.querySelector('.target');
     let parent = Sprite.offsetParentStartingAt(target);
-    assert.equal(parent.element, this.element.querySelector('.inside'), 'the offset parent sprite should be the inside <svg> element')
+    assert.equal(parent.element, this.element.querySelector('.inside'), 'the offset parent sprite should be the inside <svg> element');
   });
 
   test("svg elements skip over <g> when finding their offset parent", async function(assert) {
@@ -901,7 +901,7 @@ module("Unit | Sprite", function(hooks) {
 
     let target = this.element.querySelector('.target');
     let parent = Sprite.offsetParentStartingAt(target);
-    assert.equal(parent.element, this.element.querySelector('.inside'), 'the offset parent sprite should be the inside <svg> element')
+    assert.equal(parent.element, this.element.querySelector('.inside'), 'the offset parent sprite should be the inside <svg> element');
   });
 
 

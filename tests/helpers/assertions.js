@@ -62,7 +62,7 @@ export function installLogging(assert) {
   assert._logBuffer = [];
   assert.log = function(message) {
     this._logBuffer.push(message);
-  }
+  };
   assert.logEquals = function(value, label) {
     this.deepEqual(this._logBuffer, value, label);
   };

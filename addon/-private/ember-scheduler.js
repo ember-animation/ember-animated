@@ -202,7 +202,7 @@ function * withRunLoop(generator) {
       } catch (err) {
         state = {
           threw: err
-        }
+        };
       }
     });
 
