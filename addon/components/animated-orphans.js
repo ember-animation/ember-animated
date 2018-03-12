@@ -143,7 +143,7 @@ export default Component.extend({
         // let other animators make their own partitioning decisions
         // before we start hiding the sent & received sprites
         yield microwait();
-        sentSprites.forEach(s => s.hide());
+        //sentSprites.forEach(s => s.hide());
         yield * context._runToCompletion(transition);
       });
     }
@@ -186,7 +186,7 @@ export default Component.extend({
       let self = this;
       spawnChild(function * () {
         yield microwait();
-        sentSprites.forEach(s => s.hide());
+        //sentSprites.forEach(s => s.hide());
 
         // now that we've hidden any sent sprites, we can bail out
         // early if there is no transition they want to run
@@ -256,15 +256,18 @@ export default Component.extend({
   },
 
   _prepareSprite(sprite) {
-    sprite.hide();
-    let newElement = sprite.element.cloneNode(true);
-    continueMotions(sprite.element, newElement);
-    sprite.element = newElement;
     return sprite;
   },
 
   _onFirstMotionStart(activeSprites, cycle, sprite) {
     if (activeSprites.indexOf(sprite) === -1) {
+
+      sprite.hide();
+      let newElement = sprite.element.cloneNode(true);
+      continueMotions(sprite.element, newElement);
+      sprite.element = newElement;
+
+
       sprite.lock();
       sprite.reveal();
       this.element.appendChild(sprite.element);

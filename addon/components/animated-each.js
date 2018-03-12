@@ -460,8 +460,8 @@ export default Component.extend({
     // before we start hiding the sent & received sprites yield
     yield microwait();
 
-    matchedKeptSprites.forEach(s => s.hide());
-    sentSprites.forEach(s => s.hide());
+    //matchedKeptSprites.forEach(s => s.hide());
+    //sentSprites.forEach(s => s.hide());
 
     // By default, we don't treat sprites as "inserted" when our
     // component first renders. You can override that by setting

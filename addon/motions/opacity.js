@@ -46,9 +46,20 @@ export class Opacity extends Motion {
       // the user set a "from" option.
       from = this.prior.tween.currentValue;
     } else {
-      // otherwise we start at the user-provided option, the sprite's
-      // found initial opacity, or zero, in that priority order.
-      from = opts.from != null ? opts.from : sprite.initialComputedStyle != null ? parseFloat(sprite.initialComputedStyle.opacity) : 0;
+      if (opts.from != null) {
+        // user-provided value
+        from = opts.from;
+      } else if (!sprite.visible) {
+        // if we weren't already visible, that counts as starting at
+        // zero opacity
+        from = 0;
+      } else if (sprite.initialComputedStyle) {
+        // if we have a measured initial opacity, use that
+        from = sprite.initialComputedStyle.opacity;
+      } else {
+        // default to zero
+        from = 0;
+      }
     }
 
     let proportionalDuration = Math.abs(from - to) * duration;

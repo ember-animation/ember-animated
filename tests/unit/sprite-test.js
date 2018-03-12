@@ -1154,6 +1154,37 @@ module("Unit | Sprite", function(hooks) {
   });
 
 
+  test("cloned sprite can hide source element", async function(assert) {
+    await render(hbs`
+      <div class="target">The target</div>
+    `);
 
+    let target = this.element.querySelector('.target');
+    let sprite = Sprite.positionedStartingAt(target, Sprite.offsetParentStartingAt(target));
+
+    sprite.cloneElement();
+    sprite.hide();
+    assert.ok(!target.classList.contains('ember-animated-hidden'), "hiding the clone doesn't effect the original");
+    sprite.hideOriginal();
+    assert.ok(target.classList.contains('ember-animated-hidden'), "it can be explicitly hidden");
+  });
+
+  test("clone of clone can hide all predecessors", async function(assert) {
+    await render(hbs`
+      <div class="parent">
+        <div class="target">The target</div>
+      </div>
+    `);
+
+    let target = this.element.querySelector('.target');
+    let sprite = Sprite.positionedStartingAt(target, Sprite.offsetParentStartingAt(target));
+
+    sprite.cloneElement();
+
+
+
+    sprite.hideOriginal();
+    assert.ok(target.classList.contains('ember-animated-hidden'), "it can be explicitly hidden");
+  });
 
 });

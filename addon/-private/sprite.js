@@ -425,6 +425,17 @@ export default class Sprite {
     return this._revealed;
   }
 
+  get visible() {
+    let element = this.element;
+    while (element && element !== document.documentElement) {
+      if (element.classList.contains('ember-animated-hidden')) {
+        return false;
+      }
+      element = element.parentElement;
+    }
+    return true;
+  }
+
   _rememberSize() {
     this._imposedStyle = {};
 
