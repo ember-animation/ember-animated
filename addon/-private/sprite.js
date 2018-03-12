@@ -33,6 +33,7 @@ export const COPIED_CSS_PROPERTIES = [
   'opacity',
   'font-size',
   'color',
+  'background-color',
   'letter-spacing'
 ];
 
