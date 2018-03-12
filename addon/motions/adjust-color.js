@@ -22,8 +22,30 @@ export class AdjustColor extends Motion {
   }
 
   *animate() {
-    let from = parseComputedColor(this.sprite.initialComputedStyle[this.propertyName]);
-    let to = parseComputedColor(this.sprite.finalComputedStyle[this.propertyName]);
+    let from, to;
+
+    if (this.opts.from != null) {
+      // user-provided choice takes precedence
+      from = parseUserProvidedColor(this.opts.from);
+    } else if (this.sprite.initialComputedStyle) {
+      // otherwise our initial color defaults to the measured initial style
+      from = parseComputedColor(this.sprite.initialComputedStyle[this.propertyName]);
+    } else {
+      // if we don't have a measured initial style, we use the final
+      // style. This makes sense in cases where somebody is animating
+      // an insertedSprite to an explicit color, and they expect the
+      // "from" value to just match the way the way the sprite will
+      // look when it's normal.
+      from = parseComputedColor(this.sprite.finalComputedStyle[this.propertyName]);
+    }
+
+    if (this.opts.to != null) {
+      to = parseUserProvidedColor(this.opts.to);
+    } else if (this.sprite.finalComputedStyle) {
+      to = parseComputedColor(this.sprite.finalComputedStyle[this.propertyName]);
+    } else {
+      to = parseComputedColor(this.sprite.initialComputedStyle[this.propertyName]);
+    }
 
     for (let channel of colorChannels) {
       this[`${channel}Tween`] = new Tween(
@@ -79,4 +101,15 @@ function parseComputedColor(c) {
       a: parseFloat(m[4])
     };
   }
+}
+
+function parseUserProvidedColor(c) {
+  debugger;
+  let testElement = document.createElement('div');
+  testElement.style.display = 'none';
+  testElement.style.color = c;
+  document.body.appendChild(testElement);
+  let result = parseComputedColor(getComputedStyle(testElement).color);
+  testElement.remove();
+  return result;
 }
