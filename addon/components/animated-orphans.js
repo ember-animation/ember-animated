@@ -45,7 +45,7 @@ export default Component.extend({
       .unobserveAnimations(this.reanimate);
   },
 
-  animateOrphans(removedSprites, transition, duration) {
+  animateOrphans(removedSprites, transition, duration, shouldAnimateRemoved) {
     this._newOrphanTransitions.push({
       removedSprites: removedSprites.map(sprite => {
         // we clone the owner objects so that our sprite garbage
@@ -56,7 +56,8 @@ export default Component.extend({
         return sprite;
       }),
       transition,
-      duration
+      duration,
+      shouldAnimateRemoved
     });
     this.reanimate();
   },
@@ -158,7 +159,7 @@ export default Component.extend({
       // so any animated descendants need to get hidden before one of
       // their ancestors clones them.
       let entry = this._newOrphanTransitions.pop();
-      let { transition, duration, removedSprites } = entry;
+      let { transition, duration, removedSprites, shouldAnimateRemoved } = entry;
 
       if (removedSprites.length === 0) {
         // This can happen due to our filtering based on activeIds
@@ -194,11 +195,23 @@ export default Component.extend({
           return;
         }
 
+        let removedSprites;
+        if (shouldAnimateRemoved) {
+          removedSprites = unmatchedRemovedSprites;
+        } else {
+          removedSprites = [];
+        }
+
+        // Early bail out if there's nothing left that could animate
+        if (removedSprites.length === 0 && sentSprites.length === 0) {
+          return;
+        }
+
         let context = new TransitionContext(
           duration,
           [],
           [],
-          unmatchedRemovedSprites,
+          removedSprites,
           sentSprites,
           []
         );

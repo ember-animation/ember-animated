@@ -1,7 +1,7 @@
 import { set } from '@ember/object';
 import { A } from '@ember/array';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import QUnit, { module, test } from 'qunit';
 import $ from 'jquery';
@@ -279,7 +279,7 @@ module('Integration | Component | animated each', function(hooks) {
       {{#animated-each items use=outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
-          {{#animated-each item.comments key="id" use=innerTransition as |comment|}}
+          {{#animated-each item.comments key="id" use=innerTransition finalRemoval=true as |comment|}}
             <div>{{comment.id}}</div>
           {{/animated-each}}
         </div>
@@ -332,7 +332,7 @@ module('Integration | Component | animated each', function(hooks) {
       {{#animated-each items use=outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
-          {{#animated-each item.comments key="id" use=innerTransition as |comment|}}
+          {{#animated-each item.comments key="id" use=innerTransition finalRemoval=true as |comment|}}
             <div>{{comment.id}}</div>
           {{/animated-each}}
         </div>
@@ -381,5 +381,64 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
     assert.equal(innerCounter, 1, "inner transition should run once");
+  });
+
+  test("does not animate removed sprites at final destruction by default", async function(assert) {
+    let transitionCounter = 0;
+
+    this.set('transition', function * () {
+      transitionCounter++;
+    });
+
+    this.set('alive', true);
+    this.set('items', ['a']);
+
+    await render(hbs`
+      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      {{#if alive}}
+        {{#animated-each items use=transition as |item|}}
+          <div class="test-child">
+            {{item.id}}
+          </div>
+        {{/animated-each}}
+      {{/if}}
+    `);
+
+    await animationsSettled();
+
+    this.set('alive', false);
+    await settled();
+    await animationsSettled();
+    assert.equal(transitionCounter, 0, 'transitionCounter');
+  });
+
+  test("can opt in to animating removed sprites at final destruction", async function(assert) {
+    let transitionCounter = 0;
+
+    this.set('items', ['a']);
+    this.set('transition', function * () {
+      transitionCounter++;
+    });
+
+    this.set('alive', true);
+
+    await render(hbs`
+      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      {{#if alive}}
+        {{#animated-each items use=transition finalRemoval=true as |item|}}
+          <div class="test-child">
+            {{item.id}}
+          </div>
+        {{/animated-each}}
+      {{/if}}
+    `);
+
+    await animationsSettled();
+    assert.equal(transitionCounter, 0, 'transitionCounter precondition');
+
+    this.set('alive', false);
+    await settled();
+    await animationsSettled();
+    assert.equal(transitionCounter, 1, 'transitionCounter!');
   });
 });

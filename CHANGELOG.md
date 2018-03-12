@@ -2,6 +2,8 @@
 
  - BREAKING: Sprite no longer has initialOpacity and finalOpacity. These are now covered by initialComputedStyle and finalComputedStyle, which are also extensible to track many other CSS properties.
 
+ - BREAKING: orphaned transitions will no longer see removedSprites by default when the corresponding animator is being destroyed. It's usually not what you want. You can opt-in to animating removed sprites by setting finalRemoval=true on the animator (this is analogous to initialInsertion). None of this impacts an animator's ability to match against other animators, even when it's being destroyed (sentSprites are still always available).
+
 # 0.1.0
 
  - BREAKING: removed waitForAnimations in favor of animationsSettled. It works better with new style async Ember tests.

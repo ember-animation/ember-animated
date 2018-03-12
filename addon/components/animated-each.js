@@ -20,6 +20,7 @@ export default Component.extend({
   use: null,
   rules: null,
   initialInsertion: false,
+  finalRemoval: false,
 
   init() {
     this._elementToChild = new WeakMap();
@@ -215,7 +216,7 @@ export default Component.extend({
       sprite.owner = this._elementToChild.get(element);
       removedSprites.push(sprite);
     }
-    this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'));
+    this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'), this.get('finalRemoval'));
   },
 
   willDestroyElement() {

@@ -1,4 +1,4 @@
-{{#animated-value "index-route" initialInsertion=true use=transition duration=1000}}
+{{#animated-value "index-route" initialInsertion=true finalRemoval=true use=transition duration=1000}}
 <div class="hero-list">
   {{#each model as |person|}}
     {{#link-to "hero.detail" person.id tagName="div"}}

@@ -34,7 +34,7 @@ module('Integration | Component | animated orphans', function(hooks) {
   {{animated-orphans}}
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1}}
+    {{#animated-value "one" use=t1 finalRemoval=true }}
       <span class="one">One</span>
     {{/animated-value}}
   {{/if}}
@@ -56,10 +56,10 @@ module('Integration | Component | animated orphans', function(hooks) {
   {{animated-orphans}}
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1}}
+    {{#animated-value "one" use=t1 finalRemoval=true}}
       <span class="one">One</span>
     {{/animated-value}}
-    {{#animated-value "two" use=t2}}
+    {{#animated-value "two" use=t2 finalRemoval=true}}
       <span class="two">Two</span>
     {{/animated-value}}
   {{/if}}
@@ -99,7 +99,7 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1}}
+    {{#animated-value "one" use=t1 finalRemoval=true}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -131,7 +131,7 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1 }}
+    {{#animated-value "one" use=t1 finalRemoval=true}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -186,10 +186,10 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1}}
+    {{#animated-value "one" use=t1 finalRemoval=true }}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2}}
+    {{#animated-value "two" use=t2 finalRemoval=true }}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -265,10 +265,10 @@ module('Integration | Component | animated orphans', function(hooks) {
   </div>
 
   {{#if showIt}}
-    {{#animated-value "one" use=t1 }}
+    {{#animated-value "one" use=t1 finalRemoval=true }}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2 }}
+    {{#animated-value "two" use=t2 finalRemoval=true  }}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
