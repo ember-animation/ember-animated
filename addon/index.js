@@ -18,6 +18,10 @@ export {
   serial
 } from './-private/scheduler';
 
+export {
+  task
+} from './-private/ember-scheduler';
+
 export { printSprites } from './-private/debug';
 
 export {
