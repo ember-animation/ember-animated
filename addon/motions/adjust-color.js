@@ -104,7 +104,6 @@ function parseComputedColor(c) {
 }
 
 function parseUserProvidedColor(c) {
-  debugger;
   let testElement = document.createElement('div');
   testElement.style.display = 'none';
   testElement.style.color = c;
