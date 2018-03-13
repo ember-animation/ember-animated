@@ -1,4 +1,4 @@
-# master
+# 0.2.0
 
  - BREAKING: Sprite no longer has initialOpacity and finalOpacity. These are now covered by initialComputedStyle and finalComputedStyle, which are also extensible to track many other CSS properties.
 
