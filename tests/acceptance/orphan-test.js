@@ -20,7 +20,7 @@ module('Acceptance | orphan', function(hooks) {
 
   test('visiting /orphan', async function(assert) {
     time.pause();
-    await visit('/orphan');
+    await visit('/demos/orphan');
     await time.advance(1000);
 
     let opacity = parseFloat(getComputedStyle(this.element.querySelector('.one')).opacity);
@@ -31,6 +31,6 @@ module('Acceptance | orphan', function(hooks) {
     assert.ok(twoPosition > onePosition, `expected element .two to be animating in, ${twoPosition } > ${onePosition}`);
     time.runAtSpeed(40);
     await animationsSettled();
-    assert.equal(currentURL(), '/orphan');
+    assert.equal(currentURL(), '/demos/orphan');
   });
 });

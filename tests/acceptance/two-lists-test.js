@@ -5,7 +5,7 @@ import { currentURL, visit } from '@ember/test-helpers';
 module('Acceptance | two lists', function(hooks){
   setupApplicationTest(hooks);
   test('visiting /two-lists', async function(assert) {
-    await visit('/two-lists');
-    assert.equal(currentURL(), '/two-lists');
+    await visit('/demos/two-lists');
+    assert.equal(currentURL(), '/demos/two-lists');
   });
 });

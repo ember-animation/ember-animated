@@ -31,12 +31,12 @@ module('Acceptance | svg', function(hooks) {
   });
 
   test('visiting /svg', async function(assert) {
-    await visit('/svg');
-    assert.equal(currentURL(), '/svg');
+    await visit('/demos/svg');
+    assert.equal(currentURL(), '/demos/svg');
   });
 
   test('bubbles move smoothly at start of animation', async function(assert) {
-    await visit('/svg');
+    await visit('/demos/svg');
     let initialBounds = boundsById(this.element.querySelectorAll('circle'));
     time = new TimeControl();
     await click(this.element.querySelector('button'));
@@ -45,7 +45,7 @@ module('Acceptance | svg', function(hooks) {
   });
 
   test('bubbles move smoothly at end of animation', async function(assert) {
-    await visit('/svg');
+    await visit('/demos/svg');
     time = new TimeControl();
     await click(this.element.querySelector('button'));
     await time.advance(990);
