@@ -14,7 +14,7 @@ export default DS.JSONAPIAdapter.extend({
           id: String(i),
           attributes: Object.seal({
             name: faker.name.firstName(),
-            'avatar-url': faker.internet.avatar()
+            avatarUrl: faker.internet.avatar()
           })
         }));
       }
