@@ -22,6 +22,13 @@ Router.map(function() {
   this.route('here-there');
   this.route('svg');
   this.route('beacon');
+
+  // ember-cli-addon-docs
+  this.route('docs', function() {
+    this.route('api', function() {
+      this.route('item', { path: '/*path' });
+    });
+  });
 });
 
 export default Router;
