@@ -2,19 +2,32 @@
   "name": "ember-animated",
   "version": "0.2.0",
   "description": "Core animation primitives for Ember.",
+  "keywords": [
+    "animation",
+    "ember",
+    "ember-addon",
+    "transition"
+  ],
+  "license": "MIT",
+  "author": "Edward Faulkner <edward@eaf4.com>",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
+  "repository": "https://github.com/ember-animation/ember-animated",
   "scripts": {
     "build": "ember build",
     "lint:js": "eslint ./*.js addon addon-test-support app config lib server test-support tests",
     "start": "ember serve",
-    "test": "ember try:each"
+    "test": "ember test",
+    "test:all": "ember try:each"
   },
-  "repository": "https://github.com/ember-animation/ember-animated",
-  "author": "Edward Faulkner <edward@eaf4.com>",
-  "license": "MIT",
+  "dependencies": {
+    "ember-cli-babel": "^6.11.0",
+    "ember-cli-htmlbars": "^2.0.1",
+    "ember-cli-version-checker": "^1.1.7",
+    "ember-maybe-import-regenerator": "^0.1.5"
+  },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
     "ember-animated-tools": "^0.1.1",
@@ -32,7 +45,6 @@
     "ember-export-application-global": "^2.0.0",
     "ember-faker": "^1.2.1",
     "ember-load-initializers": "^1.0.0",
-    "ember-maybe-import-regenerator": "^0.1.6",
     "ember-resolver": "^4.0.0",
     "ember-source": "~3.0.0",
     "ember-source-channel-url": "^1.0.1",
@@ -41,15 +53,6 @@
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-node": "^5.2.1",
     "loader.js": "^4.2.3"
-  },
-  "keywords": [
-    "ember-addon"
-  ],
-  "dependencies": {
-    "ember-cli-babel": "^6.11.0",
-    "ember-cli-htmlbars": "^2.0.1",
-    "ember-cli-version-checker": "^1.1.7",
-    "ember-maybe-import-regenerator": "^0.1.5"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
