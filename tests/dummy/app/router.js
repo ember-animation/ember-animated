@@ -7,21 +7,23 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('each');
-  this.route('container-only');
-  this.route('two-lists');
-  this.route('swapping-lists');
-  this.route('bind');
-  this.route('hero', function(){
-    this.route('detail', { path: '/:id' });
+  this.route('demos', function() {
+    this.route('each');
+    this.route('container-only');
+    this.route('two-lists');
+    this.route('swapping-lists');
+    this.route('bind');
+    this.route('hero', function(){
+      this.route('detail', { path: '/:id' });
+    });
+    this.route('nested');
+    this.route('direct-style');
+    this.route('inline-text');
+    this.route('orphan');
+    this.route('here-there');
+    this.route('svg');
+    this.route('beacon');
   });
-  this.route('nested');
-  this.route('direct-style');
-  this.route('inline-text');
-  this.route('orphan');
-  this.route('here-there');
-  this.route('svg');
-  this.route('beacon');
 
   // ember-cli-addon-docs
   this.route('docs', function() {
