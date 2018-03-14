@@ -6,7 +6,7 @@ export default Component.extend({
   tagName: '',
   layout,
   items: computed('value', function() {
-    return [this.get('value')];
+    return [this.get('value')].filter(Boolean);
   })
 }).reopenClass({
   positionalParams: ['value']
