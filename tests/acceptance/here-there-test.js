@@ -17,8 +17,8 @@ module('Acceptance | here there', function(hooks) {
 
 
   test('visiting /here-there', async function(assert) {
-    await visit('/here-there');
-    assert.equal(currentURL(), '/here-there');
+    await visit('/demos/here-there');
+    assert.equal(currentURL(), '/demos/here-there');
     assert.ok(this.element.querySelector('.left .demo-item'), 'found left item');
     assert.ok(!this.element.querySelector('.right .demo-item'), 'did not find left item');
   });
@@ -27,14 +27,14 @@ module('Acceptance | here there', function(hooks) {
     // this test is not supposed to animate, which is why we never
     // touch the TimeControl. If it erroneously animates, it will hang
     // and timeout.
-    await visit('/here-there');
+    await visit('/demos/here-there');
     await click(this.element.querySelector('.scenario-here-there button'));
     assert.ok(!this.element.querySelector('.left .demo-item'), 'did not find left item');
     assert.ok(this.element.querySelector('.right .demo-item'), 'found right item');
   });
 
   test('toggling with grouping', async function(assert) {
-    await visit('/here-there');
+    await visit('/demos/here-there');
     await click(this.element.querySelector('.scenario-here-there input[type="checkbox"]'));
     click(this.element.querySelector('.scenario-here-there button'));
     await time.advance(100);
