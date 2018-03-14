@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@ember/test-helpers@^0.7.9":
-  version "0.7.13"
-  resolved "https://registry.yarnpkg.com/@ember/test-helpers/-/test-helpers-0.7.13.tgz#89523a101b5bd731e9dcaf7d0c57155b6386a4e3"
+"@ember/test-helpers@^0.7.18":
+  version "0.7.18"
+  resolved "https://registry.yarnpkg.com/@ember/test-helpers/-/test-helpers-0.7.18.tgz#a0c474c3029588ec46d2e406252fc072b7f9aa3c"
   dependencies:
     broccoli-funnel "^2.0.1"
     ember-cli-babel "^6.10.0"
@@ -2191,12 +2191,12 @@ ember-cli-preprocess-registry@^3.1.0:
     process-relative-require "^1.0.0"
     silent-error "^1.0.0"
 
-ember-cli-qunit@^4.1.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/ember-cli-qunit/-/ember-cli-qunit-4.2.1.tgz#89580e6eb157ee98b9eefbd48fba9bb75ea64544"
+ember-cli-qunit@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/ember-cli-qunit/-/ember-cli-qunit-4.3.2.tgz#cfd89ad3b0dbc28a9c2223d532b52eeade7c602c"
   dependencies:
-    ember-cli-babel "^6.8.1"
-    ember-qunit "^3.2.2"
+    ember-cli-babel "^6.11.0"
+    ember-qunit "^3.3.2"
 
 ember-cli-shims@^1.2.0:
   version "1.2.0"
@@ -2415,17 +2415,17 @@ ember-maybe-import-regenerator@^0.1.5:
     ember-cli-babel "^6.0.0-beta.4"
     regenerator-runtime "^0.9.5"
 
-ember-qunit@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/ember-qunit/-/ember-qunit-3.2.2.tgz#96c8818ecfa3894580a3dc805f7e7f1e82e07c4a"
+ember-qunit@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/ember-qunit/-/ember-qunit-3.3.2.tgz#cb48e9deaffa3b4c90983f28c5cf8590894c8ea3"
   dependencies:
-    "@ember/test-helpers" "^0.7.9"
+    "@ember/test-helpers" "^0.7.18"
     broccoli-funnel "^2.0.1"
     broccoli-merge-trees "^2.0.0"
     common-tags "^1.4.0"
     ember-cli-babel "^6.3.0"
     ember-cli-test-loader "^2.2.0"
-    qunit "^2.4.1"
+    qunit "^2.5.0"
 
 ember-resolver@^4.0.0:
   version "4.4.0"
@@ -5161,9 +5161,9 @@ quick-temp@^0.1.2:
     rimraf "~2.2.6"
     underscore.string "~2.3.3"
 
-qunit@^2.4.1:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/qunit/-/qunit-2.5.0.tgz#64cbe30a1193ef02edc5b278efcdf1d0bae96b22"
+qunit@^2.5.0:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/qunit/-/qunit-2.5.1.tgz#739b0ea9595bbf508b0600d5af04dcb2ba2a74e5"
   dependencies:
     chokidar "1.7.0"
     commander "2.12.2"

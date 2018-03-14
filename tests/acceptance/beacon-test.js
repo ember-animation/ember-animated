@@ -8,12 +8,12 @@ module('Acceptance | beacon', function(hooks) {
   setupAnimationTest(hooks);
 
   test('visiting /beacon', async function(assert) {
-    await visit('/beacon');
-    assert.equal(currentURL(), '/beacon');
+    await visit('/demos/beacon');
+    assert.equal(currentURL(), '/demos/beacon');
   });
 
   test('opening modal begins near button', async function(assert) {
-    await visit('/beacon');
+    await visit('/demos/beacon');
     time.pause();
     await click(this.element.querySelector('button'));
     await time.advance(10);
@@ -23,7 +23,7 @@ module('Acceptance | beacon', function(hooks) {
   });
 
   test('closing modal ends near button', async function(assert) {
-    await visit('/beacon');
+    await visit('/demos/beacon');
     await click(this.element.querySelector('button'));
     await animationsSettled();
 

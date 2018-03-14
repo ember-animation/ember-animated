@@ -16,12 +16,12 @@ module('Acceptance | swapping lists', function(hooks){
   });
 
   test('visiting /swapping-lists', async function(assert) {
-    await visit('/swapping-lists');
-    assert.equal(currentURL(), '/swapping-lists');
+    await visit('/demos/swapping-lists');
+    assert.equal(currentURL(), '/demos/swapping-lists');
   });
 
   test('toggling with animated receiving side', async function(assert) {
-    await visit('/swapping-lists');
+    await visit('/demos/swapping-lists');
     click(this.element.querySelector('button'));
     await time.advance(100);
     let listPosition = this.element.querySelector('.right').getBoundingClientRect().left;
@@ -37,7 +37,7 @@ module('Acceptance | swapping lists', function(hooks){
   });
 
   test('toggling with animated sending side', async function(assert) {
-    await visit('/swapping-lists');
+    await visit('/demos/swapping-lists');
     await click(this.element.querySelector('.sending-side > input'));
     click(this.element.querySelector('button'));
     await time.advance(100);
