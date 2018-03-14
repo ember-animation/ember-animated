@@ -1,4 +1,5 @@
-<nav>
-  {{#link-to 'demos'}}Demos{{/link-to}}
-  {{#link-to 'docs'}}Docs{{/link-to}}
-</nav>
+{{#docs-navbar logo='ember-cli' name='Addon Docs'}}
+  {{#link-to 'demos' class="docs-navbar__link"}}
+    Demos
+  {{/link-to}}
+{{/docs-navbar}}
