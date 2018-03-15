@@ -1,16 +1,3 @@
-/*
-   A Sprite is our handle to a DOM element that we want to animate.
-
-   It manages locking and unlocking the element (which means taking it
-   in and out of static document flow so it's readily animatable).
-
-   It tracks the sprite's current transform.
-
-   It tracks the sprite's initial and/or final bounds, as measured
-   from the actual pre- and/or post-animation DOM.
-
-*/
-
 import { warn } from '@ember/debug';
 
 import $ from 'jquery';
@@ -39,6 +26,19 @@ export const COPIED_CSS_PROPERTIES = [
 
 const inFlight = new WeakMap();
 
+/**
+  A Sprite is our handle to a DOM element that we want to animate.
+
+  It manages locking and unlocking the element (which means taking it
+  in and out of static document flow so it's readily animatable).
+
+  It tracks the sprite's current transform.
+
+  It tracks the sprite's initial and/or final bounds, as measured
+  from the actual pre- and/or post-animation DOM.
+
+  @class Sprite
+*/
 export default class Sprite {
 
   static offsetParentStartingAt(element) {
@@ -145,27 +145,39 @@ export default class Sprite {
     if (Ember.testing) { Object.seal(this); }
   }
 
-  // A DOMRect representing the place where this sprite will start the
-  // transition. Not every sprite has initialBounds (a newly inserted
-  // sprite will not -- it will only have finalBounds).
-  //
-  // The position is measured *relative* to our offsetParent, if we
-  // have one. Most of the time we want motions to act in relative
-  // terms, so that if we're inside another animator things still work
-  // out correctly.
-  //
-  // You can manipulate initialBounds using methods like startAtPixel.
-  //
-  // Motions should look at initialBounds and finalBounds to decide
-  // what to do.
+  /**
+    A DOMRect representing the place where this sprite will start the
+    transition. Not every sprite has initialBounds (a newly inserted
+    sprite will not -- it will only have finalBounds).
+
+    The position is measured *relative* to our offsetParent, if we
+    have one. Most of the time we want motions to act in relative
+    terms, so that if we're inside another animator things still work
+    out correctly.
+
+    You can manipulate initialBounds using methods like startAtPixel.
+
+    Motions should look at initialBounds and finalBounds to decide
+    what to do.
+
+    @method initialBounds
+    @return {DOMRect}
+  */
   get initialBounds() {
     return this._initialBounds;
   }
 
-  // like initialBounds, but relative to the screen, not the offset
-  // parent. Most of the time you *don't* want this one, because your
-  // motion will be more robust to ancestor motion if you do
-  // everything in relative terms.
+
+
+  /**
+    Like initialBounds, but relative to the screen, not the offset
+    parent. Most of the time you *don't* want this one, because your
+    motion will be more robust to ancestor motion if you do
+    everything in relative terms.
+
+    @method absoluteInitialBounds
+    @return {DOMRect}
+  */
   get absoluteInitialBounds() {
     if (this._offsetSprite) {
       return shiftedBounds(this._initialBounds, this._offsetSprite.initialBounds.left, this._offsetSprite.initialBounds.top);
@@ -174,25 +186,34 @@ export default class Sprite {
     }
   }
 
-  // A DOMRect representing the place where this sprite will end the
-  // transition. Not every sprite has finalBounds (a sprite that is
-  // about to be destroyed will not -- it will only have
-  // initialBounds).
-  //
-  // The position is measured *relative* to our offsetParent, if we
-  // have one. Most of the time we want motions to act in relative
-  // terms, so that if we're inside another animator things still work
-  // out correctly.
-  //
-  // You can manipulate finalBounds using methods like endAtPixel.
+  /**
+    A DOMRect representing the place where this sprite will end the
+    transition. Not every sprite has finalBounds (a sprite that is
+    about to be destroyed will not -- it will only have
+    initialBounds).
+
+    The position is measured *relative* to our offsetParent, if we
+    have one. Most of the time we want motions to act in relative
+    terms, so that if we're inside another animator things still work
+    out correctly.
+
+    You can manipulate finalBounds using methods like endAtPixel.
+    @method finalBounds
+    @return {DOMRect}
+  */
   get finalBounds() {
     return this._finalBounds;
   }
 
-  // like initialBounds, but relative to the screen, not the offset
-  // parent. Most of the time you *don't* want this one, because your
-  // motion will be more robust to ancestor motion if you do
-  // everything in relative terms.
+  /**
+    Like initialBounds, but relative to the screen, not the offset
+    parent. Most of the time you *don't* want this one, because your
+    motion will be more robust to ancestor motion if you do
+    everything in relative terms.
+
+    @method absoluteFinalBounds
+    @return {DOMRect}
+  */
   get absoluteFinalBounds() {
     if (this._offsetSprite) {
       return shiftedBounds(this._finalBounds, this._offsetSprite.finalBounds.left, this._offsetSprite.finalBounds.top);
@@ -201,29 +222,38 @@ export default class Sprite {
     }
   }
 
+  /**
+    A snapshot of the sprite's computed style at the start of the
+    transition. We don't copy every possible property, see
+    COPIED_CSS_PROPERTIES.
 
-  // A snapshot of the sprite's computed style at the start of the
-  // transition. We don't copy every possible property, see
-  // COPIED_CSS_PROPERTIES.
-  //
-  // This is powered by getComputedStyle, so the property names and
-  // values will follow those semantics.
-  //
-  // Not every sprite will have an initialComputedStyle
-  // (`insertedSprites` do not).
+    This is powered by getComputedStyle, so the property names and
+    values will follow those semantics.
+
+    Not every sprite will have an initialComputedStyle
+    (`insertedSprites` do not).
+
+    @method initialComputedStyle
+    @return {CSSStyleDeclaration}
+  */
   get initialComputedStyle() {
     return this._initialComputedStyle;
   }
 
-  // A snapshot of the sprite's computed style at the end of the
-  // transition. We don't copy every possible property, see
-  // COPIED_CSS_PROPERTIES.
-  //
-  // This is powered by getComputedStyle, so the property names and
-  // values will follow those semantics.
-  //
-  // Not every sprite will have a finalComputedStyle
-  // (`removedSprites` do not).
+  /**
+    A snapshot of the sprite's computed style at the end of the
+    transition. We don't copy every possible property, see
+    COPIED_CSS_PROPERTIES.
+
+    This is powered by getComputedStyle, so the property names and
+    values will follow those semantics.
+
+    Not every sprite will have a finalComputedStyle
+    (`removedSprites` do not).
+
+    @method finalComputedStyle
+    @return {CSSStyleDeclaration}
+  */
   get finalComputedStyle() {
     return this._finalComputedStyle;
   }
@@ -238,32 +268,53 @@ export default class Sprite {
     return this._finalPosition[name];
   }
 
-  // analogous to initialBounds, this is a snapshot of the cumulative
-  // effect of all transforms on this sprite at the start of
-  // animation.
+  /**
+    Analogous to initialBounds, this is a snapshot of the cumulative
+    effect of all transforms on this sprite at the start of
+    animation.
+
+    @method initialCumulativeTransform
+    @return {TBD} // TODO: Fill this properly
+  */
   get initialCumulativeTransform() {
     return this._initialCumulativeTransform;
   }
 
-  // analogous to finalBounds, this is a snapshot of the cumulative
-  // effect of all transforms on this sprite at the end of animation.
+  /**
+    Analogous to finalBounds, this is a snapshot of the cumulative
+    effect of all transforms on this sprite at the end of animation.
+
+    @method finalCumulativeTransform
+    @return {TBD} // TODO: Fill this properly
+  */
   get finalCumulativeTransform() {
     return this._finalCumulativeTransform;
   }
 
-  // Some things methods (like startAtSprite, startAtPixel, etc) can
-  // set or alter the initialBounds. This gives you access to the
-  // original value (which may be undefined if this sprite didn't have
-  // any initial bounds, which is the case for newly inserted
-  // sprites).
+  /**
+    Some things methods (like startAtSprite, startAtPixel, etc) can
+    set or alter the initialBounds. This gives you access to the
+    original value (which may be undefined if this sprite didn't have
+    any initial bounds, which is the case for newly inserted
+    sprites).
+
+    @method originalInitialBounds
+    @return {DOMRect}
+  */
   get originalInitialBounds() {
     return this._originalInitialBounds;
   }
 
-  // Some things (like endAtSprite) can alter the finalBounds. This
-  // gives you access to the original value (which may be undefined if
-  // the sprite didn't have any final bounds, which is the case for
-  // removedSprites).
+
+  /**
+    Some things (like endAtSprite) can alter the finalBounds. This
+    gives you access to the original value (which may be undefined if
+    the sprite didn't have any final bounds, which is the case for
+    removedSprites).
+
+    @method originalFinalBounds
+    @return {DOMRect}
+  */
   get originalFinalBounds() {
     return this._originalFinalBounds;
   }
