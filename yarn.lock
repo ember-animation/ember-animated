@@ -3167,7 +3167,7 @@ ember-cli-version-checker@^1.0.2:
   dependencies:
     semver "^5.3.0"
 
-ember-cli-version-checker@^1.1.4, ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.1.7:
+ember-cli-version-checker@^1.1.6, ember-cli-version-checker@^1.1.7:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-1.2.0.tgz#caa286b77d1b485df5d2f62c67a6f19aa8b582c4"
   dependencies:
@@ -3298,39 +3298,6 @@ ember-component-css@^0.3.5:
     postcss-selector-namespace "^1.4.1"
     rsvp "^4.0.1"
     walk-sync "^0.3.2"
-
-ember-data@^2.16.3:
-  version "2.16.3"
-  resolved "https://registry.yarnpkg.com/ember-data/-/ember-data-2.16.3.tgz#0853ed86bf813fcdbc97319d2c22abccf87b5093"
-  dependencies:
-    amd-name-resolver "0.0.7"
-    babel-plugin-feature-flags "^0.3.1"
-    babel-plugin-filter-imports "^0.3.1"
-    babel-plugin-transform-es2015-block-scoping "^6.24.1"
-    babel6-plugin-strip-class-callcheck "^6.0.0"
-    babel6-plugin-strip-heimdall "^6.0.1"
-    broccoli-babel-transpiler "^6.0.0"
-    broccoli-debug "^0.6.2"
-    broccoli-file-creator "^1.0.0"
-    broccoli-funnel "^1.2.0"
-    broccoli-merge-trees "^2.0.0"
-    broccoli-rollup "^1.2.0"
-    calculate-cache-key-for-tree "^1.1.0"
-    chalk "^1.1.1"
-    ember-cli-babel "^6.8.2"
-    ember-cli-path-utils "^1.0.0"
-    ember-cli-string-utils "^1.0.0"
-    ember-cli-test-info "^1.0.0"
-    ember-cli-version-checker "^1.1.4"
-    ember-inflector "^2.0.0"
-    ember-runtime-enumerable-includes-polyfill "^2.0.0"
-    exists-sync "0.0.3"
-    git-repo-info "^1.1.2"
-    heimdalljs "^0.3.0"
-    inflection "^1.8.0"
-    npm-git-info "^1.0.0"
-    semver "^5.1.0"
-    silent-error "^1.0.0"
 
 ember-data@^2.18.0:
   version "2.18.2"
