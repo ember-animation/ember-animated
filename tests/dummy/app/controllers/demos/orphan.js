@@ -13,12 +13,12 @@ export default Controller.extend({
 
   fromSide: function * ({ insertedSprites, receivedSprites, removedSprites }) {
     insertedSprites.forEach(s => {
-      s.startAtPixel({ x: window.outerWidth * 0.8 });
+      s.startAtPixel({ x: window.innerWidth * 0.8 });
       move(s);
     });
     receivedSprites.forEach(move);
     removedSprites.forEach(s => {
-      s.endAtPixel({ x: window.outerWidth * 0.8 });
+      s.endAtPixel({ x: window.innerWidth * 0.8 });
       move(s);
     });
   },
