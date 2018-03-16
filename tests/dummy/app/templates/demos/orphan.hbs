@@ -10,12 +10,12 @@
 
   {{#if showDetail}}
 
-    {{#animated-value use=fade duration=2000 group="one" initialInsertion=true}}
+    {{#animated-value use=fade duration=2000 group="one" initialInsertion=true finalRemoval=true}}
       <h1 class="one">1</h1>
     {{/animated-value}}
 
 
-    {{#animated-value use=fromSide duration=2000 group="two" initialInsertion=true }}
+    {{#animated-value use=fromSide duration=2000 group="two" initialInsertion=true finalRemoval=true }}
       <h1 class="two">2</h1>
     {{/animated-value}}
 

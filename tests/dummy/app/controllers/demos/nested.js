@@ -6,7 +6,7 @@ export default Controller.extend({
 
   transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
     insertedSprites.forEach(sprite => {
-      sprite.startAtPixel({ x: window.outerWidth });
+      sprite.startAtPixel({ x: window.innerWidth });
       move(sprite);
     });
 
@@ -16,7 +16,7 @@ export default Controller.extend({
       // the 0.8 here is purely so I can easily see that the elements
       // are being properly removed immediately after they get far
       // enough
-      sprite.endAtPixel({ x: window.outerWidth * 0.8 });
+      sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite);
     });
   },
