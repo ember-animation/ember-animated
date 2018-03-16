@@ -1,5 +1,6 @@
 /bower_components
 /config/ember-try.js
+/config/addon-docs.js
 /dist
 /tests
 /tmp
