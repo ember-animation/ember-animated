@@ -30,11 +30,14 @@ env:
     - EMBER_TRY_SCENARIO=ember-canary
     - EMBER_TRY_SCENARIO=ember-default
 
-matrix:
-  fast_finish: true
-  allow_failures:
-    - env: EMBER_TRY_SCENARIO=ember-canary
-    - env: EMBER_TRY_SCENARIO=ember-beta
+# We can uncomment this to allow canary and beta failures, but right
+# now they are passing and I'd like to notice when that changes.
+#
+# matrix:
+#   fast_finish: true
+#   allow_failures:
+#     - env: EMBER_TRY_SCENARIO=ember-canary
+#     - env: EMBER_TRY_SCENARIO=ember-beta
 
 before_install:
   - npm config set spin false
