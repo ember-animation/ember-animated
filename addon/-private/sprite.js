@@ -160,14 +160,12 @@ export default class Sprite {
     Motions should look at initialBounds and finalBounds to decide
     what to do.
 
-    @method initialBounds
-    @return {DOMRect}
+    @accessor initialBounds
+    @type {DOMRect}
   */
   get initialBounds() {
     return this._initialBounds;
   }
-
-
 
   /**
     Like initialBounds, but relative to the screen, not the offset
@@ -175,8 +173,8 @@ export default class Sprite {
     motion will be more robust to ancestor motion if you do
     everything in relative terms.
 
-    @method absoluteInitialBounds
-    @return {DOMRect}
+    @accessor absoluteInitialBounds
+    @type {DOMRect}
   */
   get absoluteInitialBounds() {
     if (this._offsetSprite) {
@@ -198,8 +196,8 @@ export default class Sprite {
     out correctly.
 
     You can manipulate finalBounds using methods like endAtPixel.
-    @method finalBounds
-    @return {DOMRect}
+    @accessor finalBounds
+    @type {DOMRect}
   */
   get finalBounds() {
     return this._finalBounds;
@@ -211,8 +209,8 @@ export default class Sprite {
     motion will be more robust to ancestor motion if you do
     everything in relative terms.
 
-    @method absoluteFinalBounds
-    @return {DOMRect}
+    @accessor absoluteFinalBounds
+    @type {DOMRect}
   */
   get absoluteFinalBounds() {
     if (this._offsetSprite) {
@@ -233,8 +231,8 @@ export default class Sprite {
     Not every sprite will have an initialComputedStyle
     (`insertedSprites` do not).
 
-    @method initialComputedStyle
-    @return {CSSStyleDeclaration}
+    @accessor initialComputedStyle
+    @type {CSSStyleDeclaration}
   */
   get initialComputedStyle() {
     return this._initialComputedStyle;
@@ -251,19 +249,39 @@ export default class Sprite {
     Not every sprite will have a finalComputedStyle
     (`removedSprites` do not).
 
-    @method finalComputedStyle
-    @return {CSSStyleDeclaration}
+    @accessor finalComputedStyle
+    @type {CSSStyleDeclaration}
   */
   get finalComputedStyle() {
     return this._finalComputedStyle;
   }
 
-  // This is mostly intended for use with SVG, where you can say things like getInitialDimension('x')
+  /**
+    Returns the attribute value from the initial position object with the
+    given `name`.
+
+    _This is mostly intended for use with SVG, where you can say things
+    like `getInitialDimension('x')`._
+
+    @method getInitialDimension
+    @param {string} name The desired attribute name.
+    @return {number|string}
+  */
   getInitialDimension(name) {
     return this._initialPosition[name];
   }
 
-  // This is mostly intended for use with SVG, where you can say things like getFinalDimension('x')
+  /**
+    Returns the attribute value from the final position object with the
+    given `name`.
+
+    _This is mostly intended for use with SVG, where you can say things
+    like `getFinalDimension('x')`._
+
+    @method getFinalDimension
+    @param {string} name The desired attribute name.
+    @return {number|string}
+  */
   getFinalDimension(name) {
     return this._finalPosition[name];
   }
@@ -328,10 +346,16 @@ export default class Sprite {
     }
   }
 
+  /**
+    Returns the current position of the element as an object.
 
+    _This deliberately only tracks inline styles, because it's only
+    important when the user is manipulating inline styles._
 
-  // This deliberately only tracks inline styles, because it's only
-  // important when the user is manipulating inline styles.
+    @private
+    @method _getCurrentPosition
+    @return {Object}
+  */
   _getCurrentPosition() {
     if (isSVG(this.element)) {
       let { element } = this;
@@ -357,6 +381,14 @@ export default class Sprite {
     }
   }
 
+  /**
+    Sets the position of the element.
+
+    @private
+    @method _reapplyPosition
+    @param {Object} pos The position to apply.
+    @return {void}
+  */
   _reapplyPosition(pos) {
     if (!pos) { return; }
     if (isSVG(this.element)) {
@@ -411,12 +443,23 @@ export default class Sprite {
     this._finalCumulativeTransform = cumulativeTransform(this.element);
   }
 
-  // this.difference('initialBounds', other, 'finalBounds') means "the
-  // difference between this sprite's initial bounds and the other
-  // sprite's final bounds".
-  //
-  // It works this way because each sprite has its own local
-  // coordinate system.
+  /**
+    Returns the difference between two sprites, represented as x and y
+    coordinates.
+
+    _`this.difference('initialBounds', other, 'finalBounds')` is
+    interpreted as "the difference between this sprite's initial bounds
+    and the other sprite's final bounds"._
+
+    _It works this way because each sprite has its own local coordinate
+    system._
+
+    @method difference
+    @param {string} which The current sprite's comparison attribute.
+    @param {Sprite} otherSprite The other sprite.
+    @param {string} otherWhich The other sprite's comparison attribute.
+    @return {Object}
+  */
   difference(which, otherSprite, otherWhich) {
     let x = this[which].left;
     let y = this[which].top;
@@ -450,8 +493,13 @@ export default class Sprite {
     return this.__$element;
   }
 
-  // The sprite's current transform, with appropriate caching so that
-  // you don't trigger reflows.
+  /**
+    Returns the sprite's current transform, with appropriate caching
+    so that you don't trigger reflows.
+
+    @accessor transform
+    @type {Transform}
+  */
   get transform() {
     if (!this._transform) {
       this._transform = ownTransform(this.element);
@@ -459,10 +507,15 @@ export default class Sprite {
     return this._transform;
   }
 
-  // This is different from `this.transform` because it's the product
-  // of our own transform and all ancestor transforms. It's what you
-  // need if you want to understand how many real screen pixels there
-  // are to every local pixel in the sprite.
+  /**
+    This is different from `this.transform` because it's the product
+    of our own transform and all ancestor transforms. It's what you
+    need if you want to understand how many real screen pixels there
+    are to every local pixel in the sprite.
+
+    @accessor cumulativeTransform
+    @type {TBD} // TODO: Fill this properly
+  */
   get cumulativeTransform() {
     if (!this._cumulativeTransform) {
       this._cumulativeTransform = cumulativeTransform(this.element);
@@ -470,6 +523,12 @@ export default class Sprite {
     return this._cumulativeTransform;
   }
 
+  /**
+    Returns wether the sprite is revealed or not.
+
+    @accessor revealed
+    @type {boolean}
+  */
   get revealed() {
     if (this._revealed == null) {
       this._revealed = !this._$element.hasClass('ember-animated-hidden');
@@ -604,12 +663,19 @@ export default class Sprite {
     this._clearMarginCollapse();
   }
 
-  // This is your general purpose hook for changing CSS properties of
-  // the sprite's element. Use this when there's not a more specific
-  // method like translate(), scale(), hide(), or reveal().
-  //
-  // Nothing you do to the sprite will persist after the transition is
-  // finished -- we clean things up when it ends.
+
+  /**
+    This is your general purpose hook for changing CSS properties of
+    the sprite's element. Use this when there's not a more specific
+    method like `translate()`, `scale()`, `hide()`, or `reveal()`.
+
+    _Nothing you do to the sprite will persist after the transition is
+    finished -- we clean things up when it ends._
+
+    @method applyStyles
+    @param {Object} styles The styles to apply to the sprite.
+    @return {void}
+  */
   applyStyles(styles) {
     if (!this._lockMode) {
       throw new Error("can't apply styles to non-lockable sprite");
@@ -629,16 +695,27 @@ export default class Sprite {
     return inFlight.get(this.element) === this;
   }
 
-  // Hide the sprite (using CSS visibility property).
+  /**
+    Hides the sprite using CSS visibility property.
+
+    @method hide
+    @return {void}
+  */
   hide() {
     this._revealed = false;
     this._$element.addClass('ember-animated-hidden');
   }
 
-  // Reveal the sprite (using CSS visibility property). Newly inserted
-  // sprites start hidden, and are revealed when you start animating
-  // them. You can manually reveal them with this if you want them to
-  // appear right away and you're not animating them.
+  /**
+    Reveals the sprite using CSS visibility property.
+
+    _Newly inserted sprites start hidden, and are revealed when you
+    start animating them. You can manually reveal them with this if
+    you want them to appear right away and you're not animating them._
+
+    @method reveal
+    @return {void}
+  */
   reveal() {
     if (!this.revealed) {
       this._revealed = true;
@@ -646,6 +723,20 @@ export default class Sprite {
     }
   }
 
+  /**
+    Manages the application of the `ember-animated-none` CSS class on
+    the element.
+
+    When the flag is truthy, the class is removed and the element is
+    therefore visible.
+
+    When the flag is falsy, the class is applied and the element is
+    therefore hidden.
+
+    @method display
+    @param {boolean} flag
+    @return {void}
+  */
   display(flag) {
     if (flag) {
       this._$element.removeClass('ember-animated-none');
@@ -654,8 +745,16 @@ export default class Sprite {
     }
   }
 
-  // translate the sprite by the given number of screen pixels,
-  // regardless of any preexisting transform
+  /**
+    Translates the sprite by the given number of screen pixels.
+
+    _Disregards any pre-existing transforms._
+
+    @method translate
+    @param {number} dx The number of screen pixels on the x axis.
+    @param {number} dy The number of screen pixels on the y axis.
+    @return {void}
+  */
   translate(dx, dy) {
     let t = this.transform;
     t = t.mult(new Transform(1, 0, 0, 1, dx / t.a, dy / t.d));
@@ -666,7 +765,14 @@ export default class Sprite {
     });
   }
 
-  // adjust the sprite's scale by the given scaling factors
+  /**
+    Adjusts the sprite's scale by the given scaling factors.
+
+    @method scale
+    @param {number} scaleX The scaling factor to apply to the x axis.
+    @param {number} scaleY The scaling factor to apply to the y axis.
+    @return {void}
+  */
   scale(scaleX, scaleY) {
     let t = this.transform.mult(new Transform(scaleX, 0, 0, scaleY, 0, 0));
     this._transform = t;
@@ -676,8 +782,14 @@ export default class Sprite {
     });
   }
 
-  // Adjust the sprite so it will still be in the same visual position
-  // despite being moved into a new offset parent.
+  /**
+    Adjusts the sprite so it will still be in the same visual position
+    despite being moved into a new offset parent.
+
+    @method rehome
+    @param {Sprite} newOffsetSprite
+    @return {void}
+  */
   rehome(newOffsetSprite) {
     let screenBounds = this.absoluteInitialBounds;
     let newRelativeBounds = shiftedBounds(screenBounds, -newOffsetSprite.initialBounds.left, -newOffsetSprite.initialBounds.top);
@@ -713,6 +825,14 @@ export default class Sprite {
       }
     }
   }
+
+  /**
+    TODO: Describe
+
+    @method startAtSprite
+    @param {Sprite} otherSprite
+    @return {void}
+  */
   startAtSprite(otherSprite) {
     continueMotions(otherSprite.element, this.element);
     let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
@@ -722,6 +842,13 @@ export default class Sprite {
     this._initialCumulativeTransform = otherSprite.initialCumulativeTransform;
   }
 
+  /**
+    TODO: Describe
+
+    @method startAtPixel
+    @param {Object} point The x and y coordinates.
+    @return {void}
+  */
   startAtPixel({ x, y }) {
     let dx = 0;
     let dy = 0;
@@ -772,6 +899,13 @@ export default class Sprite {
     }
   }
 
+  /**
+    TODO: Describe
+
+    @method endAtSprite
+    @param {Sprite} otherSprite
+    @return {void}
+  */
   endAtSprite(otherSprite) {
     let diff = otherSprite.difference('finalBounds', this, 'initialBounds');
     this.endTranslatedBy(diff.dx, diff.dy);
@@ -780,6 +914,13 @@ export default class Sprite {
     this._finalCumulativeTransform = otherSprite.finalCumulativeTransform;
   }
 
+  /**
+    TODO: Describe
+
+    @method endAtPixel
+    @param {Object} point The x and y coordinates.
+    @return {void}
+  */
   endAtPixel({ x, y }) {
     let dx = 0;
     let dy = 0;
@@ -803,10 +944,16 @@ export default class Sprite {
     this._finalBounds = shiftedBounds(this._initialBounds, dx, dy);
   }
 
-  // sets this sprite's finalBounds so that this sprite's position
-  // relative to otherSprite remains constant through the transition.
-  //
-  // otherSprite must have initial and final bounds.
+  /**
+    Sets this sprite's `finalBounds` so that its position relative
+    to the `otherSprite` remains constant through the transition.
+
+    _otherSprite must have initial and final bounds_
+
+    @method endRelativeTo
+    @param {Sprite} otherSprite
+    @return {void}
+  */
   endRelativeTo(otherSprite) {
     this.endTranslatedBy(otherSprite.finalBounds.left - otherSprite.initialBounds.left, otherSprite.finalBounds.top - otherSprite.initialBounds.top);
   }
