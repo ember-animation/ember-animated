@@ -292,7 +292,7 @@ export default class Sprite {
     animation.
 
     @method initialCumulativeTransform
-    @return {TBD} // TODO: Fill this properly
+    @return {Transform}
   */
   get initialCumulativeTransform() {
     return this._initialCumulativeTransform;
@@ -303,7 +303,7 @@ export default class Sprite {
     effect of all transforms on this sprite at the end of animation.
 
     @method finalCumulativeTransform
-    @return {TBD} // TODO: Fill this properly
+    @return {Transform}
   */
   get finalCumulativeTransform() {
     return this._finalCumulativeTransform;
@@ -514,7 +514,7 @@ export default class Sprite {
     are to every local pixel in the sprite.
 
     @accessor cumulativeTransform
-    @type {TBD} // TODO: Fill this properly
+    @type {Object}
   */
   get cumulativeTransform() {
     if (!this._cumulativeTransform) {
@@ -827,7 +827,7 @@ export default class Sprite {
   }
 
   /**
-    TODO: Describe
+    Sets the sprite's `initialBounds` relative to the provided `otherSprite`.
 
     @method startAtSprite
     @param {Sprite} otherSprite
@@ -843,7 +843,8 @@ export default class Sprite {
   }
 
   /**
-    TODO: Describe
+    Sets the sprite's `initialBounds` using the provided
+    x and y coordinates.
 
     @method startAtPixel
     @param {Object} point The x and y coordinates.
@@ -867,7 +868,14 @@ export default class Sprite {
     this.startTranslatedBy(dx, dy);
   }
 
-  // set our initialBounds relative to our finalBounds
+  /**
+    Sets the sprite's `initialBounds` relative to its `finalBounds`.
+
+    @method startTranslatedBy
+    @param {number} dx
+    @param {number} dy
+    @return {void}
+  */
   startTranslatedBy(dx, dy) {
     let priorInitialBounds = this._initialBounds;
     let offsetX = 0;
@@ -888,6 +896,12 @@ export default class Sprite {
 
   }
 
+  /**
+    Moves the sprite to its final position (`finalBounds`).
+
+    @method moveToFinalPosition
+    @return {void}
+  */
   moveToFinalPosition() {
     if (this._inInitialPosition) {
       let initial = this._initialBounds;
@@ -900,7 +914,7 @@ export default class Sprite {
   }
 
   /**
-    TODO: Describe
+    Sets the sprite's `finalBounds` using the provided `otherSprite`.
 
     @method endAtSprite
     @param {Sprite} otherSprite
@@ -915,7 +929,7 @@ export default class Sprite {
   }
 
   /**
-    TODO: Describe
+    Sets the sprite's `finalBounds` using the provided point (x, y).
 
     @method endAtPixel
     @param {Object} point The x and y coordinates.
@@ -939,7 +953,15 @@ export default class Sprite {
     this.endTranslatedBy(dx, dy);
   }
 
+  /**
+    Sets the sprite's `finalBounds` using its `initialBounds` and
+    the provided x and y axis offset.
 
+    @method endTranslatedBy
+    @param {number} dx The x axis offset.
+    @param {number} dy The y axis offset.
+    @return {void}
+  */
   endTranslatedBy(dx, dy) {
     this._finalBounds = shiftedBounds(this._initialBounds, dx, dy);
   }
@@ -948,10 +970,8 @@ export default class Sprite {
     Sets this sprite's `finalBounds` so that its position relative
     to the `otherSprite` remains constant through the transition.
 
-    _otherSprite must have initial and final bounds_
-
     @method endRelativeTo
-    @param {Sprite} otherSprite
+    @param {Sprite} otherSprite Note: must have initial and final bounds
     @return {void}
   */
   endRelativeTo(otherSprite) {
