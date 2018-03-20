@@ -126,15 +126,15 @@ export default Component.extend({
       newIndices.set(getKey(item), index);
     });
 
-    let newChildren = newItems.map(value => {
+    let newChildren = newItems.map((value, listIndex) => {
       let id = getKey(value);
       let index = oldIndices.get(id);
       if (index != null) {
-        let child = new Child(group, id, value);
+        let child = new Child(group, id, value, listIndex);
         child.state = 'kept';
         return child;
       } else {
-        return new Child(group, id, value);
+        return new Child(group, id, value, listIndex);
       }
     }).concat(
       oldChildren
@@ -558,10 +558,11 @@ export default Component.extend({
 
 
 class Child {
-  constructor(group, id, value) {
+  constructor(group, id, value, index) {
     this.group = group;
     this.id = id;
     this.value = value;
+    this.index = index;
 
     // new, kept, or removing
     this.state = 'new';
@@ -593,7 +594,7 @@ class Child {
   }
 
   clone() {
-    return new Child(this.group, this.id, this.value);
+    return new Child(this.group, this.id, this.value, this.index);
   }
 }
 
