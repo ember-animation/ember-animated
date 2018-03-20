@@ -1,7 +1,6 @@
 import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import Sprite from 'ember-animated/-private/sprite';
-import $ from 'jquery';
 import { Move } from 'ember-animated/motions/move';
 import {
   equalBounds,
@@ -24,8 +23,8 @@ module("Unit | Move", function(hooks) {
       motion: Move
     });
 
-    let fixture = $('#qunit-fixture');
-    fixture.html(`
+    let fixture = document.querySelector('#qunit-fixture');
+    fixture.innerHTML = `
 <div class="environment">
   <div class="offset-parent">
     <div class="sibling"></div>
@@ -35,16 +34,14 @@ module("Unit | Move", function(hooks) {
     <div class="sibling"></div>
   </div>
 </div>
-`);
-    environment = fixture.find('.environment');
-    offsetParent = fixture.find('.offset-parent');
-    target = fixture.find('.target');
-    innerContent = fixture.find('.inner-content');
-    environment.width(600);
-    offsetParent.css({
-      position: 'relative'
-    });
-    innerContent.height(400);
+`;
+    environment = fixture.querySelector('.environment');
+    offsetParent = fixture.querySelector('.offset-parent');
+    target = fixture.querySelector('.target');
+    innerContent = fixture.querySelector('.inner-content');
+    environment.style.width = '600px';
+    offsetParent.style.position = 'relative';
+    innerContent.style.width = '400px';
   });
 
   hooks.afterEach(function() {
@@ -53,14 +50,12 @@ module("Unit | Move", function(hooks) {
 
   test("simple motion", function(assert) {
     assert.expect(2);
-    let p = Sprite.offsetParentStartingAt(target[0]);
+    let p = Sprite.offsetParentStartingAt(target);
     p.measureFinalBounds();
-    let s = Sprite.positionedStartingAt(target[0], p);
+    let s = Sprite.positionedStartingAt(target, p);
     let startBounds = s.element.getBoundingClientRect();
-    target.css({
-      left: 300,
-      top: 400
-    });
+    target.style.left = '300px';
+    target.style.top = '400px';
     let endBounds = s.element.getBoundingClientRect();
     s.measureFinalBounds();
     s.lock();
@@ -81,20 +76,16 @@ module("Unit | Move", function(hooks) {
   });
 
   test("simple motion, interrupted", function(assert) {
-    target.css({
-      marginLeft: 0,
-      marginTop: 0,
-      position: 'relative'
-    });
+    target.style.marginLeft = '0px';
+    target.style.marginTop = '0px';
+    target.style.position = 'relative';
 
-    let p = Sprite.offsetParentStartingAt(target[0]);
+    let p = Sprite.offsetParentStartingAt(target);
     p.measureFinalBounds();
-    let s = Sprite.positionedStartingAt(target[0], p);
+    let s = Sprite.positionedStartingAt(target, p);
 
-    target.css({
-      left: 300,
-      top: 400
-    });
+    target.style.left = '300px';
+    target.style.top = '400px';
 
     s.measureFinalBounds();
     s.lock();
@@ -107,12 +98,10 @@ module("Unit | Move", function(hooks) {
     return time.advance(500).then(() => {
       assert.approxEqualPixels(s.getCurrentBounds().top, s.initialBounds.top + 200, 'top');
       assert.approxEqualPixels(s.getCurrentBounds().left, s.initialBounds.left + 150, 'left');
-      let newSprite = Sprite.positionedStartingAt(target[0], p);
+      let newSprite = Sprite.positionedStartingAt(target, p);
       newSprite.lock();
-      target.css({
-        left: 400,
-        top: 500
-      });
+      target.style.left = '400px';
+      target.style.top = '500px';
       newSprite.unlock();
       newSprite.measureFinalBounds();
       newSprite.lock();
@@ -131,11 +120,11 @@ module("Unit | Move", function(hooks) {
   });
 
   test("interrupting with same destination does not extend animation time", function(assert) {
-    let p = Sprite.offsetParentStartingAt(target[0]);
+    let p = Sprite.offsetParentStartingAt(target);
     p.measureFinalBounds();
-    let s = Sprite.positionedStartingAt(target[0], p);
+    let s = Sprite.positionedStartingAt(target, p);
     s.lock();
-    $('#qunit-fixture').find('.sibling').css('height', 50);
+    document.querySelector('#qunit-fixture .sibling').style.height = '50px';
     s.unlock();
     s.measureFinalBounds();
     s.lock();
@@ -146,7 +135,7 @@ module("Unit | Move", function(hooks) {
 
     return time.advance(500).then(() => {
       assert.approxEqualPixels(s.getCurrentBounds().top, s.initialBounds.top + 25, 'top');
-      let newSprite = Sprite.positionedStartingAt(target[0], p);
+      let newSprite = Sprite.positionedStartingAt(target, p);
       newSprite.lock();
       newSprite.unlock();
       newSprite.measureFinalBounds();
