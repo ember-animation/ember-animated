@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 /*
   Our Transform type is always respresented relative to
   `transform-origin: 0px 0px`. This is different from the browser's
@@ -89,8 +87,31 @@ function parseOrigin(originString) {
   return originString.split(' ').map(parseFloat);
 }
 
-function _ownTransform($elt) {
-  let t = $elt.css('transform');
+/**
+ * @param {HTMLElement} elt
+ */
+export function cumulativeTransform(elt) {
+  let accumulator = null;
+  while (elt && elt.nodeType === 1) {
+    let transform = ownTransform(elt);
+    if (transform !== identity && !transform.isIdentity()) {
+      if (accumulator) {
+        accumulator = transform.mult(accumulator);
+      } else {
+        accumulator = transform;
+      }
+    }
+    elt = elt.parentElement;
+  }
+  return accumulator || identity;
+}
+
+/**
+ * @param {HTMLElement} elt
+ */
+export function ownTransform(elt) {
+  let eltStyles = window.getComputedStyle(elt);
+  let t = eltStyles.transform !== '' ? eltStyles.transform : elt.style.transform;
   if (t === 'none') {
     // This constant value is an optimization, and we rely on that in
     // cumulativeTransform
@@ -99,7 +120,8 @@ function _ownTransform($elt) {
   let matrix = parseTransform(t);
   if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
     // If there is any rotation, scaling, or skew we need to do it within the context of transform-origin.
-    let [originX, originY] = parseOrigin($elt.css('transform-origin'));
+    let origin = eltStyles.transformOrigin !== '' ? eltStyles.transformOrigin : elt.style.transformOrigin;
+    let [originX, originY] = parseOrigin(origin);
     if (originX === 0 && originY === 0) {
       // transform origin is at 0,0 so it will have no effect, so we're done.
       return matrix;
@@ -110,28 +132,4 @@ function _ownTransform($elt) {
     // This case is an optimization for when there is only translation.
     return matrix;
   }
-}
-
-// I want the public interface for this module to be plain elements,
-// not jQuery, so that we have the option of switching to a non-query
-// implmentation.
-export function ownTransform(elt) {
-  return _ownTransform($(elt));
-}
-
-export function cumulativeTransform(elt) {
-  let $elt = $(elt);
-  let accumulator = null;
-  while ($elt.length > 0 && $elt[0].nodeType === 1) {
-    let transform = _ownTransform($elt);
-    if (transform !== identity && !transform.isIdentity()) {
-      if (accumulator) {
-        accumulator = transform.mult(accumulator);
-      } else {
-        accumulator = transform;
-      }
-    }
-    $elt = $elt.parent();
-  }
-  return accumulator || identity;
 }

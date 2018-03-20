@@ -74,6 +74,4 @@ module('Acceptance | hero', function(hooks) {
     await back;
     assert.equal(currentURL(), '/demos/hero');
   });
-
-
 });

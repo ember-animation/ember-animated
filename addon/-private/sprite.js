@@ -1,6 +1,4 @@
 import { warn } from '@ember/debug';
-
-import $ from 'jquery';
 import Ember from 'ember';
 import Transform, {
   ownTransform,
@@ -14,6 +12,7 @@ import {
   resizedBounds,
   emptyBounds
 } from './bounds';
+import { camelize } from '@ember/string';
 
 
 export const COPIED_CSS_PROPERTIES = [
@@ -23,6 +22,22 @@ export const COPIED_CSS_PROPERTIES = [
   'background-color',
   'letter-spacing'
 ];
+
+const numericCSSProps = {
+  animationIterationCount: true,
+  columnCount: true,
+  fillOpacity: true,
+  flexGrow: true,
+  flexShrink: true,
+  fontWeight: true,
+  lineHeight: true,
+  opacity: true,
+  order: true,
+  orphans: true,
+  widows: true,
+  zIndex: true,
+  zoom: true
+};
 
 const inFlight = new WeakMap();
 
@@ -83,7 +98,6 @@ export default class Sprite {
 
   constructor(element, inInitialPosition, lockMode, offsetSprite) {
     this.element = element;
-    this.__$element = null;
     this.owner = null;
     this._transform = null;
     this._cumulativeTransform = null;
@@ -436,18 +450,10 @@ export default class Sprite {
 
   set element(value) {
     this.__element = value;
-    this.__$element = null;
   }
 
   get element() {
     return this.__element;
-  }
-
-  get _$element() {
-    if (!this.__$element) {
-      this.__$element = $(this.element);
-    }
-    return this.__$element;
   }
 
   // The sprite's current transform, with appropriate caching so that
@@ -472,7 +478,7 @@ export default class Sprite {
 
   get revealed() {
     if (this._revealed == null) {
-      this._revealed = !this._$element.hasClass('ember-animated-hidden');
+      this._revealed = !this.__element.classList.contains('ember-animated-hidden');
     }
     return this._revealed;
   }
@@ -622,7 +628,15 @@ export default class Sprite {
         this._imposedStyle[property] = styles[property];
       });
     }
-    this._$element.css(styles);
+    Object.keys(styles).forEach(property => {
+      let camelizedProp = camelize(property);
+      let val = styles[property];
+      if (typeof val === 'number') {
+        this.__element.style[camelizedProp] = numericCSSProps[camelizedProp] ? styles[property] : (styles[property] + 'px');
+      } else {
+        this.__element.style[camelizedProp] = styles[property];
+      }
+    });
   }
 
   stillInFlight() {
@@ -632,7 +646,7 @@ export default class Sprite {
   // Hide the sprite (using CSS visibility property).
   hide() {
     this._revealed = false;
-    this._$element.addClass('ember-animated-hidden');
+    this.__element.classList.add('ember-animated-hidden');
   }
 
   // Reveal the sprite (using CSS visibility property). Newly inserted
@@ -642,15 +656,15 @@ export default class Sprite {
   reveal() {
     if (!this.revealed) {
       this._revealed = true;
-      this._$element.removeClass('ember-animated-hidden');
+      this.__element.classList.remove('ember-animated-hidden');
     }
   }
 
   display(flag) {
     if (flag) {
-      this._$element.removeClass('ember-animated-none');
+      this.__element.classList.remove('ember-animated-none');
     } else {
-      this._$element.addClass('ember-animated-none');
+      this.__element.classList.add('ember-animated-none');
     }
   }
 
@@ -882,7 +896,9 @@ function getEffectiveOffsetParent(element) {
   let offsetParent = element.offsetParent;
   let cursor = element.parentElement;
   while (cursor && offsetParent && cursor !== offsetParent) {
-    if ($(cursor).css('transform') !== 'none') {
+    let styles = window.getComputedStyle(cursor);
+    let t = styles.transform !== '' ? styles.transform : cursor.style.transform;
+    if (t !== 'none') {
       return cursor;
     }
     cursor = cursor.parentElement;
