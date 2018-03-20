@@ -25,14 +25,17 @@ module('Integration | Component | animated each', function(hooks) {
   });
 
   test('it renders', async function(assert) {
+    assert.expect(2);
     this.set('items', ['a', 'b', 'c']);
     await render(hbs`
-      {{#animated-each items as |item|}}
+      {{#animated-each items as |item index|}}
         <div class="test-child">{{item}}</div>
+        <div class="test-child-index">{{index}}</div>
       {{/animated-each}}
     `);
 
     assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.$('.test-child-index'), ['0', '1', '2']);
   });
 
   test('it renders when list is missing', async function(assert) {
