@@ -3,22 +3,21 @@ import { module, test } from 'qunit';
 import Sprite from 'ember-animated/-private/sprite';
 import { rAF, microwait, Motion } from 'ember-animated';
 import { MotionTester } from 'ember-animated/test-support';
-import $ from 'jquery';
 import { logErrors } from 'ember-animated/-private/scheduler';
 
 let tester;
 
 module("Unit | Motion", function(hooks) {
   hooks.beforeEach(function() {
-    let fixture = $('#qunit-fixture');
-    fixture.html(`
+    let fixture = document.querySelector('#qunit-fixture');
+    fixture.innerHTML = `
         <div class="target"></div>
-    `);
+    `;
     tester = MotionTester.create();
   });
 
   hooks.afterEach(function() {
-    $('#qunit-fixture').empty();
+    document.querySelector('#qunit-fixture').innerHTML = '';
   });
 
   test('Can be canceled within ember-concurrency tasks', function(assert) {
@@ -32,7 +31,7 @@ module("Unit | Motion", function(hooks) {
       }
     }
 
-    let sprite = new Sprite($('#qunit-fixture > .target')[0]);
+    let sprite = new Sprite(document.querySelector('#qunit-fixture > .target'));
     let motion = new TestMotion(sprite);
     tester.run(motion);
 
@@ -66,7 +65,7 @@ module("Unit | Motion", function(hooks) {
       }
     }
 
-    let sprite = new Sprite($('#qunit-fixture > .target')[0]);
+    let sprite = new Sprite(document.querySelector('#qunit-fixture > .target'));
     let motion = new TestMotion(sprite);
     let done = assert.async();
     run(() => {
@@ -92,7 +91,7 @@ module("Unit | Motion", function(hooks) {
       }
     }
 
-    let sprite = new Sprite($('#qunit-fixture > .target')[0]);
+    let sprite = new Sprite(document.querySelector('#qunit-fixture > .target'));
     let motion = new TestMotion(sprite);
     let done = assert.async();
     run(() => {

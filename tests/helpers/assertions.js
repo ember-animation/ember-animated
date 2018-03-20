@@ -21,9 +21,9 @@ export function equalBounds(value, expected, message) {
 }
 
 function constantBounds(target, fn, message = 'bounds should not change') {
-  let before = target[0].getBoundingClientRect();
+  let before = target.getBoundingClientRect();
   fn();
-  let after = target[0].getBoundingClientRect();
+  let after = target.getBoundingClientRect();
   equalBounds.call(this, after, before, message);
 }
 
@@ -46,9 +46,9 @@ function equalShape(value, expected, message) {
 }
 
 function constantShape(target, fn, message = 'shape should not change') {
-  let before = cumulativeTransform(target[0]);
+  let before = cumulativeTransform(target);
   fn();
-  let after = cumulativeTransform(target[0]);
+  let after = cumulativeTransform(target);
   equalShape.call(this, after, before, message);
 }
 

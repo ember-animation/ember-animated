@@ -14,6 +14,6 @@ module('Integration | Component | animated bind', function(hooks) {
       {{/animated-value}}
     `);
 
-    assert.equal(this.$('span').text().trim(), 'hello');
+    assert.equal(this.element.querySelector('span').textContent.trim(), 'hello');
   });
 });
