@@ -4,7 +4,6 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import QUnit, { module, test } from 'qunit';
-import $ from 'jquery';
 import { animationsSettled } from 'ember-animated/test-support';
 import { Promise, Motion } from 'ember-animated';
 import { run } from '@ember/runloop';
@@ -13,8 +12,8 @@ module('Integration | Component | animated each', function(hooks) {
   setupRenderingTest(hooks);
 
   hooks.beforeEach(function(assert) {
-    assert.listContents = function( $elts, expected, message ) {
-      let values = $elts.toArray().map(e => $(e).text().trim());
+    assert.listContents = function( elts, expected, message ) {
+      let values = [...elts].map(e => e.textContent.trim());
       this.pushResult({
         result: QUnit.equiv(values, expected),
         actual: values,
@@ -34,8 +33,8 @@ module('Integration | Component | animated each', function(hooks) {
       {{/animated-each}}
     `);
 
-    assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
-    assert.listContents(this.$('.test-child-index'), ['0', '1', '2']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child-index'), ['0', '1', '2']);
   });
 
   test('it renders when list is missing', async function(assert) {
@@ -62,7 +61,7 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -88,7 +87,7 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -114,7 +113,7 @@ module('Integration | Component | animated each', function(hooks) {
       this.get('items').replace(1, 1, ['x']);
     });
     await animationsSettled();
-    assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -140,7 +139,7 @@ module('Integration | Component | animated each', function(hooks) {
       set(this.get('items')[1], 'id', 'x');
     });
     await animationsSettled();
-    assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -170,7 +169,7 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
