@@ -37,10 +37,10 @@ module('Integration | Component | animated container', function(hooks) {
         }
       },
       beginStaticMeasurement() {
-        this.$().height(this.staticHeight);
+        this.element.style.height = this.staticHeight + 'px';
       },
       endStaticMeasurement() {
-        this.$().height(this.initialHeight);
+        this.element.style.height = this.staticHeight + 'px';
       },
       isAnimating: alias('animate.isRunning'),
       animate: task(function * (opts={}) {
@@ -54,7 +54,7 @@ module('Integration | Component | animated container', function(hooks) {
         this.staticHeight = opts.staticHeight == null ? 100 : opts.staticHeight;
         this.finalHeight = opts.finalHeight == null ? 200 : opts.finalHeight;
 
-        this.$().height(this.initialHeight);
+        this.element.style.height = this.initialHeight + 'px';
         let service = this.get('motionService');
         service.willAnimate({
           duration: opts.duration == null ? 1 : opts.duration,
@@ -63,7 +63,7 @@ module('Integration | Component | animated container', function(hooks) {
         });
         yield afterRender();
         yield * service.staticMeasurement(() => {});
-        this.$().height(this.finalHeight);
+        this.element.style.height = this.finalHeight + 'px';
         if (opts.block) {
           yield opts.block;
         }
@@ -80,20 +80,16 @@ module('Integration | Component | animated container', function(hooks) {
       {{/animated-container}}
     `);
 
-    this.$('.inside').css({
-      height: 210
-    });
+    this.element.querySelector('.inside').style.height = '210px';
 
-    let container = bounds(this.$('.animated-container'));
-    let inside = bounds(this.$('.inside'));
+    let container = _bounds(this.element.querySelector('.animated-container'));
+    let inside = _bounds(this.element.querySelector('.inside'));
     assert.equalBounds(container, inside, 'takes size of content');
 
-    this.$('.inside').css({
-      height: 600
-    });
+    this.element.querySelector('.inside').style.height = '600px';
 
-    container = bounds(this.$('.animated-container'));
-    let tallerInside = bounds(this.$('.inside'));
+    container = _bounds(this.element.querySelector('.animated-container'));
+    let tallerInside = _bounds(this.element.querySelector('.inside'));
     assert.equalBounds(container, tallerInside, 'adapts to height of content');
     assert.ok(tallerInside.height > inside.height, "inside content got taller");
 
@@ -107,23 +103,18 @@ module('Integration | Component | animated container', function(hooks) {
         </div>
       {{/animated-container}}
     `);
+    this.element.querySelector('.inside').style.height = '210px';
 
-    this.$('.inside').css({
-      height: 210
-    });
-
-    let original = bounds(this.$('.animated-container'));
+    let original = _bounds(this.element.querySelector('.animated-container'));
 
 
     run(() => {
       this.get('fakeAnimator.animate').perform();
     });
 
-    this.$('.inside').css({
-      height: 600
-    });
+    this.element.querySelector('.inside').style.height = '600px';
 
-    let final = bounds(this.$('.animated-container'));
+    let final = _bounds(this.element.querySelector('.animated-container'));
 
     assert.equalBounds(final, original, 'height can be locked');
   });
@@ -185,10 +176,10 @@ module('Integration | Component | animated container', function(hooks) {
       });
     });
     await startedMotion;
-    assert.equal(height(this.$('.animated-container')), 100, "still at previous height");
+    assert.equal(height(this.element.querySelector('.animated-container')), 100, "still at previous height");
     finishMotion();
     await animationsSettled();
-    assert.equal(height(this.$('.animated-container')), 300, "now at final height");
+    assert.equal(height(this.element.querySelector('.animated-container')), 300, "now at final height");
   });
 
   test('unlocks only after animator\'s motion is done', async function(assert) {
@@ -213,10 +204,10 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await wait(60);
-    assert.equal(height(this.$('.animated-container')), 200, "should be locked at the static height we measured");
+    assert.equal(height(this.element.querySelector('.animated-container')), 200, "should be locked at the static height we measured");
     unblock();
     await wait(60);
-    assert.equal(height(this.$('.animated-container')), 300, "unlocked and reflecting the actual final height of the animator");
+    assert.equal(height(this.element.querySelector('.animated-container')), 300, "unlocked and reflecting the actual final height of the animator");
   });
 
   test('passes provided duration to motion', async function(assert) {
@@ -267,7 +258,7 @@ module('Integration | Component | animated container', function(hooks) {
     `);
 
     await animationsSettled();
-    assert.equal(height(this.$('.animated-container')), 200, 'ends up unlocked');
+    assert.equal(height(this.element.querySelector('.animated-container')), 200, 'ends up unlocked');
   });
 
   test("Accounts for top margin collapse between self and child", async function(assert) {
@@ -279,11 +270,11 @@ module('Integration | Component | animated container', function(hooks) {
       {{/animated-container}}
     `);
 
-    assert.visuallyConstant(this.$('.animated-container'), () => {
+    assert.visuallyConstant(this.element.querySelector('.animated-container'), () => {
       run(() => {
         this.get('fakeAnimator.animate').perform();
       });
-      this.$('.inside').css('position', 'absolute');
+      this.element.querySelector('.inside').style.position = 'absolute';
     });
   });
 
@@ -297,11 +288,11 @@ module('Integration | Component | animated container', function(hooks) {
       {{/animated-container}}
     `);
 
-    assert.visuallyConstant(this.$('.animated-container'), () => {
+    assert.visuallyConstant(this.element.querySelector('.animated-container'), () => {
       run(() => {
         this.get('fakeAnimator.animate').perform();
       });
-      this.$('.inside').css('position', 'absolute');
+      this.element.querySelector('.inside').style.position = 'absolute';
     });
   });
 
@@ -317,11 +308,11 @@ module('Integration | Component | animated container', function(hooks) {
       </div>
     `);
 
-    assert.visuallyConstant(this.$('.after'), () => {
+    assert.visuallyConstant(this.element.querySelector('.after'), () => {
       run(() => {
         this.get('fakeAnimator.animate').perform();
       });
-      this.$('.inside').css('position', 'absolute');
+      this.element.querySelector('.inside').style.position = 'absolute';
     });
   });
 
@@ -342,9 +333,9 @@ module('Integration | Component | animated container', function(hooks) {
       <div class="after">This comes after</div>
     `);
 
-    this.get('fakeAnimator').$().height(0);
+    this.get('fakeAnimator').element.style.height = '0px';
 
-    let initialTop = bounds(this.$('.after')).top;
+    let initialTop = _bounds(this.element.querySelector('.after')).top;
 
     run(() => {
       this.get('fakeAnimator.animate').perform({
@@ -355,7 +346,7 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await animationsSettled();
-    assert.equal(bounds(this.$('.after')).top, initialTop + 1, 'only changes by one pixel');
+    assert.equal(_bounds(this.element.querySelector('.after')).top, initialTop + 1, 'only changes by one pixel');
   });
 
   test("Accounts for own margin collapse as last content is removed", async function(assert) {
@@ -374,9 +365,9 @@ module('Integration | Component | animated container', function(hooks) {
       <div class="after">This comes after</div>
     `);
 
-    this.get('fakeAnimator').$().height(1);
+    this.get('fakeAnimator').element.style.height = '1px';
 
-    let initialTop = bounds(this.$('.after')).top;
+    let initialTop = _bounds(this.element.querySelector('.after')).top;
 
     run(() => {
       this.get('fakeAnimator.animate').perform({
@@ -387,7 +378,7 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await animationsSettled();
-    assert.equal(bounds(this.$('.after')).top, initialTop - 1, 'only changes by one pixel');
+    assert.equal(_bounds(this.element.querySelector('.after')).top, initialTop - 1, 'only changes by one pixel');
   });
 
   test("Uses same timing for measurements as animated-each", async function(assert) {
@@ -412,12 +403,8 @@ module('Integration | Component | animated container', function(hooks) {
     await animationsSettled();
   });
 
-  function bounds($elt) {
-    return _bounds($elt[0]);
-  }
-
-  function height($elt) {
-    return bounds($elt).height;
+  function height(elt) {
+    return _bounds(elt).height;
   }
 });
 

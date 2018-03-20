@@ -4,17 +4,21 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import QUnit, { module, test } from 'qunit';
-import $ from 'jquery';
-import { animationsSettled } from 'ember-animated/test-support';
-import { Promise, Motion } from 'ember-animated';
+import {
+  animationsSettled,
+  time,
+  setupAnimationTest
+} from 'ember-animated/test-support';
+import { Promise, Motion, wait } from 'ember-animated';
 import { run } from '@ember/runloop';
 
 module('Integration | Component | animated each', function(hooks) {
   setupRenderingTest(hooks);
+  setupAnimationTest(hooks);
 
   hooks.beforeEach(function(assert) {
-    assert.listContents = function( $elts, expected, message ) {
-      let values = $elts.toArray().map(e => $(e).text().trim());
+    assert.listContents = function( elts, expected, message ) {
+      let values = [...elts].map(e => e.textContent.trim());
       this.pushResult({
         result: QUnit.equiv(values, expected),
         actual: values,
@@ -25,14 +29,17 @@ module('Integration | Component | animated each', function(hooks) {
   });
 
   test('it renders', async function(assert) {
+    assert.expect(2);
     this.set('items', ['a', 'b', 'c']);
     await render(hbs`
-      {{#animated-each items as |item|}}
+      {{#animated-each items as |item index|}}
         <div class="test-child">{{item}}</div>
+        <div class="test-child-index">{{index}}</div>
       {{/animated-each}}
     `);
 
-    assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child-index'), ['0', '1', '2']);
   });
 
   test('it renders when list is missing', async function(assert) {
@@ -59,8 +66,52 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
+  });
+
+  test(`it yields each inserted and kept item's final index`, async function(assert) {
+    // This is a do-nothing transition. Our "wait" function respects
+    // our "time" test helper, so we can manipulate it to make sure we
+    // see the state during animation without actually doing any
+    // waiting around.
+    this.set('transition', function * () {
+      yield wait(1000);
+    });
+
+    this.set('items', ['a', 'b', 'c']);
+    await render(hbs`
+      {{#animated-each items use=transition as |item index|}}
+        <div class="test-child" data-item={{item}} data-index={{index}}>{{item}}</div>
+      {{/animated-each}}
+    `);
+    await animationsSettled();
+
+    time.pause();
+    this.set('items', ['b', 'c', 'q']);
+    await time.advance(500); // halfway through the animation
+    assert.equal(this.element.querySelector('.test-child[data-item="b"]').dataset['index'], "0");
+    assert.equal(this.element.querySelector('.test-child[data-item="c"]').dataset['index'], "1");
+    assert.equal(this.element.querySelector('.test-child[data-item="q"]').dataset['index'], "2");
+  });
+
+  test(`it doesn't change each removed item's index while it's being animated away`, async function(assert) {
+    this.set('transition', function * () {
+      yield wait(1000);
+    });
+
+    this.set('items', ['a', 'b', 'c']);
+    await render(hbs`
+      {{#animated-each items use=transition as |item index|}}
+        <div class="test-child" data-item={{item}} data-index={{index}}>{{item}}</div>
+      {{/animated-each}}
+    `);
+    await animationsSettled();
+
+    time.pause();
+    this.set('items', ['a', 'c']);
+    await time.advance(500);
+    assert.equal(this.element.querySelector('.test-child[data-item="b"]').dataset['index'], "1");
   });
 
   test('it updates when list is replaced', async function(assert) {
@@ -85,7 +136,7 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -111,7 +162,7 @@ module('Integration | Component | animated each', function(hooks) {
       this.get('items').replace(1, 1, ['x']);
     });
     await animationsSettled();
-    assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -137,7 +188,7 @@ module('Integration | Component | animated each', function(hooks) {
       set(this.get('items')[1], 'id', 'x');
     });
     await animationsSettled();
-    assert.listContents(this.$('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -167,7 +218,7 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.$('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 

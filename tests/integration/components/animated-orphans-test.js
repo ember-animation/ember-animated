@@ -106,7 +106,7 @@ module('Integration | Component | animated orphans', function(hooks) {
   `);
     await animationsSettled();
 
-    let firstBounds = this.$('.one')[0].getBoundingClientRect();
+    let firstBounds = this.element.querySelector('.one').getBoundingClientRect();
 
     this.set('t1', function * ({ removedSprites }) {
       assert.equal(removedSprites.length, 1, 'second transition');
