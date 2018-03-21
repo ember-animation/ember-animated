@@ -88,8 +88,13 @@ function parseOrigin(originString) {
 }
 
 /**
- * @param {HTMLElement} elt
- */
+  Returns a Transform instance representing the cumulative CSS
+  transform of this element and all its ancestors.
+
+  @function cumulativeTransform
+  @param {HTMLElement} elt
+  @return {Transform}
+*/
 export function cumulativeTransform(elt) {
   let accumulator = null;
   while (elt && elt.nodeType === 1) {
@@ -107,7 +112,12 @@ export function cumulativeTransform(elt) {
 }
 
 /**
+  Returns a Transform instance representing the CSS transform of this
+  element.
+
+ * @function ownTransform
  * @param {HTMLElement} elt
+ * @return {Transform} instance representing this element's css transform property.
  */
 export function ownTransform(elt) {
   let eltStyles = window.getComputedStyle(elt);
