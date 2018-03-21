@@ -2768,9 +2768,9 @@ ember-cli-addon-docs-yuidoc@^0.1.1:
     lodash "^4.17.5"
     yuidocjs "^0.10.2"
 
-"ember-cli-addon-docs@https://github.com/ember-learn/ember-cli-addon-docs#560bb02a7001e023bda7116e85f8368bb5ebf8de":
-  version "0.2.2"
-  resolved "https://github.com/ember-learn/ember-cli-addon-docs#560bb02a7001e023bda7116e85f8368bb5ebf8de"
+ember-cli-addon-docs@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/ember-cli-addon-docs/-/ember-cli-addon-docs-0.2.4.tgz#09d79de52e356d97261935c5164f7031b423c66f"
   dependencies:
     "@glimmer/syntax" "^0.30.5"
     broccoli-caching-writer "^3.0.3"
@@ -2779,6 +2779,7 @@ ember-cli-addon-docs-yuidoc@^0.1.1:
     broccoli-merge-trees "^2.0.0"
     broccoli-persistent-filter "^1.4.3"
     broccoli-plugin "^1.3.0"
+    broccoli-source "^1.1.0"
     broccoli-stew "^1.5.0"
     ember-ace "^1.2.0"
     ember-cli-autoprefixer "^0.8.1"
