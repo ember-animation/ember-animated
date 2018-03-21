@@ -2,10 +2,7 @@
 
   <button {{action "toggle"}}>Toggle</button>
 
-  <label>
-    <input type="checkbox" checked={{groupTogether}} onchange={{action (mut groupTogether) (not groupTogether)}}>
-    Grouped
-  </label>
+  <label><input type="checkbox" checked={{groupTogether}} onchange={{action (mut groupTogether) (not groupTogether)}}> Grouped</label>
 
   <div>
     <div class="left">
