@@ -4,8 +4,8 @@
   </div>
   <div>
     <button {{action "swap"}}>Swap</button>
-    <label>{{input type="checkbox" checked=distinguishSides}} Distinguish by color</label>
-    <label class="sending-side">{{input type="checkbox" checked=animateSendingSide}} Animate sending side</label>
+    <label><input type="checkbox" checked={{distinguishSides}} onchange={{action (mut distinguishSides) (not distinguishSides)}}>Distinguish by color</label>
+    <label class="sending-side"><input type="checkbox" checked={{animateSendingSide}} onchange={{action (mut animateSendingSide) (not animateSendingSide)}}> Animate sending side</label>
   </div>
 
   {{#if leftItems}}

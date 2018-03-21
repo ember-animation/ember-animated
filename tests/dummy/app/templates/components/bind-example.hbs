@@ -15,5 +15,5 @@
 
   <button {{action "increment"}}>+</button>
   <button {{action "decrement"}}>-</button>
-  {{input type="checkbox" checked=showBoth}}
+  <input type="checkbox" checked={{showBoth}} onchange={{action (mut showBoth) (not showBoth)}}>
 </div>
