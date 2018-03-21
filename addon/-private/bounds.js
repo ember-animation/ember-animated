@@ -1,3 +1,14 @@
+/**
+  Shifts the coordinates of the given bounds using the provided
+  x and y axis offset.
+
+  @private
+  @function shiftedBounds
+  @param {Object} bounds The original bounds.
+  @param {number} dx X axis offset.
+  @param {number} dy Y axis offset.
+  @return {Object} The newly calculated bounds.
+*/
 export function shiftedBounds(bounds, dx, dy) {
   return {
     top: bounds.top + dy,
@@ -9,6 +20,17 @@ export function shiftedBounds(bounds, dx, dy) {
   };
 }
 
+/**
+  Resizes the coordinates of the given bounds using the provided
+  width and height.
+
+  @private
+  @function resizedBounds
+  @param {Object} bounds The original bounds.
+  @param {number} width The target width.
+  @param {number} height The target height.
+  @return {Object} The newly calculated bounds.
+*/
 export function resizedBounds(bounds, width, height) {
   return {
     top: bounds.top,
@@ -20,13 +42,26 @@ export function resizedBounds(bounds, width, height) {
   };
 }
 
+/**
+  Shifts the coordinates of the given bounds so they are relative to
+  the offset.
 
-// shifts the coordinates of the given bounds so they are relative to
-// the offset.
+  @private
+  @function relativeBounds
+  @param {Object} bounds The original bounds.
+  @param {Object} offset The offset.
+  @return {Object} The newly calculated bounds.
+*/
 export function relativeBounds(bounds, offset) {
   return shiftedBounds(bounds, -offset.left, -offset.top);
 }
 
+/**
+  An empty bounds object.
+
+  @private
+  @constant {Object} emptyBounds
+*/
 export const emptyBounds = {
   top: 0,
   bottom: 0,
