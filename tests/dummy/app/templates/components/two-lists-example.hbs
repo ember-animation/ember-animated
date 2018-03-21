@@ -1,6 +1,6 @@
 <div class="scenario-two-lists">
   <div class="controls">
-    <label>Bounce back {{input type="checkbox" checked=bounceBack}}</label>
+    <label>Bounce back <input type="checkbox" checked={{bounceBack}} onchange={{action (mut bounceBack) (not bounceBack)}}></label>
   </div>
 
   {{#animated-container}}
