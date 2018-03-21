@@ -31,7 +31,7 @@
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^3.1.0",
-    "ember-animated-tools": "^0.1.1",
+    "ember-animated-tools": "^0.3.0",
     "ember-cli": "~3.0.0",
     "ember-cli-addon-docs": "https://github.com/ember-learn/ember-cli-addon-docs#560bb02a7001e023bda7116e85f8368bb5ebf8de",
     "ember-cli-addon-docs-yuidoc": "^0.1.1",
