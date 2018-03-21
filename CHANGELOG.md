@@ -1,3 +1,9 @@
+# 0.3.0
+
+ - ENHANCEMENT: now completely jQuery-free. Thanks to @cibernox and @mikoscz.
+ - ENHANCEMENT: `animated-each` now yields an `index` variable, just like regular Ember `each`. Thanks @Cryrivers.
+ - ENHANCEMENT: much progress on integrating ember-cli-addon-docs and beginning to document methods. Thankss @Oreoz, @Turbo87, @chrism. Deployed docs site coming very soon.
+
 # 0.2.0
 
  - BREAKING: Sprite no longer has initialOpacity and finalOpacity. These are now covered by initialComputedStyle and finalComputedStyle, which are also extensible to track many other CSS properties.
