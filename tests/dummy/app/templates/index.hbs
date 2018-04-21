@@ -1,16 +1,16 @@
-{{#docs-navbar logo='ember-cli' name='Addon Docs'}}
-  {{#link-to 'demos' class="docs-navbar__link"}}
+{{#docs-header as |header|}}
+  {{#header.link 'demos'}}
     Demos
-  {{/link-to}}
-{{/docs-navbar}}
+  {{/header.link}}
+{{/docs-header}}
 
 {{docs-hero
   logo='ember'
-  slimHeading='Animated'
+  slimHeading='Ember Animated'
   byline='Core animation primitives for Ember'}}
 
-<div class='doc-container docs-md'>
-  <section class='docs-section'>
+<div class='docs-container docs-md'>
+  <section class='max-w-md mx-auto pb-8'>
     {{index/index-content}}
   </section>
 </div>

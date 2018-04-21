@@ -1,22 +1,20 @@
 {{#docs-viewer as |viewer|}}
 
   {{#viewer.nav as |nav|}}
-    {{nav.item 'Overview' 'docs.index'}}
+    {{nav.section 'Overview'}}
+    {{nav.item 'Motivation and Installation' 'docs.index'}}
 
-    {{nav.item 'Animator Components' 'docs.animator-components'}}
-    {{#nav.subnav as |sub|}}
-      {{sub.item 'animated-each' 'docs.animator-components.each'}}
-      {{sub.item 'animated-value' 'docs.animator-components.value'}}
-      {{sub.item 'animated-if' 'docs.animator-components.if'}}
-    {{/nav.subnav}}
+    {{nav.section 'Animator Components' }}
+    {{nav.item 'animated-each' 'docs.animator-components.each'}}
+    {{nav.item 'animated-value' 'docs.animator-components.value'}}
+    {{nav.item 'animated-if' 'docs.animator-components.if'}}
 
-    {{nav.item 'Support Components' 'docs.support-components'}}
-    {{#nav.subnav as |sub|}}
-      {{sub.item 'animated-container' 'docs.support-components.container'}}
-      {{sub.item 'animated-orphans' 'docs.support-components.orphans'}}
-      {{sub.item 'animated-beacon' 'docs.support-components.beacon'}}
-    {{/nav.subnav}}
+    {{nav.section 'Support Components' }}
+    {{nav.item 'animated-container' 'docs.support-components.container'}}
+    {{nav.item 'animated-orphans' 'docs.support-components.orphans'}}
+    {{nav.item 'animated-beacon' 'docs.support-components.beacon'}}
 
+    {{nav.section 'Transitions and Motions'}}
     {{nav.item 'Transition Context' 'docs.transition-context'}}
     {{nav.item 'Sprite API' 'docs.sprite-api'}}
     {{nav.item 'Built In Transitions' 'docs.built-in-transitions'}}
@@ -25,11 +23,7 @@
   {{/viewer.nav}}
 
   {{#viewer.main}}
-    <div class="docs-container docs__center">
-      <div class="docs-section">
-        {{outlet}}
-      </div>
-    </div>
+    {{outlet}}
   {{/viewer.main}}
 
 {{/docs-viewer}}
