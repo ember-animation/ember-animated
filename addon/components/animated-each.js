@@ -12,15 +12,66 @@ import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
 
+/**
+  A component that iterates a collection, performing a given block
+  once on each item in the collection. This component also animates the action with given specifications and sets the state of each item in the collection.
+  ```hbs
+    {{export default Component.extend({
+      layout,
+      tagName: '',
+      motionService: service('-ea-motion'),
+      duration: null,
+      use: null,
+      rules: null,
+      initialInsertion: false,
+      finalRemoval: false,
+      key: null,}}
+  ```
+  @class AnimatedEach
+  @public
+*/
 export default Component.extend({
   layout,
   tagName: '',
   motionService: service('-ea-motion'),
+
+  /**
+   * Represents the amount of time an animation takes in miliseconds.
+    @argument duration
+    @type Number
+  */
   duration: null,
+  /**
+   * Specifies the animation transition type.
+    @argument use
+    @type transition
+  */
   use: null,
+   /**
+   * Compares the old items to the new items in each collection. 
+    @argument rules
+    @type 
+  */
   rules: null,
+   /**
+   * Determines whether the component will render initial animation on inserted sprites. 
+    @argument initialInsertion
+    @type boolean
+  */
   initialInsertion: false,
+  /**
+   * Determines whether the component will render animation on removed sprites. 
+    @argument finalRemoval
+    @type boolean
+  */
   finalRemoval: false,
+
+  /**
+    Serves the same purpose as a traditional ember key, but it compares keys across separate lists in addition to comparing keys within one list. 
+    @argument key
+    @type 
+  */
+  key: null,
 
   init() {
     this._elementToChild = new WeakMap();
