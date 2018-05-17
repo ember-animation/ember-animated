@@ -31,8 +31,15 @@ Router.map(function() {
       this.route('item', { path: '/*path' });
     });
 
+    this.route('between');
+    this.route('sprites');
+    this.route('motions');
+    this.route('transitions');
+    this.route('rules');
+    
+
     this.route('animator-components', function() {
-      this.route('each');
+      
       this.route('value');
       this.route('if');
     });

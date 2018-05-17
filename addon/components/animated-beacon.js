@@ -9,6 +9,21 @@ import Sprite from '../-private/sprite';
 
 export const WILDCARD = {};
 
+/**
+  A component that animates when the group values match or when the group value 
+  is set to default.  
+  ```hbs
+ {{#animated-beacon group="the-group"}}
+  <div class="first"></div>
+ {{/animated-beacon}}
+
+ {{#animated-value showIt use=myTransition group="the-group"}}
+  <div class="second"></div>
+ {{/animated-value}}
+  ```
+  @class animated-beacon
+  @public
+*/
 export default Component.extend({
   layout,
   motionService: service('-ea-motion'),

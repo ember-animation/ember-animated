@@ -3,20 +3,14 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-value';
 
 /**
-  A component that uses animate-each to perform an animation on a single predicate value. This component performs the
-  animation each time the predicate value is updated (sent or received).  Animated-value uses the same parameters as animate-each. 
+  A component that animates when a single value changes. 
+  Animated-value uses the same arguments as animate-each.
   ```hbs
-  {{export default Component.extend({
-    tagName: '',
-    layout,
-    items: computed('value', function() {
-    return [this.get('value')];
-  })
-}).reopenClass({
-  positionalParams: ['value']
-}); }}
+  {{#animated-value value use=myFancyTransition duration=2000 as |v|}}
+        <span>{{v}}</span>
+      {{/animated-value}}
   ```
-  @class AnimatedValue
+  @class animated-value
   @public
 */
 

@@ -6,9 +6,31 @@ import { task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 
+/**
+  A component that animates within an element. 
+  ```hbs
+  {{#animated-container}}
+    {{#animated-value items use=transition duration=1000 as |item|}}
+      <div>myContent</div>
+    {{/animated-value}}
+  {{/animated-container}}
+  <p>
+    This is outside of the element.
+  </p>
+</div>
+  ```
+  @class animated-container
+  @public
+*/
 export default Component.extend({
   classNames: ['animated-container'],
   motionService: service('-ea-motion'),
+   /**
+   * When true, all items on the list will animate as if the parent is set at the initial position.
+   * Defaults to false. 
+    @argument onInitialRender
+    @type Boolean
+  */
   onInitialRender: false,
 
   init() {

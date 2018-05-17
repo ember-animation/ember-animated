@@ -13,21 +13,13 @@ import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
 
 /**
-  A component that iterates a collection, performing a given block
-  once on each item in the collection. This component also animates the action with given specifications and sets the state of each item in the collection.
+  A drop in replacement for `{{#each}}` that animates changes to a list. 
   ```hbs
-    {{export default Component.extend({
-      layout,
-      tagName: '',
-      motionService: service('-ea-motion'),
-      duration: null,
-      use: null,
-      rules: null,
-      initialInsertion: false,
-      finalRemoval: false,
-      key: null,}}
+    {{#animated-each items use=myFancyTransition as |item|}}
+       <div>{{item.name}}</div>
+    {{/animated-each}}
   ```
-  @class AnimatedEach
+  @class animated-each
   @public
 */
 export default Component.extend({
@@ -36,42 +28,59 @@ export default Component.extend({
   motionService: service('-ea-motion'),
 
   /**
+   * The list of data you are trying to render.
+    @argument items
+    @type Array
+  */
+  items: null,
+
+  /**
+   * If set, this animator will only [match](../../between) other animators that have the same group value. 
+    @argument group
+    @type String
+  */
+  group: null,
+
+  /**
    * Represents the amount of time an animation takes in miliseconds.
     @argument duration
     @type Number
   */
   duration: null,
   /**
-   * Specifies the animation transition type.
+   * Specifies the [Transition](../../transitions) 
+   * to run when the list changes.
     @argument use
-    @type transition
+    @type Transition
   */
   use: null,
    /**
-   * Compares the old items to the new items in each collection. 
+   * Specifies data-dependent [Rules](../../rules) that choose which [Transition](../../transitions) 
+   * to run when the list changes. This takes precedence over `use`.
     @argument rules
-    @type 
+    @type Rules
   */
   rules: null,
    /**
-   * Determines whether the component will render initial animation on inserted sprites. 
+   * When true, all the items in the list will animate as [`insertedSprites`](../../sprites) when the `{{#animated-each}}` is first rendered. Defaults to false.
     @argument initialInsertion
-    @type boolean
+    @type Boolean
   */
   initialInsertion: false,
   /**
-   * Determines whether the component will render animation on removed sprites. 
+   * When true, all the items in the list will animate as [`removedSprites`](../../sprites) when the `{{#animated-each}}` is destroyed. Defaults to false.
     @argument finalRemoval
-    @type boolean
+    @type Boolean
   */
   finalRemoval: false,
 
   /**
-    Serves the same purpose as a traditional ember key, but it compares keys across separate lists in addition to comparing keys within one list. 
+    Serves the same purpose as the `key` in ember `{{#each}}`, and it also compares keys [when animating between components](../../between).
     @argument key
-    @type 
+    @type String
   */
   key: null,
+
 
   init() {
     this._elementToChild = new WeakMap();
