@@ -93,6 +93,10 @@ export default class Sprite {
   static sizedEndingAt(element) {
     let sprite = new this(element, false, 'size', null);
     sprite._initialBounds = emptyBounds;
+    sprite._initialComputedStyle = sprite._finalComputedStyle;
+    sprite._initialPosition = sprite._finalPosition;
+    sprite._originalInitialBounds = sprite._initialBounds;
+    sprite._initialCumulativeTransform = sprite._finalCumulativeTransform;
     return sprite;
   }
 

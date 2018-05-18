@@ -473,4 +473,20 @@ module('Integration | Component | animated container', function(hooks) {
     assert.closeSize(5, after, before);
   });
 
+  test("can resize at initial render", async function(assert) {
+    this.set('transition', function * () {});
+    this.set('showThing', true);
+    time.pause();
+    await this.render(hbs`
+      {{#animated-container onInitialRender=true}}
+        {{#animated-if showThing use=transition initialInsertion=true duration=1000}}
+          <div style="height: 100px">Content</div>
+        {{/animated-if}}
+      {{/animated-container}}
+    `);
+    await time.advance(10);
+    let actual = _bounds(this.element.querySelector('.animated-container'));
+    assert.closeSize(5, actual, { width: 0, height: 0});
+  });
+
 });
