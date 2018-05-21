@@ -17,9 +17,10 @@ import partition from '../-private/partition';
   A component that animates when items do not have a parent. This component serves as a parent when 
   the parent from the previous animation was destroyed. 
   ```hbs
- <div class="scenario-orphan">
-  <div style="position: relative; top: 40px">
-    {{animated-orphans}}
+  <div class="scenario-orphan">
+    <div style="position: relative; top: 40px">
+      {{animated-orphans}}
+    </div>
   </div>
   ```
   @class animated-orphans
