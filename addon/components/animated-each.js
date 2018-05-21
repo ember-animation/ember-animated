@@ -21,9 +21,9 @@ import partition from '../-private/partition';
   ```
   ```js
   import Component from '@ember/component';
-  import { toLeft } from 'ember-animated/transitions/move-over';
+  import { toRight } from 'ember-animated/transitions/move-over';
   export default Component.extend({
-    items: A, B, C, D,
+    items: ['A', 'B', 'C', 'D']
     toRight,
   });
   ```

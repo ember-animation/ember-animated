@@ -15,8 +15,7 @@ import layout from '../templates/components/animated-value';
   import { toLeft } from 'ember-animated/transitions/move-over';
   export default Component.extend({
     toLeft,
-    value: computed('value', function() {
-      return [this.get('value)];
+    value: ['A', 'B', 'C', 'D']
     })
   });
   ```
