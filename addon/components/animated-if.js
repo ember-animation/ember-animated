@@ -5,10 +5,23 @@ import { computed } from '@ember/object';
   A drop in replacement for `{{#if}}` that animates changes to a list when the predicate changes. 
   Animated-if uses the same arguments as animated-each.
   ```hbs
-   {{#animated-if showThing use=myFancyTransition}}
-          <div>myContent</div>
-        {{/animated-if}}
+   <button {{action toggleThing}}>Toggle</button>
+   {{#animated-if showThing use=toLeft}}
+     <div>myContent</div>
+   {{/animated-if}}
   ```
+  ```js
+  import Component from '@ember/component';
+  import { toLeft } from 'ember-animated/transitions/move-over';
+  export default Component.extend({
+    showThing: false,
+    toLeft,
+    toggleThing() {
+      this.set('showThing', !this.showThing);
+    }
+  });
+  ```
+
   @class animated-if
   @public
 */
