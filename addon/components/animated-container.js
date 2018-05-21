@@ -7,7 +7,8 @@ import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 
 /**
-  A component that animates within an element. 
+  A component that animates an animator or multiple animators within a
+  given block. 
   ```hbs
   {{#animated-container}}
     {{#animated-value items use=transition duration=1000 as |item|}}
@@ -15,7 +16,7 @@ import { afterRender, microwait } from '..';
     {{/animated-value}}
   {{/animated-container}}
   <p>
-    This is outside of the element.
+    This is outside of the container.
   </p>
 </div>
   ```
@@ -26,7 +27,8 @@ export default Component.extend({
   classNames: ['animated-container'],
   motionService: service('-ea-motion'),
    /**
-   * When true, all items on the list will animate as if the parent is set at the initial position.
+   * Whether to animate the initial render. You will probably also need to set 
+   * initialInsertion=true on a child component of animated-container. 
    * Defaults to false. 
     @argument onInitialRender
     @type Boolean

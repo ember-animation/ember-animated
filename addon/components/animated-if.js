@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-if';
 import { computed } from '@ember/object';
 /**
-  A drop in replacement for `{{#if}}` that animates changes to a list when the predicate changes. 
+  A drop in replacement for `{{#if}}` that animates changes when the predicate changes. 
   Animated-if uses the same arguments as animated-each.
   ```hbs
    <button {{action toggleThing}}>Toggle</button>

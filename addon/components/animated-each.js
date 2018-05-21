@@ -15,9 +15,17 @@ import partition from '../-private/partition';
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list. 
   ```hbs
-    {{#animated-each items use=myFancyTransition as |item|}}
+    {{#animated-each items use=toRight as |item|}}
        <div>{{item.name}}</div>
     {{/animated-each}}
+  ```
+  ```js
+  import Component from '@ember/component';
+  import { toLeft } from 'ember-animated/transitions/move-over';
+  export default Component.extend({
+    items: A, B, C, D,
+    toRight,
+  });
   ```
   @class animated-each
   @public

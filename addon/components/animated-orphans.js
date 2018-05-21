@@ -14,14 +14,11 @@ import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
 
 /**
-  A component that animates when items do not have a parent. This component serves as a parent when 
-  the parent from the previous animation was destroyed. 
+  A component that adopts any orphaned sprites so they can continue animating even
+  after their original parent component has been destroyed. This relies on cloning
+  COM nodes, and the cloned nodes will be inserted as children of animated-orphans. 
   ```hbs
-  <div class="scenario-orphan">
-    <div style="position: relative; top: 40px">
-      {{animated-orphans}}
-    </div>
-  </div>
+  {{animated-orphans}}
   ```
   @class animated-orphans
   @public

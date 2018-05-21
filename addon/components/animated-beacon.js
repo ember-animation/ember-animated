@@ -10,8 +10,9 @@ import Sprite from '../-private/sprite';
 export const WILDCARD = {};
 
 /**
-  A component that animates when the group values match or when the group value 
-  is set to default.  
+  A component that marks a region of the page that 
+  can serve as a source or destination for other animator components. 
+  See [Animating Between Components](../../between).  
   ```hbs
   {{#animated-beacon group="the-group"}}
     <div class="first"></div>
