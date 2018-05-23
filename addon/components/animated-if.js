@@ -5,21 +5,38 @@ import { computed } from '@ember/object';
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes. 
   Animated-if uses the same arguments as animated-each.
   ```hbs
-   <button {{action toggleThing}}>Toggle</button>
-   {{#animated-if showThing use=toLeft}}
-     <div>myContent</div>
-   {{/animated-if}}
+ <button {{action toggleThing}}>Toggle</button>
+{{#animated-if showThing use=transition}}
+    <div>myContent</div>
+{{/animated-if}}
   ```
   ```js
-  import Component from '@ember/component';
-  import { toLeft } from 'ember-animated/transitions/move-over';
-  export default Component.extend({
-    showThing: false,
-    toLeft,
-    toggleThing() {
-      this.set('showThing', !this.showThing);
-    }
-  });
+import Component from '@ember/component';
+import move from 'ember-animated/motions/move';
+import {easeOut, easeIn } from 'ember-animated/easings/cosine';
+
+export default Component.extend({
+  showThing: false,
+  
+  toggleThing() {
+    this.set('showThing', !this.get('showThing'));
+  },
+ 
+  transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+    insertedSprites.forEach(sprite => {
+      sprite.startAtPixel({ x: window.innerWidth });
+      move(sprite, { easing: easeOut });
+    });
+
+    keptSprites.forEach(move);
+
+    removedSprites.forEach(sprite => {
+      sprite.endAtPixel({ x: window.innerWidth });
+      move(sprite, { easing: easeIn });
+    });
+  },
+});
+
   ```
 
   @class animated-if

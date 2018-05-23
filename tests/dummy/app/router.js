@@ -23,6 +23,11 @@ Router.map(function() {
     this.route('here-there');
     this.route('svg');
     this.route('beacon');
+    this.route('ifdemo');
+    this.route('eachdemo');
+    this.route('valuedemo');
+    this.route('containerdemo');
+    this.route('beacondemo');
   });
   
   // ember-cli-addon-docs

@@ -15,17 +15,31 @@ import partition from '../-private/partition';
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list. 
   ```hbs
-    {{#animated-each items use=toRight as |item|}}
-       <div>{{item.name}}</div>
+    {{#animated-each items use=transition as |item|}}
+      <div onclick={{action removeItem item}}>
+        {{item}}
+      </div>
     {{/animated-each}}
   ```
   ```js
   import Component from '@ember/component';
-  import { toRight } from 'ember-animated/transitions/move-over';
-  export default Component.extend({
-    items: ['A', 'B', 'C', 'D']
-    toRight,
-  });
+  import move from 'ember-animated/motions/move';
+  import { fadeOut } from 'ember-animated/motions/opacity';
+
+    export default class extends Component {
+      constructor(){
+        super();
+        this.items = ['A', 'B', 'C', 'D', 'E'];   
+      }
+      * transition({ keptSprites, removedSprites }) {
+        keptSprites.forEach(move);
+        removedSprites.forEach(fadeOut);
+      }
+      removeItem(item){
+        this.set('items', this.items.filter(i => i !== item));
+      }
+    }
+  }
   ```
   @class animated-each
   @public

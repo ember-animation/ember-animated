@@ -10,16 +10,43 @@ import { afterRender, microwait } from '..';
   A component that animates an animator or multiple animators within a
   given block. 
   ```hbs
-  {{#animated-container}}
-    {{#animated-value items use=transition duration=1000 as |item|}}
-      <div>myContent</div>
-    {{/animated-value}}
-  {{/animated-container}}
-  <p>
+<button {{action toggleThing}}>Toggle</button>
+{{#animated-container}}
+    {{#animated-if showThing use=transition}}
+        <div>Hello!</div>
+    {{/animated-if}}
+{{/animated-container}}
+<p>
     This is outside of the container.
-  </p>
-</div>
+</p>
   ```
+  ```js
+import Component from '@ember/component';
+import move from 'ember-animated/motions/move';
+import {easeOut, easeIn } from 'ember-animated/easings/cosine';
+
+export default Component.extend({
+  showThing: false,
+  
+  toggleThing() {
+    this.set('showThing', !this.get('showThing'));
+  },
+ 
+  transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+    insertedSprites.forEach(sprite => {
+      sprite.startAtPixel({ x: window.innerWidth });
+      move(sprite, { easing: easeOut });
+    });
+
+    keptSprites.forEach(move);
+
+    removedSprites.forEach(sprite => {
+      sprite.endAtPixel({ x: window.innerWidth });
+      move(sprite, { easing: easeIn });
+    });
+  },
+});
+```
   @class animated-container
   @public
 */
