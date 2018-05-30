@@ -11,6 +11,7 @@ module('Acceptance | each demo', function(hooks) {
   test('visiting /eachdemo', async function(assert) {
     await visit('demos/eachdemo');
     assert.equal(currentURL(), 'demos/eachdemo');
+    assert.ok(this.element.querySelector('[data-test-item="A"]'), 'found first item');
   });
 
   hooks.beforeEach(function(assert) {
