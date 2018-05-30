@@ -13,7 +13,7 @@ import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
 
 /**
-  A drop in replacement for `{{#each}}` that animates changes to a list. 
+  A drop in replacement for `{{#each}}` that animates changes to a list.
   ```hbs
   {{#animated-each items use=transition duration=2000 as |item|}}
     <div data-test-item={{item}} onclick={{action removeItem item}}>
@@ -27,10 +27,9 @@ import partition from '../-private/partition';
   import { fadeOut } from 'ember-animated/motions/opacity';
 
   export default class extends Component {
-    constructor(){
-      super();
-      this.items = ['A', 'B', 'C', 'D', 'E'];   
-    }
+
+    items = ['A', 'B', 'C', 'D', 'E'];
+
     * transition({ keptSprites, removedSprites }) {
       keptSprites.forEach(move);
       removedSprites.forEach(fadeOut);
@@ -56,7 +55,7 @@ export default Component.extend({
   items: null,
 
   /**
-   * If set, this animator will only [match](../../between) other animators that have the same group value. 
+   * If set, this animator will only [match](../../between) other animators that have the same group value.
     @argument group
     @type String
   */
@@ -69,14 +68,14 @@ export default Component.extend({
   */
   duration: null,
   /**
-   * Specifies the [Transition](../../transitions) 
+   * Specifies the [Transition](../../transitions)
    * to run when the list changes.
     @argument use
     @type Transition
   */
   use: null,
    /**
-   * Specifies data-dependent [Rules](../../rules) that choose which [Transition](../../transitions) 
+   * Specifies data-dependent [Rules](../../rules) that choose which [Transition](../../transitions)
    * to run when the list changes. This takes precedence over `use`.
     @argument rules
     @type Rules

@@ -5,10 +5,9 @@ import move from 'ember-animated/motions/move';
 import { fadeOut } from 'ember-animated/motions/opacity';
 
 export default class extends Component {
-  constructor(){
-    super();
-    this.items = ['A', 'B', 'C', 'D', 'E'];   
-  }
+
+  items = ['A', 'B', 'C', 'D', 'E'];
+
   * transition({ keptSprites, removedSprites }) {
     keptSprites.forEach(move);
     removedSprites.forEach(fadeOut);
