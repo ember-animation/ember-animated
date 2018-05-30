@@ -14,40 +14,40 @@ export const WILDCARD = {};
   can serve as a source or destination for other animator components. 
   See [Animating Between Components](../../between).  
   ```hbs
-  {{#animated-beacon group="one"}}
-    <button {{action "launch"}}>Launch</button>
-  {{/animated-beacon}}
+    {{#animated-beacon group="one"}}
+      <button {{action "launch"}}>Launch</button>
+    {{/animated-beacon}}
 
-  {{#animated-if showThing group="one" use=transition duration=500}}
-    <div class="message" {{action "dismiss"}}>
-      Hello
-    </div>
-  {{/animated-if}}
+    {{#animated-if showThing group="one" use=transition duration=500}}
+      <div class="message" {{action "dismiss"}}>
+        Hello
+      </div>
+    {{/animated-if}}
   ```
   ```js
-import Component from '@ember/component';
-import move from 'ember-animated/motions/move';
-import scale from 'ember-animated/motions/scale';
-import { parallel } from 'ember-animated';
+  import Component from '@ember/component';
+  import move from 'ember-animated/motions/move';
+  import scale from 'ember-animated/motions/scale';
+  import { parallel } from 'ember-animated';
 
-export default Component.extend({
-  showThing: false,
+  export default Component.extend({
+    showThing: false,
 
-  transition: function * ({ receivedSprites, sentSprites }) {
-    receivedSprites.forEach(parallel(scale, move));
-    sentSprites.forEach(parallel(scale, move));
-  },
-
-  actions: {
-    launch() {
-      this.set('showThing', true);
+    transition: function * ({ receivedSprites, sentSprites }) {
+      receivedSprites.forEach(parallel(scale, move));
+      sentSprites.forEach(parallel(scale, move));
     },
-    dismiss() {
-      this.set('showThing', false);
+
+    actions: {
+      launch() {
+        this.set('showThing', true);
+      },
+      dismiss() {
+        this.set('showThing', false);
+      }
     }
-  }
-});
-```
+  });
+  ```
   @class animated-beacon
   @public
 */

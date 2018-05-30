@@ -1,9 +1,9 @@
- {{#animated-beacon group="one"}}
-    <button {{action "launch"}}>Launch</button>
-  {{/animated-beacon}}
+{{#animated-beacon group="one"}}
+  <button {{action "launch"}}>Launch</button>
+{{/animated-beacon}}
 
-  {{#animated-if showThing group="one" use=transition duration=500}}
+{{#animated-if showThing group="one" use=transition duration=500}}
   <div class="message" {{action "dismiss"}}>
-      Hello
+    Hello
   </div>
 {{/animated-if}}

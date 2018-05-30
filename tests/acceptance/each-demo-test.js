@@ -31,10 +31,13 @@ module('Acceptance | each demo', function(hooks) {
     let BPosition = bounds(this.element.querySelector('[data-test-item="B"]'));
     time.pause();
     await click(this.element.querySelector('[data-test-item="A"]'));
-    await time.advance(2000);
+    await time.advance(1000);
     let B2Position = bounds(this.element.querySelector('[data-test-item="B"]'));
-    assert.strictEqual(B2Position.top, APosition.top, "final B is initial A");
+    await time.advance(1000);
+    let B3Position = bounds(this.element.querySelector('[data-test-item="B"]'));
+    assert.strictEqual(B3Position.top, APosition.top, "final B is initial A");
     assert.notEqual(B2Position.top, BPosition.top, "final B is above initial B");
+    assert.ok(B3Position.top < B2Position.top, "B final is above B intermediate");
     time.runAtSpeed(60);
     await animationsSettled();
   });

@@ -13,6 +13,7 @@ export default Component.extend({
   },
 
   counter: 10,
+  
   actions: {
     increment() {
       this.set('counter', this.get('counter') + 1);
@@ -20,6 +21,5 @@ export default Component.extend({
     decrement() {
       this.set('counter', this.get('counter') - 1);
     }
-
   }
 });

@@ -7,8 +7,9 @@ import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 
 /**
-  A component that animates an animator or multiple animators within a
-  given block. 
+ Provides a boundary between animator components and the surrounding document
+ which smoothly resizes as animators change. Use animated-container whenever you 
+ need to "hold a place for" some animated content while that content is animating. 
   ```hbs
   <button {{action toggleThing}}>Toggle</button>
   {{#animated-container}}
@@ -23,32 +24,32 @@ import { afterRender, microwait } from '..';
   </p>
   ```
   ```js
-import Component from '@ember/component';
-import move from 'ember-animated/motions/move';
-import {easeOut, easeIn } from 'ember-animated/easings/cosine';
+  import Component from '@ember/component';
+  import move from 'ember-animated/motions/move';
+  import {easeOut, easeIn } from 'ember-animated/easings/cosine';
 
-export default Component.extend({
-  showThing: false,
+  export default Component.extend({
+    showThing: false,
+    
+    toggleThing() {
+      this.set('showThing', !this.get('showThing'));
+    },
   
-  toggleThing() {
-    this.set('showThing', !this.get('showThing'));
-  },
- 
-  transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
-    insertedSprites.forEach(sprite => {
-      sprite.startAtPixel({ x: window.innerWidth });
-      move(sprite, { easing: easeOut });
-    });
+    transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+      insertedSprites.forEach(sprite => {
+        sprite.startAtPixel({ x: window.innerWidth });
+        move(sprite, { easing: easeOut });
+      });
 
-    keptSprites.forEach(move);
+      keptSprites.forEach(move);
 
-    removedSprites.forEach(sprite => {
-      sprite.endAtPixel({ x: window.innerWidth });
-      move(sprite, { easing: easeIn });
-    });
-  },
-});
-```
+      removedSprites.forEach(sprite => {
+        sprite.endAtPixel({ x: window.innerWidth });
+        move(sprite, { easing: easeIn });
+      });
+    },
+  });
+  ```
   @class animated-container
   @public
 */

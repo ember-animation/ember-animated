@@ -15,7 +15,7 @@ import partition from '../-private/partition';
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list. 
   ```hbs
-   {{#animated-each items use=transition duration=2000 as |item|}}
+  {{#animated-each items use=transition duration=2000 as |item|}}
     <div data-test-item={{item}} onclick={{action removeItem item}}>
       {{item}}
     </div>
@@ -26,18 +26,17 @@ import partition from '../-private/partition';
   import move from 'ember-animated/motions/move';
   import { fadeOut } from 'ember-animated/motions/opacity';
 
-    export default class extends Component {
-      constructor(){
-        super();
-        this.items = ['A', 'B', 'C', 'D', 'E'];   
-      }
-      * transition({ keptSprites, removedSprites }) {
-        keptSprites.forEach(move);
-        removedSprites.forEach(fadeOut);
-      }
-      removeItem(item){
-        this.set('items', this.items.filter(i => i !== item));
-      }
+  export default class extends Component {
+    constructor(){
+      super();
+      this.items = ['A', 'B', 'C', 'D', 'E'];   
+    }
+    * transition({ keptSprites, removedSprites }) {
+      keptSprites.forEach(move);
+      removedSprites.forEach(fadeOut);
+    }
+    removeItem(item){
+      this.set('items', this.items.filter(i => i !== item));
     }
   }
   ```
@@ -97,7 +96,8 @@ export default Component.extend({
   finalRemoval: false,
 
   /**
-    Serves the same purpose as the `key` in ember `{{#each}}`, and it also compares keys [when animating between components](../../between).
+    Serves the same purpose as the `key` in ember `{{#each}}`, and it's
+    also used to compare values when [animating between components](../../between).
     @argument key
     @type String
   */
