@@ -10,15 +10,17 @@ import { afterRender, microwait } from '..';
   A component that animates an animator or multiple animators within a
   given block. 
   ```hbs
-<button {{action toggleThing}}>Toggle</button>
-{{#animated-container}}
-    {{#animated-if showThing use=transition}}
-        <div>Hello!</div>
+  <button {{action toggleThing}}>Toggle</button>
+  {{#animated-container}}
+    {{#animated-if showThing use=transition }}
+        <div class="message" {{action "toggleThing"}}>
+            Hello!
+        </div>
     {{/animated-if}}
-{{/animated-container}}
-<p>
+  {{/animated-container}}
+  <p>
     This is outside of the container.
-</p>
+  </p>
   ```
   ```js
 import Component from '@ember/component';

@@ -15,11 +15,11 @@ import partition from '../-private/partition';
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list. 
   ```hbs
-    {{#animated-each items use=transition as |item|}}
-      <div onclick={{action removeItem item}}>
-        {{item}}
-      </div>
-    {{/animated-each}}
+   {{#animated-each items use=transition duration=2000 as |item|}}
+    <div data-test-item={{item}} onclick={{action removeItem item}}>
+      {{item}}
+    </div>
+  {{/animated-each}}
   ```
   ```js
   import Component from '@ember/component';

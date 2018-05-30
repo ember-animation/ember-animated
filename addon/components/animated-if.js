@@ -5,10 +5,12 @@ import { computed } from '@ember/object';
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes. 
   Animated-if uses the same arguments as animated-each.
   ```hbs
- <button {{action toggleThing}}>Toggle</button>
-{{#animated-if showThing use=transition}}
-    <div>myContent</div>
-{{/animated-if}}
+  <button {{action toggleThing}}>Toggle</button>
+  {{#animated-if showThing use=transition}}
+        <div class="message" {{action "toggleThing"}}>
+              myContent
+          </div>
+    {{/animated-if}}
   ```
   ```js
 import Component from '@ember/component';
