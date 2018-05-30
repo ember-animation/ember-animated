@@ -3838,9 +3838,9 @@ ember-source-channel-url@^1.0.1:
   dependencies:
     got "^8.0.1"
 
-"ember-source@https://s3.amazonaws.com/builds.emberjs.com/release/shas/ab8f176ab95cc7c8245ae2ca95f722466af1d531.tgz":
-  version "3.1.2-release"
-  resolved "https://s3.amazonaws.com/builds.emberjs.com/release/shas/ab8f176ab95cc7c8245ae2ca95f722466af1d531.tgz#19a1b87677b744bafaf64898cdc96d4b2a7417f6"
+ember-source@~3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ember-source/-/ember-source-3.0.0.tgz#51811cae98d2ceec53bcfbaa876d02b2b5b2159f"
   dependencies:
     broccoli-funnel "^2.0.1"
     broccoli-merge-trees "^2.0.0"
@@ -3853,8 +3853,8 @@ ember-source-channel-url@^1.0.1:
     ember-cli-version-checker "^2.1.0"
     ember-router-generator "^1.2.3"
     inflection "^1.12.0"
-    jquery "^3.3.1"
-    resolve "^1.5.0"
+    jquery "^3.2.1"
+    resolve "^1.3.3"
 
 ember-string-helpers@^1.0.2:
   version "1.0.2"
@@ -5925,7 +5925,7 @@ joi@^8.0.3:
     moment "2.x.x"
     topo "2.x.x"
 
-jquery@^3.3.1:
+jquery@^3.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
