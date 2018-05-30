@@ -6,9 +6,63 @@ import { task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 
+/**
+ Provides a boundary between animator components and the surrounding document
+ which smoothly resizes as animators change. Use animated-container whenever you 
+ need to "hold a place for" some animated content while that content is animating. 
+  ```hbs
+  <button {{action toggleThing}}>Toggle</button>
+  {{#animated-container}}
+    {{#animated-if showThing use=transition }}
+        <div class="message" {{action "toggleThing"}}>
+            Hello!
+        </div>
+    {{/animated-if}}
+  {{/animated-container}}
+  <p>
+    This is outside of the container.
+  </p>
+  ```
+  ```js
+  import Component from '@ember/component';
+  import move from 'ember-animated/motions/move';
+  import {easeOut, easeIn } from 'ember-animated/easings/cosine';
+
+  export default Component.extend({
+    showThing: false,
+    
+    toggleThing() {
+      this.set('showThing', !this.get('showThing'));
+    },
+  
+    transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+      insertedSprites.forEach(sprite => {
+        sprite.startAtPixel({ x: window.innerWidth });
+        move(sprite, { easing: easeOut });
+      });
+
+      keptSprites.forEach(move);
+
+      removedSprites.forEach(sprite => {
+        sprite.endAtPixel({ x: window.innerWidth });
+        move(sprite, { easing: easeIn });
+      });
+    },
+  });
+  ```
+  @class animated-container
+  @public
+*/
 export default Component.extend({
   classNames: ['animated-container'],
   motionService: service('-ea-motion'),
+   /**
+   * Whether to animate the initial render. You will probably also need to set 
+   * initialInsertion=true on a child component of animated-container. 
+   * Defaults to false. 
+    @argument onInitialRender
+    @type Boolean
+  */
   onInitialRender: false,
 
   init() {

@@ -12,15 +12,99 @@ import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
 
+/**
+  A drop in replacement for `{{#each}}` that animates changes to a list.
+  ```hbs
+  {{#animated-each items use=transition duration=2000 as |item|}}
+    <div data-test-item={{item}} onclick={{action removeItem item}}>
+      {{item}}
+    </div>
+  {{/animated-each}}
+  ```
+  ```js
+  import Component from '@ember/component';
+  import move from 'ember-animated/motions/move';
+  import { fadeOut } from 'ember-animated/motions/opacity';
+
+  export default Component.extend({
+    init() {
+      this._super();
+      this.items = ['A', 'B', 'C', 'D', 'E'];
+    },
+
+    * transition({ keptSprites, removedSprites }) {
+      keptSprites.forEach(move);
+      removedSprites.forEach(fadeOut);
+    },
+
+    removeItem(item){
+      this.set('items', this.items.filter(i => i !== item));
+    }
+  });
+  ```
+  @class animated-each
+  @public
+*/
 export default Component.extend({
   layout,
   tagName: '',
   motionService: service('-ea-motion'),
+
+  /**
+   * The list of data you are trying to render.
+    @argument items
+    @type Array
+  */
+  items: null,
+
+  /**
+   * If set, this animator will only [match](../../between) other animators that have the same group value.
+    @argument group
+    @type String
+  */
+  group: null,
+
+  /**
+   * Represents the amount of time an animation takes in miliseconds.
+    @argument duration
+    @type Number
+  */
   duration: null,
+  /**
+   * Specifies the [Transition](../../transitions)
+   * to run when the list changes.
+    @argument use
+    @type Transition
+  */
   use: null,
+   /**
+   * Specifies data-dependent [Rules](../../rules) that choose which [Transition](../../transitions)
+   * to run when the list changes. This takes precedence over `use`.
+    @argument rules
+    @type Rules
+  */
   rules: null,
+   /**
+   * When true, all the items in the list will animate as [`insertedSprites`](../../sprites) when the `{{#animated-each}}` is first rendered. Defaults to false.
+    @argument initialInsertion
+    @type Boolean
+  */
   initialInsertion: false,
+  /**
+   * When true, all the items in the list will animate as [`removedSprites`](../../sprites) when the `{{#animated-each}}` is destroyed. Defaults to false.
+    @argument finalRemoval
+    @type Boolean
+  */
   finalRemoval: false,
+
+  /**
+    Serves the same purpose as the `key` in ember `{{#each}}`, and it's
+    also used to compare values when [animating between components](../../between).
+    @argument key
+    @type String
+  */
+  key: null,
+
 
   init() {
     this._elementToChild = new WeakMap();

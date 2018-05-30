@@ -9,6 +9,48 @@ import Sprite from '../-private/sprite';
 
 export const WILDCARD = {};
 
+/**
+  A component that marks a region of the page that 
+  can serve as a source or destination for other animator components. 
+  See [Animating Between Components](../../between).  
+  ```hbs
+    {{#animated-beacon group="one"}}
+      <button {{action "launch"}}>Launch</button>
+    {{/animated-beacon}}
+
+    {{#animated-if showThing group="one" use=transition duration=500}}
+      <div class="message" {{action "dismiss"}}>
+        Hello
+      </div>
+    {{/animated-if}}
+  ```
+  ```js
+  import Component from '@ember/component';
+  import move from 'ember-animated/motions/move';
+  import scale from 'ember-animated/motions/scale';
+  import { parallel } from 'ember-animated';
+
+  export default Component.extend({
+    showThing: false,
+
+    transition: function * ({ receivedSprites, sentSprites }) {
+      receivedSprites.forEach(parallel(scale, move));
+      sentSprites.forEach(parallel(scale, move));
+    },
+
+    actions: {
+      launch() {
+        this.set('showThing', true);
+      },
+      dismiss() {
+        this.set('showThing', false);
+      }
+    }
+  });
+  ```
+  @class animated-beacon
+  @public
+*/
 export default Component.extend({
   layout,
   motionService: service('-ea-motion'),

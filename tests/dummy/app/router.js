@@ -23,6 +23,11 @@ Router.map(function() {
     this.route('here-there');
     this.route('svg');
     this.route('beacon');
+    this.route('ifdemo');
+    this.route('eachdemo');
+    this.route('valuedemo');
+    this.route('containerdemo');
+    this.route('beacondemo');
   });
   
   // ember-cli-addon-docs
@@ -31,8 +36,15 @@ Router.map(function() {
       this.route('item', { path: '/*path' });
     });
 
+    this.route('between');
+    this.route('sprites');
+    this.route('motions');
+    this.route('transitions');
+    this.route('rules');
+    
+
     this.route('animator-components', function() {
-      this.route('each');
+      
       this.route('value');
       this.route('if');
     });

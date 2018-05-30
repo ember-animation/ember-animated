@@ -1,0 +1,6 @@
+<button {{action toggleThing}}>Toggle</button>
+{{#animated-if showThing use=transition}}
+    <div class="message" {{action "toggleThing"}}>
+        myContent
+    </div>
+{{/animated-if}}
