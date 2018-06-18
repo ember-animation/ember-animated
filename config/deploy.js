@@ -3,7 +3,10 @@
 
 module.exports = function(deployTarget) {
   let ENV = {
-    build: {}
+    build: {},
+    git: {
+      repo: 'git@github.com:ember-animation/ember-animated.git'
+    }
     // include other plugin configuration that applies to all deploy targets here
   };
 
