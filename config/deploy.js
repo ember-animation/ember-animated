@@ -5,8 +5,7 @@ module.exports = function(deployTarget) {
   let ENV = {
     build: {},
     git: {
-      repo: 'git@github.com:ember-animation/ember-animated.git',
-      worktreePath: '/tmp/deploy-ember-animated',
+      repo: 'git@github.com:ember-animation/ember-animated.git'
     }
     // include other plugin configuration that applies to all deploy targets here
   };
