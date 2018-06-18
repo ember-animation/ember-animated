@@ -1,0 +1,14 @@
+{
+  "test-auto-deploy": {
+    "path": "versions/test-auto-deploy",
+    "name": "test-auto-deploy",
+    "sha": "39c663034aa070acadc077f67d02fac6f8c9e8a0",
+    "tag": "test-auto-deploy"
+  },
+  "-latest": {
+    "path": "",
+    "name": "Latest",
+    "sha": "39c663034aa070acadc077f67d02fac6f8c9e8a0",
+    "tag": "test-auto-deploy"
+  }
+}
