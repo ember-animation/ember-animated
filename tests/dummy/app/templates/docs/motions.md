@@ -1,0 +1,3 @@
+# Motions
+
+Sprites can move categories and change states. Motions represent the change in state or category of a sprite, and they manage continuity from one animation to the next. Every category of sprite is assigned a motion. This motion will customize the manner in which the category of sprites will change state. Motions have access to the history of motions that were running on a sprite in the previous animation. Because all sprites are apart of a list, multiple states can exist simultaneously. Examples of motions that can be applied to sprites are fading in or fading out. See [Built in Motions](../docs/built-in-motions).
