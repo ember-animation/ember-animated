@@ -1,7 +1,4 @@
-/* if changes are made here please also reflect them in
-the comments in the docs */
 
-//BEGIN-SNIPPET value-snippet.js
 import Component from '@ember/component';
 import { toLeft, toRight } from 'ember-animated/transitions/move-over';
 
@@ -25,4 +22,4 @@ export default Component.extend({
     }
   }
 });
-//END-SNIPPET
+
