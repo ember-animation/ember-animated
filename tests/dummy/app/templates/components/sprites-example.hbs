@@ -1,0 +1,17 @@
+{{! BEGIN-SNIPPET sprites-snippet.hbs }}
+<div class="scenario-each">
+  <div class="h1">Inbox</div>
+  <button {{action "addItem"}}>Refresh</button>
+
+  {{#animated-container}}
+    {{#animated-each items key="id" use=transition as |item|}}
+      <div class="each-item">
+        {{item.message}}
+        <button {{action "removeItem" item}}>Delete</button>
+      </div>
+    {{/animated-each}}
+  {{/animated-container}}
+  
+  {{message}}
+</div>
+{{! END-SNIPPET }}

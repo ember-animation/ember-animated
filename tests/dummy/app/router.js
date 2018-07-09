@@ -38,8 +38,8 @@ Router.map(function() {
 
     this.route('between');
     this.route('sprites');
-    this.route('motions');
     this.route('transitions');
+    this.route('motions');
     this.route('rules');
     
 

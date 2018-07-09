@@ -1,6 +1,6 @@
-# Rules
+# Rules for Data-Dependent Animations
 
-The rules argument chooses which transition to run when the list changes depending on the data values within the list. `rules` takes precedence over `use` where `use` simply specifies which animation to run when a list changes. In this example, the rule compares the values of the first elements in two lists, and determines whether to animate to the left or to the right based on those values. 
+The rules argument chooses which transition to run when the data changes. In this example, the rule compares the values of the first elements in two data sets, and determines whether to animate to the left or to the right based on those values. 
 
   ```js
   import Component from '@ember/component';

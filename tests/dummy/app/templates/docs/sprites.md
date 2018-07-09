@@ -2,9 +2,9 @@
 
 ## What is a sprite?
 
-The sprite abstraction in this library allows users to compose new transitions out of motions. Our sprites carry their own data or dimensions, so that users can manipulate sprites in a variety of ways, and these changes will automatically get cleaned up at the end of an animation. There are five different types of sprites, and the distinction between the five types is the data that each sprite stores. 
+In ember-animated a sprite represents a piece of your application that you want to animate. A sprite is an html element that carries additioal data. Our sprites carry their own data or dimensions, so that users can manipulate sprites in a variety of ways, and these changes will automatically get cleaned up at the end of an animation. -- history -- 
 
-Data that sprites can store refers to the different states a sprite can have. The initial state of a sprite refers to the dimensions of the location that the sprite starts at or comes from. Likewise, the final state of a sprite refers to the dimensions of the location that the sprite ends at or is going to. 
+Data that sprites can store refers to the different states a sprite can have. The initial state of a sprite refers to the dimensions of the location that the sprite starts at or comes from. Likewise, the final state of a sprite refers to the dimensions of the location that the sprite ends at or is going to. Every sprite is grouped into one of five categories in any given animation:
 
 ## keptSprites: 
 Kept sprites store both their final state and their initial state. 
@@ -12,7 +12,52 @@ Kept sprites store both their final state and their initial state.
 Inserted sprites store their final state but not their initial state. They are new sprites that will be inserted to a list, so you need to give them an initial state in order to move them. 
 ## removedSprites: 
 Removed sprites are the reverse of inserted sprites. They store their initial state but they do not store their final state. To move removed sprites, you must give them a final state.
-## receivedSprites: 
-When moving a sprite from one list to another, a sprite is considered a removed sprite on the list it is leaving from, and an inserted sprite on the list it is going to. If the sprite holds the same data value on both sides, it is considered a received sprite on the list that it is going to. This means that instead of being an inserted sprite and storing only its final state, this received sprite will store both its initial state and its final state.
-## sentSprites: 
-Sent sprites are the reverse of received sprites. If the sprite stores the same data value on both sides while moving from one list to another, it will be considered a sent sprite on the list that it came from instead of a removed sprite. This means that it will store both its initial state and its final state instead of storing just its initial state.
+
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tg .tg-eh2d{background-color:#ffffff;border-color:inherit;vertical-align:top}
+.tg .tg-47u2{font-weight:bold;background-color:#ffffff;border-color:inherit;vertical-align:top;text-align:left}
+.tg .tg-7g6k{font-weight:bold;background-color:#ffffff;border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<table class="tg">
+  <tr>
+    <th class="tg-47u2">Name</th>
+    <th class="tg-7g6k">Initial State</th>
+    <th class="tg-47u2">Final State</th>
+  </tr>
+  <tr>
+    <td class="tg-eh2d">Inserted</td>
+    <td class="tg-eh2d">No</td>
+    <td class="tg-eh2d">Yes</td>
+  </tr>
+  <tr>
+    <td class="tg-eh2d">Kept</td>
+    <td class="tg-eh2d">Yes</td>
+    <td class="tg-eh2d">Yes</td>
+  </tr>
+  <tr>
+    <td class="tg-eh2d">Removed</td>
+    <td class="tg-eh2d">Yes</td>
+    <td class="tg-eh2d">No</td>
+  </tr>
+</table>
+
+
+{{#docs-demo as |demo|}}
+    {{#demo.example name="inbox"}}
+      {{sprites-example}}
+    {{/demo.example}}
+
+    {{demo.snippet 'sprites-snippet.hbs'}}
+    {{demo.snippet 'sprites-snippet.js'}}
+    {{demo.snippet 'sprites-snippet.css'}}
+{{/docs-demo}}
+
+
+
+
+## For more on sentSprites and receivedSprites:
+See [Animating Between Components](../docs/between). 
