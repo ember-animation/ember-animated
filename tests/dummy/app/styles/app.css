@@ -185,3 +185,13 @@
     padding: 2em;
     border-radius: 5px;
 }
+
+.scenario-beacon-trash {
+    vertical-align: baseline;
+    float: right;
+    width: 10em;
+    background-color: lightblue;
+    box-sizing: border-box;
+    padding: 2em;
+    border-radius: 10px;
+}

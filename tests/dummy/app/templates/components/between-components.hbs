@@ -1,0 +1,26 @@
+{{! BEGIN-SNIPPET between-components-snippet.hbs }}
+<div class="scenario-sprites">
+  <div class="h1">Inbox</div>
+
+    {{#animated-beacon name="trash"}}
+        <div class="scenario-beacon-trash">Trash</div>
+    {{/animated-beacon}}                          
+
+    {{#animated-beacon name="add"}}
+        <button {{action "addItem" item}}>Refresh</button>
+    {{/animated-beacon}}
+
+    {{#animated-container}}
+        {{#animated-each items key="id" use=transition as |item|}}
+            <div class="each-item">
+                {{item.message}}
+                    <button {{action "removeItem" item}}>Delete</button>
+            </div>
+        {{/animated-each}}
+    {{/animated-container}}
+    
+  {{message}}
+
+</div>
+
+{{! END-SNIPPET }}

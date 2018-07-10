@@ -30,3 +30,13 @@ Sent sprites are the reverse of received sprites. If the sprite stores the same 
     <td class="tg-eh2d">Remote</td>
   </tr>
 </table>
+
+{{#docs-demo as |demo|}}
+    {{#demo.example}}
+      {{between-components}}
+    {{/demo.example}}
+
+    {{demo.snippet 'between-components-snippet.hbs'}}
+    {{demo.snippet 'between-components-snippet.js'}}
+    {{demo.snippet 'sprites-snippet.css'}}
+{{/docs-demo}}
