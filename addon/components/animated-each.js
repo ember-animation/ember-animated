@@ -490,7 +490,7 @@ export default Component.extend({
     // some of our sprites may match up with sprites that are entering
     // or leaving other simulatneous animators. So we hit another
     // coordination point via the motionService
-    let { farMatches, matchingAnimatorsFinished } = yield this.get('motionService.farMatch').perform(
+    let { farMatches, matchingAnimatorsFinished, beacons } = yield this.get('motionService.farMatch').perform(
       current(),
       insertedSprites,
       keptSprites,
@@ -576,7 +576,9 @@ export default Component.extend({
       unmatchedKeptSprites,                          // user-visible keptSprites
       unmatchedRemovedSprites,                       // user-visible removedSprites
       sentSprites,                                   // user-visible sentSprites
-      receivedSprites.concat(matchedKeptSprites)     // user-visible receivedSprites
+      receivedSprites.concat(matchedKeptSprites),    // user-visible receivedSprites
+      beacons
+
     );
     let cycle = this._cycleCounter++;
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);

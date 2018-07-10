@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-beacon';
 import { inject as service } from '@ember/service';
 import { task } from '../-private/ember-scheduler';
-import { current } from '../-private/scheduler';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
@@ -95,24 +94,19 @@ export default Component.extend({
       return;
     }
     let group = this.get('group') || '__default__';
-
-    let outboundSprite = Sprite.positionedStartingAt(element, Sprite.offsetParentStartingAt(element));
-    outboundSprite.owner = { group, id: WILDCARD };
-
-    let inboundSprite;
+    let offsetParent = Sprite.offsetParentStartingAt(element);
+    let sprite = Sprite.positionedStartingAt(element, offsetParent);
+    sprite.owner = { group, id: WILDCARD };
 
     yield afterRender();
     yield microwait();
     yield * this.get('motionService').staticMeasurement(() => {
-      let inboundParent = Sprite.offsetParentEndingAt(element);
-      inboundSprite = Sprite.positionedEndingAt(element, inboundParent);
-      inboundSprite.owner = { group, id: WILDCARD };
+      offsetParent.measureFinalBounds();
+      sprite.measureFinalBounds();
     });
-    yield this.get('motionService.farMatch').perform(
-      current(),
-      [inboundSprite],
-      [],
-      [outboundSprite]
+    yield this.get('motionService.addBeacon').perform(
+      this.name,
+      sprite
     );
   }).restartable()
 
