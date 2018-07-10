@@ -8,9 +8,19 @@ import { parallel } from 'ember-animated';
 export default Component.extend({
   showThing: false,
 
-  transition: function * ({ receivedSprites, sentSprites }) {
-    receivedSprites.forEach(parallel(scale, move));
-    sentSprites.forEach(parallel(scale, move));
+  transition: function * (context) {
+    let { insertedSprites, removedSprites, keptSprites, beacons } = context;
+    insertedSprites.forEach(sprite => {
+      sprite.startAtSprite(beacons.one);
+      parallel(move(sprite, scale(sprite)));
+    });
+
+    keptSprites.forEach(move);
+      
+    removedSprites.forEach(sprite => {
+      sprite.endAtSprite(beacons.one);
+      parallel(move(sprite, scale(sprite)));
+    });
   },
 
   actions: {

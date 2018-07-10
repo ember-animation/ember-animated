@@ -6,8 +6,6 @@ import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
 
-export const WILDCARD = {};
-
 /**
   A component that marks a region of the page that 
   can serve as a source or destination for other animator components. 
@@ -93,10 +91,8 @@ export default Component.extend({
     if (!element) {
       return;
     }
-    let group = this.get('group') || '__default__';
     let offsetParent = Sprite.offsetParentStartingAt(element);
     let sprite = Sprite.positionedStartingAt(element, offsetParent);
-    sprite.owner = { group, id: WILDCARD };
 
     yield afterRender();
     yield microwait();
