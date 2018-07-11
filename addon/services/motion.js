@@ -8,7 +8,7 @@ import {
   afterRender,
   allSettled
 } from '..';
-import { WILDCARD } from '../components/animated-beacon';
+
 
 const MotionService = Service.extend({
   init() {
@@ -20,6 +20,7 @@ const MotionService = Service.extend({
     this._animationObservers = [];
     this._descendantObservers = [];
     this._ancestorObservers = new WeakMap();
+    this._beacons = null;
   },
 
   // === Notification System ===
@@ -162,6 +163,22 @@ const MotionService = Service.extend({
     }
   },
 
+  addBeacon: task(function * (name, beacon) {
+    if(!this._beacons) {
+      this._beacons = {};
+    }
+    if(this._beacons[name]){
+      throw new Error("There is more than one beacon named", name);
+    }
+
+    this._beacons[name] = beacon;
+    // allows other farMatches to start
+    yield microwait();
+    // allows other farMatches to finish
+    yield microwait();
+    this._beacons = null;
+  }),
+
   farMatch: task(function * (runAnimationTask, inserted, kept, removed, longWait=false) {
     let matches = new Map();
     let mine = { inserted, kept, removed, matches, runAnimationTask, otherTasks: new Map() };
@@ -186,7 +203,8 @@ const MotionService = Service.extend({
     this._rendezvous.splice(this._rendezvous.indexOf(mine), 1);
     return {
       farMatches: matches,
-      matchingAnimatorsFinished: allSettled([...mine.otherTasks.keys()])
+      matchingAnimatorsFinished: allSettled([...mine.otherTasks.keys()]),
+      beacons: this._beacons
     };
   }),
 
@@ -257,12 +275,7 @@ function performMatches(sink, source) {
   sink.inserted.concat(sink.kept).forEach(sprite => {
     let match = source.removed.find(
       mySprite =>
-        sprite.owner.group == mySprite.owner.group && (
-          sprite.owner.id === WILDCARD ||
-            mySprite.owner.id === WILDCARD ||
-            sprite.owner.id === mySprite.owner.id
-        )
-    );
+        sprite.owner.group == mySprite.owner.group && sprite.owner.id === mySprite.owner.id);
     if (match) {
       sink.matches.set(sprite, match);
       sink.otherTasks.set(source.runAnimationTask, true);
