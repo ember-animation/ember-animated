@@ -1,7 +1,7 @@
 import { childrenSettled } from './scheduler';
 
 export default class TransitionContext {
-  constructor(duration, insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites) {
+  constructor(duration, insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites, beacons) {
     this._duration = duration;
     this._insertedSprites = insertedSprites;
     this._keptSprites = keptSprites;
@@ -9,6 +9,7 @@ export default class TransitionContext {
     this._sentSprites = sentSprites;
     this._receivedSprites = receivedSprites;
     this._prepared = new Set();
+    this._beacons = beacons;
   }
 
   // the following things are all accessors in order to make them
@@ -32,6 +33,10 @@ export default class TransitionContext {
   }
   get receivedSprites() {
     return this._prepareSprites(this._receivedSprites);
+  }
+
+  get beacons() {
+    return this._beacons;
   }
 
   _prepareSprites(sprites) {
