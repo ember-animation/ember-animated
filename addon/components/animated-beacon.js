@@ -11,11 +11,11 @@ import Sprite from '../-private/sprite';
   can serve as a source or destination for other animator components. 
   See [Animating Between Components](../../between).  
   ```hbs
-    {{#animated-beacon group="one"}}
+    {{#animated-beacon name="one"}}
       <button {{action "launch"}}>Launch</button>
     {{/animated-beacon}}
 
-    {{#animated-if showThing group="one" use=transition duration=500}}
+    {{#animated-if showThing use=transition duration=500}}
       <div class="message" {{action "dismiss"}}>
         Hello
       </div>
