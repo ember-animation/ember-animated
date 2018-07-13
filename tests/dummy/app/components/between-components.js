@@ -6,6 +6,8 @@ import { parallel } from 'ember-animated';
 import { A } from '@ember/array';
 import { computed } from '@ember/object';
 import { task, timeout } from 'ember-animated/-private/ember-scheduler';
+import { later } from '@ember/runloop';
+
 
 export default Component.extend({
   init() {
@@ -13,7 +15,7 @@ export default Component.extend({
     this.transition = this.transition.bind(this);
   },
 
-  showTrash: false,
+  deleteUndo: false,
 
   printSprites (context, label) {
     let isOrphan;
@@ -39,10 +41,11 @@ export default Component.extend({
       this.set('message', message);
     });
 
-    keptSprites.forEach(move);
-
-    let message = this.printSprites(context);
-    this.set('message', message);
+    keptSprites.forEach(sprite => {
+      move(sprite, scale(sprite));
+      let message = this.printSprites(context);
+      this.set('message', message);
+    });
       
 
     removedSprites.forEach(sprite => {
@@ -88,15 +91,19 @@ export default Component.extend({
       this.set('items', items.slice(0, 0).concat([makeRandomItem(index)]).concat(items.slice(0)));
     },
     removeItem(which) {
-      let items = this.get('items');
+      let items = this.get('items'); 
+      let index = items.indexOf(which);
       this.set('message', `remove ${which.message} at ${which.id}`);
       this.set('items', items.filter(i => i !== which));
+      if (this.get('deleteUndo')) {
+        later(() => this.send('restoreItem', which, index), 1000);
+      }
     },
-    replaceItem(which) {
+    restoreItem(which, index) {
       let items = this.get('items');
-      let index = items.indexOf(which);
-      this.set('items', items.slice(0, index).concat([makeRandomItem()]).concat(items.slice(index+1)));
-    },
+      this.set('items', items.concat(items.splice(index, 0, which)));
+      this.set('message', `replace ${which.message} at ${index}`);
+    }
   }
 });
 

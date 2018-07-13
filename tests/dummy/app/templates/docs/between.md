@@ -1,9 +1,14 @@
 # Animating Between Components
+-----Description------
 
 ## receivedSprites: 
 When moving a sprite from one list to another, a sprite is considered a removed sprite on the list it is leaving from, and an inserted sprite on the list it is going to. If the sprite holds the same data value on both sides, it is considered a received sprite on the list that it is going to. This means that instead of being an inserted sprite and storing only its final state, this received sprite will store both its initial state and its final state.
 ## sentSprites: 
 Sent sprites are the reverse of received sprites. If the sprite stores the same data value on both sides while moving from one list to another, it will be considered a sent sprite on the list that it came from instead of a removed sprite. This means that it will store both its initial state and its final state instead of storing just its initial state.
+
+----Interruption Cases----
+
+
 
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}

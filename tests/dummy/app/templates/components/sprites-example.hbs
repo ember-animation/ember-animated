@@ -1,8 +1,8 @@
 {{! BEGIN-SNIPPET sprites-snippet.hbs }}
 <div class="scenario-sprites">
-  <div class="h1">Inbox</div>
+  <h1>Inbox</h1>
   <button {{action "addItem"}}>Refresh</button>
-
+  
   {{#animated-container}}
     {{#animated-each items key="id" use=transition as |item|}}
       <div class="each-item">
@@ -11,7 +11,7 @@
       </div>
     {{/animated-each}}
   {{/animated-container}}
-  
+
   {{message}}
 </div>
 {{! END-SNIPPET }}

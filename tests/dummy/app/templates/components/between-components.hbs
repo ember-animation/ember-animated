@@ -1,6 +1,10 @@
 {{! BEGIN-SNIPPET between-components-snippet.hbs }}
 <div class="scenario-sprites">
-  <div class="h1">Inbox</div>
+  <h1>Inbox</h1>
+
+  <div class="controls">
+    <label>Delete with Undo <input type="checkbox" checked={{deleteUndo}} onchange={{action (mut deleteUndo) (not deleteUndo)}}></label>
+  </div>
 
     {{#animated-beacon name="trash"}}
         <div class="scenario-beacon-trash">Trash</div>

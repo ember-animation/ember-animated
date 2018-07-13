@@ -9,8 +9,10 @@
 
 .scenario-sprites .each-item {
     border-collapse: collapse;
-    border: 1px solid rgb(0, 136, 255);
+    border: 1px solid rgb(69, 158, 237);
     font-style: bold;
+    background-color:rgb(129, 203, 247);
+    color: white;
 }
 
 .scenario-sprites .h1 {
@@ -19,13 +21,14 @@
 }
 
 .scenario-sprites .each-item > button {
-    background-color:white;
+    xbackground-color:white;
+    color:white;
     float: right;
     transition: background-color .5s;
 }
 
 .scenario-sprites button:hover {
-    background-color: rgb(0, 229, 255);
+    background-color: rgb(68, 121, 228);
 }
 /* END-SNIPPET */
 
@@ -195,3 +198,26 @@
     padding: 2em;
     border-radius: 10px;
 }
+
+/* BEGIN-SNIPPET transitions-snippet.css */
+.scenario-transitions  {
+    width: 10em;
+    height: 5em;
+}
+
+.scenario-transitions .message {
+    width: 7em;
+    background-color: lightblue;
+    color: white;
+    font: italic bold 16px/2 cursive;
+    box-sizing: border-box;
+    padding: 2em;
+    border-radius: 10px;
+}
+
+.scenario-transitions .h1 {
+    font: sans-serif;
+    font-style: bold;
+    background-color: blue;
+}
+/* END-SNIPPET */
