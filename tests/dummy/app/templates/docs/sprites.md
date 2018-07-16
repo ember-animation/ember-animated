@@ -13,6 +13,8 @@ Inserted sprites store their final state but not their initial state. To move in
 ## removedSprites: 
 Removed sprites are the reverse of inserted sprites. They store their initial state but they do not store their final state. To move removed sprites, you must give them a final state.
 
+## For more on sentSprites and receivedSprites:
+See [Animating Between Components](../docs/between).
 
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
@@ -59,8 +61,3 @@ In this example, messages that are considered `removedSprites`, `insertedSprites
     {{demo.snippet 'sprites-snippet.css'}}
 {{/docs-demo}}
 
-
-
-
-## For more on sentSprites and receivedSprites:
-See [Animating Between Components](../docs/between). 
