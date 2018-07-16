@@ -1,0 +1,32 @@
+{{! BEGIN-SNIPPET between-two-lists-example-snippet.hbs }}
+<div class="scenario-two-lists clearfix">
+  <div class="controls">
+    <label>Bounce back <input type="checkbox" checked={{bounceBack}} onchange={{action (mut bounceBack) (not bounceBack)}}></label>
+  </div>
+
+ 
+  {{#animated-container class="left" }}
+    <h1>Inbox</h1>
+    {{#animated-each leftItems use=transition as |item|}}
+      <div class="each-item">
+        {{item.message}}
+        <button {{action "move" item}}>Delete</button>
+      </div>
+    {{/animated-each}}
+  {{/animated-container}}
+
+
+  {{#animated-container class="right"}}
+    <h1>Trash</h1>
+    {{#animated-each rightItems use=transition as |item|}}
+      <div class="each-item">
+        <button {{action "move" item}}>Restore</button>
+        {{item.message}}
+      </div>
+    {{/animated-each}}
+  {{/animated-container}}
+
+  {{message}}
+
+</div>
+{{! END-SNIPPET }}

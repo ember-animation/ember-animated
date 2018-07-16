@@ -61,21 +61,21 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="two"}}
-      {{two-lists-example}}
+      {{between-two-lists-example}}
     {{/demo.example}}
 
-    {{demo.snippet 'two-lists-example-snippet.hbs'}}
-    {{demo.snippet 'two-lists-example-snippet.js'}}
+    {{demo.snippet 'between-two-lists-example-snippet.hbs'}}
+    {{demo.snippet 'between-two-lists-example-snippet.js'}}
     {{demo.snippet 'two-lists-snippet.css'}}
 {{/docs-demo}}
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="three"}}
-      {{swapping-lists-example}}
+      {{between-swap-lists-example}}
     {{/demo.example}}
 
-    {{demo.snippet 'swapping-lists-snippet.hbs'}}
-    {{demo.snippet 'swapping-lists-snippet.js'}}
+    {{demo.snippet 'between-swap-lists-snippet.hbs'}}
+    {{demo.snippet 'between-swap-lists-snippet.js'}}
     {{demo.snippet 'swapping-lists-snippet.css'}}
 {{/docs-demo}}
 
@@ -83,9 +83,17 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="four"}}
-      {{index}}
+      {{docs-hero hero}}
     {{/demo.example}}
 
-    {{demo.snippet 'index-snippet.hbs'}}
+    {{demo.snippet 'hero-snippet.hbs'}}
+    {{demo.snippet 'hero-snippet.css'}}
+    {{demo.snippet 'detail-snippet.hbs'}}
     {{demo.snippet 'index-snippet.js'}}
+    {{demo.snippet 'detail-snippet.js'}}
+    {{demo.snippet 'person-snippet.js'}}
+    {{demo.snippet 'person-2-snippet.js'}}
+    {{demo.snippet 'index-snippet.hbs'}}
+    {{demo.snippet 'index-2-snippet.js'}}
+    {{demo.snippet 'detail-2-snippet.js'}}
 {{/docs-demo}}

@@ -15,6 +15,14 @@ export default Component.extend({
   fadeMessage: false,
   custom: false,
 
+  rules(moveOverMessage) {
+    if(moveOverMessage){
+      return toDown;
+    }else{
+      return toDown;
+    }
+  },
+
   /* custom transition */
   slideFromSide: function * (context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
