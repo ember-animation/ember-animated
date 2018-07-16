@@ -6,15 +6,6 @@ In ember-animated a sprite represents a piece of your application that you want 
 
 The initial state of a sprite refers to the dimensions of the location where a sprite starts at. Likewise, the final state of a sprite refers to the dimensions of the location that the sprite ends at. Every sprite is grouped into one of five categories in any given animation:
 
-## keptSprites: 
-Kept sprites store their initial and final states. 
-## insertedSprites: 
-Inserted sprites store their final state but not their initial state. To move inserted sprites, you need to give them an initial state. 
-## removedSprites: 
-Removed sprites are the reverse of inserted sprites. They store their initial state but they do not store their final state. To move removed sprites, you must give them a final state.
-
-## For more on sentSprites and receivedSprites:
-See [Animating Between Components](../docs/between).
 
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
@@ -47,6 +38,9 @@ See [Animating Between Components](../docs/between).
   </tr>
 </table>
 
+***************
+
+
 
 In this example, messages that are considered `removedSprites`, `insertedSprites`, or `keptSprites` after each animation. When a message is deleted from the inbox, it becomes a `removedSprite`. This makes sense because they are removed from the inbox where the inbox was the initial location of the message, and there is no final destination. When the inbox is refreshed and new messages come in, the messages that come from the refresh are `insertedSprites`. This makes sense because a message from refresh go to the inbox, where the inbox is the final destination. Finally, the remaining messages in the inbox that are not deleted or added from refresh are `keptSprites`. All of the `keptSprites` remain in the inbox throughout deletions and additions to the inbox, so both their initial and final locations are the inbox. 
 
@@ -57,7 +51,12 @@ In this example, messages that are considered `removedSprites`, `insertedSprites
     {{/demo.example}}
 
     {{demo.snippet 'sprites-snippet.hbs'}}
-    {{demo.snippet 'sprites-snippet.js'}}
+    {{demo.snippet 'sprites-snippet.js' label='component.js'}}
     {{demo.snippet 'sprites-snippet.css'}}
 {{/docs-demo}}
 
+
+
+
+## For more on sentSprites and receivedSprites:
+See [Animating Between Components](../docs/between).

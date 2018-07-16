@@ -1,5 +1,4 @@
- {{! BEGIN-SNIPPET bind-snippet.hbs }}
-<div class="scenario-bind clearfix">
+ <div class="scenario-bind clearfix">
   {{#animated-container}}
     {{#animated-value counter rules=rules duration=1000 as |v|}}
       <span class="left-count">{{v}}</span>
@@ -19,4 +18,3 @@
   <button {{action "decrement"}}>-</button>
   <input type="checkbox" checked={{showBoth}} onchange={{action (mut showBoth) (not showBoth)}}>
 </div>
-{{! END-SNIPPET }}

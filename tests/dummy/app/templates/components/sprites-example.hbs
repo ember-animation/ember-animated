@@ -4,7 +4,7 @@
   <button {{action "addItem"}}>Refresh</button>
   
   {{#animated-container}}
-    {{#animated-each items key="id" use=transition as |item|}}
+    {{#animated-each items use=transition as |item|}}
       <div class="each-item">
         {{item.message}}
         <button {{action "removeItem" item}}>Delete</button>
