@@ -19,8 +19,11 @@ Animates the adjustment of the height and width of a sprite relative to its envi
 Animates the adjustment of the height and width of sprite relative to the factor of the initial and final bounds. 
 
 ### compensateForScale
+-------------
 
 ### follow
+---------
+
 
 ### adjustColor
 Animates the change in color of a sprite.

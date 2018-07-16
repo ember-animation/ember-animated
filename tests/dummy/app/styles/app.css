@@ -15,6 +15,15 @@
     color: white;
 }
 
+.scenario-sprites .trash {
+    border-collapse: collapse;
+    border: 1px solid rgb(69, 158, 237);
+    font-style: bold;
+    background-color:rgb(129, 203, 247);
+    color: white;
+    float: left;
+}
+
 .scenario-sprites .h1 {
     font: sans-serif;
     font-style: bold;
@@ -42,11 +51,45 @@
     border: 1px solid red;
 }
 
+
+
+/* BEGIN-SNIPPET two-lists-snippet.css */
+
 .scenario-two-lists > .animated-container {
     width:40%;
     float: left;
 }
 
+.scenario-two-lists .each-item {
+    border-collapse: collapse;
+    width: 15em;
+    border: 1px solid rgb(69, 158, 237);
+    font-style: bold;
+    background-color:rgb(129, 203, 247);
+    color: white;
+}
+
+.scenario-two-lists .h1 {
+    xfont: sans-serif;
+    font-style: bold;
+}
+
+.scenario-two-lists .each-item > button {
+    xbackground-color:white;
+    color:white;
+    float: right;
+    transition: background-color .5s;
+}
+
+/* .scenario-two-lists .message {
+    float: bottom;
+    border: 1px solid rgb(25, 233, 25);
+} */
+
+/* END-SNIPPET */
+
+
+/* BEGIN-SNIPPET swapping-lists-snippet.css */
 .scenario-swapping-lists .left {
     width:40%;
     float: left;
@@ -59,7 +102,11 @@
 .scenario-swapping-lists .left-item {
     color: red;
 }
+/* END-SNIPPET */
 
+
+
+/* BEGIN-SNIPPET bind-snippet.css */
 .scenario-bind .animated-container {
     font-size: 3rem;
     float: left;
@@ -80,6 +127,7 @@
     overflow: hidden;
     transform: translateZ(0);
 }
+/* END-SNIPPET */
 
 .hero-list {
     display: flex;

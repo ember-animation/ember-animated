@@ -2,14 +2,14 @@
 
 ## What is a sprite?
 
-In ember-animated a sprite represents a piece of your application that you want to animate. A sprite is an html element that carries additioal data. Our sprites carry their own data or dimensions, so that users can manipulate sprites in a variety of ways, and these changes will automatically get cleaned up at the end of an animation. -- history -- 
+In ember-animated a sprite represents a piece of your application that you want to animate. The term "sprite" comes from a long tradition of two-dimensional graphics. A sprite is an html element that carries additional data. Our sprites carry their own data which consists of the different states a sprite can be. With this data, users can manipulate sprites in a variety of ways, and these changes will automatically get cleaned up at the end of an animation. 
 
-Data that sprites can store refers to the different states a sprite can have. The initial state of a sprite refers to the dimensions of the location that the sprite starts at or comes from. Likewise, the final state of a sprite refers to the dimensions of the location that the sprite ends at or is going to. Every sprite is grouped into one of five categories in any given animation:
+The initial state of a sprite refers to the dimensions of the location where a sprite starts at. Likewise, the final state of a sprite refers to the dimensions of the location that the sprite ends at. Every sprite is grouped into one of five categories in any given animation:
 
 ## keptSprites: 
-Kept sprites store both their final state and their initial state. 
+Kept sprites store their initial and final states. 
 ## insertedSprites: 
-Inserted sprites store their final state but not their initial state. They are new sprites that will be inserted to a list, so you need to give them an initial state in order to move them. 
+Inserted sprites store their final state but not their initial state. To move inserted sprites, you need to give them an initial state. 
 ## removedSprites: 
 Removed sprites are the reverse of inserted sprites. They store their initial state but they do not store their final state. To move removed sprites, you must give them a final state.
 
@@ -44,6 +44,9 @@ Removed sprites are the reverse of inserted sprites. They store their initial st
     <td class="tg-eh2d">No</td>
   </tr>
 </table>
+
+
+In this example, messages that are considered `removedSprites`, `insertedSprites`, or `keptSprites` after each animation. When a message is deleted from the inbox, it becomes a `removedSprite`. This makes sense because they are removed from the inbox where the inbox was the initial location of the message, and there is no final destination. When the inbox is refreshed and new messages come in, the messages that come from the refresh are `insertedSprites`. This makes sense because a message from refresh go to the inbox, where the inbox is the final destination. Finally, the remaining messages in the inbox that are not deleted or added from refresh are `keptSprites`. All of the `keptSprites` remain in the inbox throughout deletions and additions to the inbox, so both their initial and final locations are the inbox. 
 
 
 {{#docs-demo as |demo|}}
