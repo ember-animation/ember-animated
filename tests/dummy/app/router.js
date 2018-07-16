@@ -36,7 +36,9 @@ Router.map(function() {
       this.route('item', { path: '/*path' });
     });
 
-    this.route('between');
+    this.route('between', function(){
+      this.route('detail', { path: '/:id' });
+    });
     this.route('sprites');
     this.route('transitions');
     this.route('motions');

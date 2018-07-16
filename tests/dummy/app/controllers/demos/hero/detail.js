@@ -1,3 +1,4 @@
+//BEGIN-SNIPPET detail-snippet.js
 import Controller from '@ember/controller';
 import move, { continuePrior } from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
@@ -26,3 +27,4 @@ export default Controller.extend({
 
 
 });
+//END-SNIPPET 

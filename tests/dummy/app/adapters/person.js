@@ -1,3 +1,4 @@
+//BEGIN-SNIPPET person-snippet.js
 import DS from 'ember-data';
 import faker from 'faker';
 
@@ -36,3 +37,4 @@ export default DS.JSONAPIAdapter.extend({
     };
   }
 });
+//END-SNIPPET 

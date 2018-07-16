@@ -81,9 +81,10 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
 
 ### Animating Across Routes
 
+
 {{#docs-demo as |demo|}}
-    {{#demo.example name="four"}}
-      {{docs-hero hero}}
+    {{#demo.example name="hero"}}
+      {{outlet}}
     {{/demo.example}}
 
     {{demo.snippet 'hero-snippet.hbs'}}
