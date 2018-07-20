@@ -54,6 +54,7 @@
     "ember-export-application-global": "^2.0.0",
     "ember-faker": "^1.2.1",
     "ember-load-initializers": "^1.0.0",
+    "ember-power-select": "^2.0.4",
     "ember-resolver": "^4.0.0",
     "ember-source": "~3.0.0",
     "ember-source-channel-url": "^1.0.1",
