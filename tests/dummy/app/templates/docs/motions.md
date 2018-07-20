@@ -4,26 +4,43 @@ A motion is responsible for animating a single sprite while taking into account 
 
 
 ### move
-Animates a sprite from its current position to its final position using css transforms. The only option it takes is easing, kept sprite need initial and final state of a sprite. 
+Animates a sprite from its current position to its final position using css transforms. The only option it takes is easing. Because this motion works with kept sprites, it requires the initial and final state of a sprite. 
 
----demo that makes it clear that sprite needs initial and final bound--- (slideFromSide)
+
+{{#docs-demo as |demo|}}
+    {{#demo.example name="move"}}
+      {{transitions-example}}
+    {{/demo.example}}
+
+    {{demo.snippet 'transitions-snippet.hbs'}}
+    {{demo.snippet 'transitions-snippet.js' label='component.js'}}
+    {{demo.snippet 'transitions-snippet.css'}}
+{{/docs-demo}}
 
 ### moveSVG
-Animates one property on a svg element. This motion takes in an attribute name and animates that attribute from its initial to its final value. For example, on a circle move svg property cx 
+Animates one property on a svg element. This motion takes in an attribute name and animates that attribute from its initial to its final value. For example, on a circle movesvg property cx.
 
---- svg demo ---
+{{#docs-demo as |demo|}}
+    {{#demo.example name="svg"}}
+        {{svg-example}}
+    {{/demo.example}}
+
+    {{demo.snippet 'svg-snippet.js' label='component.js'}}
+    {{demo.snippet 'svg-snippet.hbs'}}
+{{/docs-demo}}
+
 
 ### opacity
-Animates a sprite from its inital to its final opacity (from %0 to %100 and vice versa). Takes from and to. No arguemnts defaults to default initial and final opacity of the sprite. fadeIn and fadeOut exports from same module
+Animates a sprite from its inital to its final opacity (from %0 to %100 and vice versa). Takes from and to arguments. With no arguments, this motion uses the default initial and final opacity of the sprite. fadeIn and fadeOut export from the same module.
 
 ### resize
 Animates the height and width of a sprite. Expects the initial and final state of the sprite. This is the default motion used by animated-container. Consider using scale instead because scale uses css transforms and will not trigger reflow. (link?)
 
 ### scale
-Applies css transforms to animate the initial size into the final size. 
+Applies css transforms to animate the initial size of the sprite into the final size. 
 
 ### adjustColor
-Animates the change in color of a sprite. From argument takes a css color otherwise defaults to measuredInitial color animate to whatever the final color was. 
+Animates the change in color of a sprite. The from argument takes a css color, otherwise it defaults to the measuredInitial color and animates to the default final color. 
 
 ### adjustCSS
 Animates the change in style of a sprite. Applies to css properties that are a unit and a number (font-size, letter spacing). Attribute method 

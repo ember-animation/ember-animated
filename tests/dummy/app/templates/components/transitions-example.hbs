@@ -1,27 +1,9 @@
  {{! BEGIN-SNIPPET transitions-snippet.hbs }}
     <div class="controls">
-        <label>Fade<input type="checkbox" checked={{fadeMessage}} onchange={{action (mut fadeMessage) (not fadeMessage)}}></label>
-        <label>moveOver<input type="checkbox" checked={{moveOverMessage}} onchange={{action (mut moveOverMessage) (not moveOverMessage)}}></label>
         <label>Custom<input type="checkbox" checked={{custom}} onchange={{action (mut custom) (not custom)}}></label>
     </div>
 
 <div class="scenario-transitions">
-    {{#animated-container}}
-        {{#animated-if fadeMessage use=fade }}
-            <div class="message">
-                {{mail}}
-            </div>
-        {{/animated-if}}
-    {{/animated-container}}
-
-    {{#animated-container}}
-        {{#animated-if moveOverMessage use=moveOver }}
-            <div class="message">
-                {{mail}}
-            </div>
-        {{/animated-if}}
-    {{/animated-container}}
-
     {{#animated-container}}
         {{#animated-if custom use=slideFromSide}}
             <div class="message">
