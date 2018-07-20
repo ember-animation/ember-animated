@@ -1,17 +1,36 @@
 {{! BEGIN-SNIPPET sprites-snippet.hbs }}
-<div class="scenario-sprites">
-  <h1>Inbox</h1>
-  <button {{action "addItem"}}>Refresh</button>
+<div class="scenario-sprites clearfix">
+  <div class="message">
+    <label>Delete</label><input type="checkbox" checked={{deleteAll}} onclick={{action "deleteItems"}}>
+    <button {{action "addItem"}}>Send/Receive</button>
+  </div>
   
   {{#animated-container}}
     {{#animated-each items use=transition as |item|}}
       <div class="each-item">
+        <input type="checkbox" checked={{item.deleteMessage}} onchange={{action (mut item.deleteMessage) (not item.deleteMessage)}}>
         {{item.message}}
-        <button {{action "removeItem" item}}>Delete</button>
       </div>
     {{/animated-each}}
   {{/animated-container}}
 
-  {{message}}
+<table>
+  <tr>
+    <th>Inserted</th>
+    <th>Kept</th>
+    <th>Removed</th>
+  </tr>
+  <tr>
+    <td>
+      {{message.inserted}}
+    </td>
+    <td>
+      {{message.kept}}
+    </td>
+    <td>
+      {{message.removed}}
+    </td>
+  </tr>
+</table>
 </div>
 {{! END-SNIPPET }}

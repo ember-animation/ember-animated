@@ -17,6 +17,7 @@ export default Component.extend({
     }
     return (result);
   },
+  
 
   transition: function * (context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
@@ -31,9 +32,12 @@ export default Component.extend({
       sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite, { easing: easeIn });
     });
-
+    
     this.set('message', printSprites(context));
   },
+
+  deleteAll: false,
+  refresh: false,
 
 
   actions: {
@@ -42,25 +46,33 @@ export default Component.extend({
       let index = Math.floor(Math.random() * Math.floor(10));
       this.set('items', items.slice(0, 0).concat([makeRandomItem(index)]).concat(items.slice(0)));
     },
-    removeItem(which) {
+    deleteItems() {
       let items = this.get('items');
-      this.set('items', items.filter(i => i !== which));
+      this.set('items', items.filter(item => !item.deleteMessage));
     }
   }
 });
 
 function makeRandomItem(index) {
   var messages = ["hi", "hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
-  return { message: messages[index] };
+  return { message: messages[index], deleteMessage: false };
 }
 //END-SNIPPET
 
-function printSprites (context, label) {
-  let prefix = label ? label + ' ' : '';
-  let spriteSummary = ['inserted', 'kept', 'removed'].map(type => {
-    return type + '=' + context[`_${type}Sprites`].map(s => {
-      return s.owner.value.message;
-    }).join(',');
-  }).join(" | ");
-  return (prefix + spriteSummary);
+function printSprites (context) {
+  return { 
+    inserted: context._insertedSprites.map(s =>  s.owner.value.message),
+    kept: context._keptSprites.map(s => s.owner.value.message).join("\r\n"),
+    removed: context._removedSprites.map(s =>s.owner.value.message)
+  };
 }
+
+// function printSprites (context) {
+//   let result = {};
+//   ['inserted', 'kept', 'removed'].map(type => {
+//      result[type] = context[`_${type}Sprites`].forEach(s => {
+//        result[s] = s.owner.value.message;
+//        return result._zip(result[type], result[s]);
+//     });
+//   });
+// }
