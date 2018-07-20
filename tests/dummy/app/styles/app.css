@@ -294,8 +294,8 @@
 
 /* BEGIN-SNIPPET transitions-snippet.css */
 .scenario-transitions  {
-    width: 10em;
-    height: 5em;
+    xwidth: 10em;
+    xheight: 5em;
 }
 
 .scenario-transitions .message {
@@ -306,6 +306,13 @@
     box-sizing: border-box;
     padding: 2em;
     border-radius: 10px;
+    float: right;
+}
+
+
+.scenario-transitions .selector {
+    float: left;
+
 }
 
 .scenario-transitions .h1 {
