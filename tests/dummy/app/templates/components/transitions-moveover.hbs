@@ -1,0 +1,20 @@
+{{!BEGIN-SNIPPET transitions-moveover-snippet.hbs}}
+<div class="scenario-transitions clearfix">
+    <div class="selector">
+        {{#power-select selected=message
+            options=words 
+            onchange=(action "chooseMessage") 
+            as |name|}}
+        {{name}}
+        {{/power-select}}
+    </div>
+ 
+    {{#animated-container}}
+        {{#animated-value message rules=rules}}
+            <div class="message">
+                {{message}}
+            </div>
+        {{/animated-value}}
+    {{/animated-container}}
+</div>
+{{!END-SNIPPET}}

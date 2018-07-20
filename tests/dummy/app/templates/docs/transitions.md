@@ -34,7 +34,7 @@ Transitions define or customize how motions will be applied to one or more categ
     {{transitions-moveover}}
   {{/demo.example}}
 
-  {{demo.snippet 'transitions-moveover-snippet.js'}}
+  {{demo.snippet 'transitions-moveover-snippet.js' label='component.js'}}
   {{demo.snippet 'transitions-moveover-snippet.hbs'}}
 {{/docs-demo}}
 
