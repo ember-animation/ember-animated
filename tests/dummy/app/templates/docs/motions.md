@@ -30,6 +30,28 @@ Animates one property on a svg element. This motion takes in an attribute name a
 {{/docs-demo}}
 
 
+### compensateForScale
+Sprite animating into or out of an area of the page that has scaling applied.
+
+### adjustColor
+Animates the change in color of a sprite. The from argument takes a css color, otherwise it defaults to the measuredInitial color and animates to the default final color. 
+
+### adjustCSS
+Animates the change in style of a sprite. Applies to css properties that are a unit and a number (font-size, letter spacing). Attribute method 
+
+{{#docs-demo as |demo|}}
+    {{#demo.example name="moving-word"}}
+        {{moving-word-text}}
+    {{/demo.example}}
+
+    {{demo.snippet 'moving-word-snippet.js' label='component.js'}}
+    {{demo.snippet 'moving-word-snippet.hbs'}}
+    {{demo.snippet 'moving-word-snippet.css'}}
+    {{demo.snippet 'moving-word-text-snippet.js' label='component.js'}}
+    {{demo.snippet 'moving-word-text-snippet.hbs'}}
+{{/docs-demo}}
+
+
 ### opacity
 Animates a sprite from its inital to its final opacity (from %0 to %100 and vice versa). Takes from and to arguments. With no arguments, this motion uses the default initial and final opacity of the sprite. fadeIn and fadeOut export from the same module.
 
@@ -38,13 +60,3 @@ Animates the height and width of a sprite. Expects the initial and final state o
 
 ### scale
 Applies css transforms to animate the initial size of the sprite into the final size. 
-
-### adjustColor
-Animates the change in color of a sprite. The from argument takes a css color, otherwise it defaults to the measuredInitial color and animates to the default final color. 
-
-### adjustCSS
-Animates the change in style of a sprite. Applies to css properties that are a unit and a number (font-size, letter spacing). Attribute method 
-
-### compensateForScale
-Sprite animating into or out of an area of the page that has scaling applied.
-

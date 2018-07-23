@@ -298,9 +298,8 @@
     margin-block-start: 2em;
 }
 
-.scenario-transitions >.animated-container {
+.scenario-transitions .move-container {
     overflow: hidden;
-
 }
 
 .scenario-transitions .message {
@@ -322,5 +321,23 @@
     font: sans-serif;
     font-style: bold;
     background-color: blue;
+}
+/* END-SNIPPET */
+
+/* BEGIN-SNIPPET moving-word-snippet.css */
+.moving-word {
+    display: inline-block;
+    vertical-align: top;
+}
+
+h1.text {
+    letter-spacing: 1rem;
+    font-size: 10rem;
+    font-weight: normal;
+    margin: 0;
+    color: var(--tertiaryColor);
+}
+.moving-word > .animated-container {
+    xborder: 1px solid blue;
 }
 /* END-SNIPPET */

@@ -1,0 +1,34 @@
+{{! BEGIN-SNIPPET moving-word-text-snippet.hbs }}
+<div class="moving-word">
+  <div style="position: absolute">{{animated-orphans}}</div>
+  <button {{action "toggle"}}>Toggle</button>
+  {{#animated-container}}
+    {{#animated-if tableMode use=fade duration=1000 }}
+      <ul>
+        <li>{{moving-word "framework"}}</li>
+        <li>{{moving-word "ambitious"}}</li>
+        <li>{{moving-word "applications"}}</li>
+      </ul>
+    {{else}}
+      <p style="color: lightblue; font-size: 20px; letter-spacing: .2rem">
+        A {{moving-word "framework"}} for creating {{moving-word "ambitious"}} web {{moving-word "applications"}}.
+      </p>
+    {{/animated-if}}
+  {{/animated-container}}
+
+ <button {{action "normal"}}>Without Adjustments </button>
+  {{#animated-container}}
+    {{#animated-if noAdjustments use=fade duration=1000 }}
+      <ul>
+        <li>{{animated-text "framework"}}</li>
+        <li>{{animated-text "ambitious"}}</li>
+        <li>{{animated-text "applications"}}</li>
+      </ul>
+    {{else}}
+      <p style="color: lightblue; font-size: 20px; letter-spacing: .2rem">
+        A {{animated-text "framework"}} for creating {{animated-text "ambitious"}} web {{animated-text "applications"}}.
+      </p>
+    {{/animated-if}}
+  {{/animated-container}}
+</div>
+{{! END-SNIPPET }}
