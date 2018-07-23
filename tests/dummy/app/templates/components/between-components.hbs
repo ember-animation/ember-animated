@@ -6,9 +6,13 @@
     <label>Delete with Undo <input type="checkbox" checked={{deleteUndo}} onchange={{action (mut deleteUndo) (not deleteUndo)}}></label>
   </div>
 
-    {{#animated-beacon name="trash"}}
-        <div class="scenario-beacon-trash">Trash</div>
-    {{/animated-beacon}}                          
+    {{#animated-container class="image"}}
+        {{#animated-beacon name="trash"}}
+          <div class="img">
+            {{svg-jar "download"}}
+          </div>
+      {{/animated-beacon}} 
+    {{/animated-container}}                       
 
     {{#animated-beacon name="add"}}
         <button {{action "addItem" item}}>Refresh</button>

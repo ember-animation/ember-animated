@@ -58,6 +58,17 @@
     height: 50px;
 }
 
+.scenario-sprites .image {
+    float: right;
+    width: 120px;
+    height: 120px;
+}
+
+.scenario-sprites .img {
+    width: 50%;
+    height: 50%;
+}
+
 
 /* END-SNIPPET */
 
@@ -283,13 +294,25 @@
 }
 
 .scenario-beacon-trash {
-    vertical-align: baseline;
+    xvertical-align: baseline;
     float: right;
-    width: 10em;
-    background-color: lightblue;
-    box-sizing: border-box;
-    padding: 2em;
-    border-radius: 10px;
+    width: 120px;
+    height: 120px;
+    xwidth: 10em;
+    xbackground-color: lightblue;
+    xbox-sizing: border-box;
+    xpadding: 2em;
+    xborder-radius: 10px;
+}
+
+.scenario-beacon .image {
+    width: 120px;
+    height: 120px;
+}
+
+.scenario-beacon > img {
+    width: 100%;
+    height: 100%;
 }
 
 /* BEGIN-SNIPPET transitions-snippet.css */
