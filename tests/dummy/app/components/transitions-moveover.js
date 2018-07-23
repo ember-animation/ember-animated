@@ -13,18 +13,18 @@ export default Component.extend({
   toLeft,
   toRight,
 
-  rules(message){
-    if(message==="hello"){
-      return toLeft;
-    }else{
+  rules({ oldItems, newItems}){
+    if(newItems[0]==="goodbye" && oldItems[0]==="hello"){
       return toRight;
+    }else{
+      return toLeft;
     }
   },
 
   actions: {
-    chooseMessage(word) {
-      this.set('message', word);
-    }
+    chooseMessage(selected) {
+      this.set('message', selected);
+    },
   }
 
 

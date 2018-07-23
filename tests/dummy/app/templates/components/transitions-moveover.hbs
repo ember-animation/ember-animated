@@ -3,18 +3,19 @@
     <div class="selector">
         {{#power-select selected=message
             options=words 
-            onchange=(action "chooseMessage") 
+            onchange=(action "chooseMessage")
             as |name|}}
         {{name}}
         {{/power-select}}
     </div>
- 
+
     {{#animated-container}}
-        {{#animated-value message rules=rules}}
+        {{#animated-value message rules=rules as |currentMessage|}}
             <div class="message">
-                {{message}}
+                {{currentMessage}}
             </div>
         {{/animated-value}}
     {{/animated-container}}
+
 </div>
 {{!END-SNIPPET}}

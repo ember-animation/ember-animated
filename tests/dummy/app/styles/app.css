@@ -294,8 +294,13 @@
 
 /* BEGIN-SNIPPET transitions-snippet.css */
 .scenario-transitions  {
-    xwidth: 10em;
-    xheight: 5em;
+    display: flex;
+    margin-block-start: 2em;
+}
+
+.scenario-transitions >.animated-container {
+    overflow: hidden;
+
 }
 
 .scenario-transitions .message {
@@ -306,13 +311,11 @@
     box-sizing: border-box;
     padding: 2em;
     border-radius: 10px;
-    float: right;
 }
 
 
 .scenario-transitions .selector {
-    float: left;
-
+    width: 25%;
 }
 
 .scenario-transitions .h1 {
