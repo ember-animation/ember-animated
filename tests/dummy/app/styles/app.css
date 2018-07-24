@@ -44,20 +44,6 @@
     padding-bottom: 15px;
 }
 
-.scenario-sprites table, td, th {
-    border: 1px solid black;
-}
-
-.scenario-sprites table {
-    border-collapse: collapse;
-    width: 50%;
-    float: right;
-}
-
-.scenario-sprites th {
-    height: 50px;
-}
-
 .scenario-sprites .image {
     float: right;
     width: 120px;
@@ -355,3 +341,17 @@ h1.text {
     xborder: 1px solid blue;
 }
 /* END-SNIPPET */
+
+
+.transition-log-table, .transition-log-table td, .transition-log-table th {
+  border: 1px solid black;
+}
+
+.transition-log-table {
+  border-collapse: collapse;
+  width: 50%;
+}
+
+.transition-log-table th {
+  height: 50px;
+}

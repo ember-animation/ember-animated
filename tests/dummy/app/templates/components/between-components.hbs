@@ -11,8 +11,8 @@
           <div class="img">
             {{svg-jar "download"}}
           </div>
-      {{/animated-beacon}} 
-    {{/animated-container}}                       
+      {{/animated-beacon}}
+    {{/animated-container}}
 
     {{#animated-beacon name="add"}}
         <button {{action "addItem" item}}>Refresh</button>
@@ -26,25 +26,6 @@
             </div>
         {{/animated-each}}
     {{/animated-container}}
-    
-  <table>
-  <tr>
-    <th>Inserted</th>
-    <th>Kept</th>
-    <th>Removed</th>
-  </tr>
-  <tr>
-    <td>
-      {{message.inserted}}
-    </td>
-    <td>
-      {{message.kept}}
-    </td>
-    <td>
-      {{message.removed}}
-    </td>
-  </tr>
-</table>
 
 </div>
 

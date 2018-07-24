@@ -9,13 +9,12 @@ import { later } from '@ember/runloop';
 export default Component.extend({
   init() {
     this._super();
-    this.transition = this.transition.bind(this);
-    this.items = this.items();
+    this.items = this.makeItems();
   },
 
   deleteUndo: false,
 
-  items() {
+  makeItems() {
     let result = [];
     for (let i = 0; i < 5; i++) {
       result.push(makeRandomItem(i));
@@ -23,8 +22,7 @@ export default Component.extend({
     return (result);
   },
 
-  transition: function * (context) {
-    let { insertedSprites, keptSprites, removedSprites, beacons } = context;
+  transition: function * ({ insertedSprites, keptSprites, removedSprites, beacons }) {
     insertedSprites.forEach(sprite => {
       sprite.startAtSprite(beacons.add);
       parallel(move(sprite, scale(sprite)));
@@ -38,8 +36,6 @@ export default Component.extend({
       sprite.endAtSprite(beacons.trash);
       parallel(move(sprite, scale(sprite)));
     });
-    
-    this.set('message', printSprites(context));
   },
 
 
@@ -50,7 +46,7 @@ export default Component.extend({
       this.set('items', items.slice(0, 0).concat([makeRandomItem(index)]).concat(items.slice(0)));
     },
     removeItem(which) {
-      let items = this.get('items'); 
+      let items = this.get('items');
       let index = items.indexOf(which);
       this.set('items', items.filter(i => i !== which));
       if (this.get('deleteUndo')) {
@@ -60,7 +56,6 @@ export default Component.extend({
     restoreItem(which, index) {
       let items = this.get('items');
       this.set('items', items.concat(items.splice(index, 0, which)));
-      this.set('message', `replace ${which.message} at ${index}`);
     }
   }
 });
@@ -72,10 +67,3 @@ function makeRandomItem(index) {
 }
 //END-SNIPPET
 
-function printSprites (context) {
-  return { 
-    inserted: context._insertedSprites.map(s =>  s.owner.value.message),
-    kept: context._keptSprites.map(s => s.owner.value.message),
-    removed: context._removedSprites.map(s =>s.owner.value.message)
-  };
-}

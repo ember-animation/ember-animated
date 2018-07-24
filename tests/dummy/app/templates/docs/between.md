@@ -47,7 +47,9 @@ In this demonstration, sprites are represented by messages, and they animatine b
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="one"}}
-      {{between-components}}
+      {{#transition-log-table as |logTransition|}}
+        {{logged-between-components logTransition=logTransition}}      
+      {{/transition-log-table}}
     {{/demo.example}}
 
     {{demo.snippet 'between-components-snippet.hbs'}}
