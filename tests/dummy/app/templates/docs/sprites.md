@@ -4,7 +4,7 @@
 
 In ember-animated, a sprite is a piece of your application that you want to animate. The term "sprite" comes from a long tradition of two-dimensional graphics. More specifically, a sprite is an html element that carries additional data about itself, such as its starting point and its ending point. With this information, users can make changes to sprites in a variety of ways, and these changes will automatically get cleaned up at the end of an animation. 
 
-The initial state of a sprite refers to the dimensions of the location where a sprite starts at. Likewise, the final state of a sprite refers to the dimensions of the location that the sprite ends at. Every sprite is grouped into one of five categories in any given animation: `insertedSprites`, `keptSprites`, `removedSprites`, `sentSprites`, and `receivedSprites`. The first three categories are outlined here: 
+The initial state of a sprite refers to the dimensions of the location where a sprite starts at. The final state of a sprite refers to the dimensions of the location that the sprite ends at. Every sprite is grouped into one of five categories based on what information the sprite holds: `insertedSprites`, `keptSprites`, `removedSprites`, `sentSprites`, and `receivedSprites`. The first three categories are outlined here: 
 
 
 <style type="text/css">
@@ -42,7 +42,11 @@ The initial state of a sprite refers to the dimensions of the location where a s
 
 
 
-In this example, messages that are considered `removedSprites`, `insertedSprites`, or `keptSprites` after each animation. When a message is deleted from the inbox, it becomes a `removedSprite`. This makes sense because the message is deleted from the inbox where the inbox was the initial location of the message, and the message does not have a set final destination. When the inbox is refreshed, a new message is added. This added message is an `insertedSprite` and its final destination or endpoint was the inbox, and it did not have a set starting point. Finally, the remaining messages in the inbox that are not deleted or added from refresh at each render are `keptSprites`. All of the `keptSprites` do not change location, so the initial and the final location of these messages is the inbox.
+In this example, messages that are considered `removedSprites`, `insertedSprites`, or `keptSprites` after each animation. When a message is deleted from the inbox, it becomes a `removedSprite`. This makes sense because the message is deleted from the inbox where the inbox was the initial location of the message, and the message does not have a set final destination. 
+
+When the inbox is refreshed, a new message is added. This added message is an `insertedSprite` that ends in the inbox, and does not have a set starting point. 
+
+Finally, the remaining messages in the inbox that are not deleted or added are `keptSprites`. All of the `keptSprites` are untouched and do not change location, so the initial and the final location of these messages is the inbox.
 
 
 {{#docs-demo as |demo|}}
