@@ -21,6 +21,21 @@ Sent sprites are the reverse of received sprites. If the sprite stores the same 
     <th class="tg-7g6k">Initial State</th>
     <th class="tg-47u2">Final State</th>
   </tr>
+    <tr>
+    <td class="tg-eh2d">Inserted</td>
+    <td class="tg-eh2d">No</td>
+    <td class="tg-eh2d">Yes</td>
+  </tr>
+  <tr>
+    <td class="tg-eh2d">Kept</td>
+    <td class="tg-eh2d">Yes</td>
+    <td class="tg-eh2d">Yes</td>
+  </tr>
+  <tr>
+    <td class="tg-eh2d">Removed</td>
+    <td class="tg-eh2d">Yes</td>
+    <td class="tg-eh2d">No</td>
+  </tr>
   <tr>
     <td class="tg-eh2d">Received</td>
     <td class="tg-eh2d">Remote</td>
@@ -86,7 +101,9 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="hero"}}
-      {{outlet}}
+      {{#animated-container class="debug"}}
+        {{outlet}}
+      {{/animated-container}}
     {{/demo.example}}
 
     {{demo.snippet 'hero-snippet.hbs'}}
