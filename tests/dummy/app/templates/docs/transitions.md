@@ -1,7 +1,9 @@
 # Transitions
 
-Transitions define or customize how motions will be applied to one or more categories of sprites. In other words, transitions connect each sprite to a motion. Transitions are async and therefore interruptable, and use ember concurrency. Transitions run every time the state of the sprites changes, therefore they must be implemented as generator functions. There are two built-in transitions, `fade` and `moveOver`. To use these transitions, you simply import them, then pass them into your template. You can also implement your own transitions. 
+Transitions connect each sprite to a motion. A transition is a way to tell a category of sprites (`kept`, `removed`, `sent`, etc) how to animate from one state to another. For example, a transition might assign the `fade` motion to all `insertedSprites` so that each time an `insertedSprite` is added to a list, it fades into the list as that sprite moves from its initial to its final destination. Transitions run every time the state of a sprite changes, therefore they must be implemented as generator functions. This also means that transitions are async and interruptable, so the state of a sprite can be changed during a transition. Ember concurrency is used to support interruptions. 
 
+
+`fade` and `moveOver` are built in transitions. To use the built in transitions, you simply import `fade` or `moveOver` and then pass them into your template.
 
 ### Fade
 
@@ -10,22 +12,11 @@ Transitions define or customize how motions will be applied to one or more categ
       {{transitions-fade}}
     {{/demo.example}}
 
-    {{demo.snippet 'transitions-fade-snippet.hbs'}}
-    {{demo.snippet 'transitions-fade-snippet.js' label='component.js'}}
+    {{demo.snippet 'transitions-fade-snippet.hbs' label='transitions-fade.hbs'}}
+    {{demo.snippet 'transitions-fade-snippet.js' label='transitions-fade.js'}}
     {{demo.snippet 'transitions-snippet.css'}}
 {{/docs-demo}}
 
-### Custom 
-
-{{#docs-demo as |demo|}}
-    {{#demo.example name="custom"}}
-      {{transitions-example}}
-    {{/demo.example}}
-
-    {{demo.snippet 'transitions-snippet.hbs'}}
-    {{demo.snippet 'transitions-snippet.js' label='component.js'}}
-    {{demo.snippet 'transitions-snippet.css'}}
-{{/docs-demo}}
 
 ### moveOver
 
@@ -34,8 +25,21 @@ Transitions define or customize how motions will be applied to one or more categ
     {{transitions-moveover}}
   {{/demo.example}}
 
-  {{demo.snippet 'transitions-moveover-snippet.js' label='component.js'}}
-  {{demo.snippet 'transitions-moveover-snippet.hbs'}}
+  {{demo.snippet 'transitions-moveover-snippet.hbs' label='transitions-moveover.hbs'}}
+  {{demo.snippet 'transitions-moveover-snippet.js' label='transitions-moveover.js'}}
 {{/docs-demo}}
 
 
+You can also implement your own transitions. `slideFromSide` is a custom transition that assigns specific motions to `insertedSprites`, `keptSprites`, and `removedSprites` so that the sprite will slide to and from the side when the button is clicked and unclicked. When the sprite or message is an `insertedSprite`, the message will ease in, and when it is a `removedSprite` it will ease out. 
+
+### Custom 
+
+{{#docs-demo as |demo|}}
+    {{#demo.example name="custom"}}
+      {{transitions-example}}
+    {{/demo.example}}
+
+    {{demo.snippet 'transitions-snippet.hbs' label='transitions-example.hbs'}}
+    {{demo.snippet 'transitions-snippet.js' label='transitions-example.js'}}
+    {{demo.snippet 'transitions-snippet.css'}}
+{{/docs-demo}}
