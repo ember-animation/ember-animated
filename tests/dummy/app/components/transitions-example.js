@@ -10,8 +10,7 @@ export default Component.extend({
   mail: "Hello",
 
   /* custom transition */
-  slideFromSide: function * (context) {
-    let { insertedSprites, keptSprites, removedSprites } = context;
+  slideFromSide: function * ({ insertedSprites, keptSprites, removedSprites }) {
     insertedSprites.forEach(sprite => {
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeOut });

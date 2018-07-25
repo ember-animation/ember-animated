@@ -1,15 +1,15 @@
  {{! BEGIN-SNIPPET transitions-snippet.hbs }}
-    <div class="controls">
-        <label>Custom<input type="checkbox" checked={{custom}} onchange={{action (mut custom) (not custom)}}></label>
-    </div>
+<div class="controls">
+    <label>Custom<input type="checkbox" checked={{custom}} onchange={{action (mut custom) (not custom)}}></label>
+</div>
 
 <div class="scenario-transitions">
-    {{#animated-container}}
-        {{#animated-if custom use=slideFromSide}}
-            <div class="message">
-                {{mail}}
-            </div>
+  {{#animated-container}}
+      {{#animated-if custom use=slideFromSide}}
+          <div class="message">
+              {{mail}}
+          </div>
         {{/animated-if}}
-    {{/animated-container}}
+  {{/animated-container}}
 </div>
 {{! END-SNIPPET }}
