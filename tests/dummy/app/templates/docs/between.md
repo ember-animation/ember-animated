@@ -1,10 +1,10 @@
 # Animating Between Components
-When animating between components, sprites travel from one component to another. Therefore, sprites always have an initial and a final destination when animating between components or lists. 
+When animating between components, sprites travel back and forth from two separate locations or lists that know about each other. This means that when a sprite leaves one list and goes to another, the list that it goes to, or its endpoint, knows where the sprite started from. This also applies in the opposite direction. Therefore, sprites always have an initial and a final destination when animating between components. When two components know about each other, they can identify when a sprite is animating between them by checking the start or endpoint of that sprite.
 
 ## receivedSprites: 
-When moving a sprite from one list to another, a sprite is considered a removed sprite on the list it is leaving from, and an inserted sprite on the list it is going to. If the sprite holds the same data value on both sides, it is considered a received sprite on the list that it is going to. This means that instead of being an inserted sprite and storing only its final state, this received sprite will store both its initial state and its final state.
+When a sprite animates between lists it is a removed sprite on the list it started at, and an inserted sprite on the list ended at. If the sprite holds the same data value on both sides, it is considered a received sprite on the list that it is going to.
 ## sentSprites: 
-Sent sprites are the reverse of received sprites. If the sprite stores the same data value on both sides while moving from one list to another, it will be considered a sent sprite on the list that it came from instead of a removed sprite. This means that it will store both its initial state and its final state instead of storing just its initial state.
+Sent sprites are the reverse of received sprites. If the sprite stores the same data value on both sides while moving from one list to another, it will be considered a sent sprite on the list that it came from. 
 
 
 <style type="text/css">
@@ -57,8 +57,7 @@ In this demonstration, the "Delete with Undo" option shows what happens when an 
 ### Beacons
 You may have noticed that this demonstration uses `#animated-beacon`. For more on beacons, see [animated-beacon](../docs/api/components/animated-beacon). 
 
-
-In this demonstration, sprites are represented by messages, and they animatine between Refresh, Trash, and the Inbox. If a message starts in the inbox and is deleted, it goes to the trash. Therefore, it is considered a `sentSprite` by the Inbox, and a `receivedSprite` by the Trash. If you refresh your inbox, a message comes from refresh and goes to the inbox. In this case, the message is considered a `sentSprite` by refresh, and a `receivedSprite` by the inbox. 
+In this demonstration, sprites are represented by messages, and they animate between Refresh, Trash, and the Inbox. When a message is deleted, it is considered a `sentSprite` by the Inbox, and a `receivedSprite` by the trash. If you refresh your inbox, the message added is a `sentSprite` by refresh, and a `receivedSprite` by the inbox. 
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="one"}}
@@ -73,7 +72,7 @@ In this demonstration, sprites are represented by messages, and they animatine b
 {{/docs-demo}}
 
 ### Animating Across Lists
-Here we have two lists of messages, the inbox and the trash. Now, when you delete a message, it is possible to recover that message from the trash and move it back into your inbox. So, a deleted message is actually a `receivedSprite` to the trash where the initial location is the inbox and the final destination is the trash. When moving a message from the trash to the inbox (restore), this message is a `sentSprite` from the trash.
+Here we have two lists of messages, the inbox and the trash. Now, when you delete a message, it is possible to recover that message from the trash and move it back into your inbox. So, a deleted message is actually a `receivedSprite` where the initial location is the inbox and the final destination is the trash. When moving a message from the trash to the inbox (restore), this message is a `sentSprite` from the trash.
 
 
 {{#docs-demo as |demo|}}
@@ -97,7 +96,7 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
 {{/docs-demo}}
 
 ### Animating Across Routes
-
+This is an example of animating sprites across different routes. When you select an icon from the list, both the selected image and the list of image animates while the route changes.
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="hero"}}
