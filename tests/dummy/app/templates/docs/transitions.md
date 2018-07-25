@@ -18,6 +18,8 @@ Transitions connect each sprite to a motion. A transition is a way to tell a cat
 {{/docs-demo}}
 
 
+`moveOver` comes with four options: `toLeft`, `toRight`, `toUp`, and `toDown`. `toLeft` and `toRight` are demonstrated here, using `rules` to compare the two messages and determine which transition to use. For more on `rules` see [Rules for Data-Dependent Animations](../docs/rules/).
+
 ### moveOver
 
 {{#docs-demo as |demo|}}
@@ -30,7 +32,7 @@ Transitions connect each sprite to a motion. A transition is a way to tell a cat
 {{/docs-demo}}
 
 
-You can also implement your own transitions. `slideFromSide` is a custom transition that assigns specific motions to `insertedSprites`, `keptSprites`, and `removedSprites` so that the sprite will slide to and from the side when the button is clicked and unclicked. When the sprite or message is an `insertedSprite`, the message will ease in, and when it is a `removedSprite` it will ease out. 
+You can also implement your own transitions. `slideFromSide` is a custom transition that assigns specific motions to `insertedSprites`, `keptSprites`, and `removedSprites` so that the sprite will slide to and from the side when the button is clicked and unclicked. When the sprite is an `insertedSprite`, the message will ease in, and when it is a `removedSprite` it will ease out. 
 
 ### Custom 
 

@@ -2,9 +2,9 @@
 When animating between components, sprites travel back and forth from two separate locations or lists that know about each other. This means that when a sprite leaves one list and goes to another, the list that it goes to, or its endpoint, knows where the sprite started from. This also applies in the opposite direction. Therefore, sprites always have an initial and a final destination when animating between components. When two components know about each other, they can identify when a sprite is animating between them by checking the start or endpoint of that sprite.
 
 ## receivedSprites: 
-When a sprite animates between lists it is a removed sprite on the list it started at, and an inserted sprite on the list ended at. If the sprite holds the same data value on both sides, it is considered a received sprite on the list that it is going to.
+When a sprite animates between lists it is a `removedSprite` on the list it started at, and an `insertedSprite` on the list ended at. If the sprite holds the same data value on both sides, it is considered a `receivedSprite` on the list that it is going to.
 ## sentSprites: 
-Sent sprites are the reverse of received sprites. If the sprite stores the same data value on both sides while moving from one list to another, it will be considered a sent sprite on the list that it came from. 
+Sent sprites are the reverse of `receivedSprites`. If the sprite stores the same data value on both sides while moving from one list to another, it will be considered a `sentSprite` on the list that it came from. 
 
 
 <style type="text/css">
@@ -66,8 +66,8 @@ In this demonstration, sprites are represented by messages, and they animate bet
       {{/transition-log-table}}
     {{/demo.example}}
 
-    {{demo.snippet 'between-components-snippet.hbs'}}
-    {{demo.snippet 'between-components-snippet.js'}}
+    {{demo.snippet 'between-components-snippet.hbs' label='between-components.hbs'}}
+    {{demo.snippet 'between-components-snippet.js' label='between-components.js'}}
     {{demo.snippet 'sprites-snippet.css'}}
 {{/docs-demo}}
 
@@ -80,8 +80,8 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
       {{between-two-lists-example}}
     {{/demo.example}}
 
-    {{demo.snippet 'between-two-lists-example-snippet.hbs'}}
-    {{demo.snippet 'between-two-lists-example-snippet.js'}}
+    {{demo.snippet 'between-two-lists-example-snippet.hbs' label='between-two-lists-example.hbs'}}
+    {{demo.snippet 'between-two-lists-example-snippet.js' label='between-two-lists-example.js'}}
     {{demo.snippet 'two-lists-snippet.css'}}
 {{/docs-demo}}
 
@@ -90,8 +90,8 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
       {{between-swap-lists-example}}
     {{/demo.example}}
 
-    {{demo.snippet 'between-swap-lists-snippet.hbs'}}
-    {{demo.snippet 'between-swap-lists-snippet.js'}}
+    {{demo.snippet 'between-swap-lists-snippet.hbs' label='between-swap-lists-example.hbs'}}
+    {{demo.snippet 'between-swap-lists-snippet.js' label='between-swap-lists-example.js'}}
     {{demo.snippet 'swapping-lists-snippet.css'}}
 {{/docs-demo}}
 
@@ -105,14 +105,10 @@ This is an example of animating sprites across different routes. When you select
       {{/animated-container}}
     {{/demo.example}}
 
-    {{demo.snippet 'hero-snippet.hbs'}}
+    {{demo.snippet 'hero-snippet.hbs' label='hero.hbs'}}
+    {{demo.snippet 'detail-snippet.hbs' label='detail.hbs'}}
+    {{demo.snippet 'detail-snippet.js' label='detail.js'}}
+    {{demo.snippet 'index-snippet.hbs' label='index.hbs'}}
+    {{demo.snippet 'index-snippet.js' label='index.js'}}
     {{demo.snippet 'hero-snippet.css'}}
-    {{demo.snippet 'detail-snippet.hbs'}}
-    {{demo.snippet 'index-snippet.js'}}
-    {{demo.snippet 'detail-snippet.js'}}
-    {{demo.snippet 'person-snippet.js'}}
-    {{demo.snippet 'person-2-snippet.js'}}
-    {{demo.snippet 'index-snippet.hbs'}}
-    {{demo.snippet 'index-2-snippet.js'}}
-    {{demo.snippet 'detail-2-snippet.js'}}
 {{/docs-demo}}
