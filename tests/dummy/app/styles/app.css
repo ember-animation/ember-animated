@@ -2,16 +2,21 @@
     display: block;
 }
 /* BEGIN-SNIPPET sprites-snippet.css */
+
+.scenario-sprites {
+  border-bottom: 1px solid black;
+  overflow: hidden;
+}
+
 .scenario-sprites > .animated-container {
-    padding-top: 15px;
-    width: 40%;
+    border-collapse: collapse;
 }
 
 .scenario-sprites .each-item {
-    border-collapse: collapse;
-    border: ridge;
-    font-style: bold;
-    background-color: white;
+  border-collapse: collapse;
+  border-bottom: 1px solid lightgray;
+  font-style: bold;
+  background-color: white;
 }
 
 .scenario-sprites .trash {
@@ -30,18 +35,22 @@
 
 .scenario-sprites .each-item > button {
     color:white;
-    float: right;
     transition: background-color .5s;
 }
 
 .scenario-sprites button:hover {
-    background-color: rgb(68, 121, 228);
+    background-color: lightgray;
 }
 
 .scenario-sprites .message {
+    border-top: 1px solid rgb(135, 135, 135);
     border-bottom: 1px solid rgb(135, 135, 135);
-    width: 40%;
-    padding-bottom: 15px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.scenario-sprites .mail-buttons {
+  float: right;
 }
 
 .scenario-sprites .image {
@@ -50,9 +59,35 @@
     height: 120px;
 }
 
+.scenario-sprites .inbox {
+  width: 84%;
+  float: right;
+  border-left: 1px solid lightgray;
+}
+
 .scenario-sprites .img {
     width: 50%;
     height: 50%;
+}
+
+.scenario-sprites .sidebar {
+  float: left;
+  border-right: 1px solid lightgray;
+}
+
+.scenario-sprites .sidebar > table {
+  border-collapse: collapse;
+}
+
+.scenario-sprites .sidebar > table > tr > td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+  border-right: 1px solid lightgray;
+}
+
+.scenario-sprites .sidebar > table > th {
+  text-align: left;
 }
 
 
@@ -337,9 +372,7 @@ h1.text {
     margin: 0;
     color: var(--tertiaryColor);
 }
-.moving-word > .animated-container {
-    xborder: 1px solid blue;
-}
+
 /* END-SNIPPET */
 
 
@@ -354,4 +387,8 @@ h1.text {
 
 .transition-log-table th {
   height: 50px;
+}
+
+.debug {
+  border: 1px solid red;
 }

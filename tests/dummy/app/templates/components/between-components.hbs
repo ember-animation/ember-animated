@@ -1,6 +1,5 @@
 {{! BEGIN-SNIPPET between-components-snippet.hbs }}
 <div class="scenario-sprites clearfix">
-  <h1>Inbox</h1>
 
   <div class="controls">
     <label>Delete with Undo <input type="checkbox" checked={{deleteUndo}} onchange={{action (mut deleteUndo) (not deleteUndo)}}></label>
@@ -9,13 +8,13 @@
     {{#animated-container class="image"}}
         {{#animated-beacon name="trash"}}
           <div class="img">
-            {{svg-jar "download"}}
+            {{svg-jar "trash-big"}}
           </div>
       {{/animated-beacon}}
     {{/animated-container}}
 
     {{#animated-beacon name="add"}}
-        <button {{action "addItem" item}}>Refresh</button>
+        <button {{action "addItem" item}}>{{svg-jar "envelope"}}</button>
     {{/animated-beacon}}
 
     {{#animated-container}}
