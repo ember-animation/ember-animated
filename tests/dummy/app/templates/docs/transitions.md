@@ -1,6 +1,6 @@
 # Transitions
 
-Transitions connect each sprite to a motion. A transition is a way to tell a category of sprites (`kept`, `removed`, `sent`, etc) how to animate from one state to another. For example, a transition might assign the `fade` motion to all `insertedSprites` so that each time an `insertedSprite` is added to a list, it fades into the list as that sprite moves from its initial to its final destination. Transitions run every time the state of a sprite changes, therefore they must be implemented as generator functions. This also means that transitions are async and interruptable, so the state of a sprite can be changed during a transition. Ember concurrency is used to support interruptions. 
+Transitions connect each sprite to a motion. A transition is a way to tell a category of sprites (`insertedSprites`, `keptSprites`, `removedSprites`, etc) how to animate from one state to another. For example, a transition might assign the `fade` motion to all `insertedSprites` so that each time a sprite is added to a list, it fades into the list as that sprite moves from its initial to its final destination. Transitions run every time the state of a sprite changes, therefore they must be implemented as generator functions. This also means that transitions are async and interruptable, so the state of a sprite can be changed during a transition. Ember concurrency is used to support interruptions. 
 
 
 `fade` and `moveOver` are built in transitions. To use the built in transitions, you simply import `fade` or `moveOver` and then pass them into your template.
