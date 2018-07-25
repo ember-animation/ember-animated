@@ -4,7 +4,7 @@
     <label>Delete</label><input type="checkbox" checked={{deleteAll}} onclick={{action "deleteItems"}}>
     <button {{action "addItem"}}>Send/Receive</button>
   </div>
-  
+
   {{#animated-container}}
     {{#animated-each items use=transition as |item|}}
       <div class="each-item">
@@ -13,24 +13,5 @@
       </div>
     {{/animated-each}}
   {{/animated-container}}
-
-<table>
-  <tr>
-    <th>Inserted</th>
-    <th>Kept</th>
-    <th>Removed</th>
-  </tr>
-  <tr>
-    <td>
-      {{message.inserted}}
-    </td>
-    <td>
-      {{message.kept}}
-    </td>
-    <td>
-      {{message.removed}}
-    </td>
-  </tr>
-</table>
 </div>
 {{! END-SNIPPET }}

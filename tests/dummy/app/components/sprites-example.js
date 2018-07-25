@@ -6,18 +6,17 @@ import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 export default Component.extend({
   init() {
     this._super();
-    this.transition = this.transition.bind(this);
-    this.items = this.items();
+    this.items = this.makeItems();
   },
 
-  items() {
+  makeItems() {
     let result = [];
     for (let i = 0; i < 5; i++) {
       result.push(makeRandomItem(i));
     }
     return (result);
   },
-  
+
 
   transition: function * (context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
@@ -32,8 +31,6 @@ export default Component.extend({
       sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite, { easing: easeIn });
     });
-    
-    this.set('message', printSprites(context));
   },
 
   deleteAll: false,
@@ -58,21 +55,3 @@ function makeRandomItem(index) {
   return { message: messages[index], deleteMessage: false };
 }
 //END-SNIPPET
-
-function printSprites (context) {
-  return { 
-    inserted: context._insertedSprites.map(s =>  s.owner.value.message),
-    kept: context._keptSprites.map(s => s.owner.value.message).join("\r\n"),
-    removed: context._removedSprites.map(s =>s.owner.value.message)
-  };
-}
-
-// function printSprites (context) {
-//   let result = {};
-//   ['inserted', 'kept', 'removed'].map(type => {
-//      result[type] = context[`_${type}Sprites`].forEach(s => {
-//        result[s] = s.owner.value.message;
-//        return result._zip(result[type], result[s]);
-//     });
-//   });
-// }
