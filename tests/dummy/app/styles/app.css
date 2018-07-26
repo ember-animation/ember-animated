@@ -9,7 +9,8 @@
 }
 
 .scenario-sprites > .animated-container {
-    border-collapse: collapse;
+  border-collapse: collapse;
+  display: flex;
 }
 
 .scenario-sprites .each-item {
@@ -19,59 +20,32 @@
   background-color: white;
 }
 
-.scenario-sprites .trash {
-    border-collapse: collapse;
-    border: 1px solid rgb(69, 158, 237);
-    font-style: bold;
-    background-color:rgb(129, 203, 247);
-    color: white;
-    float: left;
-}
-
-.scenario-sprites .h1 {
-    font: sans-serif;
-    font-style: bold;
-}
-
 .scenario-sprites .each-item > button {
-    color:white;
-    transition: background-color .5s;
+  color:white;
+  transition: background-color .5s;
 }
 
 .scenario-sprites button:hover {
-    background-color: lightgray;
+  background-color: lightgray;
 }
 
 .scenario-sprites .message {
-    border-top: 1px solid rgb(135, 135, 135);
-    border-bottom: 1px solid rgb(135, 135, 135);
-    padding-bottom: 5px;
-    padding-top: 5px;
+  border-top: 1px solid rgb(135, 135, 135);
+  border-bottom: 1px solid rgb(135, 135, 135);
+  padding-bottom: 5px;
+  padding-top: 5px;
 }
 
 .scenario-sprites .mail-buttons {
   float: right;
 }
 
-.scenario-sprites .image {
-    float: right;
-    width: 120px;
-    height: 120px;
-}
-
 .scenario-sprites .inbox {
-  width: 84%;
-  float: right;
   border-left: 1px solid lightgray;
-}
-
-.scenario-sprites .img {
-    width: 50%;
-    height: 50%;
+  flex-grow: 1;
 }
 
 .scenario-sprites .sidebar {
-  float: left;
   border-right: 1px solid lightgray;
 }
 
@@ -89,9 +63,9 @@
 .scenario-sprites .sidebar > table > th {
   text-align: left;
 }
-
-
 /* END-SNIPPET */
+
+
 
 .scenario-each > .animated-container {
     overflow: hidden;
@@ -103,30 +77,120 @@
     border: 1px solid red;
 }
 
+.scenario-two-lists2 > .animated-container {
+  width: 40%;
+  float: left;
+}
+
+
+
+
 
 
 /* BEGIN-SNIPPET two-lists-snippet.css */
 
+.scenario-two-lists {
+  xbackground-color: rgb(227, 249, 250);
+  border-radius: 5px;
+  padding: 10px;
+}
+
 .scenario-two-lists > .animated-container {
-    width:40%;
-    float: left;
+  display: flex;
+  border-collapse: collapse;
+  justify-content: center;
+}
+
+.scenario-two-lists .bounce {
+  font-family: "Andale Mono";
+  color: rgb(9, 114, 149);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.scenario-two-lists .left {
+  width: 45%;
+  padding-right: 20px;
+  order: 1;
+}
+
+.scenario-two-lists .right {
+  width: 45%;
+  padding-left: 20px;
+  order: 2;
+}
+
+.scenario-two-lists .party {
+  font-weight: bold;
+  text-align: left;
+  font-size: 25px;
+  xborder-bottom: 2px solid rgb(68, 172, 207);
+  border-bottom: 2px solid rgb(60, 127, 168);
+  font-family: "Helvetica Neue";
+  color: rgb(9, 59, 91);
+}
+
+.scenario-two-lists .guest-list-header {
+  font-weight: bold;
+  font-size: 15px;
+  xborder-top: 2px solid rgb(68, 172, 207);
+  xborder-bottom: 2px solid rgb(68, 172, 207);
+  border-top: 2px solid rgb(60, 127, 168);
+  border-bottom: 2px solid rgb(60, 127, 168);
+  border-radius: 5px;
+  padding: 5px;
+  font-family: "Helvetica Neue";
+  color: rgb(9, 59, 91);
+  background-color: rgb(227, 244, 250);
+
+
 }
 
 .scenario-two-lists .each-item {
-    border-collapse: collapse;
-    border: ridge;
-    font-style: bold;
-    background-color: white;
+  border-collapse: collapse;
+  border: 2px solid rgb(68, 172, 207);
+  xborder: 2px solid rgb(158, 215, 235);
+  xborder: 2px solid rgb(60, 127, 168);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
 }
 
-.scenario-two-lists .h1 {
-    font-style: bold;
+.scenario-two-lists .icon {
+  max-width: 20%;
+  align-self: center;
+  padding-top: 4px;
+  padding-left: 4px;
 }
 
-.scenario-two-lists .each-item > button {
-    color: black;
-    float: right;
-    transition: background-color .5s;
+.scenario-two-lists img {
+  border-radius: 30px;
+  border: 2px solid lightblue;
+  align-self: center;
+}
+
+.scenario-two-lists .each-item > .name {
+  text-align: left;
+  padding-left: 10px;
+  font-family: "Helvetica Neue";
+  flex: 1;
+  font-size: 17px;
+}
+
+.scenario-two-lists button {
+  padding-right: 10px;
+  color: rgb(37, 158, 199);
+}
+
+.scenario-two-lists .left > .each-item > button:hover {
+  color: rgb(230, 107, 107);
+}
+
+.scenario-two-lists .right > .each-item > button:hover {
+  color: rgb(202, 236, 149);
 }
 
 

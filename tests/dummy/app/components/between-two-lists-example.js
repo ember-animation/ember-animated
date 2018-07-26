@@ -27,8 +27,8 @@ export default Component.extend({
       sprite.moveToFinalPosition();
     });
 
-    this.set('message', printSprites(context));
-    
+    //this.set('message', printSprites(context));
+
   },
 
   leftItems() {
@@ -42,10 +42,11 @@ export default Component.extend({
   rightItems() {
     let result = [];
     for (let i = 0; i < 5; i++) {
-      result.push(makeRandomItem(i));
+      result.push(makeRandomItem2(i));
     }
     return (result);
   },
+
 
   actions: {
     move(item, bounceCounter=1) {
@@ -69,8 +70,15 @@ export default Component.extend({
 
 
 function makeRandomItem(index) {
-  var messages = ["hi", "hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
-  return { id: Math.round(Math.random()*1000), message: messages[index] };
+  var messages = ["Dwight", "Stanley", "Kelly", "Ryan", "Kevin"];
+  var images = ['https://pbs.twimg.com/profile_images/549268771484229632/WnatiHzT_400x400.jpeg', 'https://pbs.twimg.com/profile_images/1839546020/florida_stanley_400x400.jpg', 'https://pbs.twimg.com/profile_images/71405458/2928282474_24807334d7_400x400.jpg', 'https://pbs.twimg.com/profile_images/740436182107049984/y0N8Sqbi_400x400.jpg', 'https://pbs.twimg.com/profile_images/118888142/Brian_Baumgartner_134198_400x400.jpg'];
+  return { id: Math.round(Math.random()*1000), message: messages[index], image: images[index] };
+}
+
+function makeRandomItem2(index) {
+  var messages = ["Oscar", "Jim", "Angela", "Michael","Pam"];
+  var images = ['https://pbs.twimg.com/profile_images/563110431653249025/5_Y6Amql_400x400.jpeg', 'https://pbs.twimg.com/profile_images/3171824697/ef75d90df2e65ce326acf30262df5918_400x400.jpeg', 'https://pbs.twimg.com/profile_images/800824511184572416/uC3hE1JB_400x400.jpg', 'https://pbs.twimg.com/profile_images/1323877428/the_office_nbc_tv_show_image_steve_carrol_as_michael_scott__1__400x400.jpg', 'https://pbs.twimg.com/profile_images/1812302355/carEmmy_400x400.jpg'];
+  return { id: Math.round(Math.random()*1000), message: messages[index], image: images[index]};
 }
 //END-SNIPPET
 
