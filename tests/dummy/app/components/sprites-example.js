@@ -11,7 +11,7 @@ export default Component.extend({
 
   makeItems() {
     let result = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 7; i++) {
       result.push(makeRandomItem(i));
     }
     return (result);
