@@ -85,15 +85,6 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
     {{demo.snippet 'two-lists-snippet.css'}}
 {{/docs-demo}}
 
-{{#docs-demo as |demo|}}
-    {{#demo.example name="three"}}
-      {{between-swap-lists-example}}
-    {{/demo.example}}
-
-    {{demo.snippet 'between-swap-lists-snippet.hbs' label='between-swap-lists-example.hbs'}}
-    {{demo.snippet 'between-swap-lists-snippet.js' label='between-swap-lists-example.js'}}
-    {{demo.snippet 'swapping-lists-snippet.css'}}
-{{/docs-demo}}
 
 ### Animating Across Routes
 This is an example of animating sprites across different routes. When you select an icon from the list, both the selected image and the list of image animates while the route changes.

@@ -11,29 +11,29 @@
     </div>
   </div>
 
-  <div class="sidebar">
-    <table>
-      <th>Mail</th>
-      <tr>
-        <td>{{svg-jar "inbox"}} Inbox({{items.length}})</td>
-      </tr>
-      <tr>
-        <td>{{svg-jar "paper-plane"}} Sent Mail</td>
-      </tr>
-      <tr>
-        <td>{{svg-jar "pencil"}} Drafts(3)</td>
-      </tr>
-    </table>
-  </div>
-  <div class="inbox">
-    {{#animated-container}}
-        {{#animated-each items use=transition as |item|}}
-          <div class="each-item">
-            <input type="checkbox" checked={{item.deleteMessage}} onchange={{action (mut item.deleteMessage) (not item.deleteMessage)}}>
-            {{item.message}}
-          </div>
-        {{/animated-each}}
-    {{/animated-container}}
-  </div>
+  {{#animated-container}}
+    <div class="sidebar">
+      <table>
+        <th>Mail {{svg-jar "caret-down"}}</th>
+        <tr>
+          <td>{{svg-jar "inbox"}} Inbox({{items.length}})</td>
+        </tr>
+        <tr>
+          <td>{{svg-jar "paper-plane"}} Sent Mail</td>
+        </tr>
+        <tr>
+          <td>{{svg-jar "edit"}} Drafts(3)</td>
+        </tr>
+      </table>
+    </div>
+    <div class="inbox">
+      {{#animated-each items use=transition as |item|}}
+        <div class="each-item">
+          <input type="checkbox" checked={{item.deleteMessage}} onchange={{action (mut item.deleteMessage) (not item.deleteMessage)}}>
+          {{item.message}}
+        </div>
+      {{/animated-each}}
+    </div>
+  {{/animated-container}}
 </div>
 {{! END-SNIPPET }}
