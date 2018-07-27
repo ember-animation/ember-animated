@@ -4,7 +4,7 @@
 /* BEGIN-SNIPPET sprites-snippet.css */
 
 .scenario-sprites {
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid lightblue;
   overflow: hidden;
 }
 
@@ -14,8 +14,11 @@
 }
 
 .scenario-sprites .each-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-collapse: collapse;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 2px solid lightblue;
   font-style: bold;
   background-color: white;
 }
@@ -29,11 +32,19 @@
   background-color: lightgray;
 }
 
-.scenario-sprites .message {
-  border-top: 1px solid rgb(135, 135, 135);
-  border-bottom: 1px solid rgb(135, 135, 135);
+.scenario-sprites .top-bar {
+  border-top: 1px solid lightblue;
+  border-bottom: 1px solid lightblue;
   padding-bottom: 5px;
   padding-top: 5px;
+  flex: 1;
+}
+
+.scenario-sprites .message {
+  text-align: left;
+  flex: 1;
+  padding-left: 10px;
+  font-weight: bold;
 }
 
 .scenario-sprites .mail-buttons {
@@ -41,12 +52,12 @@
 }
 
 .scenario-sprites .inbox {
-  border-left: 1px solid lightgray;
-  flex-grow: 1;
+  border-left: 2px solid lightblue;
+  flex: 1;
 }
 
 .scenario-sprites .sidebar {
-  border-right: 1px solid lightgray;
+  border-right: 2px solid lightblue;
 }
 
 .scenario-sprites .sidebar > table {
@@ -56,12 +67,17 @@
 .scenario-sprites .sidebar > table > tr > td {
   padding: 8px;
   text-align: left;
-  border-bottom: 2px solid #ddd;
-  border-right: 1px solid lightgray;
+  border-bottom: 2px solid lightblue;
+  border-right: 1px solid lightblue;
 }
 
 .scenario-sprites .sidebar > table > th {
   text-align: left;
+}
+
+.scenario-sprites .date {
+  padding-right: 10px;
+  font-weight: bold;
 }
 /* END-SNIPPET */
 
@@ -81,8 +97,6 @@
   width: 40%;
   float: left;
 }
-
-
 
 
 

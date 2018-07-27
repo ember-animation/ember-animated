@@ -5,7 +5,7 @@
     <label>Delete Undo<input type="checkbox" checked={{deleteUndo}} onchange={{action (mut deleteUndo) (not deleteUndo)}}></label>
   </div>
 
-  <div class="message">
+  <div class="top-bar">
     {{#animated-beacon name="add"}}
       <button {{action "addItem" item}}>{{svg-jar "envelope-big"}}</button>
     {{/animated-beacon}}
@@ -21,30 +21,31 @@
     </div>
   </div>
 
-    {{#animated-container}}
-      <div class="sidebar">
-        <table>
-          <th>Mail {{svg-jar "caret-down"}}</th>
-          <tr>
-            <td>{{svg-jar "inbox"}} Inbox({{items.length}})</td>
-          </tr>
-          <tr>
-            <td>{{svg-jar "paper-plane"}} Sent Mail</td>
-          </tr>
-          <tr>
-            <td>{{svg-jar "edit"}} Drafts(3)</td>
-          </tr>
-        </table>
-      </div>
-      <div class="inbox">
-        {{#animated-each items use=transition as |item|}}
-            <div class="each-item">
-                <input type="checkbox" onclick={{action "removeItem" item}}>
-                {{item.message}}
-            </div>
-        {{/animated-each}}
-      </div>
-    {{/animated-container}}
+  {{#animated-container}}
+    <div class="sidebar">
+      <table>
+        <th>Mail {{svg-jar "caret-down"}}</th>
+        <tr>
+          <td>{{svg-jar "inbox"}} Inbox({{items.length}})</td>
+        </tr>
+        <tr>
+          <td>{{svg-jar "paper-plane"}} Sent Mail</td>
+        </tr>
+        <tr>
+          <td>{{svg-jar "edit"}} Drafts(3)</td>
+        </tr>
+      </table>
+    </div>
+    <div class="inbox">
+      {{#animated-each items use=transition as |item|}}
+          <div class="each-item">
+              <input type="checkbox" onclick={{action "removeItem" item}}>
+              <div class="message">{{item.message}}</div>
+              <div class="date">{{moment-format now 'MMM D'}}</div>
+          </div>
+      {{/animated-each}}
+    </div>
+  {{/animated-container}}
 
 </div>
 
