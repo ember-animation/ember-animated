@@ -1,0 +1,31 @@
+{{yield (action fullLog) }}
+
+<table class="transition-log-table">
+    <tr><td colspan=5>Complete Log</td></tr>
+  <tr>
+    <th>Inserted</th>
+    <th>Kept</th>
+    <th>Removed</th>
+    <th>Sent</th>
+    <th>Received</th>
+  </tr>
+  {{#animated-each messages as |message|}}
+  <tr>
+    <td>
+      {{message.inserted}}
+    </td>
+    <td>
+      {{message.kept}}
+    </td>
+    <td>
+      {{message.removed}}
+    </td>
+    <td>
+      {{message.sent}}
+    </td>
+    <td>
+      {{message.received}}
+    </td>
+  </tr>
+  {{/animated-each}}
+</table>
