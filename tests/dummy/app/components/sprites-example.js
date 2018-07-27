@@ -17,7 +17,6 @@ export default Component.extend({
     return (result);
   },
 
-
   transition: function * (context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
     insertedSprites.forEach(sprite => {
@@ -51,7 +50,7 @@ export default Component.extend({
 });
 
 function makeRandomItem(index) {
-  var messages = ["hi", "hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
-  return { message: messages[index], deleteMessage: false };
+  var messages = ["Hi", "Hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
+  return { message: messages[index], deleteMessage: false, };
 }
 //END-SNIPPET
