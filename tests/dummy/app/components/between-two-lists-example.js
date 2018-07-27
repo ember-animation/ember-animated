@@ -2,25 +2,26 @@
 import { later } from '@ember/runloop';
 import Component from '@ember/component';
 import move from 'ember-animated/motions/move';
+import scale from 'ember-animated/motions/scale';
+import { parallel } from 'ember-animated';
 
 export default Component.extend({
   bounceBack: false,
   init() {
     this._super();
-    this.transition = this.transition.bind(this);
-    this.leftItems = this.leftItems();
-    this.rightItems = this.rightItems();
+    this.leftItems = this.makeLeftItems();
+    this.rightItems = this.makeRightItems();
   },
 
   transition: function * (context) {
     let { keptSprites, sentSprites, receivedSprites } = context;
 
     keptSprites.forEach(sprite => {
-      move(sprite);
+      parallel(move(sprite), scale(sprite));
     });
 
     sentSprites.forEach(sprite => {
-      move(sprite);
+      parallel(move(sprite), scale(sprite));
     });
 
     receivedSprites.forEach(sprite => {
@@ -31,7 +32,7 @@ export default Component.extend({
 
   },
 
-  leftItems() {
+  makeLeftItems() {
     let result = [];
     for (let i = 0; i < 5; i++) {
       result.push(makeRandomItem(i));
@@ -39,7 +40,7 @@ export default Component.extend({
     return (result);
   },
 
-  rightItems() {
+  makeRightItems() {
     let result = [];
     for (let i = 0; i < 5; i++) {
       result.push(makeRandomItem2(i));
@@ -82,11 +83,3 @@ function makeRandomItem2(index) {
 }
 //END-SNIPPET
 
-function printSprites (context) {
-  let spriteSummary = ['inserted', 'kept', 'removed', 'sent', 'received'].map(type => {
-    return type + '=' + context[`_${type}Sprites`].map(s => {
-      return s.owner.value.message;
-    });
-  });
-  return spriteSummary;
-}
