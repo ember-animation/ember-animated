@@ -435,14 +435,14 @@ export default class Sprite {
     }
     this._inInitialPosition = true;
     if (this._offsetSprite) {
-      this._initialBounds = relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.initialBounds);
+      this._initialBounds = relativeBounds(this._getScaledBoundingClientRect(), this._offsetSprite.initialBounds);
     } else {
-      this._initialBounds = this.element.getBoundingClientRect();
+      this._initialBounds = this._getScaledBoundingClientRect();
     }
     this._initialComputedStyle = copyComputedStyle(this.element);
     this._initialPosition = this._getCurrentPosition();
     this._originalInitialBounds = this._initialBounds;
-    this._initialCumulativeTransform = cumulativeTransform(this.element);
+    this._initialCumulativeTransform = this.cumulativeTransform;
   }
 
   measureFinalBounds() {
@@ -451,14 +451,46 @@ export default class Sprite {
     }
     this._inInitialPosition = false;
     if (this._offsetSprite) {
-      this._finalBounds = relativeBounds(this.element.getBoundingClientRect(), this._offsetSprite.finalBounds);
+      this._finalBounds = relativeBounds(this._getScaledBoundingClientRect(), this._offsetSprite.finalBounds);
     } else {
-      this._finalBounds = this.element.getBoundingClientRect();
+      this._finalBounds = this._getScaledBoundingClientRect();
     }
     this._finalComputedStyle = copyComputedStyle(this.element);
     this._finalPosition = this._getCurrentPosition();
     this._originalFinalBounds = this._finalBounds;
-    this._finalCumulativeTransform = cumulativeTransform(this.element);
+    this._finalCumulativeTransform = this.cumulativeTransform;
+  }
+
+  _getScaledBoundingClientRect() {
+    const rect = this.element.getBoundingClientRect();
+
+    let xScale = this.cumulativeTransform.a;
+    let yScale = this.cumulativeTransform.d;
+
+    if (xScale === 1 && yScale === 1) {
+      return rect;
+    }
+
+    let scaled = {};
+    for (let key in rect) {
+      if (key === 'left') {
+        scaled[key] = rect[key] * (1 / xScale);
+      } else if (key === 'right') {
+        scaled[key] = rect[key] * (1 / xScale);
+      } else if (key === 'width') {
+        scaled[key] = rect[key] * (1 / xScale);
+      } else if (key === 'top') {
+        scaled[key] = rect[key] * (1 / yScale);
+      } else if (key === 'bottom') {
+        scaled[key] = rect[key] * (1 / yScale);
+      } else if (key === 'height') {
+        scaled[key] = rect[key] * (1 / yScale);
+      } else {
+        scaled[key] = rect[key];
+      }
+    }
+
+    return scaled;
   }
 
   /**
