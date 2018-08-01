@@ -1,5 +1,5 @@
 # Animating Between Components
-When animating between components, sprites travel back and forth from two separate locations or lists that know about each other. This means that when a sprite leaves one list and goes to another, the list that it goes to, or its endpoint, knows where the sprite started from. This also applies in the opposite direction. Therefore, sprites always have an initial and a final destination when animating between components. When two components know about each other, they can identify when a sprite is animating between them by checking the start or endpoint of that sprite.
+When animating between components, sprites travel back and forth from two separate lists that know about each other. This means that when a sprite leaves one list and goes to another, the list that it goes to, or its endpoint, knows where the sprite started from. This also applies in the opposite direction. Therefore, sprites always have an initial and a final destination when animating between components. When two components know about each other, they can identify when a sprite is animating between them by checking the start or endpoint of that sprite.
 
 ## receivedSprites: 
 When a sprite animates between lists it is a `removedSprite` on the list it started at, and an `insertedSprite` on the list ended at. If the sprite holds the same data value on both sides, it is considered a `receivedSprite` on the list that it is going to.
@@ -52,12 +52,12 @@ Sent sprites are the reverse of `receivedSprites`. If the sprite stores the same
 
 
 ### Interruption Cases
-In this demonstration, the "Delete with Undo" option shows what happens when an animation is interrupted. Choose this option, then delete a message to see what happens when the delete action is stopped before the animation is complete. A message that would have been a `removedSprite` when deleted is now a `keptSprite`. 
+In this demonstration, the "Delete with Undo" option shows what happens when an animation is interrupted. Choose this option, then delete an email to see what happens when the delete action is interrupted. An email that would have been a `removedSprite` becomes a `keptSprite`. 
 
 ### Beacons
 You may have noticed that this demonstration uses `#animated-beacon`. For more on beacons, see [animated-beacon](../docs/api/components/animated-beacon). 
 
-In this demonstration, sprites are represented by messages, and they animate between Refresh, Trash, and the Inbox. When a message is deleted, it is considered a `sentSprite` by the Inbox, and a `receivedSprite` by the trash. If you refresh your inbox, the message added is a `sentSprite` by refresh, and a `receivedSprite` by the inbox. 
+In this example, emails animate between Refresh (mail icon), Trash, and the Inbox. When an email is deleted, it is considered a `removedSprite`. If you refresh your inbox, the new email added is an `insertedSprite`. This scenario has two beacons, the refresh button and the trash button. 
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="one"}}
@@ -72,7 +72,7 @@ In this demonstration, sprites are represented by messages, and they animate bet
 {{/docs-demo}}
 
 ### Animating Across Lists
-Here we have two lists of messages, the inbox and the trash. Now, when you delete a message, it is possible to recover that message from the trash and move it back into your inbox. So, a deleted message is actually a `receivedSprite` where the initial location is the inbox and the final destination is the trash. When moving a message from the trash to the inbox (restore), this message is a `sentSprite` from the trash.
+In this example, the office is hosting a dinner party. Everyone received an email invitation with two options "going" and "not going". Many people are not sure if they want to go or not, and thankfully invitees can change their response as many times as they want before the party. If Dwight originally said he was going but then decides that he can no longer attend the dinner party, he will be removed from the "going" list and added to the "not going" list. This means that Dwight would be considered a `sentSprite` from the going list and a `receivedSprite` from the "not going" list. If Dwight then changes his mind and decides he will attend the dinner party, he will be removed from the "not going" list and added to the "going" list. In thic case, Dwight would now be considered a `sentSprite` from the "not going" list and a `receivedSprite` by the "going list". Both lists are aware of each other, therefore when he decides whether or not to go and and changes his mind, Dwight is always sent from one list and received by the other. 
 
 
 {{#docs-demo as |demo|}}
@@ -89,7 +89,7 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
 
 
 ### Animating Across Routes
-This is an example of animating sprites across different routes. When you select an icon from the list, both the selected image and the list of image animates while the route changes.
+This is an example of animating sprites across different routes. When you select an icon from the list, both the selected image and the list of image animates while the route changes. 
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="hero"}}
