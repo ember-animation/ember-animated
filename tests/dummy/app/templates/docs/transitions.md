@@ -1,9 +1,13 @@
 # Transitions
 
-Transitions connect each sprite to a motion. A transition is a way to tell a category of sprites (`insertedSprites`, `keptSprites`, `removedSprites`, etc) how to animate from one state to another. For example, a transition might assign the `fade` motion to all `insertedSprites` so that each time a sprite is added to a list, it fades into the list as that sprite moves from its initial to its final destination. Transitions run every time the state of a sprite changes, therefore they must be implemented as generator functions. This also means that transitions are async and interruptable, so the state of a sprite can be changed during a transition. Ember concurrency is used to support interruptions. 
+Transitions assign each sprite to a motion. A transition tells sprite categories how to animate from one state to another. For example, a transition might assign the `fade` motion to all `insertedSprites` so that each time a sprite is added to a list, it fades into the list as that sprite changes states (from its initial state to its final state). 
+
+Because transitions run every time the state of a sprite changes, they must be implemented as generator functions. This also means that transitions are async and interruptable, so the state of a sprite can be changed during a transition. Ember concurrency is used to support interruptions. 
 
 
 `fade` and `moveOver` are built in transitions. To use the built in transitions, you simply import `fade` or `moveOver` and then pass them into your template.
+
+In this demonstration, the message fades in or it fades out as it changes states. Each click of the button makes the state of the message change, causing the transition to run.
 
 ### Fade
 
@@ -32,8 +36,7 @@ Transitions connect each sprite to a motion. A transition is a way to tell a cat
 {{/docs-demo}}
 
 
-You can also implement your own transitions. `slideFromSide` is a custom transition that assigns specific motions to `insertedSprites`, `keptSprites`, and `removedSprites` so that the sprite will slide to and from the side when the button is clicked and unclicked. When the sprite is an `insertedSprite`, the message will ease in, and when it is a `removedSprite` it will ease out. 
-
+You can also implement your own transitions. `slideFromSide` is a custom transition that assigns specific motions to `insertedSprites`, `keptSprites`, and `removedSprites` so that the message will slide to and from the side when the button is clicked and unclicked. 
 ### Custom 
 
 {{#docs-demo as |demo|}}
