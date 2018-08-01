@@ -61,9 +61,9 @@ In this demonstration, sprites are represented by messages, and they animate bet
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="one"}}
-      {{#transition-log-table as |logTransition|}}
-        {{logged-between-components logTransition=logTransition}}      
-      {{/transition-log-table}}
+      {{#full-log-table as |fullLog|}}
+        {{logged-between-components fullLog=fullLog}}      
+      {{/full-log-table}}
     {{/demo.example}}
 
     {{demo.snippet 'between-components-snippet.hbs' label='between-components.hbs'}}
@@ -77,7 +77,9 @@ Here we have two lists of messages, the inbox and the trash. Now, when you delet
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="two"}}
-      {{between-two-lists-example}}
+      {{#full-log-table as |fullLog|}}
+        {{logged-two-lists fullLog=fullLog}}
+      {{/full-log-table}}
     {{/demo.example}}
 
     {{demo.snippet 'between-two-lists-example-snippet.hbs' label='between-two-lists-example.hbs'}}
