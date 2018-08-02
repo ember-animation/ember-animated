@@ -1,6 +1,16 @@
 <div class="scenario-two-lists">
   <div class="controls">
     <label>Bounce back <input type="checkbox" checked={{bounceBack}} onchange={{action (mut bounceBack) (not bounceBack)}}></label>
+
+    <label>scale:</label>
+
+    <button onclick={{action 'changeScale' 0.5}}>50%</button>
+    <button onclick={{action 'changeScale' 0.8}}>80%</button>
+    <button onclick={{action 'changeScale' 0.9}}>90%</button>
+    <button onclick={{action 'changeScale' 1}}>100%</button>
+    <button onclick={{action 'changeScale' 1.1}}>110%</button>
+    <button onclick={{action 'changeScale' 1.2}}>120%</button>
+    <button onclick={{action 'changeScale' 1.5}}>150%</button>
   </div>
 
   {{#animated-container}}
@@ -20,5 +30,4 @@
       </div>
     {{/animated-each}}
   {{/animated-container}}
-
 </div>

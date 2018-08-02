@@ -68,6 +68,10 @@ export default Component.extend({
       if (this.get('bounceBack') && bounceCounter > 0) {
         later(() => this.send('move', item, bounceCounter - 1), 1000);
       }
+    },
+    changeScale(scaleValue) {
+      this.element.style['transform-origin'] = '0px 0px';
+      this.element.style.transform = `scale(${scaleValue})`;
     }
   }
 });
