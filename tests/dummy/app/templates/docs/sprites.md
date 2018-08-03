@@ -2,9 +2,9 @@
 
 ## What is a sprite?
 
-A sprite is an html element that can be animated by using its starting and ending positions. The term "sprite" comes from a long tradition of two-dimensional graphics. In ember-animated, sprites carry additional data, such as the initial location and the final destination of that sprite. This way, sprites can animate from their given starting position, to their given final position. 
+A sprite is an html element that can animate by using its starting and ending positions. The term "sprite" comes from a long tradition of two-dimensional graphics. In ember-animated, sprites carry additional data about themselves. This extra information is typically the initial and/or the final location of the sprite. Sprites can animate from their starting position to their final position and vice versa. 
 
-The initial state of a sprite is dimensions pf the location where a sprite starts at. The dimensions of the location that the sprite ends at is the final state of that sprite. Sprites are grouped into five categories based on which states the sprite holds: `insertedSprites`, `keptSprites`, `removedSprites`, `sentSprites`, and `receivedSprites`. The first three categories are outlined here: 
+The initial state of a sprite is dimensions of the location where a sprite starts at. The dimensions of the location that the sprite ends at is the final state of that sprite. There are five sprite categories: `insertedSprites`, `keptSprites`, `removedSprites`, `sentSprites`, and `receivedSprites`. The first three categories are outlined here: 
 
 
 <style type="text/css">
@@ -42,11 +42,11 @@ The initial state of a sprite is dimensions pf the location where a sprite start
 
 
 
-In this example, emails are considered `removedSprites`, `insertedSprites`, or `keptSprites` after each animation. When an email is deleted from the inbox, it becomes a `removedSprite`. The email is deleted from the inbox where the inbox was the initial location of the message, and the email does not have a set final destination. 
+In this example, emails are `removedSprites`, `insertedSprites`, or `keptSprites` after each animation. When an email gets deleted from the inbox, it becomes a `removedSprite`. In this scenario, the  the inbox was the initial state or location of the email. Notice that the deleted email did not have a set final location. 
 
-When the inbox is refreshed, a new email is added. This new email is an `insertedSprite` that ends in the inbox, and does not have a set starting point. 
+When the inbox gets refreshed (click the mail icon), a new email gets added to the inbox. This new email is an `insertedSprite` that ends in the inbox, and does not have a set starting point. 
 
-Finally, the remaining emails in the inbox that are not deleted or added are `keptSprites`. All of the `keptSprites` remain in the inbox, and only animate when other emails are added or deleted from the inbox. All of these emails are `keptSprites` because their initial and final destination is the inbox.
+Finally, the remaining emails in the inbox that are not deleted or added are `keptSprites`. The `keptSprites` only animate when other emails get added or deleted from the inbox. These emails are `keptSprites` because their initial and final destination is the inbox.
 
 
 {{#docs-demo as |demo|}}

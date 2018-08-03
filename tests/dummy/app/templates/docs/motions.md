@@ -1,6 +1,6 @@
 # Motions
 
-A motion is responsible for animating a single sprite. Each motion takes a sprite as the first argument and options as the second argument. Motions can also have `to` and `from` arguments that take initial and final attribute values of the sprite. Motions animate the change of the given attribute from its initial to its final value. Like transitions, you may use any of the built in motions or implement your own. 
+A motion animates a single sprite. Each motion takes a sprite as the first argument and options as the second argument. Motions can also have `to` and `from` arguments. These arguments take initial and final attribute values of the sprite. Motions animate the change of the given attribute from its initial to its final value. Like transitions, you may use any of the built in motions or create your own. 
 
 
 ### move
