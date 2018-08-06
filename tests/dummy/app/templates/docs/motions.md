@@ -17,7 +17,8 @@ Animates a sprite from its current position to its final position using css tran
 {{/docs-demo}}
 
 ### moveSVG
-Animates one property on a svg element. This motion takes in an attribute name and animates that attribute from its initial to its final value. For example, on a circle `moveSVG` animates the `cx` property.
+
+Ember-animated works for SVGs too! An SVG is an image format made of xml. Many vector illustration programs can export SVGs. `moveSVG` animates one property on a svg element. This motion takes in an attribute name and animates that attribute from its initial to its final value. For example, on a circle `moveSVG` animates the `cx` property.
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="svg"}}
