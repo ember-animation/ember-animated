@@ -33,7 +33,7 @@ Ember-animated works for SVGs too! An SVG is an image format made of xml. Many v
 
 
 ### compensateForScale
-Animates a sprite moving into or out of an area of a page that has scaling applied.
+This motion is useful when moving a sprite into or out of an area of a page that has a css scaling transform applied. Ensures that the scale changes smoothly during the animation. 
 
 ### adjustColor
 Animates the change in value of the css color attribute of a sprite, such as `rbg(211, 211, 211)`. The `from` argument takes a css color, otherwise it defaults to the `measuredInitial` color and animates to the default final color. 
@@ -67,7 +67,7 @@ Animates a sprite from its inital to its final opacity (from %0 to %100 and vice
 {{/docs-demo}}
 
 ### resize
-Animates the height and width of a sprite. The height and width can be length values such as px or cm, or a percentage of the containing block. Expects the initial and final state of the sprite. This is the default motion used by animated-container. Consider using `scale` instead because `scale` uses css transforms and will not trigger reflow. 
+Animates the height and width of a sprite. The height and width can be length values such as px or cm, or a percentage of the containing block. Expects the initial and final state of the sprite. This is the default motion used by animated-container. Consider using `scale` instead because `scale` uses css transforms and will not trigger reflow. See [More on Reflow](https://developers.google.com/web/fundamentals/design-and-ux/animations/animations-and-performance).
 
 ### scale
 Applies css transforms to animate the initial size of a sprite into the final size. 
