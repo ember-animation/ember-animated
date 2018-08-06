@@ -1,12 +1,13 @@
 # Transitions
 
-Transitions assign each sprite to a motion. A transition tells sprite categories how to animate from one state to another. For example, a transition can assign the `fade` motion to all `insertedSprites`. Each time a sprite gets added to a list, it would fade into the list as that sprite went from its initial to its final state. 
+A transition tells sprite categories how to animate from one state to another. For example, a transition can assign the `fade` motion to all `insertedSprites`. Each time a sprite gets added to a list, it would fade into the list as that sprite went from its initial to its final state. 
 
-Transitions are interruptible and they run every time the state of a sprite changes. Therefore, they must be implemented as generator functions. Also, this means that the state of a sprite can change during a transition.
+Ember-animated has some built-in transitions, like `fade` and `moveOver` are built-in transitions. To use the built in transitions, import `fade` or `moveOver` and then pass them into your template.
 
-`fade` and `moveOver` are built-in transitions. To use the built in transitions, import `fade` or `moveOver` and then pass them into your template.
+Transitions are interruptible and they run every time the state of a sprite changes. Also, this means that the state of a sprite can change during a transition. For example, if a user clicks an "undo" button as a sprite is changing states, the animation can reverse and the sprite could move back to its previous position. 
 
-In this demonstration, the message fades in or it fades out as it changes states. Each click of the button makes the state of the message change, causing the transition to run.
+
+In this demonstration, the message fades in or it fades out as it changes states. When the checkbox is checked or unchecked the state of the message changes, causing the transition to run.
 
 ### Fade
 
@@ -21,9 +22,9 @@ In this demonstration, the message fades in or it fades out as it changes states
 {{/docs-demo}}
 
 
-`moveOver` comes with four options: `toLeft`, `toRight`, `toUp`, and `toDown`. `toLeft` and `toRight` are demonstrated here, using `rules` to compare two messages and choose a transition. For more on `rules` see [Rules for Data-Dependent Animations](../docs/rules/).
-
 ### moveOver
+
+`moveOver` comes with four options: `toLeft`, `toRight`, `toUp`, and `toDown`. `toLeft` and `toRight` are demonstrated here, using `rules` to compare two messages and choose a transition. For more on `rules` see [Rules for Data-Dependent Animations](../docs/rules/).
 
 {{#docs-demo as |demo|}}
   {{#demo.example name="moveover"}}
