@@ -1,12 +1,13 @@
 # Animating Between Components
-Sprites can travel between two separate lists that know about each other. When a sprite starts in one list and ends in another, the two lists know that the sprite came from one and went to the other. This also applies in the opposite direction. So, sprites always have an initial and a final destination. Two lists identify when a sprite is animating between them by checking the states of that sprite. 
+Sprites can travel back and forth between two separate lists that know about each other as `receivedSprites` and `sentSprites`. Sprites animating between components always store their initial and final bounds. Two lists can identify when a sprite is animating between them by checking these bounds. If the initial bounds and the final bounds of a sprite are interchanging, then the sprite is animating between two lists (the initial bounds become the final bounds and the final bounds become the initial bounds etc).
 
-This is useful for animating elements that as they are repeatedly removed from one component and inserted to another. For example, imagine that you are hosting a dinner party and you need to keep track of the people that are going and not going. You would have a list of people that are going, and a list of the people that are not going. As people change their minds from going to not going, they would move back and forth between the two lists. `receivedSprites` and `sentSprites` help sprites animate smoothly between two lists or components. 
+This is useful for animating elements that are repeatedly inserted or removed from one component to another. For example, imagine that you are hosting a dinner party and you need to keep track of the people that are going and not going. You would have a list of people that are going, and a list of the people that are not going. As people change their minds from going to not going, they would move back and forth between the two lists. `receivedSprites` and `sentSprites` help sprites animate smoothly between two lists or components. 
 
 ## receivedSprites: 
-If a sprite holds the same data value on both sides, it is a `receivedSprite` on the list that it is going to.
+When the final bounds of a sprite become its initial bounds, it is a `receivedSprite` on the list that it is going to. 
+
 ## sentSprites: 
-Sent sprites are the reverse of `receivedSprites`. If the sprite stores the same data value on both sides, it is a `sentSprite` on the list that it came from. 
+Sent sprites are the reverse of `receivedSprites`. When the initial bounds of a sprite become its final bounds, it is a `sentSprite` on the list that it came from. 
 
 
 <style type="text/css">
@@ -51,25 +52,6 @@ Sent sprites are the reverse of `receivedSprites`. If the sprite stores the same
 </table>
 
 
-### Interruption Cases
-In this demonstration, the "Delete with Undo" option shows what happens when an animation is interrupted. An email that would have been a `removedSprite` becomes a `keptSprite`. 
-
-### Beacons
-You may have noticed that this demonstration uses `#animated-beacon`. For more on beacons, see [animated-beacon](../docs/api/components/animated-beacon). 
-
-In this example, emails animate between Refresh (mail icon), Trash, and the Inbox. When an email gets deleted, it is a `removedSprite`. If you refresh your inbox, the new email added is an `insertedSprite`. This scenario has two beacons, the refresh button and the trash button.
-
-{{#docs-demo as |demo|}}
-    {{#demo.example name="one"}}
-      {{#full-log-table as |fullLog|}}
-        {{logged-between-components fullLog=fullLog}}      
-      {{/full-log-table}}
-    {{/demo.example}}
-
-    {{demo.snippet 'between-components-snippet.hbs' label='between-components.hbs'}}
-    {{demo.snippet 'between-components-snippet.js' label='between-components.js'}}
-    {{demo.snippet 'sprites-snippet.css'}}
-{{/docs-demo}}
 
 ### Animating Across Lists
 In this example, the office is hosting a dinner party. Everyone received an email invitation with two options "going" and "not going".  The people invited can change their response as many times as they want. 
