@@ -1,10 +1,12 @@
 # Motions
 
-A motion animates a single sprite. Each motion takes a sprite as the first argument and options as the second argument. Motions can also have `to` and `from` arguments. These arguments take initial and final attribute values of the sprite. Motions animate the change of the given attribute from its initial to its final value. Like transitions, you may use any of the built in motions or create your own. 
+A motion animates the change in an attribute value of a single sprite. Each motion takes a sprite as the first argument and options as the second argument. Motions can also have `to` and `from` arguments. These arguments take initial and final attribute values of the sprite. Motions animate the change of the given attribute from its initial to its final value. Like transitions, you may use any of the built in motions or create your own. 
+
+Motions are useful when you want to animate the change in a particular attribute of a sprite such as size, opacity, scale, color, etc. For example, if a sprite is changing color from red to blue, a motion can be applied to smoothly animate the gradual shift from red to blue. Without a motion, the sprite would just abruptly switch from red to blue. 
 
 
 ### move
-Animates a sprite from its current position to its final position using css transforms. The only option argument it takes is `easing`. Because this motion works with `keptSprites`, it requires the start point and the end point of a sprite. 
+Animates a sprite from its current position to its final position using css transforms. The only option argument it takes is `easing`. Because this motion works with `keptSprites`, it requires the starting and the ending position of a sprite. 
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="move"}}
@@ -34,7 +36,7 @@ Ember-animated works for SVGs too! An SVG is an image format made of xml. Many v
 Animates a sprite moving into or out of an area of a page that has scaling applied.
 
 ### adjustColor
-Animates the change in color of a sprite. The `from` argument takes a css color, otherwise it defaults to the `measuredInitial` color and animates to the default final color. 
+Animates the change in value of the css color attribute of a sprite, such as `rbg(211, 211, 211)`. The `from` argument takes a css color, otherwise it defaults to the `measuredInitial` color and animates to the default final color. 
 
 ### adjustCSS
 Animates the change in style of a sprite. Applies to css properties that are a unit and a number (font-size, letter spacing).

@@ -1,6 +1,8 @@
 # Animating Between Components
 Sprites can travel between two separate lists that know about each other. When a sprite starts in one list and ends in another, the two lists know that the sprite came from one and went to the other. This also applies in the opposite direction. So, sprites always have an initial and a final destination. Two lists identify when a sprite is animating between them by checking the states of that sprite. 
 
+This is useful for animating elements that as they are repeatedly removed from one component and inserted to another. For example, imagine that you are hosting a dinner party and you need to keep track of the people that are going and not going. You would have a list of people that are going, and a list of the people that are not going. As people change their minds from going to not going, they would move back and forth between the two lists. `receivedSprites` and `sentSprites` help sprites animate smoothly between two lists or components. 
+
 ## receivedSprites: 
 If a sprite holds the same data value on both sides, it is a `receivedSprite` on the list that it is going to.
 ## sentSprites: 
@@ -49,8 +51,6 @@ Sent sprites are the reverse of `receivedSprites`. If the sprite stores the same
 </table>
 
 
-
-
 ### Interruption Cases
 In this demonstration, the "Delete with Undo" option shows what happens when an animation is interrupted. An email that would have been a `removedSprite` becomes a `keptSprite`. 
 
@@ -72,7 +72,17 @@ In this example, emails animate between Refresh (mail icon), Trash, and the Inbo
 {{/docs-demo}}
 
 ### Animating Across Lists
-In this example, the office is hosting a dinner party. Everyone received an email invitation with two options "going" and "not going".  The people invited can change their response as many times as they want. If Dwight said he was going then changes his mind, he will be removed from the "going" list and added to the "not going" list. This means that Dwight is a `sentSprite` on the going list and a `receivedSprite` on the "not going" list. If Dwight changes his mind again, he would be removed from the "not going" list and added to the "going" list. In this case, Dwight would be a `sentSprite` on the "not going" list and a `receivedSprite` on the "going list". 
+In this example, the office is hosting a dinner party. Everyone received an email invitation with two options "going" and "not going".  The people invited can change their response as many times as they want. 
+
+<ul> 
+  <li>If Dwight said he was going then changes his mind, he will be removed from the "going" list and added to the "not going" list.</li>
+
+  <li>This means that Dwight is a `sentSprite` on the going list and a `receivedSprite` on the "not going" list.</li>
+
+  <li>If Dwight changes his mind again, he would be removed from the "not going" list and added to the "going" list.</li>
+
+  <li>In this case, Dwight would be a `sentSprite` on the "not going" list and a `receivedSprite` on the "going list".</li>
+</ul>
 
 
 {{#docs-demo as |demo|}}
@@ -89,7 +99,7 @@ In this example, the office is hosting a dinner party. Everyone received an emai
 
 
 ### Animating Across Routes
-This is an example of animating sprites across different routes. When you select an icon from the list, the selected image and the list of images animate as the route changes. 
+Just like animattions can be applied to components, they can be applied to route transitions too! This is an example of animating sprites across different routes. When you select an icon from the list, the selected image and the list of images animate as the route changes. 
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="hero"}}

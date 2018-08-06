@@ -1,13 +1,12 @@
 {{! BEGIN-SNIPPET sprites-snippet.hbs }}
 <div class="scenario-sprites clearfix">
   <div class="top-bar">
-    <button {{action "addItem"}}>{{svg-jar "envelope"}}</button>
-    {{!-- <label>{{svg-jar "trash-small"}}</label><input type="checkbox" checked={{deleteAll}} onclick={{action "deleteItems"}}> --}}
-    <button {{action "deleteItems"}}>{{svg-jar "trash-small"}}</button>
+    <button {{action "addItem"}}>{{svg-jar "envelope-big"}}</button>
+    <button {{action "deleteItems"}}>{{svg-jar "trash-big"}}</button>
      <div class="mail-buttons">
-      <button>{{svg-jar "mail-reply"}}</button>
-      <button>{{svg-jar "mail-reply-all"}}</button>
-      <button>{{svg-jar "mail-forward"}}</button>
+      {{svg-jar "mail-reply-big"}}
+      {{svg-jar "mail-reply-all-big"}}
+      {{svg-jar "mail-forward-big"}}
     </div>
   </div>
 
@@ -31,6 +30,7 @@
         <div class="each-item">
           <input type="checkbox" checked={{item.deleteMessage}} onchange={{action (mut item.deleteMessage) (not item.deleteMessage)}}>
           <div class="message">{{item.message}}</div>
+          {{!-- <div class="person">{{item.person}}</div> --}}
           <div class="date">{{moment-format now 'MMM D'}}</div>
         </div>
       {{/animated-each}}

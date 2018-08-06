@@ -7,9 +7,10 @@ Ember-animated has some built-in transitions, like `fade` and `moveOver` are bui
 Transitions are interruptible and they run every time the state of a sprite changes. Also, this means that the state of a sprite can change during a transition. For example, if a user clicks an "undo" button as a sprite is changing states, the animation can reverse and the sprite could move back to its previous position. 
 
 
-In this demonstration, the message fades in or it fades out as it changes states. When the checkbox is checked or unchecked the state of the message changes, causing the transition to run.
 
 ### Fade
+
+In this demonstration, the message fades in or it fades out as it changes states. When the checkbox is checked or unchecked the state of the message changes. This change causes the transition to run. Try checking and unchecking the box yourself to watch the message animate in both directions!
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="fade"}}
@@ -36,8 +37,9 @@ In this demonstration, the message fades in or it fades out as it changes states
 {{/docs-demo}}
 
 
-You can also create your own transitions. `slideFromSide` is a custom transition that assigns motions to `insertedSprites`, `keptSprites`, and `removedSprites`. The message will slide to and from the side when the button is selected. 
 ### Custom 
+
+You can also create your own transitions. `slideFromSide` is a custom transition that assigns motions to `insertedSprites`, `keptSprites`, and `removedSprites`. The message will slide to and from the side when the button is selected. 
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="custom"}}
