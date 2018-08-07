@@ -47,7 +47,6 @@ Animates the change in style of a sprite. Applies to css properties that are a u
     {{/demo.example}}
 
     {{demo.snippet 'moving-word-text-snippet.hbs' label='moving-word-text.hbs'}}
-    {{demo.snippet 'moving-word-text-snippet.js' label='moving-word-text.js'}}
     {{demo.snippet 'moving-word-snippet.hbs' label='moving-word.hbs'}}
     {{demo.snippet 'moving-word-snippet.js' label='moving-word.js'}}
     {{demo.snippet 'moving-word-snippet.css'}}

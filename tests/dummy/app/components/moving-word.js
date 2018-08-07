@@ -9,15 +9,36 @@ import { parallel } from 'ember-animated';
 export default Component.extend({
   tagName: '',
   duration: 1000,
+
+  init() {
+    this._super();
+    this.transition = this.transition.bind(this);
+  },
+
+  motions() {
+    let motions = [];
+    if(!this.disableMove){
+      motions.push(move);
+    }
+    if(!this.disableCompensateForScale){
+      motions.push(compensateForScale);
+    }
+    if(!this.disableAdjustFontSize){
+      motions.push(adjustCSS.property('font-size'));
+    }
+    if(!this.disableAdjustLetterSpacing){
+      motions.push(adjustCSS.property('letter-spacing'));
+    }
+    if(!this.disableAdjustColor){
+     motions.push(adjustColor.property('color'));
+    }
+    return motions;
+  },
+
   transition: function * ({ sentSprites }) {
+    let motions = this.motions();
     sentSprites.forEach(
-      parallel(
-        move,
-        compensateForScale,
-        adjustCSS.property('font-size'),
-        adjustCSS.property('letter-spacing'),
-        adjustColor.property('color')
-      )
+      parallel(...motions),
     );
   }
 }).reopenClass({

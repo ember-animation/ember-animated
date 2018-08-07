@@ -1,0 +1,12 @@
+<label>Move<input type="checkbox" checked={{not disableMove}} onchange={{action (mut disableMove) (not disableMove)}}></label>
+<label>Compensate For Scale<input type="checkbox" checked={{not disableCompensateForScale}} onchange={{action (mut disableCompensateForScale) (not disableCompensateForScale)}}></label>
+<label>Adjust Font Size<input type="checkbox" checked={{not disableAdjustFontSize}} onchange={{action (mut disableAdjustFontSize) (not disableAdjustFontSize)}}></label>
+<label>Adjust Letter Spacing<input type="checkbox" checked={{not disableAdjustLetterSpacing}} onchange={{action (mut disableAdjustLetterSpacing) (not disableAdjustLetterSpacing)}}></label>
+<label>Adjust Color<input type="checkbox" checked={{not disableAdjustColor}} onchange={{action (mut disableAdjustColor) (not disableAdjustColor)}}></label>
+
+{{yield (hash moving-word=(component "moving-word"  disableMove=disableMove
+                                                    disableCompensateForScale=disableCompensateForScale
+                                                    disableAdjustFontSize=disableAdjustFontSize
+                                                    disableAdjustLetterSpacing=disableAdjustLetterSpacing
+                                                    disableAdjustColor=disableAdjustColor
+                                            )) }}
