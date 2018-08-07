@@ -16,11 +16,18 @@
 .scenario-sprites .each-item {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   border-collapse: collapse;
   border-bottom: 2px solid lightblue;
   font-style: bold;
   background-color: white;
+}
+
+.scenario-sprites .person {
+  padding: 2px;
+  flex-wrap: wrap;
+  order: 3;
 }
 
 .scenario-sprites .each-item > button {
@@ -29,7 +36,12 @@
 }
 
 .scenario-sprites button:hover {
-  background-color: lightgray;
+  background-color: rgb(32, 174, 221);
+  color: white;
+}
+
+.scenario-sprites button {
+  color: blue;
 }
 
 .scenario-sprites .top-bar {
@@ -42,7 +54,7 @@
 
 .scenario-sprites .message {
   text-align: left;
-  flex: 1;
+  flex: 3;
   padding-left: 10px;
   font-weight: bold;
 }
@@ -76,8 +88,8 @@
 }
 
 .scenario-sprites .date {
-  padding-right: 10px;
   font-weight: bold;
+  text-align: left;
 }
 /* END-SNIPPET */
 
@@ -104,7 +116,6 @@
 /* BEGIN-SNIPPET two-lists-snippet.css */
 
 .scenario-two-lists {
-  xbackground-color: rgb(227, 249, 250);
   border-radius: 5px;
   padding: 10px;
 }
@@ -139,7 +150,6 @@
   font-weight: bold;
   text-align: left;
   font-size: 25px;
-  xborder-bottom: 2px solid rgb(68, 172, 207);
   border-bottom: 2px solid rgb(60, 127, 168);
   font-family: "Helvetica Neue";
   color: rgb(9, 59, 91);
@@ -148,8 +158,6 @@
 .scenario-two-lists .guest-list-header {
   font-weight: bold;
   font-size: 15px;
-  xborder-top: 2px solid rgb(68, 172, 207);
-  xborder-bottom: 2px solid rgb(68, 172, 207);
   border-top: 2px solid rgb(60, 127, 168);
   border-bottom: 2px solid rgb(60, 127, 168);
   border-radius: 5px;
@@ -157,20 +165,16 @@
   font-family: "Helvetica Neue";
   color: rgb(9, 59, 91);
   background-color: rgb(227, 244, 250);
-
-
 }
 
 .scenario-two-lists .each-item {
   border-collapse: collapse;
   border: 2px solid rgb(68, 172, 207);
-  xborder: 2px solid rgb(158, 215, 235);
-  xborder: 2px solid rgb(60, 127, 168);
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  background-color: white;
 }
 
 .scenario-two-lists .icon {
@@ -284,52 +288,56 @@
 
 /* BEGIN-SNIPPET hero-snippet.css */
 .hero-list {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .hero-list > div {
-    cursor: pointer;
-    margin: 10px;
+  cursor: pointer;
+  margin: 10px;
 }
 
 .hero-list-image {
-    width: 60px;
-    height: 60px;
+  width: 60px;
+  height: 60px;
 }
 
 .hero-list-image > img {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .hero-list-image > span {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 8px;
 }
 
 .hero-detail {
-    margin-left: 6rem;
-    margin-top: 6rem;
+  margin-left: 6rem;
+  margin-top: 6rem;
 }
 
 .hero-detail-image {
-    width: 120px;
-    height: 120px;
+  width: 120px;
+  height: 120px;
 }
 
 .hero-detail-image > img {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .hero-detail-image > span {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 8px;
+}
+
+.hero-example {
+  height: 300px;
 }
 /* END-SNIPPET */
 
@@ -439,16 +447,28 @@
 
 /* BEGIN-SNIPPET moving-word-snippet.css */
 .moving-word {
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
 
 h1.text {
-    letter-spacing: 1rem;
-    font-size: 10rem;
-    font-weight: normal;
-    margin: 0;
-    color: var(--tertiaryColor);
+  letter-spacing: 1rem;
+  font-size: 10rem;
+  font-weight: normal;
+  margin: 0;
+  color: var(--tertiaryColor);
+}
+
+.moving-word button {
+  font-weight: bold;
+  border: 2px solid rgb(7, 170, 219);
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.moving-word button:hover {
+  background-color: lightblue;
+  color: white;
 }
 
 /* END-SNIPPET */
@@ -467,6 +487,16 @@ h1.text {
   height: 50px;
 }
 
-.debug {
-  border: 1px solid red;
+.svg-move button {
+  font-weight: bold;
+  border: 2px solid rgb(7, 170, 219);
+  border-radius: 5px;
+  padding: 2px;
 }
+
+.svg-move button:hover {
+  background-color: lightblue;
+  color: white;
+}
+
+
