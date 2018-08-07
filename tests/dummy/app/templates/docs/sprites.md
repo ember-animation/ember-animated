@@ -52,7 +52,7 @@ In this example, emails are `removedSprites`, `insertedSprites`, or `keptSprites
 
 When the inbox gets refreshed by clicking the mail icon, a new email gets added to the inbox. This new email is an `insertedSprite` that ends up in the inbox, so the inbox serves as the final bounds of the added email.
 
-Finally, the remaining emails in the inbox that are not deleted or added are `keptSprites`. The `keptSprites` only animate when other emails get added or deleted from the inbox. These emails are `keptSprites` because the inbox serves as both their initial and final bounds. 
+Finally, the remaining emails in the inbox that are not deleted or added are `keptSprites`. The `keptSprites` only animate when other emails get added or deleted from the inbox. These emails are `keptSprites` because the inbox serves as both their initial and final bounds. When styles are applied to sprites such as `{ 'z-index': 1 }`, they are cleaned up after the transition has finished. 
 
 
 {{#docs-demo as |demo|}}
