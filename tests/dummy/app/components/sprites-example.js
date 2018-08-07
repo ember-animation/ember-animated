@@ -51,7 +51,6 @@ export default Component.extend({
 
 function makeRandomItem(index) {
   var messages = ["Hi", "Hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
-  var people = ["Jim", "Pam", "Michael", "Dwight", "Kelly", "Ryan", "Stanley", "Kevin", "Angela", "Oscar"];
-  return { message: messages[index], deleteMessage: false, person: people[index]};
+  return { message: messages[index], deleteMessage: false, received: new Date() };
 }
 //END-SNIPPET
