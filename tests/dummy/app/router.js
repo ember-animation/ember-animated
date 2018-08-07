@@ -1,7 +1,7 @@
-import EmberRouter from '@ember/routing/router';
+import AddonDocsRouter, { docsRoute } from 'ember-cli-addon-docs/router';
 import config from './config/environment';
 
-const Router = EmberRouter.extend({
+const Router = AddonDocsRouter.extend({
   location: config.locationType,
   rootURL: config.rootURL
 });
@@ -31,11 +31,7 @@ Router.map(function() {
   });
 
   // ember-cli-addon-docs
-  this.route('docs', function() {
-    this.route('api', function() {
-      this.route('item', { path: '/*path' });
-    });
-
+  docsRoute(this, function() {
     this.route('between', function(){
       this.route('detail', { path: '/:id' });
     });
