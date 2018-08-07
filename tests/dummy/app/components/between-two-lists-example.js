@@ -28,8 +28,6 @@ export default Component.extend({
       sprite.moveToFinalPosition();
     });
 
-    //this.set('message', printSprites(context));
-
   },
 
   makeLeftItems() {

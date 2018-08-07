@@ -29,7 +29,7 @@ Router.map(function() {
     this.route('containerdemo');
     this.route('beacondemo');
   });
-  
+
   // ember-cli-addon-docs
   this.route('docs', function() {
     this.route('api', function() {
@@ -43,10 +43,11 @@ Router.map(function() {
     this.route('transitions');
     this.route('motions');
     this.route('rules');
-    
+    this.route('beacons');
+
 
     this.route('animator-components', function() {
-      
+
       this.route('value');
       this.route('if');
     });
