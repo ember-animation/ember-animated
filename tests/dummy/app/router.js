@@ -47,18 +47,6 @@ Router.map(function() {
       this.route('value');
       this.route('if');
     });
-
-    this.route('support-components', function() {
-      this.route('container');
-      this.route('orphans');
-      this.route('beacon');
-    });
-
-    this.route('transition-context');
-    this.route('sprite-api');
-    this.route('built-in-transitions');
-    this.route('built-in-motions');
-    this.route('authoring-motions');
   });
 
   this.route('not-found', { path: '/*path' });
