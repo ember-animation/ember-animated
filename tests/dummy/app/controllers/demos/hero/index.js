@@ -1,4 +1,3 @@
-//BEGIN-SNIPPET index-snippet.js
 import Controller from '@ember/controller';
 import opacity from 'ember-animated/motions/opacity';
 
@@ -17,4 +16,3 @@ export default Controller.extend({
     });
   }
 });
-//END-SNIPPET

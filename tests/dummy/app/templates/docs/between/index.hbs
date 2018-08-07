@@ -1,3 +1,4 @@
+{{! BEGIN-SNIPPET index-snippet.hbs }}
 {{#animated-value "index-route" initialInsertion=true finalRemoval=true use=transition duration=1000}}
 <div class="hero-list">
   {{#each model as |person|}}
@@ -15,3 +16,4 @@
   {{/each}}
 </div>
 {{/animated-value}}
+{{! END-SNIPPET }}

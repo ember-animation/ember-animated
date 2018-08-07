@@ -85,14 +85,14 @@ Just like animattions can be applied to components, they can be applied to route
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="hero"}}
-      {{#animated-container class="debug"}}
-        {{outlet}}
+      {{#animated-container class="hero-example"}}
+        {{hero-example}}
       {{/animated-container}}
     {{/demo.example}}
 
     {{demo.snippet 'hero-snippet.hbs' label='hero.hbs'}}
     {{demo.snippet 'detail-snippet.hbs' label='detail.hbs'}}
-    {{demo.snippet 'detail-snippet.js' label='detail.js'}}
+    {{demo.snippet 'between-detail-snippet.js' label='detail.js'}}
     {{demo.snippet 'index-snippet.hbs' label='index.hbs'}}
     {{demo.snippet 'index-snippet.js' label='index.js'}}
     {{demo.snippet 'hero-snippet.css'}}
