@@ -7,9 +7,8 @@ import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
 
 /**
-  A component that marks a region of the page that 
-  can serve as a source or destination for other animator components. 
-  See [Animating Between Components](../../between).  
+  A component that marks a region of the page that
+  can serve as a source or destination for sprites to animate to and from.
   ```hbs
     {{#animated-beacon name="one"}}
       <button {{action "launch"}}>Launch</button>
@@ -38,7 +37,7 @@ import Sprite from '../-private/sprite';
     });
 
     keptSprites.forEach(move);
-      
+
     removedSprites.forEach(sprite => {
       sprite.endAtSprite(beacons.one);
       parallel(move(sprite, scale(sprite)));

@@ -34,7 +34,7 @@ export class AdjustColor extends Motion {
       // if we don't have a measured initial style, we use the final
       // style. This makes sense in cases where somebody is animating
       // an insertedSprite to an explicit color, and they expect the
-      // "from" value to just match the way the way the sprite will
+      // "from" value to just match the way the sprite will
       // look when it's normal.
       from = parseComputedColor(this.sprite.finalComputedStyle[this.propertyName]);
     }

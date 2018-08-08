@@ -1,7 +1,7 @@
-import EmberRouter from '@ember/routing/router';
+import AddonDocsRouter, { docsRoute } from 'ember-cli-addon-docs/router';
 import config from './config/environment';
 
-const Router = EmberRouter.extend({
+const Router = AddonDocsRouter.extend({
   location: config.locationType,
   rootURL: config.rootURL
 });
@@ -29,37 +29,24 @@ Router.map(function() {
     this.route('containerdemo');
     this.route('beacondemo');
   });
-  
-  // ember-cli-addon-docs
-  this.route('docs', function() {
-    this.route('api', function() {
-      this.route('item', { path: '/*path' });
-    });
 
-    this.route('between');
+  // ember-cli-addon-docs
+  docsRoute(this, function() {
+    this.route('between', function(){
+      this.route('detail', { path: '/:id' });
+    });
     this.route('sprites');
-    this.route('motions');
     this.route('transitions');
+    this.route('motions');
     this.route('rules');
-    
+    this.route('beacons');
+
 
     this.route('animator-components', function() {
-      
+
       this.route('value');
       this.route('if');
     });
-
-    this.route('support-components', function() {
-      this.route('container');
-      this.route('orphans');
-      this.route('beacon');
-    });
-
-    this.route('transition-context');
-    this.route('sprite-api');
-    this.route('built-in-transitions');
-    this.route('built-in-motions');
-    this.route('authoring-motions');
   });
 
   this.route('not-found', { path: '/*path' });
