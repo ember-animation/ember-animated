@@ -1,21 +1,18 @@
 {{!BEGIN-SNIPPET transitions-moveover-snippet.hbs}}
-<div class="scenario-transitions clearfix">
-    <div class="selector">
-        {{#power-select selected=message
-            options=words 
-            onchange=(action "chooseMessage")
-            as |name|}}
-        {{name}}
-        {{/power-select}}
-    </div>
+<div class="move-over">
+   <label>Show Hello<input type="checkbox" checked={{showHello}} onchange={{action (mut showHello) (not showHello)}}></label>
 
-    {{#animated-container class="move-container"}}
-        {{#animated-value message rules=rules as |currentMessage|}}
-            <div class="message">
-                {{currentMessage}}
-            </div>
-        {{/animated-value}}
-    {{/animated-container}}
+  {{#animated-container}}
+    {{#animated-if showHello rules=rules}}
+        <div class="hello">
+          Hello
+        </div>
+    {{else}}
+      <div class="goodbye">
+          Goodbye
+      </div>
+    {{/animated-if}}
+  {{/animated-container}}
 
 </div>
 {{!END-SNIPPET}}

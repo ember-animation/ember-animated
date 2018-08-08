@@ -264,7 +264,7 @@
     float: top;
     font-size: 3rem;
     border: 2px solid lightskyblue;
-    padding: 4px;
+    width: 1em;
     color: blue;
     transition: background-color .5s;
     border-radius: 5px;
@@ -417,11 +417,9 @@
 .scenario-transitions  {
     display: flex;
     margin-block-start: 2em;
+    height: 7em;
 }
 
-.scenario-transitions .move-container {
-    overflow: hidden;
-}
 
 .scenario-transitions .message {
     width: 7em;
@@ -445,11 +443,41 @@
 }
 /* END-SNIPPET */
 
-/* BEGIN-SNIPPET moving-word-snippet.css */
+
+/* BEGIN-SNIPPET move-over-snippet.css */
+.move-over {
+  display: flex;
+}
+
+.move-over > .animated-container {
+  overflow: hidden;
+}
+
+.move-over .hello {
+  width: 7em;
+  background-color: lightblue;
+  color: white;
+  font: italic bold 16px/2 cursive;
+  box-sizing: border-box;
+  padding: 2em;
+}
+
+.move-over .goodbye {
+  width: 7em;
+  background-color: darkblue;
+  color: white;
+  font: italic bold 16px/2 cursive;
+  box-sizing: border-box;
+  padding: 2em;
+}
+/* END-SNIPPET */
+
+
 .moving-word {
   display: inline-block;
   vertical-align: top;
 }
+
 
 h1.text {
   letter-spacing: 1rem;
@@ -459,17 +487,20 @@ h1.text {
   color: var(--tertiaryColor);
 }
 
-.moving-word button {
+/* BEGIN-SNIPPET moving-word-snippet.css */
+.moving-word-demo button {
   font-weight: bold;
   border: 2px solid rgb(7, 170, 219);
   border-radius: 5px;
   padding: 2px;
 }
 
-.moving-word button:hover {
+.moving-word-demo button:hover {
   background-color: lightblue;
   color: white;
 }
+
+
 
 /* END-SNIPPET */
 
@@ -500,3 +531,10 @@ h1.text {
 }
 
 
+.motion-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-bottom: 2px solid rgb(30, 167, 212);
+  padding-bottom: 10px;
+}

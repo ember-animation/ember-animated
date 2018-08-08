@@ -25,7 +25,7 @@ In this demonstration, the message fades in or it fades out as it changes states
 
 ### moveOver
 
-`moveOver` comes with four options: `toLeft`, `toRight`, `toUp`, and `toDown`. `toLeft` and `toRight` are demonstrated here, using `rules` to compare two messages and choose a transition. For more on `rules` see [Rules for Data-Dependent Animations](../docs/rules/).
+`moveOver` comes with four options: `toLeft`, `toRight`, `toUp`, and `toDown`. `toLeft` and `toRight` are demonstrated here, using `rules` to compare two messages and choose a transition. For more on `rules` see [Data-Dependent Rules](../docs/rules/).
 
 {{#docs-demo as |demo|}}
   {{#demo.example name="moveover"}}
@@ -34,6 +34,7 @@ In this demonstration, the message fades in or it fades out as it changes states
 
   {{demo.snippet 'transitions-moveover-snippet.hbs' label='transitions-moveover.hbs'}}
   {{demo.snippet 'transitions-moveover-snippet.js' label='transitions-moveover.js'}}
+  {{demo.snippet 'move-over-snippet.css'}}
 {{/docs-demo}}
 
 
