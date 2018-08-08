@@ -4,6 +4,8 @@ ember-animated
 This library is intended to become a robust foundation for animation in Ember.
 A future version of liquid-fire will be implemented on top of this.
 
+Interactive docs are at https://ember-animation.github.io/ember-animated/
+
 Installation
 ------------------------------------------------------------------------------
 
