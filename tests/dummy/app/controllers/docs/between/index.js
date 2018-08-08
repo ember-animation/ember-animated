@@ -3,6 +3,10 @@ import Controller from '@ember/controller';
 import opacity from 'ember-animated/motions/opacity';
 
 export default Controller.extend({
+  /* Sets scroll position so that the demo animates between routes without
+  scrolling to the top of the page every time, see scroll-to-top */
+  preserveScrollPosition: true,
+
   transition: function * ({ insertedSprites, receivedSprites, removedSprites }) {
     insertedSprites.forEach(sprite => {
       opacity(sprite, { from: 0, to: 1 });
