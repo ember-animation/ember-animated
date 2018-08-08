@@ -3,9 +3,7 @@ import { A } from '@ember/array';
 
 function printSprites (context) {
   return {
-    inserted: context._insertedSprites.map(s =>  s.owner.value.message),
     kept: context._keptSprites.map(s => s.owner.value.message),
-    removed: context._removedSprites.map(s => s.owner.value.message),
     sent: context._sentSprites.map(s => s.owner.value.message),
     received: context._receivedSprites.map(s => s.owner.value.message)
   };
