@@ -24,6 +24,10 @@
   background-color: white;
 }
 
+.scenario-sprites .each-item:hover {
+  background-color: rgb(38, 136, 228);
+}
+
 .scenario-sprites .person {
   padding: 2px;
   flex-wrap: wrap;
