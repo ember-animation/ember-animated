@@ -2,7 +2,7 @@
 
 A transition tells sprite categories how to animate from one state to another. For example, a transition can assign the `fade` motion to all `insertedSprites`. Each time a sprite gets added to a list, it would fade into the list as that sprite went from its initial to its final state. 
 
-Ember-animated has some built-in transitions, like `fade` and `moveOver` are built-in transitions. To use the built in transitions, import `fade` or `moveOver` and then pass them into your template.
+Ember-animated has some built-in transitions, like `fade` and `moveOver`. To use the built in transitions, import `fade` or `moveOver` and then pass them into your template.
 
 Transitions are interruptible and they run every time the state of a sprite changes. Also, this means that the state of a sprite can change during a transition. For example, if a user clicks an "undo" button as a sprite is changing states, the animation can reverse and the sprite could move back to its previous position. 
 
