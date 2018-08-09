@@ -43,8 +43,6 @@ module('Integration | Component | transitions-fade', function(hooks) {
     await time.advance(500);
     let finalOpacity = parseFloat(getComputedStyle(this.element.querySelector('.message')).opacity);
     assert.ok(finalOpacity < initialOpacity, `expected opacity to be animating, it's ${finalOpacity}`);
-
-
   });
 
 
