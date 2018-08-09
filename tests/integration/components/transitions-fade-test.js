@@ -11,7 +11,7 @@ module('Integration | Component | transitions-fade', function(hooks) {
   test('it renders', async function(assert) {
     await render(hbs`{{transitions-fade}}`);
 
-    assert.ok(this.element.querySelector('label'));
+    assert.ok(this.element.querySelector('input[type="checkbox"]'));
 
   });
 
@@ -19,7 +19,7 @@ module('Integration | Component | transitions-fade', function(hooks) {
     await render(hbs`{{transitions-fade}}`);
 
     await time.pause();
-    await click(this.element.querySelector('label'));
+    await click(this.element.querySelector('input[type="checkbox"]'));
     await time.advance(500);
 
     let opacity = parseFloat(getComputedStyle(this.element.querySelector('.message')).opacity);
@@ -35,11 +35,11 @@ module('Integration | Component | transitions-fade', function(hooks) {
     await render(hbs`{{transitions-fade}}`);
 
     await time.pause();
-    await click(this.element.querySelector('label'));
+    await click(this.element.querySelector('input[type="checkbox"]'));
     await time.advance(1000);
     let initialOpacity = parseFloat(getComputedStyle(this.element.querySelector('.message')).opacity);
     assert.equal(initialOpacity, 1);
-    await click(this.element.querySelector('label'));
+    await click(this.element.querySelector('input[type="checkbox"]'));
     await time.advance(500);
     let finalOpacity = parseFloat(getComputedStyle(this.element.querySelector('.message')).opacity);
     assert.ok(finalOpacity < initialOpacity, `expected opacity to be animating, it's ${finalOpacity}`);
