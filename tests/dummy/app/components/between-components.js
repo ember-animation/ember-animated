@@ -63,7 +63,7 @@ export default Component.extend({
 
 function makeRandomItem(index) {
   var messages = ["Hi", "Hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
-  return { id: Math.round(Math.random()*1000), message: messages[index] };
+  return { id: Math.round(Math.random()*1000), message: messages[index], received: new Date() };
 }
 //END-SNIPPET
 
