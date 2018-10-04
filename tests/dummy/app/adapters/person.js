@@ -1,3 +1,4 @@
+//BEGIN-SNIPPET person-snippet.js
 import DS from 'ember-data';
 import faker from 'faker';
 
@@ -8,7 +9,7 @@ export default DS.JSONAPIAdapter.extend({
   _makeFakePeople() {
     if (!this._fakePeople) {
       let people = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 8; i++) {
         people.push(Object.seal({
           type: 'person',
           id: String(i),
@@ -36,3 +37,4 @@ export default DS.JSONAPIAdapter.extend({
     };
   }
 });
+//END-SNIPPET 

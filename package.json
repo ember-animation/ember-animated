@@ -1,6 +1,6 @@
 {
   "name": "ember-animated",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Core animation primitives for Ember.",
   "keywords": [
     "animation",
@@ -35,7 +35,7 @@
     "ember-ajax": "^3.1.0",
     "ember-animated-tools": "^0.3.0",
     "ember-cli": "~3.0.0",
-    "ember-cli-addon-docs": "^0.4.0",
+    "ember-cli-addon-docs": "git+https://github.com/savvymas/ember-cli-addon-docs#496999f53a77f21b0c05e9e51ceef8645a775030",
     "ember-cli-addon-docs-yuidoc": "^0.1.1",
     "ember-cli-dependency-checker": "^2.0.0",
     "ember-cli-deploy": "^1.0.2",
@@ -45,18 +45,22 @@
     "ember-cli-eslint": "^4.2.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
+    "ember-cli-moment-shim": "^3.7.1",
     "ember-cli-qunit": "^4.3.2",
     "ember-cli-shims": "^1.2.0",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^2.0.0",
-    "ember-data": "~3.0.0",
+    "ember-data": "^3.3.1",
     "ember-disable-prototype-extensions": "^1.1.2",
     "ember-export-application-global": "^2.0.0",
     "ember-faker": "^1.2.1",
     "ember-load-initializers": "^1.0.0",
+    "ember-moment": "^7.7.0",
+    "ember-power-select": "^2.0.4",
     "ember-resolver": "^4.0.0",
     "ember-source": "~3.0.0",
     "ember-source-channel-url": "^1.0.1",
+    "ember-svg-jar": "^1.2.1",
     "ember-truth-helpers": "^2.0.0",
     "ember-try": "^0.2.23",
     "eslint": "~4.15.0",
@@ -69,5 +73,8 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
+  },
+  "resolutions": {
+    "ember-cli-addon-docs/ember-data": "^3.3.1"
   }
 }

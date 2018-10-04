@@ -4,6 +4,8 @@ ember-animated
 This library is intended to become a robust foundation for animation in Ember.
 A future version of liquid-fire will be implemented on top of this.
 
+Interactive docs are at https://ember-animation.github.io/ember-animated/
+
 Installation
 ------------------------------------------------------------------------------
 
@@ -11,12 +13,7 @@ Installation
 ember install ember-animated
 ```
 
-This repo is tested against Ember versions going back as far as 1.13. For Ember
-versions older than 2.3, you will also need to install the following addons:
-
-- ember-hash-helper-polyfill
-- ember-getowner-polyfill (1.1.0+)
-- ember-assign-polyfill
+This repo is tested against Ember versions going back as far as 2.12.
 
 
 Usage

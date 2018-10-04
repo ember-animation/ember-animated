@@ -1,3 +1,4 @@
+//BEGIN-SNIPPET index-2-snippet.js
 import Route from '@ember/routing/route';
 
 export default Route.extend({
@@ -5,3 +6,4 @@ export default Route.extend({
     return this.store.findAll('person');
   }
 });
+//END-SNIPPET

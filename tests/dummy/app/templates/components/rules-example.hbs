@@ -1,0 +1,14 @@
+{{!BEGIN-SNIPPET rules-snippet.hbs}}
+<div class="scenario-rules clearfix">
+
+ <button {{action "increment"}}>+</button>
+ <button {{action "decrement"}}>-</button>
+
+  {{#animated-container}}
+    {{#animated-value counter rules=rules duration=1000 as |v|}}
+      <span class="count">{{v}}</span>
+    {{/animated-value}}
+  {{/animated-container}}
+
+</div>
+{{! END-SNIPPET }}

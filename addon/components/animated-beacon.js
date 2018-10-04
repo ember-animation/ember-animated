@@ -2,23 +2,19 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-beacon';
 import { inject as service } from '@ember/service';
 import { task } from '../-private/ember-scheduler';
-import { current } from '../-private/scheduler';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
 
-export const WILDCARD = {};
-
 /**
-  A component that marks a region of the page that 
-  can serve as a source or destination for other animator components. 
-  See [Animating Between Components](../../between).  
+  A component that marks a region of the page that
+  can serve as a source or destination for sprites to animate to and from.
   ```hbs
-    {{#animated-beacon group="one"}}
+    {{#animated-beacon name="one"}}
       <button {{action "launch"}}>Launch</button>
     {{/animated-beacon}}
 
-    {{#animated-if showThing group="one" use=transition duration=500}}
+    {{#animated-if showThing use=transition duration=500}}
       <div class="message" {{action "dismiss"}}>
         Hello
       </div>
@@ -33,10 +29,20 @@ export const WILDCARD = {};
   export default Component.extend({
     showThing: false,
 
-    transition: function * ({ receivedSprites, sentSprites }) {
-      receivedSprites.forEach(parallel(scale, move));
-      sentSprites.forEach(parallel(scale, move));
-    },
+    transition: function * (context) {
+      let { insertedSprites, removedSprites, keptSprites, beacons } = context;
+      insertedSprites.forEach(sprite => {
+        sprite.startAtSprite(beacons.one);
+        parallel(move(sprite, scale(sprite)));
+    });
+
+    keptSprites.forEach(move);
+
+    removedSprites.forEach(sprite => {
+      sprite.endAtSprite(beacons.one);
+      parallel(move(sprite, scale(sprite)));
+    });
+  },
 
     actions: {
       launch() {
@@ -94,25 +100,18 @@ export default Component.extend({
     if (!element) {
       return;
     }
-    let group = this.get('group') || '__default__';
-
-    let outboundSprite = Sprite.positionedStartingAt(element, Sprite.offsetParentStartingAt(element));
-    outboundSprite.owner = { group, id: WILDCARD };
-
-    let inboundSprite;
+    let offsetParent = Sprite.offsetParentStartingAt(element);
+    let sprite = Sprite.positionedStartingAt(element, offsetParent);
 
     yield afterRender();
     yield microwait();
     yield * this.get('motionService').staticMeasurement(() => {
-      let inboundParent = Sprite.offsetParentEndingAt(element);
-      inboundSprite = Sprite.positionedEndingAt(element, inboundParent);
-      inboundSprite.owner = { group, id: WILDCARD };
+      offsetParent.measureFinalBounds();
+      sprite.measureFinalBounds();
     });
-    yield this.get('motionService.farMatch').perform(
-      current(),
-      [inboundSprite],
-      [],
-      [outboundSprite]
+    yield this.get('motionService.addBeacon').perform(
+      this.name,
+      sprite
     );
   }).restartable()
 
