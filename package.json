@@ -37,8 +37,8 @@
     "ember-ajax": "^3.1.0",
     "ember-animated-tools": "^0.3.0",
     "ember-cli": "~3.5.0",
-    "ember-cli-addon-docs": "git+https://github.com/savvymas/ember-cli-addon-docs#496999f53a77f21b0c05e9e51ceef8645a775030",
-    "ember-cli-addon-docs-yuidoc": "^0.1.1",
+    "ember-cli-addon-docs": "^0.6.0",
+    "ember-cli-addon-docs-yuidoc": "^0.2.1",
     "ember-cli-dependency-checker": "^3.0.0",
     "ember-cli-deploy": "^1.0.2",
     "ember-cli-deploy-build": "^1.1.1",
@@ -51,7 +51,7 @@
     "ember-cli-sri": "^2.1.1",
     "ember-cli-template-lint": "^1.0.0-beta.1",
     "ember-cli-uglify": "^2.1.0",
-    "ember-data": "^3.3.1",
+    "ember-data": "^3.5.0",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.0",
     "ember-faker": "^1.2.1",
@@ -78,6 +78,6 @@
     "configPath": "tests/dummy/config"
   },
   "resolutions": {
-    "ember-cli-addon-docs/ember-data": "^3.3.1"
+    "ember-cli-addon-docs/ember-data": "^3.5.0"
   }
 }
