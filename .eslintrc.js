@@ -30,6 +30,7 @@ module.exports = {
       files: [
         '.template-lintrc.js',
         'ember-cli-build.js',
+        '.eslintrc.js',
         'index.js',
         'testem.js',
         'blueprints/*/index.js',
@@ -40,6 +41,7 @@ module.exports = {
         'addon/**',
         'addon-test-support/**',
         'version-specific-*/**',
+        'config/addon-docs.js',
         'tests/dummy/app/**'
       ],
       parserOptions: {
