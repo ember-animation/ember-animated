@@ -10,7 +10,6 @@ module.exports = {
     'no-invalid-interactive': false,
     'table-groups': false,
     'no-unused-block-params': false,
-    'no-quoteless-attributes': false,
     'no-outlet-outside-routes': false,
   }
 };
