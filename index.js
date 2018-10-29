@@ -3,7 +3,7 @@
 var VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
-  name: 'ember-animated',
+  name: require('./package').name,
 
   isDevelopingAddon() {
     return process.env.DEV_EMBER_ANIMATED;

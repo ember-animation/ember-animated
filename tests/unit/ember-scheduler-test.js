@@ -1,5 +1,5 @@
 import EmberObject, { computed } from '@ember/object';
-import { run, later, cancel, schedule } from '@ember/runloop';
+import { run, later } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
@@ -322,14 +322,6 @@ module("Unit | scheduler Ember layer", function(hooks) {
 
 
   function insideRunLoop() {
-    try {
-      cancel(schedule('actions', function() {}));
-      return true;
-    } catch(err) {
-      if (!/autorun/.test(err.message)) {
-        throw err;
-      }
-      return false;
-    }
+    return !!run.currentRunLoop;
   }
 });
