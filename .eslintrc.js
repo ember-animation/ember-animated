@@ -28,17 +28,20 @@ module.exports = {
     // node files
     {
       files: [
+        '.template-lintrc.js',
+        'ember-cli-build.js',
+        '.eslintrc.js',
         'index.js',
         'testem.js',
-        'ember-cli-build.js',
+        'blueprints/*/index.js',
         'config/**/*.js',
         'tests/dummy/config/**/*.js'
       ],
       excludedFiles: [
-        'app/**',
         'addon/**',
         'addon-test-support/**',
         'version-specific-*/**',
+        'config/addon-docs.js',
         'tests/dummy/app/**'
       ],
       parserOptions: {
