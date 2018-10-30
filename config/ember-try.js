@@ -43,7 +43,8 @@ module.exports = function() {
           npm: {
             devDependencies: {
               'ember-source': '~2.18.0',
-              'ember-native-dom-event-dispatcher': '~0.6.4'
+              'ember-native-dom-event-dispatcher': '~0.6.4',
+              'ember-angle-bracket-invocation-polyfill': '^1.2.3',
             }
           }
         },
@@ -51,7 +52,8 @@ module.exports = function() {
           name: 'ember-3.0',
           npm: {
             devDependencies: {
-              'ember-source': '~3.0.0'
+              'ember-source': '~3.0.0',
+              'ember-angle-bracket-invocation-polyfill': '^1.2.3',
             }
           }
         },
