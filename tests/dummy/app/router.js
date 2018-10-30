@@ -28,6 +28,7 @@ Router.map(function() {
     this.route('valuedemo');
     this.route('containerdemo');
     this.route('beacondemo');
+    this.route('modal');
   });
 
   // ember-cli-addon-docs
