@@ -1,23 +1,23 @@
 {{yield (action logTransition) }}
 
 <table class="transition-log-table">
-    <tr><td colspan=3>Transition Log</td></tr>
+  <tr><td colspan=3>Transition Log</td></tr>
   <tr>
     <th>Inserted</th>
     <th>Kept</th>
     <th>Removed</th>
   </tr>
   {{#animated-each messages as |message|}}
-  <tr>
-    <td>
-      {{message.inserted}}
-    </td>
-    <td>
-      {{message.kept}}
-    </td>
-    <td>
-      {{message.removed}}
-    </td>
-  </tr>
+    <tr>
+      <td>
+        {{message.inserted}}
+      </td>
+      <td>
+        {{message.kept}}
+      </td>
+      <td>
+        {{message.removed}}
+      </td>
+    </tr>
   {{/animated-each}}
 </table>
