@@ -3,7 +3,6 @@
 module.exports = {
   extends: 'recommended',
   rules: {
-    'block-indentation': false,
     'attribute-indentation': false,
     'quotes': false,
     'no-inline-styles': false,
