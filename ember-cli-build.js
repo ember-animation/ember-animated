@@ -9,7 +9,15 @@ module.exports = function(defaults) {
       plugins: [
         'transform-class-properties'
       ]
-    }
+    },
+    'ember-cli-uglify': {
+			uglify: {
+				compress: {
+          // https://github.com/ember-cli/ember-cli/issues/8075
+					collapse_vars: false
+				}
+			}
+		},
   });
   return app.toTree();
 };
