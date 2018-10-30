@@ -11,7 +11,7 @@
     {{/animated-beacon}}
 
     {{#animated-beacon name="trash"}}
-        {{svg-jar "trash-big"}}
+      {{svg-jar "trash-big"}}
     {{/animated-beacon}}
 
     <div class="mail-buttons">
@@ -38,11 +38,11 @@
     </div>
     <div class="inbox">
       {{#animated-each items use=transition as |item|}}
-          <div class="each-item">
-              <input type="checkbox" onclick={{action "removeItem" item}}>
-              <div class="message">{{item.message}}</div>
-              <div class="date">{{moment-format now 'MMM D'}}</div>
-          </div>
+        <div class="each-item">
+          <input type="checkbox" onclick={{action "removeItem" item}}>
+          <div class="message">{{item.message}}</div>
+          <div class="date">{{moment-format now 'MMM D'}}</div>
+        </div>
       {{/animated-each}}
     </div>
   {{/animated-container}}
