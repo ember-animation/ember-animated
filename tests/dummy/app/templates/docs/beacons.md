@@ -17,3 +17,4 @@ In this demonstration, the "Delete with Undo" option shows what happens when an 
     {{demo.snippet 'between-components-snippet.js' label='between-components.js'}}
     {{demo.snippet 'sprites-snippet.css'}}
 {{/docs-demo}}
+
