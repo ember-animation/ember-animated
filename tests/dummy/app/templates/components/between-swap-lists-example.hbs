@@ -13,7 +13,7 @@
     {{#animated-container class="left"}}
       {{#animated-each leftItems use=transition key="id" as |item|}}
         <div class={{if distinguishSides "left-item"}} >
-         {{item.message}}
+          {{item.message}}
         </div>
       {{/animated-each}}
     {{/animated-container}}
@@ -21,13 +21,13 @@
     {{#animated-container class="right"}}
       {{#animated-each rightItems use=transition key="id" as |item|}}
         <div>
-         {{item.message}}
+          {{item.message}}
         </div>
       {{/animated-each}}
     {{/animated-container}}
   {{/if}}
 
   {{message}}
- 
+
 </div>
 {{! END-SNIPPET }}
