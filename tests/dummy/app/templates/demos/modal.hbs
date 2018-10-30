@@ -1,9 +1,9 @@
 {{#if message}}
   <div class="scenario-modal--container">
-    <AnimatedValue @value="background" @use={{backgroundTransition}} @initialInsertion=true @finalRemoval=true>
+    <AnimatedValue @value="background" @use={{backgroundTransition}} @initialInsertion={{true}} @finalRemoval={{true}}>
       <div class="scenario-modal--background" {{action showMessage ""}}></div>
     </AnimatedValue>
-    <AnimatedValue @value={{message}} @use={{dialogTransition}} @initialInsertion=true @finalRemoval=true as |currentMessage|>
+    <AnimatedValue @value={{message}} @use={{dialogTransition}} @initialInsertion={{true}} @finalRemoval={{true}} as |currentMessage|>
       <div class="scenario-modal--contents">
         <h3>Alert! {{currentMessage}}</h3>
       </div>
