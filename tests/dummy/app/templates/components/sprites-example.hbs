@@ -30,7 +30,7 @@
         <div class="each-item">
           <input type="checkbox" checked={{item.deleteMessage}} onchange={{action (mut item.deleteMessage) (not item.deleteMessage)}}>
           <div class="message">{{item.message}}</div>
-          <div class="date">{{moment-format item.received 'MMM D'}}</div>
+          <div class="date">{{moment-format item.received "MMM D"}}</div>
         </div>
       {{/animated-each}}
     </div>
