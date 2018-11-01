@@ -1,12 +1,12 @@
 <button {{action toggleThing}}>Toggle</button>
 {{#animated-container}}
-    {{#animated-if showThing use=transition }}
-        <div class="message" {{action "toggleThing"}}>
-            Hello!
-        </div>
-    {{/animated-if}}
+  {{#animated-if showThing use=transition }}
+    <div class="message" {{action "toggleThing"}}>
+      Hello!
+    </div>
+  {{/animated-if}}
 {{/animated-container}}
 <p>
-    This is outside of the container.
+  This is outside of the container.
 </p>
 
