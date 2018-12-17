@@ -45,6 +45,9 @@ class TaskProperty extends ComputedProperty {
   }
 
   setup(proto, taskName) {
+    if (super.setup) {
+      super.setup(...arguments);
+    }
     registerOnPrototype(addObserver, proto, this._observes, taskName, 'perform', true);
   }
 
