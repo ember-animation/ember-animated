@@ -1,0 +1,31 @@
+<div class="scenario-swap-nested">
+  <div style="position: absolute; top: 0; left: 0">
+    {{animated-orphans}}
+  </div>
+  <div>
+    <button {{action "swap"}}>Swap</button>
+  </div>
+
+  {{#if this.showLeft}}
+    {{#animated-container class="left"}}
+      {{#animated-value "my-value" group="outer-box" use=outerBox }}
+        <div class="scenario-swap-nested--outer-box-big">
+          <h1>The title</h1>
+          {{#animated-value "my-value" group="logo" use=logo}}
+            <div>The logo</div>
+          {{/animated-value}}
+        </div>
+      {{/animated-value}}
+    {{/animated-container}}
+  {{else}}
+    {{#animated-container class="right"}}
+      {{#animated-value "my-value" group="outer-box" use=outerBox }}
+        <div class="scenario-swap-nested--outer-box-small">
+          {{#animated-value "my-value" group="logo" use=logo }}
+            <div>The logo</div>
+          {{/animated-value}}
+        </div>
+      {{/animated-value}}
+    {{/animated-container}}
+  {{/if}}
+</div>

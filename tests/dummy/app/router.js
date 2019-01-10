@@ -12,6 +12,7 @@ Router.map(function() {
     this.route('container-only');
     this.route('two-lists');
     this.route('swapping-lists');
+    this.route('swap-nested');
     this.route('bind');
     this.route('hero', function(){
       this.route('detail', { path: '/:id' });

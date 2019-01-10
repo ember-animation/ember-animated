@@ -568,3 +568,26 @@ h1.text {
   z-index: 1;
 }
 
+.scenario-swap-nested > .left {
+  width:40%;
+  float: left;
+}
+
+.scenario-swap-nested > .right {
+  width: 40%;
+  float: right;
+}
+
+.scenario-swap-nested--outer-box-big {
+  width: 400px;
+  height: 400px;
+  background-color: red;
+  border-radius: 7px;
+}
+
+.scenario-swap-nested--outer-box-small {
+  width: 200px;
+  height: 200px;
+  background-color: red;
+  border-radius: 7px;
+}
