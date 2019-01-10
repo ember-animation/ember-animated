@@ -23,22 +23,28 @@ export class Resize extends Motion {
     if (!this.prior) {
       this.widthTween = new Tween(
         sprite.initialBounds.width / sprite.initialCumulativeTransform.a,
-        sprite.finalBounds.width / sprite.finalCumulativeTransform.a, duration
+        sprite.finalBounds.width / sprite.finalCumulativeTransform.a,
+        duration,
+        this.opts.easing
       );
       this.heightTween = new Tween(
         sprite.initialBounds.height / sprite.initialCumulativeTransform.d,
-        sprite.finalBounds.height / sprite.finalCumulativeTransform.d, duration
+        sprite.finalBounds.height / sprite.finalCumulativeTransform.d,
+        duration,
+        this.opts.easing
       );
     } else {
       this.widthTween = new Tween(
         0,
         sprite.finalBounds.width / sprite.finalCumulativeTransform.a - this.prior.sprite.finalBounds.width,
-        duration
+        duration,
+        this.opts.easing
       ).plus(this.prior.widthTween);
       this.heightTween = new Tween(
         0,
         sprite.finalBounds.height / sprite.finalCumulativeTransform.d - this.prior.sprite.finalBounds.height,
-        duration
+        duration,
+        this.opts.easing
       ).plus(this.prior.heightTween);
     }
 
