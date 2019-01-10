@@ -576,6 +576,7 @@ h1.text {
 .scenario-swap-nested > .right {
   width: 40%;
   float: right;
+  margin-top: 300px;
 }
 
 .scenario-swap-nested--outer-box-big {

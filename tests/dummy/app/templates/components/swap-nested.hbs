@@ -10,9 +10,15 @@
     {{#animated-container class="left"}}
       {{#animated-value "my-value" group="outer-box" use=outerBox }}
         <div class="scenario-swap-nested--outer-box-big">
-          <h1>The title</h1>
-          {{#animated-value "my-value" group="logo" use=logo}}
-            <div>The logo</div>
+          {{#animated-value "my-value" group="box-contents" use=boxContents initialInsertion=true}}
+            <div>
+              <h1>The title</h1>
+              <AnimatedContainer>
+              {{#animated-value "my-value" group="logo" use=logo}}
+                <div>The logo</div>
+              {{/animated-value}}
+              </AnimatedContainer>
+            </div>
           {{/animated-value}}
         </div>
       {{/animated-value}}
@@ -21,8 +27,15 @@
     {{#animated-container class="right"}}
       {{#animated-value "my-value" group="outer-box" use=outerBox }}
         <div class="scenario-swap-nested--outer-box-small">
-          {{#animated-value "my-value" group="logo" use=logo }}
-            <div>The logo</div>
+          {{#animated-value "my-value" group="box-contents" use=boxContents initialInsertion=true}}
+            <div>
+              <AnimatedContainer>
+              {{#animated-value "my-value" group="logo" use=logo }}
+                <div>The logo</div>
+              {{/animated-value}}
+              </AnimatedContainer>
+              This is some content.
+            </div>
           {{/animated-value}}
         </div>
       {{/animated-value}}
