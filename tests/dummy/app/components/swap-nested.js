@@ -16,14 +16,22 @@ export default Component.extend({
 
   logo: function * ({ sentSprites }) {
     sentSprites.forEach(sprite => {
+
+      // TODO: this should be the default behavior (deeper children who become
+      // orphans should get listed later in the DOM within the animated-orphans
+      // component)
       sprite.applyStyles({ 'z-index': 1 });
+
       move(sprite);
     });
   },
 
   boxContents: function * ({ receivedSprites, sentSprites, duration }) {
     sentSprites.forEach(sprite => {
+      // this is needed because we're dealing with orphans who will no longer
+      // automatically ride along with their original parent.
       move(sprite);
+
       opacity(sprite, { to: 0, duration: duration * 0.2 });
       sprite.applyStyles({ 'z-index': 1 });
     });
