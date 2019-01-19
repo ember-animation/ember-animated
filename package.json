@@ -78,6 +78,7 @@
     "configPath": "tests/dummy/config"
   },
   "resolutions": {
-    "ember-cli-addon-docs/ember-data": "^3.5.0"
+    "ember-cli-addon-docs/ember-data": "^3.5.0",
+    "ember-component-css": "^0.6.7"
   }
 }
