@@ -6,6 +6,14 @@ A future version of liquid-fire will be implemented on top of this.
 
 Interactive docs are at https://ember-animation.github.io/ember-animated/
 
+
+Compatibility
+------------------------------------------------------------------------------
+
+* Ember.js v2.18 or above
+* Ember CLI v2.13 or above
+
+
 Installation
 ------------------------------------------------------------------------------
 
