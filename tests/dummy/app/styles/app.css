@@ -1,3 +1,55 @@
+:root {
+  --brand-primary: #b72f74;
+}
+
+.home {
+  margin: 2rem auto;
+  font-size: 18px;
+  padding: 1rem;
+  width: 100%;
+  max-width: 752px;
+}
+.home__video {
+  margin-bottom: 3rem;
+}
+.ar-16x9 {
+  height: 0;
+  position: relative;
+  padding-bottom: 56.25%;
+}
+.ar-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+.home__copy {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.home__cta {
+  text-align: right;
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+}
+.home__cta-link {
+  background-color: var(--brand-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+}
+
+.home__cta-link:hover {
+  text-decoration: none;
+  background-color: #981658;
+}
+
+
 .homepage > a {
     display: block;
 }

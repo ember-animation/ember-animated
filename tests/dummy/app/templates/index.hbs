@@ -7,10 +7,20 @@
     slimHeading="Ember Animated"
     byline="Core animation primitives for Ember"}}
 
-  <div class="docs-container docs-md">
-    <section class="max-w-md mx-auto pb-8">
+  <div class="home">
+    <div class="home__video ar-16x9">
+      <iframe class="ar-content" width="560" height="315" src="https://www.youtube.com/embed/4JofVQ3nGrw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <div class="home__copy">
       {{index/index-content}}
-    </section>
+    </div>
+
+    <div class="home__cta">
+      {{#docs-link "docs" class="home__cta-link"}}
+        Get started →
+      {{/docs-link}}
+    </div>
   </div>
 
 {{/if}}
