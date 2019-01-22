@@ -35,8 +35,9 @@ module.exports = function() {
             }
           }
         },
+
         {
-          name: 'ember-lts-3.4',
+          name: 'ember-lts-2.18',
           npm: {
             devDependencies: {
               'ember-source': '~2.18.0',
