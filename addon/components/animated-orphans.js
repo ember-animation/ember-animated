@@ -16,7 +16,7 @@ import partition from '../-private/partition';
 /**
   A component that adopts any orphaned sprites so they can continue animating even
   after their original parent component has been destroyed. This relies on cloning
-  DOM nodes, and the cloned nodes will be inserted as children of animated-orphans. 
+  DOM nodes, and the cloned nodes will be inserted as children of animated-orphans.
   ```hbs
   {{animated-orphans}}
   ```
@@ -288,6 +288,16 @@ export default Component.extend({
 
   _onFirstMotionStart(activeSprites, cycle, sprite) {
     if (activeSprites.indexOf(sprite) === -1) {
+
+      // in most animators, sprites are still living in their normal place in
+      // the DOM, and so they will necessarily start out with their appearance
+      // matching initialComputedStyles. But here we're dealing with an orphan
+      // who may have lost inherited styles. So we manually re-apply the
+      // initialComputedStyles that were snapshotted before it was moved. See
+      // COPIED_CSS_PROPERTIES to see exactly which property we copy (we don't
+      // do all of them, that sounds expensive).
+      sprite.applyStyles(sprite.initialComputedStyle);
+
       sprite.lock();
       sprite.reveal();
       this.element.appendChild(sprite.element);
