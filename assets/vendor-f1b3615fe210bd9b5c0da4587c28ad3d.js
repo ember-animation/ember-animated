@@ -5064,7 +5064,7 @@ t.message="TaskCancelation"
 try{e.throw(t)}catch(n){if("TaskCancelation"!==n.message)throw n}}(t.generator)})}}],a&&n(r.prototype,a),l&&n(r,l),e}()}),define("ember-animated/-private/sprite",["exports","ember-animated/-private/transform","ember-animated","ember-animated/-private/margin-collapse","ember-animated/-private/bounds"],function(e,t,n,r,a){"use strict"
 function i(e,t){for(var n=0;n<t.length;n++){var r=t[n]
 r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function o(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}Object.defineProperty(e,"__esModule",{value:!0}),e.default=e.COPIED_CSS_PROPERTIES=void 0
-var s=["opacity","font-size","font-family","font-weight","color","background-color","letter-spacing","text-align"]
+var s=["opacity","font-size","color","background-color","letter-spacing"]
 e.COPIED_CSS_PROPERTIES=s
 var l={animationIterationCount:!0,columnCount:!0,fillOpacity:!0,flexGrow:!0,flexShrink:!0,fontWeight:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,widows:!0,zIndex:!0,zoom:!0},u=new WeakMap,c=function(){function e(t,n,r,a){(function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")})(this,e),this.element=t,this.owner=null,this._transform=null,this._cumulativeTransform=null,this._offsetSprite=a,this._transitionContext=null
 var i=u.get(t)
@@ -5340,7 +5340,7 @@ return a.owner=r,r.flagForRemoval(),a}n.remove()}).filter(Boolean):[]},_groupAct
 try{for(var o,s=function(){var e=o.value,r=t._childToTransition.get(e.owner),a=r.transition,i=r.duration,s=n.find(function(e){return e.transition===a})
 s||(s={transition:a,duration:i,sprites:[]},n.push(s)),s.sprites.push(e)},l=e[Symbol.iterator]();!(r=(o=l.next()).done);r=!0)s()}catch(u){a=!0,i=u}finally{try{r||null==l.return||l.return()}finally{if(a)throw i}}return n},_prepareSprite:function(e){e.hide()
 var t=e.element.cloneNode(!0)
-return(0,r.continueMotions)(e.element,t),e.element=t,e},_onFirstMotionStart:function(e,t,n){-1===e.indexOf(n)&&(n.applyStyles(n.initialComputedStyle),n.lock(),n.reveal(),this.element.appendChild(n.element),e.push(n),this._elementToChild.set(n.element,n.owner)),n.owner.block(t)},_onMotionStart:function(e,t){t.reveal(),t.owner.block(e)},_onMotionEnd:function(e,t){t.owner.unblock(e)}})
+return(0,r.continueMotions)(e.element,t),e.element=t,e},_onFirstMotionStart:function(e,t,n){-1===e.indexOf(n)&&(n.lock(),n.reveal(),this.element.appendChild(n.element),e.push(n),this._elementToChild.set(n.element,n.owner)),n.owner.block(t)},_onMotionStart:function(e,t){t.reveal(),t.owner.block(e)},_onMotionEnd:function(e,t){t.owner.unblock(e)}})
 e.default=c}),define("ember-animated/components/animated-value",["exports","ember-animated/templates/components/animated-value"],function(e,t){"use strict"
 Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
 var n=Ember.Component.extend({tagName:"",layout:t.default,items:Ember.computed("value",function(){return[this.get("value")]})}).reopenClass({positionalParams:["value"]})
