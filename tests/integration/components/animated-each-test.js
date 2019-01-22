@@ -365,7 +365,7 @@ module('Integration | Component | animated each', function(hooks) {
     // a motion that never finishes
     class TestMotion extends Motion {
       *animate() {
-        yield new Promise(() => {});
+        yield (new Promise(() => {}));
       }
     }
 

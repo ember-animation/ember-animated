@@ -1,7 +1,6 @@
 import { Promise as EmberPromise } from 'rsvp';
 import { join, scheduleOnce } from '@ember/runloop';
 import { addObserver } from '@ember/object/observers';
-import { assign } from '@ember/polyfills';
 import { set } from '@ember/object';
 import ComputedProperty from '@ember/object/computed';
 import {
@@ -11,42 +10,62 @@ import {
   logErrors
 } from './scheduler';
 import Ember from 'ember';
-import  { microwait } from '..';
+import { microwait } from '..';
 import { DEBUG } from '@glimmer/env';
 
 export function task(...args) {
   return new TaskProperty(...args);
 }
 
-function TaskProperty(taskFn) {
-  let tp = this;
-  ComputedProperty.call(this, function(name) {
-    return new Task(this, taskFn, tp, name);
-  });
-  this._bufferPolicy = null;
-  this._observes = null;
-}
+let handlerCounter = 0;
 
-TaskProperty.prototype = Object.create(ComputedProperty.prototype);
-assign(TaskProperty.prototype, {
-  constructor: TaskProperty,
+class TaskProperty extends ComputedProperty {
+
+  constructor(taskFn) {
+    let tp;
+    super(function (name) {
+      return new Task(this, taskFn, tp, name);
+    });
+    tp = this;
+    this._bufferPolicy = null;
+    this._observes = null;
+  }
+
   restartable() {
     this._bufferPolicy = cancelAllButLast;
     return this;
-  },
+  }
+
   drop() {
     this._bufferPolicy = drop;
     return this;
-  },
+  }
+
   observes(...deps) {
     this._observes = deps;
     return this;
-  },
-  setup(proto, taskName) {
-    registerOnPrototype(addObserver, proto, this._observes, taskName, 'perform', true);
-  },
+  }
 
-});
+  setup(proto, taskName) {
+    if (super.setup) {
+      super.setup(...arguments);
+    }
+
+    if (this._observes) {
+      for (let i = 0; i < this._observes.length; ++i) {
+        let name = this._observes[i];
+        let handlerName = `_ember_animated_handler_${handlerCounter++}`;
+        proto[handlerName] = function (...args) {
+          let task = this.get(taskName);
+          scheduleOnce('actions', task, '_safeInvokeCallback', 'perform', args);
+        };
+        addObserver(proto, name, null, handlerName);
+      }
+    }
+  }
+
+}
+
 
 let priv = new WeakMap();
 
@@ -72,7 +91,7 @@ class Task {
       throw new Error(`Tried to perform task ${privSelf.name} on an already destroyed object`);
     }
     cleanupOnDestroy(context, this, 'cancelAll');
-    return spawn(function * () {
+    return spawn(function* () {
       if (DEBUG) {
         logErrors(error => {
           if (Ember.testing) {
@@ -91,7 +110,7 @@ class Task {
             yield maybeWait;
           }
         }
-        let finalValue = yield * withRunLoop(implementation.call(context, ...args));
+        let finalValue = yield* withRunLoop(implementation.call(context, ...args));
         return finalValue;
       } finally {
         join(() => {
@@ -124,8 +143,7 @@ class Task {
 
 // cribbed from machty's ember-concurrency
 function cleanupOnDestroy(owner, object, cleanupMethodName) {
-  if (!owner.willDestroy)
-  {
+  if (!owner.willDestroy) {
     // we're running in non Ember object (possibly in a test mock)
     return;
   }
@@ -134,8 +152,8 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
     let oldWillDestroy = owner.willDestroy;
     let disposers = [];
 
-    owner.willDestroy = function() {
-      for (let i = 0, l = disposers.length; i < l; i ++) {
+    owner.willDestroy = function () {
+      for (let i = 0, l = disposers.length; i < l; i++) {
         disposers[i]();
       }
       oldWillDestroy.apply(owner, arguments);
@@ -153,25 +171,6 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
     }
   });
 }
-function registerOnPrototype(addListenerOrObserver, proto, names, taskName, taskMethod, once) {
-  if (names) {
-    for (let i = 0; i < names.length; ++i) {
-      let name = names[i];
-      addListenerOrObserver(proto, name, null, makeTaskCallback(taskName, taskMethod, once));
-    }
-  }
-}
-function makeTaskCallback(taskName, method, once) {
-  return function(...args) {
-    let task = this.get(taskName);
-
-    if (once) {
-      scheduleOnce('actions', task, '_safeInvokeCallback', method, args);
-    } else {
-      task._safeInvokeCallback(method, args);
-    }
-  };
-}
 
 function cancelAllButLast(task, privTask) {
   let instances = privTask.instances;
@@ -187,7 +186,7 @@ function drop(task, privTask) {
   }
 }
 
-function * withRunLoop(generator) {
+function* withRunLoop(generator) {
   let state;
   let nextValue;
   let fulfilled = true;
@@ -217,7 +216,7 @@ function * withRunLoop(generator) {
     try {
       nextValue = yield state.value;
       fulfilled = true;
-    } catch(err) {
+    } catch (err) {
       nextValue = err;
       fulfilled = false;
     }

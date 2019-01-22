@@ -154,9 +154,9 @@ module('Integration | Component | animated container', function(hooks) {
     this.set('TestMotion', class extends Motion {
       *animate() {
         startMotion();
-        yield new EmberPromise(resolve => {
+        yield (new EmberPromise(resolve => {
           finishMotion = resolve;
-        });
+        }));
       }
     });
 
