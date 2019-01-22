@@ -1,5 +1,7 @@
 'use strict';
 
+var docsEnabled = process.env.RAISE_ON_DEPRECATION !== 'true';
+
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'dummy',
@@ -35,7 +37,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.EmberENV.RAISE_ON_DEPRECATION = true;
+    ENV.EmberENV.RAISE_ON_DEPRECATION = !docsEnabled;
   }
 
   if (environment === 'test') {
@@ -47,7 +49,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
-    ENV.EmberENV.RAISE_ON_DEPRECATION = true;
+    ENV.EmberENV.RAISE_ON_DEPRECATION = !docsEnabled;
     ENV.APP.autoboot = false;
   }
 
