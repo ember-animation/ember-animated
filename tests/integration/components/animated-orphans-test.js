@@ -119,6 +119,37 @@ module('Integration | Component | animated orphans', function(hooks) {
 
   });
 
+  test('it preserves copied CSS properties on orphans', async function(assert) {
+    assert.expect(1);
+
+    this.set('showIt', true);
+    await render(hbs`
+  {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
+  <div style="position: fixed; top: 0px; left: 0px">
+   {{animated-orphans}}
+  </div>
+
+  {{#if showIt}}
+    <div style="color: rgb(12, 34, 56)">
+    {{#animated-value "one" use=t1 finalRemoval=true}}
+      <div class="one">One</div>
+    {{/animated-value}}
+    </div>
+  {{/if}}
+  `);
+    await animationsSettled();
+
+    this.set('t1', function * ({ removedSprites }) {
+      testMotion(removedSprites[0]);
+      assert.equal('rgb(12, 34, 56)', getComputedStyle(removedSprites[0].element).color);
+    });
+
+    this.set('showIt', false);
+    await animationsSettled();
+
+  });
+
+
   test('makes orphan sprites eligible for far matching back into other animators', async function(assert) {
     assert.expect(15);
 
