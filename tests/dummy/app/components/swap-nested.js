@@ -63,8 +63,7 @@ export default Component.extend({
       // TODO: either design an API that makes moved-by-default explicit instead
       // of implicit, OR see if there is an automatic nested behavior that we're
       // failing to do.
-      let diff = sprite.difference('finalBounds', sprite, 'initialBounds');
-      sprite.translate(diff.dx, diff.dy);
+      sprite.moveToFinalPosition();
 
       sprite.applyStyles({ opacity: 0 });
     });
