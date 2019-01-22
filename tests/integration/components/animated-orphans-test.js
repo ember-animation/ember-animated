@@ -16,7 +16,7 @@ module('Integration | Component | animated orphans', function(hooks) {
   class TestMotion extends Motion {
     *animate() {
       if (this.opts && this.opts.shouldBlock) {
-        yield new Promise(() => {});
+        yield (new Promise(() => {}));
       }
     }
   }
@@ -71,12 +71,12 @@ module('Integration | Component | animated orphans', function(hooks) {
 
     this.set('t1', function * ({ removedSprites }) {
       assert.equal(removedSprites.length, 1, 't1');
-      yield new Promise(r => unblock1 = r);
+      yield (new Promise(r => unblock1 = r));
     });
 
     this.set('t2', function * ({ removedSprites }) {
       assert.equal(removedSprites.length, 1, 't2');
-      yield new Promise(r => unblock2 = r);
+      yield (new Promise(r => unblock2 = r));
     });
 
     this.set('showIt', false);

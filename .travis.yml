@@ -19,6 +19,13 @@ env:
   global:
     # See https://git.io/vdao3 for details.
     - JOBS=1
+    - RAISE_ON_DEPRECATION=true
+
+branches:
+  only:
+    - master
+    # npm version tags
+    - /^v\d+\.\d+\.\d+/
 
 jobs:
   fail_fast: true
@@ -50,7 +57,7 @@ jobs:
 
     - stage: "Deploy"
       if: (branch = master or tag is present) and type = push
-      script: node_modules/.bin/ember deploy production
+      script: RAISE_ON_DEPRECATION=false node_modules/.bin/ember deploy production
 
 before_install:
   - npm config set spin false

@@ -2,19 +2,38 @@
 
 ## What is a sprite?
 
-A sprite is an html element that holds additional data such as width, height, css styles, and bounds.
+The term "sprite" comes from a long tradition of two-dimensional graphics. Historically, rendered images that could be moved independently of the scene needed extra memory to facilitate this animation. Those images were called sprites.
 
-Sprites are useful for animating html elements as they are inserted, removed, or moved around to new positions. For example, imagine that a new email has just arrived. Where should it show up within a list of other emails? How should things move and shift when the user deletes an email, or maybe multiple emails at once? Sprites help manage these states and create a smooth flow between them.
+In Ember Animated, a **sprite** is an HTML element packaged with additional data, such as width, height, CSS styles, historical bounds, and more. This data enables developers to animate the HTML elements that comprise their application, and respond to state changes over time.
 
-The term "sprite" comes from a long tradition of two-dimensional graphics. However, in ember-animated, a sprite can do a lot more than a regular html element can. It holds data about its own position and state. Animations can be played forwards and backwards, in and out of the user's view. By using sprites, the developer does not need to track the state of different elements by hand.
+For example, imagine you're working on an email client and you'd like to add animations. Here's some scenarios you'll need to consider:
 
-Before we can write sprite animations, it's important to understand the lifecycle of a sprite as it enters, leaves, or moves around. There are five different categories that a sprite can belong to: `insertedSprites`, `keptSprites`, `removedSprites`, `sentSprites`, and `receivedSprites`. The difference between these categories is whether the sprite stores its initial and/or final bounds. For example, a newly inserted sprite stores the area of the page that it will end up at or its final bounds, and it animates to that location (`insertedSprite`). When a sprite is removed, it stores its current location or initial bounds, then animates from the place it started on the page (`removedSprite`). Finally, if a sprite is kept on the page, it holds both its initial and its final bounds, so it starts and ends in the same location (`keptSprite`). 
+- When a new message arrives, where should it show up in the list of other messages, and how should the existing messages respond?
+- How should the list behave when the user deletes a message?
+- What happens if the user deletes multiple messages at once?
 
-Let's begin with the first three categories:
+Sprites manage the different states of each of these messages, saving the developer from having to do complex and error-prone bookkeeping, and letting them focus on the actual logic of their application's animations.
 
+## Categories of sprites
+
+There are five categories of sprites, but we'll start with the first three:
+
+1. `insertedSprites`
+2. `removedSprites`
+3. `keptSprites`
+
+**`insertedSprites`** are sprites whose elements are entering or being _inserted into_ the DOM. They store the final bounds of their element, which can be used to animate the element from some starting point (such as off-screen) to that final location.
+
+**`removedSprites`** are sprites whose elements are exiting or being _removed from_ the DOM. They store the initial bounds of their element, which can be used to animate the element from their last location to some final position.
+
+Finally, **`keptSprites`** are sprites whose elements are in the DOM both before and after some state change. They store both their initial bounds and their final bounds, so that they can be animated between their beginning and ending positions.
+
+---
+
+To summarize, the three sprite categories can be differentiated by which data they store: their initial bounds, their final bounds, or both:
 
 <style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
+.tg  {border-collapse:collapse;border-spacing:0;margin-bottom:1rem;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
 .tg .tg-eh2d{background-color:#ffffff;border-color:inherit;vertical-align:top}
@@ -28,31 +47,31 @@ Let's begin with the first three categories:
     <th class="tg-47u2">Final Bounds</th>
   </tr>
   <tr>
-    <td class="tg-eh2d">Inserted</td>
-    <td class="tg-eh2d">No</td>
-    <td class="tg-eh2d">Yes</td>
+    <td class="tg-eh2d">insertedSprites</td>
+    <td class="tg-eh2d">❌</td>
+    <td class="tg-eh2d">✅</td>
   </tr>
   <tr>
-    <td class="tg-eh2d">Kept</td>
-    <td class="tg-eh2d">Yes</td>
-    <td class="tg-eh2d">Yes</td>
+    <td class="tg-eh2d">keptSprites</td>
+    <td class="tg-eh2d">✅</td>
+    <td class="tg-eh2d">✅</td>
   </tr>
   <tr>
-    <td class="tg-eh2d">Removed</td>
-    <td class="tg-eh2d">Yes</td>
-    <td class="tg-eh2d">No</td>
+    <td class="tg-eh2d">removedSprites</td>
+    <td class="tg-eh2d">✅</td>
+    <td class="tg-eh2d">❌</td>
   </tr>
 </table>
 
-***************
+## Example: Email Inbox
 
+This example shows all three categories of sprites.
 
+Click the blue envelope to see a new email appear in the inbox. This new email is an `insertedSprite`. It animates from a starting location off-screen to its final location in the inbox. This final location is the "final bounds" we referred to earlier, and is a property of the sprite. (The initial location is a property of this particular transition. We'll cover transitions in the next section.)
 
-In this example, emails are `removedSprites`, `insertedSprites`, or `keptSprites` after each animation. When an email gets deleted from the inbox, it becomes a `removedSprite`. The inbox is the initial bounds of the deleted email. 
+If you select an email then click the trash can, you'll delete that message. This message is a `removedSprite`. It animates from its "initial bounds" (its initial location in the DOM when you clicked delete) to off-screen right. The "initial bounds" is a property of this removed sprite, and the off-screen location is a property of the transition.
 
-When the inbox gets refreshed by clicking the mail icon, a new email gets added to the inbox. This new email is an `insertedSprite` that ends up in the inbox, so the inbox serves as the final bounds of the added email.
-
-Finally, the remaining emails in the inbox that are not deleted or added are `keptSprites`. The `keptSprites` only animate when other emails get added or deleted from the inbox. These emails are `keptSprites` because the inbox serves as both their initial and final bounds. 
+Finally, whenever a message is added or deleted, the remaining emails in the inbox smoothly animate to their new position in the list. These messages are `keptSprites`, and each of these sprites have both an "initial bounds" and "final bounds" property. These properties are how these messages are able to smoothly adjust to accommodate the entering and exiting emails.
 
 
 {{#docs-demo as |demo|}}
@@ -69,6 +88,6 @@ Finally, the remaining emails in the inbox that are not deleted or added are `ke
 
 
 
+The last two categories of sprites, `sentSprites` and `receivedSprites`, are covered in {{docs-link 'Animating between components' 'docs.between'}}.
 
-## For more on sentSprites and receivedSprites:
-See [Animating Between Components](../docs/between).
+For now, read on to learn all about Transitions.

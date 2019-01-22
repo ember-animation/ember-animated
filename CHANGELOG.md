@@ -1,3 +1,7 @@
+# 0.3.2
+ - HOUSEKEEPING: compatibility with newer ember versions with help from @toovy and @cibernox
+ - DOCS: sprite docs improvements by @samselikoff
+
 # 0.3.1
  - ENHANCEMENT: new beacon API
  - DOCS: lots of new docs added, thanks @savvymas

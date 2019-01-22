@@ -1,6 +1,6 @@
 {
   "name": "ember-animated",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Core animation primitives for Ember.",
   "keywords": [
     "animation",
@@ -24,7 +24,7 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.16.0",
+    "ember-cli-babel": "^7.1.2",
     "ember-cli-htmlbars": "^3.0.0",
     "ember-cli-version-checker": "^2.1.2",
     "ember-maybe-import-regenerator": "^0.1.5"
@@ -32,11 +32,13 @@
   "devDependencies": {
     "@ember/optional-features": "^0.6.3",
     "babel-eslint": "^8.2.3",
+    "babel-plugin-macros": "^2.4.5",
+    "babel-plugin-preval": "^3.0.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "broccoli-asset-rev": "^2.7.0",
-    "ember-ajax": "^3.1.0",
+    "build-if.macro": "^0.1.0",
     "ember-animated-tools": "^0.3.0",
-    "ember-cli": "~3.5.0",
+    "ember-cli": "~3.7.1",
     "ember-cli-addon-docs": "^0.6.0",
     "ember-cli-addon-docs-yuidoc": "^0.2.1",
     "ember-cli-dependency-checker": "^3.0.0",
@@ -60,7 +62,7 @@
     "ember-power-select": "^2.0.4",
     "ember-qunit": "^3.4.1",
     "ember-resolver": "^5.0.1",
-    "ember-source": "~3.5.0",
+    "ember-source": "~3.7.0",
     "ember-source-channel-url": "^1.1.0",
     "ember-svg-jar": "^1.2.1",
     "ember-truth-helpers": "^2.0.0",
@@ -78,6 +80,7 @@
     "configPath": "tests/dummy/config"
   },
   "resolutions": {
-    "ember-cli-addon-docs/ember-data": "^3.5.0"
+    "ember-cli-addon-docs/ember-data": "^3.5.0",
+    "ember-cli-addon-docs/ember-component-css": "^0.6.7"
   }
 }

@@ -66,9 +66,9 @@ export function logErrors(fn) {
 }
 
 export function current() {
-  let current = getCurrent();
-  if (current) {
-    return current.promise;
+  let cur = getCurrent();
+  if (cur) {
+    return cur.promise;
   }
 }
 
@@ -82,16 +82,16 @@ export function childrenSettled() {
 
 let withCurrent, getCurrent, onStack;
 {
-  let current;
+  let cur;
   let prior = [];
   withCurrent = function(routine, fn) {
-    prior.unshift({ microroutine: current });
-    current = routine;
+    prior.unshift({ microroutine: cur });
+    cur = routine;
     try {
       return fn();
     } finally {
       let restore = prior.shift();
-      current = restore.microroutine;
+      cur = restore.microroutine;
       if (restore.throw) {
         /*
            Why is this not really "unsafe"? Because if the
@@ -105,7 +105,7 @@ let withCurrent, getCurrent, onStack;
     }
   };
   getCurrent = function() {
-    return current;
+    return cur;
   };
   onStack = function(microroutine) {
     return prior.find(entry => entry.microroutine === microroutine);
@@ -113,11 +113,11 @@ let withCurrent, getCurrent, onStack;
 }
 
 function ensureCurrent(label) {
-  let current = getCurrent();
-  if (!current) {
+  let cur = getCurrent();
+  if (!cur) {
     throw new Error(`${label}: only works inside a running microroutine`);
   }
-  return current;
+  return cur;
 }
 
 

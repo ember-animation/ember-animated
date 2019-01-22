@@ -56,7 +56,7 @@ module("Unit | scheduler", function(hooks) {
   test('spawn: asynchronous exception', function(assert) {
     let resolve;
     let p = spawn(function * () {
-      yield new Promise(r => resolve = r);
+      yield (new Promise(r => resolve = r));
       throw new Error('boom');
     });
     resolve();
@@ -73,7 +73,7 @@ module("Unit | scheduler", function(hooks) {
       assert.log("parent started");
       let child = spawn(function * () {
         assert.log("child started");
-        yield new Promise(r => resolve = r);
+        yield (new Promise(r => resolve = r));
         assert.log("child finishing");
       });
       assert.log("parent finishing");
@@ -153,14 +153,14 @@ module("Unit | scheduler", function(hooks) {
       let promises = [null, null];
 
       function * first() {
-        assert.log(yield new Promise(resolve => {
+        assert.log(yield (new Promise(resolve => {
           resolvers[0] = () => resolve('hello');
-        }));
+        })));
       }
       function * second() {
-        assert.log(yield new Promise(resolve => {
+        assert.log(yield (new Promise(resolve => {
           resolvers[1] = () => resolve('world');
-        }));
+        })));
       }
       return spawn(function * () {
         promises[0] = spawn(first);
@@ -194,7 +194,7 @@ module("Unit | scheduler", function(hooks) {
     return spawn(function * () {
       let resolveFirst;
       let p = spawn(function * example() {
-        yield new Promise(r => resolveFirst = r);
+        yield (new Promise(r => resolveFirst = r));
         return new Promise(resolve => resolve(42));
       });
       resolveFirst();
@@ -207,7 +207,7 @@ module("Unit | scheduler", function(hooks) {
       let reject;
       let p = spawn(function * example() {
         try {
-          yield new Promise((_, r) => reject = r);
+          yield (new Promise((_, r) => reject = r));
         } catch(err) {
           assert.log(err);
         }
@@ -239,14 +239,14 @@ module("Unit | scheduler", function(hooks) {
       let resolve;
       let task = spawn(function * () {
         try {
-          yield new Promise(r => resolve = r);
+          yield (new Promise(r => resolve = r));
           assert.ok(false, "should never get here (1)");
         } catch(err) {
           assert.equal(err.message, 'TaskCancelation');
           // Here we attempt to keep going after being canceled. Even
           // when our promise resolves, the runtime should refuse to
           // reenter our generator.
-          yield new Promise(r => r());
+          yield (new Promise(r => r()));
           assert.ok(false, "should never get here (2)");
         }
         assert.ok(false, "should never get here (3)");
@@ -263,7 +263,7 @@ module("Unit | scheduler", function(hooks) {
       spawn(function * () {
         let resolve;
         let task = spawn(function * () {
-          yield new Promise(r => resolve = r);
+          yield (new Promise(r => resolve = r));
         });
         stop(task);
         resolve();
@@ -291,7 +291,7 @@ module("Unit | scheduler", function(hooks) {
     return spawn(function * () {
       let innerTask;
       let task = spawn(function * () {
-        yield new Promise(r => r());
+        yield (new Promise(r => r()));
         innerTask = current();
       });
       yield microwait();
@@ -304,7 +304,7 @@ module("Unit | scheduler", function(hooks) {
       let innerTask;
       let task = spawn(function * () {
         try {
-          yield new Promise((resolve, reject) => reject());
+          yield (new Promise((resolve, reject) => reject()));
         } catch(err) {
           innerTask = current();
         }
@@ -319,7 +319,7 @@ module("Unit | scheduler", function(hooks) {
       let innerTask;
       let task = spawn(function * () {
         try {
-          yield new Promise(() => null);
+          yield (new Promise(() => null));
         } finally {
           innerTask = current();
         }
@@ -348,7 +348,7 @@ module("Unit | scheduler", function(hooks) {
           yield spawn(function * () {
             stop(c);
             assert.ok(true, "stop does not throw here");
-            yield new Promise(() => {});
+            yield (new Promise(() => {}));
           });
         } catch (err) {
           assert.equal(err.message, 'TaskCancelation');
@@ -367,7 +367,7 @@ module("Unit | scheduler", function(hooks) {
       let task = spawn(function * () {
 
         spawnChild(function * example1() {
-          yield new Promise(r => resolveFirst = r);
+          yield (new Promise(r => resolveFirst = r));
           let third = new Promise(() => null);
           third.__ec_cancel__ = () => assert.log('third canceled');
           try {
@@ -378,7 +378,7 @@ module("Unit | scheduler", function(hooks) {
         });
 
         spawnChild(function * example2() {
-          yield new Promise(r => resolveSecond = r);
+          yield (new Promise(r => resolveSecond = r));
           let fourth = new Promise(() => null);
           fourth.__ec_cancel__ = () => assert.log('fourth canceled');
           try {
@@ -414,7 +414,7 @@ module("Unit | scheduler", function(hooks) {
         let resolveFirst, resolveSecond;
 
         spawnChild(function * example1() {
-          yield new Promise(r => resolveFirst = r);
+          yield (new Promise(r => resolveFirst = r));
           let third = new Promise(() => null);
           third.__ec_cancel__ = () => assert.log('third canceled');
           try {
@@ -425,7 +425,7 @@ module("Unit | scheduler", function(hooks) {
         });
 
         spawnChild(function * example2() {
-          yield new Promise(r => resolveSecond = r);
+          yield (new Promise(r => resolveSecond = r));
           let fourth = new Promise(() => null);
           fourth.__ec_cancel__ = () => assert.log('fourth canceled');
           try {
@@ -465,7 +465,7 @@ module("Unit | scheduler", function(hooks) {
         let resolveFirst, resolveSecond;
 
         spawnChild(function * example1() {
-          yield new Promise(r => resolveFirst = r);
+          yield (new Promise(r => resolveFirst = r));
           let third = new Promise(() => null);
           third.__ec_cancel__ = () => assert.log('third canceled');
           try {
@@ -476,7 +476,7 @@ module("Unit | scheduler", function(hooks) {
         });
 
         spawnChild(function * example2() {
-          yield new Promise(r => resolveSecond = r);
+          yield (new Promise(r => resolveSecond = r));
           let fourth = new Promise(() => null);
           fourth.__ec_cancel__ = () => assert.log('fourth canceled');
           try {
@@ -542,12 +542,12 @@ module("Unit | scheduler", function(hooks) {
       let promise = spawn(function * () {
 
         spawnChild(function * example1() {
-          yield new Promise(r => resolveFirst = r);
+          yield (new Promise(r => resolveFirst = r));
           assert.log('first finishing');
         });
 
         spawnChild(function * example2() {
-          yield new Promise(r => resolveSecond = r);
+          yield (new Promise(r => resolveSecond = r));
           assert.log('second finishing');
           throw new Error('boom');
         });
