@@ -26,6 +26,14 @@ export default Component.extend({
     });
   },
 
+  // TODO: "group" really doesn't belong on the animators! It belongs (probably
+  // as a data-attr) on their direct child elements. That way you can do
+  // matching per-sprite when you have multiple sprite in the animator.
+
+  // TODO: I think we can relax the initialInsertion/finalRemoval behavior to
+  // *always* make available inserted/removed sprites *if* there are received or
+  // sent sprites present in the same animator.
+
   boxContents: function * ({ receivedSprites, sentSprites, duration }) {
     sentSprites.forEach(sprite => {
       // this is needed because we're dealing with orphans who will no longer

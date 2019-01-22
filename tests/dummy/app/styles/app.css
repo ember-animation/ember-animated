@@ -636,6 +636,7 @@ h1.text {
   height: 400px;
   background-color: red;
   border-radius: 7px;
+  will-change: width, height;
 }
 
 .scenario-swap-nested--outer-box-small {
@@ -643,4 +644,5 @@ h1.text {
   height: 200px;
   background-color: red;
   border-radius: 7px;
+  will-change: width, height;
 }
