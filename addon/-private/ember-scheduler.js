@@ -17,6 +17,8 @@ export function task(...args) {
   return new TaskProperty(...args);
 }
 
+let handlerCounter = 0;
+
 class TaskProperty extends ComputedProperty {
 
   constructor(taskFn) {
@@ -48,7 +50,18 @@ class TaskProperty extends ComputedProperty {
     if (super.setup) {
       super.setup(...arguments);
     }
-    registerOnPrototype(addObserver, proto, this._observes, taskName, 'perform', true);
+
+    if (this._observes) {
+      for (let i = 0; i < this._observes.length; ++i) {
+        let name = this._observes[i];
+        let handlerName = `_ember_animated_handler_${handlerCounter++}`;
+        proto[handlerName] = function (...args) {
+          let task = this.get(taskName);
+          scheduleOnce('actions', task, '_safeInvokeCallback', 'perform', args);
+        };
+        addObserver(proto, name, null, handlerName);
+      }
+    }
   }
 
 }
@@ -157,25 +170,6 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
       }
     }
   });
-}
-function registerOnPrototype(addListenerOrObserver, proto, names, taskName, taskMethod, once) {
-  if (names) {
-    for (let i = 0; i < names.length; ++i) {
-      let name = names[i];
-      addListenerOrObserver(proto, name, null, makeTaskCallback(taskName, taskMethod, once));
-    }
-  }
-}
-function makeTaskCallback(taskName, method, once) {
-  return function (...args) {
-    let task = this.get(taskName);
-
-    if (once) {
-      scheduleOnce('actions', task, '_safeInvokeCallback', method, args);
-    } else {
-      task._safeInvokeCallback(method, args);
-    }
-  };
 }
 
 function cancelAllButLast(task, privTask) {
