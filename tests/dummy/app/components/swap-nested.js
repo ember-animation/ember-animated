@@ -34,6 +34,8 @@ export default Component.extend({
   // *always* make available inserted/removed sprites *if* there are received or
   // sent sprites present in the same animator.
 
+  // TODO: animators as direct children of each other are problematic.
+
   boxContents: function * ({ receivedSprites, sentSprites, duration }) {
     sentSprites.forEach(sprite => {
       // this is needed because we're dealing with orphans who will no longer
