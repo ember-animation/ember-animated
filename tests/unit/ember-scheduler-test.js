@@ -72,7 +72,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
     let didResolve = false;
     let Class = EmberObject.extend({
       hello: task(function * () {
-        yield new Promise(r => resolve = r);
+        yield (new Promise(r => resolve = r));
       })
     });
     let object = Class.create();
@@ -93,7 +93,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
     let resolve;
     let Class = EmberObject.extend({
       hello: task(function * () {
-        yield new Promise(r => resolve = r);
+        yield (new Promise(r => resolve = r));
         assert.insideRunLoop();
       })
     });
@@ -128,7 +128,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
     let Class = EmberObject.extend({
       hello: task(function * () {
         assert.ok(false, "should not run");
-        yield new Promise(() => null);
+        yield (new Promise(() => null));
       })
     });
     let object = Class.create();
@@ -220,7 +220,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
     let resolve;
     let Class = EmberObject.extend({
       hello: task(function * () {
-        yield new Promise(r => resolve = r);
+        yield (new Promise(r => resolve = r));
       }),
       message: computed('hello.isRunning', function() {
         return this.get('hello.isRunning') ? 'yup' : 'nope';
