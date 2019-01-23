@@ -1,3 +1,7 @@
+# 0.4.1
+ - BUGFIX: previous style continuity feature was slightly too aggressive for line-height
+ - BUGFIX: fix a crash when using SVGs as orphan sprites
+
 # 0.4.0
  - ENHANCEMENT: improved style continuity for orphan sprites
  - DOCS: improved styling by @samselikoff
