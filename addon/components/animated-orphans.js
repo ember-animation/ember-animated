@@ -296,11 +296,18 @@ export default Component.extend({
       // initialComputedStyles that were snapshotted before it was moved. See
       // COPIED_CSS_PROPERTIES to see exactly which property we copy (we don't
       // do all of them, that sounds expensive).
-      sprite.applyStyles(sprite.initialComputedStyle);
+      //
+      // Also, unfortunately getComputedStyles has legacy behavior for
+      // line-height that gives us the "used value" not the "computed value".
+      // The used value doesn't inherit correctly, so we can't set it here, so
+      // we're pulling that one out.
+      let s = Object.assign({}, sprite.initialComputedStyle);
+      delete s['line-height'];
+      sprite.applyStyles(s);
 
+      this.element.appendChild(sprite.element);
       sprite.lock();
       sprite.reveal();
-      this.element.appendChild(sprite.element);
       activeSprites.push(sprite);
       this._elementToChild.set(sprite.element, sprite.owner);
     }

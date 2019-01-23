@@ -23,7 +23,9 @@ export const COPIED_CSS_PROPERTIES = [
   'color',
   'background-color',
   'letter-spacing',
+  'line-height',
   'text-align',
+  'text-transform',
 ];
 
 const numericCSSProps = {
