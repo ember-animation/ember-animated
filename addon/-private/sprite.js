@@ -18,9 +18,14 @@ import { camelize } from '@ember/string';
 export const COPIED_CSS_PROPERTIES = [
   'opacity',
   'font-size',
+  'font-family',
+  'font-weight',
   'color',
   'background-color',
-  'letter-spacing'
+  'letter-spacing',
+  'line-height',
+  'text-align',
+  'text-transform',
 ];
 
 const numericCSSProps = {

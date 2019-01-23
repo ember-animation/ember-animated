@@ -1,3 +1,11 @@
+# 0.4.1
+ - BUGFIX: previous style continuity feature was slightly too aggressive for line-height
+ - BUGFIX: fix a crash when using SVGs as orphan sprites
+
+# 0.4.0
+ - ENHANCEMENT: improved style continuity for orphan sprites
+ - DOCS: improved styling by @samselikoff
+
 # 0.3.2
  - HOUSEKEEPING: compatibility with newer ember versions with help from @toovy and @cibernox
  - DOCS: sprite docs improvements by @samselikoff
