@@ -327,9 +327,9 @@ module('Integration | Component | animated container', function(hooks) {
           margin-bottom: 20px;
         }
       </style>
-      {{#animated-container class="example"}}
+      <AnimatedContainer class="example">
         {{fake-animator}}
-      {{/animated-container}}
+      </AnimatedContainer>
       <div class="after">This comes after</div>
     `);
 
@@ -359,9 +359,9 @@ module('Integration | Component | animated container', function(hooks) {
           margin-bottom: 20px;
         }
       </style>
-      {{#animated-container class="example"}}
+      <AnimatedContainer class="example">
         {{fake-animator}}
-      {{/animated-container}}
+      </AnimatedContainer>
       <div class="after">This comes after</div>
     `);
 

@@ -2,13 +2,13 @@
 {{scroll-to-top}}
 Sprites can travel back and forth between two separate lists as `receivedSprites` and `sentSprites`. Sprites animating between components always store their initial and final bounds. Two lists can identify when a sprite is animating between them by checking these bounds. If the initial bounds and the final bounds of a sprite are interchanging, then the sprite is animating between two lists (the initial bounds become the final bounds or the final bounds become the initial bounds).
 
-This is useful for animating elements that are repeatedly inserted or removed from one component to another. For example, imagine that you are hosting a dinner party and you need to keep track of the people that are going and not going. You would have a list of people that are going, and a list of the people that can't go. As people change their minds from going to not going, they would move back and forth between the two lists. `receivedSprites` and `sentSprites` help sprites animate smoothly between two lists or components. 
+This is useful for animating elements that are repeatedly inserted or removed from one component to another. For example, imagine that you are hosting a dinner party and you need to keep track of the people that are going and not going. You would have a list of people that are going, and a list of the people that can't go. As people change their minds from going to not going, they would move back and forth between the two lists. `receivedSprites` and `sentSprites` help sprites animate smoothly between two lists or components.
 
-## receivedSprites: 
-When the final bounds of a sprite become its initial bounds, it is a `receivedSprite` on the list that it is going to. 
+## receivedSprites:
+When the final bounds of a sprite become its initial bounds, it is a `receivedSprite` on the list that it is going to.
 
-## sentSprites: 
-Sent sprites are the reverse of `receivedSprites`. When the initial bounds of a sprite become its final bounds, it is a `sentSprite` on the list that it came from. 
+## sentSprites:
+Sent sprites are the reverse of `receivedSprites`. When the initial bounds of a sprite become its final bounds, it is a `sentSprite` on the list that it came from.
 
 
 <style type="text/css">
@@ -55,9 +55,9 @@ Sent sprites are the reverse of `receivedSprites`. When the initial bounds of a 
 
 
 ### Animating Across Lists
-In this example, the office is hosting a dinner party. Everyone received an invitation with two options "going" and "can't go".  The people invited can change their response as many times as they want. 
+In this example, the office is hosting a dinner party. Everyone received an invitation with two options "going" and "can't go".  The people invited can change their response as many times as they want.
 
-<ul> 
+<ul>
   <li>If Dwight said he was going then changes his mind, he will be removed from the "going" list and added to the "can't go" list.</li>
 
   <li>This means that Dwight is a `sentSprite` on the going list and a `receivedSprite` on the "can't go" list.</li>
@@ -82,13 +82,13 @@ In this example, the office is hosting a dinner party. Everyone received an invi
 
 
 ### Animating Across Routes
-Just like animations can be applied to components, they can be applied to route transitions. This is an example of animating sprites across different routes. When you select an icon from the list, the selected image and the list of images animate as the route changes. 
+Just like animations can be applied to components, they can be applied to route transitions. This is an example of animating sprites across different routes. When you select an icon from the list, the selected image and the list of images animate as the route changes.
 
 {{#docs-demo as |demo|}}
     {{#demo.example name="hero"}}
-      {{#animated-container class="hero-example"}}
+      <AnimatedContainer class="hero-example">
         {{hero-example}}
-      {{/animated-container}}
+      </AnimatedContainer>
     {{/demo.example}}
 
     {{demo.snippet 'hero-snippet.hbs' label='hero.hbs'}}

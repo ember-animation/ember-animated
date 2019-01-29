@@ -7,6 +7,7 @@ import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
 import layout from '../templates/components/animated-container';
+import { deprecate } from '@ember/application/deprecations';
 
 /**
  Provides a boundary between animator components and the surrounding document
@@ -81,6 +82,11 @@ export default Component.extend({
     this.get('motionService')
       .register(this)
       .observeDescendantAnimations(this, this.maybeAnimate);
+
+    deprecate(`passing a "class" argument to animated-container is deprecated. Switch to angle bracket invocation and pass an HTML attribute instead`, !this.class, {
+      id: 'ember-animated-container-class-arg',
+      until: '1.0.0'
+    });
   },
 
   didInsertElement() {

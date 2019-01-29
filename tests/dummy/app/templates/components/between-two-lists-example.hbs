@@ -6,9 +6,9 @@
     {{svg-jar "rotate-left"}} <input type="checkbox" checked={{bounceBack}} onchange={{action (mut bounceBack) (not bounceBack)}}>
   </div>
 
-  {{#animated-container}}
+  <AnimatedContainer>
 
-    {{#animated-container class="left"}}
+    <AnimatedContainer class="left">
       <div class="guest-list-header">Going{{svg-jar "chevron-down"}}</div>
       {{#animated-each leftItems use=transition as |item|}}
         <div class="each-item">
@@ -19,10 +19,10 @@
           <button {{action "move" item}}>{{svg-jar "ban"}}</button>
         </div>
       {{/animated-each}}
-    {{/animated-container}}
+    </AnimatedContainer>
 
 
-    {{#animated-container class="right"}}
+    <AnimatedContainer class="right">
       <div class="guest-list-header">Can't Go{{svg-jar "chevron-down"}}</div>
       {{#animated-each rightItems use=transition as |item|}}
         <div class="each-item">
@@ -31,9 +31,9 @@
           <button {{action "move" item}}>{{svg-jar "check"}}</button>
         </div>
       {{/animated-each}}
-    {{/animated-container}}
+    </AnimatedContainer>
 
-  {{/animated-container}}
+  </AnimatedContainer>
 
 
 </div>
