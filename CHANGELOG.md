@@ -1,3 +1,18 @@
+# master
+ - DEPRECATION: AnimatedContainer's "class" _argument_ is deprecated in favor of the class _attribute_. The old usage was
+
+    ```hbs
+    {{!-- these are exactly equivalent to each other --}}
+    {{#animated-container class=something}}
+    <AnimatedContainer @class={{something}}>
+    ```
+
+    The new usage is
+
+    ```hbs
+    <AnimatedContainer class={{something}}>
+    ```
+
 # 0.4.1
  - BUGFIX: previous style continuity feature was slightly too aggressive for line-height
  - BUGFIX: fix a crash when using SVGs as orphan sprites
