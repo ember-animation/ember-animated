@@ -5,11 +5,13 @@ import { Resize } from '../motions/resize';
 import { task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
+import { componentNodes } from '../-private/ember-internals';
+import layout from '../templates/components/animated-container';
 
 /**
  Provides a boundary between animator components and the surrounding document
- which smoothly resizes as animators change. Use animated-container whenever you 
- need to "hold a place for" some animated content while that content is animating. 
+ which smoothly resizes as animators change. Use animated-container whenever you
+ need to "hold a place for" some animated content while that content is animating.
   ```hbs
   <button {{action toggleThing}}>Toggle</button>
   {{#animated-container}}
@@ -30,11 +32,11 @@ import { afterRender, microwait } from '..';
 
   export default Component.extend({
     showThing: false,
-    
+
     toggleThing() {
       this.set('showThing', !this.get('showThing'));
     },
-  
+
     transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
       insertedSprites.forEach(sprite => {
         sprite.startAtPixel({ x: window.innerWidth });
@@ -54,12 +56,14 @@ import { afterRender, microwait } from '..';
   @public
 */
 export default Component.extend({
-  classNames: ['animated-container'],
+  layout,
+  tagName: '',
+
   motionService: service('-ea-motion'),
    /**
-   * Whether to animate the initial render. You will probably also need to set 
-   * initialInsertion=true on a child component of animated-container. 
-   * Defaults to false. 
+   * Whether to animate the initial render. You will probably also need to set
+   * initialInsertion=true on a child component of animated-container.
+   * Defaults to false.
     @argument onInitialRender
     @type Boolean
   */
@@ -81,6 +85,12 @@ export default Component.extend({
 
   didInsertElement() {
     this._inserted = true;
+  },
+
+  _ownElement() {
+    if (this._inserted) {
+      return componentNodes(this).firstNode;
+    }
   },
 
   willDestroyElement() {
@@ -114,9 +124,10 @@ export default Component.extend({
     let service = this.get('motionService');
     let sprite;
     let useMotion;
+    let element = this._ownElement();
 
-    if (this._inserted){
-      sprite = Sprite.sizedStartingAt(this.element);
+    if (element){
+      sprite = Sprite.sizedStartingAt(element);
       this.sprite = sprite;
       sprite.lock();
       useMotion = true;
@@ -133,7 +144,7 @@ export default Component.extend({
 
     yield * service.staticMeasurement(() => {
       if (!sprite) {
-        sprite = Sprite.sizedEndingAt(this.element);
+        sprite = Sprite.sizedEndingAt(this._ownElement());
         this.sprite = sprite;
       } else {
         sprite.measureFinalBounds();

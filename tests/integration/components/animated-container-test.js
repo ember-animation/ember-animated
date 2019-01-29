@@ -489,4 +489,14 @@ module('Integration | Component | animated container', function(hooks) {
     assert.closeSize(5, actual, { width: 0, height: 0});
   });
 
+  test('accepts splattributes', async function(assert) {
+    await render(hbs`
+      <AnimatedContainer class="hello world" data-foo="bar"/>
+    `);
+
+    let elt = this.element.querySelector('.animated-container');
+    assert.ok(elt.classList.contains('hello'), 'found hello');
+    assert.ok(elt.classList.contains('world'), 'found world');
+    assert.equal(elt.dataset['foo'], 'bar');
+  });
 });
