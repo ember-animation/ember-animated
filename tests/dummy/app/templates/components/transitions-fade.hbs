@@ -4,12 +4,12 @@
 </div>
 
 <div class="scenario-transitions clearfix">
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-if fadeMessage use=fade }}
       <div class="message">
         {{mail}}
       </div>
     {{/animated-if}}
-  {{/animated-container}}
+  </AnimatedContainer>
 </div>
 {{! END-SNIPPET }}

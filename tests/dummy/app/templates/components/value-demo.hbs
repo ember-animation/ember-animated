@@ -1,7 +1,7 @@
-{{#animated-container}}
+<AnimatedContainer>
   {{#animated-value counter rules=rules duration=100 as |v|}}
     <span class="numbers">{{v}}</span>
   {{/animated-value}}
-{{/animated-container}}
+</AnimatedContainer>
 <button {{action "increment"}}>+</button>
 <button {{action "decrement"}}>-</button>

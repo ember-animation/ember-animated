@@ -2,7 +2,7 @@
 <div class="move-over">
   <label>Show Hello<input type="checkbox" checked={{showHello}} onchange={{action (mut showHello) (not showHello)}}></label>
 
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-if showHello rules=rules}}
       <div class="hello">
         Hello
@@ -12,6 +12,6 @@
         Goodbye
       </div>
     {{/animated-if}}
-  {{/animated-container}}
+  </AnimatedContainer>
 </div>
 {{!END-SNIPPET}}

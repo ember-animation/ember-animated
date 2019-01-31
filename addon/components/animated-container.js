@@ -15,13 +15,13 @@ import { deprecate } from '@ember/application/deprecations';
  need to "hold a place for" some animated content while that content is animating.
   ```hbs
   <button {{action toggleThing}}>Toggle</button>
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-if showThing use=transition }}
         <div class="message" {{action "toggleThing"}}>
             Hello!
         </div>
     {{/animated-if}}
-  {{/animated-container}}
+  </AnimatedContainer>
   <p>
     This is outside of the container.
   </p>

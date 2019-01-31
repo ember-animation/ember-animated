@@ -8,7 +8,7 @@
     <button {{action "startChaos"}}>Auto</button>
   {{/if}}
 
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-each items key="id" use=transition as |item|}}
       <div>
         {{item.id}}
@@ -17,7 +17,7 @@
         <button {{action "mutate" item}}>M</button>
       </div>
     {{/animated-each}}
-  {{/animated-container}}
+  </AnimatedContainer>
 
   This is after the list. {{message}}
 </div>
