@@ -499,4 +499,13 @@ module('Integration | Component | animated container', function(hooks) {
     assert.ok(elt.classList.contains('world'), 'found world');
     assert.equal(elt.dataset['foo'], 'bar');
   });
+
+  test('accepts custom tagName', async function(assert) {
+    await render(hbs`
+      <AnimatedContainer data-test-me @tagName="section"/>
+    `);
+
+    let elt = this.element.querySelector('[data-test-me]');
+    assert.equal(elt.tagName, 'SECTION');
+  });
 });
