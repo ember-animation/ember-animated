@@ -2,14 +2,14 @@
   <div class="hero-list">
     {{#each model as |person|}}
       {{#link-to "demos.hero.detail" person.id tagName="div"}}
-        {{#animated-container}}
+        <AnimatedContainer>
           {{#animated-value person duration=1000 as |p|}}
             <div class="hero-list-image">
               <img src={{p.avatarUrl}}>
               <span>Thumbnail</span>
             </div>
           {{/animated-value}}
-        {{/animated-container}}
+        </AnimatedContainer>
         <p>{{person.name}}</p>
       {{/link-to}}
     {{/each}}

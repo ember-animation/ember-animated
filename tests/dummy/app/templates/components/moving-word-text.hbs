@@ -4,7 +4,7 @@
   <button {{action "toggle"}}>Toggle</button>
 
   {{#moving-words-demo as |demo|}}
-    {{#animated-container}}
+    <AnimatedContainer>
       {{#animated-if listMode use=fade duration=1000 }}
         <ul>
           <li>{{demo.moving-word "framework"}}</li>
@@ -16,7 +16,7 @@
           A {{demo.moving-word "framework"}} for creating {{demo.moving-word "ambitious"}} web {{demo.moving-word "applications"}}.
         </p>
       {{/animated-if}}
-    {{/animated-container}}
+    </AnimatedContainer>
   {{/moving-words-demo}}
 
 </div>

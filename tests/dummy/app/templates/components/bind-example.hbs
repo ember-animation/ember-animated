@@ -1,16 +1,16 @@
 <div class="scenario-bind clearfix">
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-value counter rules=rules duration=1000 as |v|}}
       <span class="left-count">{{v}}</span>
     {{/animated-value}}
-  {{/animated-container}}
+  </AnimatedContainer>
 
   {{#if showBoth}}
-    {{#animated-container}}
+    <AnimatedContainer>
       {{#animated-value counter rules=rules2 duration=1000 as |v|}}
         <span class="right-count">{{v}}</span>
       {{/animated-value}}
-    {{/animated-container}}
+    </AnimatedContainer>
   {{/if}}
 
   <button {{action "increment"}}>+</button>

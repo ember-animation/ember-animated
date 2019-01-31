@@ -3,22 +3,22 @@
     <label>Bounce back <input type="checkbox" checked={{bounceBack}} onchange={{action (mut bounceBack) (not bounceBack)}}></label>
   </div>
 
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-each leftItems use=transition as |item|}}
       <div>
         {{item.id}}
         <button {{action "move" item}}>&rarr;</button>
       </div>
     {{/animated-each}}
-  {{/animated-container}}
+  </AnimatedContainer>
 
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-each rightItems use=transition as |item|}}
       <div>
         <button {{action "move" item}}>&larr;</button>
         {{item.id}}
       </div>
     {{/animated-each}}
-  {{/animated-container}}
+  </AnimatedContainer>
 
 </div>

@@ -10,21 +10,21 @@
   </div>
 
   {{#if leftItems}}
-    {{#animated-container class="left"}}
+    <AnimatedContainer class="left">
       {{#animated-each leftItems use=transition key="id" as |item|}}
         <div class={{if distinguishSides "left-item"}} >
           {{item.message}}
         </div>
       {{/animated-each}}
-    {{/animated-container}}
+    </AnimatedContainer>
   {{else}}
-    {{#animated-container class="right"}}
+    <AnimatedContainer class="right">
       {{#animated-each rightItems use=transition key="id" as |item|}}
         <div>
           {{item.message}}
         </div>
       {{/animated-each}}
-    {{/animated-container}}
+    </AnimatedContainer>
   {{/if}}
 
   {{message}}

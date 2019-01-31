@@ -3,14 +3,14 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-value';
 
 /**
-  A component that animates when a single value changes. 
+  A component that animates when a single value changes.
   Animated-value uses the same arguments as animated-each.
   ```hbs
-    {{#animated-container}}
+    <AnimatedContainer>
       {{#animated-value counter rules=rules duration=100 as |v|}}
           <span class="numbers">{{v}}</span>
       {{/animated-value}}
-    {{/animated-container}}
+    </AnimatedContainer>
 
     <button {{action "increment"}}>+</button>
     <button {{action "decrement"}}>-</button>
@@ -29,7 +29,7 @@ import layout from '../templates/components/animated-value';
     },
 
     counter: 10,
-    
+
     actions: {
       increment() {
         this.set('counter', this.get('counter') + 1);

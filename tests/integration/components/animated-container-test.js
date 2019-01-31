@@ -73,11 +73,11 @@ module('Integration | Component | animated container', function(hooks) {
 
   test('simple render', async function(assert) {
     await render(hbs`
-      {{#animated-container}}
+      <AnimatedContainer>
         <div class="inside">
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     this.element.querySelector('.inside').style.height = '210px';
@@ -97,11 +97,11 @@ module('Integration | Component | animated container', function(hooks) {
 
   test('locks size', async function(assert) {
     await render(hbs`
-      {{#animated-container}}
+      <AnimatedContainer>
         <div class="inside">
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
     this.element.querySelector('.inside').style.height = '210px';
 
@@ -129,11 +129,11 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await render(hbs`
-      {{#animated-container motion=TestMotion}}
+      <AnimatedContainer @motion={{TestMotion}}>
         <div class="inside">
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     run(() => {
@@ -161,11 +161,11 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await render(hbs`
-      {{#animated-container motion=TestMotion}}
+      <AnimatedContainer @motion={{TestMotion}}>
         <div class="inside">
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     run(() => {
@@ -187,11 +187,11 @@ module('Integration | Component | animated container', function(hooks) {
     let block = new EmberPromise(resolve => unblock = resolve);
 
     await render(hbs`
-      {{#animated-container}}
+      <AnimatedContainer>
         <div class="inside">
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     run(() => {
@@ -219,11 +219,11 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await render(hbs`
-      {{#animated-container motion=TestMotion}}
+      <AnimatedContainer @motion={{TestMotion}}>
         <div class="inside">
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     run(() => {
@@ -252,9 +252,9 @@ module('Integration | Component | animated container', function(hooks) {
       finalHeight: 200
     });
     await render(hbs`
-      {{#animated-container motion=TestMotion onInitialRender=true}}
+      <AnimatedContainer @motion={{TestMotion}} @onInitialRender={{true}}>
         {{fake-animator onInitialRender=opts}}
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     await animationsSettled();
@@ -263,11 +263,11 @@ module('Integration | Component | animated container', function(hooks) {
 
   test("Accounts for top margin collapse between self and child", async function(assert) {
     await render(hbs`
-      {{#animated-container}}
+      <AnimatedContainer>
         <div class="inside" style="margin-top: 10px; height: 100px;">
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     assert.visuallyConstant(this.element.querySelector('.animated-container'), () => {
@@ -280,12 +280,12 @@ module('Integration | Component | animated container', function(hooks) {
 
   test("Accounts for top margin collapse between self and descendant", async function(assert) {
     await render(hbs`
-      {{#animated-container}}
+      <AnimatedContainer>
         <div class="inside">
           <div style="margin-top: 10px; height: 100px;"></div>
           {{fake-animator}}
         </div>
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
 
     assert.visuallyConstant(this.element.querySelector('.animated-container'), () => {
@@ -299,11 +299,11 @@ module('Integration | Component | animated container', function(hooks) {
   test("Accounts for bottom margin collapse between self and child", async function(assert) {
     await render(hbs`
       <div style="border: 1px solid black">
-        {{#animated-container}}
+        <AnimatedContainer>
           <div class="inside" style="margin-bottom: 10px; height: 100px;">
             {{fake-animator}}
           </div>
-        {{/animated-container}}
+        </AnimatedContainer>
         <div class="after">This comes after</div>
       </div>
     `);
@@ -327,9 +327,9 @@ module('Integration | Component | animated container', function(hooks) {
           margin-bottom: 20px;
         }
       </style>
-      {{#animated-container class="example"}}
+      <AnimatedContainer class="example">
         {{fake-animator}}
-      {{/animated-container}}
+      </AnimatedContainer>
       <div class="after">This comes after</div>
     `);
 
@@ -359,9 +359,9 @@ module('Integration | Component | animated container', function(hooks) {
           margin-bottom: 20px;
         }
       </style>
-      {{#animated-container class="example"}}
+      <AnimatedContainer class="example">
         {{fake-animator}}
-      {{/animated-container}}
+      </AnimatedContainer>
       <div class="after">This comes after</div>
     `);
 
@@ -392,11 +392,11 @@ module('Integration | Component | animated container', function(hooks) {
     });
     this.set('items', ['a']);
     await render(hbs`
-      {{#animated-container motion=TestMotion}}
+      <AnimatedContainer @motion={{TestMotion}}>
         {{#animated-each items use=transition as |item|}}
           <div style="height: 10px"></div>
         {{/animated-each}}
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
     await animationsSettled();
     this.set('items', ['a', 'b']);
@@ -415,11 +415,11 @@ module('Integration | Component | animated container', function(hooks) {
   test("has visual continuity at start", async function(assert) {
     this.set('transition', function * () {});
     await this.render(hbs`
-      {{#animated-container}}
+      <AnimatedContainer>
         {{#animated-if showThing use=transition duration=1000}}
           <div>Content</div>
         {{/animated-if}}
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
     await animationsSettled();
     let before = _bounds(this.element.querySelector('.animated-container'));
@@ -434,11 +434,11 @@ module('Integration | Component | animated container', function(hooks) {
   test("has visual continuity at end", async function(assert) {
     this.set('transition', function * () {});
     await this.render(hbs`
-      {{#animated-container}}
+      <AnimatedContainer>
         {{#animated-if showThing use=transition duration=1000}}
           <div>Content</div>
         {{/animated-if}}
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
     await animationsSettled();
     time.pause();
@@ -456,11 +456,11 @@ module('Integration | Component | animated container', function(hooks) {
     this.set('transition', function * () {});
     await this.render(hbs`
       <div style="transform: scale(0.5)">
-        {{#animated-container}}
+        <AnimatedContainer>
           {{#animated-if showThing use=transition duration=1000}}
             <div>Content</div>
           {{/animated-if}}
-        {{/animated-container}}
+        </AnimatedContainer>
       </div>
     `);
     await animationsSettled();
@@ -478,15 +478,34 @@ module('Integration | Component | animated container', function(hooks) {
     this.set('showThing', true);
     time.pause();
     await this.render(hbs`
-      {{#animated-container onInitialRender=true}}
+      <AnimatedContainer @onInitialRender={{true}}>
         {{#animated-if showThing use=transition initialInsertion=true duration=1000}}
           <div style="height: 100px">Content</div>
         {{/animated-if}}
-      {{/animated-container}}
+      </AnimatedContainer>
     `);
     await time.advance(10);
     let actual = _bounds(this.element.querySelector('.animated-container'));
     assert.closeSize(5, actual, { width: 0, height: 0});
   });
 
+  test('accepts splattributes', async function(assert) {
+    await render(hbs`
+      <AnimatedContainer class="hello world" data-foo="bar"/>
+    `);
+
+    let elt = this.element.querySelector('.animated-container');
+    assert.ok(elt.classList.contains('hello'), 'found hello');
+    assert.ok(elt.classList.contains('world'), 'found world');
+    assert.equal(elt.dataset['foo'], 'bar');
+  });
+
+  test('accepts custom tagName', async function(assert) {
+    await render(hbs`
+      <AnimatedContainer data-test-me @tagName="section"/>
+    `);
+
+    let elt = this.element.querySelector('[data-test-me]');
+    assert.equal(elt.tagName, 'SECTION');
+  });
 });

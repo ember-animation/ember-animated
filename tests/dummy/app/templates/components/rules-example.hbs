@@ -3,10 +3,10 @@
   <button {{action "increment"}}>+</button>
   <button {{action "decrement"}}>-</button>
 
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-value counter rules=rules duration=1000 as |v|}}
       <span class="count">{{v}}</span>
     {{/animated-value}}
-  {{/animated-container}}
+  </AnimatedContainer>
 </div>
 {{! END-SNIPPET }}

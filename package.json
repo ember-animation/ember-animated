@@ -24,10 +24,12 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
+    "ember-angle-bracket-invocation-polyfill": "git+https://github.com/ef4/ember-angle-bracket-invocation-polyfill#02e90e76397303ba72158d46b9a0944b05c00b86",
     "ember-cli-babel": "^7.1.2",
     "ember-cli-htmlbars": "^3.0.0",
     "ember-cli-version-checker": "^2.1.2",
-    "ember-maybe-import-regenerator": "^0.1.5"
+    "ember-maybe-import-regenerator": "^0.1.5",
+    "ember-named-arguments-polyfill": "^1.0.0"
   },
   "devDependencies": {
     "@ember/optional-features": "^0.6.3",
