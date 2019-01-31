@@ -15,17 +15,16 @@
 */
 
 export default class Transform {
-  constructor(a, b, c, d, tx, ty) {
-    // WARNING: never mutate an existing Transform. Some of them are
-    // shared. Operations need to return new Transforms instead.
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.tx = tx;
-    this.ty = ty;
-  }
-  serialize() {
+  constructor(
+    readonly a: number,
+    readonly b: number,
+    readonly c: number,
+    readonly d: number,
+    readonly tx: number,
+    readonly ty: number
+  ) {}
+
+  serialize(): string {
     if (this.isIdentity()) {
       return 'none';
     }
@@ -33,7 +32,7 @@ export default class Transform {
   }
 
   // See the comment below on `const identity`.
-  isIdentity() {
+  isIdentity(): boolean {
     return this === identity || (
       this.a === 1 &&
         this.b === 0 &&
@@ -44,7 +43,7 @@ export default class Transform {
     );
   }
 
-  mult(other) {
+  mult(other: Transform): Transform {
     // This is deliberately not isIdentity(). I'm optimizing for the
     // case where there was no preexisting transform at all.
     if (this === identity) { return other; }
@@ -75,16 +74,17 @@ export const identity = new Transform(1, 0, 0, 1, 0, 0);
 
 const matrixPattern = /matrix\((.*)\)/;
 
-function parseTransform(matrixString) {
+function parseTransform(matrixString: string): Transform {
   let match = matrixPattern.exec(matrixString);
   if (!match) {
     return identity;
   }
-  return new Transform(...match[1].split(',').map(parseFloat));
+  let [a, b, c, d, tx, ty] = match[1].split(',').map(parseFloat);
+  return new Transform(a, b, c, d, tx, ty);
 }
 
-function parseOrigin(originString) {
-  return originString.split(' ').map(parseFloat);
+function parseOrigin(originString: string): [number, number] {
+  return originString.split(' ').map(parseFloat) as [number, number];
 }
 
 /**
@@ -92,13 +92,14 @@ function parseOrigin(originString) {
   transform of this element and all its ancestors.
 
   @function cumulativeTransform
-  @param {HTMLElement} elt
+  @param {HTMLElement} current
   @return {Transform}
 */
-export function cumulativeTransform(elt) {
+export function cumulativeTransform(elt: HTMLElement) {
   let accumulator = null;
-  while (elt && elt.nodeType === 1) {
-    let transform = ownTransform(elt);
+  let current: HTMLElement | null = elt;
+  while (current && current.nodeType === 1) {
+    let transform = ownTransform(current);
     if (transform !== identity && !transform.isIdentity()) {
       if (accumulator) {
         accumulator = transform.mult(accumulator);
@@ -106,7 +107,7 @@ export function cumulativeTransform(elt) {
         accumulator = transform;
       }
     }
-    elt = elt.parentElement;
+    current = current.parentElement;
   }
   return accumulator || identity;
 }
@@ -119,9 +120,9 @@ export function cumulativeTransform(elt) {
  * @param {HTMLElement} elt
  * @return {Transform} instance representing this element's css transform property.
  */
-export function ownTransform(elt) {
+export function ownTransform(elt: HTMLElement): Transform {
   let eltStyles = window.getComputedStyle(elt);
-  let t = eltStyles.transform !== '' ? eltStyles.transform : elt.style.transform;
+  let t = eltStyles.transform !== '' ? eltStyles.transform! : elt.style.transform!;
   if (t === 'none') {
     // This constant value is an optimization, and we rely on that in
     // cumulativeTransform
@@ -130,7 +131,7 @@ export function ownTransform(elt) {
   let matrix = parseTransform(t);
   if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
     // If there is any rotation, scaling, or skew we need to do it within the context of transform-origin.
-    let origin = eltStyles.transformOrigin !== '' ? eltStyles.transformOrigin : elt.style.transformOrigin;
+    let origin = eltStyles.transformOrigin !== '' ? eltStyles.transformOrigin! : elt.style.transformOrigin!;
     let [originX, originY] = parseOrigin(origin);
     if (originX === 0 && originY === 0) {
       // transform origin is at 0,0 so it will have no effect, so we're done.
