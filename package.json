@@ -24,7 +24,7 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
-    "ember-angle-bracket-invocation-polyfill": "git+https://github.com/ef4/ember-angle-bracket-invocation-polyfill#02e90e76397303ba72158d46b9a0944b05c00b86",
+    "ember-angle-bracket-invocation-polyfill": "git+https://github.com/rwjblue/ember-angle-bracket-invocation-polyfill#f7771dc1d84764a642c769d794293d3e55dd3a6d",
     "ember-cli-babel": "^7.1.2",
     "ember-cli-htmlbars": "^3.0.0",
     "ember-cli-version-checker": "^2.1.2",
