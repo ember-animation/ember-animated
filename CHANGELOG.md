@@ -1,4 +1,6 @@
 # master
+ - BREAKING: Sprite#initialBounds, Sprite#finalBounds, and the bounds-returning test helpers are all now true DOMRect instances, as opposed to custom POJOs with the same fields. This can alter your results because the properties on DOMRect are non-enumerable.
+
  - DEPRECATION: AnimatedContainer's "class" _argument_ is deprecated in favor of the class _attribute_. The old usage was
 
     ```hbs
