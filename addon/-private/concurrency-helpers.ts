@@ -54,7 +54,6 @@ function rAFDidFire(clock: number) {
 }
 
 function removeWaiter(promise: Promise<any>) {
-  if (nextFrameWaiters.length > 0) { debugger }
   let pair = nextFrameWaiters.find(pair => pair.promise === promise);
   if (pair) {
     let index = nextFrameWaiters.indexOf(pair);
