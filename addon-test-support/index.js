@@ -37,6 +37,16 @@ export function shape(element) {
   };
 }
 
+export function boundsAndShape(element) {
+  let s = shape(element);
+  let b = bounds(element);
+  s.width = b.width;
+  s.height = b.height;
+  s.top = b.top;
+  s.left = b.left;
+  return s;
+}
+
 function checkFields(fields, tolerance, value, expected, message) {
 
   let filteredActual = Object.create(null);
@@ -55,9 +65,9 @@ function checkFields(fields, tolerance, value, expected, message) {
 }
 
 export async function visuallyConstant(target, fn, message) {
-  let before = Object.assign({}, bounds(target), shape(target));
+  let before = boundsAndShape(target);
   await fn();
-  let after = Object.assign({}, bounds(target), shape(target));
+  let after = boundsAndShape(target);
   checkFields.call(this, ['a', 'b', 'c', 'd', 'top', 'left', 'width', 'height'], 0.25, before, after, message);
 }
 
