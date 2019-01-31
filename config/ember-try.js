@@ -1,6 +1,7 @@
 'use strict';
 
 const getChannelURL = require('ember-source-channel-url');
+let angleBracketPolyfillVersion = "git+https://github.com/ef4/ember-angle-bracket-invocation-polyfill#e6f2feabbd313202a775fa9e5e0d6e47771592e5";
 
 module.exports = function() {
   return Promise.all([
@@ -18,7 +19,9 @@ module.exports = function() {
             devDependencies: {
               'ember-source': '~2.12.0',
               'ember-native-dom-event-dispatcher': '~0.6.4',
-              'ember-angle-bracket-invocation-polyfill': '^1.2.3',
+              'ember-angle-bracket-invocation-polyfill': angleBracketPolyfillVersion,
+              'ember-named-arguments-polyfill': '^1.0.0'
+
             }
           }
         },
@@ -31,7 +34,8 @@ module.exports = function() {
             devDependencies: {
               'ember-source': '~2.16.0',
               'ember-native-dom-event-dispatcher': '~0.6.4',
-              'ember-angle-bracket-invocation-polyfill': '^1.2.3',
+              'ember-angle-bracket-invocation-polyfill': angleBracketPolyfillVersion,
+              'ember-named-arguments-polyfill': '^1.0.0'
             }
           }
         },
@@ -42,7 +46,8 @@ module.exports = function() {
             devDependencies: {
               'ember-source': '~2.18.0',
               'ember-native-dom-event-dispatcher': '~0.6.4',
-              'ember-angle-bracket-invocation-polyfill': '^1.2.3',
+              'ember-angle-bracket-invocation-polyfill': angleBracketPolyfillVersion,
+              'ember-named-arguments-polyfill': '^1.0.0'
             }
           }
         },
@@ -51,7 +56,8 @@ module.exports = function() {
           npm: {
             devDependencies: {
               'ember-source': '~3.0.0',
-              'ember-angle-bracket-invocation-polyfill': '^1.2.3',
+              'ember-angle-bracket-invocation-polyfill': angleBracketPolyfillVersion,
+              'ember-named-arguments-polyfill': '^1.0.0'
             }
           }
         },
