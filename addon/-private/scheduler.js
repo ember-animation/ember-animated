@@ -38,6 +38,7 @@ API
 */
 
 import { Promise } from '..';
+import { registerCancellation, fireCancellation } from './concurrency-helpers';
 
 export function spawn(genFn) {
   let m = new MicroRoutine(genFn, false);
@@ -133,7 +134,7 @@ class MicroRoutine {
       this.reject = rej;
     });
     microRoutines.set(this.promise, this);
-    this.promise.__ec_cancel__ = this.stop.bind(this);
+    registerCancellation(this.promise, this.stop.bind(this));
     this.stopped = false;
     if (linked) {
       let parent = ensureCurrent('spawnChild');
@@ -182,8 +183,8 @@ class MicroRoutine {
   }
   stop() {
     this.stopped = true;
-    if (this.state && isPromise(this.state.value) && typeof this.state.value.__ec_cancel__ === 'function') {
-      this.state.value.__ec_cancel__();
+    if (this.state && isPromise(this.state.value)) {
+      fireCancellation(this.state.value);
     }
     this.linked.forEach(microRoutine => {
       microRoutine.stop();

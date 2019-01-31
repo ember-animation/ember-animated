@@ -9,6 +9,7 @@ import {
   childrenSettled
 } from 'ember-animated/-private/scheduler';
 import { Promise, microwait } from 'ember-animated';
+import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
 
 module("Unit | scheduler", function(hooks) {
   hooks.beforeEach(function(assert) {
@@ -223,7 +224,7 @@ module("Unit | scheduler", function(hooks) {
       let task = spawn(function * () {
         try {
           let p = new Promise(() => null);
-          p.__ec_cancel__ = () => assert.log('cancelation ran');
+          registerCancellation(p, () => assert.log('cancelation ran'));
           yield p;
         } finally {
           assert.log('ran finally');
@@ -369,7 +370,7 @@ module("Unit | scheduler", function(hooks) {
         spawnChild(function * example1() {
           yield (new Promise(r => resolveFirst = r));
           let third = new Promise(() => null);
-          third.__ec_cancel__ = () => assert.log('third canceled');
+          registerCancellation(third, () => assert.log('third canceled'));
           try {
             yield third;
           } finally {
@@ -380,7 +381,7 @@ module("Unit | scheduler", function(hooks) {
         spawnChild(function * example2() {
           yield (new Promise(r => resolveSecond = r));
           let fourth = new Promise(() => null);
-          fourth.__ec_cancel__ = () => assert.log('fourth canceled');
+          registerCancellation(fourth, () => assert.log('fourth canceled'));
           try {
             yield fourth;
           } finally {
@@ -416,7 +417,7 @@ module("Unit | scheduler", function(hooks) {
         spawnChild(function * example1() {
           yield (new Promise(r => resolveFirst = r));
           let third = new Promise(() => null);
-          third.__ec_cancel__ = () => assert.log('third canceled');
+          registerCancellation(third, () => assert.log('third canceled'));
           try {
             yield third;
           } finally {
@@ -427,7 +428,7 @@ module("Unit | scheduler", function(hooks) {
         spawnChild(function * example2() {
           yield (new Promise(r => resolveSecond = r));
           let fourth = new Promise(() => null);
-          fourth.__ec_cancel__ = () => assert.log('fourth canceled');
+          registerCancellation(fourth, () => assert.log('fourth canceled'));
           try {
             yield fourth;
           } finally {
@@ -467,7 +468,7 @@ module("Unit | scheduler", function(hooks) {
         spawnChild(function * example1() {
           yield (new Promise(r => resolveFirst = r));
           let third = new Promise(() => null);
-          third.__ec_cancel__ = () => assert.log('third canceled');
+          registerCancellation(third, () => assert.log('third canceled'));
           try {
             yield third;
           } finally {
@@ -478,7 +479,7 @@ module("Unit | scheduler", function(hooks) {
         spawnChild(function * example2() {
           yield (new Promise(r => resolveSecond = r));
           let fourth = new Promise(() => null);
-          fourth.__ec_cancel__ = () => assert.log('fourth canceled');
+          registerCancellation(fourth, () => assert.log('fourth canceled'));
           try {
             yield fourth;
           } finally {

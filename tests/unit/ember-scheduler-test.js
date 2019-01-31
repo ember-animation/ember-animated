@@ -4,6 +4,7 @@ import { module, test } from 'qunit';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
 import { Promise, microwait } from 'ember-animated';
+import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
 
 module("Unit | scheduler Ember layer", function(hooks) {
   hooks.beforeEach(function(assert) {
@@ -112,7 +113,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
     let Class = EmberObject.extend({
       hello: task(function * () {
         let p = new Promise(() => null);
-        p.__ec_cancel__ = () => assert.log("task canceled");
+        registerCancellation(p, () => assert.log("task canceled"));
         yield p;
       })
     });
@@ -163,7 +164,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
         assert.log("task starting");
         if (shouldBlock) {
           let p = new Promise(() => null);
-          p.__ec_cancel__ = () => assert.log("task canceled");
+          registerCancellation(p, () => assert.log("task canceled"));
           try {
             yield p;
           } finally {
@@ -192,7 +193,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
         assert.log(`task ${id} starting`);
         try {
           if (blockerPromise) {
-            blockerPromise.__ec_cancel__ = () => assert.log(`task ${id} canceled`);
+            registerCancellation(blockerPromise, () => assert.log(`task ${id} canceled`));
             yield blockerPromise;
           }
         } finally {
@@ -302,7 +303,7 @@ module("Unit | scheduler Ember layer", function(hooks) {
       }),
       inner: task(function * () {
         let p = new Promise(() => null);
-        p.__ec_cancel__ = () => assert.log('canceled');
+        registerCancellation(p, () => assert.log('canceled'));
         try {
           yield p;
         } finally {
