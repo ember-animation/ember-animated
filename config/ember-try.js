@@ -1,7 +1,6 @@
 'use strict';
 
 const getChannelURL = require('ember-source-channel-url');
-let angleBracketPolyfillVersion = "git+https://github.com/ef4/ember-angle-bracket-invocation-polyfill#e6f2feabbd313202a775fa9e5e0d6e47771592e5";
 
 module.exports = function() {
   return Promise.all([
