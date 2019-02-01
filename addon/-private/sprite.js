@@ -4,7 +4,7 @@ import Transform, {
   ownTransform,
   cumulativeTransform,
 } from './transform';
-import { continueMotions } from '..';
+import { continueMotions } from './motion';
 import { collapsedChildren } from './margin-collapse';
 import {
   shiftedBounds,
