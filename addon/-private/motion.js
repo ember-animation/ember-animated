@@ -3,10 +3,11 @@ import {
   rAF,
   Promise,
   microwait
-} from '..';
+} from './concurrency-helpers';
+
+import { continuedFromElement } from './motion-bridge';
 
 const motions = new WeakMap();
-const bridges = new WeakMap();
 
 export default class Motion {
 
@@ -103,9 +104,9 @@ export default class Motion {
         this._motionList.unshift(this);
       }
     });
-    let bridge = bridges.get(element);
-    if (bridge) {
-      let inheritedMotions = motions.get(bridge);
+    let oldElement = continuedFromElement(element);
+    if (oldElement) {
+      let inheritedMotions = motions.get(oldElement);
       if (inheritedMotions) {
         this._inheritedMotionList = inheritedMotions;
       }
@@ -121,13 +122,4 @@ export default class Motion {
     this._motionList = null;
   }
 
-}
-
-export function continueMotions(oldElement, newElement) {
-  bridges.set(newElement, oldElement);
-  rAF().then(() => {
-    if (bridges.get(newElement) === oldElement) {
-      bridges.delete(newElement);
-    }
-  });
 }
