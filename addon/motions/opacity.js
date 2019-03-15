@@ -5,6 +5,23 @@ export default function opacity(sprite, opts) {
   return new Opacity(sprite, opts).run();
 }
 
+/**
+  Animates in a sprite from 0% to 100% opacity.
+
+  ```js
+  // normal invocation
+  insertedSprites.forEach(sprite => {
+    fadeIn(sprite)
+  });
+
+  // point-free
+  insertedSprites.forEach(fadeIn);
+  ```
+
+  @function fadeIn
+  @param {Sprite} sprite
+  @return {Motion}
+*/
 export function fadeIn(sprite, opts) {
   let innerOpts = Object.assign({
     to: 1
@@ -12,6 +29,23 @@ export function fadeIn(sprite, opts) {
   return opacity(sprite, innerOpts);
 }
 
+/**
+  Animates out a sprite from 100% to 0% opacity.
+
+  ```js
+  // normal invocation
+  removedSprites.forEach(sprite => {
+    fadeIn(sprite)
+  });
+
+  // point-free
+  removedSprites.forEach(fadeIn);
+  ```
+
+  @function fadeOut
+  @param {Sprite} sprite
+  @return {Motion}
+*/
 export function fadeOut(sprite, opts) {
   let innerOpts = Object.assign({
     to: 0
