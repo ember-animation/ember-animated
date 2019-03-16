@@ -970,7 +970,11 @@ export default class Sprite {
   }
 
   /**
-    Sets the sprite's `finalBounds` using the provided point (x, y).
+    Sets the sprite's `finalBounds` using the provided point `{ x, y }`.
+
+    ```js
+    sprite.endAtPixel({ x: window.innerWidth });
+    ```
 
     @method endAtPixel
     @param {Object} point The x and y coordinates.
