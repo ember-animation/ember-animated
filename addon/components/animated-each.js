@@ -154,7 +154,7 @@ export default Component.extend({
   durationWithDefault: computed('duration', function() {
     let d = this.get('duration');
     if (d == null) {
-      return 2000;
+      return 500;
     } else {
       return d;
     }
