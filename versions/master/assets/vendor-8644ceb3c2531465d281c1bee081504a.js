@@ -5193,7 +5193,7 @@ if(t){var n=!0,r=!1,a=void 0
 try{for(var i,o=t[Symbol.iterator]();!(n=(i=o.next()).done);n=!0){var s=i.value
 this.addObserver("items.@each.".concat(s),this,this._invalidateRenderedChildren)}}catch(l){r=!0,a=l}finally{try{n||null==o.return||o.return()}finally{if(r)throw a}}}},_deps:Ember.computed("watch",function(){var e=this.get("watch")
 if("string"==typeof e)return e.split(/\s*,\s*/)}),durationWithDefault:Ember.computed("duration",function(){var e=this.get("duration")
-return null==e?2e3:e}),_invalidateRenderedChildren:function(){this.notifyPropertyChange("renderedChildren")},_identitySignature:function(e,t){if(!e)return[]
+return null==e?500:e}),_invalidateRenderedChildren:function(){this.notifyPropertyChange("renderedChildren")},_identitySignature:function(e,t){if(!e)return[]
 for(var n=this.get("_deps"),r=[],a=0;a<e.length;a++){var i=e[a]
 if(r.push(t(i)),n)for(var o=0;o<n.length;o++){var s=n[o]
 r.push(Ember.get(i,s))}}return r},renderedChildren:Ember.computed("items.[]","group",function(){var e=this._firstTime
