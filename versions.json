@@ -40,5 +40,11 @@
     "name": "v0.4.1",
     "sha": "029ab194847b6d51ad9a8457b8654fcccdf59399",
     "tag": "v0.4.1"
+  },
+  "docs-improvements": {
+    "path": "versions/docs-improvements",
+    "name": "docs-improvements",
+    "sha": "92310cbcd10d17f0a045d6d6d1972f8fd86e402b",
+    "tag": null
   }
 }
