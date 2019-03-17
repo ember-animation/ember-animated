@@ -1,4 +1,6 @@
 # master
+
+# 0.5.0
  - BREAKING CHANGE: changes the default duration from 2000 to 500
  - DEPRECATION: AnimatedContainer's "class" _argument_ is deprecated in favor of the class _attribute_. The old usage was
 
