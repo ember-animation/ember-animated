@@ -48,13 +48,6 @@ Router.map(function() {
       this.route('motions');
       this.route('rules');
       this.route('beacons');
-
-
-      this.route('animator-components', function() {
-
-        this.route('value');
-        this.route('if');
-      });
     });
     this.route('not-found', { path: '/*path' });
   });
