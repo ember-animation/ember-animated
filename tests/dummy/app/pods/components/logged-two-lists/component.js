@@ -1,5 +1,5 @@
-import TwoListsExample from './between-two-lists-example';
-import layout from '../templates/components/between-two-lists-example';
-import { extensions } from './full-log-table';
+import TwoListsExample from '../between-two-lists-example/component';
+import layout from '../between-two-lists-example/template';
+import { extensions } from '../full-log-table/component';
 
 export default TwoListsExample.extend({ layout }).extend(extensions);
