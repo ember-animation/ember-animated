@@ -59,7 +59,7 @@ if (gte('3.10.0')) {
         super.setup(...arguments);
       }
     }
-  }
+  };
 
 }
 objectAssign(TaskProperty.prototype, {
