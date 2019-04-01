@@ -2,24 +2,119 @@
 
   {{ea-docs-header}}
 
-  {{docs-hero
-    logo="ember"
-    slimHeading="Ember Animated"
-    byline="Core animation primitives for Ember"}}
+  {{docs-hero}}
 
-  <div class="home">
-    <div class="home__video ar-16x9">
-      <iframe class="ar-content" width="560" height="315" src="https://www.youtube.com/embed/4JofVQ3nGrw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <div class="mt-20 w-full max-w-2xl mx-auto">
+    <div class="text-center">
+      <h2 class='text-3xl font-semibold leading-tight'>
+        Use your existing business logic
+      </h2>
+      <p class='mt-4 text-lg'>
+        Add animation with minimal changes to your existing application code.
+      </p>
     </div>
 
-    <div class="home__copy">
-      {{index/index-content}}
-    </div>
+    <div class="mt-20 mb-20">
+      <div class="flex -mx-4">
+        <div class="mx-4 w-2/5">
+          <div class="shadow-lg rounded-lg overflow-hidden">
+            <div class="p-6">
+              <div class="flex mb-3">
+                <p class='text-lg'>How many guests?</p>
+                <div class="ml-4 ">
+                  <div class="flex">
+                    <button {{action 'removeGuest'}}
+                      disabled={{eq this.guests 1}}
+                      class='
+                        homepage-demo1-button
+                        {{if (eq guests 1) ' homepage-demo1-button--disabled'}}
+                      '
+                    >
+                      -
+                    </button>
+                    <button {{action 'addGuest' 'guests'}}
+                      disabled={{eq guests 6}}
+                      class='
+                        homepage-demo1-button
+                        {{if (eq guests 6) ' homepage-demo1-button--disabled'}}
+                      '
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-    <div class="home__cta">
-      {{#docs-link "docs" class="home__cta-link"}}
-        Get started →
-      {{/docs-link}}
+              <div class='text-3xl text-pink select-none'>
+                {{#if isAnimating}}
+                  <AnimatedContainer>
+                    {{#animated-each (range 0 guests) use=fade}}
+                      <span class='inline-block'>{{fa-icon 'user'}}</span>
+                    {{/animated-each}}
+                  </AnimatedContainer>
+                {{else}}
+                  {{#each (range 0 guests)}}
+                    <span class='inline-block'>{{fa-icon 'user'}}</span>
+                  {{/each}}
+                {{/if}}
+              </div>
+            </div>
+
+            <div class="bg-grey-lightest p-4 flex items-center justify-end">
+              <span class="uppercase font-medium text-sm">✨Animation</span>
+
+              <button {{action (toggle 'isAnimating' this)}}
+                class="
+                  ml-2 w-15 h-5 rounded-full inline-block flex
+                  relative focus:outline-none focus:shadow-outline shadow-inner
+                  overflow-hidden transition
+                  {{if isAnimating 'bg-blue' 'bg-grey-light'}}
+                "
+              >
+                <span class="p-px absolute w-5 h-5 flex pin-t pin-l nudge-r-0 transition {{if isAnimating 'nudge-r-10'}}">
+                   <span class="bg-white rounded-full w-full h-full shadow"></span>
+                </span>
+                <span class='
+                  text-white text-sm ml-auto pl-2 font-bold tracking-tight
+                  pb-px transition {{if isAnimating 'nudge-r-0' '-nudge-r-10'}}
+                '>
+                  ON
+                </span>
+                <span class='
+                  text-grey-darker text-sm ml-auto mr-2 font-bold tracking-tight
+                  pb-px transition {{if isAnimating 'nudge-r-10' 'nudge-r-0'}}
+                '>
+                  OFF
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class='mx-4 w-3/5'>
+          <div class='rounded-lg overflow-hidden text-white'>
+            <div class="bg-black py-2 px-4 text-sm font-medium border-b border-grey-darkest">
+              component.js
+            </div>
+            <div class='flex docs-bg-code-base'>
+              <div class="p-4">
+                <AnimatedContainer>
+                  <pre>
+                    {{#animated-each
+                      (if this.isAnimating this.finalComponentLines this.originalComponentLines)
+                      key='id'
+                      use=codeTransition
+                      duration=400
+                    as |line|~}}
+                      <div>{{{line.text}}}</div>
+                    {{~/animated-each}}
+                  </pre>
+                </AnimatedContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -2,6 +2,9 @@
   --brand-primary: #b72f74;
 }
 
+@import 'pod-styles';
+@import 'tailwind-utilities.min';
+
 .home {
   margin: 2rem auto;
   font-size: 18px;
