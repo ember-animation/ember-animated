@@ -63,7 +63,7 @@
             <div class="bg-grey-lightest p-4 flex items-center justify-end">
               <span class="uppercase font-medium text-sm">✨Animation</span>
 
-              <button {{action (toggle 'isAnimating' this)}}
+              <button {{action "toggleAnimation"}}
                 class="
                   ml-2 w-15 h-5 rounded-full inline-block flex
                   relative focus:outline-none focus:shadow-outline shadow-inner
@@ -94,6 +94,28 @@
         <div class='mx-4 w-3/5'>
           <div class='rounded-lg overflow-hidden text-white'>
             <div class="bg-black py-2 px-4 text-sm font-medium border-b border-grey-darkest">
+              template.hbs
+            </div>
+            <div class='flex docs-bg-code-base'>
+              <div class="p-4">
+                <AnimatedContainer>
+                  <pre>
+                    {{#animated-each
+                      (if this.showFinalTemplate this.finalTemplateLines this.originalTemplateLines)
+                      key='id'
+                      use=codeTransition
+                      duration=400
+                    as |line|~}}
+                      <div>{{{line.text}}}</div>
+                    {{~/animated-each}}
+                  </pre>
+                </AnimatedContainer>
+              </div>
+            </div>
+          </div>
+
+          <div class='mt-4 rounded-lg overflow-hidden text-white'>
+            <div class="bg-black py-2 px-4 text-sm font-medium border-b border-grey-darkest">
               component.js
             </div>
             <div class='flex docs-bg-code-base'>
@@ -101,7 +123,7 @@
                 <AnimatedContainer>
                   <pre>
                     {{#animated-each
-                      (if this.isAnimating this.finalComponentLines this.originalComponentLines)
+                      (if this.showFinalComponent this.finalComponentLines this.originalComponentLines)
                       key='id'
                       use=codeTransition
                       duration=400

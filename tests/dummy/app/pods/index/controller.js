@@ -4,7 +4,8 @@ import { fadeIn, fadeOut } from 'ember-animated/motions/opacity';
 import fade from 'ember-animated/transitions/fade';
 import { computed } from '@ember/object';
 import { wait } from 'ember-animated';
-import  { highlightCode } from 'ember-cli-addon-docs/utils/compile-markdown';
+import { highlightCode } from 'ember-cli-addon-docs/utils/compile-markdown';
+import { later } from '@ember/runloop';
 
 export default Controller.extend({
 
@@ -16,6 +17,7 @@ export default Controller.extend({
   },
 
   fade,
+
   crossFade: function*({ insertedSprites, removedSprites, keptSprites }) {
     insertedSprites.concat(keptSprites).forEach(fadeIn);
     removedSprites.forEach(fadeOut);
@@ -23,31 +25,7 @@ export default Controller.extend({
 
   transition: fade,
 
-  // originalTemplate: `
-  //   {{#each guests}}
-  //     {{fa-icon 'user'}}
-  //   {{/each}}
-  // `,
-  //
-  // animatedTemplate: `
-  //   {{#animated-each guests use=transition}}
-  //     {{fa-icon 'user'}}
-  //   {{/animated-each}}
-  // `,
-
-  originalTemplateLines: Object.freeze([
-    { id: 'original-1', text: "{{#each guests}}" },
-    { id: 'both-1', text: "  {{fa-icon 'user'}}" },
-    { id: 'original-2', text: "{{/each}}" },
-  ]),
-
-  animatedTemplateLines: Object.freeze([
-    { id: 'animated-1', text: "{{#animated-each guests use=transition}}" },
-    { id: 'both-1', text: "  {{fa-icon 'user'}}" },
-    { id: 'animated-2', text: "{{/animated-each}}" },
-  ]),
-
-  templateLines: dedent`
+  templateDiff: dedent`
     - {{#each guests}}
     + {{#animated-each guests use=transition}}
         {{fa-icon 'user'}}
@@ -80,32 +58,24 @@ export default Controller.extend({
       });
   `,
 
-  originalComponentLines: computed(function() {
-    let lineObjects = getLineObjectsFromDiff(this.componentDiff, 'before');
+  originalComponentLines: linesFromDiff('componentDiff', 'before'),
+  finalComponentLines: linesFromDiff('componentDiff', 'after'),
+  originalTemplateLines: linesFromDiff('templateDiff', 'before'),
+  finalTemplateLines: linesFromDiff('templateDiff', 'after'),
 
-    return highlightLineObjects(lineObjects);
+  activeTemplateLines: computed('isAnimating', function() {
+    return this.isAnimating ? this.finalTemplateLines : this.originalTemplateLines;
   }),
 
-  finalComponentLines: computed(function() {
-    let diffLines = this.componentDiff.split('\n');
-    let lineObjects = diffLines.map((diff, index) => {
-      return {
-        index,
-        text: diff
-      };
-    });
-
-    let { keptLines, addedLines } = groupedLines(lineObjects);
-    let lines = keptLines.concat(addedLines).sort((a, b) => a.index - b.index);
-
-    return highlightLineObjects(lines);
+  activeComponentLines: computed('isAnimating', function() {
+    return this.isAnimating ? this.finalTemplateLines : this.originalTemplateLines;
   }),
 
   codeTransition: function*({ duration, insertedSprites, removedSprites, keptSprites }) {
+    this.set('isAnimatingInsertedLines', false);
+
     if (this.isAnimating) {
       removedSprites.forEach(fadeOut);
-
-      // yield wait(duration);
 
       // Need to set inserted sprites to 0 opacity in case their animation is interrupted
       insertedSprites.forEach(sprite => {
@@ -121,8 +91,11 @@ export default Controller.extend({
 
       yield wait(duration);
 
-      // for (let sprite of insertedSprites) {
-      // }
+      while (this.isAnimatingInsertedLines) {
+        yield wait(100);
+      }
+
+      this.set('isAnimatingInsertedLines', true);
 
       for (let sprite of insertedSprites) {
         sprite.moveToFinalPosition();
@@ -132,7 +105,7 @@ export default Controller.extend({
           display: 'inline-block',
           width: 'auto'
         });
-        // debugger;
+
         let totalWidth = sprite.element.getBoundingClientRect().width;
         let chars = sprite.element.textContent;
         let characterWidth = totalWidth / chars.length;
@@ -150,6 +123,8 @@ export default Controller.extend({
         }
       }
 
+      this.set('isAnimatingInsertedLines', false);
+
     } else {
       removedSprites.forEach(fadeOut);
       keptSprites.map(sprite => {
@@ -159,33 +134,6 @@ export default Controller.extend({
       insertedSprites.forEach(fadeIn);
     }
   },
-
-  // * transition({ insertedSprites, keptSprites, removedSprites }) {
-  //   insertedSprites.forEach(sprite => {
-  //     debugger;
-  //     // sprite.startTranslatedBy(0, -10);
-  //     sprite.applyStyles({
-  //       opacity: 0
-  //
-  //     });
-  //     debugger;
-  //     // sprite.scale(0.8, 0.8);
-  //     fadeIn(sprite);
-  //     // scale(sprite);
-  //     move(sprite);
-  //   });
-  //
-  //   keptSprites.forEach(sprite => {
-  //     fadeIn(sprite);
-  //     move(sprite);
-  //   });
-  //
-  //   removedSprites.forEach(sprite => {
-  //     sprite.endTranslatedBy(10, 0);
-  //     fadeOut(sprite);
-  //     move(sprite);
-  //   });
-  // },
 
   actions: {
     addGuest() {
@@ -197,6 +145,24 @@ export default Controller.extend({
     removeGuest() {
       if (this.guests > 1) {
         this.decrementProperty('guests');
+      }
+    },
+
+    toggleAnimation() {
+      this.toggleProperty('isAnimating');
+
+      if (this.isAnimating) {
+        this.set('showFinalTemplate', true);
+        this.set('showFinalComponent', true);
+        // later(() => {
+        //   this.set('showFinalComponent', true);
+        // }, 1250);
+
+      } else {
+        this.setProperties({
+          showFinalTemplate: false,
+          showFinalComponent: false,
+        });
       }
     }
   }
@@ -287,9 +253,9 @@ function groupedLines(lineObjects) {
   return { keptLines, removedLines, addedLines };
 }
 
-function highlightLineObjects(lineObjects) {
+function highlightLineObjects(lineObjects, language) {
   let code = lineObjects.map(lineObject => lineObject.text).join('\n');
-  let highlightedCode = highlightCode(code, 'js');
+  let highlightedCode = highlightCode(code, language);
 
   return highlightedCode.split('\n').map((text, index) => ({
     id: lineObjects[index].id,
@@ -297,7 +263,7 @@ function highlightLineObjects(lineObjects) {
   }));
 }
 
-function getOriginalLineObjectsFromDiff(diff, beforeOrAfter) {
+function getLineObjectsFromDiff(diff, beforeOrAfter) {
   let diffLines = diff.split('\n');
   let lineObjects = diffLines.map((diff, index) => {
     return {
@@ -306,10 +272,29 @@ function getOriginalLineObjectsFromDiff(diff, beforeOrAfter) {
     };
   });
 
-  let { keptLines, removedLines } = groupedLines(lineObjects);
+  let { keptLines, addedLines, removedLines } = groupedLines(lineObjects);
+  let lines;
 
   if (beforeOrAfter === 'before') {
+    lines = keptLines.concat(removedLines).sort((a, b) => a.index - b.index);
+  } else if (beforeOrAfter === 'after') {
+    lines = keptLines.concat(addedLines).sort((a, b) => a.index - b.index);
   }
 
-  return keptLines.concat(removedLines).sort((a, b) => a.index - b.index);
+  return lines;
+}
+
+function linesFromDiff(diffProperty, beforeOrAfter) {
+  return computed(function() {
+    let lineObjects = getLineObjectsFromDiff(this[diffProperty], beforeOrAfter);
+    let language;
+
+    if (diffProperty.indexOf('component') === 0) {
+      language = 'js';
+    } else if (diffProperty.indexOf('template') === 0) {
+      language = 'hbs';
+    }
+
+    return highlightLineObjects(lineObjects, language);
+  });
 }
