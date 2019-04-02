@@ -5,23 +5,17 @@ import fade from 'ember-animated/transitions/fade';
 import { computed } from '@ember/object';
 import { wait } from 'ember-animated';
 import { highlightCode } from 'ember-cli-addon-docs/utils/compile-markdown';
-import { later } from '@ember/runloop';
 
 export default Controller.extend({
-
-  guests: 1,
 
   init() {
     this._super(...arguments);
     this.codeTransition = this.codeTransition.bind(this);
   },
 
-  fade,
+  transitionsRunning: 0,
 
-  crossFade: function*({ insertedSprites, removedSprites, keptSprites }) {
-    insertedSprites.concat(keptSprites).forEach(fadeIn);
-    removedSprites.forEach(fadeOut);
-  },
+  guests: 1,
 
   transition: fade,
 
@@ -72,6 +66,7 @@ export default Controller.extend({
   }),
 
   codeTransition: function*({ duration, insertedSprites, removedSprites, keptSprites }) {
+    this.incrementProperty('transitionsRunning');
     this.set('isAnimatingInsertedLines', false);
 
     if (this.isAnimating) {
@@ -120,6 +115,7 @@ export default Controller.extend({
           if (chars[i] !== " ") {
             yield wait(15);
           }
+
         }
       }
 
@@ -133,6 +129,8 @@ export default Controller.extend({
       });
       insertedSprites.forEach(fadeIn);
     }
+
+    this.decrementProperty('transitionsRunning');
   },
 
   actions: {
@@ -145,24 +143,6 @@ export default Controller.extend({
     removeGuest() {
       if (this.guests > 1) {
         this.decrementProperty('guests');
-      }
-    },
-
-    toggleAnimation() {
-      this.toggleProperty('isAnimating');
-
-      if (this.isAnimating) {
-        this.set('showFinalTemplate', true);
-        this.set('showFinalComponent', true);
-        // later(() => {
-        //   this.set('showFinalComponent', true);
-        // }, 1250);
-
-      } else {
-        this.setProperties({
-          showFinalTemplate: false,
-          showFinalComponent: false,
-        });
       }
     }
   }
@@ -231,6 +211,7 @@ function groupedLines(lineObjects) {
       lineObject.text = lineObject.text
         .replace('+', ' ')
         .replace(/^\s\s/, ""); // remove the 2-space indent
+      lineObject.highlighted = true;
 
       addedLines.push(lineObject);
 
@@ -259,7 +240,8 @@ function highlightLineObjects(lineObjects, language) {
 
   return highlightedCode.split('\n').map((text, index) => ({
     id: lineObjects[index].id,
-    text: text === "" ? "\n" : text
+    highlighted: lineObjects[index].highlighted,
+    text: text === "" ? "\n" : text,
   }));
 }
 
