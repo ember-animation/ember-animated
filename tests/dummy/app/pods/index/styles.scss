@@ -1,28 +1,3 @@
-.homepage-demo1-button {
-  @extend .rounded-full;
-  @extend .text-lg;
-  @extend .ml-2;
-  @extend .border;
-  @extend .font-semibold;
-  @extend .border-pink;
-  @extend .text-pink;
-  @extend .w-8;
-  @extend .h-8;
-  @extend .flex;
-  @extend .items-center;
-  @extend .justify-center;
-  @extend .select-none;
-  @extend .focus\:outline-none;
-  @extend .focus\:shadow-outline;
-  @extend .hover\:bg-pink;
-  @extend .hover\:text-white;
-}
-
-.homepage-demo1-button--disabled {
-  @extend .opacity-50;
-  @extend .pointer-events-none;
-}
-
 .nudge-r-0 {
   transform: translateX(0);
 }

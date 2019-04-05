@@ -256,9 +256,11 @@ export default Component.extend({
         insertedSprites.forEach(sprite => {
           fadeIn(sprite);
         });
+
         removedSprites.forEach(sprite => {
           fadeOut(sprite);
         });
+        
         keptSprites.forEach(sprite => {
           fadeIn(sprite);
           move(sprite);
