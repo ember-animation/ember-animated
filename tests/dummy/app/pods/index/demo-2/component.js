@@ -3,6 +3,9 @@ import { A } from '@ember/array';
 import move from 'ember-animated/motions/move';
 import { fadeOut, fadeIn } from 'ember-animated/motions/opacity';
 import { sort } from '@ember/object/computed';
+import dedent from '../utils/dedent';
+import { highlightCode } from 'ember-cli-addon-docs/utils/compile-markdown';
+import { computed } from '@ember/object';
 
 export default Component.extend({
 
@@ -234,6 +237,46 @@ export default Component.extend({
         this.selectedCountries.pushObject(country);
       }
     }
-  }
+  },
+
+  templateSnippet: dedent`
+    {{#animated-each sortedCountries use=transition as |country|}}
+      ...
+    {{/animated-each}}
+  `,
+
+  componentSnippet: dedent`
+    import Component from '@ember/component';
+    import move from 'ember-animated/motions/move';
+    import { fadeOut, fadeIn } from 'ember-animated/motions/opacity';
+
+    export default Component.extend({
+
+      transition: function*({ keptSprites, insertedSprites, removedSprites }) {
+        insertedSprites.forEach(sprite => {
+          fadeIn(sprite);
+        });
+        removedSprites.forEach(sprite => {
+          fadeOut(sprite);
+        });
+        keptSprites.forEach(sprite => {
+          fadeIn(sprite);
+          move(sprite);
+        });
+      },
+
+      // ...
+
+    });
+  `,
+
+  highlightedTemplateSnippet: computed(function() {
+    return highlightCode(this.templateSnippet, 'hbs');
+  }),
+
+  highlightedComponentSnippet: computed(function() {
+    return highlightCode(this.componentSnippet, 'js');
+  })
+
 
 });

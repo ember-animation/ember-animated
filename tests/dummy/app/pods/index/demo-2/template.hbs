@@ -5,17 +5,20 @@
       <p class='text-lg py-2'>Choose your countries:</p>
       <div class="flex -mx-2 mt-6">
         <div class='w-2/5 mx-2'>
-          <div class='max-h-sm overflow-y-scroll'>
+          <div class='max-h-sm overflow-y-scroll border shadow-inner'>
             {{#each countries as |country|}}
-              <div class='truncate'>
-                <button {{action 'toggleCountry' country}}
-                  class='inline-block focus:outline-none focus:text-blue hover:text-blue
-                  {{if (contains country selectedCountries) "text-blue font-bold"}}
-                  '
-                >
-                  {{country.name}}
-                </button>
-              </div>
+              <button {{action 'toggleCountry' country}}
+                class='
+                  truncate block w-full text-left px-3 py-2
+                  focus:outline-none
+                  {{if (contains country selectedCountries)
+                    "bg-blue text-white focus:text-blue-lighter"
+                    "focus:text-blue"
+                  }}
+                '
+              >
+                {{country.name}}
+              </button>
             {{/each}}
           </div>
         </div>
@@ -37,36 +40,28 @@
     </div>
   </div>
   <div class='w-3/5 mx-4'>
-    {{#docs-snippet name='template.hbs' showCopy=false title='template.hbs'}}
-      {{#animated-each sortedCountries use=transition as |country|}}
-        ...
-      {{/animated-each}}
-    {{/docs-snippet}}
+    <div class='rounded-lg overflow-hidden'>
+      <div class="bg-black py-2 px-4 text-white text-sm font-medium border-b border-grey-darkest">
+        template.hbs
+      </div>
+      <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
+        <div class="p-4">
+          <pre>{{{highlightedTemplateSnippet}}}</pre>
+        </div>
+      </div>
+    </div>
 
     <div class="mt-4">
-      {{#docs-snippet name='index-demo2-transition.js' showCopy=false title='component.js'}}
-        import Component from '@ember/component';
-        import move from 'ember-animated/motions/move';
-        import { fadeOut, fadeIn } from 'ember-animated/motions/opacity';
-
-        export default Component.extend({
-
-          transition: function*({ keptSprites, insertedSprites, removedSprites }) {
-            insertedSprites.forEach(sprite => {
-              fadeIn(sprite);
-            });
-            removedSprites.forEach(sprite => {
-              fadeOut(sprite);
-            });
-            keptSprites.forEach(sprite => {
-              fadeIn(sprite);
-              move(sprite);
-            });
-          }
-
-        });
-
-      {{/docs-snippet}}
+      <div class='mt-4 rounded-lg overflow-hidden'>
+        <div class="bg-black py-2 px-4 text-white text-sm font-medium border-b border-grey-darkest">
+          component.js
+        </div>
+        <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
+          <div class="p-4">
+            <pre>{{{highlightedComponentSnippet}}}</pre>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

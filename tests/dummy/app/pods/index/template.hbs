@@ -92,11 +92,11 @@
         </div>
 
         <div class='lg:mx-4 lg:w-3/5'>
-          <div class='rounded-lg overflow-hidden text-white'>
-            <div class="bg-black py-2 px-4 text-sm font-medium border-b border-grey-darkest">
+          <div class='rounded-lg overflow-hidden'>
+            <div class="bg-black text-white py-2 px-4 text-sm font-medium border-b border-grey-darkest">
               template.hbs
             </div>
-            <div class='flex docs-bg-code-base overflow-x-scroll'>
+            <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
               <div class="p-4 w-full">
                 <AnimatedContainer>
                   <pre>
@@ -107,18 +107,18 @@
                       duration=400
                     as |line|~}}
                       <div>{{{line.text}}}</div>
-                    {{~/animated-each}}
+                    {{~/animated-each~}}
                   </pre>
                 </AnimatedContainer>
               </div>
             </div>
           </div>
 
-          <div class='mt-4 rounded-lg overflow-hidden text-white'>
-            <div class="bg-black py-2 px-4 text-sm font-medium border-b border-grey-darkest">
+          <div class='mt-4 rounded-lg overflow-hidden'>
+            <div class="bg-black text-white py-2 px-4 text-sm font-medium border-b border-grey-darkest">
               component.js
             </div>
-            <div class='flex docs-bg-code-base overflow-x-scroll'>
+            <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
               <div class="p-4">
                 <AnimatedContainer>
                   <pre>
@@ -129,7 +129,7 @@
                       duration=400
                     as |line|~}}
                       <div>{{{line.text}}}</div>
-                    {{~/animated-each}}
+                    {{~/animated-each~}}
                   </pre>
                 </AnimatedContainer>
               </div>
@@ -141,10 +141,10 @@
 
     <div class="text-center mt-32">
       <h2 class='text-4xl font-semibold leading-tight'>
-        Animation for every state
+        Animate every state
       </h2>
       <p class='mt-4 text-lg'>
-        Entering, existing and updating elements can be independently animated.
+        Intuitive APIs for handling entering, existing and updating elements independently.
       </p>
     </div>
 
