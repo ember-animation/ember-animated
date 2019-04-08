@@ -1,6 +1,6 @@
-<div class="flex -mx-4">
-  <div class='w-2/5 flex-no-shrink mx-4'>
-    <div class="rounded-lg shadow-lg">
+<div class="lg:flex lg:-mx-4">
+  <div class='lg:w-2/5 lg:flex-no-shrink lg:mx-4'>
+    <div class="rounded-lg overflow-hidden shadow-lg mb-8">
       <div class="bg-white p-4">
         <div class="flex justify-between -mx-2">
           {{#each categories as |category|}}
@@ -73,7 +73,7 @@
     </div>
   </div>
 
-  <div class='w-3/5 mx-4'>
+  <div class='lg:w-3/5 lg:mx-4'>
     {{index/utils/animated-code-diff
       label='component.js'
       diff=this.componentDiff

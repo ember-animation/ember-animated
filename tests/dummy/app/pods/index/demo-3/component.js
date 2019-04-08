@@ -17,6 +17,7 @@ export default Component.extend({
     + import { wait } from 'ember-animated';
 
       export default Component.extend({
+
         * transition({ receivedSprites, sentSprites }) {
           for (let sprite of receivedSprites) {
             move(sprite);
@@ -30,6 +31,7 @@ export default Component.extend({
     +       yield wait(75);
           }
         }
+        
       });
   `,
 
