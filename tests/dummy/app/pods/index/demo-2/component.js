@@ -253,22 +253,19 @@ export default Component.extend({
     export default Component.extend({
 
       transition: function*({ keptSprites, insertedSprites, removedSprites }) {
-        insertedSprites.forEach(sprite => {
+        for (let sprite of insertedSprites) {
           fadeIn(sprite);
-        });
+        }
 
-        removedSprites.forEach(sprite => {
+        for (let sprite of removedSprites) {
           fadeOut(sprite);
-        });
-        
-        keptSprites.forEach(sprite => {
+        }
+
+        for (let sprite of keptSprites) {
           fadeIn(sprite);
           move(sprite);
-        });
-      },
-
-      // ...
-
+        }
+      }
     });
   `,
 

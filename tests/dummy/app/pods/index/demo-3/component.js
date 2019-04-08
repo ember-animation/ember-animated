@@ -6,6 +6,11 @@ import { wait } from 'ember-animated';
 import dedent from '../utils/dedent';
 
 export default Component.extend({
+  init() {
+    this._super(...arguments);
+    this.collapse = this.collapse.bind(this);
+    this.shuffle = this.shuffle.bind(this);
+  },
 
   componentDiff: dedent`
       import Component from '@ember/component';
@@ -19,9 +24,6 @@ export default Component.extend({
           }
 
           for (let sprite of receivedSprites) {
-            sprite.applyStyles({
-              zIndex: (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
-            });
             move(sprite);
             scale(sprite);
     +
@@ -31,14 +33,14 @@ export default Component.extend({
       });
   `,
 
-  * transition({ receivedSprites }) {
+  * collapse({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       move(sprite);
       scale(sprite);
     }
   },
 
-  * transition2({ receivedSprites }) {
+  * shuffle({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
         zIndex: (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
@@ -46,7 +48,9 @@ export default Component.extend({
       move(sprite);
       scale(sprite);
 
-      yield wait(75);
+      if (this.staggerEnabled) {
+        yield wait(75);
+      }
     }
   },
 
