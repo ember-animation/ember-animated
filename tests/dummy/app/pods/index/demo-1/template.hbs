@@ -32,7 +32,7 @@
         </div>
 
         <div class='text-3xl text-pink select-none'>
-          {{#if isAnimating}}
+          {{#if animationEnabled}}
             <AnimatedContainer>
               {{#animated-each (range 0 guests) use=transition}}
                 <span class='inline-block'>{{fa-icon 'user'}}</span>
@@ -49,26 +49,26 @@
       <div class="bg-grey-lightest p-4 flex items-center justify-end">
         <span class="uppercase font-medium text-sm">✨Animation</span>
 
-        <button {{action (toggle 'isAnimating' this)}}
+        <button {{action (toggle 'animationEnabled' this)}}
           class="
             ml-2 w-15 h-5 rounded-full inline-block flex
             relative focus:outline-none focus:shadow-outline shadow-inner
             overflow-hidden transition
-            {{if isAnimating 'bg-blue' 'bg-grey-light'}}
+            {{if animationEnabled 'bg-blue' 'bg-grey-light'}}
           "
         >
-          <span class="p-px absolute w-5 h-5 flex pin-t pin-l nudge-r-0 transition {{if isAnimating 'nudge-r-10'}}">
+          <span class="p-px absolute w-5 h-5 flex pin-t pin-l nudge-r-0 transition {{if animationEnabled 'nudge-r-10'}}">
              <span class="bg-white rounded-full w-full h-full shadow"></span>
           </span>
           <span class='
             text-white text-sm ml-auto pl-2 font-bold tracking-tight
-            pb-px transition {{if isAnimating 'nudge-r-0' '-nudge-r-10'}}
+            pb-px transition {{if animationEnabled 'nudge-r-0' '-nudge-r-10'}}
           '>
             ON
           </span>
           <span class='
             text-grey-darker text-sm ml-auto mr-2 font-bold tracking-tight
-            pb-px transition {{if isAnimating 'nudge-r-10' 'nudge-r-0'}}
+            pb-px transition {{if animationEnabled 'nudge-r-10' 'nudge-r-0'}}
           '>
             OFF
           </span>
@@ -78,48 +78,20 @@
   </div>
 
   <div class='lg:mx-4 lg:w-3/5'>
-    <div class='rounded-lg overflow-hidden'>
-      <div class="bg-black text-white py-2 px-4 text-sm font-medium border-b border-grey-darkest">
-        template.hbs
-      </div>
-      <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
-        <div class="p-4 w-full">
-          <AnimatedContainer>
-            <pre>
-              {{#animated-each
-                (if this.isAnimating this.finalTemplateLines this.originalTemplateLines)
-                key='id'
-                use=codeTransition
-                duration=400
-              as |line|~}}
-                <div>{{{line.text}}}</div>
-              {{~/animated-each~}}
-            </pre>
-          </AnimatedContainer>
-        </div>
-      </div>
-    </div>
+    {{index/utils/animated-code-diff
+      label='template.hbs'
+      diff=this.templateDiff
+      isShowingFinal=this.animationEnabled
+      onAnimationChange=(action (mut this.isAnimating))
+    }}
 
-    <div class='mt-4 rounded-lg overflow-hidden'>
-      <div class="bg-black text-white py-2 px-4 text-sm font-medium border-b border-grey-darkest">
-        component.js
-      </div>
-      <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
-        <div class="p-4">
-          <AnimatedContainer>
-            <pre>
-              {{#animated-each
-                (if this.isAnimating this.finalComponentLines this.originalComponentLines)
-                key='id'
-                use=codeTransition
-                duration=400
-              as |line|~}}
-                <div>{{{line.text}}}</div>
-              {{~/animated-each~}}
-            </pre>
-          </AnimatedContainer>
-        </div>
-      </div>
+    <div class="mt-4">
+      {{index/utils/animated-code-diff
+        label='component.js'
+        diff=this.componentDiff
+        isShowingFinal=this.animationEnabled
+        animationPaused=this.isAnimating
+      }}
     </div>
   </div>
 </div>

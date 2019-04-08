@@ -9,10 +9,10 @@ import dedent from './utils/dedent';
 
 export default Controller.extend({
 
-  init() {
-    this._super(...arguments);
-    this.codeTransition = this.codeTransition.bind(this);
-  },
+  // init() {
+  //   this._super(...arguments);
+  //   this.codeTransition = this.codeTransition.bind(this);
+  // },
 
   transitionsRunning: 0,
 
@@ -55,84 +55,84 @@ export default Controller.extend({
 
   originalComponentLines: linesFromDiff('componentDiff', 'before'),
   finalComponentLines: linesFromDiff('componentDiff', 'after'),
-  originalTemplateLines: linesFromDiff('templateDiff', 'before'),
-  finalTemplateLines: linesFromDiff('templateDiff', 'after'),
+  // originalTemplateLines: linesFromDiff('templateDiff', 'before'),
+  // finalTemplateLines: linesFromDiff('templateDiff', 'after'),
 
-  activeTemplateLines: computed('isAnimating', function() {
-    return this.isAnimating ? this.finalTemplateLines : this.originalTemplateLines;
-  }),
+  // activeTemplateLines: computed('isAnimating', function() {
+  //   return this.isAnimating ? this.finalTemplateLines : this.originalTemplateLines;
+  // }),
 
   activeComponentLines: computed('isAnimating', function() {
     return this.isAnimating ? this.finalTemplateLines : this.originalTemplateLines;
   }),
 
-  codeTransition: function*({ duration, insertedSprites, removedSprites, keptSprites }) {
-    this.incrementProperty('transitionsRunning');
-    this.set('isAnimatingInsertedLines', false);
-
-    if (this.isAnimating) {
-      removedSprites.forEach(fadeOut);
-
-      // Need to set inserted sprites to 0 opacity in case their animation is interrupted
-      insertedSprites.forEach(sprite => {
-        sprite.applyStyles({
-          opacity: '0'
-        });
-      });
-
-      keptSprites.map(sprite => {
-        fadeIn(sprite);
-        move(sprite);
-      });
-
-      yield wait(duration);
-
-      while (this.isAnimatingInsertedLines) {
-        yield wait(100);
-      }
-
-      this.set('isAnimatingInsertedLines', true);
-
-      for (let sprite of insertedSprites) {
-        sprite.moveToFinalPosition();
-        sprite.applyStyles({
-          overflow: 'hidden',
-          opacity: '1',
-          display: 'inline-block',
-          width: 'auto'
-        });
-
-        let totalWidth = sprite.element.getBoundingClientRect().width;
-        let chars = sprite.element.textContent;
-        let characterWidth = totalWidth / chars.length;
-
-        sprite.reveal();
-
-        for (var i = 0; i < chars.length; i++) {
-          sprite.applyStyles({
-            width: characterWidth * (i + 1)
-          });
-
-          if (chars[i] !== " ") {
-            yield wait(15);
-          }
-
-        }
-      }
-
-      this.set('isAnimatingInsertedLines', false);
-
-    } else {
-      removedSprites.forEach(fadeOut);
-      keptSprites.map(sprite => {
-        fadeIn(sprite);
-        move(sprite);
-      });
-      insertedSprites.forEach(fadeIn);
-    }
-
-    this.decrementProperty('transitionsRunning');
-  },
+  // codeTransition: function*({ duration, insertedSprites, removedSprites, keptSprites }) {
+  //   this.incrementProperty('transitionsRunning');
+  //   this.set('isAnimatingInsertedLines', false);
+  //
+  //   if (this.isAnimating) {
+  //     removedSprites.forEach(fadeOut);
+  //
+  //     // Need to set inserted sprites to 0 opacity in case their animation is interrupted
+  //     insertedSprites.forEach(sprite => {
+  //       sprite.applyStyles({
+  //         opacity: '0'
+  //       });
+  //     });
+  //
+  //     keptSprites.map(sprite => {
+  //       fadeIn(sprite);
+  //       move(sprite);
+  //     });
+  //
+  //     yield wait(duration);
+  //
+  //     while (this.isAnimatingInsertedLines) {
+  //       yield wait(100);
+  //     }
+  //
+  //     this.set('isAnimatingInsertedLines', true);
+  //
+  //     for (let sprite of insertedSprites) {
+  //       sprite.moveToFinalPosition();
+  //       sprite.applyStyles({
+  //         overflow: 'hidden',
+  //         opacity: '1',
+  //         display: 'inline-block',
+  //         width: 'auto'
+  //       });
+  //
+  //       let totalWidth = sprite.element.getBoundingClientRect().width;
+  //       let chars = sprite.element.textContent;
+  //       let characterWidth = totalWidth / chars.length;
+  //
+  //       sprite.reveal();
+  //
+  //       for (var i = 0; i < chars.length; i++) {
+  //         sprite.applyStyles({
+  //           width: characterWidth * (i + 1)
+  //         });
+  //
+  //         if (chars[i] !== " ") {
+  //           yield wait(15);
+  //         }
+  //
+  //       }
+  //     }
+  //
+  //     this.set('isAnimatingInsertedLines', false);
+  //
+  //   } else {
+  //     removedSprites.forEach(fadeOut);
+  //     keptSprites.map(sprite => {
+  //       fadeIn(sprite);
+  //       move(sprite);
+  //     });
+  //     insertedSprites.forEach(fadeIn);
+  //   }
+  //
+  //   this.decrementProperty('transitionsRunning');
+  // },
 
   actions: {
     addGuest() {
