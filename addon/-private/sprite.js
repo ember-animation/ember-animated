@@ -383,6 +383,7 @@ export default class Sprite {
     important when the user is manipulating inline styles._
 
     @private
+    @hide
     @method _getCurrentPosition
     @return {Object}
   */
@@ -416,6 +417,7 @@ export default class Sprite {
 
     @private
     @method _reapplyPosition
+    @hide
     @param {Object} pos The position to apply.
     @return {void}
   */

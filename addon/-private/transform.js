@@ -92,6 +92,7 @@ function parseOrigin(originString) {
   transform of this element and all its ancestors.
 
   @function cumulativeTransform
+  @hide
   @param {HTMLElement} elt
   @return {Transform}
 */
