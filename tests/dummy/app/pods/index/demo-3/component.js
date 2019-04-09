@@ -24,14 +24,14 @@ export default Component.extend({
             scale(sprite);
           }
 
-          for (let sprite of receivedSprites) {
+          for (let sprite of sentSprites) {
             move(sprite);
             scale(sprite);
     +
     +       yield wait(75);
           }
         }
-        
+
       });
   `,
 
