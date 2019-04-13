@@ -1,9 +1,8 @@
 import Component from '@ember/component';
 import { A } from '@ember/array';
 import move from 'ember-animated/motions/move';
-import { fadeOut } from 'ember-animated/motions/opacity';
+import { fadeIn, fadeOut } from 'ember-animated/motions/opacity';
 import dedent from '../utils/dedent';
-import fade from 'ember-animated/transitions/fade';
 
 const MESSAGES = [
   "Your message has been sent!",
@@ -27,7 +26,22 @@ export default Component.extend({
 
   nextId: 0,
 
-  * transition({ insertedSprites, removedSprites, keptSprites }) {
+  * originalTransition({ insertedSprites, removedSprites, keptSprites }) {
+    for (let sprite of insertedSprites) {
+      fadeIn(sprite);
+    }
+
+    for (let sprite of keptSprites) {
+      sprite.moveToFinalPosition();
+      fadeIn(sprite);
+    }
+
+    for (let sprite of removedSprites) {
+      fadeOut(sprite);
+    }
+  },
+
+  * separateTransition({ insertedSprites, removedSprites, keptSprites }) {
     for (let sprite of insertedSprites) {
       sprite.startTranslatedBy(0, -sprite.finalBounds.height);
       move(sprite);
@@ -41,8 +55,6 @@ export default Component.extend({
       fadeOut(sprite);
     }
   },
-
-  fade,
 
   actions: {
     createNotification() {

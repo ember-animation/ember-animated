@@ -11,18 +11,17 @@
           </span>
         </button>
 
-        {{!-- <div class='absolute pin-b pin-r'>
-          <div class='w-full h-full flex flex-col justify-end'> --}}
-            {{#animated-each (reverse notifications) key='id' use=(if this.separateEnabled this.transition this.fade) as |notification|}}
-              <div class='w-2/3'>
-                {{index/demo-2/notification-card
-                  notification=notification
-                  onDismiss=(action 'destroyNotification' notification)
-                }}
-              </div>
-            {{/animated-each}}
-          {{!-- </div>
-        </div> --}}
+        {{#animated-each (reverse notifications)
+          key='id'
+          use=(if this.separateEnabled this.separateTransition this.originalTransition)
+        as |notification|}}
+          <div class='w-2/3'>
+            {{index/demo-2/notification-card
+              notification=notification
+              onDismiss=(action 'destroyNotification' notification)
+            }}
+          </div>
+        {{/animated-each}}
       </div>
 
       {{#index/components/toggle-bar
