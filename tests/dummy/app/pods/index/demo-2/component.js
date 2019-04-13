@@ -82,7 +82,7 @@ export default Component.extend({
       import Component from '@ember/component';
     - import fade from 'ember-animated/transitions/fade';
     + import move from 'ember-animated/motions/move';
-    + import { fadeOut, fadeIn } from 'ember-animated/motions/opacity';
+    + import { fadeOut } from 'ember-animated/motions/opacity';
 
       export default Component.extend({
 
