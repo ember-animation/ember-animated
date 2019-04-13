@@ -39,17 +39,19 @@ import { deprecate } from '@ember/application/deprecations';
     },
 
     transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
-      insertedSprites.forEach(sprite => {
+      for (let sprite of insertedSprites) {
         sprite.startAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeOut });
-      });
+      }
 
-      keptSprites.forEach(move);
+      for (let sprite of keptSprites) {
+        move(sprite);
+      }
 
-      removedSprites.forEach(sprite => {
+      for (let sprite of removedSprites) {
         sprite.endAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeIn });
-      });
+      }
     },
   });
   ```

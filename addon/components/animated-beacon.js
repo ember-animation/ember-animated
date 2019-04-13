@@ -9,38 +9,43 @@ import Sprite from '../-private/sprite';
 /**
   A component that marks a region of the page that
   can serve as a source or destination for sprites to animate to and from.
-  ```hbs
-    {{#animated-beacon name="one"}}
-      <button {{action "launch"}}>Launch</button>
-    {{/animated-beacon}}
 
-    {{#animated-if showThing use=transition duration=500}}
-      <div class="message" {{action "dismiss"}}>
-        Hello
-      </div>
-    {{/animated-if}}
+  ```hbs
+  {{#animated-beacon name="one"}}
+    <button {{action "launch"}}>Launch</button>
+  {{/animated-beacon}}
+
+  {{#animated-if showThing use=transition}}
+    <div class="message" {{action "dismiss"}}>
+      Hello
+    </div>
+  {{/animated-if}}
   ```
+
   ```js
   import Component from '@ember/component';
   import move from 'ember-animated/motions/move';
   import scale from 'ember-animated/motions/scale';
-  import { parallel } from 'ember-animated';
 
   export default Component.extend({
     showThing: false,
 
-    transition: function * (context) {
-      let { insertedSprites, removedSprites, keptSprites, beacons } = context;
-      insertedSprites.forEach(sprite => {
+    transition: function *({ insertedSprites, keptSprites, removedSprites, beacons }) {
+      for (let sprite of insertedSprites) {
         sprite.startAtSprite(beacons.one);
-        parallel(move(sprite, scale(sprite)));
-    });
+        move(sprite);
+        scale(sprite);
+      }
 
-    keptSprites.forEach(move);
+      for (let sprite of keptSprites) {
+        move(sprite);
+      }
 
-    removedSprites.forEach(sprite => {
-      sprite.endAtSprite(beacons.one);
-      parallel(move(sprite, scale(sprite)));
+      for (let sprite of removedSprites) {
+        sprite.endAtSprite(beacons.one);
+        move(sprite);
+        scale(sprite);
+      }
     });
   },
 

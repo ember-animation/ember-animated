@@ -6,10 +6,10 @@ import { Motion, rAF, Tween } from '..';
   _sprite_ must have both `initialBounds` and `finalBounds` set.
 
   ```js
-  insertedSprites.forEach(sprite => {
+  for (let sprite of insertedSprites) {
     sprite.startAtSprite(beacons['source']);
     scale(sprite)
-  });
+  }
   ```
 
   @function scale

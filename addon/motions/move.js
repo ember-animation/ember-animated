@@ -6,9 +6,9 @@ import { Motion, rAF, Tween } from '..';
   _sprite_ must have both `initialBounds` and `finalBounds` set.
 
   ```js
-  keptSprites.forEach(sprite => {
+  for (let sprite of keptSprites) {
     move(sprite)
-  });
+  }
   ```
 
   @function move

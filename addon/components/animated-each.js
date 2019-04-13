@@ -33,8 +33,13 @@ import partition from '../-private/partition';
     },
 
     * transition({ keptSprites, removedSprites }) {
-      keptSprites.forEach(move);
-      removedSprites.forEach(fadeOut);
+      for (let sprite of keptSprites) {
+        move(sprite);
+      }
+
+      for (let sprite of removedSprites) {
+        fadeOut(sprite);
+      }
     },
 
     removeItem(item){

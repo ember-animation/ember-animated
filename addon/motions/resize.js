@@ -8,10 +8,10 @@ import { Motion, rAF, Tween } from '..';
   Consider using `scale` instead because scale uses CSS transforms and will not trigger reflow.
 
   ```js
-  insertedSprites.forEach(sprite => {
+  for (let sprite of insertedSprites) {
     sprite.startAtSprite(beacons['source']);
     resize(sprite)
-  });
+  }
   ```
 
   @function resize
