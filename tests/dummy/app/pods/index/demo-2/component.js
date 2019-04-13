@@ -1,11 +1,8 @@
 import Component from '@ember/component';
 import { A } from '@ember/array';
 import move from 'ember-animated/motions/move';
-import { fadeOut, fadeIn } from 'ember-animated/motions/opacity';
-import { sort } from '@ember/object/computed';
+import { fadeOut } from 'ember-animated/motions/opacity';
 import dedent from '../utils/dedent';
-import { highlightCode } from 'ember-cli-addon-docs/utils/compile-markdown';
-import { computed } from '@ember/object';
 import fade from 'ember-animated/transitions/fade';
 
 const MESSAGES = [
