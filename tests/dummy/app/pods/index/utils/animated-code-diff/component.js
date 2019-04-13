@@ -133,35 +133,45 @@ function getLineObjectsFromDiff(diff, beforeOrAfter) {
 }
 
 function groupedLines(lineObjects) {
-  let keptLines = [];
-  let removedLines = [];
-  let addedLines = [];
+  let isAddedLine = lineObject => lineObject.text.indexOf('+') === 0;
+  let isRemovedLine = lineObject => lineObject.text.indexOf('-') === 0;
+  let isModifiedLine = lineObject => isAddedLine(lineObject) || isRemovedLine(lineObject);
+  let hasAddedOrRemovedLines = lineObjects.filter(isModifiedLine).length > 0;
 
-  lineObjects.forEach((lineObject, index) => {
-    if (lineObject.text.indexOf('+') === 0) {
+  return lineObjects.map((lineObject, index) => {
+    if (isAddedLine(lineObject)) {
       lineObject.id = `added-${index}`;
-      lineObject.text = lineObject.text
-        .replace('+', ' ')
-        .replace(/^\s\s/, ""); // remove the 2-space indent
+      lineObject.text = lineObject.text.replace('+', ' ');
       lineObject.highlighted = true;
 
-      addedLines.push(lineObject);
-
-    } else if (lineObject.text.indexOf('-') === 0) {
+    } else if (isRemovedLine(lineObject)) {
       lineObject.id = `removed-${index}`;
-      lineObject.text = lineObject.text
-        .replace('-', ' ')
-        .replace(/^\s\s/, ""); // remove the 2-space indent
+      lineObject.text = lineObject.text.replace('-', ' ');
+        // .replace(/^\s\s/, ""); // remove the 2-space indent
 
-      removedLines.push(lineObject);
     } else {
       lineObject.id = `kept-${index}`;
-      lineObject.text = lineObject.text
-        .replace(/^\s\s/, ""); // remove the 2-space indent
 
-      keptLines.push(lineObject);
     }
-  });
 
-  return { keptLines, removedLines, addedLines };
+    return lineObject;
+  }).map(lineObject => {
+    /*
+      If we have either addded or removed lines, all text has a 2-space indent
+      right now, so we remove it.
+
+      If we don't, we don't need to dedent anything, because all space was
+      dedented by the `dedent` function when the diff was originally passed in.
+    */
+    if (hasAddedOrRemovedLines) {
+      lineObject.text = lineObject.text.replace(/^\s\s/, "");
+    }
+
+    return lineObject;
+  }).reduce((groupedLines, lineObject) => {
+    let type = lineObject.id.split('-')[0];
+    groupedLines[`${type}Lines`].push(lineObject);
+
+    return groupedLines;
+  }, { keptLines: [], removedLines: [], addedLines: []});
 }

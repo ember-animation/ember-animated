@@ -3,17 +3,20 @@
 }
 
 .hover\:opacity-100:hover {
-  opacity: 100;
+  opacity: 1;
+}
+.hover\:opacity-50:hover {
+  opacity: 0.50;
 }
 
 .focus\:opacity-100:focus {
-  opacity: 100;
+  opacity: 1;
 }
 .active\:bg-blue-dark:active {
   @extend .bg-blue-dark;
 }
-.h-128 {
-  height: 32rem;
+.h-96 {
+  height: 24rem;
 }
 .active\:text-grey-darkest:active {
   @extend .text-grey-darkest;

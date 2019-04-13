@@ -32,7 +32,7 @@ export default Component.extend({
 
   * transition({ insertedSprites, removedSprites, keptSprites }) {
     for (let sprite of insertedSprites) {
-      sprite.startTranslatedBy(0, sprite.finalBounds.height);
+      sprite.startTranslatedBy(0, -sprite.finalBounds.height);
       move(sprite);
     }
 
@@ -64,9 +64,9 @@ export default Component.extend({
   },
 
   templateDiff: dedent`
-    {{#animated-each notifications use=transition as |notification|}}
-      <NotificationCard @notification=notification />
-    {{/animated-each}}
+      {{#animated-each notifications use=transition as |notification|}}
+        <NotificationCard @notification=notification />
+      {{/animated-each}}
   `,
 
   componentDiff: dedent`
@@ -80,7 +80,7 @@ export default Component.extend({
     -   transition: fade
     +   * transition({ keptSprites, insertedSprites, removedSprites }) {
     +     for (let sprite of insertedSprites) {
-    +       sprite.startTranslatedBy(0, sprite.finalBounds.height);
+    +       sprite.startTranslatedBy(0, -sprite.finalBounds.height);
     +       move(sprite);
     +     }
     +

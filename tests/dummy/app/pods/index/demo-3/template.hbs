@@ -73,35 +73,11 @@
     </div>
   </div>
 
-  <div class='lg:w-3/5 lg:mx-4'>
+  <div class='lg:w-3/5 lg:mx-4 overflow-hidden'>
     {{index/utils/animated-code-diff
       label='component.js'
       diff=this.componentDiff
       isShowingFinal=this.staggerEnabled
     }}
-
-    {{!-- <div class='rounded-lg overflow-hidden'>
-      <div class="bg-black py-2 px-4 text-white text-sm font-medium border-b border-grey-darkest">
-        template.hbs
-      </div>
-      <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
-        <div class="p-4">
-          <pre>{{{highlightedTemplateSnippet}}}</pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-4">
-      <div class='mt-4 rounded-lg overflow-hidden'>
-        <div class="bg-black py-2 px-4 text-white text-sm font-medium border-b border-grey-darkest">
-          component.js
-        </div>
-        <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
-          <div class="p-4">
-            <pre>{{{highlightedComponentSnippet}}}</pre>
-          </div>
-        </div>
-      </div>
-    </div> --}}
   </div>
 </div>
