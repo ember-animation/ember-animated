@@ -1,67 +1,52 @@
 <div class="lg:flex lg:-mx-4">
   <div class='lg:w-2/5 lg:flex-no-shrink lg:mx-4'>
-    <div class="bg-white rounded-lg shadow-lg p-4 mb-8">
-      <p class='text-lg py-2'>Choose your countries:</p>
-      <div class="flex -mx-2 mt-6">
-        <div class='w-2/5 mx-2'>
-          <div class='max-h-sm overflow-y-scroll border shadow-inner'>
-            {{#each countries as |country|}}
-              <button {{action 'toggleCountry' country}}
-                class='
-                  truncate block w-full text-left px-3 py-2
-                  focus:outline-none
-                  {{if (contains country selectedCountries)
-                    "bg-blue text-white focus:text-blue-lighter"
-                    "focus:text-blue"
-                  }}
-                '
-              >
-                {{country.name}}
-              </button>
-            {{/each}}
+    <div class="bg-white rounded-lg shadow-lg mb-8">
+      <div class='flex h-128 relative overflow-hidden'>
+        <div class='w-1/3 p-6'>
+          <button {{action 'createNotification'}}
+            class='px-3 py-2 text-grey-darker rounded active:text-grey-darkest
+              focus:outline-none focus:shadow-outline'
+          >
+            Notify me
+          </button>
+        </div>
+
+        <div class='w-2/3 pr-4'>
+          <div class='w-full h-full flex flex-col justify-end'>
+            {{#animated-each notifications key='id' use=(if this.separateEnabled this.transition this.fade) as |notification|}}
+              {{index/demo-2/notification-card
+                notification=notification
+                onDismiss=(action 'destroyNotification' notification)
+              }}
+            {{/animated-each}}
           </div>
         </div>
-
-        <div class='w-3/5 mx-2'>
-          <AnimatedContainer>
-            {{#animated-each sortedCountries use=transition duration=350 as |country|}}
-              <div class='whitespace-no-wrap inline-block bg-blue px-2 py-1 rounded text-sm text-white font-bold mr-2 mb-2'>
-                {{country.name}}
-
-                <button {{action 'toggleCountry' country}} class='text-sm text-white ml-1 p-1 opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100'>
-                  {{fa-icon 'times'}}
-                </button>
-              </div>
-            {{/animated-each}}
-          </AnimatedContainer>
-        </div>
       </div>
+
+      {{#index/components/toggle-bar
+        enabled=this.separateEnabled
+        onToggle=(action (mut this.separateEnabled))
+      }}
+        ✨Separate
+      {{/index/components/toggle-bar}}
     </div>
   </div>
 
-  <div class='lg:w-3/5 lg:mx-4'>
-    <div class='rounded-lg overflow-hidden'>
-      <div class="bg-black py-2 px-4 text-white text-sm font-medium border-b border-grey-darkest">
-        template.hbs
-      </div>
-      <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
-        <div class="p-4">
-          <pre>{{{highlightedTemplateSnippet}}}</pre>
-        </div>
-      </div>
-    </div>
+  <div class='lg:mx-4 lg:w-3/5'>
+    {{index/utils/animated-code-diff
+      label='template.hbs'
+      diff=this.templateDiff
+      isShowingFinal=this.separateEnabled
+      onAnimationChange=(action (mut this.isAnimating))
+    }}
 
     <div class="mt-4">
-      <div class='mt-4 rounded-lg overflow-hidden'>
-        <div class="bg-black py-2 px-4 text-white text-sm font-medium border-b border-grey-darkest">
-          component.js
-        </div>
-        <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
-          <div class="p-4">
-            <pre>{{{highlightedComponentSnippet}}}</pre>
-          </div>
-        </div>
-      </div>
+      {{index/utils/animated-code-diff
+        label='component.js'
+        diff=this.componentDiff
+        isShowingFinal=this.separateEnabled
+        animationPaused=this.isAnimating
+      }}
     </div>
   </div>
 </div>

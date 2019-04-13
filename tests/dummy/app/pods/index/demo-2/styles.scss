@@ -9,3 +9,12 @@
 .focus\:opacity-100:focus {
   opacity: 100;
 }
+.active\:bg-blue-dark:active {
+  @extend .bg-blue-dark;
+}
+.h-128 {
+  height: 32rem;
+}
+.active\:text-grey-darkest:active {
+  @extend .text-grey-darkest;
+}

@@ -13,7 +13,7 @@ export default Component.extend({
   templateDiff: dedent`
     - {{#each guests}}
     + {{#animated-each guests use=transition}}
-        {{fa-icon 'user'}}
+        <Icon 'user' />
     - {{/each}}
     + {{/animated-each}}
   `,
