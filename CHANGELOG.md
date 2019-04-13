@@ -1,5 +1,8 @@
 # master
 
+# 0.5.1
+ - COMPATABILITY: update for compatibility with internal change to Ember 3.10 decorators, by @geoffreyd.
+
 # 0.5.0
  - BREAKING CHANGE: changes the default duration from 2000 to 500
  - DEPRECATION: AnimatedContainer's "class" _argument_ is deprecated in favor of the class _attribute_. The old usage was
