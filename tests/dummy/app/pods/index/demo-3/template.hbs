@@ -34,7 +34,9 @@
 
         <div class="w-4/5 mx-auto mt-4 pb-6">
           <AnimatedContainer>
-            {{#animated-each selectedCategory.images use=this.shuffle as |image|}}
+            {{#animated-each selectedCategory.images
+              use=(if this.staggerEnabled this.shuffleWithStagger this.shuffle)
+            as |image|}}
               <div class='aspect-ratio-square bg-cover mt-6 rounded-lg shadow-md'
                 style={{html-safe (concat 'background-image: url(' image ')')}}></div>
             {{/animated-each}}
@@ -42,34 +44,12 @@
         </div>
       </div>
 
-      <div class="bg-grey-lightest p-4 flex items-center justify-end">
-        <span class="uppercase font-medium text-sm">✨Stagger</span>
-
-        <button {{action (toggle 'staggerEnabled' this)}}
-          class="
-            ml-2 w-15 h-5 rounded-full inline-block flex
-            relative focus:outline-none focus:shadow-outline shadow-inner
-            overflow-hidden transition
-            {{if staggerEnabled 'bg-blue' 'bg-grey-light'}}
-          "
-        >
-          <span class="p-px absolute w-5 h-5 flex pin-t pin-l nudge-r-0 transition {{if staggerEnabled 'nudge-r-10'}}">
-            <span class="bg-white rounded-full w-full h-full shadow"></span>
-          </span>
-          <span class='
-            text-white text-sm ml-auto pl-2 font-bold tracking-tight
-            pb-px transition {{if staggerEnabled 'nudge-r-0' '-nudge-r-10'}}
-          '>
-            ON
-          </span>
-          <span class='
-            text-grey-darker text-sm ml-auto mr-2 font-bold tracking-tight
-            pb-px transition {{if staggerEnabled 'nudge-r-10' 'nudge-r-0'}}
-          '>
-            OFF
-          </span>
-        </button>
-      </div>
+      {{#index/components/toggle-bar
+        enabled=this.staggerEnabled
+        onToggle=(action (mut this.staggerEnabled))
+      }}
+        ✨Stagger
+      {{/index/components/toggle-bar}}
     </div>
   </div>
 

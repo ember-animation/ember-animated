@@ -6,34 +6,6 @@ import { wait } from 'ember-animated';
 import dedent from '../utils/dedent';
 
 export default Component.extend({
-  init() {
-    this._super(...arguments);
-    this.collapse = this.collapse.bind(this);
-    this.shuffle = this.shuffle.bind(this);
-  },
-
-  componentDiff: dedent`
-      import Component from '@ember/component';
-    + import { wait } from 'ember-animated';
-
-      export default Component.extend({
-
-        * transition({ receivedSprites, sentSprites }) {
-          for (let sprite of receivedSprites) {
-            move(sprite);
-            scale(sprite);
-          }
-
-          for (let sprite of sentSprites) {
-            move(sprite);
-            scale(sprite);
-    +
-    +       yield wait(75);
-          }
-        }
-
-      });
-  `,
 
   * collapse({ receivedSprites }) {
     for (let sprite of receivedSprites) {
@@ -49,10 +21,18 @@ export default Component.extend({
       });
       move(sprite);
       scale(sprite);
+    }
+  },
 
-      if (this.staggerEnabled) {
-        yield wait(75);
-      }
+  * shuffleWithStagger({ receivedSprites }) {
+    for (let sprite of receivedSprites) {
+      sprite.applyStyles({
+        zIndex: (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
+      });
+      move(sprite);
+      scale(sprite);
+
+      yield wait(75);
     }
   },
 
@@ -88,5 +68,28 @@ export default Component.extend({
   selectedCategory: computed('selectedCategoryName', function() {
     return this.categories.find(category => category.name === this.selectedCategoryName);
   }),
+
+  componentDiff: dedent`
+      import Component from '@ember/component';
+    + import { wait } from 'ember-animated';
+
+      export default Component.extend({
+
+        * transition({ receivedSprites, sentSprites }) {
+          for (let sprite of receivedSprites) {
+            move(sprite);
+            scale(sprite);
+          }
+
+          for (let sprite of sentSprites) {
+            move(sprite);
+            scale(sprite);
+    +
+    +       yield wait(75);
+          }
+        }
+
+      });
+  `
 
 });

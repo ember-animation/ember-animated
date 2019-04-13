@@ -10,6 +10,20 @@ export default Component.extend({
 
   transition: fade,
 
+  actions: {
+    addGuest() {
+      if (this.guests < 6) {
+        this.incrementProperty('guests');
+      }
+    },
+
+    removeGuest() {
+      if (this.guests > 1) {
+        this.decrementProperty('guests');
+      }
+    }
+  },
+
   templateDiff: dedent`
     - {{#each guests}}
     + {{#animated-each guests use=transition}}
@@ -41,20 +55,6 @@ export default Component.extend({
           }
         }
       });
-  `,
-
-  actions: {
-    addGuest() {
-      if (this.guests < 6) {
-        this.incrementProperty('guests');
-      }
-    },
-
-    removeGuest() {
-      if (this.guests > 1) {
-        this.decrementProperty('guests');
-      }
-    }
-  }
+  `
 
 });
