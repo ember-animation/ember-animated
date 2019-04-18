@@ -170,7 +170,14 @@ export default class Sprite {
 
   /**
     A DOMRect representing the place where this sprite will start the
-    transition. Not every sprite has initialBounds (a newly inserted
+    transition.
+
+    ```js
+    sprite.initialBounds;
+    // { top: 0, bottom: 230, left: 0, right: 256, width: 256 }
+    ```
+
+    Not every sprite has initialBounds (a newly inserted
     sprite will not -- it will only have finalBounds).
 
     The position is measured *relative* to our offsetParent, if we
@@ -376,6 +383,7 @@ export default class Sprite {
     important when the user is manipulating inline styles._
 
     @private
+    @hide
     @method _getCurrentPosition
     @return {Object}
   */
@@ -409,6 +417,7 @@ export default class Sprite {
 
     @private
     @method _reapplyPosition
+    @hide
     @param {Object} pos The position to apply.
     @return {void}
   */
@@ -684,8 +693,15 @@ export default class Sprite {
     the sprite's element. Use this when there's not a more specific
     method like `translate()`, `scale()`, `hide()`, or `reveal()`.
 
-    _Nothing you do to the sprite will persist after the transition is
-    finished -- we clean things up when it ends._
+    ```js
+    sprite.applyStyles({
+      'opacity': 0,
+      'z-index': 1
+    });
+    ```
+
+    Nothing you do to the sprite will persist after the transition is
+    finished – we clean things up when it ends.
 
     @method applyStyles
     @param {Object} styles The styles to apply to the sprite.
@@ -869,6 +885,10 @@ export default class Sprite {
     Sets the sprite's `initialBounds` using the provided
     x and y coordinates.
 
+    ```js
+    sprite.startAtPixel({ x: 0, y: 0 });
+    ```
+
     @method startAtPixel
     @param {Object} point The x and y coordinates.
     @return {void}
@@ -952,7 +972,11 @@ export default class Sprite {
   }
 
   /**
-    Sets the sprite's `finalBounds` using the provided point (x, y).
+    Sets the sprite's `finalBounds` using the provided point `{ x, y }`.
+
+    ```js
+    sprite.endAtPixel({ x: window.innerWidth });
+    ```
 
     @method endAtPixel
     @param {Object} point The x and y coordinates.

@@ -4,6 +4,7 @@
 
   @private
   @function shiftedBounds
+  @hide
   @param {Object} bounds The original bounds.
   @param {number} dx X axis offset.
   @param {number} dy Y axis offset.
@@ -26,6 +27,7 @@ export function shiftedBounds(bounds, dx, dy) {
 
   @private
   @function resizedBounds
+  @hide
   @param {Object} bounds The original bounds.
   @param {number} width The target width.
   @param {number} height The target height.
@@ -48,6 +50,7 @@ export function resizedBounds(bounds, width, height) {
 
   @private
   @function relativeBounds
+  @hide
   @param {Object} bounds The original bounds.
   @param {Object} offset The offset.
   @return {Object} The newly calculated bounds.
@@ -60,6 +63,7 @@ export function relativeBounds(bounds, offset) {
   An empty bounds object.
 
   @private
+  @hide
   @constant {Object} emptyBounds
 */
 export const emptyBounds = {

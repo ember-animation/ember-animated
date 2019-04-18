@@ -1,5 +1,22 @@
 import { Motion, rAF, Tween } from '..';
 
+/**
+  Smoothly scales _sprite_ from its the initial size to its final size.
+
+  _sprite_ must have both `initialBounds` and `finalBounds` set.
+
+  ```js
+  for (let sprite of insertedSprites) {
+    sprite.startAtSprite(beacons['source']);
+    scale(sprite)
+  }
+  ```
+
+  @function scale
+  @export default
+  @param {Sprite} sprite
+  @return {Motion}
+*/
 export default function scale(sprite, opts) {
   return new Scale(sprite, opts).run();
 }

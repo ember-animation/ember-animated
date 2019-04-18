@@ -8,6 +8,7 @@ module.exports = {
     'img-alt-attributes': false,
     'no-invalid-interactive': false,
     'table-groups': false,
+    'quotes': false,
     'no-unused-block-params': false,
     'no-outlet-outside-routes': false,
   }

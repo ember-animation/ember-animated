@@ -1,0 +1,624 @@
+:root {
+  --brand-primary: #b72f74;
+}
+
+@import 'pod-styles';
+@import 'tailwind-utilities.min';
+
+.home {
+  margin: 2rem auto;
+  font-size: 18px;
+  padding: 1rem;
+  width: 100%;
+  max-width: 752px;
+}
+.home__video {
+  margin-bottom: 3rem;
+}
+.ar-16x9 {
+  height: 0;
+  position: relative;
+  padding-bottom: 56.25%;
+}
+.ar-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+.home__copy {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.home__cta {
+  text-align: right;
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+}
+.home__cta-link {
+  background-color: var(--brand-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+}
+
+.home__cta-link:hover {
+  text-decoration: none;
+  background-color: #981658;
+}
+
+
+.homepage > a {
+    display: block;
+}
+/* BEGIN-SNIPPET sprites-snippet.css */
+
+.scenario-sprites {
+  border-bottom: 2px solid lightblue;
+  overflow: hidden;
+}
+
+.scenario-sprites > .animated-container {
+  border-collapse: collapse;
+  display: flex;
+}
+
+.scenario-sprites .each-item {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  border-collapse: collapse;
+  border-bottom: 2px solid lightblue;
+  font-style: bold;
+  background-color: white;
+}
+
+.scenario-sprites .each-item:hover {
+  background-color: rgb(38, 136, 228);
+}
+
+.scenario-sprites .person {
+  padding: 2px;
+  flex-wrap: wrap;
+  order: 3;
+}
+
+.scenario-sprites .each-item > button {
+  color:white;
+  transition: background-color .5s;
+}
+
+.scenario-sprites button:hover {
+  background-color: rgb(32, 174, 221);
+  color: white;
+}
+
+.scenario-sprites button {
+  color: blue;
+}
+
+.scenario-sprites .top-bar {
+  border-top: 1px solid lightblue;
+  border-bottom: 1px solid lightblue;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  flex: 1;
+}
+
+.scenario-sprites .message {
+  text-align: left;
+  flex: 3;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+.scenario-sprites .mail-buttons {
+  float: right;
+}
+
+.scenario-sprites .inbox {
+  border-left: 2px solid lightblue;
+  flex: 1;
+}
+
+.scenario-sprites .sidebar {
+  border-right: 2px solid lightblue;
+}
+
+.scenario-sprites .sidebar > table {
+  border-collapse: collapse;
+}
+
+.scenario-sprites .sidebar > table > tr > td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 2px solid lightblue;
+  border-right: 1px solid lightblue;
+}
+
+.scenario-sprites .sidebar > table > th {
+  text-align: left;
+}
+
+.scenario-sprites .date {
+  font-weight: bold;
+  text-align: left;
+}
+/* END-SNIPPET */
+
+
+
+.scenario-each > .animated-container {
+    overflow: hidden;
+    transform: translateZ(0);
+    border: 1px solid green;
+}
+
+.scenario-container-only > .animated-container {
+    border: 1px solid red;
+}
+
+.scenario-two-lists2 > .animated-container {
+  width: 40%;
+  float: left;
+}
+
+
+
+
+/* BEGIN-SNIPPET two-lists-snippet.css */
+
+.scenario-two-lists {
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.scenario-two-lists > .animated-container {
+  display: flex;
+  border-collapse: collapse;
+  justify-content: center;
+}
+
+.scenario-two-lists .bounce {
+  font-family: "Andale Mono";
+  color: rgb(9, 114, 149);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.scenario-two-lists .left {
+  width: 45%;
+  padding-right: 20px;
+  order: 1;
+}
+
+.scenario-two-lists .right {
+  width: 45%;
+  padding-left: 20px;
+  order: 2;
+}
+
+.scenario-two-lists .party {
+  font-weight: bold;
+  text-align: left;
+  font-size: 25px;
+  border-bottom: 2px solid rgb(60, 127, 168);
+  font-family: "Helvetica Neue";
+  color: rgb(9, 59, 91);
+}
+
+.scenario-two-lists .guest-list-header {
+  font-weight: bold;
+  font-size: 15px;
+  border-top: 2px solid rgb(60, 127, 168);
+  border-bottom: 2px solid rgb(60, 127, 168);
+  border-radius: 5px;
+  padding: 5px;
+  font-family: "Helvetica Neue";
+  color: rgb(9, 59, 91);
+  background-color: rgb(227, 244, 250);
+}
+
+.scenario-two-lists .each-item {
+  border-collapse: collapse;
+  border: 2px solid rgb(68, 172, 207);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+}
+
+.scenario-two-lists .icon {
+  max-width: 20%;
+  align-self: center;
+  padding-top: 4px;
+  padding-left: 4px;
+}
+
+.scenario-two-lists img {
+  border-radius: 30px;
+  border: 2px solid lightblue;
+  align-self: center;
+}
+
+.scenario-two-lists .each-item > .name {
+  text-align: left;
+  padding-left: 10px;
+  font-family: "Helvetica Neue";
+  flex: 1;
+  font-size: 17px;
+}
+
+.scenario-two-lists button {
+  padding-right: 10px;
+  color: rgb(37, 158, 199);
+}
+
+.scenario-two-lists .left > .each-item > button:hover {
+  color: rgb(230, 107, 107);
+}
+
+.scenario-two-lists .right > .each-item > button:hover {
+  color: rgb(202, 236, 149);
+}
+
+
+/* END-SNIPPET */
+
+
+/* BEGIN-SNIPPET swapping-lists-snippet.css */
+.scenario-swapping-lists .left {
+    width:40%;
+    float: left;
+}
+.scenario-swapping-lists .right {
+    width: 40%;
+    float: right;
+}
+
+.scenario-swapping-lists .left-item {
+    color: red;
+}
+/* END-SNIPPET */
+
+
+.scenario-bind .animated-container {
+    font-size: 3rem;
+    float: left;
+    margin: 3rem;
+}
+
+.scenario-bind button {
+    float: left;
+    font-size: 3rem;
+}
+
+.scenario-bind span {
+    border: 1px solid blue;
+}
+
+.scenario-bind > .animated-container {
+    border: 1px solid red;
+    overflow: hidden;
+    transform: translateZ(0);
+}
+
+
+/* BEGIN-SNIPPET rules-snippet.css */
+.scenario-rules .animated-container {
+    font-size: 2.5rem;
+    float: left;
+    margin-right: 3rem;
+}
+
+.scenario-rules button {
+    float: top;
+    font-size: 3rem;
+    border: 2px solid lightskyblue;
+    width: 1em;
+    color: blue;
+    transition: background-color .5s;
+    border-radius: 5px;
+}
+
+.scenario-rules button:hover {
+    background-color: lightskyblue;
+}
+
+.scenario-rules span {
+    border: 1px solid blue;
+}
+
+.scenario-rules > .animated-container {
+    border: 1px solid red;
+    overflow: hidden;
+    transform: translateZ(0);
+}
+/* END-SNIPPET */
+
+
+/* BEGIN-SNIPPET hero-snippet.css */
+.hero-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hero-list > div {
+  cursor: pointer;
+  margin: 10px;
+}
+
+.hero-list-image {
+  width: 60px;
+  height: 60px;
+}
+
+.hero-list-image > img {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-list-image > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 8px;
+}
+
+.hero-detail {
+  margin-left: 6rem;
+  margin-top: 6rem;
+}
+
+.hero-detail-image {
+  width: 120px;
+  height: 120px;
+}
+
+.hero-detail-image > img {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-detail-image > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 8px;
+}
+
+.hero-example {
+  height: 300px;
+}
+/* END-SNIPPET */
+
+.scenario-direct-style--item {
+    position: absolute;
+    text-align: center;
+    padding: 4px;
+}
+
+.scenario-direct-style--frame {
+    border: 1px solid blue;
+    color: transparent;
+}
+
+.inline-text-scenario .inline {
+    display: inline-block;
+}
+
+.animated-text {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.scenario-orphan {
+    width: 10em;
+    margin-left: 5em;
+}
+
+.scenario-orphan h1 {
+    background-color: #bbebbb;
+    padding: 0 0.5em;
+    margin: 0.5em;
+    transform: translateX(20px);
+}
+
+
+.scenario-here-there > div {
+    display: flex;
+}
+
+.scenario-here-there > div > div {
+    width: 50%;
+}
+
+.scenario-here-there .demo-item {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+}
+
+.scenario-beacon-modal {
+    position: absolute;
+    left: 30%;
+    top: 40%;
+    width: 20em;
+    min-height: 10em;
+    background-color: #c4c4ff;
+    box-sizing: border-box;
+    padding: 2em;
+    border-radius: 5px;
+}
+
+.scenario-beacon-trash {
+    vertical-align: baseline;
+    float: right;
+    width: 120px;
+    height: 120px;
+    width: 10em;
+    background-color: lightblue;
+    box-sizing: border-box;
+    padding: 2em;
+    border-radius: 10px;
+}
+
+
+/* BEGIN-SNIPPET transitions-snippet.css */
+.scenario-transitions  {
+    display: flex;
+    margin-block-start: 2em;
+    height: 7em;
+}
+
+
+.scenario-transitions .message {
+    width: 7em;
+    background-color: lightblue;
+    color: white;
+    font: italic bold 16px/2 cursive;
+    box-sizing: border-box;
+    padding: 2em;
+    border-radius: 10px;
+}
+
+
+.scenario-transitions .selector {
+    width: 25%;
+}
+
+.scenario-transitions .h1 {
+    font: sans-serif;
+    font-style: bold;
+    background-color: blue;
+}
+/* END-SNIPPET */
+
+
+/* BEGIN-SNIPPET move-over-snippet.css */
+.move-over {
+  display: flex;
+}
+
+.move-over > .animated-container {
+  overflow: hidden;
+}
+
+.move-over .hello {
+  width: 7em;
+  background-color: lightblue;
+  color: white;
+  font: italic bold 16px/2 cursive;
+  box-sizing: border-box;
+  padding: 2em;
+}
+
+.move-over .goodbye {
+  width: 7em;
+  background-color: darkblue;
+  color: white;
+  font: italic bold 16px/2 cursive;
+  box-sizing: border-box;
+  padding: 2em;
+}
+/* END-SNIPPET */
+
+
+.moving-word {
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+h1.text {
+  letter-spacing: 1rem;
+  font-size: 10rem;
+  font-weight: normal;
+  margin: 0;
+  color: var(--tertiaryColor);
+}
+
+/* BEGIN-SNIPPET moving-word-snippet.css */
+.moving-word-demo button {
+  font-weight: bold;
+  border: 2px solid rgb(7, 170, 219);
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.moving-word-demo button:hover {
+  background-color: lightblue;
+  color: white;
+}
+
+
+
+/* END-SNIPPET */
+
+
+.transition-log-table, .transition-log-table td, .transition-log-table th {
+  border: 1px solid black;
+}
+
+.transition-log-table {
+  border-collapse: collapse;
+  width: 50%;
+}
+
+.transition-log-table th {
+  height: 50px;
+}
+
+.svg-move button {
+  font-weight: bold;
+  border: 2px solid rgb(7, 170, 219);
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.svg-move button:hover {
+  background-color: lightblue;
+  color: white;
+}
+
+
+.motion-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-bottom: 2px solid rgb(30, 167, 212);
+  padding-bottom: 10px;
+}
+
+.scenario-modal--container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.scenario-modal--background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0.5;
+  background-color: black;
+}
+
+.scenario-modal--contents {
+  width: 300px;
+  height: 150px;
+  background-color: white;
+  border: 1px solid black;
+  z-index: 1;
+}

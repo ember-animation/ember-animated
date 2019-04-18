@@ -1,5 +1,24 @@
 import { Motion, rAF, Tween } from '..';
 
+/**
+  Smoothly resizes _sprite_ from its the initial size to its final size.
+
+  _sprite_ must have both `initialBounds` and `finalBounds` set.
+
+  Consider using `scale` instead because scale uses CSS transforms and will not trigger reflow.
+
+  ```js
+  for (let sprite of insertedSprites) {
+    sprite.startAtSprite(beacons['source']);
+    resize(sprite)
+  }
+  ```
+
+  @function resize
+  @export default
+  @param {Sprite} sprite
+  @return {Motion}
+*/
 export default function resize(sprite, opts) {
   return new Resize(sprite, opts).run();
 }
