@@ -35,12 +35,6 @@
     "sha": "029ab194847b6d51ad9a8457b8654fcccdf59399",
     "tag": "v0.4.1"
   },
-  "docs-improvements": {
-    "path": "versions/docs-improvements",
-    "name": "docs-improvements",
-    "sha": "7468ba35dd5c66103a58b2d53ee57a5160b21c67",
-    "tag": null
-  },
   "v0.5.0": {
     "path": "versions/v0.5.0",
     "name": "v0.5.0",
