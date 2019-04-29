@@ -1,5 +1,16 @@
 # master
 
+# 0.5.4
+ - HOUSEKEEPING: switch to released version of ember-angle-bracket-invocation-polyfill, by @danwenzel
+
+# 0.5.3
+
+ - HOUSEKEEPING: configure travis releases by @samselikoff
+
+# 0.5.2
+
+ - DOCS: major docs improvements by @samselikoff
+
 # 0.5.1
  - COMPATABILITY: update for compatibility with internal change to Ember 3.10 decorators, by @geoffreyd.
 
