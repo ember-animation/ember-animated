@@ -50,8 +50,8 @@ export class Scale extends Motion {
     let widthFactor = sprite.finalBounds.width / sprite.initialBounds.width;
     let heightFactor = sprite.finalBounds.height / sprite.initialBounds.height;
 
-    this.widthTween = new Tween(sprite.transform.a * initialWidthFactor, sprite.transform.a * initialWidthFactor * widthFactor, duration);
-    this.heightTween = new Tween(sprite.transform.d * initialHeightFactor, sprite.transform.d * initialHeightFactor * heightFactor, duration);
+    this.widthTween = new Tween(sprite.transform.a * initialWidthFactor, sprite.transform.a * initialWidthFactor * widthFactor, duration, this.opts.easing);
+    this.heightTween = new Tween(sprite.transform.d * initialHeightFactor, sprite.transform.d * initialHeightFactor * heightFactor, duration, this.opts.easing);
 
     while (!this.widthTween.done || !this.heightTween.done) {
       sprite.scale(this.widthTween.currentValue / sprite.transform.a, this.heightTween.currentValue / sprite.transform.d);
