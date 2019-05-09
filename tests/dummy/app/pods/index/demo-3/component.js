@@ -9,14 +9,22 @@ import { inject as service } from '@ember/service';
 export default Component.extend({
   rootUrl: service(),
 
-  * collapse({ receivedSprites }) {
+  * collapse({ receivedSprites, sentSprites }) {
+    for (let sprite of sentSprites) {
+      sprite.moveToFinalPosition();
+    }
+
     for (let sprite of receivedSprites) {
       move(sprite);
       scale(sprite);
     }
   },
 
-  * shuffle({ receivedSprites }) {
+  * shuffle({ receivedSprites, sentSprites }) {
+    for (let sprite of sentSprites) {
+      sprite.moveToFinalPosition();
+    }
+
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
         zIndex: (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
@@ -26,7 +34,11 @@ export default Component.extend({
     }
   },
 
-  * shuffleWithStagger({ receivedSprites }) {
+  * shuffleWithStagger({ receivedSprites, sentSprites }) {
+    for (let sprite of sentSprites) {
+      sprite.moveToFinalPosition();
+    }
+
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
         zIndex: (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
