@@ -109,5 +109,42 @@ module('Integration | Component | demo3', function(hooks) {
     }
   });
 
+  test('interruptions remain smooth after many time back and forth', async function(assert) {
+    await render(hbs`{{index/demo-3}}`);
+    time.pause();
+    let categories = this.element.querySelectorAll('[data-test-category]');
+
+    await click(categories[1]);
+    await time.advance(250); // half way through animation
+    await click(categories[0]);
+    await time.advance(250);
+    await click(categories[1]);
+    await time.advance(250);
+
+    // these are the small first category images that are animating upward to their pile
+    let beforeFirstCategoryBounds = [...categories[0].querySelectorAll('[data-test-small-image]')].map(bounds);
+
+    // these are the large second category images that are animating down to the main area
+    let beforeSecondCategoryBounds = [...this.element.querySelectorAll('[data-test-large-image]')].map(bounds);
+
+    // interrupt!
+    await click(categories[0]);
+    await time.advance(1); // let the animation go just a little bit
+
+    // these are the large first category images that are now animating back downward to the main area
+    let afterFirstCategoryBounds = [...this.element.querySelectorAll('[data-test-large-image]')].map(bounds);
+
+    // these are the small second category images that are now animating back upward to their pile
+    let afterSecondCategoryBounds = [...categories[1].querySelectorAll('[data-test-small-image]')].map(bounds);
+
+    for (let i = 0; i < 3; i++) {
+      assert.closeBounds(5, beforeFirstCategoryBounds[i], afterFirstCategoryBounds[i], `first category image ${i} should not jump at interruption`);
+    }
+
+    for (let i = 0; i < 3; i++) {
+      assert.closeBounds(5, beforeSecondCategoryBounds[i], afterSecondCategoryBounds[i], `second category image ${i} should not jump at interruption`);
+    }
+  });
+
 
 });
