@@ -4,6 +4,7 @@ import { wait } from 'ember-animated';
 import move from 'ember-animated/motions/move';
 import { fadeIn, fadeOut } from 'ember-animated/motions/opacity';
 import { highlightCode } from 'ember-cli-addon-docs/utils/compile-markdown';
+import { htmlSafe } from '@ember/string';
 
 export default Component.extend({
   init() {
@@ -107,7 +108,9 @@ function highlightLineObjects(lineObjects, language) {
   return highlightedCode.split('\n').map((text, index) => ({
     id: lineObjects[index].id,
     highlighted: lineObjects[index].highlighted,
-    text: text === "" ? "\n" : text,
+    // htmlSafe is justified here because we generated the highlighting markup
+    // ourself in highlightCode
+    text: htmlSafe(text === "" ? "\n" : text),
   }));
 }
 

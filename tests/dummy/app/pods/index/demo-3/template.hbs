@@ -23,7 +23,7 @@
                         {{if (eq index 1) 'z-10 rotate-1 group-hover:rotate-0'}}
                         {{if (eq index 2) 'z-0 rotate-2 group-hover:rotate-0'}}
                       '
-                      style={{html-safe (concat 'background-image: url(' image ')')}}>
+                      style={{background-image image}}>
                     </div>
                   {{/animated-each}}
                 </div>
@@ -38,7 +38,7 @@
               use=(if this.staggerEnabled this.shuffleWithStagger this.shuffle)
             as |image|}}
               <div class='aspect-ratio-square bg-cover mt-6 rounded-lg shadow-md'
-                style={{html-safe (concat 'background-image: url(' image ')')}}></div>
+                style={{background-image image}}></div>
             {{/animated-each}}
           </AnimatedContainer>
         </div>
