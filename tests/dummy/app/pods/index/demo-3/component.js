@@ -4,8 +4,10 @@ import move from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
 import { wait } from 'ember-animated';
 import dedent from '../utils/dedent';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
+  rootUrl: service(),
 
   * collapse({ receivedSprites }) {
     for (let sprite of receivedSprites) {
@@ -38,32 +40,37 @@ export default Component.extend({
 
   selectedCategoryName: 'Nature',
 
-  categories: Object.freeze([
-    {
-      name: 'Nature',
-      images: [
-        'images/nature-1.jpeg',
-        'images/nature-2.jpeg',
-        'images/nature-3.jpeg'
-      ],
-    },
-    {
-      name: 'Architecture',
-      images: [
-        'images/architecture-1.jpeg',
-        'images/architecture-2.jpeg',
-        'images/architecture-3.jpeg'
-      ]
-    },
-    {
-      name: 'Food',
-      images: [
-        'images/food-1.jpeg',
-        'images/food-2.jpeg',
-        'images/food-3.jpeg'
-      ]
-    },
-  ]),
+  categories: computed(function() {
+    return [
+      {
+        name: 'Nature',
+        images: [
+          'images/nature-1.jpeg',
+          'images/nature-2.jpeg',
+          'images/nature-3.jpeg'
+        ],
+      },
+      {
+        name: 'Architecture',
+        images: [
+          'images/architecture-1.jpeg',
+          'images/architecture-2.jpeg',
+          'images/architecture-3.jpeg'
+        ]
+      },
+      {
+        name: 'Food',
+        images: [
+          'images/food-1.jpeg',
+          'images/food-2.jpeg',
+          'images/food-3.jpeg'
+        ]
+      },
+    ].map(category => {
+      category.images = category.images.map(img => this.rootUrl.build(img));
+      return category;
+    });
+  }),
 
   selectedCategory: computed('selectedCategoryName', function() {
     return this.categories.find(category => category.name === this.selectedCategoryName);

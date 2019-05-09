@@ -71,6 +71,7 @@
     "ember-power-select": "^2.0.4",
     "ember-qunit": "^3.4.1",
     "ember-resolver": "^5.0.1",
+    "ember-root-url": "^0.2.0",
     "ember-source": "~3.7.0",
     "ember-source-channel-url": "^1.1.0",
     "ember-svg-jar": "^1.2.1",
