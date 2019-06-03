@@ -1,5 +1,7 @@
 import { Motion, rAF, Tween } from '..';
 
+const HEIGHT_AND_WIDTH_OPTS = ['fromHeight', 'toHeight', 'fromWidth', 'toWidth'];
+
 /**
   Smoothly resizes _sprite_ from its the initial size to its final size.
 
@@ -35,30 +37,81 @@ export class Resize extends Motion {
     this.prior = motions.find(m => m instanceof this.constructor);
   }
 
+  /**
+   * Extracts initial/final height and width from the `this.opts` object. Required for sprites wrapped in a resize
+   * `animated-if`, as they may not have `initialBounds` or `finalBounds` of their own
+   * @private
+   */
+  _extractHeightAndWidthOpts() {
+    const returnVariables = {};
+    HEIGHT_AND_WIDTH_OPTS.forEach(optionKey => {
+      let bounds = 'initialBounds';
+      let transform = 'initialCumulativeTransform';
+      let transformProp = 'a';
+      let dimension = 'width';
+      let option = this.opts[optionKey];
+
+      if (optionKey.indexOf('to') > -1) {
+        bounds = 'finalBounds';
+        transform = 'finalCumulativeTransform';
+      }
+      if (optionKey.indexOf('Height') > -1) {
+        dimension = 'height';
+        transformProp = 'd';
+      }
+
+      if (option != null) {
+        returnVariables[optionKey] = option;
+        returnVariables[transform] = { ...this.sprite[transform], ...returnVariables[transform], [transformProp]: 1 };
+      } else {
+        let spriteBounds = this.sprite[bounds];
+        returnVariables[optionKey] = spriteBounds != null && spriteBounds[dimension];
+        returnVariables[transform] = { ...this.sprite[transform], ...returnVariables[transform] };
+      }
+    });
+
+    return returnVariables;
+  }
+
+
+
+
   * animate() {
     let sprite = this.sprite;
     let duration = this.duration;
+    let { fromHeight, toHeight, fromWidth, toWidth, initialCumulativeTransform,
+      finalCumulativeTransform } = this._extractHeightAndWidthOpts();
 
     if (!this.prior) {
-      this.widthTween = new Tween(
-        sprite.initialBounds.width / sprite.initialCumulativeTransform.a,
-        sprite.finalBounds.width / sprite.finalCumulativeTransform.a, duration
-      );
-      this.heightTween = new Tween(
-        sprite.initialBounds.height / sprite.initialCumulativeTransform.d,
-        sprite.finalBounds.height / sprite.finalCumulativeTransform.d, duration
-      );
+      this.widthTween = (fromWidth === false || toWidth === false)
+        ? { done: true }
+        : new Tween(
+          fromWidth / initialCumulativeTransform.a,
+          toWidth / finalCumulativeTransform.a, duration
+        );
+
+      this.heightTween = (fromHeight === false || toHeight === false)
+        ? { done: true }
+        : new Tween(
+          fromHeight / initialCumulativeTransform.d,
+          toHeight / finalCumulativeTransform.d, duration
+        );
     } else {
-      this.widthTween = new Tween(
-        0,
-        sprite.finalBounds.width / sprite.finalCumulativeTransform.a - this.prior.sprite.finalBounds.width,
-        duration
-      ).plus(this.prior.widthTween);
-      this.heightTween = new Tween(
-        0,
-        sprite.finalBounds.height / sprite.finalCumulativeTransform.d - this.prior.sprite.finalBounds.height,
-        duration
-      ).plus(this.prior.heightTween);
+      this.widthTween = (toWidth === false)
+        ? { done: true}
+        : new Tween(
+          0,
+          toWidth / finalCumulativeTransform.a - this.prior.sprite.finalBounds.width,
+          duration
+        ).plus(this.prior.widthTween);
+
+      this.heightTween = (toHeight === false)
+      ? { done: true }
+      : new Tween(
+          0,
+          toHeight / finalCumulativeTransform.d - this.prior.sprite.finalBounds.height,
+          duration
+        ).plus(this.prior.heightTween);
     }
 
     while (!this.widthTween.done || !this.heightTween.done) {
