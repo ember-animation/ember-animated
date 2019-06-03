@@ -118,6 +118,7 @@ export default Component.extend({
     this._firstTime = true;
     this._inserted = false;
     this._renderedChildren = [];
+    this._renderedChildrenStartedMoving = false;
     this._cycleCounter = 0;
     this._keptSprites = null;
     this._insertedSprites = null;
@@ -227,13 +228,23 @@ export default Component.extend({
       }
     }).concat(
       oldChildren
-        .filter(child => !child.shouldRemove && newIndices.get(child.id) == null)
+        .filter(child =>
+          (!child.shouldRemove || !this._renderedChildrenStartedMoving) &&
+          newIndices.get(child.id) == null
+        )
         .map(child => {
           child.flagForRemoval();
           return child;
         })
     );
     this._renderedChildren = newChildren;
+
+    // in general, a removed sprite that didn't run a motion in the previous
+    // animation gets instantly removed at the start of the next animation. But
+    // there is a possible race condition if we recompute before the user's
+    // transition even has a chance to begin. So this flag protects the removed
+    // sprites until we can hand them off to the user's transition.
+    this._renderedChildrenStartedMoving = false;
 
     if (typeof FastBoot === 'undefined' && !isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
@@ -563,6 +574,11 @@ export default Component.extend({
       unmatchedInsertedSprites.forEach(s => s.reveal());
       unmatchedInsertedSprites = [];
     }
+
+
+    // if we are interrupted after this point, any removed children that didn't
+    // actually undergo a motion will be immediately destroyed.
+    this._renderedChildrenStartedMoving = true;
 
     // Early exit if nothing is happening.
     if (!transition ||
