@@ -38,7 +38,7 @@ function _computed(fn) {
       return computed(fn)(...arguments);
     };
 
-    Ember._setComputedDecorator(cp);
+    Ember._setClassicDecorator(cp);
 
     return cp;
   } else {
