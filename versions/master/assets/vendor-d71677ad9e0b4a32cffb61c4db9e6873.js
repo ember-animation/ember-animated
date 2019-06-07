@@ -6379,7 +6379,7 @@ break}throw i
 case 19:return e.finish(16)
 case 20:return e.finish(13)
 case 21:case"end":return e.stop()}},e,null,[[5,9,13,21],[14,,16,20]])})),_findActiveSprites:function(e){var t=this
-return this._inserted?l(this.element.children).map(function(n){var a=t._elementToChild.get(n)
+return this._inserted?Array.from(this.element.children).map(function(n){var a=t._elementToChild.get(n)
 if(!a.shouldRemove){var r=o.default.positionedStartingAt(n,e)
 return r.owner=a,a.flagForRemoval(),r}n.remove()}).filter(Boolean):[]},_groupActiveSprites:function(e){var t=this,n=[],a=!0,r=!1,i=void 0
 try{for(var o,s=function(){var e=o.value,a=t._childToTransition.get(e.owner),r=a.transition,i=a.duration,s=n.find(function(e){return e.transition===r})
