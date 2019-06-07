@@ -117,6 +117,23 @@ export default class Sprite {
     // just pass Sprites to Motions without also passing the context.
     this._transitionContext = null;
 
+    this._lockedToInitialPosition = inInitialPosition;
+    if (inInitialPosition) {
+      this.measureInitialBounds();
+      this._finalComputedStyle = null;
+      this._finalBounds = null;
+      this._originalFinalBounds = null;
+      this._finalPosition = null;
+      this._finalCumulativeTransform = null;
+    } else {
+      this._initialComputedStyle = null;
+      this._initialBounds = null;
+      this._originalInitialBounds = null;
+      this._initialPosition = null;
+      this._initialCumulativeTransform = null;
+      this.measureFinalBounds();
+    }
+
     let predecessor = inFlight.get(element);
     if (predecessor && lockMode) {
       // When we finish, we want to be able to set the style back to
@@ -148,22 +165,7 @@ export default class Sprite {
       }
     }
 
-    this._lockedToInitialPosition = inInitialPosition;
-    if (inInitialPosition) {
-      this.measureInitialBounds();
-      this._finalComputedStyle = null;
-      this._finalBounds = null;
-      this._originalFinalBounds = null;
-      this._finalPosition = null;
-      this._finalCumulativeTransform = null;
-    } else {
-      this._initialComputedStyle = null;
-      this._initialBounds = null;
-      this._originalInitialBounds = null;
-      this._initialPosition = null;
-      this._initialCumulativeTransform = null;
-      this.measureFinalBounds();
-    }
+
 
     if (Ember.testing) { Object.seal(this); }
   }
@@ -561,6 +563,12 @@ export default class Sprite {
   }
 
   _rememberSize() {
+    // at the point in time when this runs, we always have either initial or
+    // final measurements, but not both. So this will successfully pick the one
+    // we do have, which applies to what we are currently measuring.
+    let transform = this.initialCumulativeTransform || this.finalCumulativeTransform;
+    let bounds = this.initialBounds || this.finalBounds;
+
     this._imposedStyle = {};
 
     if (isSVG(this.element)) {
@@ -580,7 +588,7 @@ export default class Sprite {
     // actually returns the "used" values for width and height).
 
     if (this.element.style.width === "") {
-      this._imposedStyle.width = this.element.offsetWidth;
+      this._imposedStyle.width = bounds.width / transform.a;
       // TODO: do a more sophisticated size measurement so we don't
       // need to impose border-box. If we're only imposing width OR
       // height and we weren't originally in border box, we can get an
@@ -588,7 +596,7 @@ export default class Sprite {
       this._imposedStyle['box-sizing'] = 'border-box';
     }
     if (this.element.style.height === "") {
-      this._imposedStyle.height = this.element.offsetHeight;
+      this._imposedStyle.height = bounds.height / transform.d;
       this._imposedStyle['box-sizing'] = 'border-box';
     }
   }
