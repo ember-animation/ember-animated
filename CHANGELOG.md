@@ -1,5 +1,9 @@
 # master
 
+# 0.6.1
+ - BUGFIX: polyfill Element.remove on IE11
+ - BUGFIX: subpixel rounding could cause text wrapping during animation of inline elements
+
 # 0.6.0
  - BUGFIX: we sometimes threw a "function expected" Exception on Microsoft Edge when using <AnimatedOrphans />
  - DOCS: @jenweber fixed a broken link
