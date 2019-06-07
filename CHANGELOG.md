@@ -1,5 +1,16 @@
 # master
 
+# 0.6.0
+ - BUGFIX: we sometimes threw a "function expected" Exception on Microsoft Edge when using <AnimatedOrphans />
+ - DOCS: @jenweber fixed a broken link
+ - BUGFIX: there was a race condition if any animator component received two changes before the first could even begin running the user's transition
+ - HOUSEKEEPING: issue template added by @samselikof
+ - HOUSEKEEPING: deleted unnecessary package-lock.json by @Turbo87
+ - DOCS: refer to yarn instead of NPM in the CONTRIBUTING docs, by @outdoorsy
+ - HOUSEKEEPING: upgrade to Ember 3.10 and fix deprecations, by @cibernox
+ - DOCS: improved use of `htmlSafe` in examples to demonstrate safer patterns
+ - ENHANCEMENT: added easing option support to the scale motion, by @nibynic
+
 # 0.5.4
  - HOUSEKEEPING: switch to released version of ember-angle-bracket-invocation-polyfill, by @danwenzel
 
