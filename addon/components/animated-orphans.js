@@ -12,6 +12,7 @@ import {
 } from '../-private/scheduler';
 import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
+import '../element-remove';
 
 /**
   A component that adopts any orphaned sprites so they can continue animating even

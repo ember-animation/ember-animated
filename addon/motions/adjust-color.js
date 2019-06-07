@@ -1,5 +1,6 @@
 import { Motion, rAF, Tween } from 'ember-animated';
 import linear from 'ember-animated/easings/linear';
+import '../element-remove';
 
 const colorChannels = ['r', 'g', 'b'];
 const channels = colorChannels.concat(['a']);
