@@ -1,4 +1,9 @@
-{{!-- the @class on the next line is only there to support a deprecated usage --}}
-<div class="animated-container {{@class}}" ...attributes >
-  {{yield}}
-</div>
+{{!--
+  1. The @class is only there to support a deprecated usage.
+  2. The ~ is needed or else getViewBounds returns a text node
+--}}
+{{#let (element this.tag) as |Tag|~}}
+  <Tag class="animated-container {{@class}}" ...attributes >
+    {{yield}}
+  </Tag>
+{{/let}}

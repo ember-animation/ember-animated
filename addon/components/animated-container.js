@@ -64,6 +64,12 @@ export default Component.extend({
 
   motionService: service('-ea-motion'),
    /**
+   * Use a custom tag for the container. Defaults to div.
+    @argument tag
+    @type String
+  */
+  tag: 'div',
+   /**
    * Whether to animate the initial render. You will probably also need to set
    * initialInsertion=true on a child component of animated-container.
    * Defaults to false.
