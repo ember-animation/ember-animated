@@ -508,4 +508,13 @@ module('Integration | Component | animated container', function(hooks) {
     let elt = this.element.querySelector('[data-test-me]');
     assert.equal(elt.tagName, 'SECTION');
   });
+
+  test('accepts a custom tag', async function(assert) {
+    await render(hbs`
+      <AnimatedContainer @tag="section"/>
+    `);
+
+    let elt = this.element.querySelector('.animated-container');
+    assert.equal(elt.tagName, 'SECTION');
+  });
 });
