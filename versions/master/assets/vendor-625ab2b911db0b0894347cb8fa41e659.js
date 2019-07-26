@@ -6173,7 +6173,7 @@ a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Obj
 for(;e&&1===e.nodeType;){var n=l(e)
 n===s||n.isIdentity()||(t=t?n.mult(t):n),e=e.parentElement}return t||s},e.ownTransform=l,e.identity=e.default=void 0
 var o=function(){function e(t,n,a,r,i,o){(function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")})(this,e),this.a=t,this.b=n,this.c=a,this.d=r,this.tx=i,this.ty=o}var t,n,a
-return t=e,n=[{key:"serialize",value:function(){return this.isIdentity()?"none":"matrix(".concat(this.a,", ").concat(this.b,", ").concat(this.c,", ").concat(this.d,", ").concat(this.tx,", ").concat(this.ty,")")}},{key:"isIdentity",value:function(){return this===s||1===this.a&&0===this.b&&0===this.c&&1===this.d&&0===this.tx&&0===this.ty}},{key:"mult",value:function(t){return this===s?t:t===s?this:new e(this.a*t.a+this.c*t.b,this.b*t.a+this.d*t.b,this.a*t.c+this.c*t.d,this.b*t.c+this.d*t.d,this.a*t.tx+this.c*t.ty+this.tx,this.b*t.tx+this.d*t.ty+this.ty)}}],n&&i(t.prototype,n),a&&i(t,a),e}()
+return t=e,n=[{key:"serialize",value:function(){return"matrix(".concat(this.a,", ").concat(this.b,", ").concat(this.c,", ").concat(this.d,", ").concat(this.tx,", ").concat(this.ty,")")}},{key:"isIdentity",value:function(){return this===s||1===this.a&&0===this.b&&0===this.c&&1===this.d&&0===this.tx&&0===this.ty}},{key:"mult",value:function(t){return this===s?t:t===s?this:new e(this.a*t.a+this.c*t.b,this.b*t.a+this.d*t.b,this.a*t.c+this.c*t.d,this.b*t.c+this.d*t.d,this.a*t.tx+this.c*t.ty+this.tx,this.b*t.tx+this.d*t.ty+this.ty)}}],n&&i(t.prototype,n),a&&i(t,a),e}()
 e.default=o
 var s=new o(1,0,0,1,0,0)
 e.identity=s
