@@ -141,6 +141,7 @@ export default class Sprite {
       // so inheriting the state from our predecessor is important for
       // correctness.
       this._styleCache = predecessor._styleCache;
+      this._classListCache = predecessor._classListCache;
       this._parentElement = predecessor._parentElement;
       this._revealed = predecessor._revealed;
       this._imposedStyle = predecessor._imposedStyle;
@@ -151,6 +152,7 @@ export default class Sprite {
       }
     } else {
       this._styleCache = null;
+      this._classListCache = null;
       this._parentElement = null;
       this._revealed = null;
       this._imposedStyle = null;
@@ -666,6 +668,7 @@ export default class Sprite {
       cache[property] = style[property];
     });
     this._styleCache = cache;
+    this._classListCache = Array.from(this.element.classList);
   }
 
   lock() {
@@ -693,6 +696,14 @@ export default class Sprite {
     this._reapplyPosition(this._finalPosition);
 
     this._clearMarginCollapse();
+    for (let cls of this._classListCache) {
+      this.element.classList.add(cls);
+    }
+    for (let cls of Array.from(this.element.classList)) {
+      if (!this._classListCache.includes(cls)) {
+        this.element.classList.remove(cls);
+      }
+    }
   }
 
 
