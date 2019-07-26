@@ -1,5 +1,10 @@
 # master
 
+# 0.7.0
+ - ENHANCEMENT: sprites now reset their classlist after animating, so any classes applied by motions will be safely cleared at the end of animation.
+ - BUGFIX: the identity transform used to serialized as "none", which can lead to unexpected behavior.
+ - ENHANCEMENT: AnimatedContainer now accepts a `@tag` argument so you can customize which HTML Element it will render, by @ryanto. With this feature, users now have control over 100% of the DOM emitted by ember-animated.
+
 # 0.6.1
  - BUGFIX: polyfill Element.remove on IE11
  - BUGFIX: subpixel rounding could cause text wrapping during animation of inline elements
