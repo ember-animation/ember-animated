@@ -61,20 +61,26 @@ export class Resize extends Motion {
       }
 
       if (option != null) {
+        // User passed in option
         returnVariables[optionKey] = option;
         returnVariables[transform] = { ...this.sprite[transform], ...returnVariables[transform], [transformProp]: 1 };
       } else {
         let spriteBounds = this.sprite[bounds];
-        returnVariables[optionKey] = spriteBounds != null && spriteBounds[dimension];
+
+        if (spriteBounds != null) {
+          returnVariables[optionKey] = spriteBounds[dimension]
+        } else {
+          // If the sprite has no `initialBounds` or `finalBounds` key, then we use alternate bounds value
+          // This results in the same start and end attribute, meaning the that the sprite won't animate on that plane
+          let alternateBounds = bounds === 'initialBounds' ? 'finalBounds' : 'initialBounds'
+          returnVariables[optionKey] = this.sprite[alternateBounds][dimension]
+        }
         returnVariables[transform] = { ...this.sprite[transform], ...returnVariables[transform] };
       }
     });
 
     return returnVariables;
   }
-
-
-
 
   * animate() {
     let sprite = this.sprite;
@@ -83,31 +89,23 @@ export class Resize extends Motion {
       finalCumulativeTransform } = this._extractHeightAndWidthOpts();
 
     if (!this.prior) {
-      this.widthTween = (fromWidth === false || toWidth === false)
-        ? { done: true }
-        : new Tween(
+      this.widthTween =  new Tween(
           fromWidth / initialCumulativeTransform.a,
           toWidth / finalCumulativeTransform.a, duration
         );
 
-      this.heightTween = (fromHeight === false || toHeight === false)
-        ? { done: true }
-        : new Tween(
+      this.heightTween = new Tween(
           fromHeight / initialCumulativeTransform.d,
           toHeight / finalCumulativeTransform.d, duration
         );
     } else {
-      this.widthTween = (toWidth === false)
-        ? { done: true}
-        : new Tween(
+      this.widthTween = new Tween(
           0,
           toWidth / finalCumulativeTransform.a - this.prior.sprite.finalBounds.width,
           duration
         ).plus(this.prior.widthTween);
 
-      this.heightTween = (toHeight === false)
-      ? { done: true }
-      : new Tween(
+      this.heightTween = new Tween(
           0,
           toHeight / finalCumulativeTransform.d - this.prior.sprite.finalBounds.height,
           duration
