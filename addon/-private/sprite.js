@@ -949,7 +949,7 @@ export default class Sprite {
     this._initialBounds = shiftedBounds(this._finalBounds, dx-offsetX, dy-offsetY);
 
     if (this._inInitialPosition) {
-      // we were already moved into our priorInitiaBounds position, so we need to compensate
+      // we were already moved into our priorInitialBounds position, so we need to compensate
       this.translate(this._initialBounds.left - priorInitialBounds.left, this._initialBounds.top - priorInitialBounds.top);
     } else {
       this.translate(this._initialBounds.left - this._finalBounds.left, this._initialBounds.top - this._finalBounds.top);
