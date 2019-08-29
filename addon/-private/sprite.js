@@ -26,6 +26,11 @@ export const COPIED_CSS_PROPERTIES = [
   'line-height',
   'text-align',
   'text-transform',
+  'border-radius',
+  'border-top-left-radius',
+  'border-top-right-radius',
+  'border-bottom-left-radius',
+  'border-bottom-right-radius',
 ];
 
 const numericCSSProps = {
