@@ -5,7 +5,7 @@ import { shiftedBounds } from 'ember-animated/-private/bounds';
 import Sprite from 'ember-animated/-private/sprite';
 import hbs from 'htmlbars-inline-precompile';
 import { bounds, setupAnimationTest } from 'ember-animated/test-support';
-import { render } from '@ember/test-helpers';
+import { render, settled } from '@ember/test-helpers';
 import {
   equalBounds,
   visuallyConstant,
@@ -1073,7 +1073,41 @@ module("Unit | Sprite", function(hooks) {
     }, 'target bounds');
   });
 
+  test("sprites cleanup their classlist", async function(assert) {
+    await render(hbs`<div class="a"></div>`);
+    let target = this.element.querySelector('.a');
 
+    let parent = Sprite.offsetParentEndingAt(target);
+    let sprite = Sprite.positionedEndingAt(target, parent);
+
+    sprite.lock();
+    // a class added externally during animation
+    target.classList.add('extra');
+    sprite.unlock();
+    assert.ok(!target.classList.contains('extra'), 'extra should have been cleaned up');
+  });
+
+  test("sprites cleanup classlist correctly when there are dynamic classes", async function(assert) {
+    await render(hbs`<div class="a {{if this.showB "b"}}"></div>`);
+
+    let target = this.element.querySelector('.a');
+    let parent = Sprite.offsetParentStartingAt(target);
+    let sprite = Sprite.positionedStartingAt(target, parent);
+
+    this.set('showB', true);
+    await settled();
+
+    parent.measureFinalBounds();
+    sprite.measureFinalBounds();
+
+    sprite.lock();
+    // a class added externally during animation
+    target.classList.add('extra');
+    sprite.unlock();
+
+    assert.ok(!target.classList.contains('extra'), 'extra should have been cleaned up');
+    assert.ok(target.classList.contains('b'), 'keeps the b class');
+  });
 
 
 });
