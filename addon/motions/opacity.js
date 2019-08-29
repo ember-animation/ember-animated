@@ -94,7 +94,12 @@ export class Opacity extends Motion {
     }
 
     let proportionalDuration = Math.abs(from - to) * duration;
-    this.tween = new Tween(from, to, proportionalDuration, linear);
+    this.tween = new Tween(
+      from,
+      to,
+      proportionalDuration,
+      this.opts.easing !== undefined ? this.opts.easing : linear
+    );
 
     while (!this.tween.done) {
       sprite.applyStyles({
