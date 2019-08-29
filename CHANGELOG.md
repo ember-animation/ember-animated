@@ -1,5 +1,11 @@
 # master
 
+# 0.8.0
+ - BUGFIX: the classlist-resetting feature in the previous release had a bug that would prevent legitimate permanent updates to classes.
+ - ENHANCEMENT: track border-radius properties so adjustCSS can easily interpolate radii.
+ - DOCS: updates by @samselikof
+ - HOUSEKEEPING: update angle bracket invocation polyfill by @ryanto
+
 # 0.7.0
  - ENHANCEMENT: sprites now reset their classlist after animating, so any classes applied by motions will be safely cleared at the end of animation.
  - BUGFIX: the identity transform used to serialized as "none", which can lead to unexpected behavior.
