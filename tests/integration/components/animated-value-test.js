@@ -3,11 +3,12 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { animationsSettled } from 'ember-animated/test-support';
+import { animationsSettled, setupAnimationTest } from 'ember-animated/test-support';
 import { run } from '@ember/runloop';
 
-module('Integration | Component | animated bind', function(hooks) {
+module('Integration | Component | animated value', function(hooks) {
   setupRenderingTest(hooks);
+  setupAnimationTest(hooks);
 
   test('it renders', async function(assert) {
     this.set('value', 'hello');
@@ -46,7 +47,7 @@ module('Integration | Component | animated bind', function(hooks) {
 
     await animationsSettled();
 
-    assert.equal(this.element.querySelector('.test-child').innerHTML, 'a');
+    assert.equal(this.element.querySelector('.test-child').textContent.trim(), 'a');
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 });
