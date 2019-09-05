@@ -6394,7 +6394,7 @@ return(0,a.continueMotions)(e.element,t),e.element=t,e},_onFirstMotionStart:func
 delete a["line-height"],n.applyStyles(a),this.element.appendChild(n.element),n.lock(),n.reveal(),e.push(n),this._elementToChild.set(n.element,n.owner)}n.owner.block(t)},_onMotionStart:function(e,t){t.reveal(),t.owner.block(e)},_onMotionEnd:function(e,t){t.owner.unblock(e)}})
 e.default=d}),define("ember-animated/components/animated-value",["exports","ember-animated/templates/components/animated-value"],function(e,t){"use strict"
 Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var n=Ember.Component.extend({tagName:"",layout:t.default,items:Ember.computed("value",function(){return[this.get("value")]})}).reopenClass({positionalParams:["value"]})
+var n=Ember.Component.extend({tagName:"",layout:t.default,items:Ember.computed("value",function(){return Ember.A([this.get("value")])})}).reopenClass({positionalParams:["value"]})
 e.default=n}),define("ember-animated/components/ea-list-element",["exports","ember-animated/-private/ember-internals"],function(e,t){"use strict"
 Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
 var n=Ember.Component.extend({tagName:"",isEmberAnimatedListElement:!0,didRender:function(){var e=this.get("elementToChild"),t=this.get("child")
@@ -6628,7 +6628,7 @@ Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
 var t=Ember.HTMLBars.template({id:"jhqx1TIA",block:'{"symbols":["&default"],"statements":[[15,1],[0,"\\n"]],"hasEval":false}',meta:{moduleName:"ember-animated/templates/components/animated-orphans.hbs"}})
 e.default=t}),define("ember-animated/templates/components/animated-value",["exports"],function(e){"use strict"
 Object.defineProperty(e,"__esModule",{value:!0}),e.default=void 0
-var t=Ember.HTMLBars.template({id:"amvvH/NC",block:'{"symbols":["item","&default"],"statements":[[4,"animated-each",[[25,["items"]]],[["key","rules","use","duration","group","initialInsertion","finalRemoval"],[[25,["key"]],[25,["rules"]],[25,["use"]],[25,["duration"]],[25,["group"]],[25,["initialInsertion"]],[25,["finalRemoval"]]]],{"statements":[[0,"  "],[15,2,[[24,1,[]]]],[0,"\\n"]],"parameters":[1]},null]],"hasEval":false}',meta:{moduleName:"ember-animated/templates/components/animated-value.hbs"}})
+var t=Ember.HTMLBars.template({id:"hMoOalQv",block:'{"symbols":["item","&default"],"statements":[[4,"animated-each",[[25,["items"]]],[["key","rules","use","duration","group","watch","initialInsertion","finalRemoval"],[[25,["key"]],[25,["rules"]],[25,["use"]],[25,["duration"]],[25,["group"]],[25,["watch"]],[25,["initialInsertion"]],[25,["finalRemoval"]]]],{"statements":[[0,"  "],[15,2,[[24,1,[]]]],[0,"\\n"]],"parameters":[1]},null]],"hasEval":false}',meta:{moduleName:"ember-animated/templates/components/animated-value.hbs"}})
 e.default=t}),define("ember-animated/transitions/fade",["exports","ember-animated/motions/opacity","ember-animated"],function(e,t,n){"use strict"
 Object.defineProperty(e,"__esModule",{value:!0}),e.default=r
 var a=regeneratorRuntime.mark(r)
