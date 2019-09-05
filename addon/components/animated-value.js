@@ -1,6 +1,7 @@
 import { computed } from '@ember/object';
 import Component from '@ember/component';
 import layout from '../templates/components/animated-value';
+import { A } from '@ember/array';
 
 /**
   A component that animates when a single value changes.
@@ -50,7 +51,7 @@ export default Component.extend({
   tagName: '',
   layout,
   items: computed('value', function() {
-    return [this.get('value')];
+    return A([this.get('value')]);
   })
 }).reopenClass({
   positionalParams: ['value']
