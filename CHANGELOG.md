@@ -1,5 +1,9 @@
 # master
 
+# 0.8.1
+ - ENHANCEMENT: add padding- and border-radius-related CSS properties to the list of ones we track automatically
+ - BUGFIX: animated-value didn't respect the `watch` parameter, by @bagby
+
 # 0.8.0
  - BUGFIX: the classlist-resetting feature in the previous release had a bug that would prevent legitimate permanent updates to classes.
  - ENHANCEMENT: track border-radius properties so adjustCSS can easily interpolate radii.
