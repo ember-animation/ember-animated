@@ -22,6 +22,7 @@ export const COPIED_CSS_PROPERTIES = [
   'font-weight',
   'color',
   'background-color',
+  'border-color',
   'letter-spacing',
   'line-height',
   'text-align',
