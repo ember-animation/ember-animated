@@ -61,6 +61,50 @@ export async function visuallyConstant(target, fn, message) {
   checkFields.call(this, ['a', 'b', 'c', 'd', 'top', 'left', 'width', 'height'], 0.25, before, after, message);
 }
 
+function parseComputedColor(c) {
+  let m = /rgb\((\d+), (\d+), (\d+)\)/.exec(c);
+  if (m) {
+    return {
+      r: parseInt(m[1]),
+      g: parseInt(m[2]),
+      b: parseInt(m[3]),
+      a: 1
+    };
+  }
+  m = /rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
+  if (m) {
+    return {
+      r: parseInt(m[1]),
+      g: parseInt(m[2]),
+      b: parseInt(m[3]),
+      a: parseFloat(m[4])
+    };
+  }
+}
+
+function parseUserProvidedColor(c) {
+  let testElement = document.createElement('div');
+  testElement.style.display = 'none';
+  testElement.style.color = c;
+  document.body.appendChild(testElement);
+  let result = parseComputedColor(getComputedStyle(testElement).color);
+  testElement.remove();
+  return result;
+}
+
+export function approxEqualColors(value, expected, message) {
+  const tolerance = 3;
+  let valueColor = parseUserProvidedColor(value);
+  let expectedColor = parseUserProvidedColor(expected);
+  let channels = ['r', 'g', 'b', 'a'];
+  this.pushResult({
+    result: channels.every(channel => Math.abs(valueColor[channel] - expectedColor[channel]) < tolerance),
+    actual: value,
+    expected,
+    message,
+  });
+}
+
 export let time;
 
 export function setupAnimationTest(hooks) {
@@ -79,6 +123,7 @@ export function setupAnimationTest(hooks) {
     assert.closeBounds = checkFields.bind(assert, ['height', 'left', 'top', 'width']);
 
     assert.visuallyConstant = visuallyConstant;
+    assert.approxEqualColors = approxEqualColors;
 
   });
   hooks.afterEach(function() {
