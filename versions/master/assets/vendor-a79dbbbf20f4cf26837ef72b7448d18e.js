@@ -6258,7 +6258,7 @@ return t.remove(),n}(t),t)}}]),e}()
 e.Color=s
 var c=function(){function e(a,i,o){var s=arguments.length>3&&void 0!==arguments[3]?arguments[3]:n.default
 r(this,e),this.rTween=new t.Tween(a.r*a.a,i.r*i.a,o,s),this.gTween=new t.Tween(a.g*a.a,i.g*i.a,o,s),this.bTween=new t.Tween(a.b*a.a,i.b*i.a,o,s),this.aTween=new t.Tween(a.a,i.a,o,s)}return o(e,[{key:"currentValue",get:function(){var e=this.aTween.currentValue||1
-return new s({r:Math.floor(this.rTween.currentValue/e),g:Math.floor(this.gTween.currentValue/e),b:Math.floor(this.bTween.currentValue/e),a:e})}},{key:"done",get:function(){return[this.rTween,this.gTween,this.bTween,this.aTween].every(function(e){return e.done})}}]),e}()
+return new s({r:Math.floor(this.rTween.currentValue/e),g:Math.floor(this.gTween.currentValue/e),b:Math.floor(this.bTween.currentValue/e),a:this.aTween.currentValue})}},{key:"done",get:function(){return[this.rTween,this.gTween,this.bTween,this.aTween].every(function(e){return e.done})}}]),e}()
 function l(e){var t=/^rgb\((\d+), (\d+), (\d+)\)/.exec(e)
 if(t)return{r:parseInt(t[1]),g:parseInt(t[2]),b:parseInt(t[3]),a:1,m:t}
 if(t=/^rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(e),t)return{r:parseInt(t[1]),g:parseInt(t[2]),b:parseInt(t[3]),a:parseFloat(t[4]),m:t}
