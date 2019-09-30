@@ -1,6 +1,7 @@
 import { Color, ColorTween } from './color';
 import { Tween } from '.';
 import linear from  './easings/linear';
+import './element-remove';
 
 const innerPattern = /^ (\d+)px (\d+)px(?: (\d+)px)?(?: (\d+)px)?( inset)?(?:, )?/;
 
@@ -27,6 +28,16 @@ export class BoxShadow {
       string = string.slice(m[0].length);
     }
     return shadows;
+  }
+
+  static fromUserProvidedShadow(string) {
+    let testElement = document.createElement('div');
+    testElement.style.display = 'none';
+    testElement.style['box-shadow'] = string;
+    document.body.appendChild(testElement);
+    let result = this.fromComputedStyle(getComputedStyle(testElement)['box-shadow']);
+    testElement.remove();
+    return result;
   }
 
   constructor({ color, x, y, blur, spread, inset }) {
