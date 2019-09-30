@@ -36,6 +36,7 @@ Router.map(function() {
     this.route('beacondemo');
     this.route('modal');
     this.route('sandbox');
+    this.route('color-and-shadow');
   });
 
   buildIf(useDocs, () => {

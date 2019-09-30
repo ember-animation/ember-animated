@@ -37,6 +37,7 @@ export const COPIED_CSS_PROPERTIES = [
   'border-top-right-radius',
   'border-bottom-left-radius',
   'border-bottom-right-radius',
+  'box-shadow',
 ];
 
 const numericCSSProps = {
