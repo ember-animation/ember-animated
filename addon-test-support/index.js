@@ -4,6 +4,7 @@ import { run } from '@ember/runloop';
 import { relativeBounds } from 'ember-animated/-private/bounds';
 import { cumulativeTransform } from 'ember-animated/-private/transform';
 import TimeControl from './time-control';
+import { Color } from '../color';
 
 export { TimeControl };
 export { default as MotionTester } from './motion-tester';
@@ -61,41 +62,10 @@ export async function visuallyConstant(target, fn, message) {
   checkFields.call(this, ['a', 'b', 'c', 'd', 'top', 'left', 'width', 'height'], 0.25, before, after, message);
 }
 
-function parseComputedColor(c) {
-  let m = /rgb\((\d+), (\d+), (\d+)\)/.exec(c);
-  if (m) {
-    return {
-      r: parseInt(m[1]),
-      g: parseInt(m[2]),
-      b: parseInt(m[3]),
-      a: 1
-    };
-  }
-  m = /rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
-  if (m) {
-    return {
-      r: parseInt(m[1]),
-      g: parseInt(m[2]),
-      b: parseInt(m[3]),
-      a: parseFloat(m[4])
-    };
-  }
-}
-
-function parseUserProvidedColor(c) {
-  let testElement = document.createElement('div');
-  testElement.style.display = 'none';
-  testElement.style.color = c;
-  document.body.appendChild(testElement);
-  let result = parseComputedColor(getComputedStyle(testElement).color);
-  testElement.remove();
-  return result;
-}
-
 export function approxEqualColors(value, expected, message) {
   const tolerance = 3;
-  let valueColor = parseUserProvidedColor(value);
-  let expectedColor = parseUserProvidedColor(expected);
+  let valueColor = Color.fromUserProvidedColor(value);
+  let expectedColor = Color.fromUserProvidedColor(expected);
   let channels = ['r', 'g', 'b', 'a'];
   this.pushResult({
     result: channels.every(channel => Math.abs(valueColor[channel] - expectedColor[channel]) < tolerance),
