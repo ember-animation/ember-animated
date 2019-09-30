@@ -6,21 +6,23 @@ import './element-remove';
 
 export class Color {
   static fromComputedStyle(colorString) {
-    return new Color(parseComputedColor(colorString));
+    let channels = parseComputedColor(colorString);
+    return new Color(channels, channels.m[0]);
   }
   static fromUserProvidedColor(colorString) {
-    return new Color(parseUserProvidedColor(colorString));
+    return new Color(parseUserProvidedColor(colorString), colorString);
   }
 
   toString() {
     return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
   }
 
-  constructor({ r, g, b, a }) {
+  constructor({ r, g, b, a }, sourceString) {
     this.r = r;
     this.g = g;
     this.b = b;
     this.a = a;
+    this.sourceString = sourceString;
   }
 }
 
@@ -46,22 +48,24 @@ export class ColorTween {
 }
 
 function parseComputedColor(c) {
-  let m = /rgb\((\d+), (\d+), (\d+)\)/.exec(c);
+  let m = /^rgb\((\d+), (\d+), (\d+)\)/.exec(c);
   if (m) {
     return {
       r: parseInt(m[1]),
       g: parseInt(m[2]),
       b: parseInt(m[3]),
-      a: 1
+      a: 1,
+      m,
     };
   }
-  m = /rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
+  m = /^rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
   if (m) {
     return {
       r: parseInt(m[1]),
       g: parseInt(m[2]),
       b: parseInt(m[3]),
-      a: parseFloat(m[4])
+      a: parseFloat(m[4]),
+      m,
     };
   }
   throw new Error(`unable to parse color ${c}`);
