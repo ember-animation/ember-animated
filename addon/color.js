@@ -34,12 +34,12 @@ export class ColorTween {
     this.aTween = new Tween(initialColor.a, finalColor.a, duration, easing);
   }
   get currentValue() {
-    let currentAlpha = this.aTween.currentValue || 1;
+    let nonZeroAlpha = this.aTween.currentValue || 1;
     return new Color({
-      r: Math.floor(this.rTween.currentValue / currentAlpha),
-      g: Math.floor(this.gTween.currentValue / currentAlpha),
-      b: Math.floor(this.bTween.currentValue / currentAlpha),
-      a: currentAlpha,
+      r: Math.floor(this.rTween.currentValue / nonZeroAlpha),
+      g: Math.floor(this.gTween.currentValue / nonZeroAlpha),
+      b: Math.floor(this.bTween.currentValue / nonZeroAlpha),
+      a: this.aTween.currentValue,
     });
   }
   get done() {
