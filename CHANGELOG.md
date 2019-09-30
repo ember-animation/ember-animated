@@ -1,5 +1,10 @@
 # master
 
+# 0.9.0
+ - BUGFIX: fix a flicker when interpolating colors near alpha zero.
+ - ENHANCEMENT: add a boxShadow motion for interpolating shadows.
+ - ENHANCEMENT: track border-color property by @bagby.
+
 # 0.8.1
  - ENHANCEMENT: add padding- and border-radius-related CSS properties to the list of ones we track automatically
  - BUGFIX: animated-value didn't respect the `watch` parameter, by @bagby
