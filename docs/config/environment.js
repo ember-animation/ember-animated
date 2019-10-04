@@ -1,8 +1,11 @@
 'use strict';
 
+var docsEnabled = process.env.RAISE_ON_DEPRECATION !== 'true';
+
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'ember-animated-docs',
+    podModulePrefix: 'ember-animated-docs/pods',
     environment,
     rootURL: '/',
     locationType: 'auto',
@@ -20,6 +23,12 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+
+    // Enable fake data in all environments (by default ember-faker
+    // does not include itself in production)
+    'ember-faker': {
+      enabled: true
     }
   };
 
@@ -29,6 +38,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.EmberENV.RAISE_ON_DEPRECATION = !docsEnabled;
   }
 
   if (environment === 'test') {
@@ -40,10 +50,13 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.EmberENV.RAISE_ON_DEPRECATION = !docsEnabled;
     ENV.APP.autoboot = false;
   }
 
   if (environment === 'production') {
+    // Allow ember-cli-addon-docs to update the rootURL in compiled assets
+    ENV.rootURL = 'ADDON_DOCS_ROOT_URL';
     // here you can enable a production-specific feature
   }
 

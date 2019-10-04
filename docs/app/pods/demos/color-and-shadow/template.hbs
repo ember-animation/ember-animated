@@ -1,0 +1,35 @@
+<div class="scenario-color-and-shadow">
+  <label>
+    <Input @type="checkbox" @checked={{this.showFirst}} />
+    Toggle Me
+  </label>
+
+  {{#if this.showFirst }}
+    {{#animated-value "scenario-color-and-shadow.main" use=this.transition}}
+      <div class="block first"></div>
+    {{/animated-value}}
+  {{else}}
+    {{#animated-value "scenario-color-and-shadow.main" use=this.transition}}
+      <div class="block second"></div>
+    {{/animated-value}}
+  {{/if}}
+
+</div>
+
+<style>
+  .scenario-color-and-shadow {
+    margin: 40px;
+  }
+  .scenario-color-and-shadow > .block {
+    width: 500px;
+    height: 500px;
+    margin-top: 20px;
+  }
+  .scenario-color-and-shadow > .first {
+    background-color: rgba(0, 0, 255, 0.2);
+  }
+  .scenario-color-and-shadow > .second {
+    background-color: red;
+    box-shadow: inset 1px 2px 20px 3px black, 0 0 20px blue;
+  }
+</style>

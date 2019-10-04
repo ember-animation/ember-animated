@@ -1,0 +1,28 @@
+<div class="scenario-swapping-lists">
+  <div style="position: absolute; top: 0; left: 0">
+    {{animated-orphans}}
+  </div>
+  <div>
+    <button {{action "swap"}}>Swap</button>
+    <label><input type="checkbox" checked={{distinguishSides}} onchange={{action (mut distinguishSides) (not distinguishSides)}}>Distinguish by color</label>
+    <label class="sending-side"><input type="checkbox" checked={{animateSendingSide}} onchange={{action (mut animateSendingSide) (not animateSendingSide)}}> Animate sending side</label>
+  </div>
+
+  {{#if leftItems}}
+    <AnimatedContainer class="left">
+      {{#animated-each leftItems use=transition key="id" as |item|}}
+        <div class={{if distinguishSides "left-item"}} >
+          {{item.id}}
+        </div>
+      {{/animated-each}}
+    </AnimatedContainer>
+  {{else}}
+    <AnimatedContainer class="right">
+      {{#animated-each rightItems use=transition key="id" as |item|}}
+        <div>
+          {{item.id}}
+        </div>
+      {{/animated-each}}
+    </AnimatedContainer>
+  {{/if}}
+</div>

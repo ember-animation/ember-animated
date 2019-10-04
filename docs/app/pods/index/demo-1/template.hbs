@@ -1,0 +1,75 @@
+<div class="lg:flex lg:-mx-4">
+  <div class="lg:mx-4 lg:w-2/5 lg:flex-no-shrink">
+    <div class="shadow-lg rounded-lg overflow-hidden mb-8">
+      <div class="p-6">
+        <div class="flex mb-3">
+          <p class='text-lg'>How many guests?</p>
+          <div class="ml-4 ">
+            <div class="flex items-center">
+              <button {{action 'removeGuest'}}
+                disabled={{eq this.guests 1}}
+                class='
+                  homepage-demo1-button
+                  {{if (eq guests 1) ' homepage-demo1-button--disabled'}}
+                '
+              >
+                -
+              </button>
+              <span class='text-pink font-bold w-8 text-center text-lg'>
+                {{guests}}
+              </span>
+              <button {{action 'addGuest' 'guests'}}
+                disabled={{eq guests 6}}
+                class='
+                  homepage-demo1-button
+                  {{if (eq guests 6) ' homepage-demo1-button--disabled'}}
+                '
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class='text-3xl text-pink select-none'>
+          {{#if animationEnabled}}
+            <AnimatedContainer>
+              {{#animated-each (range 0 guests) use=transition}}
+                <span class='inline-block'>{{fa-icon 'user'}}</span>
+              {{/animated-each}}
+            </AnimatedContainer>
+          {{else}}
+            {{#each (range 0 guests)}}
+              <span class='inline-block'>{{fa-icon 'user'}}</span>
+            {{/each}}
+          {{/if}}
+        </div>
+      </div>
+
+      {{#index/components/toggle-bar
+        enabled=this.animationEnabled
+        onToggle=(action (mut this.animationEnabled))
+      }}
+        ✨Animate
+      {{/index/components/toggle-bar}}
+    </div>
+  </div>
+
+  <div class='lg:mx-4 lg:w-3/5 overflow-hidden'>
+    {{index/utils/animated-code-diff
+      label='template.hbs'
+      diff=this.templateDiff
+      isShowingFinal=this.animationEnabled
+      onAnimationChange=(action (mut this.isAnimating))
+    }}
+
+    <div class="mt-4">
+      {{index/utils/animated-code-diff
+        label='component.js'
+        diff=this.componentDiff
+        isShowingFinal=this.animationEnabled
+        animationPaused=this.isAnimating
+      }}
+    </div>
+  </div>
+</div>
