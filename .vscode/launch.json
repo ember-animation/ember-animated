@@ -7,12 +7,22 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Dummy App",
             "program": "${workspaceRoot}/node_modules/ember-cli/bin/ember",
             "cwd": "${workspaceRoot}",
             "args": [
                 "serve"
             ]
+        },
+        {
+          "type": "node",
+          "request": "launch",
+          "name": "Launch Docs App",
+          "program": "${workspaceRoot}/node_modules/ember-cli/bin/ember",
+          "cwd": "${workspaceRoot}/docs",
+          "args": [
+              "serve"
+          ]
         },
         {
             "type": "node",
