@@ -44,6 +44,10 @@ jobs:
       install:
         - yarn install --production
         - cd docs && yarn
+      script:
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
 
 
     # we recommend new addons test the current and previous LTS
