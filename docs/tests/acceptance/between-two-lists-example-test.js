@@ -8,6 +8,6 @@ module('Integration | Between Two Lists Example', function(hooks){
     await this.render(hbs`
     {{between-two-lists-example}}
     `);
-    assert.ok(this.element.querySelectorAll('bounce'), "found undo button");
+    assert.equal(this.element.querySelectorAll('.bounce').length, 1, "found undo button");
   });
 });
