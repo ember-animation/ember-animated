@@ -15,6 +15,9 @@ module.exports = function(deployTarget) {
   if (deployTarget === 'staging') {
     ENV.build.environment = 'production';
     // configure other plugins for staging deploy target here
+    ENV.git = {
+      repo: '/tmp/my-deploy-repo'
+    };
   }
 
   if (deployTarget === 'production') {

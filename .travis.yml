@@ -65,7 +65,7 @@ jobs:
 
     - stage: Deploy
       if: (branch = master or tag is present) and type = push
-      script: node_modules/.bin/ember deploy production
+      script: cd docs && node_modules/.bin/ember deploy production
 
     - stage: npm release
       install: skip
