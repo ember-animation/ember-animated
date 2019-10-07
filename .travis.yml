@@ -36,16 +36,18 @@ jobs:
     # runs linting and tests with current locked deps
     - stage: Tests
       name: Library Tests
-      env: EMBER_APP_DIR=.
       script:
-        - cd $EMBER_APP_DIR && yarn run lint:hbs
-        - cd $EMBER_APP_DIR && yarn run lint:js
-        - cd $EMBER_APP_DIR && yarn test
-    - env: EMBER_APP_DIR=docs
-      name: Docs Tests
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
+    - name: Docs Tests
       install:
-        - yarn
+        - yarn install --production
         - cd docs && yarn
+      script:
+        - cd docs && yarn run lint:hbs
+        - cd docs && yarn run lint:js
+        - cd docs && yarn test
 
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
