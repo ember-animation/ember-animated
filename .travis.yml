@@ -35,13 +35,14 @@ jobs:
   include:
     # runs linting and tests with current locked deps
     - stage: Tests
-      name: Tests
+      name: Library Tests
       env: EMBER_APP_DIR=.
       script:
         - cd $EMBER_APP_DIR && yarn run lint:hbs
         - cd $EMBER_APP_DIR && yarn run lint:js
         - cd $EMBER_APP_DIR && yarn test
     - env: EMBER_APP_DIR=docs
+      name: Docs Tests
       install:
         - yarn
         - cd docs && yarn
