@@ -43,8 +43,10 @@ jobs:
     - name: Docs Tests
       install:
         - yarn install --production
-        - cd docs && yarn
+        - cd docs
+        - yarn
       script:
+        - cd docs
         - yarn run lint:hbs
         - yarn run lint:js
         - yarn test
