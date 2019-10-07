@@ -34,13 +34,17 @@ jobs:
 
   include:
     # runs linting and tests with current locked deps
-
     - stage: Tests
       name: Tests
+      env: EMBER_APP_DIR=.
       script:
-        - npm run lint:hbs
-        - npm run lint:js
-        - npm test
+        - cd $EMBER_APP_DIR && yarn run lint:hbs
+        - cd $EMBER_APP_DIR && yarn run lint:js
+        - cd $EMBER_APP_DIR && yarn test
+    - env: EMBER_APP_DIR=docs
+      install:
+        - yarn
+        - cd docs && yarn
 
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
@@ -70,11 +74,6 @@ jobs:
         on:
           tags: true
           repo: ember-animation/ember-animated
-
-before_install:
-  - npm config set spin false
-  - npm install -g npm@4
-  - npm --version
 
 script:
   - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO
