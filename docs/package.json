@@ -24,7 +24,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "ember-ajax": "^5.0.0",
     "ember-cli": "~3.10.1",
-    "ember-cli-addon-docs": "^0.6.10",
+    "ember-cli-addon-docs": "git+https://github.com/ef4/ember-cli-addon-docs#54403750e2b14ce2f62e79118f553716a0835c72",
     "ember-cli-addon-docs-yuidoc": "^0.2.1",
     "ember-cli-app-version": "^3.2.0",
     "ember-cli-babel": "^7.7.3",
