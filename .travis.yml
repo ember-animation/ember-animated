@@ -64,8 +64,14 @@ jobs:
         - yarn install --production
         - cd docs
         - yarn
+        # travis's initial clone only configures our repo to use the master
+        # branch, but we need to reconfigure it and re-fetch so we can interact
+        # with the gh-pages branch.
+        - git config --replace-all "remote.origin.fetch" "+refs/heads/*:refs/remotes/origin/*"
+        - git fetch
+        - git branch --track gh-pages origin/gh-pages
       script:
-        - node_modules/.bin/ember deploy production
+        - node_modules/.bin/ember deploy production --verbose
 
     - stage: npm release
       install: skip
