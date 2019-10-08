@@ -36,6 +36,7 @@ jobs:
         - yarn run lint:js
         - yarn test
     - name: Docs Tests
+      if: false
       install:
         - yarn install --production
         - cd docs
