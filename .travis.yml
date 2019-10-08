@@ -46,7 +46,6 @@ jobs:
         - cd docs
         - yarn
       script:
-        - echo $PWD
         - yarn run lint:hbs
         - yarn run lint:js
         - yarn test
@@ -66,8 +65,13 @@ jobs:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
     - stage: Deploy
-      if: (branch = master or tag is present or branch = split-docs) and type = push
-      script: cd docs && node_modules/.bin/ember deploy production
+      if: ((branch = master or tag is present) and type = push) or (branch = split-docs)
+      install:
+        - yarn install --production
+        - cd docs
+        - yarn
+      script:
+        - node_modules/.bin/ember deploy production
 
     - stage: npm release
       install: skip
