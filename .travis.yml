@@ -43,13 +43,13 @@ jobs:
     - name: Docs Tests
       install:
         - yarn install --production
-        - ( cd docs && yarn )
-        - echo $PWD
-        - find $TRAVIS_BUILD_DIR
+        - cd docs
+        - yarn
       script:
-        - ( cd docs && yarn run lint:hbs )
-        - ( cd docs && yarn run lint:js )
-        - ( cd docs && yarn test )
+        - echo $PWD
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
 
 
     # we recommend new addons test the current and previous LTS

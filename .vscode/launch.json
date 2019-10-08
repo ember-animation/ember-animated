@@ -18,7 +18,7 @@
           "type": "node",
           "request": "launch",
           "name": "Launch Docs App",
-          "program": "${workspaceRoot}/node_modules/ember-cli/bin/ember",
+          "program": "${workspaceRoot}/docs/node_modules/ember-cli/bin/ember",
           "cwd": "${workspaceRoot}/docs",
           "args": [
               "serve"
