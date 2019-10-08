@@ -43,13 +43,11 @@ jobs:
     - name: Docs Tests
       install:
         - yarn install --production
-        - cd docs
-        - yarn
+        - cd docs && yarn
       script:
-        - cd docs
-        - yarn run lint:hbs
-        - yarn run lint:js
-        - yarn test
+        - cd docs && yarn run lint:hbs
+        - cd docs && yarn run lint:js
+        - cd docs && yarn test
 
 
     # we recommend new addons test the current and previous LTS
