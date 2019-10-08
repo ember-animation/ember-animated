@@ -44,6 +44,8 @@ jobs:
       install:
         - yarn install --production
         - ( cd docs && yarn )
+        - echo $PWD
+        - find $TRAVIS_BUILD_DIR
       script:
         - ( cd docs && yarn run lint:hbs )
         - ( cd docs && yarn run lint:js )
