@@ -29,6 +29,7 @@ jobs:
   include:
     # runs linting and tests with current locked deps
     - stage: Tests
+      if: false
       name: Library Tests
       script:
         - yarn run lint:hbs
@@ -48,6 +49,7 @@ jobs:
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
     - stage: Additional Tests
+      if: false
       env: EMBER_TRY_SCENARIO=ember-lts-2.12
     - env: EMBER_TRY_SCENARIO=ember-lts-2.16
     - env: EMBER_TRY_SCENARIO=ember-lts-2.18
