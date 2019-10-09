@@ -28,38 +28,38 @@ jobs:
 
   include:
     # runs linting and tests with current locked deps
-    # - stage: Tests
-    #   name: Library Tests
-    #   script:
-    #     - yarn run lint:hbs
-    #     - yarn run lint:js
-    #     - yarn test
-    # - name: Docs Tests
-    #   install:
-    #     - yarn install --production
-    #     - cd docs
-    #     - yarn
-    #   script:
-    #     - yarn run lint:hbs
-    #     - yarn run lint:js
-    #     - yarn test
+    - stage: Tests
+      name: Library Tests
+      script:
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
+    - name: Docs Tests
+      install:
+        - yarn install --production
+        - cd docs
+        - yarn
+      script:
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
 
 
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
-    # - stage: Additional Tests
-    #   env: EMBER_TRY_SCENARIO=ember-lts-2.12
-    # - env: EMBER_TRY_SCENARIO=ember-lts-2.16
-    # - env: EMBER_TRY_SCENARIO=ember-lts-2.18
-    # - env: EMBER_TRY_SCENARIO=ember-lts-3.4
-    # - env: EMBER_TRY_SCENARIO=ember-lts-3.8
-    # - env: EMBER_TRY_SCENARIO=ember-lts-3.12
-    # - env: EMBER_TRY_SCENARIO=ember-release
-    # - env: EMBER_TRY_SCENARIO=ember-beta
-    # - env: EMBER_TRY_SCENARIO=ember-canary
+    - stage: Additional Tests
+      env: EMBER_TRY_SCENARIO=ember-lts-2.12
+    - env: EMBER_TRY_SCENARIO=ember-lts-2.16
+    - env: EMBER_TRY_SCENARIO=ember-lts-2.18
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.4
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.8
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.12
+    - env: EMBER_TRY_SCENARIO=ember-release
+    - env: EMBER_TRY_SCENARIO=ember-beta
+    - env: EMBER_TRY_SCENARIO=ember-canary
 
     - stage: Deploy
-      if: ((branch = master or tag is present) and type = push) or (branch = split-docs)
+      if: (branch = master or tag is present or branch = split-docs) and type = push
       install:
         - yarn install --production
         - cd docs
