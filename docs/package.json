@@ -51,6 +51,7 @@
     "ember-resolver": "^5.0.1",
     "ember-source": "~3.10.0",
     "ember-template-lint": "^1.5.3",
+    "eslint": "^5.16.0",
     "eslint-plugin-ember": "^6.2.0",
     "eslint-plugin-node": "^9.0.1",
     "loader.js": "^4.7.0",
