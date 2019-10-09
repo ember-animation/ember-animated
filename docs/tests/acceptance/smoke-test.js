@@ -75,4 +75,20 @@ module("Acceptance | smoke", function(hooks) {
       "found Icon snippet content"
     );
   });
+
+  test("step through all /docs pages", async function(assert) {
+    await visit("/docs");
+    assert.equal(currentURL(), "/docs");
+    let count = 0;
+    while (true) {
+      let nextLink = document.querySelector('[data-test-next-link] > a');
+      if (!nextLink) {
+        break;
+      }
+      count++;
+      await click(nextLink);
+    }
+    assert.equal(currentURL(), '/docs/api/modules/ember-animated/transitions/fade', 'last expected page');
+    assert.equal(count, 19, 'expected number of docs pages');
+  });
 });
