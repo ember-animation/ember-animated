@@ -95,6 +95,7 @@ module("Acceptance | smoke", function(hooks) {
   test("search functionality", async function(assert) {
     await visit("/");
     await fillIn(document.querySelector('[data-search-box] > input'), 'receivedSprites');
+    await settled();
     assert.dom('[data-test-search-result-list]').containsText('Animating Between Components');
   });
 });
