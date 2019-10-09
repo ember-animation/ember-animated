@@ -1,7 +1,6 @@
 # ember-animated-docs
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This is the documentation app for Ember Animated.
 
 ## Prerequisites
 
@@ -15,15 +14,20 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
+PAY ATTENTION here, this is slightly different than a normal Ember app.
+
 * `git clone <repository-url>` this repository
-* `cd ember-animated-docs`
-* `yarn install`
+* `cd ember-animated`
+* `yarn install` (this is needed because the app depends on the library)
+* `cd docs`
+* `yarn install` (this is needed because the app has its own dependencies too)
+* `ember s`
 
 ## Running / Development
 
 * `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+* Visit your app at [http://localhost:4201](http://localhost:4201).
+* Visit your tests at [http://localhost:4201/tests](http://localhost:4201/tests).
 
 ### Code Generators
 
@@ -47,7 +51,7 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-Specify what it takes to deploy your app.
+This app gets deployed automatically via TravisCI using ember-cli-deploy.
 
 ## Further Reading / Useful Links
 
