@@ -18,6 +18,9 @@ module.exports = function() {
             devDependencies: {
               'ember-source': '~2.12.0',
               'ember-native-dom-event-dispatcher': '~0.6.4',
+              'ember-angle-bracket-invocation-polyfill': '^2.0.0',
+              'ember-let-polyfill': '^0.1.0',
+              'ember-named-arguments-polyfill': '^1.0.0',
             }
           }
         },
@@ -30,6 +33,9 @@ module.exports = function() {
             devDependencies: {
               'ember-source': '~2.16.0',
               'ember-native-dom-event-dispatcher': '~0.6.4',
+              'ember-angle-bracket-invocation-polyfill': '^2.0.0',
+              'ember-let-polyfill': '^0.1.0',
+              'ember-named-arguments-polyfill': '^1.0.0',
             }
           }
         },
@@ -40,6 +46,9 @@ module.exports = function() {
             devDependencies: {
               'ember-source': '~2.18.0',
               'ember-native-dom-event-dispatcher': '~0.6.4',
+              'ember-angle-bracket-invocation-polyfill': '^2.0.0',
+              'ember-let-polyfill': '^0.1.0',
+              'ember-named-arguments-polyfill': '^1.0.0',
             }
           }
         },
@@ -47,7 +56,8 @@ module.exports = function() {
           name: 'ember-lts-3.4',
           npm: {
             devDependencies: {
-              'ember-source': '~3.4.0'
+              'ember-source': '~3.4.0',
+              'ember-angle-bracket-invocation-polyfill': '^2.0.0',
             }
           }
         },
@@ -55,7 +65,8 @@ module.exports = function() {
           name: 'ember-lts-3.8',
           npm: {
             devDependencies: {
-              'ember-source': '~3.8.0'
+              'ember-source': '~3.8.0',
+              'ember-angle-bracket-invocation-polyfill': '^2.0.0',
             }
           }
         },
