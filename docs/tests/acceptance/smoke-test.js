@@ -1,5 +1,5 @@
 import { module, test } from "qunit";
-import { visit, currentURL, click, settled } from "@ember/test-helpers";
+import { visit, currentURL, click, settled, fillIn } from "@ember/test-helpers";
 import { setupApplicationTest } from "ember-qunit";
 import {
   setupAnimationTest,
@@ -90,5 +90,11 @@ module("Acceptance | smoke", function(hooks) {
     }
     assert.equal(currentURL(), '/docs/api/modules/ember-animated/transitions/fade', 'last expected page');
     assert.equal(count, 19, 'expected number of docs pages');
+  });
+
+  test("search functionality", async function(assert) {
+    await visit("/");
+    await fillIn(document.querySelector('[data-search-box] > input'), 'receivedSprites');
+    assert.dom('[data-test-search-result-list]').containsText('Animating Between Components');
   });
 });
