@@ -1,4 +1,5 @@
 # master
+ - HOUSEKEEPING: the docs are now a totally standalone app in the /docs subdirectory, as opposed to using the addon's dummy app. This lets us be more strict in the addon's test suite without involving all the complexities of the docs app.
 
 # 0.9.0
  - BUGFIX: fix a flicker when interpolating colors near alpha zero.

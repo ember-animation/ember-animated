@@ -19,13 +19,6 @@ env:
   global:
     # See https://git.io/vdao3 for details.
     - JOBS=1
-    - RAISE_ON_DEPRECATION=true
-
-branches:
-  only:
-    - master
-    # npm version tags
-    - /^v\d+\.\d+\.\d+/
 
 jobs:
   fail_fast: true
@@ -35,13 +28,22 @@ jobs:
 
   include:
     # runs linting and tests with current locked deps
-
     - stage: Tests
-      name: Tests
+      name: Library Tests
       script:
-        - npm run lint:hbs
-        - npm run lint:js
-        - npm test
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
+    - name: Docs Tests
+      install:
+        - yarn install --production
+        - cd docs
+        - yarn
+      script:
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
+
 
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
@@ -51,13 +53,19 @@ jobs:
     - env: EMBER_TRY_SCENARIO=ember-lts-2.18
     - env: EMBER_TRY_SCENARIO=ember-lts-3.4
     - env: EMBER_TRY_SCENARIO=ember-lts-3.8
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.12
     - env: EMBER_TRY_SCENARIO=ember-release
     - env: EMBER_TRY_SCENARIO=ember-beta
     - env: EMBER_TRY_SCENARIO=ember-canary
 
     - stage: Deploy
-      if: (branch = master or tag is present) and type = push
-      script: RAISE_ON_DEPRECATION=false node_modules/.bin/ember deploy production
+      if: (branch = master or tag is present or branch = split-docs) and type = push
+      install:
+        - yarn install --production
+        - cd docs
+        - yarn
+      script:
+        - node_modules/.bin/ember deploy production --verbose
 
     - stage: npm release
       install: skip
@@ -70,11 +78,6 @@ jobs:
         on:
           tags: true
           repo: ember-animation/ember-animated
-
-before_install:
-  - npm config set spin false
-  - npm install -g npm@4
-  - npm --version
 
 script:
   - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO

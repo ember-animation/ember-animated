@@ -23,4 +23,12 @@
 * `ember serve`
 * Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
+## Running the documentation application
+
+The docs are in a standalone app in the /docs subdirectory.
+
+* `cd docs`
+* `yarn install` (this is needed separately from the `yarn install` in the addon itself)
+* `ember s`
+
 For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
