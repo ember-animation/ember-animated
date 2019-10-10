@@ -100,11 +100,5 @@
     "name": "v0.9.0",
     "sha": "bb4792b630f34d7a01c1a3d74a368592b324ae66",
     "tag": "v0.9.0"
-  },
-  "split-docs": {
-    "path": "versions/split-docs",
-    "name": "split-docs",
-    "sha": "4f3ca814f2661ce6dd9298f2ceba39d9ce2c8a9b",
-    "tag": null
   }
 }
