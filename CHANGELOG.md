@@ -1,6 +1,5 @@
 # master
  - HOUSEKEEPING: the docs are now a totally standalone app in the /docs subdirectory, as opposed to using the addon's dummy app. This lets us be more strict in the addon's test suite without involving all the complexities of the docs app.
- - BREAKING: we still support Ember versions back to 2.12, but as of this release you will need to install your own ember-angle-bracket-invocation-polyfill, ember-let-polyfill, and/or ember-named-arguments-polyfill.
 
 # 0.9.0
  - BUGFIX: fix a flicker when interpolating colors near alpha zero.
