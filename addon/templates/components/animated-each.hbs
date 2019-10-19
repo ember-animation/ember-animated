@@ -2,4 +2,6 @@
   {{~#-ea-list-element child=child elementToChild=_elementToChild~}}
     {{~yield child.value child.index~}}
   {{~/-ea-list-element~}}
+{{else}}
+  {{~yield to="inverse"~}}
 {{/each}}
