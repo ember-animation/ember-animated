@@ -1,0 +1,17 @@
+{{!BEGIN-SNIPPET transitions-moveover-snippet.hbs}}
+<div class="move-over">
+  <label>Show Hello<input type="checkbox" checked={{showHello}} onchange={{action (mut showHello) (not showHello)}}></label>
+
+  <AnimatedContainer>
+    {{#animated-if showHello rules=rules}}
+      <div class="hello">
+        Hello
+      </div>
+    {{else}}
+      <div class="goodbye">
+        Goodbye
+      </div>
+    {{/animated-if}}
+  </AnimatedContainer>
+</div>
+{{!END-SNIPPET}}

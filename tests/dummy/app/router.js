@@ -1,7 +1,7 @@
-import AddonDocsRouter, { docsRoute } from 'ember-cli-addon-docs/router';
 import config from './config/environment';
+import EmberRouter from '@ember/routing/router';
 
-const Router = AddonDocsRouter.extend({
+const Router = EmberRouter.extend({
   location: config.locationType,
   rootURL: config.rootURL
 });
@@ -29,28 +29,10 @@ Router.map(function() {
     this.route('containerdemo');
     this.route('beacondemo');
     this.route('modal');
+    this.route('sandbox');
+    this.route('color-and-shadow');
   });
 
-  // ember-cli-addon-docs
-  docsRoute(this, function() {
-    this.route('between', function(){
-      this.route('detail', { path: '/:id' });
-    });
-    this.route('sprites');
-    this.route('transitions');
-    this.route('motions');
-    this.route('rules');
-    this.route('beacons');
-
-
-    this.route('animator-components', function() {
-
-      this.route('value');
-      this.route('if');
-    });
-  });
-
-  this.route('not-found', { path: '/*path' });
 });
 
 export default Router;

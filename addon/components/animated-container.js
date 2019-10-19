@@ -5,20 +5,23 @@ import { Resize } from '../motions/resize';
 import { task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
+import { componentNodes } from '../-private/ember-internals';
+import layout from '../templates/components/animated-container';
+import { deprecate } from '@ember/application/deprecations';
 
 /**
  Provides a boundary between animator components and the surrounding document
- which smoothly resizes as animators change. Use animated-container whenever you 
- need to "hold a place for" some animated content while that content is animating. 
+ which smoothly resizes as animators change. Use animated-container whenever you
+ need to "hold a place for" some animated content while that content is animating.
   ```hbs
   <button {{action toggleThing}}>Toggle</button>
-  {{#animated-container}}
+  <AnimatedContainer>
     {{#animated-if showThing use=transition }}
         <div class="message" {{action "toggleThing"}}>
             Hello!
         </div>
     {{/animated-if}}
-  {{/animated-container}}
+  </AnimatedContainer>
   <p>
     This is outside of the container.
   </p>
@@ -30,23 +33,25 @@ import { afterRender, microwait } from '..';
 
   export default Component.extend({
     showThing: false,
-    
+
     toggleThing() {
       this.set('showThing', !this.get('showThing'));
     },
-  
+
     transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
-      insertedSprites.forEach(sprite => {
+      for (let sprite of insertedSprites) {
         sprite.startAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeOut });
-      });
+      }
 
-      keptSprites.forEach(move);
+      for (let sprite of keptSprites) {
+        move(sprite);
+      }
 
-      removedSprites.forEach(sprite => {
+      for (let sprite of removedSprites) {
         sprite.endAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeIn });
-      });
+      }
     },
   });
   ```
@@ -54,12 +59,20 @@ import { afterRender, microwait } from '..';
   @public
 */
 export default Component.extend({
-  classNames: ['animated-container'],
+  layout,
+  tagName: '',
+
   motionService: service('-ea-motion'),
    /**
-   * Whether to animate the initial render. You will probably also need to set 
-   * initialInsertion=true on a child component of animated-container. 
-   * Defaults to false. 
+   * Use a custom tag for the container. Defaults to div.
+    @argument tag
+    @type String
+  */
+  tag: 'div',
+   /**
+   * Whether to animate the initial render. You will probably also need to set
+   * initialInsertion=true on a child component of animated-container.
+   * Defaults to false.
     @argument onInitialRender
     @type Boolean
   */
@@ -77,10 +90,21 @@ export default Component.extend({
     this.get('motionService')
       .register(this)
       .observeDescendantAnimations(this, this.maybeAnimate);
+
+    deprecate(`passing a "class" argument to animated-container is deprecated. Switch to angle bracket invocation and pass an HTML attribute instead`, !this.class, {
+      id: 'ember-animated-container-class-arg',
+      until: '1.0.0'
+    });
   },
 
   didInsertElement() {
     this._inserted = true;
+  },
+
+  _ownElement() {
+    if (this._inserted) {
+      return componentNodes(this).firstNode;
+    }
   },
 
   willDestroyElement() {
@@ -114,9 +138,10 @@ export default Component.extend({
     let service = this.get('motionService');
     let sprite;
     let useMotion;
+    let element = this._ownElement();
 
-    if (this._inserted){
-      sprite = Sprite.sizedStartingAt(this.element);
+    if (element){
+      sprite = Sprite.sizedStartingAt(element);
       this.sprite = sprite;
       sprite.lock();
       useMotion = true;
@@ -133,7 +158,7 @@ export default Component.extend({
 
     yield * service.staticMeasurement(() => {
       if (!sprite) {
-        sprite = Sprite.sizedEndingAt(this.element);
+        sprite = Sprite.sizedEndingAt(this._ownElement());
         this.sprite = sprite;
       } else {
         sprite.measureFinalBounds();

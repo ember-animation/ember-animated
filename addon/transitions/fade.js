@@ -1,6 +1,26 @@
 import opacity from 'ember-animated/motions/opacity';
 import { Promise } from 'ember-animated';
 
+/**
+  Fades inserted, removed, and kept sprites.
+
+  ```js
+  import fade from 'ember-animated/transitions/fade'
+
+  export default Component.extend({
+    transition: fade
+  });
+  ```
+
+  ```hbs
+  {{#animated-if use=transition}}
+    ...
+  {{/animated-if}}
+  ```
+
+  @function fade
+  @export default
+*/
 export default function * ({ removedSprites, insertedSprites, keptSprites, duration }) {
   // We yield Promise.all here because we want to wait for this
   // step before starting what comes after.

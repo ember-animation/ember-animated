@@ -1,3 +1,83 @@
+# master
+ - HOUSEKEEPING: the docs are now a totally standalone app in the /docs subdirectory, as opposed to using the addon's dummy app. This lets us be more strict in the addon's test suite without involving all the complexities of the docs app.
+
+# 0.9.0
+ - BUGFIX: fix a flicker when interpolating colors near alpha zero.
+ - ENHANCEMENT: add a boxShadow motion for interpolating shadows.
+ - ENHANCEMENT: track border-color property by @bagby.
+
+# 0.8.1
+ - ENHANCEMENT: add padding- and border-radius-related CSS properties to the list of ones we track automatically
+ - BUGFIX: animated-value didn't respect the `watch` parameter, by @bagby
+
+# 0.8.0
+ - BUGFIX: the classlist-resetting feature in the previous release had a bug that would prevent legitimate permanent updates to classes.
+ - ENHANCEMENT: track border-radius properties so adjustCSS can easily interpolate radii.
+ - DOCS: updates by @samselikof
+ - HOUSEKEEPING: update angle bracket invocation polyfill by @ryanto
+
+# 0.7.0
+ - ENHANCEMENT: sprites now reset their classlist after animating, so any classes applied by motions will be safely cleared at the end of animation.
+ - BUGFIX: the identity transform used to serialized as "none", which can lead to unexpected behavior.
+ - ENHANCEMENT: AnimatedContainer now accepts a `@tag` argument so you can customize which HTML Element it will render, by @ryanto. With this feature, users now have control over 100% of the DOM emitted by ember-animated.
+
+# 0.6.1
+ - BUGFIX: polyfill Element.remove on IE11
+ - BUGFIX: subpixel rounding could cause text wrapping during animation of inline elements
+
+# 0.6.0
+ - BUGFIX: we sometimes threw a "function expected" Exception on Microsoft Edge when using <AnimatedOrphans />
+ - DOCS: @jenweber fixed a broken link
+ - BUGFIX: there was a race condition if any animator component received two changes before the first could even begin running the user's transition
+ - HOUSEKEEPING: issue template added by @samselikof
+ - HOUSEKEEPING: deleted unnecessary package-lock.json by @Turbo87
+ - DOCS: refer to yarn instead of NPM in the CONTRIBUTING docs, by @outdoorsy
+ - HOUSEKEEPING: upgrade to Ember 3.10 and fix deprecations, by @cibernox
+ - DOCS: improved use of `htmlSafe` in examples to demonstrate safer patterns
+ - ENHANCEMENT: added easing option support to the scale motion, by @nibynic
+
+# 0.5.4
+ - HOUSEKEEPING: switch to released version of ember-angle-bracket-invocation-polyfill, by @danwenzel
+
+# 0.5.3
+
+ - HOUSEKEEPING: configure travis releases by @samselikoff
+
+# 0.5.2
+
+ - DOCS: major docs improvements by @samselikoff
+
+# 0.5.1
+ - COMPATABILITY: update for compatibility with internal change to Ember 3.10 decorators, by @geoffreyd.
+
+# 0.5.0
+ - BREAKING CHANGE: changes the default duration from 2000 to 500
+ - DEPRECATION: AnimatedContainer's "class" _argument_ is deprecated in favor of the class _attribute_. The old usage was
+
+    ```hbs
+    {{!-- these are exactly equivalent to each other --}}
+    {{#animated-container class=something}}
+    <AnimatedContainer @class={{something}}>
+    ```
+
+    The new usage is
+
+    ```hbs
+    <AnimatedContainer class={{something}}>
+    ```
+
+# 0.4.1
+ - BUGFIX: previous style continuity feature was slightly too aggressive for line-height
+ - BUGFIX: fix a crash when using SVGs as orphan sprites
+
+# 0.4.0
+ - ENHANCEMENT: improved style continuity for orphan sprites
+ - DOCS: improved styling by @samselikoff
+
+# 0.3.2
+ - HOUSEKEEPING: compatibility with newer ember versions with help from @toovy and @cibernox
+ - DOCS: sprite docs improvements by @samselikoff
+
 # 0.3.1
  - ENHANCEMENT: new beacon API
  - DOCS: lots of new docs added, thanks @savvymas

@@ -26,9 +26,6 @@ export default class Transform {
     this.ty = ty;
   }
   serialize() {
-    if (this.isIdentity()) {
-      return 'none';
-    }
     return `matrix(${this.a}, ${this.b}, ${this.c}, ${this.d}, ${this.tx}, ${this.ty})`;
   }
 
@@ -92,6 +89,7 @@ function parseOrigin(originString) {
   transform of this element and all its ancestors.
 
   @function cumulativeTransform
+  @hide
   @param {HTMLElement} elt
   @return {Transform}
 */

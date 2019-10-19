@@ -24,10 +24,10 @@ module('Acceptance | if demo', function(hooks) {
 
     time.pause();
     await click(this.element.querySelector('button'));
-    await time.advance(500);
+    await time.advance(125);
 
     let onePosition = bounds(this.element.querySelector('.message')).left;
-    await time.advance(500);
+    await time.advance(125);
     let twoPosition = bounds(this.element.querySelector('.message')).left;
     assert.ok(twoPosition < onePosition, `expected element .two to be animating in, ${twoPosition } > ${onePosition}`);
   });

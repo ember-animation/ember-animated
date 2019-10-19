@@ -8,8 +8,8 @@ module('Acceptance | beacon demo', function(hooks) {
   setupAnimationTest(hooks);
 
   test('visiting /beacon-demo', async function(assert) {
-    await visit('/beacon-demo');
-    assert.equal(currentURL(), '/beacon-demo');
+    await visit('/demos/beacondemo');
+    assert.equal(currentURL(), '/demos/beacondemo');
   });
 
   test('opening modal begins near button', async function(assert) {

@@ -1,0 +1,15 @@
+{{! BEGIN-SNIPPET transitions-fade-snippet.hbs }}
+<div class="controls">
+  <label>Show Message <input type="checkbox" checked={{fadeMessage}} onchange={{action (mut fadeMessage) (not fadeMessage)}}></label>
+</div>
+
+<div class="scenario-transitions clearfix">
+  <AnimatedContainer>
+    {{#animated-if fadeMessage use=fade }}
+      <div class="message">
+        {{mail}}
+      </div>
+    {{/animated-if}}
+  </AnimatedContainer>
+</div>
+{{! END-SNIPPET }}

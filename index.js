@@ -1,7 +1,5 @@
 'use strict';
 
-var VersionChecker = require('ember-cli-version-checker');
-
 module.exports = {
   name: require('./package').name,
 
@@ -13,9 +11,6 @@ module.exports = {
     if (this._super.init) {
       this._super.init.apply(this, arguments);
     }
-
-    this.versionChecker = new VersionChecker(this);
-    this.versionChecker.for('ember-cli', 'npm').assertAbove('0.2.0');
 
     // Shim this.import for Engines support
     if (!this.import) {
