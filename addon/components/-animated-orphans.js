@@ -61,7 +61,7 @@ export default Component.extend({
 
   animateOrphans(removedSprites, transition, duration, shouldAnimateRemoved, animatorComponent) {
     // only animate orphans meant for this <AnimatedOrphans/>
-    const _removedSprites = removedSprites.filter(s => {
+    const _removedSprites = removedSprites.filter(() => {
       let closestAnimatedOrphans;
 
       // find closest ancestor <AnimatedOrphans/> that is not in the process of being destroyed
