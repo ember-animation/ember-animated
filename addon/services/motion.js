@@ -16,7 +16,7 @@ const MotionService = Service.extend({
     this._rendezvous = [];
     this._measurements = [];
     this._animators = A();
-    this._orphanObserver = null;
+    this._orphanObservers = [];
     this._animationObservers = [];
     this._descendantObservers = [];
     this._ancestorObservers = new WeakMap();
@@ -42,15 +42,13 @@ const MotionService = Service.extend({
   // Register to receive any sprites that are orphaned by a destroyed
   // animator.
   observeOrphans(fn) {
-    if (this._orphanObserver) {
-      throw new Error("Only one animated-orphans component can be used at one time");
-    }
-    this._orphanObserver = fn;
+    this._orphanObservers.push(fn);
     return this;
   },
   unobserveOrphans(fn) {
-    if (this._orphanObserver === fn) {
-      this._orphanObserver = null;
+    let index = this._orphanObservers.indexOf(fn);
+    if (index !== -1) {
+      this._orphanObservers.splice(index, 1);
     }
     return this;
   },
@@ -150,12 +148,12 @@ const MotionService = Service.extend({
     }
   }),
 
-  matchDestroyed(removed, transition, duration, shouldAnimateRemoved) {
-    if (this._orphanObserver && removed.length > 0) {
+  matchDestroyed(removed, transition, duration, shouldAnimateRemoved, animatorComponent) {
+    if (this._orphanObservers.length > 0 && removed.length > 0) {
       // if these orphaned sprites may be capable of animating,
       // delegate them to the orphanObserver. It will do farMatching
       // for them.
-      this._orphanObserver(removed, transition, duration, shouldAnimateRemoved);
+      this._orphanObservers.forEach(fn => fn(removed, transition, duration, shouldAnimateRemoved, animatorComponent));
     } else {
       // otherwise, we make them available for far matching but they
       // can't be animated.

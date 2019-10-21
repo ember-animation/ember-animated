@@ -319,7 +319,7 @@ export default Component.extend({
       sprite.owner = this._elementToChild.get(element);
       removedSprites.push(sprite);
     }
-    this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'), this.get('finalRemoval'));
+    this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'), this.get('finalRemoval'), this);
   },
 
   willDestroyElement() {
