@@ -53,7 +53,6 @@ export default Component.extend({
   },
 
   willDestroyElement() {
-    console.log('will destroy animated-orphans', this.elementId);
     this.get("motionService")
       .unregister(this)
       .unobserveOrphans(this.animateOrphans)
