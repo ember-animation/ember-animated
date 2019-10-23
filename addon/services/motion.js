@@ -42,12 +42,12 @@ const MotionService = Service.extend({
 
   // Register to receive any sprites that are orphaned by a destroyed
   // animator.
-  observeOrphans(fn) {
-    this._orphanObservers.push(fn);
+  observeOrphans(fn, animatedOrphans) {
+    this._orphanObservers.push({fn, animatedOrphans});
     return this;
   },
   unobserveOrphans(fn) {
-    let index = this._orphanObservers.indexOf(fn);
+    let index = this._orphanObservers.findIndex(o => o.fn === fn);
     if (index !== -1) {
       this._orphanObservers.splice(index, 1);
     }
@@ -154,7 +154,23 @@ const MotionService = Service.extend({
       // if these orphaned sprites may be capable of animating,
       // delegate them to the orphanObserver. It will do farMatching
       // for them.
-      this._orphanObservers.forEach(fn => fn(removed, transition, duration, shouldAnimateRemoved, animatorComponent));
+
+      // find closest ancestor <AnimatedOrphans/> that is not in the process of being destroyed
+      let closestAnimatedOrphans;
+      for(let ancestorComponent of ancestorsOf(animatorComponent)) {
+        if (ancestorComponent.isEmberAnimatedOrphans && !ancestorComponent._isDestroying) {
+          closestAnimatedOrphans = ancestorComponent;
+          break;
+        }
+      }
+
+      if (!closestAnimatedOrphans) {
+        throw new Error('Could not find {{animated-orphans}} ancestor');
+      }
+
+      this._orphanObservers
+        .find(o => o.animatedOrphans === closestAnimatedOrphans)
+        .fn(removed, transition, duration, shouldAnimateRemoved);
     } else {
       // otherwise, we make them available for far matching but they
       // can't be animated.

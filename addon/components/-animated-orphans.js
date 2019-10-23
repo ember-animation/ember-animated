@@ -12,7 +12,6 @@ import {
 } from '../-private/scheduler';
 import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
-import { ancestorsOf } from '../-private/ember-internals';
 import '../element-remove';
 
 /**
@@ -49,49 +48,32 @@ export default Component.extend({
     this.reanimate = this.reanimate.bind(this);
     this.get("motionService")
       .register(this)
-      .observeOrphans(this.animateOrphans)
+      .observeOrphans(this.animateOrphans, this.parent)
       .observeAnimations(this.reanimate);
   },
 
   willDestroyElement() {
     this.get("motionService")
       .unregister(this)
-      .unobserveOrphans(this.animateOrphans)
+      .unobserveOrphans(this.animateOrphans, this.parent)
       .unobserveAnimations(this.reanimate);
   },
 
-  animateOrphans(removedSprites, transition, duration, shouldAnimateRemoved, animatorComponent) {
-    // only animate orphans meant for this <AnimatedOrphans/>
-    const _removedSprites = removedSprites.filter(() => {
-      let closestAnimatedOrphans;
-
-      // find closest ancestor <AnimatedOrphans/> that is not in the process of being destroyed
-      for(let ancestorComponent of ancestorsOf(animatorComponent)) {
-        if (ancestorComponent.isEmberAnimatedOrphans && !ancestorComponent._isDestroying) {
-          closestAnimatedOrphans = ancestorComponent;
-          break;
-        }
-      }
-
-      return closestAnimatedOrphans === this.parent;
+  animateOrphans(removedSprites, transition, duration, shouldAnimateRemoved) {
+    this._newOrphanTransitions.push({
+      removedSprites: removedSprites.map(sprite => {
+        // we clone the owner objects so that our sprite garbage
+        // collection is entirely detached from the original
+        // animator's
+        sprite.owner = sprite.owner.clone();
+        sprite.owner.flagForRemoval();
+        return sprite;
+      }),
+      transition,
+      duration,
+      shouldAnimateRemoved
     });
-
-    if(_removedSprites.length){
-      this._newOrphanTransitions.push({
-        removedSprites: _removedSprites.map(sprite => {
-          // we clone the owner objects so that our sprite garbage
-          // collection is entirely detached from the original
-          // animator's
-          sprite.owner = sprite.owner.clone();
-          sprite.owner.flagForRemoval();
-          return sprite;
-        }),
-        transition,
-        duration,
-        shouldAnimateRemoved
-      });
-      this.reanimate();
-    }
+    this.reanimate();
   },
 
   reanimate() {
