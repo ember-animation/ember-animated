@@ -2,6 +2,7 @@ import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
 import { task } from '../-private/ember-scheduler';
+import { ancestorsOf } from '../-private/ember-internals';
 import {
   microwait,
   rAF,
@@ -281,14 +282,6 @@ function performMatches(sink, source) {
       source.otherTasks.set(sink.runAnimationTask, true);
     }
   });
-}
-
-function * ancestorsOf(component) {
-  let pointer = component.parentView;
-  while (pointer) {
-    yield pointer;
-    pointer = pointer.parentView;
-  }
 }
 
 export default MotionService;

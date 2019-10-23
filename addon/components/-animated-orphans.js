@@ -12,6 +12,7 @@ import {
 } from '../-private/scheduler';
 import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
+import { ancestorsOf } from '../-private/ember-internals';
 import '../element-remove';
 
 /**
@@ -345,11 +346,3 @@ export default Component.extend({
   }
 
 });
-
-function * ancestorsOf(component) {
-  let pointer = component.parentView;
-  while (pointer) {
-    yield pointer;
-    pointer = pointer.parentView;
-  }
-}

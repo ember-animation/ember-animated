@@ -11,6 +11,14 @@ import { guidFor } from '@ember/object/internals';
 import Ember from 'ember';
 const { getViewBounds } = Ember.ViewUtils;
 
+export function * ancestorsOf(component) {
+  let pointer = component.parentView;
+  while (pointer) {
+    yield pointer;
+    pointer = pointer.parentView;
+  }
+}
+
 export function componentNodes(view) {
   let bounds = getViewBounds(view);
   return {
