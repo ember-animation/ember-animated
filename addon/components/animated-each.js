@@ -33,8 +33,13 @@ import partition from '../-private/partition';
     },
 
     * transition({ keptSprites, removedSprites }) {
-      keptSprites.forEach(move);
-      removedSprites.forEach(fadeOut);
+      for (let sprite of keptSprites) {
+        move(sprite);
+      }
+
+      for (let sprite of removedSprites) {
+        fadeOut(sprite);
+      }
     },
 
     removeItem(item){
@@ -91,7 +96,10 @@ export default Component.extend({
   */
   initialInsertion: false,
   /**
-   * When true, all the items in the list will animate as [`removedSprites`](../../sprites) when the `{{#animated-each}}` is destroyed. Defaults to false.
+    When true, all the items in the list will animate as [`removedSprites`](../../sprites) when the `{{#animated-each}}` is destroyed. Defaults to false.
+
+    Note that an `{{animated-orphans}}` component must be actively rendered when this animator is removed for this option to have any effect.
+
     @argument finalRemoval
     @type Boolean
   */
@@ -113,6 +121,7 @@ export default Component.extend({
     this._firstTime = true;
     this._inserted = false;
     this._renderedChildren = [];
+    this._renderedChildrenStartedMoving = false;
     this._cycleCounter = 0;
     this._keptSprites = null;
     this._insertedSprites = null;
@@ -154,7 +163,7 @@ export default Component.extend({
   durationWithDefault: computed('duration', function() {
     let d = this.get('duration');
     if (d == null) {
-      return 2000;
+      return 500;
     } else {
       return d;
     }
@@ -222,13 +231,23 @@ export default Component.extend({
       }
     }).concat(
       oldChildren
-        .filter(child => !child.shouldRemove && newIndices.get(child.id) == null)
+        .filter(child =>
+          (!child.shouldRemove || !this._renderedChildrenStartedMoving) &&
+          newIndices.get(child.id) == null
+        )
         .map(child => {
           child.flagForRemoval();
           return child;
         })
     );
     this._renderedChildren = newChildren;
+
+    // in general, a removed sprite that didn't run a motion in the previous
+    // animation gets instantly removed at the start of the next animation. But
+    // there is a possible race condition if we recompute before the user's
+    // transition even has a chance to begin. So this flag protects the removed
+    // sprites until we can hand them off to the user's transition.
+    this._renderedChildrenStartedMoving = false;
 
     if (typeof FastBoot === 'undefined' && !isStable(oldSignature, newSignature)) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
@@ -558,6 +577,11 @@ export default Component.extend({
       unmatchedInsertedSprites.forEach(s => s.reveal());
       unmatchedInsertedSprites = [];
     }
+
+
+    // if we are interrupted after this point, any removed children that didn't
+    // actually undergo a motion will be immediately destroyed.
+    this._renderedChildrenStartedMoving = true;
 
     // Early exit if nothing is happening.
     if (!transition ||

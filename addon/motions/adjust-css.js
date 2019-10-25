@@ -1,5 +1,15 @@
 import { Motion, rAF, Tween } from 'ember-animated';
 
+/**
+  Animates the change in style of a Sprite. Applies to CSS properties that are a unit and a number (font-size, letter spacing, etc.).
+
+  @function adjustCSS
+  @export default
+  @param {String} propertyName The CSS property to adjust
+  @param {Sprite} sprite The sprite we're adjusting
+  @param {Object} options
+  @return {Motion}
+*/
 export default function adjustCSS(propertyName, sprite, opts) {
   return new AdjustCSS(propertyName, sprite, opts).run();
 }

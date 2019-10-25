@@ -51,6 +51,18 @@ module('Integration | Component | animated each', function(hooks) {
     `);
   });
 
+  test('it renders the block within else clause', async function(assert) {
+    assert.expect(1);
+    await render(hbs`
+      {{#animated-each items as |item|}}
+        <div class="test-child">{{item}}</div>
+      {{else}}
+        <span>No items</span>
+      {{/animated-each}}
+    `);
+    assert.dom('span').hasText('No items');
+  });
+
   test('it can transition at first render', async function(assert) {
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);

@@ -1,5 +1,21 @@
 import { Motion, rAF, Tween } from '..';
 
+/**
+  Animates _sprite_ from its initial position to its final position.
+
+  _sprite_ must have both `initialBounds` and `finalBounds` set.
+
+  ```js
+  for (let sprite of keptSprites) {
+    move(sprite)
+  }
+  ```
+
+  @function move
+  @export default
+  @param {Sprite} sprite
+  @return {Motion}
+*/
 export default function move(sprite, opts) {
   return new Move(sprite, opts).run();
 }

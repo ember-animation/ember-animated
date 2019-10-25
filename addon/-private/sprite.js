@@ -22,10 +22,22 @@ export const COPIED_CSS_PROPERTIES = [
   'font-weight',
   'color',
   'background-color',
+  'border-color',
   'letter-spacing',
   'line-height',
   'text-align',
   'text-transform',
+  'padding',
+  'padding-top',
+  'padding-bottom',
+  'padding-left',
+  'padding-right',
+  'border-radius',
+  'border-top-left-radius',
+  'border-top-right-radius',
+  'border-bottom-left-radius',
+  'border-bottom-right-radius',
+  'box-shadow',
 ];
 
 const numericCSSProps = {
@@ -117,6 +129,23 @@ export default class Sprite {
     // just pass Sprites to Motions without also passing the context.
     this._transitionContext = null;
 
+    this._lockedToInitialPosition = inInitialPosition;
+    if (inInitialPosition) {
+      this.measureInitialBounds();
+      this._finalComputedStyle = null;
+      this._finalBounds = null;
+      this._originalFinalBounds = null;
+      this._finalPosition = null;
+      this._finalCumulativeTransform = null;
+    } else {
+      this._initialComputedStyle = null;
+      this._initialBounds = null;
+      this._originalInitialBounds = null;
+      this._initialPosition = null;
+      this._initialCumulativeTransform = null;
+      this.measureFinalBounds();
+    }
+
     let predecessor = inFlight.get(element);
     if (predecessor && lockMode) {
       // When we finish, we want to be able to set the style back to
@@ -148,29 +177,21 @@ export default class Sprite {
       }
     }
 
-    this._lockedToInitialPosition = inInitialPosition;
-    if (inInitialPosition) {
-      this.measureInitialBounds();
-      this._finalComputedStyle = null;
-      this._finalBounds = null;
-      this._originalFinalBounds = null;
-      this._finalPosition = null;
-      this._finalCumulativeTransform = null;
-    } else {
-      this._initialComputedStyle = null;
-      this._initialBounds = null;
-      this._originalInitialBounds = null;
-      this._initialPosition = null;
-      this._initialCumulativeTransform = null;
-      this.measureFinalBounds();
-    }
+
 
     if (Ember.testing) { Object.seal(this); }
   }
 
   /**
     A DOMRect representing the place where this sprite will start the
-    transition. Not every sprite has initialBounds (a newly inserted
+    transition.
+
+    ```js
+    sprite.initialBounds;
+    // { top: 0, bottom: 230, left: 0, right: 256, width: 256 }
+    ```
+
+    Not every sprite has initialBounds (a newly inserted
     sprite will not -- it will only have finalBounds).
 
     The position is measured *relative* to our offsetParent, if we
@@ -376,6 +397,7 @@ export default class Sprite {
     important when the user is manipulating inline styles._
 
     @private
+    @hide
     @method _getCurrentPosition
     @return {Object}
   */
@@ -399,7 +421,8 @@ export default class Sprite {
         left: style.left,
         bottom: style.bottom,
         right: style.right,
-        transform: style.transform
+        transform: style.transform,
+        classList: Array.from(this.element.classList),
       };
     }
   }
@@ -409,6 +432,7 @@ export default class Sprite {
 
     @private
     @method _reapplyPosition
+    @hide
     @param {Object} pos The position to apply.
     @return {void}
   */
@@ -431,6 +455,15 @@ export default class Sprite {
       style.right = pos.right;
       style.bottom = pos.bottom;
       style.transform = pos.transform;
+
+      for (let cls of pos.classList) {
+        this.element.classList.add(cls);
+      }
+      for (let cls of Array.from(this.element.classList)) {
+        if (!pos.classList.includes(cls)) {
+          this.element.classList.remove(cls);
+        }
+      }
     }
   }
 
@@ -552,6 +585,12 @@ export default class Sprite {
   }
 
   _rememberSize() {
+    // at the point in time when this runs, we always have either initial or
+    // final measurements, but not both. So this will successfully pick the one
+    // we do have, which applies to what we are currently measuring.
+    let transform = this.initialCumulativeTransform || this.finalCumulativeTransform;
+    let bounds = this.initialBounds || this.finalBounds;
+
     this._imposedStyle = {};
 
     if (isSVG(this.element)) {
@@ -571,7 +610,7 @@ export default class Sprite {
     // actually returns the "used" values for width and height).
 
     if (this.element.style.width === "") {
-      this._imposedStyle.width = this.element.offsetWidth;
+      this._imposedStyle.width = bounds.width / transform.a;
       // TODO: do a more sophisticated size measurement so we don't
       // need to impose border-box. If we're only imposing width OR
       // height and we weren't originally in border box, we can get an
@@ -579,7 +618,7 @@ export default class Sprite {
       this._imposedStyle['box-sizing'] = 'border-box';
     }
     if (this.element.style.height === "") {
-      this._imposedStyle.height = this.element.offsetHeight;
+      this._imposedStyle.height = bounds.height / transform.d;
       this._imposedStyle['box-sizing'] = 'border-box';
     }
   }
@@ -684,8 +723,15 @@ export default class Sprite {
     the sprite's element. Use this when there's not a more specific
     method like `translate()`, `scale()`, `hide()`, or `reveal()`.
 
-    _Nothing you do to the sprite will persist after the transition is
-    finished -- we clean things up when it ends._
+    ```js
+    sprite.applyStyles({
+      'opacity': 0,
+      'z-index': 1
+    });
+    ```
+
+    Nothing you do to the sprite will persist after the transition is
+    finished – we clean things up when it ends.
 
     @method applyStyles
     @param {Object} styles The styles to apply to the sprite.
@@ -869,6 +915,10 @@ export default class Sprite {
     Sets the sprite's `initialBounds` using the provided
     x and y coordinates.
 
+    ```js
+    sprite.startAtPixel({ x: 0, y: 0 });
+    ```
+
     @method startAtPixel
     @param {Object} point The x and y coordinates.
     @return {void}
@@ -952,7 +1002,11 @@ export default class Sprite {
   }
 
   /**
-    Sets the sprite's `finalBounds` using the provided point (x, y).
+    Sets the sprite's `finalBounds` using the provided point `{ x, y }`.
+
+    ```js
+    sprite.endAtPixel({ x: window.innerWidth });
+    ```
 
     @method endAtPixel
     @param {Object} point The x and y coordinates.

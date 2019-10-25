@@ -1,5 +1,7 @@
 {{#each renderedChildren key="id" as |child|}}
-  {{#-ea-list-element child=child elementToChild=_elementToChild}}
-    {{yield child.value child.index}}
-  {{/-ea-list-element}}
+  {{~#-ea-list-element child=child elementToChild=_elementToChild~}}
+    {{~yield child.value child.index~}}
+  {{~/-ea-list-element~}}
+{{else}}
+  {{~yield to="inverse"~}}
 {{/each}}

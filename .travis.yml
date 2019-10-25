@@ -19,13 +19,6 @@ env:
   global:
     # See https://git.io/vdao3 for details.
     - JOBS=1
-    - RAISE_ON_DEPRECATION=true
-
-branches:
-  only:
-    - master
-    # npm version tags
-    - /^v\d+\.\d+\.\d+/
 
 jobs:
   fail_fast: true
@@ -35,35 +28,56 @@ jobs:
 
   include:
     # runs linting and tests with current locked deps
-
-    - stage: "Tests"
-      name: "Tests"
+    - stage: Tests
+      name: Library Tests
       script:
-        - npm run lint:hbs
-        - npm run lint:js
-        - npm test
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
+    - name: Docs Tests
+      install:
+        - yarn install --production
+        - cd docs
+        - yarn
+      script:
+        - yarn run lint:hbs
+        - yarn run lint:js
+        - yarn test
+
 
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
-    - stage: "Additional Tests"
+    - stage: Additional Tests
       env: EMBER_TRY_SCENARIO=ember-lts-2.12
     - env: EMBER_TRY_SCENARIO=ember-lts-2.16
     - env: EMBER_TRY_SCENARIO=ember-lts-2.18
-    - env: EMBER_TRY_SCENARIO=ember-3.0
-    - env: EMBER_TRY_SCENARIO=ember-3.4
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.4
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.8
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.12
     - env: EMBER_TRY_SCENARIO=ember-release
     - env: EMBER_TRY_SCENARIO=ember-beta
     - env: EMBER_TRY_SCENARIO=ember-canary
 
-    - stage: "Deploy"
-      if: (branch = master or tag is present) and type = push
-      script: RAISE_ON_DEPRECATION=false node_modules/.bin/ember deploy production
+    - stage: Deploy
+      if: (branch = master or tag is present or branch = split-docs) and type = push
+      install:
+        - yarn install --production
+        - cd docs
+        - yarn
+      script:
+        - node_modules/.bin/ember deploy production --verbose
 
-before_install:
-  - npm config set spin false
-  - npm install -g npm@4
-  - npm --version
+    - stage: npm release
+      install: skip
+      script: skip
+      deploy:
+        provider: npm
+        email: sam.selikoff@gmail.com
+        api_key:
+          secure: Ww+4XjqUHuJMsemYS2LhvPJcd4m0280xEXmXTshp++D0ldMExZebOkmThGwcWNqSL1xXZLxRu2FGvxyn81qZ78L6u9Jyr/1LjIHQ1tBOF1qdWfHErtrAvromoWv8NDps741/7ymeOADabTgz/ow42DvS7HPGuyhfCIePTewyoTu5t2a7EBD2ltQisosM0eseWeIXVkHu84aG43L14iesXO3DvjNbQbGHxqSSfwylgr7syv5LK58WISlOW9F2k1E9LOKj+CH7JrgThs1NwCdfny60k+5eFm/ni+UQdynuqYKBI722nElKqNRmxRa/tGEg6jUpy6SADBqzDaRHS+tulzQybVU9V0ZyL/RDlng+IQiS8Ngd3eil/EGcyLFZEiFgRfynDWuxP9AvTpTR2bX+NHz6fYWMvVlfa2kz7rV6xjLruO76rw4oSAkj/0v9plwnqY/NBWbRtjweSu+LyN5vTWEMr3Uw6kxTOnbVnUfYgfS8Cs/OqzuA0Es1iedOkGXbPtAzjxQE/T+RRJ5Ot71fzFl2U+QBaG4KfAX5E5FhVNH/sjZ5yXzemk2UiS8fJ2mfuUMb5/QQZ7MI4hJRbnzYa6dSfYLSBFnHQAnVsIlKUXmFv4cdOMYynoMQm8wkJB42TOvVhgaT8/Ib3+zx6zP+k7RFnvV29K7swVyIsEYt6QI=
+        on:
+          tags: true
+          repo: ember-animation/ember-animated
 
 script:
   - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO
-

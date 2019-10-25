@@ -4,13 +4,13 @@
 
 * `git clone <repository-url>`
 * `cd my-addon`
-* `npm install`
+* `yarn install`
 
 ## Linting
 
-* `npm run lint:hbs`
-* `npm run lint:js`
-* `npm run lint:js -- --fix`
+* `yarn lint:hbs`
+* `yarn lint:js`
+* `yarn lint:js --fix`
 
 ## Running tests
 
@@ -22,5 +22,13 @@
 
 * `ember serve`
 * Visit the dummy application at [http://localhost:4200](http://localhost:4200).
+
+## Running the documentation application
+
+The docs are in a standalone app in the /docs subdirectory.
+
+* `cd docs`
+* `yarn install` (this is needed separately from the `yarn install` in the addon itself)
+* `ember s`
 
 For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).

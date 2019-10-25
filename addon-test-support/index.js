@@ -4,6 +4,7 @@ import { run } from '@ember/runloop';
 import { relativeBounds } from 'ember-animated/-private/bounds';
 import { cumulativeTransform } from 'ember-animated/-private/transform';
 import TimeControl from './time-control';
+import { Color } from '../color';
 
 export { TimeControl };
 export { default as MotionTester } from './motion-tester';
@@ -71,6 +72,19 @@ export async function visuallyConstant(target, fn, message) {
   checkFields.call(this, ['a', 'b', 'c', 'd', 'top', 'left', 'width', 'height'], 0.25, before, after, message);
 }
 
+export function approxEqualColors(value, expected, message) {
+  const tolerance = 3;
+  let valueColor = Color.fromUserProvidedColor(value);
+  let expectedColor = Color.fromUserProvidedColor(expected);
+  let channels = ['r', 'g', 'b', 'a'];
+  this.pushResult({
+    result: channels.every(channel => Math.abs(valueColor[channel] - expectedColor[channel]) < tolerance),
+    actual: value,
+    expected,
+    message,
+  });
+}
+
 export let time;
 
 export function setupAnimationTest(hooks) {
@@ -89,6 +103,7 @@ export function setupAnimationTest(hooks) {
     assert.closeBounds = checkFields.bind(assert, ['height', 'left', 'top', 'width']);
 
     assert.visuallyConstant = visuallyConstant;
+    assert.approxEqualColors = approxEqualColors;
 
   });
   hooks.afterEach(function() {

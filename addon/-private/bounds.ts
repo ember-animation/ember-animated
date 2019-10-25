@@ -4,6 +4,7 @@
 
   @private
   @function shiftedBounds
+  @hide
   @param {Object} bounds The original bounds.
   @param {number} dx X axis offset.
   @param {number} dy Y axis offset.
@@ -19,6 +20,7 @@ export function shiftedBounds(bounds: DOMRect, dx: number, dy: number): DOMRect 
 
   @private
   @function resizedBounds
+  @hide
   @param {Object} bounds The original bounds.
   @param {number} width The target width.
   @param {number} height The target height.
@@ -34,6 +36,7 @@ export function resizedBounds(bounds: DOMRect, width: number, height: number): D
 
   @private
   @function relativeBounds
+  @hide
   @param {Object} bounds The original bounds.
   @param {Object} offset The offset.
   @return {Object} The newly calculated bounds.
@@ -46,6 +49,7 @@ export function relativeBounds(bounds: DOMRect, offset: { left: number, top: num
   An empty bounds object.
 
   @private
+  @hide
   @constant {Object} emptyBounds
 */
 export const emptyBounds= Object.freeze(new DOMRect(0, 0, 0, 0));

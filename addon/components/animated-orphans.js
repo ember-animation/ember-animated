@@ -12,6 +12,7 @@ import {
 } from '../-private/scheduler';
 import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
+import '../element-remove';
 
 /**
   A component that adopts any orphaned sprites so they can continue animating even
@@ -246,7 +247,7 @@ export default Component.extend({
 
   _findActiveSprites(ownSprite) {
     if (!this._inserted) { return []; }
-    return [...this.element.children].map(element => {
+    return Array.from(this.element.children).map(element => {
       let child = this._elementToChild.get(element);
       if (child.shouldRemove) {
         // child was not animating in the previously interrupted

@@ -39,17 +39,19 @@ import { deprecate } from '@ember/application/deprecations';
     },
 
     transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
-      insertedSprites.forEach(sprite => {
+      for (let sprite of insertedSprites) {
         sprite.startAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeOut });
-      });
+      }
 
-      keptSprites.forEach(move);
+      for (let sprite of keptSprites) {
+        move(sprite);
+      }
 
-      removedSprites.forEach(sprite => {
+      for (let sprite of removedSprites) {
         sprite.endAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeIn });
-      });
+      }
     },
   });
   ```
@@ -61,6 +63,12 @@ export default Component.extend({
   tagName: '',
 
   motionService: service('-ea-motion'),
+   /**
+   * Use a custom tag for the container. Defaults to div.
+    @argument tag
+    @type String
+  */
+  tag: 'div',
    /**
    * Whether to animate the initial render. You will probably also need to set
    * initialInsertion=true on a child component of animated-container.

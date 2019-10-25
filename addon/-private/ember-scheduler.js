@@ -1,8 +1,10 @@
 import { Promise as EmberPromise } from 'rsvp';
 import { join, scheduleOnce } from '@ember/runloop';
 import { addObserver } from '@ember/object/observers';
-import { set } from '@ember/object';
+import { computed, set } from '@ember/object';
 import ComputedProperty from '@ember/object/computed';
+import { gte } from 'ember-compatibility-helpers';
+import { assign as objectAssign }  from '@ember/polyfills';
 import {
   spawn,
   current,
@@ -13,42 +15,73 @@ import Ember from 'ember';
 import { microwait } from '..';
 import { DEBUG } from '@glimmer/env';
 
-export function task(...args) {
-  return new TaskProperty(...args);
+export function task(taskFn) {
+  let tp = _computed(function(propertyName) {
+    const task = new Task(this, taskFn, tp, propertyName);
+
+    task._bufferPolicy = null;
+    task._observes = null;
+    return task;
+  });
+
+  Object.setPrototypeOf(tp, TaskProperty.prototype);
+  return tp;
+}
+
+function _computed(fn) {
+  if (gte('3.10.0')) {
+    let cp = function(proto, key) {
+      if (cp.setup !== undefined) {
+        cp.setup(proto, key);
+      }
+
+      return computed(fn)(...arguments);
+    };
+
+    Ember._setClassicDecorator(cp);
+
+    return cp;
+  } else {
+    return computed(fn);
+  }
 }
 
 let handlerCounter = 0;
 
-class TaskProperty extends ComputedProperty {
+export let TaskProperty;
 
-  constructor(taskFn) {
-    let tp;
-    super(function (name) {
-      return new Task(this, taskFn, tp, name);
-    });
-    tp = this;
-    this._bufferPolicy = null;
-    this._observes = null;
-  }
+if (gte('3.10.0')) {
+  TaskProperty = class {};
+} else {
+  TaskProperty = class extends ComputedProperty {
+    callSuperSetup() {
+      if (super.setup) {
+        super.setup(...arguments);
+      }
+    }
+  };
+
+}
+objectAssign(TaskProperty.prototype, {
 
   restartable() {
     this._bufferPolicy = cancelAllButLast;
     return this;
-  }
+  },
 
   drop() {
     this._bufferPolicy = drop;
     return this;
-  }
+  },
 
   observes(...deps) {
     this._observes = deps;
     return this;
-  }
+  },
 
   setup(proto, taskName) {
-    if (super.setup) {
-      super.setup(...arguments);
+    if (this.callSuperSetup) {
+      this.callSuperSetup(...arguments);
     }
 
     if (this._observes) {
@@ -64,7 +97,7 @@ class TaskProperty extends ComputedProperty {
     }
   }
 
-}
+});
 
 
 let priv = new WeakMap();
