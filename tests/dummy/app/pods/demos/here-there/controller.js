@@ -15,6 +15,7 @@ export default Controller.extend({
     if (this.get('groupTogether')) {
       return 'together';
     }
+    return undefined;
   }),
   actions: {
     toggle() {

@@ -158,6 +158,7 @@ export default Component.extend({
     if (typeof w === 'string') {
       return w.split(/\s*,\s*/);
     }
+    return undefined;
   }),
 
   durationWithDefault: computed('duration', function() {
