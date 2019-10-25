@@ -3,7 +3,7 @@ import { run, later } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
-import { Promise, microwait } from 'ember-animated';
+import { microwait } from 'ember-animated';
 import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
 
 module("Unit | scheduler Ember layer", function(hooks) {

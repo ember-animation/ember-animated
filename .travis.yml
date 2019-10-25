@@ -33,6 +33,7 @@ jobs:
       script:
         - yarn run lint:hbs
         - yarn run lint:js
+        - yarn run typecheck
         - yarn test
     - name: Docs Tests
       install:

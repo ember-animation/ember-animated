@@ -2,6 +2,8 @@
 
  - BREAKING: Sprite#initialBounds, Sprite#finalBounds, and the bounds-returning test helpers are all now true DOMRect instances, as opposed to custom POJOs with the same fields. This can alter your results because the properties on DOMRect are non-enumerable.
 
+ - BREAKING: we no longer export `Promise` from "ember-animated". In the environments where Ember Animated actually works, we always exported the native `Promise` anyway. We just used this as a place to check for native `Promise` support. This is awkward for TypeScript users, because the compiler reserves the name `Promise` in any file that has async functions.
+
  - HOUSEKEEPING: the docs are now a totally standalone app in the /docs subdirectory, as opposed to using the addon's dummy app. This lets us be more strict in the addon's test suite without involving all the complexities of the docs app.
  - ENHANCEMENT: `{{#animated-each}}` now supports an `{{else}}` block just like Ember's normal `{{#each}}`. By @esbanarango.
 

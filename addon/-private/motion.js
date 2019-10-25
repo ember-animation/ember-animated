@@ -1,8 +1,7 @@
 import { spawnChild } from './scheduler';
 import {
   rAF,
-  Promise,
-  microwait
+  microwait,
 } from './concurrency-helpers';
 
 import { continuedFromElement } from './motion-bridge';

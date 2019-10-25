@@ -9,7 +9,7 @@ import {
   time,
   setupAnimationTest
 } from 'ember-animated/test-support';
-import { Promise, Motion, wait } from 'ember-animated';
+import { Motion, wait } from 'ember-animated';
 import { run } from '@ember/runloop';
 
 module('Integration | Component | animated each', function(hooks) {

@@ -3,12 +3,9 @@ import { warn } from '@ember/debug';
 import RSVP from 'rsvp';
 import { EmberRunTimer } from '@ember/runloop/types';
 
-export let Promise: PromiseConstructor;
-if ((window as any).Promise) {
-  Promise = (window as any).Promise;
-} else {
+if (!(window as any).Promise) {
   warn("Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.", false, { id: "ember-animated-missing-microtask" });
-  Promise = RSVP.Promise as any as PromiseConstructor;
+  window.Promise = RSVP.Promise as any as PromiseConstructor;
 }
 
 const cancellation: WeakMap<Promise<any>, (p: Promise<any>) => void> = new WeakMap();
@@ -80,7 +77,7 @@ export function wait(ms=0) {
   if (clock.now === originalClock) {
     let ticket: number;
     let promise = new RSVP.Promise(resolve => {
-      ticket = setTimeout(resolve, ms);
+      ticket = window.setTimeout(resolve, ms);
     });
     registerCancellation(promise, () => {
       clearTimeout(ticket);

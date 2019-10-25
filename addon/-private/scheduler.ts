@@ -37,15 +37,14 @@ API
 
 */
 
-import { Promise } from '..';
 import { registerCancellation, fireCancellation } from './concurrency-helpers';
 
-export function spawn(genFn: () => IterableIterator<any>) {
+export function spawn(genFn: () => Generator) {
   let m = new MicroRoutine(genFn, false);
   return m.promise;
 }
 
-export function spawnChild(genFn: () => IterableIterator<any>) {
+export function spawnChild(genFn: () => Generator) {
   let m = new MicroRoutine(genFn, true);
   return m.promise;
 }
@@ -141,7 +140,7 @@ class MicroRoutine {
   errorLogger: ((e: Error) => void) | undefined;
   promise: Promise<any>;
 
-  constructor(genFn: () => IterableIterator<any>, linkToParent: boolean) {
+  constructor(genFn: () => Generator, linkToParent: boolean) {
     this.generator = genFn();
     this.promise = new Promise((res, rej) => {
       this.resolve = res;

@@ -8,7 +8,7 @@ import {
   current,
   childrenSettled
 } from 'ember-animated/-private/scheduler';
-import { Promise, microwait } from 'ember-animated';
+import { microwait } from 'ember-animated';
 import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
 
 module("Unit | scheduler", function(hooks) {

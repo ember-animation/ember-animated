@@ -5,7 +5,6 @@ export {
   afterRender,
   clock,
   allSettled,
-  Promise
 } from './-private/concurrency-helpers';
 
 export {

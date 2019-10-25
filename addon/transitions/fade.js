@@ -1,5 +1,4 @@
 import opacity from 'ember-animated/motions/opacity';
-import { Promise } from 'ember-animated';
 
 /**
   Fades inserted, removed, and kept sprites.
