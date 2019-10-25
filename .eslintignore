@@ -19,16 +19,6 @@
 /bower.json.ember-try
 /package.json.ember-try
 
-
-# unconventional js
-/docs/blueprints/*/files/
-/docs/vendor/
-
-# compiled output
-/docs/dist/
-/docs/tmp/
-
-# dependencies
-/docs/bower_components/
-/docs/node_modules/
-
+# the docs app does its own separate linting, in order to be a more conventional
+# ember app
+/docs
