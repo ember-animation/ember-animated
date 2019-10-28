@@ -18,6 +18,7 @@ module.exports = {
     'no-constant-condition': ['error', { checkLoops: false }],
     'require-yield': 0,
     semi: ['error', 'always'],
+    'no-var': 'error',
   },
   overrides: [
     // node files

@@ -15,6 +15,7 @@ module.exports = {
     browser: true,
   },
   rules: {
+    'no-var': 'error',
     'no-constant-condition': ['error', { checkLoops: false }],
     'require-yield': 0,
     semi: 0,

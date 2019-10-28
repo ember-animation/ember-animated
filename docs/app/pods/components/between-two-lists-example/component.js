@@ -72,8 +72,8 @@ export default Component.extend({
 });
 
 function makeRandomItem(index) {
-  var messages = ['Dwight', 'Stanley', 'Kelly', 'Ryan', 'Kevin'];
-  var images = [
+  let messages = ['Dwight', 'Stanley', 'Kelly', 'Ryan', 'Kevin'];
+  let images = [
     'https://pbs.twimg.com/profile_images/549268771484229632/WnatiHzT_400x400.jpeg',
     'https://pbs.twimg.com/profile_images/1839546020/florida_stanley_400x400.jpg',
     'https://pbs.twimg.com/profile_images/71405458/2928282474_24807334d7_400x400.jpg',
@@ -88,8 +88,8 @@ function makeRandomItem(index) {
 }
 
 function makeRandomItem2(index) {
-  var messages = ['Oscar', 'Jim', 'Angela', 'Michael', 'Pam'];
-  var images = [
+  let messages = ['Oscar', 'Jim', 'Angela', 'Michael', 'Pam'];
+  let images = [
     'https://pbs.twimg.com/profile_images/563110431653249025/5_Y6Amql_400x400.jpeg',
     'https://pbs.twimg.com/profile_images/3171824697/ef75d90df2e65ce326acf30262df5918_400x400.jpeg',
     'https://pbs.twimg.com/profile_images/800824511184572416/uC3hE1JB_400x400.jpg',

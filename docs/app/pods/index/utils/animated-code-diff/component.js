@@ -69,7 +69,7 @@ export default Component.extend({
 
         sprite.reveal();
 
-        for (var i = 0; i < chars.length; i++) {
+        for (let i = 0; i < chars.length; i++) {
           sprite.applyStyles({
             width: characterWidth * (i + 1),
           });

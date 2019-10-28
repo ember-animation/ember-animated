@@ -1,10 +1,10 @@
 export default function dedent(strings) {
   // $FlowFixMe: Flow doesn't undestand .raw
-  var raw = typeof strings === 'string' ? [strings] : strings.raw;
+  let raw = typeof strings === 'string' ? [strings] : strings.raw;
 
   // first, perform interpolation
-  var result = '';
-  for (var i = 0; i < raw.length; i++) {
+  let result = '';
+  for (let i = 0; i < raw.length; i++) {
     result += raw[i]
       // join lines when there is a suppressed newline
       .replace(/\\\n[ \t]*/g, '')
@@ -17,12 +17,12 @@ export default function dedent(strings) {
   }
 
   // now strip indentation
-  var lines = result.split('\n');
-  var mindent = null;
+  let lines = result.split('\n');
+  let mindent = null;
   lines.forEach(function(l) {
-    var m = l.match(/^(\s+)\S+/);
+    let m = l.match(/^(\s+)\S+/);
     if (m) {
-      var indent = m[1].length;
+      let indent = m[1].length;
       if (!mindent) {
         // this is the first indented line
         mindent = indent;
@@ -34,7 +34,7 @@ export default function dedent(strings) {
 
   if (mindent !== null) {
     (function() {
-      var m = mindent; // appease Flow
+      let m = mindent; // appease Flow
       result = lines
         .map(function(l) {
           return l[0] === ' ' ? l.slice(m) : l;

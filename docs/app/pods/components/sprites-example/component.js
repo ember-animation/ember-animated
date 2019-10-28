@@ -57,7 +57,7 @@ export default Component.extend({
 });
 
 function makeRandomItem(index) {
-  var messages = [
+  let messages = [
     'Hi',
     'Hello',
     'Invitation',

@@ -16,8 +16,8 @@ module.exports = {
     if (!this.import) {
       // Shim from https://github.com/ember-cli/ember-cli/blob/5d64cfbf1276cf1e3eb88761df4546c891b5efa6/lib/models/addon.js#L387
       this._findHost = function findHostShim() {
-        var current = this;
-        var app;
+        let current = this;
+        let app;
 
         // Keep iterating upward until we don't have a grandparent.
         // Has to do this grandparent check because at some point we hit the project.
@@ -29,7 +29,7 @@ module.exports = {
       };
       // Shim from https://github.com/ember-cli/ember-cli/blob/5d64cfbf1276cf1e3eb88761df4546c891b5efa6/lib/models/addon.js#L443
       this.import = function importShim(asset, options) {
-        var app = this._findHost();
+        let app = this._findHost();
         app.import(asset, options);
       };
     }
