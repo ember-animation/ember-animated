@@ -3,6 +3,7 @@ import EmberObject from '@ember/object';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { Motion } from 'ember-animated';
 import Sprite from 'ember-animated/-private/sprite';
+import TransitionContext from 'ember-animated/-private/transition-context';
 
 export default EmberObject.extend({
   motion: null,
@@ -27,13 +28,23 @@ export default EmberObject.extend({
       );
     }
 
-    if (motion.duration === null) {
-      motion.duration = this.duration;
+    let duration = this.duration;
+    if (args.length > 1 && args[1].duration != null) {
+      duration = args[1].duration;
     }
 
-    if (args.length > 1 && args[1].duration != null) {
-      motion.duration = args[1].duration;
-    }
+    let context = new TransitionContext(
+      duration,
+      [motion.sprite],
+      [],
+      [],
+      [],
+      [],
+      {},
+      () => null,
+      () => null,
+    );
+    context.insertedSprites;
 
     // Each motion contains its own promise that is used by
     // TransitionContext#animate so that a transition can wait for a

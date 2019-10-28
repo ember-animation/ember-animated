@@ -2,22 +2,25 @@ import { spawnChild } from './scheduler';
 import { rAF, microwait } from './concurrency-helpers';
 import { continuedFromElement } from './motion-bridge';
 import TransitionContext from './transition-context';
+import Sprite from './sprite';
 
-const motions = new WeakMap();
+const motions: WeakMap<Element, Motion[]> = new WeakMap();
 
-export default class Motion {
-  constructor(sprite, opts = {}) {
+interface BaseOptions {
+  duration: number;
+}
+
+export default abstract class Motion<T extends BaseOptions = BaseOptions> {
+  private _motionList: Motion[] | undefined;
+  private _inheritedMotionList: Motion[] | undefined;
+
+  private _promise: Promise<unknown>;
+  private _resolve!: () => void;
+  private _reject!: (err: any) => void;
+
+  constructor(readonly sprite: Sprite, readonly opts: Partial<T> = {}) {
     this.sprite = sprite;
     this.opts = opts;
-
-    // You can set this property directly if you want to. If you leave
-    // it null the transition will apply its own overall duration,
-    // which is often what you want.
-    this.duration = null;
-    if (opts.duration != null) {
-      this.duration = opts.duration;
-    }
-
     this._setupMotionList();
     this._promise = new Promise((resolve, reject) => {
       this._resolve = resolve;
@@ -25,11 +28,18 @@ export default class Motion {
     });
   }
 
+  // All motions should read this to decide how long to animate. It allows users
+  // to set a duration explicitly or rely on the prevailing default for the
+  // whole running transition.
+  get duration(): number {
+    if (this.opts.duration != null) {
+      return this.opts.duration;
+    }
+    return TransitionContext.forSprite(this.sprite).duration;
+  }
+
   run() {
     let context = TransitionContext.forSprite(this.sprite);
-    if (this.duration == null) {
-      this.duration = context.duration;
-    }
     let self = this;
     return spawnChild(function*() {
       context.onMotionStart(self.sprite);
@@ -47,7 +57,7 @@ export default class Motion {
   // been interrupted during this frame. You should save any state on
   // `this` in order to influence your own animation. This hook is
   // skipped if there were no other motions.
-  interrupted(/* motions */) {}
+  interrupted(_otherMotions: Motion[]): void {}
 
   // Implement your animation here. It must be a generator function
   // that yields promises (just like an ember-concurrency task, except
@@ -59,7 +69,7 @@ export default class Motion {
 
   *_run() {
     try {
-      let others = this._motionList.filter(m => m !== this);
+      let others = this._motionList!.filter(m => m !== this);
       if (this._inheritedMotionList) {
         others = others.concat(this._inheritedMotionList);
       }
@@ -103,11 +113,13 @@ export default class Motion {
   }
 
   _clearMotionList() {
-    let index = this._motionList.indexOf(this);
-    this._motionList.splice(index, 1);
-    if (this._motionList.length === 0) {
-      motions.delete(this.sprite.element);
+    if (this._motionList) {
+      let index = this._motionList.indexOf(this);
+      this._motionList.splice(index, 1);
+      if (this._motionList.length === 0) {
+        motions.delete(this.sprite.element);
+      }
+      this._motionList = undefined;
     }
-    this._motionList = null;
   }
 }

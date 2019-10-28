@@ -28,6 +28,8 @@ export default class TransitionContext {
     private _sentSprites: Sprite[],
     private _receivedSprites: Sprite[],
     private _beacons: { [name: string]: Sprite },
+    readonly onMotionStart: (sprite: Sprite) => void,
+    readonly onMotionEnd: (sprite: Sprite) => void,
   ) {}
 
   // the following things are all accessors in order to make them
