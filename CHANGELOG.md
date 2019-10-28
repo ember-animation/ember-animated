@@ -1,5 +1,7 @@
 # master
 
+ - BREAKING: Sprite#applyStyles no longer automatically adjusts non-string values to add units where appropriate. Always pass complete string values for your CSS properties.
+
  - BREAKING: Sprite#initialBounds, Sprite#finalBounds, and the bounds-returning test helpers are all now true DOMRect instances, as opposed to custom POJOs with the same fields. This can alter your results because the properties on DOMRect are non-enumerable.
 
  - BREAKING: we no longer export `Promise` from "ember-animated". In the environments where Ember Animated actually works, we always exported the native `Promise` anyway. We just used this as a place to check for native `Promise` support. This is awkward for TypeScript users, because the compiler reserves the name `Promise` in any file that has async functions.
