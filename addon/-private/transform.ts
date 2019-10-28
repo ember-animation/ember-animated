@@ -136,9 +136,9 @@ export function ownTransform(elt: HTMLElement): Transform {
   if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
     // If there is any rotation, scaling, or skew we need to do it within the context of transform-origin.
     let origin =
-      eltStyles['transform-origin'] !== ''
-        ? eltStyles['transform-origin']!
-        : elt.style['transform-origin']!;
+      eltStyles.getPropertyValue('transform-origin') !== ''
+        ? eltStyles.getPropertyValue('transform-origin')!
+        : elt.style.getPropertyValue('transform-origin')!;
     let [originX, originY] = parseOrigin(origin);
     if (originX === 0 && originY === 0) {
       // transform origin is at 0,0 so it will have no effect, so we're done.
