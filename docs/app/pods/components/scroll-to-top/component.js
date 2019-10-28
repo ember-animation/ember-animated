@@ -5,5 +5,5 @@ export default Component.extend({
   This makes sure that when transitioning from or to this page, it always scrolls to the top. */
   didInsertElement() {
     document.documentElement.scrollTop = 0;
-  }
+  },
 });

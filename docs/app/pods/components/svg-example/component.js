@@ -10,28 +10,28 @@ export default Component.extend({
     for (let id = 0; id < 10; id++) {
       list.push({
         id,
-        x: Math.floor(Math.random()*100),
-        y: Math.floor(Math.random()*100),
-        radius: Math.floor(Math.random()*50)
+        x: Math.floor(Math.random() * 100),
+        y: Math.floor(Math.random() * 100),
+        radius: Math.floor(Math.random() * 50),
       });
     }
     return list;
   }),
 
-  moveThem: function * ({ keptSprites }) {
+  moveThem: function*({ keptSprites }) {
     keptSprites.forEach(
       parallel(
         moveSVG.property('cx'),
         moveSVG.property('cy'),
-        moveSVG.property('r')
-      )
+        moveSVG.property('r'),
+      ),
     );
   },
 
   actions: {
     move() {
       this.notifyPropertyChange('bubbles');
-    }
-  }
+    },
+  },
 });
 //END-SNIPPET

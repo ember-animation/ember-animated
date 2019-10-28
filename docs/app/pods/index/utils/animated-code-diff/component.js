@@ -21,7 +21,12 @@ export default Component.extend({
     return this.isShowingFinal ? this.finalLines : this.originalLines;
   }),
 
-  codeTransition: function*({ duration, insertedSprites, removedSprites, keptSprites }) {
+  codeTransition: function*({
+    duration,
+    insertedSprites,
+    removedSprites,
+    keptSprites,
+  }) {
     this.incrementProperty('transitionsRunning');
     this.set('isAnimatingInsertedLines', false);
 
@@ -31,7 +36,7 @@ export default Component.extend({
       // Need to set inserted sprites to 0 opacity in case their animation is interrupted
       insertedSprites.forEach(sprite => {
         sprite.applyStyles({
-          opacity: '0'
+          opacity: '0',
         });
       });
 
@@ -55,7 +60,7 @@ export default Component.extend({
           overflow: 'hidden',
           opacity: '1',
           display: 'inline-block',
-          width: 'auto'
+          width: 'auto',
         });
 
         let totalWidth = sprite.element.getBoundingClientRect().width;
@@ -66,19 +71,17 @@ export default Component.extend({
 
         for (var i = 0; i < chars.length; i++) {
           sprite.applyStyles({
-            width: characterWidth * (i + 1)
+            width: characterWidth * (i + 1),
           });
 
-          if (chars[i] !== " ") {
+          if (chars[i] !== ' ') {
             yield wait(15);
           }
-
         }
       }
 
       // this.set('isAnimatingInsertedLines', false);
       this.onAnimationChange(false);
-
     } else {
       removedSprites.forEach(fadeOut);
       keptSprites.map(sprite => {
@@ -110,7 +113,7 @@ function highlightLineObjects(lineObjects, language) {
     highlighted: lineObjects[index].highlighted,
     // htmlSafe is justified here because we generated the highlighting markup
     // ourself in highlightCode
-    text: htmlSafe(text === "" ? "\n" : text),
+    text: htmlSafe(text === '' ? '\n' : text),
   }));
 }
 
@@ -119,7 +122,7 @@ function getLineObjectsFromDiff(diff, beforeOrAfter) {
   let lineObjects = diffLines.map((diff, index) => {
     return {
       index,
-      text: diff
+      text: diff,
     };
   });
 
@@ -138,43 +141,47 @@ function getLineObjectsFromDiff(diff, beforeOrAfter) {
 function groupedLines(lineObjects) {
   let isAddedLine = lineObject => lineObject.text.indexOf('+') === 0;
   let isRemovedLine = lineObject => lineObject.text.indexOf('-') === 0;
-  let isModifiedLine = lineObject => isAddedLine(lineObject) || isRemovedLine(lineObject);
+  let isModifiedLine = lineObject =>
+    isAddedLine(lineObject) || isRemovedLine(lineObject);
   let hasAddedOrRemovedLines = lineObjects.filter(isModifiedLine).length > 0;
 
-  return lineObjects.map((lineObject, index) => {
-    if (isAddedLine(lineObject)) {
-      lineObject.id = `added-${index}`;
-      lineObject.text = lineObject.text.replace('+', ' ');
-      lineObject.highlighted = true;
-
-    } else if (isRemovedLine(lineObject)) {
-      lineObject.id = `removed-${index}`;
-      lineObject.text = lineObject.text.replace('-', ' ');
+  return lineObjects
+    .map((lineObject, index) => {
+      if (isAddedLine(lineObject)) {
+        lineObject.id = `added-${index}`;
+        lineObject.text = lineObject.text.replace('+', ' ');
+        lineObject.highlighted = true;
+      } else if (isRemovedLine(lineObject)) {
+        lineObject.id = `removed-${index}`;
+        lineObject.text = lineObject.text.replace('-', ' ');
         // .replace(/^\s\s/, ""); // remove the 2-space indent
+      } else {
+        lineObject.id = `kept-${index}`;
+      }
 
-    } else {
-      lineObject.id = `kept-${index}`;
-
-    }
-
-    return lineObject;
-  }).map(lineObject => {
-    /*
+      return lineObject;
+    })
+    .map(lineObject => {
+      /*
       If we have either addded or removed lines, all text has a 2-space indent
       right now, so we remove it.
 
       If we don't, we don't need to dedent anything, because all space was
       dedented by the `dedent` function when the diff was originally passed in.
     */
-    if (hasAddedOrRemovedLines) {
-      lineObject.text = lineObject.text.replace(/^\s\s/, "");
-    }
+      if (hasAddedOrRemovedLines) {
+        lineObject.text = lineObject.text.replace(/^\s\s/, '');
+      }
 
-    return lineObject;
-  }).reduce((groupedLines, lineObject) => {
-    let type = lineObject.id.split('-')[0];
-    groupedLines[`${type}Lines`].push(lineObject);
+      return lineObject;
+    })
+    .reduce(
+      (groupedLines, lineObject) => {
+        let type = lineObject.id.split('-')[0];
+        groupedLines[`${type}Lines`].push(lineObject);
 
-    return groupedLines;
-  }, { keptLines: [], removedLines: [], addedLines: []});
+        return groupedLines;
+      },
+      { keptLines: [], removedLines: [], addedLines: [] },
+    );
 }

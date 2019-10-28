@@ -17,31 +17,29 @@ export default Component.extend({
 
   motions() {
     let motions = [];
-    if(!this.disableMove){
+    if (!this.disableMove) {
       motions.push(move);
     }
-    if(!this.disableCompensateForScale){
+    if (!this.disableCompensateForScale) {
       motions.push(compensateForScale);
     }
-    if(!this.disableAdjustFontSize){
+    if (!this.disableAdjustFontSize) {
       motions.push(adjustCSS.property('font-size'));
     }
-    if(!this.disableAdjustLetterSpacing){
+    if (!this.disableAdjustLetterSpacing) {
       motions.push(adjustCSS.property('letter-spacing'));
     }
-    if(!this.disableAdjustColor){
-     motions.push(adjustColor.property('color'));
+    if (!this.disableAdjustColor) {
+      motions.push(adjustColor.property('color'));
     }
     return motions;
   },
 
-  transition: function * ({ sentSprites }) {
+  transition: function*({ sentSprites }) {
     let motions = this.motions();
-    sentSprites.forEach(
-      parallel(...motions),
-    );
-  }
+    sentSprites.forEach(parallel(...motions));
+  },
 }).reopenClass({
-  positionalParams: ['text']
+  positionalParams: ['text'],
 });
 //END-SNIPPET

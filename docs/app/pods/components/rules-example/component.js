@@ -18,8 +18,7 @@ export default Component.extend({
     },
     decrement() {
       this.set('counter', this.get('counter') - 1);
-    }
-
-  }
+    },
+  },
 });
 //END-SNIPPET

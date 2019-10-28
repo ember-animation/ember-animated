@@ -6,16 +6,16 @@ import opacity from 'ember-animated/motions/opacity';
 import { parallel, printSprites } from 'ember-animated';
 
 export default Controller.extend({
-   /* Sets scroll position so that the demo animates between routes without
+  /* Sets scroll position so that the demo animates between routes without
   scrolling to the top of the page every time, see scroll-to-top */
   preserveScrollPosition: true,
 
-  transition: function * ({ receivedSprites, sentSprites, removedSprites }) {
+  transition: function*({ receivedSprites, sentSprites, removedSprites }) {
     printSprites(arguments[0]);
     // received and sent sprites are flying above all the others
     receivedSprites.concat(sentSprites).forEach(sprite => {
       sprite.applyStyles({
-        'z-index': 1
+        'z-index': 1,
       });
     });
 
@@ -27,8 +27,6 @@ export default Controller.extend({
       continuePrior(sprite);
       opacity(sprite, { to: 0 });
     });
-  }
-
-
+  },
 });
 //END-SNIPPET

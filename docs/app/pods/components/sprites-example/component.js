@@ -14,10 +14,10 @@ export default Component.extend({
     for (let i = 0; i < 7; i++) {
       result.push(makeRandomItem(i));
     }
-    return (result);
+    return result;
   },
 
-  transition: function * (context) {
+  transition: function*(context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
     insertedSprites.forEach(sprite => {
       sprite.applyStyles({ 'z-index': 1 });
@@ -37,22 +37,42 @@ export default Component.extend({
   deleteAll: false,
   refresh: false,
 
-
   actions: {
     addItem() {
       let items = this.get('items');
       let index = Math.floor(Math.random() * Math.floor(10));
-      this.set('items', items.slice(0, 0).concat([makeRandomItem(index)]).concat(items.slice(0)));
+      this.set(
+        'items',
+        items
+          .slice(0, 0)
+          .concat([makeRandomItem(index)])
+          .concat(items.slice(0)),
+      );
     },
     deleteItems() {
       let items = this.get('items');
       this.set('items', items.filter(item => !item.deleteMessage));
-    }
-  }
+    },
+  },
 });
 
 function makeRandomItem(index) {
-  var messages = ["Hi", "Hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
-  return { message: messages[index], deleteMessage: false, received: new Date() };
+  var messages = [
+    'Hi',
+    'Hello',
+    'Invitation',
+    'Thank You',
+    'Congratulations',
+    'Namaste',
+    'Happy Birthday',
+    'Aloha',
+    'Welcome',
+    'Urgent',
+  ];
+  return {
+    message: messages[index],
+    deleteMessage: false,
+    received: new Date(),
+  };
 }
 //END-SNIPPET

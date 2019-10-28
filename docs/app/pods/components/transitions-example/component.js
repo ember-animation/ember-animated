@@ -7,11 +7,10 @@ import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 export default Component.extend({
   fade,
   custom: false,
-  mail: "Hello",
+  mail: 'Hello',
 
   /* custom transition */
-  slideFromSide: function * ({ insertedSprites, keptSprites, removedSprites }) {
-
+  slideFromSide: function*({ insertedSprites, keptSprites, removedSprites }) {
     insertedSprites.forEach(sprite => {
       sprite.startAtPixel({ x: window.innerWidth });
       sprite.applyStyles({ 'z-index': 1 });
@@ -29,6 +28,5 @@ export default Component.extend({
       move(sprite, { easing: easeIn });
     });
   },
-
 });
 //END-SNIPPET
