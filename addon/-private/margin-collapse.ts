@@ -4,9 +4,9 @@
 // returns list of Element for increasingly deep descendants
 // of the given element whose top (or bottom) margin collapses with
 // the given element's.
-export function collapsedChildren(element, cs, which, children=[]) {
+export function collapsedChildren(element: Element, cs: CSSStyleDeclaration, which: "Top" | "Bottom", children: Element[]=[]) {
   // margin collapse only happens if we have no border or padding
-  if (isBlock(cs) && cs[`border${which}Width`] === '0px' && cs[`padding${which}`] === '0px') {
+  if (isBlock(cs) && cs.getPropertyValue(`border${which}Width`) === '0px' && cs.getPropertyValue(`padding${which}`) === '0px') {
     let block;
     if (which === 'Top') {
       block = firstChildBlock(element);
@@ -22,7 +22,7 @@ export function collapsedChildren(element, cs, which, children=[]) {
   return children;
 }
 
-function firstChildBlock(element) {
+function firstChildBlock(element: Element): [Element, CSSStyleDeclaration] | undefined {
   for (let i = 0; i < element.children.length; i++) {
     let child = element.children[i];
     let childCS = getComputedStyle(child);
@@ -34,9 +34,10 @@ function firstChildBlock(element) {
       return [child, childCS];
     }
   }
+  return;
 }
 
-function lastChildBlock(element) {
+function lastChildBlock(element: Element): [Element, CSSStyleDeclaration] | undefined {
   for (let i = element.children.length - 1; i >= 0; i--) {
     let child = element.children[i];
     let childCS = getComputedStyle(child);
@@ -48,11 +49,12 @@ function lastChildBlock(element) {
       return [child, childCS];
     }
   }
+  return;
 }
 
 
-function isBlock(cs) {
+function isBlock(cs: CSSStyleDeclaration) {
   return cs.display === 'block' && (
     cs.position === 'static' || cs.position === 'relative'
-  ) && cs.float === 'none' && cs.overflow === 'visible';
+  ) && cs.getPropertyValue('float') === 'none' && cs.overflow === 'visible';
 }
