@@ -1,6 +1,12 @@
 import { childrenSettled } from './scheduler';
 
+const spriteContext = new WeakMap();
+
 export default class TransitionContext {
+  static forSprite(sprite) {
+    return spriteContext.get(sprite);
+  }
+
   constructor(
     duration,
     insertedSprites,
@@ -50,7 +56,9 @@ export default class TransitionContext {
   _prepareSprites(sprites) {
     // Link them up, so that users can conveniently pass sprites
     // around to Motions without also passing the transition context.
-    sprites.forEach(sprite => (sprite._transitionContext = this));
+    sprites.forEach(sprite => {
+      spriteContext.set(sprite, this);
+    });
 
     if (!this.prepareSprite) {
       return sprites;

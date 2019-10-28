@@ -1,7 +1,7 @@
 import { spawnChild } from './scheduler';
 import { rAF, microwait } from './concurrency-helpers';
-
 import { continuedFromElement } from './motion-bridge';
+import TransitionContext from './transition-context';
 
 const motions = new WeakMap();
 
@@ -26,7 +26,7 @@ export default class Motion {
   }
 
   run() {
-    let context = this.sprite._transitionContext;
+    let context = TransitionContext.forSprite(this.sprite);
     if (this.duration == null) {
       this.duration = context.duration;
     }

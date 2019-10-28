@@ -75,7 +75,6 @@ export default class Sprite {
   private _transform: Transform | null = null;
   private _cumulativeTransform: Transform | null = null;
   private _offsetSprite: Sprite | null;
-  private _transitionContext: unknown;
   private _lockedToInitialPosition: boolean;
   private _finalComputedStyle: unknown;
   private _finalBounds: DOMRect | null = null;
@@ -103,11 +102,6 @@ export default class Sprite {
     this.element = element;
     this.owner = null;
     this._offsetSprite = offsetSprite;
-
-    // This gets set by TransitionContext when a sprite is used within
-    // a TransitionContext. It's a convenience that allows users to
-    // just pass Sprites to Motions without also passing the context.
-    this._transitionContext = null;
 
     this._lockedToInitialPosition = inInitialPosition;
     if (inInitialPosition) {
