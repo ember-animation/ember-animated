@@ -1,5 +1,5 @@
 # master
- - BREAKING: drop support for node < 10.
+ - BREAKING: drop support for node 6.
 
  - BREAKING: Sprite#applyStyles no longer automatically corrects CSS property names from camel case to dasherized form. Always use the names as written in plain CSS.
 
