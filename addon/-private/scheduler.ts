@@ -39,6 +39,8 @@ API
 
 import { registerCancellation, fireCancellation } from './concurrency-helpers';
 
+// TODO: specialize the Generator types here so you can only yield promises and
+// get back the promise's resolved type.
 export function spawn(genFn: () => Generator) {
   let m = new MicroRoutine(genFn, false);
   return m.promise;
