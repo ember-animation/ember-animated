@@ -1,7 +1,12 @@
 {
-  "editor.formatOnSave": true,
   "eslint.validate": [
     "javascript",
     { "language": "typescript", "autoFix": true }
-  ]
+  ],
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true
+  }
 }
