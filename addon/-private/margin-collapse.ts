@@ -5,7 +5,6 @@
 // of the given element whose top (or bottom) margin collapses with
 // the given element's.
 export function collapsedChildren(element: Element, cs: CSSStyleDeclaration, which: "top" | "bottom", children: Element[]=[]) {
-  debugger;
   // margin collapse only happens if we have no border or padding
   if (isBlock(cs) && cs.getPropertyValue(`border-${which}-width`) === '0px' && cs.getPropertyValue(`padding-${which}`) === '0px') {
     let block;
