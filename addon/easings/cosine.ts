@@ -1,4 +1,4 @@
-export function easeInAndOut(t) {
+export function easeInAndOut(t: number) {
   return 0.5 - Math.cos(t * Math.PI) / 2;
 }
 
@@ -11,7 +11,7 @@ const cutover = 1 / (2 * adjust);
 const b = (2 - Math.PI) / 4;
 const m = (Math.PI / 2) * adjust;
 
-export function easeIn(t) {
+export function easeIn(t: number) {
   if (t < cutover) {
     return easeInAndOut(t * adjust);
   } else {
@@ -19,6 +19,6 @@ export function easeIn(t) {
   }
 }
 
-export function easeOut(t) {
+export function easeOut(t: number) {
   return 1 - easeIn(1 - t);
 }
