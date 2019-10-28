@@ -1,4 +1,7 @@
-export default function partition(iterator, predicate) {
+export default function partition<T>(
+  iterator: Iterable<T>,
+  predicate: (item: T) => boolean,
+): [T[], T[]] {
   let truthy = [];
   let falsy = [];
   for (let item of iterator) {
