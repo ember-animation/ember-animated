@@ -87,7 +87,6 @@ export default class Sprite {
   private _originalInitialBounds: unknown;
   private _initialPosition: SpritePosition | null = null;
   private _initialCumulativeTransform: Transform | null = null;
-  private _parentElement: unknown;
   private _revealed: unknown;
   private _imposedStyle: { [property: string]: string } | null = null;
   private _styleCache: { [property: string]: string } | null = null;
@@ -128,7 +127,6 @@ export default class Sprite {
       // so inheriting the state from our predecessor is important for
       // correctness.
       this._styleCache = predecessor._styleCache;
-      this._parentElement = predecessor._parentElement;
       this._revealed = predecessor._revealed;
       this._imposedStyle = predecessor._imposedStyle;
       this._collapsingChildren = predecessor._collapsingChildren;
@@ -140,7 +138,6 @@ export default class Sprite {
       }
     } else {
       this._styleCache = null;
-      this._parentElement = null;
       this._revealed = null;
       this._lockMode = lockMode;
       if (lockMode === 'position') {
