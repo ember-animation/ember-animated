@@ -77,7 +77,7 @@ let nextFrameWaiters: ({ promise: Promise<any>; resolve: () => void })[] = [];
 // same clock. We stash it here so that arbitrary code can easily ask
 // "did I already do that this frame?" without needing to thread the
 // clock values around.
-export let currentFrameClock: number | null = null;
+export let currentFrameClock = -Infinity;
 
 export function microwait() {
   return new Promise(resolve => resolve());
