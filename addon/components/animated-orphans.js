@@ -4,7 +4,9 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-orphans';
 import { task } from '../-private/ember-scheduler';
 import { afterRender, microwait, continueMotions } from '..';
-import TransitionContext from '../-private/transition-context';
+import TransitionContext, {
+  runToCompletion,
+} from '../-private/transition-context';
 import { spawnChild, childrenSettled, current } from '../-private/scheduler';
 import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
@@ -165,7 +167,7 @@ export default Component.extend({
         // before we start hiding the sent & received sprites
         yield microwait();
         sentSprites.forEach(s => s.hide());
-        yield* context._runToCompletion(transition);
+        yield* runToCompletion(context, transition);
       });
     }
 
@@ -251,7 +253,7 @@ export default Component.extend({
         context.onMotionEnd = self._onMotionEnd.bind(self, cycle);
         context.prepareSprite = self._prepareSprite.bind(self);
 
-        yield* context._runToCompletion(transition);
+        yield* runToCompletion(context, transition);
       });
     }
 

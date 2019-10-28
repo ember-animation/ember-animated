@@ -7,7 +7,9 @@ import layout from '../templates/components/animated-each';
 import { task } from '../-private/ember-scheduler';
 import { current } from '../-private/scheduler';
 import { afterRender, microwait } from '..';
-import TransitionContext from '../-private/transition-context';
+import TransitionContext, {
+  runToCompletion,
+} from '../-private/transition-context';
 import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
@@ -677,7 +679,7 @@ export default Component.extend({
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);
     context.onMotionEnd = sprite => this._motionEnded(sprite, cycle);
 
-    yield* context._runToCompletion(transition);
+    yield* runToCompletion(context, transition);
     return { matchingAnimatorsFinished };
   }),
 
