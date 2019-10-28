@@ -678,7 +678,7 @@ export default class Sprite {
       this._imposedStyle.transform = this.transform.serialize();
     }
 
-    this._collapsingChildren = collapsedChildren(this.element, computedStyle, 'Top');
+    this._collapsingChildren = collapsedChildren(this.element, computedStyle, 'top');
   }
 
   _cacheOriginalStyles() {

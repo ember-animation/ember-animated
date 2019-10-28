@@ -1,14 +1,15 @@
-// takes an element, the element's computed style, and either 'Top' or
-// 'Bottom'.
+// takes an element, the element's computed style, and either 'top' or
+// 'bottom'.
 //
 // returns list of Element for increasingly deep descendants
 // of the given element whose top (or bottom) margin collapses with
 // the given element's.
-export function collapsedChildren(element: Element, cs: CSSStyleDeclaration, which: "Top" | "Bottom", children: Element[]=[]) {
+export function collapsedChildren(element: Element, cs: CSSStyleDeclaration, which: "top" | "bottom", children: Element[]=[]) {
+  debugger;
   // margin collapse only happens if we have no border or padding
-  if (isBlock(cs) && cs.getPropertyValue(`border${which}Width`) === '0px' && cs.getPropertyValue(`padding${which}`) === '0px') {
+  if (isBlock(cs) && cs.getPropertyValue(`border-${which}-width`) === '0px' && cs.getPropertyValue(`padding-${which}`) === '0px') {
     let block;
-    if (which === 'Top') {
+    if (which === 'top') {
       block = firstChildBlock(element);
     } else {
       block = lastChildBlock(element);
