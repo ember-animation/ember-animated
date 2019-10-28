@@ -20,9 +20,6 @@ env:
     # See https://git.io/vdao3 for details.
     - JOBS=1
 
-before_install:
- - npm install -g yarn@1.19.1
-
 jobs:
   fail_fast: true
   allow_failures:
