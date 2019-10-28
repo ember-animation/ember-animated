@@ -1,4 +1,7 @@
 # master
+ - BREAKING: drop support for node < 10.
+
+ - BREAKING: Sprite#applyStyles no longer automatically corrects CSS property names from camel case to dasherized form. Always use the names as written in plain CSS.
 
  - BREAKING: Sprite#applyStyles no longer automatically adjusts non-string values to add units where appropriate. Always pass complete string values for your CSS properties.
 
