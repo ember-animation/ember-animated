@@ -24,7 +24,7 @@
 # 0.8.0
  - BUGFIX: the classlist-resetting feature in the previous release had a bug that would prevent legitimate permanent updates to classes.
  - ENHANCEMENT: track border-radius properties so adjustCSS can easily interpolate radii.
- - DOCS: updates by @samselikof
+ - DOCS: updates by @samselikoff
  - HOUSEKEEPING: update angle bracket invocation polyfill by @ryanto
 
 # 0.7.0
@@ -40,7 +40,7 @@
  - BUGFIX: we sometimes threw a "function expected" Exception on Microsoft Edge when using <AnimatedOrphans />
  - DOCS: @jenweber fixed a broken link
  - BUGFIX: there was a race condition if any animator component received two changes before the first could even begin running the user's transition
- - HOUSEKEEPING: issue template added by @samselikof
+ - HOUSEKEEPING: issue template added by @samselikoff
  - HOUSEKEEPING: deleted unnecessary package-lock.json by @Turbo87
  - DOCS: refer to yarn instead of NPM in the CONTRIBUTING docs, by @outdoorsy
  - HOUSEKEEPING: upgrade to Ember 3.10 and fix deprecations, by @cibernox
@@ -59,7 +59,7 @@
  - DOCS: major docs improvements by @samselikoff
 
 # 0.5.1
- - COMPATABILITY: update for compatibility with internal change to Ember 3.10 decorators, by @geoffreyd.
+ - COMPATIBILITY: update for compatibility with internal change to Ember 3.10 decorators, by @geoffreyd.
 
 # 0.5.0
  - BREAKING CHANGE: changes the default duration from 2000 to 500
@@ -97,7 +97,7 @@
 
  - ENHANCEMENT: now completely jQuery-free. Thanks to @cibernox and @mikoscz.
  - ENHANCEMENT: `animated-each` now yields an `index` variable, just like regular Ember `each`. Thanks @Cryrivers.
- - ENHANCEMENT: much progress on integrating ember-cli-addon-docs and beginning to document methods. Thankss @Oreoz, @Turbo87, @chrism. Deployed docs site coming very soon.
+ - ENHANCEMENT: much progress on integrating ember-cli-addon-docs and beginning to document methods. Thanks @Oreoz, @Turbo87, @chrism. Deployed docs site coming very soon.
 
 # 0.2.0
 
@@ -114,7 +114,7 @@
  - BREAKING: rules functions get named arguments instead of positional arguments.
  - BREAKING: renamed animated-bind component to animated-value. "bind" made sense in the context of early Ember, it's not really a thing people say anymore.
  - BREAKING: we only provide insertedSprites at initial render if you set initialInsertion=true. Received sprites are always still provided, because that's what they're for.
- - BREAKING: moved around many internal modules to make it clear what things are publicy importable.
+ - BREAKING: moved around many internal modules to make it clear what things are publicly importable.
  - BREAKING: rename the default cosine-based easing function from `inAndOut` to `easeInAndOut` for consistency with `easeIn` and `easeOut`.
  - BREAKING: the built-in `scale` motion now adjusts initial scale correctly. Previously you needed to do it manually, but now we can make it automatic using Sprite's originalInitialBounds and originalFinalBounds.
 
