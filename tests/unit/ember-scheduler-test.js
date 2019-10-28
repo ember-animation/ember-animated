@@ -15,7 +15,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
         result,
         actual: result ? 'no exception thrown' : 'autorun exception thrown',
         expected: 'no exception thrown',
-        message
+        message,
       });
     };
   });
@@ -31,7 +31,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     let Class = EmberObject.extend({
       hello: task(function*() {
         this.set('foo', 'bar');
-      })
+      }),
     });
     let object = Class.create();
     let done = assert.async();
@@ -49,7 +49,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     let Class = EmberObject.extend({
       hello: task(function*() {
         assert.equal(this.get('hello.concurrency'), 1);
-      })
+      }),
     });
     let object = Class.create();
     let done = assert.async();
@@ -64,7 +64,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
   test('synchronously done task stops running immediately', function(assert) {
     assert.expect(1);
     let Class = EmberObject.extend({
-      hello: task(function*() {})
+      hello: task(function*() {}),
     });
     let object = Class.create();
     let done = assert.async();
@@ -83,7 +83,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     let Class = EmberObject.extend({
       hello: task(function*() {
         yield new Promise(r => (resolve = r));
-      })
+      }),
     });
     let object = Class.create();
     let done = assert.async();
@@ -109,7 +109,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
       hello: task(function*() {
         yield new Promise(r => (resolve = r));
         assert.insideRunLoop();
-      })
+      }),
     });
     let object = Class.create();
     let promise;
@@ -128,7 +128,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
         let p = new Promise(() => null);
         registerCancellation(p, () => assert.log('task canceled'));
         yield p;
-      })
+      }),
     });
     let object = Class.create();
     run(() => {
@@ -143,7 +143,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
       hello: task(function*() {
         assert.ok(false, 'should not run');
         yield new Promise(() => null);
-      })
+      }),
     });
     let object = Class.create();
     run(() => {
@@ -151,7 +151,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
     assert.throws(
       () => object.get('hello').perform(),
-      /Tried to perform task hello on an already destroyed object/
+      /Tried to perform task hello on an already destroyed object/,
     );
   });
 
@@ -166,7 +166,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
       willDestroy() {
         assert.ok('will destroy ran');
         done();
-      }
+      },
     });
     let object = Class.create();
     run(() => {
@@ -187,7 +187,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
             assert.log('task exiting');
           }
         }
-      }).restartable()
+      }).restartable(),
     });
     let object = Class.create();
     let promise;
@@ -202,7 +202,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
         'task starting',
         'task canceled',
         'task exiting',
-        'task starting'
+        'task starting',
       ]);
       assert.equal(object.get('hello.concurrency'), 0);
     });
@@ -215,14 +215,14 @@ module('Unit | scheduler Ember layer', function(hooks) {
         try {
           if (blockerPromise) {
             registerCancellation(blockerPromise, () =>
-              assert.log(`task ${id} canceled`)
+              assert.log(`task ${id} canceled`),
             );
             yield blockerPromise;
           }
         } finally {
           assert.log(`task ${id} exiting`);
         }
-      }).drop()
+      }).drop(),
     });
     let object = Class.create();
     let promise, unblock;
@@ -249,7 +249,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
       }),
       message: computed('hello.isRunning', function() {
         return this.get('hello.isRunning') ? 'yup' : 'nope';
-      })
+      }),
     });
     let object = Class.create();
     let promise;
@@ -272,7 +272,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     let Class = EmberObject.extend({
       hello: task(function*() {
         assert.log('ok');
-      }).observes('foo')
+      }).observes('foo'),
     });
     let object = Class.create();
 
@@ -288,7 +288,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
       hello: task(function*() {
         yield microwait();
         return 42;
-      })
+      }),
     });
     let object = Class.create();
     let promise;
@@ -302,7 +302,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
 
   test('task promise exposes microtask timing, not ember run loop', function(assert) {
     let Class = EmberObject.extend({
-      hello: task(function*() {})
+      hello: task(function*() {}),
     });
     let object = Class.create();
     let promise;
@@ -331,7 +331,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
         } finally {
           assert.log('leaving inner');
         }
-      })
+      }),
     });
     let object = Class.create();
 
@@ -344,7 +344,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
       'canceled',
       'leaving inner',
       'leaving outer',
-      'cancelAll returned'
+      'cancelAll returned',
     ]);
   });
 

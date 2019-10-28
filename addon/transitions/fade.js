@@ -24,7 +24,7 @@ export default function*({
   removedSprites,
   insertedSprites,
   keptSprites,
-  duration
+  duration,
 }) {
   // We yield Promise.all here because we want to wait for this
   // step before starting what comes after.
@@ -33,10 +33,10 @@ export default function*({
       if (s.revealed) {
         return opacity(s, {
           to: 0,
-          duration: duration / 2
+          duration: duration / 2,
         });
       }
-    })
+    }),
   );
 
   // Once all fading out has happened, we can fade in the inserted
@@ -46,7 +46,7 @@ export default function*({
   insertedSprites.concat(keptSprites).map(s =>
     opacity(s, {
       to: 1,
-      duration: duration / 2
-    })
+      duration: duration / 2,
+    }),
   );
 }

@@ -34,7 +34,7 @@ export default Component.extend({
     },
     set(k, v) {
       return A(v);
-    }
+    },
   }),
 
   chaos: task(function*(running) {
@@ -47,7 +47,7 @@ export default Component.extend({
       yield timeout(1000);
       this.send(
         'removeItem',
-        this.get('items')[Math.floor(Math.random() * this.get('items.length'))]
+        this.get('items')[Math.floor(Math.random() * this.get('items.length'))],
       );
     }
   }).restartable(),
@@ -63,7 +63,7 @@ export default Component.extend({
         items
           .concat([item])
           .sort(this.currentSort)
-          .map(elt => ({ id: elt.id }))
+          .map(elt => ({ id: elt.id })),
       );
     },
     removeItem(which) {
@@ -79,7 +79,7 @@ export default Component.extend({
         items
           .slice(0, index)
           .concat([makeRandomItem()])
-          .concat(items.slice(index + 1))
+          .concat(items.slice(index + 1)),
       );
     },
     mutate(item) {
@@ -100,8 +100,8 @@ export default Component.extend({
     },
     stopChaos() {
       this.get('chaos').perform(false);
-    }
-  }
+    },
+  },
 });
 
 function numeric(a, b) {

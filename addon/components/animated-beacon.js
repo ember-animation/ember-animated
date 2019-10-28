@@ -119,5 +119,5 @@ export default Component.extend({
       sprite.measureFinalBounds();
     });
     yield this.get('motionService.addBeacon').perform(this.name, sprite);
-  }).restartable()
+  }).restartable(),
 });

@@ -12,7 +12,7 @@ export class BoxShadowMotion extends Motion {
       from = BoxShadow.fromUserProvidedShadow(this.opts.from);
     } else {
       from = BoxShadow.fromComputedStyle(
-        this.sprite.initialComputedStyle['box-shadow']
+        this.sprite.initialComputedStyle['box-shadow'],
       );
     }
 
@@ -21,7 +21,7 @@ export class BoxShadowMotion extends Motion {
       to = BoxShadow.fromUserProvidedShadow(this.opts.to);
     } else {
       to = BoxShadow.fromComputedStyle(
-        this.sprite.finalComputedStyle['box-shadow']
+        this.sprite.finalComputedStyle['box-shadow'],
       );
     }
 
@@ -29,13 +29,13 @@ export class BoxShadowMotion extends Motion {
       from,
       to,
       this.duration,
-      this.opts.easing
+      this.opts.easing,
     );
     while (!shadowTween.done) {
       this.sprite.applyStyles({
         'box-shadow': shadowTween.currentValue
           .map(shadow => shadow.toString())
-          .join(',')
+          .join(','),
       });
       yield rAF();
     }

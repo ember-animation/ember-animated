@@ -5,7 +5,7 @@ import {
   bounds,
   setupAnimationTest,
   time,
-  animationsSettled
+  animationsSettled,
 } from 'ember-animated/test-support';
 
 module('Acceptance | beacon', function(hooks) {

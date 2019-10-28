@@ -35,7 +35,7 @@ module('Acceptance | swapping lists', function(hooks) {
     });
     assert.ok(
       leftwardCount >= 3,
-      `expected at least 3 elements to be in motion, found ${leftwardCount}`
+      `expected at least 3 elements to be in motion, found ${leftwardCount}`,
     );
     time.runAtSpeed(60);
     await animationsSettled();
@@ -48,23 +48,23 @@ module('Acceptance | swapping lists', function(hooks) {
     await time.advance(100);
 
     let hidden = this.element.querySelectorAll(
-      '.right > div.ember-animated-hidden'
+      '.right > div.ember-animated-hidden',
     ).length;
     assert.ok(
       hidden >= 3,
-      `expected at least 3 elements in right list to be hidden, found ${hidden}`
+      `expected at least 3 elements in right list to be hidden, found ${hidden}`,
     );
     assert.ok(
       hidden < 10,
       `expected at least one element in right list to be visible, found ${10 -
-        hidden}`
+        hidden}`,
     );
 
     let orphans = this.element.querySelectorAll('.animated-orphans > div')
       .length;
     assert.ok(
       orphans >= 3,
-      `expected at least 3 orphan elements to be in motion, found ${orphans}`
+      `expected at least 3 orphan elements to be in motion, found ${orphans}`,
     );
 
     time.runAtSpeed(60);

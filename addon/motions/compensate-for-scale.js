@@ -23,18 +23,18 @@ export class CompensateForScale extends Motion {
     this.widthTween = new Tween(
       sprite.transform.a,
       sprite.transform.a * widthFactor,
-      duration
+      duration,
     );
     this.heightTween = new Tween(
       sprite.transform.d,
       sprite.transform.d * heightFactor,
-      duration
+      duration,
     );
 
     while (!this.widthTween.done || !this.heightTween.done) {
       sprite.scale(
         this.widthTween.currentValue / sprite.transform.a,
-        this.heightTween.currentValue / sprite.transform.d
+        this.heightTween.currentValue / sprite.transform.d,
       );
       yield rAF();
     }

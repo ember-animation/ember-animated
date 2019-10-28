@@ -23,33 +23,33 @@ export default Controller.extend({
   collections: A([
     {
       title: 'A',
-      members: A([{ name: 'one' }, { name: 'two' }, { name: 'three' }])
+      members: A([{ name: 'one' }, { name: 'two' }, { name: 'three' }]),
     },
     {
       title: 'B',
-      members: A([{ name: 'four' }, { name: 'five' }, { name: 'six' }])
-    }
+      members: A([{ name: 'four' }, { name: 'five' }, { name: 'six' }]),
+    },
   ]),
   actions: {
     addMember(collection) {
       collection.members.unshiftObject({
-        name: String(counter++)
+        name: String(counter++),
       });
     },
     addMembers() {
       this.get('collections').forEach(collection => {
         collection.members.unshiftObject({
-          name: String(counter++)
+          name: String(counter++),
         });
       });
     },
     addCollection() {
       this.get('collections').unshiftObject({
         title: String(counter++),
-        members: A()
+        members: A(),
       });
-    }
-  }
+    },
+  },
 });
 
 let counter = 0;

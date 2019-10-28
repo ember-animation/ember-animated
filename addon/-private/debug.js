@@ -26,7 +26,7 @@ if (DEBUG) {
                 isOrphan =
                   !s.element.parentElement ||
                   s.element.parentElement.classList.contains(
-                    'animated-orphans'
+                    'animated-orphans',
                   );
               }
               return s.owner.id;

@@ -6,7 +6,7 @@ import {
   logErrors,
   stop,
   current,
-  childrenSettled
+  childrenSettled,
 } from 'ember-animated/-private/scheduler';
 import { microwait } from 'ember-animated';
 import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
@@ -53,7 +53,7 @@ module('Unit | scheduler', function(hooks) {
       },
       err => {
         assert.equal(err.message, 'boom');
-      }
+      },
     );
   });
 
@@ -70,7 +70,7 @@ module('Unit | scheduler', function(hooks) {
       },
       err => {
         assert.equal(err.message, 'boom');
-      }
+      },
     );
   });
 
@@ -95,7 +95,7 @@ module('Unit | scheduler', function(hooks) {
         'parent started',
         'child started',
         'parent finishing',
-        'child finishing'
+        'child finishing',
       ]);
     });
   });
@@ -122,7 +122,7 @@ module('Unit | scheduler', function(hooks) {
       err => {
         assert.equal(err.message, 'boom');
         assert.logEquals(['handled message: boom']);
-      }
+      },
     );
   });
 
@@ -171,14 +171,14 @@ module('Unit | scheduler', function(hooks) {
         assert.log(
           yield new Promise(resolve => {
             resolvers[0] = () => resolve('hello');
-          })
+          }),
         );
       }
       function* second() {
         assert.log(
           yield new Promise(resolve => {
             resolvers[1] = () => resolve('world');
-          })
+          }),
         );
       }
       return spawn(function*() {
@@ -571,7 +571,7 @@ module('Unit | scheduler', function(hooks) {
         'awaiting children',
         'first finishing',
         'second finishing',
-        'they finished'
+        'they finished',
       ]);
     });
   });

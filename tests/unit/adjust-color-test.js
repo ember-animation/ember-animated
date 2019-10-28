@@ -4,7 +4,7 @@ import { AdjustColor } from 'ember-animated/motions/adjust-color';
 import {
   MotionTester,
   time,
-  setupAnimationTest
+  setupAnimationTest,
 } from 'ember-animated/test-support';
 
 let tester, target;
@@ -34,17 +34,17 @@ module('Unit | Adjust Color', function(hooks) {
     await time.advance(1);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'red'
+      'red',
     );
     await time.advance(499);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'purple'
+      'purple',
     );
     await time.advance(999);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'blue'
+      'blue',
     );
   });
 
@@ -55,24 +55,24 @@ module('Unit | Adjust Color', function(hooks) {
     target.style['background-color'] = 'white';
     sprite.measureFinalBounds();
     let motion = new AdjustColor('background-color', sprite, {
-      from: 'yellow'
+      from: 'yellow',
     });
     time.pause();
     tester.run(motion, { duration: 1000 });
     await time.advance(1);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'yellow'
+      'yellow',
     );
     await time.advance(499);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      '#ffff7f'
+      '#ffff7f',
     );
     await time.advance(999);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'white'
+      'white',
     );
   });
 
@@ -88,17 +88,17 @@ module('Unit | Adjust Color', function(hooks) {
     await time.advance(1);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'white'
+      'white',
     );
     await time.advance(499);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      '#ffff7f'
+      '#ffff7f',
     );
     await time.advance(999);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'yellow'
+      'yellow',
     );
   });
 
@@ -114,17 +114,17 @@ module('Unit | Adjust Color', function(hooks) {
     await time.advance(1);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      '#0000ff'
+      '#0000ff',
     );
     await time.advance(499);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      'rgba(84, 0, 170, 0.75)'
+      'rgba(84, 0, 170, 0.75)',
     );
     await time.advance(999);
     assert.approxEqualColors(
       getComputedStyle(target)['background-color'],
-      '#ff00007f'
+      '#ff00007f',
     );
   });
 });

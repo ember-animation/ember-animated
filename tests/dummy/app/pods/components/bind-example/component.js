@@ -3,7 +3,7 @@ import {
   toUp,
   toDown,
   toLeft,
-  toRight
+  toRight,
 } from 'ember-animated/transitions/move-over';
 
 export default Component.extend({
@@ -31,6 +31,6 @@ export default Component.extend({
     },
     decrement() {
       this.set('counter', this.get('counter') - 1);
-    }
-  }
+    },
+  },
 });

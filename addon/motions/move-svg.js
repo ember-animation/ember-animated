@@ -18,7 +18,7 @@ export class MoveSVG extends Motion {
 
   interrupted(motions) {
     this.prior = motions.find(
-      m => m instanceof MoveSVG && m.dimension === this.dimension
+      m => m instanceof MoveSVG && m.dimension === this.dimension,
     );
   }
 
@@ -29,14 +29,14 @@ export class MoveSVG extends Motion {
         this.sprite.getFinalDimension(this.dimension) -
           this.prior.tween.finalValue,
         this.duration,
-        this.opts.easing
+        this.opts.easing,
       ).plus(this.prior.tween);
     } else {
       this.tween = new Tween(
         this.sprite.getInitialDimension(this.dimension),
         this.sprite.getFinalDimension(this.dimension),
         this.duration,
-        this.opts.easing
+        this.opts.easing,
       );
     }
     while (!this.tween.done) {

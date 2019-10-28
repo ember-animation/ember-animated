@@ -48,7 +48,7 @@ function normalize(dimension, direction) {
 export default function* moveOver(dimension, direction, context) {
   let { position, size, startTranslatedBy, endTranslatedBy } = normalize(
     dimension,
-    direction
+    direction,
   );
 
   let viewport;

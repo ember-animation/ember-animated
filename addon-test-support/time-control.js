@@ -26,7 +26,7 @@ export default class TimeControl {
   advance(ms) {
     if (this._runningSpeed) {
       throw new Error(
-        "You can't advance a running TimeControl. Use either runAtSpeed or advance but not both at once."
+        "You can't advance a running TimeControl. Use either runAtSpeed or advance but not both at once.",
       );
     }
     this._timer += ms;

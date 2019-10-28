@@ -38,7 +38,7 @@ const MotionService = Service.extend({
   observeOrphans(fn) {
     if (this._orphanObserver) {
       throw new Error(
-        'Only one animated-orphans component can be used at one time'
+        'Only one animated-orphans component can be used at one time',
       );
     }
     this._orphanObserver = fn;
@@ -72,12 +72,12 @@ const MotionService = Service.extend({
   },
   unobserveDescendantAnimations(component, fn) {
     let entry = this._descendantObservers.find(
-      e => e.component === component && e.fn === fn
+      e => e.component === component && e.fn === fn,
     );
     if (entry) {
       this._descendantObservers.splice(
         this._descendantObservers.indexOf(entry),
-        1
+        1,
       );
     }
     return this;
@@ -100,7 +100,7 @@ const MotionService = Service.extend({
         if (!observers) {
           this._ancestorObservers.set(
             ancestorComponent,
-            (observers = new Map())
+            (observers = new Map()),
           );
         }
         observers.set(fn, id);
@@ -188,7 +188,7 @@ const MotionService = Service.extend({
     inserted,
     kept,
     removed,
-    longWait = false
+    longWait = false,
   ) {
     let matches = new Map();
     let mine = {
@@ -197,7 +197,7 @@ const MotionService = Service.extend({
       removed,
       matches,
       runAnimationTask,
-      otherTasks: new Map()
+      otherTasks: new Map(),
     };
     this._rendezvous.push(mine);
     yield microwait();
@@ -223,7 +223,7 @@ const MotionService = Service.extend({
     return {
       farMatches: matches,
       matchingAnimatorsFinished: allSettled([...mine.otherTasks.keys()]),
-      beacons: this._beacons
+      beacons: this._beacons,
     };
   }),
 
@@ -289,7 +289,7 @@ const MotionService = Service.extend({
     } finally {
       this._measurements.splice(this._measurements.indexOf(measurement), 1);
     }
-  }
+  },
 });
 
 function performMatches(sink, source) {
@@ -297,7 +297,7 @@ function performMatches(sink, source) {
     let match = source.removed.find(
       mySprite =>
         sprite.owner.group == mySprite.owner.group &&
-        sprite.owner.id === mySprite.owner.id
+        sprite.owner.id === mySprite.owner.id,
     );
     if (match) {
       sink.matches.set(sprite, match);

@@ -58,19 +58,19 @@ export class Scale extends Motion {
       sprite.transform.a * initialWidthFactor,
       sprite.transform.a * initialWidthFactor * widthFactor,
       duration,
-      this.opts.easing
+      this.opts.easing,
     );
     this.heightTween = new Tween(
       sprite.transform.d * initialHeightFactor,
       sprite.transform.d * initialHeightFactor * heightFactor,
       duration,
-      this.opts.easing
+      this.opts.easing,
     );
 
     while (!this.widthTween.done || !this.heightTween.done) {
       sprite.scale(
         this.widthTween.currentValue / sprite.transform.a,
-        this.heightTween.currentValue / sprite.transform.d
+        this.heightTween.currentValue / sprite.transform.d,
       );
       yield rAF();
     }

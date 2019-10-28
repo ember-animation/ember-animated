@@ -5,7 +5,7 @@ import { Move } from 'ember-animated/motions/move';
 import {
   equalBounds,
   approxEqualPixels,
-  visuallyConstant
+  visuallyConstant,
 } from '../helpers/assertions';
 import { MotionTester, TimeControl } from 'ember-animated/test-support';
 
@@ -20,7 +20,7 @@ module('Unit | Move', function(hooks) {
     time = new TimeControl();
 
     tester = MotionTester.create({
-      motion: Move
+      motion: Move,
     });
 
     let fixture = document.querySelector('#qunit-fixture');
@@ -98,12 +98,12 @@ module('Unit | Move', function(hooks) {
       assert.approxEqualPixels(
         s.getCurrentBounds().top,
         s.initialBounds.top + 200,
-        'top'
+        'top',
       );
       assert.approxEqualPixels(
         s.getCurrentBounds().left,
         s.initialBounds.left + 150,
-        'left'
+        'left',
       );
       let newSprite = Sprite.positionedStartingAt(target, p);
       newSprite.lock();
@@ -119,12 +119,12 @@ module('Unit | Move', function(hooks) {
       assert.approxEqualPixels(
         newSprite.getCurrentBounds().top,
         s.initialBounds.top + 200,
-        'top continuity'
+        'top continuity',
       );
       assert.approxEqualPixels(
         newSprite.getCurrentBounds().left,
         s.initialBounds.left + 150,
-        'left continuity'
+        'left continuity',
       );
       return time.advance(1005).then(() => {
         assert.visuallyConstant(target, () => {
@@ -152,7 +152,7 @@ module('Unit | Move', function(hooks) {
       assert.approxEqualPixels(
         s.getCurrentBounds().top,
         s.initialBounds.top + 25,
-        'top'
+        'top',
       );
       let newSprite = Sprite.positionedStartingAt(target, p);
       newSprite.lock();

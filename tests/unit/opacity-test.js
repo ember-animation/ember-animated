@@ -16,7 +16,7 @@ module('Unit | Opacity', function(hooks) {
     time = new TimeControl();
 
     tester = MotionTester.create({
-      motion: Opacity
+      motion: Opacity,
     });
 
     let fixture = document.querySelector('#qunit-fixture');

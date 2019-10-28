@@ -63,7 +63,7 @@ export default Component.extend({
       }),
       transition,
       duration,
-      shouldAnimateRemoved
+      shouldAnimateRemoved,
     });
     this.reanimate();
   },
@@ -88,11 +88,11 @@ export default Component.extend({
     yield this.get('startAnimation').perform(ownSprite);
     let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(
       activeSprites,
-      ownSprite
+      ownSprite,
     );
     yield this.get('finalizeAnimation').perform(
       activeSprites,
-      matchingAnimatorsFinished
+      matchingAnimatorsFinished,
     );
   }).restartable(),
 
@@ -116,7 +116,7 @@ export default Component.extend({
       }
       for (let entry of this._newOrphanTransitions) {
         entry.removedSprites = entry.removedSprites.filter(
-          s => !activeIds[`${s.owner.group}/${s.owner.id}`]
+          s => !activeIds[`${s.owner.group}/${s.owner.id}`],
         );
       }
     }
@@ -125,20 +125,20 @@ export default Component.extend({
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
     let { farMatches, matchingAnimatorsFinished } = yield this.get(
-      'motionService.farMatch'
+      'motionService.farMatch',
     ).perform(
       current(),
       [],
       [],
       activeSprites.concat(
-        ...this._newOrphanTransitions.map(t => t.removedSprites)
-      )
+        ...this._newOrphanTransitions.map(t => t.removedSprites),
+      ),
     );
 
     let cycle = this._cycleCounter++;
 
     for (let { transition, duration, sprites } of this._groupActiveSprites(
-      activeSprites
+      activeSprites,
     )) {
       let [sentSprites, removedSprites] = partition(sprites, sprite => {
         let other = farMatches.get(sprite);
@@ -156,7 +156,7 @@ export default Component.extend({
         [],
         removedSprites,
         sentSprites,
-        []
+        [],
       );
       context.onMotionStart = this._onMotionStart.bind(this, cycle);
       context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
@@ -183,7 +183,7 @@ export default Component.extend({
         transition,
         duration,
         removedSprites,
-        shouldAnimateRemoved
+        shouldAnimateRemoved,
       } = entry;
 
       if (removedSprites.length === 0) {
@@ -209,7 +209,7 @@ export default Component.extend({
             }
             return true;
           }
-        }
+        },
       );
 
       let self = this;
@@ -241,12 +241,12 @@ export default Component.extend({
           [],
           removedSprites,
           sentSprites,
-          []
+          [],
         );
         context.onMotionStart = self._onFirstMotionStart.bind(
           self,
           activeSprites,
-          cycle
+          cycle,
         );
         context.onMotionEnd = self._onMotionEnd.bind(self, cycle);
         context.prepareSprite = self._prepareSprite.bind(self);
@@ -346,5 +346,5 @@ export default Component.extend({
 
   _onMotionEnd(cycle, sprite) {
     sprite.owner.unblock(cycle);
-  }
+  },
 });

@@ -29,7 +29,7 @@ export default class Tween {
   plus(otherTween) {
     return new DerivedTween(
       [this, otherTween],
-      (a, b) => a.currentValue + b.currentValue
+      (a, b) => a.currentValue + b.currentValue,
     );
   }
 }
@@ -46,7 +46,7 @@ class DerivedTween {
         return {
           currentValue: t.currentValue,
           done: true,
-          finalValue: t.finalValue
+          finalValue: t.finalValue,
         };
       } else {
         return t;
@@ -77,7 +77,7 @@ class MotionCurve {
   // same duration that start in the same animation frame.
   static findOrCreate(duration, easing) {
     let shared = currentCurves.find(
-      c => c.duration === duration && c.easing === easing
+      c => c.duration === duration && c.easing === easing,
     );
     if (shared) {
       return shared;

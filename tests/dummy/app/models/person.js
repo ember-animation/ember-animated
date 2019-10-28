@@ -4,6 +4,6 @@ const { attr } = DS;
 
 export default DS.Model.extend({
   name: attr(),
-  avatarUrl: attr()
+  avatarUrl: attr(),
 });
 //END-SNIPPET

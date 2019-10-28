@@ -5,7 +5,7 @@ import {
   setupAnimationTest,
   animationsSettled,
   time,
-  bounds
+  bounds,
 } from 'ember-animated/test-support';
 
 module('Acceptance | if demo', function(hooks) {
@@ -31,7 +31,7 @@ module('Acceptance | if demo', function(hooks) {
     let twoPosition = bounds(this.element.querySelector('.message')).left;
     assert.ok(
       twoPosition < onePosition,
-      `expected element .two to be animating in, ${twoPosition} > ${onePosition}`
+      `expected element .two to be animating in, ${twoPosition} > ${onePosition}`,
     );
   });
 });

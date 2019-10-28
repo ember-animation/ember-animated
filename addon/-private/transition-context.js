@@ -8,7 +8,7 @@ export default class TransitionContext {
     removedSprites,
     sentSprites,
     receivedSprites,
-    beacons
+    beacons,
   ) {
     this._duration = duration;
     this._insertedSprites = insertedSprites;

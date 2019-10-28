@@ -5,7 +5,7 @@ import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import {
   animationsSettled,
-  setupAnimationTest
+  setupAnimationTest,
 } from 'ember-animated/test-support';
 import { run } from '@ember/runloop';
 
@@ -23,7 +23,7 @@ module('Integration | Component | animated value', function(hooks) {
 
     assert.equal(
       this.element.querySelector('span').textContent.trim(),
-      'hello'
+      'hello',
     );
   });
 
@@ -34,7 +34,7 @@ module('Integration | Component | animated value', function(hooks) {
     this.set('transition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 1, 'kept sprites');
@@ -59,7 +59,7 @@ module('Integration | Component | animated value', function(hooks) {
 
     assert.equal(
       this.element.querySelector('.test-child').textContent.trim(),
-      'a'
+      'a',
     );
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });

@@ -23,5 +23,5 @@ export default Component.extend({
       sprite.endAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeIn });
     });
-  }
+  },
 });

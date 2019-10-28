@@ -10,6 +10,6 @@ module.exports = {
     'table-groups': false,
     quotes: false,
     'no-unused-block-params': false,
-    'no-outlet-outside-routes': false
-  }
+    'no-outlet-outside-routes': false,
+  },
 };

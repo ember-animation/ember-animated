@@ -31,7 +31,7 @@ module('Acceptance | value demo', function(hooks) {
 
     await click(findByText(this.element, 'button', '+'));
     let finalNumber = parseInt(
-      this.element.querySelector('.numbers').textContent
+      this.element.querySelector('.numbers').textContent,
     );
     assert.equal(finalNumber, number + 1);
   });

@@ -11,7 +11,7 @@ export default Controller.extend({
         id,
         x: Math.floor(Math.random() * 100),
         y: Math.floor(Math.random() * 100),
-        radius: Math.floor(Math.random() * 50)
+        radius: Math.floor(Math.random() * 50),
       });
     }
     return list;
@@ -22,14 +22,14 @@ export default Controller.extend({
       parallel(
         moveSVG.property('cx'),
         moveSVG.property('cy'),
-        moveSVG.property('r')
-      )
+        moveSVG.property('r'),
+      ),
     );
   },
 
   actions: {
     move() {
       this.notifyPropertyChange('bubbles');
-    }
-  }
+    },
+  },
 });

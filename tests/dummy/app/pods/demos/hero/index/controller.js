@@ -14,5 +14,5 @@ export default Controller.extend({
     removedSprites.forEach(sprite => {
       opacity(sprite, { to: 0 });
     });
-  }
+  },
 });

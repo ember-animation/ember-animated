@@ -32,19 +32,19 @@ export class ColorTween {
       initialColor.r * initialColor.a,
       finalColor.r * finalColor.a,
       duration,
-      easing
+      easing,
     );
     this.gTween = new Tween(
       initialColor.g * initialColor.a,
       finalColor.g * finalColor.a,
       duration,
-      easing
+      easing,
     );
     this.bTween = new Tween(
       initialColor.b * initialColor.a,
       finalColor.b * finalColor.a,
       duration,
-      easing
+      easing,
     );
     this.aTween = new Tween(initialColor.a, finalColor.a, duration, easing);
   }
@@ -54,12 +54,12 @@ export class ColorTween {
       r: Math.floor(this.rTween.currentValue / nonZeroAlpha),
       g: Math.floor(this.gTween.currentValue / nonZeroAlpha),
       b: Math.floor(this.bTween.currentValue / nonZeroAlpha),
-      a: this.aTween.currentValue
+      a: this.aTween.currentValue,
     });
   }
   get done() {
     return [this.rTween, this.gTween, this.bTween, this.aTween].every(
-      tween => tween.done
+      tween => tween.done,
     );
   }
 }
@@ -72,7 +72,7 @@ function parseComputedColor(c) {
       g: parseInt(m[2]),
       b: parseInt(m[3]),
       a: 1,
-      m
+      m,
     };
   }
   m = /^rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
@@ -82,7 +82,7 @@ function parseComputedColor(c) {
       g: parseInt(m[2]),
       b: parseInt(m[3]),
       a: parseFloat(m[4]),
-      m
+      m,
     };
   }
   throw new Error(`unable to parse color ${c}`);

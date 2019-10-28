@@ -50,12 +50,12 @@ module('Integration | Component | animated-beacon', function(hooks) {
       assert.equal(
         beacons.thegroup.initialBounds.width,
         expected.width,
-        'width'
+        'width',
       );
       assert.equal(
         beacons.thegroup.initialBounds.height,
         expected.height,
-        'height'
+        'height',
       );
     });
 

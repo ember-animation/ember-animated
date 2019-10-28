@@ -18,7 +18,7 @@
   "scripts": {
     "build": "ember build",
     "lint:hbs": "ember-template-lint .",
-    "lint:js": "eslint .",
+    "lint:js": "eslint . --ext .ts,.js",
     "typecheck": "tsc --noEmit",
     "start": "ember serve",
     "test": "ember test",
@@ -47,7 +47,8 @@
     "@types/ember__test-helpers": "^0.7.7",
     "@types/qunit": "^2.5.4",
     "@types/rsvp": "^4.0.2",
-    "babel-eslint": "^10.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-animated-tools": "^0.3.0",
     "ember-cli": "~3.10.0",
@@ -83,7 +84,7 @@
     "typescript": "^3.2.4"
   },
   "engines": {
-    "node": "6.* || 8.* || >= 10.*"
+    "node": ">= 10.*"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

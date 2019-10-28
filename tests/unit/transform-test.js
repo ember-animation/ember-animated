@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { equalTransform } from '../helpers/assertions';
 import Transform, {
   ownTransform,
-  cumulativeTransform
+  cumulativeTransform,
 } from 'ember-animated/-private/transform';
 
 let environment, myParent, target;
@@ -30,7 +30,7 @@ module('Unit | Transform', function(hooks) {
   test('Degenerate case', function(assert) {
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(1, 0, 0, 1, 0, 0)
+      new Transform(1, 0, 0, 1, 0, 0),
     );
   });
 
@@ -38,7 +38,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transform = 'scaleX(0.5)';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(0.5, 0, 0, 1, (WIDTH * (1 - 0.5)) / 2, 0)
+      new Transform(0.5, 0, 0, 1, (WIDTH * (1 - 0.5)) / 2, 0),
     );
   });
 
@@ -47,7 +47,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transformOrigin = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(0.5, 0, 0, 1, 0, 0)
+      new Transform(0.5, 0, 0, 1, 0, 0),
     );
   });
 
@@ -55,7 +55,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transform = 'scaleY(2.5)';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(1, 0, 0, 2.5, 0, (HEIGHT * (1 - 2.5)) / 2)
+      new Transform(1, 0, 0, 2.5, 0, (HEIGHT * (1 - 2.5)) / 2),
     );
   });
 
@@ -69,8 +69,8 @@ module('Unit | Transform', function(hooks) {
         0,
         1.2,
         (WIDTH * (1 - 1.2)) / 2,
-        (HEIGHT * (1 - 1.2)) / 2
-      )
+        (HEIGHT * (1 - 1.2)) / 2,
+      ),
     );
   });
 
@@ -84,8 +84,8 @@ module('Unit | Transform', function(hooks) {
         0,
         0.7,
         (WIDTH * (1 - 2.5)) / 2,
-        (HEIGHT * (1 - 0.7)) / 2
-      )
+        (HEIGHT * (1 - 0.7)) / 2,
+      ),
     );
   });
 
@@ -93,7 +93,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transform = 'translateX(123px) translateY(456px)';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(1, 0, 0, 1, 123, 456)
+      new Transform(1, 0, 0, 1, 123, 456),
     );
   });
 
@@ -108,8 +108,8 @@ module('Unit | Transform', function(hooks) {
         0,
         0.7,
         (WIDTH * (1 - 0.5)) / 2 + 123 * 0.5,
-        (HEIGHT * (1 - 0.7)) / 2 + 456 * 0.7
-      )
+        (HEIGHT * (1 - 0.7)) / 2 + 456 * 0.7,
+      ),
     );
   });
 
@@ -124,8 +124,8 @@ module('Unit | Transform', function(hooks) {
         0,
         0.7,
         (WIDTH * (1 - 0.5)) / 2 + 123,
-        (HEIGHT * (1 - 0.7)) / 2 + 456
-      )
+        (HEIGHT * (1 - 0.7)) / 2 + 456,
+      ),
     );
   });
 
@@ -135,7 +135,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transformOrigin = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(0.5, 0, 0, 0.7, 123 * 0.5, 456 * 0.7)
+      new Transform(0.5, 0, 0, 0.7, 123 * 0.5, 456 * 0.7),
     );
   });
 
@@ -145,7 +145,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transformOrigin = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(0.5, 0, 0, 0.7, 123, 456)
+      new Transform(0.5, 0, 0, 0.7, 123, 456),
     );
   });
 
@@ -155,7 +155,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transformOrigin = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(1, 0, 0, 1, 123 - 50, 456 - 20)
+      new Transform(1, 0, 0, 1, 123 - 50, 456 - 20),
     );
   });
 
@@ -166,7 +166,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transformOrigin = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
-      new Transform(1, 0, 0, 1, 123 - 50, 456 - 20)
+      new Transform(1, 0, 0, 1, 123 - 50, 456 - 20),
     );
   });
 
@@ -182,8 +182,8 @@ module('Unit | Transform', function(hooks) {
         -s,
         c,
         (WIDTH * (1 - c)) / 2 + (HEIGHT * s) / 2,
-        (-WIDTH * s) / 2 + (HEIGHT * (1 - c)) / 2
-      )
+        (-WIDTH * s) / 2 + (HEIGHT * (1 - c)) / 2,
+      ),
     );
   });
 
@@ -199,8 +199,8 @@ module('Unit | Transform', function(hooks) {
         -s,
         c,
         (WIDTH * (1 - c)) / 2 + (HEIGHT * s) / 2 + 123,
-        (-WIDTH * s) / 2 + (HEIGHT * (1 - c)) / 2
-      )
+        (-WIDTH * s) / 2 + (HEIGHT * (1 - c)) / 2,
+      ),
     );
   });
 
@@ -210,7 +210,7 @@ module('Unit | Transform', function(hooks) {
     target.style.transformOrigin = '0px 0px';
     assert.equalTransform(
       ownTransform(target),
-      new Transform(s, s, -s, s, 123, 0)
+      new Transform(s, s, -s, s, 123, 0),
     );
   });
 
@@ -221,7 +221,7 @@ module('Unit | Transform', function(hooks) {
     'scaleX(0.5) scaleY(0.7)',
     'scaleX(0.5) translateX(300px)',
     'translateX(300px) scaleX(0.5)',
-    'rotate(10deg) translateX(300px) scaleX(0.5)'
+    'rotate(10deg) translateX(300px) scaleX(0.5)',
   ].forEach(function(transform) {
     test(`Adjusts transform-origin correctly for ${transform}, relative to top left`, function(assert) {
       target.style.transform = transform;

@@ -50,7 +50,7 @@ export default Component.extend({
   layout,
   items: computed('value', function() {
     return A([this.get('value')]);
-  })
+  }),
 }).reopenClass({
-  positionalParams: ['value']
+  positionalParams: ['value'],
 });

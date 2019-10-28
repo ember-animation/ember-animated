@@ -7,7 +7,7 @@ import QUnit, { module, test } from 'qunit';
 import {
   animationsSettled,
   time,
-  setupAnimationTest
+  setupAnimationTest,
 } from 'ember-animated/test-support';
 import { Motion, wait } from 'ember-animated';
 import { run } from '@ember/runloop';
@@ -23,7 +23,7 @@ module('Integration | Component | animated each', function(hooks) {
         result: QUnit.equiv(values, expected),
         actual: values,
         expected: expected,
-        message: message
+        message: message,
       });
     };
   });
@@ -41,12 +41,12 @@ module('Integration | Component | animated each', function(hooks) {
     assert.listContents(this.element.querySelectorAll('.test-child'), [
       'a',
       'b',
-      'c'
+      'c',
     ]);
     assert.listContents(this.element.querySelectorAll('.test-child-index'), [
       '0',
       '1',
-      '2'
+      '2',
     ]);
   });
 
@@ -89,7 +89,7 @@ module('Integration | Component | animated each', function(hooks) {
     assert.listContents(this.element.querySelectorAll('.test-child'), [
       'a',
       'b',
-      'c'
+      'c',
     ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
@@ -116,15 +116,15 @@ module('Integration | Component | animated each', function(hooks) {
     await time.advance(500); // halfway through the animation
     assert.equal(
       this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
-      '0'
+      '0',
     );
     assert.equal(
       this.element.querySelector('.test-child[data-item="c"]').dataset['index'],
-      '1'
+      '1',
     );
     assert.equal(
       this.element.querySelector('.test-child[data-item="q"]').dataset['index'],
-      '2'
+      '2',
     );
   });
 
@@ -146,7 +146,7 @@ module('Integration | Component | animated each', function(hooks) {
     await time.advance(500);
     assert.equal(
       this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
-      '1'
+      '1',
     );
   });
 
@@ -156,7 +156,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('transition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
@@ -179,7 +179,7 @@ module('Integration | Component | animated each', function(hooks) {
     assert.listContents(this.element.querySelectorAll('.test-child'), [
       'a',
       'x',
-      'c'
+      'c',
     ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
@@ -190,7 +190,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('transition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
@@ -213,7 +213,7 @@ module('Integration | Component | animated each', function(hooks) {
     assert.listContents(this.element.querySelectorAll('.test-child'), [
       'a',
       'x',
-      'c'
+      'c',
     ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
@@ -225,7 +225,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('transition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
@@ -247,7 +247,7 @@ module('Integration | Component | animated each', function(hooks) {
     assert.listContents(this.element.querySelectorAll('.test-child'), [
       'a',
       'x',
-      'c'
+      'c',
     ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
@@ -259,7 +259,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('transition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 3, 'kept sprites');
@@ -285,7 +285,7 @@ module('Integration | Component | animated each', function(hooks) {
     assert.listContents(this.element.querySelectorAll('.test-child'), [
       'a',
       'b',
-      'c'
+      'c',
     ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
@@ -320,7 +320,7 @@ module('Integration | Component | animated each', function(hooks) {
       insertedSprites,
       removedSprites,
       keptSprites,
-      sentSprites
+      sentSprites,
     }) {
       assert.equal(keptSprites.length, 2, 'left kept');
       assert.equal(removedSprites.length, 0, 'left removed');
@@ -334,7 +334,7 @@ module('Integration | Component | animated each', function(hooks) {
       insertedSprites,
       removedSprites,
       keptSprites,
-      sentSprites
+      sentSprites,
     }) {
       assert.equal(keptSprites.length, 0, 'right kept');
       assert.equal(removedSprites.length, 0, 'right removed');
@@ -397,7 +397,7 @@ module('Integration | Component | animated each', function(hooks) {
     function makeItem(id) {
       return {
         id,
-        comments: [{ id: `comment-${id}` }]
+        comments: [{ id: `comment-${id}` }],
       };
     }
 
@@ -420,22 +420,22 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('outerTransition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       assert.deepEqual(
         keptSprites.map(s => s.owner.id),
         ['a', 'c'],
-        'kept sprites'
+        'kept sprites',
       );
       assert.deepEqual(
         insertedSprites.map(s => s.owner.id),
         [],
-        'inserted sprites'
+        'inserted sprites',
       );
       assert.deepEqual(
         removedSprites.map(s => s.owner.id),
         ['b'],
-        'removed sprites'
+        'removed sprites',
       );
     });
 
@@ -444,19 +444,19 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('innerTransition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       innerCounter++;
       assert.deepEqual(keptSprites.map(s => s.owner.id), [], 'kept sprites');
       assert.deepEqual(
         insertedSprites.map(s => s.owner.id),
         [],
-        'inserted sprites'
+        'inserted sprites',
       );
       assert.deepEqual(
         removedSprites.map(s => s.owner.id),
         ['comment-b'],
-        'removed sprites'
+        'removed sprites',
       );
     });
 
@@ -478,7 +478,7 @@ module('Integration | Component | animated each', function(hooks) {
     function makeItem(id) {
       return {
         id,
-        comments: [{ id: `comment-${id}` }]
+        comments: [{ id: `comment-${id}` }],
       };
     }
 
@@ -521,22 +521,22 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('outerTransition', function*({
       insertedSprites,
       removedSprites,
-      keptSprites
+      keptSprites,
     }) {
       assert.deepEqual(
         keptSprites.map(s => s.owner.id).sort(),
         ['a', 'b', 'c'],
-        'kept sprites'
+        'kept sprites',
       );
       assert.deepEqual(
         insertedSprites.map(s => s.owner.id),
         [],
-        'inserted sprites'
+        'inserted sprites',
       );
       assert.deepEqual(
         removedSprites.map(s => s.owner.id),
         [],
-        'removed sprites'
+        'removed sprites',
       );
     });
 
@@ -544,23 +544,23 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('innerTransition', function*({
       receivedSprites,
       insertedSprites,
-      removedSprites
+      removedSprites,
     }) {
       innerCounter++;
       assert.deepEqual(
         receivedSprites.map(s => s.owner.id),
         ['comment-b'],
-        'received sprites'
+        'received sprites',
       );
       assert.deepEqual(
         insertedSprites.map(s => s.owner.id),
         [],
-        'inserted sprites'
+        'inserted sprites',
       );
       assert.deepEqual(
         removedSprites.map(s => s.owner.id),
         [],
-        'removed sprites'
+        'removed sprites',
       );
     });
 

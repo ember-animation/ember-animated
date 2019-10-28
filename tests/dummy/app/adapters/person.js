@@ -16,15 +16,15 @@ export default DS.JSONAPIAdapter.extend({
             id: String(i),
             attributes: Object.seal({
               name: faker.name.firstName(),
-              'avatar-url': faker.internet.avatar()
-            })
-          })
+              'avatar-url': faker.internet.avatar(),
+            }),
+          }),
         );
       }
       // This is a shorthand way to deep copy everything, because
       // Ember Data will mutate the objects we give it.
       this._fakePeople = JSON.stringify({
-        data: people
+        data: people,
       });
     }
     return JSON.parse(this._fakePeople);
@@ -35,8 +35,8 @@ export default DS.JSONAPIAdapter.extend({
   findRecord(store, type, id) {
     let payload = this._makeFakePeople();
     return {
-      data: payload.data.find(entry => entry.id === id)
+      data: payload.data.find(entry => entry.id === id),
     };
-  }
+  },
 });
 //END-SNIPPET

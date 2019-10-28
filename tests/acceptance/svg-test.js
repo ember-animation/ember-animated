@@ -4,7 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import {
   TimeControl,
   animationsSettled,
-  bounds
+  bounds,
 } from 'ember-animated/test-support';
 
 module('Acceptance | svg', function(hooks) {
@@ -20,7 +20,7 @@ module('Acceptance | svg', function(hooks) {
         for (let field of ['top', 'left', 'width', 'height']) {
           assert.ok(
             Math.abs(firstBound[field] - secondBound[field]) < pixels,
-            `on id ${id}, ${field} differs by less than ${pixels}. ${firstBound[field]} ~ ${secondBound[field]}`
+            `on id ${id}, ${field} differs by less than ${pixels}. ${firstBound[field]} ~ ${secondBound[field]}`,
           );
         }
       }
@@ -48,7 +48,7 @@ module('Acceptance | svg', function(hooks) {
     assert.allClose(
       5,
       initialBounds,
-      boundsById(this.element.querySelectorAll('circle'))
+      boundsById(this.element.querySelectorAll('circle')),
     );
   });
 
@@ -63,7 +63,7 @@ module('Acceptance | svg', function(hooks) {
     assert.allClose(
       5,
       initialBounds,
-      boundsById(this.element.querySelectorAll('circle'))
+      boundsById(this.element.querySelectorAll('circle')),
     );
   });
 });

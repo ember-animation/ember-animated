@@ -2,7 +2,10 @@ import { rAF } from './concurrency-helpers';
 
 const bridges = new WeakMap();
 
-export function continueMotions(oldElement: Element, newElement: Element): void {
+export function continueMotions(
+  oldElement: Element,
+  newElement: Element,
+): void {
   bridges.set(newElement, oldElement);
   rAF().then(() => {
     if (bridges.get(newElement) === oldElement) {
@@ -11,6 +14,6 @@ export function continueMotions(oldElement: Element, newElement: Element): void 
   });
 }
 
-export function continuedFromElement(newElement: Element):  Element | undefined {
+export function continuedFromElement(newElement: Element): Element | undefined {
   return bridges.get(newElement);
 }

@@ -9,7 +9,7 @@ import { render, settled } from '@ember/test-helpers';
 import {
   equalBounds,
   visuallyConstant,
-  approxEqualPixels
+  approxEqualPixels,
 } from '../helpers/assertions';
 
 module('Unit | Sprite', function(hooks) {
@@ -244,14 +244,14 @@ module('Unit | Sprite', function(hooks) {
     assert.equalBounds(
       target.getBoundingClientRect(),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
 
     assert.approxEqualPixels(m.initialBounds.top + 2, m.finalBounds.top, 'top');
     assert.approxEqualPixels(
       m.initialBounds.left + 2,
       m.finalBounds.left,
-      'left'
+      'left',
     );
   });
 
@@ -289,18 +289,18 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m2.initialBounds.top + 15,
       m2.finalBounds.top,
-      'top'
+      'top',
     );
     assert.approxEqualPixels(
       m2.initialBounds.left + 16,
       m2.finalBounds.left,
-      'left'
+      'left',
     );
 
     assert.equalBounds(
       target.getBoundingClientRect(),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
   });
 
@@ -326,14 +326,14 @@ module('Unit | Sprite', function(hooks) {
     assert.equalBounds(
       target.getBoundingClientRect(),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
 
     assert.approxEqualPixels(m.finalBounds.top, m.initialBounds.top + 1, 'top');
     assert.approxEqualPixels(
       m.finalBounds.left,
       m.initialBounds.left + 1,
-      'left'
+      'left',
     );
   });
 
@@ -368,18 +368,18 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m2.initialBounds.top + 13,
       m2.finalBounds.top,
-      'top'
+      'top',
     );
     assert.approxEqualPixels(
       m2.initialBounds.left + 14,
       m2.finalBounds.left,
-      'left'
+      'left',
     );
 
     assert.equalBounds(
       target.getBoundingClientRect(),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
   });
 
@@ -495,7 +495,7 @@ module('Unit | Sprite', function(hooks) {
     assert.equal(
       getComputedStyle(body).position,
       'static',
-      'This test cannot work correctly if the body is not statically positioned'
+      'This test cannot work correctly if the body is not statically positioned',
     );
     body.append(intermediate);
     intermediate.style.margin = '10px';
@@ -508,7 +508,7 @@ module('Unit | Sprite', function(hooks) {
     assert.equal(
       getComputedStyle(body).position,
       'static',
-      'This test cannot work correctly if the body is not statically positioned'
+      'This test cannot work correctly if the body is not statically positioned',
     );
     body.append(intermediate);
     intermediate.style.margin = '10px';
@@ -528,12 +528,12 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m.initialBounds.top,
       document.querySelector('.sibling').getBoundingClientRect().height,
-      'top relative to parent'
+      'top relative to parent',
     );
     assert.approxEqualPixels(
       m.initialBounds.left,
       0,
-      'left relative to parent'
+      'left relative to parent',
     );
   });
 
@@ -544,12 +544,12 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m.finalBounds.top,
       m.initialBounds.top,
-      'top constant'
+      'top constant',
     );
     assert.approxEqualPixels(
       m.initialBounds.left + 100,
       m.finalBounds.left,
-      'left reflects movement'
+      'left reflects movement',
     );
   });
 
@@ -573,7 +573,7 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m.finalBounds.top,
       document.querySelector('.sibling').getBoundingClientRect().height,
-      'top relative to parent'
+      'top relative to parent',
     );
     assert.approxEqualPixels(m.finalBounds.left, 0, 'left relative to parent');
   });
@@ -585,12 +585,12 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       b.top - 120,
       m.initialBounds.top,
-      'top reflects movement'
+      'top reflects movement',
     );
     assert.approxEqualPixels(
       b.left - 100,
       m.initialBounds.left,
-      'left reflects movement'
+      'left reflects movement',
     );
   });
 
@@ -611,17 +611,17 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m.finalBounds.left - m.initialBounds.left,
       bounds.left - 400,
-      'left'
+      'left',
     );
     assert.approxEqualPixels(
       m.finalBounds.top - m.initialBounds.top,
       bounds.top - 300,
-      'top'
+      'top',
     );
     assert.equalBounds(
       m.initialBounds,
       m.getCurrentBounds(),
-      'current matches initial'
+      'current matches initial',
     );
   });
 
@@ -637,18 +637,18 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m.finalBounds.left - m.initialBounds.left - 100,
       bounds.left - 400,
-      'left'
+      'left',
     );
     assert.approxEqualPixels(
       m.finalBounds.top - m.initialBounds.top - 120,
       bounds.top - 300,
-      'top'
+      'top',
     );
 
     assert.equalBounds(
       m.initialBounds,
       m.getCurrentBounds(),
-      'current matches initial'
+      'current matches initial',
     );
   });
 
@@ -664,10 +664,10 @@ module('Unit | Sprite', function(hooks) {
           () => {
             m.lock();
           },
-          'inner content bounds'
+          'inner content bounds',
         );
       },
-      'target bounds'
+      'target bounds',
     );
 
     assert.visuallyConstant(
@@ -678,10 +678,10 @@ module('Unit | Sprite', function(hooks) {
           () => {
             m.unlock();
           },
-          'inner content bounds unlock'
+          'inner content bounds unlock',
         );
       },
-      'target bounds unlock'
+      'target bounds unlock',
     );
   });
 
@@ -698,10 +698,10 @@ module('Unit | Sprite', function(hooks) {
           () => {
             m.lock();
           },
-          'inner content bounds'
+          'inner content bounds',
         );
       },
-      'target bounds'
+      'target bounds',
     );
 
     assert.visuallyConstant(
@@ -712,10 +712,10 @@ module('Unit | Sprite', function(hooks) {
           () => {
             m.unlock();
           },
-          'inner content bounds unlock'
+          'inner content bounds unlock',
         );
       },
-      'target bounds unlock'
+      'target bounds unlock',
     );
   });
 
@@ -729,7 +729,7 @@ module('Unit | Sprite', function(hooks) {
   test('startAtSprite moves into correct position', function(assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
-      makeParent(external)
+      makeParent(external),
     );
 
     let parent = makeParent(target);
@@ -744,14 +744,14 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       have.left,
       want.left,
-      'horizontal position matches'
+      'horizontal position matches',
     );
   });
 
   test("startAtSprite matches the source sprite's dimensions", function(assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
-      makeParent(external)
+      makeParent(external),
     );
 
     let parent = makeParent(target);
@@ -764,12 +764,12 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       m.initialBounds.width,
       want.width,
-      'width was recorded'
+      'width was recorded',
     );
     assert.approxEqualPixels(
       m.initialBounds.height,
       want.height,
-      'height was recorded'
+      'height was recorded',
     );
   });
 
@@ -777,7 +777,7 @@ module('Unit | Sprite', function(hooks) {
     external.style.opacity = 0.3;
     let externalSprite = Sprite.positionedStartingAt(
       external,
-      makeParent(external)
+      makeParent(external),
     );
 
     let parent = makeParent(target);
@@ -788,14 +788,14 @@ module('Unit | Sprite', function(hooks) {
 
     assert.ok(
       Math.abs(parseFloat(m.initialComputedStyle.opacity) - 0.3) < 0.01,
-      'opacity differs by less than 1%'
+      'opacity differs by less than 1%',
     );
   });
 
   test('startAtSprite moves into correct position, even when we already had initialBounds', function(assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
-      makeParent(external)
+      makeParent(external),
     );
 
     let parent = makeParent(target);
@@ -813,14 +813,14 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       have.left,
       want.left,
-      'horizontal position matches'
+      'horizontal position matches',
     );
   });
 
   test('moveToFinalPosition moves to correct position', function(assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
-      makeParent(external)
+      makeParent(external),
     );
 
     let parent = makeParent(target);
@@ -835,7 +835,7 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(
       have.left,
       want.left,
-      'horizontal position matches'
+      'horizontal position matches',
     );
   });
 
@@ -858,7 +858,7 @@ module('Unit | Sprite', function(hooks) {
         priorSibling.appendChild(target);
         m.lock();
       },
-      'target bounds'
+      'target bounds',
     );
   });
 
@@ -882,7 +882,7 @@ module('Unit | Sprite', function(hooks) {
         priorSibling.appendChild(target);
         m.lock();
       },
-      'target bounds'
+      'target bounds',
     );
   });
 
@@ -943,7 +943,7 @@ module('Unit | Sprite', function(hooks) {
     assert.equal(
       parent.element,
       this.element.querySelector('svg'),
-      'the offset parent sprite should be the <svg> element'
+      'the offset parent sprite should be the <svg> element',
     );
   });
 
@@ -961,7 +961,7 @@ module('Unit | Sprite', function(hooks) {
     assert.equal(
       parent.element,
       this.element.querySelector('.inside'),
-      'the offset parent sprite should be the inside <svg> element'
+      'the offset parent sprite should be the inside <svg> element',
     );
   });
 
@@ -981,7 +981,7 @@ module('Unit | Sprite', function(hooks) {
     assert.equal(
       parent.element,
       this.element.querySelector('.inside'),
-      'the offset parent sprite should be the inside <svg> element'
+      'the offset parent sprite should be the inside <svg> element',
     );
   });
 
@@ -1015,16 +1015,16 @@ module('Unit | Sprite', function(hooks) {
     assert.equalBounds(
       bounds(target),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
 
     assert.equalSize(
       {
         width: sprite.initialBounds.width + 5,
-        height: sprite.initialBounds.height + 8
+        height: sprite.initialBounds.height + 8,
       },
       sprite.finalBounds,
-      'measured bounds show the size change'
+      'measured bounds show the size change',
     );
   });
 
@@ -1058,13 +1058,13 @@ module('Unit | Sprite', function(hooks) {
     assert.equalBounds(
       bounds(target),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
 
     assert.equalBounds(
       shiftedBounds(sprite.initialBounds, 20, -10),
       sprite.finalBounds,
-      'measured bounds show the position change'
+      'measured bounds show the position change',
     );
   });
 
@@ -1098,13 +1098,13 @@ module('Unit | Sprite', function(hooks) {
     assert.equalBounds(
       bounds(target),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
 
     assert.equalBounds(
       shiftedBounds(sprite.initialBounds, 20, -10),
       sprite.finalBounds,
-      'measured bounds detect the change'
+      'measured bounds detect the change',
     );
   });
 
@@ -1137,16 +1137,16 @@ module('Unit | Sprite', function(hooks) {
     assert.equalBounds(
       bounds(target),
       initialBounds,
-      'locking brings it back into initial position'
+      'locking brings it back into initial position',
     );
 
     assert.equalSize(
       {
         width: sprite.initialBounds.width + 20,
-        height: sprite.initialBounds.height + 20
+        height: sprite.initialBounds.height + 20,
       },
       sprite.finalBounds,
-      'measured bounds detect the change'
+      'measured bounds detect the change',
     );
   });
 
@@ -1198,7 +1198,7 @@ module('Unit | Sprite', function(hooks) {
         destination.element.appendChild(target);
         sprite.lock();
       },
-      'target bounds'
+      'target bounds',
     );
   });
 
@@ -1228,7 +1228,7 @@ module('Unit | Sprite', function(hooks) {
         destination.element.appendChild(target);
         sprite.lock();
       },
-      'target bounds'
+      'target bounds',
     );
   });
 
@@ -1245,7 +1245,7 @@ module('Unit | Sprite', function(hooks) {
     sprite.unlock();
     assert.ok(
       !target.classList.contains('extra'),
-      'extra should have been cleaned up'
+      'extra should have been cleaned up',
     );
   });
 
@@ -1269,7 +1269,7 @@ module('Unit | Sprite', function(hooks) {
 
     assert.ok(
       !target.classList.contains('extra'),
-      'extra should have been cleaned up'
+      'extra should have been cleaned up',
     );
     assert.ok(target.classList.contains('b'), 'keeps the b class');
   });

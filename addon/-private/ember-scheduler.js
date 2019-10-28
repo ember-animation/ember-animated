@@ -88,7 +88,7 @@ objectAssign(TaskProperty.prototype, {
         addObserver(proto, name, null, handlerName);
       }
     }
-  }
+  },
 });
 
 let priv = new WeakMap();
@@ -100,7 +100,7 @@ class Task {
       implementation,
       instances: [],
       taskProperty,
-      name
+      name,
     });
     this.concurrency = 0;
     this.isRunning = false;
@@ -113,7 +113,7 @@ class Task {
     let policy = privSelf.taskProperty._bufferPolicy;
     if (context.isDestroyed) {
       throw new Error(
-        `Tried to perform task ${privSelf.name} on an already destroyed object`
+        `Tried to perform task ${privSelf.name} on an already destroyed object`,
       );
     }
     cleanupOnDestroy(context, this, 'cancelAll');
@@ -139,7 +139,7 @@ class Task {
           }
         }
         let finalValue = yield* withRunLoop(
-          implementation.call(context, ...args)
+          implementation.call(context, ...args),
         );
         return finalValue;
       } finally {
@@ -188,6 +188,7 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
       }
       oldWillDestroy.apply(owner, arguments);
     };
+    /* eslint-disable-next-line @typescript-eslint/camelcase */
     owner.willDestroy.__ember_processes_destroyers__ = disposers;
   }
 
@@ -230,7 +231,7 @@ function* withRunLoop(generator) {
         }
       } catch (err) {
         state = {
-          threw: err
+          threw: err,
         };
       }
     });

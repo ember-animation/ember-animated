@@ -36,7 +36,7 @@ export default Component.extend({
     },
     set(k, v) {
       return v;
-    }
+    },
   }),
 
   rightItems: computed({
@@ -49,7 +49,7 @@ export default Component.extend({
     },
     set(k, v) {
       return v;
-    }
+    },
   }),
 
   actions: {
@@ -60,22 +60,22 @@ export default Component.extend({
       if (index !== -1) {
         this.set(
           'rightItems',
-          rightItems.slice(0, index).concat(rightItems.slice(index + 1))
+          rightItems.slice(0, index).concat(rightItems.slice(index + 1)),
         );
         this.set('leftItems', leftItems.concat([item]).sort(numeric));
       } else {
         index = leftItems.indexOf(item);
         this.set(
           'leftItems',
-          leftItems.slice(0, index).concat(leftItems.slice(index + 1))
+          leftItems.slice(0, index).concat(leftItems.slice(index + 1)),
         );
         this.set('rightItems', rightItems.concat([item]).sort(numeric));
       }
       if (this.get('bounceBack') && bounceCounter > 0) {
         later(() => this.send('move', item, bounceCounter - 1), 1000);
       }
-    }
-  }
+    },
+  },
 });
 
 function numeric(a, b) {

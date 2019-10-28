@@ -20,6 +20,6 @@ export default Controller.extend({
   actions: {
     toggle() {
       this.set('showLeft', !this.get('showLeft'));
-    }
-  }
+    },
+  },
 });

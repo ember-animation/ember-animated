@@ -5,7 +5,7 @@ import {
   setupAnimationTest,
   animationsSettled,
   bounds,
-  time
+  time,
 } from 'ember-animated/test-support';
 import QUnit from 'qunit';
 
@@ -18,7 +18,7 @@ module('Acceptance | each demo', function(hooks) {
     assert.equal(currentURL(), 'demos/eachdemo');
     assert.ok(
       this.element.querySelector('[data-test-item="A"]'),
-      'found first item'
+      'found first item',
     );
   });
 
@@ -29,7 +29,7 @@ module('Acceptance | each demo', function(hooks) {
         result: QUnit.equiv(values, expected),
         actual: values,
         expected: expected,
-        message: message
+        message: message,
       });
     };
   });
@@ -48,11 +48,11 @@ module('Acceptance | each demo', function(hooks) {
     assert.notEqual(
       B2Position.top,
       BPosition.top,
-      'final B is above initial B'
+      'final B is above initial B',
     );
     assert.ok(
       B3Position.top < B2Position.top,
-      'B final is above B intermediate'
+      'B final is above B intermediate',
     );
     time.runAtSpeed(60);
     await animationsSettled();

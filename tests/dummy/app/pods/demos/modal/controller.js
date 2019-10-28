@@ -46,5 +46,5 @@ export default Controller.extend({
       sprite.endAtPixel({ x: window.outerWidth });
       move(sprite);
     });
-  }
+  },
 });

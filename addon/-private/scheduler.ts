@@ -74,9 +74,11 @@ export function current() {
 }
 
 export async function childrenSettled() {
-  return Promise.all(ensureCurrent('childrenSettled').linked.map(
-    child => child.promise.catch(() => null)
-  ));
+  return Promise.all(
+    ensureCurrent('childrenSettled').linked.map(child =>
+      child.promise.catch(() => null),
+    ),
+  );
 }
 
 interface StackEntry {
@@ -125,7 +127,6 @@ function ensureCurrent(label: string) {
   return cur;
 }
 
-
 let loggedErrors: WeakSet<Error> = new WeakSet();
 let microRoutines: WeakMap<Promise<any>, MicroRoutine> = new WeakMap();
 
@@ -157,7 +158,9 @@ class MicroRoutine {
     this.wake('fulfilled', undefined);
   }
   wake(state: 'fulfilled' | 'rejected', value: any) {
-    if (this.stopped) { return; }
+    if (this.stopped) {
+      return;
+    }
     withCurrent(this, () => {
       try {
         if (state === 'fulfilled') {
@@ -172,13 +175,13 @@ class MicroRoutine {
         } else {
           Promise.resolve(this.state.value).then(
             value => this.wake('fulfilled', value),
-            reason => this.wake('rejected', reason)
+            reason => this.wake('rejected', reason),
           );
         }
-      } catch(err) {
+      } catch (err) {
         this.state = {
           done: true,
-          value: undefined
+          value: undefined,
         };
         this.linked.forEach(microRoutine => {
           microRoutine.stop();
@@ -233,7 +236,7 @@ function cancelGenerator(generator: Generator) {
   e.message = 'TaskCancelation';
   try {
     generator.throw!(e);
-  } catch(err) {
+  } catch (err) {
     if (err.message !== 'TaskCancelation') {
       throw err;
     }
@@ -263,8 +266,8 @@ export function parallel(...functions: Function[]) {
 //   sprites.forEach(serial(scale, move)).
 //
 export function serial(...functions: Function[]) {
-  return function (...args: any[]) {
-    return spawnChild(function * () {
+  return function(...args: any[]) {
+    return spawnChild(function*() {
       for (let fn of functions) {
         yield fn.apply(null, args);
       }

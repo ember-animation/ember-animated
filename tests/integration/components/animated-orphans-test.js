@@ -113,7 +113,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       testMotion(removedSprites[0]);
       assert.equalBounds(
         firstBounds,
-        removedSprites[0].element.getBoundingClientRect()
+        removedSprites[0].element.getBoundingClientRect(),
       );
     });
 
@@ -145,7 +145,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       testMotion(removedSprites[0]);
       assert.equal(
         'rgb(12, 34, 56)',
-        getComputedStyle(removedSprites[0].element).color
+        getComputedStyle(removedSprites[0].element).color,
       );
     });
 
@@ -182,7 +182,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       counter++;
       if (counter === 1) {
@@ -198,12 +198,12 @@ module('Integration | Component | animated orphans', function(hooks) {
       assert.equal(
         insertedSprites.length,
         0,
-        'both times inserted, old sprite'
+        'both times inserted, old sprite',
       );
       assert.equal(
         receivedSprites.length,
         0,
-        'both times received, old sprite'
+        'both times received, old sprite',
       );
       removedSprites.forEach(s => testMotion(s, { shouldBlock: true }));
     });
@@ -217,7 +217,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       assert.equal(removedSprites.length, 0, 'second removed, new sprite');
       assert.equal(keptSprites.length, 0, 'second kept, new sprite');
@@ -257,7 +257,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       t1Counter++;
 
@@ -285,7 +285,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       t2Counter++;
 
@@ -308,7 +308,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       let t1Counter = 3;
       assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
@@ -354,7 +354,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       t1Counter++;
 
@@ -382,7 +382,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       t2Counter++;
 
@@ -407,7 +407,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       keptSprites,
       removedSprites,
       sentSprites,
-      receivedSprites
+      receivedSprites,
     }) {
       let t1Counter = 3;
       assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);

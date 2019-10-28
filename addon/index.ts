@@ -14,21 +14,15 @@ export {
   current,
   childrenSettled,
   parallel,
-  serial
+  serial,
 } from './-private/scheduler';
 
-export {
-  task
-} from './-private/ember-scheduler';
+export { task } from './-private/ember-scheduler';
 
 export { printSprites } from './-private/debug';
 
-export {
-  default as Motion,
-} from './-private/motion';
+export { default as Motion } from './-private/motion';
 
-export {
-  continueMotions
-} from './-private/motion-bridge';
+export { continueMotions } from './-private/motion-bridge';
 
 export { default as Tween } from './-private/tween';

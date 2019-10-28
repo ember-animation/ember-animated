@@ -8,6 +8,6 @@ export default Controller.extend({
   actions: {
     toggle() {
       this.set('tableMode', !this.get('tableMode'));
-    }
-  }
+    },
+  },
 });

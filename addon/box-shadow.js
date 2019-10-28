@@ -36,7 +36,7 @@ export class BoxShadow {
     testElement.style['box-shadow'] = string;
     document.body.appendChild(testElement);
     let result = this.fromComputedStyle(
-      getComputedStyle(testElement)['box-shadow']
+      getComputedStyle(testElement)['box-shadow'],
     );
     testElement.remove();
     return result;
@@ -65,7 +65,7 @@ function emptyShadowOfType(otherShadow) {
     spread: 0,
     x: 0,
     y: 0,
-    inset: otherShadow.inset
+    inset: otherShadow.inset,
   });
 }
 
@@ -87,7 +87,7 @@ export class BoxShadowTween {
 
     this.shadowTweens = fromShadows.map(
       (fromShadow, index) =>
-        new OneShadowTween(fromShadow, toShadows[index], duration, easing)
+        new OneShadowTween(fromShadow, toShadows[index], duration, easing),
     );
   }
   get currentValue() {
@@ -104,7 +104,7 @@ class OneShadowTween {
       fromShadow.color,
       toShadow.color,
       duration,
-      easing
+      easing,
     );
     this.xTween = new Tween(fromShadow.x, toShadow.x, duration, easing);
     this.yTween = new Tween(fromShadow.y, toShadow.y, duration, easing);
@@ -112,13 +112,13 @@ class OneShadowTween {
       fromShadow.blur,
       toShadow.blur,
       duration,
-      easing
+      easing,
     );
     this.spreadTween = new Tween(
       fromShadow.spread,
       toShadow.spread,
       duration,
-      easing
+      easing,
     );
     this.inset = fromShadow.inset;
   }
@@ -130,7 +130,7 @@ class OneShadowTween {
       blur: this.blurTween.currentValue,
       spread: this.spreadTween.currentValue,
       inset: this.inset,
-      color: this.colorTween.currentValue
+      color: this.colorTween.currentValue,
     });
   }
 
@@ -140,7 +140,7 @@ class OneShadowTween {
       this.xTween,
       this.yTween,
       this.blurTween,
-      this.spreadTween
+      this.spreadTween,
     ].every(tween => tween.done);
   }
 }

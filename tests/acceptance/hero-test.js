@@ -37,10 +37,10 @@ module('Acceptance | hero', function(hooks) {
     click('.hero-list-image');
     await time.advance(50);
     let orphans = this.element.querySelectorAll(
-      '.animated-orphans .hero-list-image'
+      '.animated-orphans .hero-list-image',
     ).length;
     let hiddenOrphans = this.element.querySelectorAll(
-      '.animated-orphans .hero-list-image.ember-animated-hidden'
+      '.animated-orphans .hero-list-image.ember-animated-hidden',
     ).length;
     assert.equal(orphans, 8, 'orphans');
     assert.equal(hiddenOrphans, 1, 'hidden orphans');
@@ -57,7 +57,7 @@ module('Acceptance | hero', function(hooks) {
     let images = this.element.querySelectorAll('.hero-list .hero-list-image')
       .length;
     let hiddenImages = this.element.querySelectorAll(
-      '.hero-list .hero-list-image.ember-animated-hidden'
+      '.hero-list .hero-list-image.ember-animated-hidden',
     ).length;
     assert.equal(images, 8, 'images');
     assert.equal(hiddenImages, 1, 'hidden images');
@@ -82,7 +82,7 @@ module('Acceptance | hero', function(hooks) {
     assert.equalBounds(
       afterInterruption,
       beforeInterruption,
-      'visual continuity at interruption'
+      'visual continuity at interruption',
     );
     time.runAtSpeed(FAST);
     await back;

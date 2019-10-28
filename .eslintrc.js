@@ -1,27 +1,54 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module'
+    sourceType: 'module',
   },
-  plugins: ['ember'],
+  plugins: ['ember', '@typescript-eslint'],
   extends: [
     'plugin:prettier/recommended',
     'eslint:recommended',
-    'plugin:ember/recommended'
+    'plugin:ember/recommended',
   ],
   env: {
-    browser: true
+    browser: true,
   },
   rules: {
     'no-constant-condition': ['error', { checkLoops: false }],
     'require-yield': 0,
-    semi: ['error', 'always']
+    semi: 0,
+    '@typescript-eslint/adjacent-overload-signatures': 'error',
+    '@typescript-eslint/array-type': 'error',
+    '@typescript-eslint/ban-types': 'error',
+    camelcase: 'off',
+    '@typescript-eslint/camelcase': 'error',
+    '@typescript-eslint/class-name-casing': 'error',
+    indent: 'off',
+    '@typescript-eslint/member-delimiter-style': 'error',
+    '@typescript-eslint/consistent-type-assertions': 'error',
+    '@typescript-eslint/consistent-type-definitions': 'error',
+    'no-array-constructor': 'off',
+    '@typescript-eslint/no-array-constructor': 'error',
+    '@typescript-eslint/no-empty-interface': 'error',
+    '@typescript-eslint/no-inferrable-types': 'error',
+    '@typescript-eslint/no-misused-new': 'error',
+    '@typescript-eslint/no-namespace': 'error',
+    '@typescript-eslint/triple-slash-reference': [
+      'error',
+      { path: 'never', types: 'never', lib: 'never' },
+    ],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-var-requires': 'error',
+    '@typescript-eslint/prefer-namespace-keyword': 'error',
+    '@typescript-eslint/type-annotation-spacing': 'error',
+    '@typescript-eslint/no-require-imports': 'error',
+    '@typescript-eslint/no-for-in-array': 'error',
   },
   globals: {
     WeakMap: false,
-    Map: false
+    Map: false,
   },
   overrides: [
     // node files
@@ -35,31 +62,33 @@ module.exports = {
         'testem.js',
         'blueprints/*/index.js',
         'config/**/*.js',
-        'tests/dummy/config/**/*.js'
+        'tests/dummy/config/**/*.js',
       ],
       excludedFiles: [
         'addon/**',
         'addon-test-support/**',
         'version-specific-*/**',
         'config/addon-docs.js',
-        'tests/dummy/app/**'
+        'tests/dummy/app/**',
       ],
       parserOptions: {
         sourceType: 'script',
-        ecmaVersion: 2015
+        ecmaVersion: 2015,
       },
       env: {
         browser: false,
-        node: true
+        node: true,
       },
       plugins: ['node'],
       rules: Object.assign(
         {},
+        /* eslint-disable-next-line @typescript-eslint/no-require-imports */
         require('eslint-plugin-node').configs.recommended.rules,
         {
-          // add your custom rules and overrides for node files here
-        }
-      )
-    }
-  ]
+          '@typescript-eslint/no-var-requires': 0,
+          '@typescript-eslint/no-require-imports': 0,
+        },
+      ),
+    },
+  ],
 };

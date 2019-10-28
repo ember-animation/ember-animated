@@ -8,10 +8,10 @@ let Item = EmberObject.extend({
   style: computed('x', 'y', function() {
     return htmlSafe(
       `top: ${parseFloat(this.get('y'))}px; left: ${parseFloat(
-        this.get('x')
-      )}px; `
+        this.get('x'),
+      )}px; `,
     );
-  })
+  }),
 });
 
 export default Controller.extend({
@@ -32,8 +32,8 @@ export default Controller.extend({
         i.set('x', somewhere());
         i.set('y', somewhere());
       });
-    }
-  }
+    },
+  },
 });
 
 function somewhere() {

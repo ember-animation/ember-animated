@@ -20,10 +20,10 @@ export class Follow extends Move {
     let transformOffsetX = sprite.transform.tx - source.sprite.transform.tx;
     let transformOffsetY = sprite.transform.ty - source.sprite.transform.ty;
     this.xTween = new Tween(transformOffsetX, transformOffsetX, 0).plus(
-      source.xTween
+      source.xTween,
     );
     this.yTween = new Tween(transformOffsetY, transformOffsetY, 0).plus(
-      source.yTween
+      source.yTween,
     );
 
     // We don't need this to make our own animation work correctly,
@@ -36,7 +36,7 @@ export class Follow extends Move {
     while (!this.xTween.done || !this.yTween.done) {
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
-        this.yTween.currentValue - sprite.transform.ty
+        this.yTween.currentValue - sprite.transform.ty,
       );
       yield rAF();
     }

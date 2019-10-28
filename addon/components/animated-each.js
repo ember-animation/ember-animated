@@ -143,7 +143,7 @@ export default Component.extend({
       this.addObserver(
         `items.@each.${key}`,
         this,
-        this._invalidateRenderedChildren
+        this._invalidateRenderedChildren,
       );
     }
 
@@ -153,7 +153,7 @@ export default Component.extend({
         this.addObserver(
           `items.@each.${dep}`,
           this,
-          this._invalidateRenderedChildren
+          this._invalidateRenderedChildren,
         );
       }
     }
@@ -248,12 +248,12 @@ export default Component.extend({
           .filter(
             child =>
               (!child.shouldRemove || !this._renderedChildrenStartedMoving) &&
-              newIndices.get(child.id) == null
+              newIndices.get(child.id) == null,
           )
           .map(child => {
             child.flagForRemoval();
             return child;
-          })
+          }),
       );
     this._renderedChildren = newChildren;
 
@@ -330,7 +330,7 @@ export default Component.extend({
       let transition = this._transitionFor(
         this._firstTime,
         [],
-        this._prevItems
+        this._prevItems,
       );
       this.get('animate').perform(transition);
     }
@@ -352,7 +352,7 @@ export default Component.extend({
       removedSprites,
       transition,
       this.get('durationWithDefault'),
-      this.get('finalRemoval')
+      this.get('finalRemoval'),
     );
   },
 
@@ -434,7 +434,7 @@ export default Component.extend({
             warn(
               `Probable bug in ember-animated: saw unexpected child state ${child.state}`,
               false,
-              { id: 'ember-animated-state' }
+              { id: 'ember-animated-state' },
             );
         }
       }
@@ -466,7 +466,7 @@ export default Component.extend({
       currentSprites,
       insertedSprites,
       keptSprites,
-      removedSprites
+      removedSprites,
     } = yield this.get('startAnimation').perform(transition, current());
 
     let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(
@@ -476,13 +476,13 @@ export default Component.extend({
       insertedSprites,
       keptSprites,
       removedSprites,
-      firstTime
+      firstTime,
     );
     yield this.get('finalizeAnimation').perform(
       insertedSprites,
       keptSprites,
       removedSprites,
-      matchingAnimatorsFinished
+      matchingAnimatorsFinished,
     );
   }).restartable(),
 
@@ -510,7 +510,7 @@ export default Component.extend({
       task: animateTask,
       duration: this.get('durationWithDefault'),
       component: this,
-      children: this._renderedChildren
+      children: this._renderedChildren,
     });
 
     // Make all our current sprites absolutely positioned so they won't move during render.
@@ -523,7 +523,7 @@ export default Component.extend({
       currentSprites,
       insertedSprites,
       keptSprites,
-      removedSprites
+      removedSprites,
     };
   }),
 
@@ -534,7 +534,7 @@ export default Component.extend({
     insertedSprites,
     keptSprites,
     removedSprites,
-    firstTime
+    firstTime,
   ) {
     // fill the keptSprites and removedSprites lists by comparing what
     // we had in currentSprites with what is still in the DOM now that
@@ -573,7 +573,7 @@ export default Component.extend({
     // or leaving other simulatneous animators. So we hit another
     // coordination point via the motionService
     let { farMatches, matchingAnimatorsFinished, beacons } = yield this.get(
-      'motionService.farMatch'
+      'motionService.farMatch',
     ).perform(current(), insertedSprites, keptSprites, removedSprites);
 
     // TODO: This is best effort. The parent isn't necessarily in
@@ -598,7 +598,7 @@ export default Component.extend({
           }
           return true;
         }
-      }
+      },
     );
 
     // if any of our inserted sprites have matching far away sprites,
@@ -613,7 +613,7 @@ export default Component.extend({
           sprite.startAtSprite(other);
           return true;
         }
-      }
+      },
     );
 
     let [matchedKeptSprites, unmatchedKeptSprites] = partition(
@@ -626,7 +626,7 @@ export default Component.extend({
           }
           return true;
         }
-      }
+      },
     );
 
     // let other animators make their own partitioning decisions
@@ -671,7 +671,7 @@ export default Component.extend({
       unmatchedRemovedSprites, // user-visible removedSprites
       sentSprites, // user-visible sentSprites
       receivedSprites.concat(matchedKeptSprites), // user-visible receivedSprites
-      beacons
+      beacons,
     );
     let cycle = this._cycleCounter++;
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);
@@ -685,7 +685,7 @@ export default Component.extend({
     insertedSprites,
     keptSprites,
     removedSprites,
-    matchingAnimatorsFinished
+    matchingAnimatorsFinished,
   ) {
     yield matchingAnimatorsFinished;
 
@@ -734,9 +734,9 @@ export default Component.extend({
     } else {
       return this.get('use');
     }
-  }
+  },
 }).reopenClass({
-  positionalParams: ['items']
+  positionalParams: ['items'],
 });
 
 class Child {

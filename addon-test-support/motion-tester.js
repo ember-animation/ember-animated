@@ -17,13 +17,13 @@ export default EmberObject.extend({
       let M = this.motion;
       if (!M) {
         throw new Error(
-          "passing a Sprite to MotionTester#run only works if you've already set a default motion"
+          "passing a Sprite to MotionTester#run only works if you've already set a default motion",
         );
       }
       motion = new M(args[0]);
     } else {
       throw new Error(
-        'first argument to MotionTester#run must be either a Motion or a Sprite'
+        'first argument to MotionTester#run must be either a Motion or a Sprite',
       );
     }
 
@@ -50,5 +50,5 @@ export default EmberObject.extend({
     this.beforeAnimation(motion);
     yield* motion._run();
     this.afterAnimation(motion);
-  }).restartable()
+  }).restartable(),
 });

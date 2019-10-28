@@ -52,7 +52,7 @@ export default Component.extend({
     return (
       this.get('group') || `animated_if_${Math.floor(Math.random() * 1000000)}`
     );
-  })
+  }),
 }).reopenClass({
-  positionalParams: ['predicate']
+  positionalParams: ['predicate'],
 });

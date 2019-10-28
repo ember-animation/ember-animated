@@ -26,6 +26,6 @@ export default Controller.extend({
   actions: {
     toggle() {
       this.set('showDetail', !this.get('showDetail'));
-    }
-  }
+    },
+  },
 });

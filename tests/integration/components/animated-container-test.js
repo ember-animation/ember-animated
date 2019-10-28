@@ -15,7 +15,7 @@ import {
   setupAnimationTest,
   time,
   animationsSettled,
-  bounds as _bounds
+  bounds as _bounds,
 } from 'ember-animated/test-support';
 
 module('Integration | Component | animated container', function(hooks) {
@@ -67,7 +67,7 @@ module('Integration | Component | animated container', function(hooks) {
           service.willAnimate({
             duration: opts.duration == null ? 1 : opts.duration,
             task: current(),
-            component: this
+            component: this,
           });
           yield afterRender();
           yield* service.staticMeasurement(() => {});
@@ -75,8 +75,8 @@ module('Integration | Component | animated container', function(hooks) {
           if (opts.block) {
             yield opts.block;
           }
-        })
-      })
+        }),
+      }),
     );
   });
 
@@ -135,7 +135,7 @@ module('Integration | Component | animated container', function(hooks) {
         *animate() {
           motionSawHeight = this.sprite.finalBounds.height;
         }
-      }
+      },
     );
 
     await render(hbs`
@@ -148,7 +148,7 @@ module('Integration | Component | animated container', function(hooks) {
 
     run(() => {
       this.get('fakeAnimator.animate').perform({
-        staticHeight: 321
+        staticHeight: 321,
       });
     });
 
@@ -170,7 +170,7 @@ module('Integration | Component | animated container', function(hooks) {
             finishMotion = resolve;
           });
         }
-      }
+      },
     );
 
     await render(hbs`
@@ -185,21 +185,21 @@ module('Integration | Component | animated container', function(hooks) {
       this.get('fakeAnimator.animate').perform({
         initialHeight: 100,
         staticHeight: 200,
-        finalHeight: 300
+        finalHeight: 300,
       });
     });
     await startedMotion;
     assert.equal(
       height(this.element.querySelector('.animated-container')),
       100,
-      'still at previous height'
+      'still at previous height',
     );
     finishMotion();
     await animationsSettled();
     assert.equal(
       height(this.element.querySelector('.animated-container')),
       300,
-      'now at final height'
+      'now at final height',
     );
   });
 
@@ -220,7 +220,7 @@ module('Integration | Component | animated container', function(hooks) {
         block,
         initialHeight: 100,
         staticHeight: 200,
-        finalHeight: 300
+        finalHeight: 300,
       });
     });
 
@@ -228,14 +228,14 @@ module('Integration | Component | animated container', function(hooks) {
     assert.equal(
       height(this.element.querySelector('.animated-container')),
       200,
-      'should be locked at the static height we measured'
+      'should be locked at the static height we measured',
     );
     unblock();
     await wait(60);
     assert.equal(
       height(this.element.querySelector('.animated-container')),
       300,
-      'unlocked and reflecting the actual final height of the animator'
+      'unlocked and reflecting the actual final height of the animator',
     );
   });
 
@@ -247,7 +247,7 @@ module('Integration | Component | animated container', function(hooks) {
         *animate() {
           motionOpts = this.opts;
         }
-      }
+      },
     );
 
     await render(hbs`
@@ -260,7 +260,7 @@ module('Integration | Component | animated container', function(hooks) {
 
     run(() => {
       this.get('fakeAnimator.animate').perform({
-        duration: 456
+        duration: 456,
       });
     });
 
@@ -278,13 +278,13 @@ module('Integration | Component | animated container', function(hooks) {
           assert.equal(this.sprite.initialBounds.height, 0, 'initial height');
           assert.equal(this.sprite.finalBounds.height, 100, 'static height');
         }
-      }
+      },
     );
 
     this.set('opts', {
       initialHeight: 0,
       staticHeight: 100,
-      finalHeight: 200
+      finalHeight: 200,
     });
     await render(hbs`
       <AnimatedContainer @motion={{TestMotion}} @onInitialRender={{true}}>
@@ -296,7 +296,7 @@ module('Integration | Component | animated container', function(hooks) {
     assert.equal(
       height(this.element.querySelector('.animated-container')),
       200,
-      'ends up unlocked'
+      'ends up unlocked',
     );
   });
 
@@ -316,7 +316,7 @@ module('Integration | Component | animated container', function(hooks) {
           this.get('fakeAnimator.animate').perform();
         });
         this.element.querySelector('.inside').style.position = 'absolute';
-      }
+      },
     );
   });
 
@@ -337,7 +337,7 @@ module('Integration | Component | animated container', function(hooks) {
           this.get('fakeAnimator.animate').perform();
         });
         this.element.querySelector('.inside').style.position = 'absolute';
-      }
+      },
     );
   });
 
@@ -385,7 +385,7 @@ module('Integration | Component | animated container', function(hooks) {
       this.get('fakeAnimator.animate').perform({
         initialHeight: 0,
         staticHeight: 1,
-        finalHeight: 1
+        finalHeight: 1,
       });
     });
 
@@ -393,7 +393,7 @@ module('Integration | Component | animated container', function(hooks) {
     assert.equal(
       _bounds(this.element.querySelector('.after')).top,
       initialTop + 1,
-      'only changes by one pixel'
+      'only changes by one pixel',
     );
   });
 
@@ -421,7 +421,7 @@ module('Integration | Component | animated container', function(hooks) {
       this.get('fakeAnimator.animate').perform({
         initialHeight: 1,
         staticHeight: 0,
-        finalHeight: 0
+        finalHeight: 0,
       });
     });
 
@@ -429,7 +429,7 @@ module('Integration | Component | animated container', function(hooks) {
     assert.equal(
       _bounds(this.element.querySelector('.after')).top,
       initialTop - 1,
-      'only changes by one pixel'
+      'only changes by one pixel',
     );
   });
 
@@ -443,7 +443,7 @@ module('Integration | Component | animated container', function(hooks) {
           assert.equal(this.sprite.initialBounds.height, 10, 'initial height');
           assert.equal(this.sprite.finalBounds.height, 20, 'static height');
         }
-      }
+      },
     );
     this.set('items', ['a']);
     await render(hbs`

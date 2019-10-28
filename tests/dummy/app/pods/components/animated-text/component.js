@@ -5,7 +5,7 @@ export default Component.extend({
   tagName: '',
   transition: function*({ sentSprites }) {
     sentSprites.forEach(move);
-  }
+  },
 }).reopenClass({
-  positionalParams: ['text']
+  positionalParams: ['text'],
 });

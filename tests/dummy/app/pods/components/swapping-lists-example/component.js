@@ -38,8 +38,8 @@ export default Component.extend({
         this.set('leftItems', makeRandomList());
         this.set('rightItems', null);
       }
-    }
-  }
+    },
+  },
 });
 
 function numeric(a, b) {

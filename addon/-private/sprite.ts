@@ -1,14 +1,14 @@
-import { warn } from "@ember/debug";
-import Ember from "ember";
-import Transform, { ownTransform, cumulativeTransform } from "./transform";
-import { continueMotions } from "./motion-bridge";
-import { collapsedChildren } from "./margin-collapse";
+import { warn } from '@ember/debug';
+import Ember from 'ember';
+import Transform, { ownTransform, cumulativeTransform } from './transform';
+import { continueMotions } from './motion-bridge';
+import { collapsedChildren } from './margin-collapse';
 import {
   shiftedBounds,
   relativeBounds,
   resizedBounds,
   emptyBounds,
-} from "./bounds";
+} from './bounds';
 
 const inFlight = new WeakMap();
 
@@ -29,7 +29,7 @@ export default class Sprite {
   static offsetParentStartingAt(element: Element) {
     let parent = getEffectiveOffsetParent(element as HTMLElement);
     if (!parent) {
-      parent = document.getElementsByTagName("body")[0];
+      parent = document.getElementsByTagName('body')[0];
     }
     return new this(parent, true, null, null);
   }
@@ -37,31 +37,31 @@ export default class Sprite {
   static offsetParentEndingAt(element: Element) {
     let parent = getEffectiveOffsetParent(element as HTMLElement);
     if (!parent) {
-      parent = document.getElementsByTagName("body")[0];
+      parent = document.getElementsByTagName('body')[0];
     }
     return new this(parent, false, null, null);
   }
 
   static positionedStartingAt(element: Element, offsetSprite: Sprite) {
     if (!offsetSprite.initialBounds) {
-      throw new Error("offset sprite must have initial bounds");
+      throw new Error('offset sprite must have initial bounds');
     }
-    return new this(element, true, "position", offsetSprite);
+    return new this(element, true, 'position', offsetSprite);
   }
 
   static positionedEndingAt(element: Element, offsetSprite: Sprite) {
     if (!offsetSprite.finalBounds) {
-      throw new Error("offset sprite must have final bounds");
+      throw new Error('offset sprite must have final bounds');
     }
-    return new this(element, false, "position", offsetSprite);
+    return new this(element, false, 'position', offsetSprite);
   }
 
   static sizedStartingAt(element: Element) {
-    return new this(element, true, "size", null);
+    return new this(element, true, 'size', null);
   }
 
   static sizedEndingAt(element: Element) {
-    let sprite = new this(element, false, "size", null);
+    let sprite = new this(element, false, 'size', null);
     sprite._initialBounds = emptyBounds;
     sprite._initialComputedStyle = sprite._finalComputedStyle;
     sprite._initialPosition = sprite._finalPosition;
@@ -92,14 +92,14 @@ export default class Sprite {
   private _imposedStyle: { [property: string]: string } | null = null;
   private _styleCache: { [property: string]: string } | null = null;
   private _collapsingChildren: Element[] | null = null;
-  private _lockMode: "position" | "size" | null;
-  private _inInitialPosition: boolean = false;
+  private _lockMode: 'position' | 'size' | null;
+  private _inInitialPosition = false;
 
   constructor(
     element: Element,
     inInitialPosition: boolean,
-    lockMode: "position" | "size" | null,
-    offsetSprite: Sprite | null
+    lockMode: 'position' | 'size' | null,
+    offsetSprite: Sprite | null,
   ) {
     this.element = element;
     this.owner = null;
@@ -135,7 +135,7 @@ export default class Sprite {
       this._lockMode = predecessor._lockMode;
       if (lockMode !== predecessor._lockMode) {
         throw new Error(
-          `probable bug in ember-animated: can't change lock mode from ${predecessor._lockMode} to ${lockMode}`
+          `probable bug in ember-animated: can't change lock mode from ${predecessor._lockMode} to ${lockMode}`,
         );
       }
     } else {
@@ -143,10 +143,10 @@ export default class Sprite {
       this._parentElement = null;
       this._revealed = null;
       this._lockMode = lockMode;
-      if (lockMode === "position") {
+      if (lockMode === 'position') {
         this._rememberPosition();
         this._cacheOriginalStyles();
-      } else if (this._lockMode === "size") {
+      } else if (this._lockMode === 'size') {
         this._rememberSize();
         this._cacheOriginalStyles();
       }
@@ -200,7 +200,7 @@ export default class Sprite {
       return shiftedBounds(
         this._initialBounds!,
         this._offsetSprite.initialBounds!.left,
-        this._offsetSprite.initialBounds!.top
+        this._offsetSprite.initialBounds!.top,
       );
     } else {
       return this._initialBounds!;
@@ -240,7 +240,7 @@ export default class Sprite {
       return shiftedBounds(
         this._finalBounds!,
         this._offsetSprite.finalBounds!.left,
-        this._offsetSprite.finalBounds!.top
+        this._offsetSprite.finalBounds!.top,
       );
     } else {
       return this._finalBounds;
@@ -295,7 +295,7 @@ export default class Sprite {
     @return {number|string}
   */
   getInitialDimension<K extends keyof SpritePosition>(
-    name: K
+    name: K,
   ): SpritePosition[K] {
     return this._initialPosition![name];
   }
@@ -312,7 +312,7 @@ export default class Sprite {
     @return {number|string}
   */
   getFinalDimension<K extends keyof SpritePosition>(
-    name: K
+    name: K,
   ): SpritePosition[K] {
     return this._finalPosition![name];
   }
@@ -372,7 +372,7 @@ export default class Sprite {
     if (this._offsetSprite) {
       return relativeBounds(
         this.element.getBoundingClientRect() as DOMRect,
-        this._offsetSprite.getCurrentBounds()!
+        this._offsetSprite.getCurrentBounds()!,
       );
     } else {
       return this.element.getBoundingClientRect() as DOMRect;
@@ -394,14 +394,14 @@ export default class Sprite {
     let { element } = this;
     if (isSVG(element)) {
       return {
-        x: getSVGLength(element, "x"),
-        y: getSVGLength(element, "y"),
-        cx: getSVGLength(element, "cx"),
-        cy: getSVGLength(element, "cy"),
-        r: getSVGLength(element, "r"),
-        width: getSVGLength(element, "width"),
-        height: getSVGLength(element, "height"),
-        transform: element.getAttribute("transform"),
+        x: getSVGLength(element, 'x'),
+        y: getSVGLength(element, 'y'),
+        cx: getSVGLength(element, 'cx'),
+        cy: getSVGLength(element, 'cy'),
+        r: getSVGLength(element, 'r'),
+        width: getSVGLength(element, 'width'),
+        height: getSVGLength(element, 'height'),
+        transform: element.getAttribute('transform'),
       };
     } else {
       let style = (this.element as HTMLElement).style;
@@ -431,14 +431,14 @@ export default class Sprite {
     }
     if (isSVG(this.element)) {
       let { element } = this;
-      setSVGLength(element, "x", pos);
-      setSVGLength(element, "y", pos);
-      setSVGLength(element, "cx", pos);
-      setSVGLength(element, "cy", pos);
-      setSVGLength(element, "r", pos);
-      setSVGLength(element, "width", pos);
-      setSVGLength(element, "height", pos);
-      setAttribute(element, "transform", pos);
+      setSVGLength(element, 'x', pos);
+      setSVGLength(element, 'y', pos);
+      setSVGLength(element, 'cx', pos);
+      setSVGLength(element, 'cy', pos);
+      setSVGLength(element, 'r', pos);
+      setSVGLength(element, 'width', pos);
+      setSVGLength(element, 'height', pos);
+      setAttribute(element, 'transform', pos);
     } else {
       let style = (this.element as HTMLElement).style;
       let p = pos as HTMLPosition;
@@ -461,13 +461,13 @@ export default class Sprite {
 
   measureInitialBounds() {
     if (this._initialBounds) {
-      throw new Error("Sprite already has initial bounds");
+      throw new Error('Sprite already has initial bounds');
     }
     this._inInitialPosition = true;
     if (this._offsetSprite) {
       this._initialBounds = relativeBounds(
         this.element.getBoundingClientRect() as DOMRect,
-        this._offsetSprite.initialBounds!
+        this._offsetSprite.initialBounds!,
       );
     } else {
       this._initialBounds = this.element.getBoundingClientRect() as DOMRect;
@@ -475,18 +475,19 @@ export default class Sprite {
     this._initialComputedStyle = copyComputedStyle(this.element);
     this._initialPosition = this._getCurrentPosition();
     this._originalInitialBounds = this._initialBounds;
-    this._initialCumulativeTransform = cumulativeTransform(this.element as HTMLElement);
+    this._initialCumulativeTransform = cumulativeTransform(this
+      .element as HTMLElement);
   }
 
   measureFinalBounds() {
     if (this._finalBounds) {
-      throw new Error("Sprite already has final bounds");
+      throw new Error('Sprite already has final bounds');
     }
     this._inInitialPosition = false;
     if (this._offsetSprite) {
       this._finalBounds = relativeBounds(
         this.element.getBoundingClientRect() as DOMRect,
-        this._offsetSprite.finalBounds!
+        this._offsetSprite.finalBounds!,
       );
     } else {
       this._finalBounds = this.element.getBoundingClientRect() as DOMRect;
@@ -494,7 +495,8 @@ export default class Sprite {
     this._finalComputedStyle = copyComputedStyle(this.element);
     this._finalPosition = this._getCurrentPosition();
     this._originalFinalBounds = this._finalBounds;
-    this._finalCumulativeTransform = cumulativeTransform(this.element as HTMLElement);
+    this._finalCumulativeTransform = cumulativeTransform(this
+      .element as HTMLElement);
   }
 
   /**
@@ -514,7 +516,11 @@ export default class Sprite {
     @param {string} otherWhich The other sprite's comparison attribute.
     @return {Object}
   */
-  difference(which: "initialBounds" | "finalBounds", otherSprite: Sprite, otherWhich: "initialBounds" | "finalBounds") {
+  difference(
+    which: 'initialBounds' | 'finalBounds',
+    otherSprite: Sprite,
+    otherWhich: 'initialBounds' | 'finalBounds',
+  ) {
     let x = this[which]!.left;
     let y = this[which]!.top;
     if (this._offsetSprite) {
@@ -564,7 +570,8 @@ export default class Sprite {
   */
   get cumulativeTransform() {
     if (!this._cumulativeTransform) {
-      this._cumulativeTransform = cumulativeTransform(this.element as HTMLElement);
+      this._cumulativeTransform = cumulativeTransform(this
+        .element as HTMLElement);
     }
     return this._cumulativeTransform;
   }
@@ -578,7 +585,7 @@ export default class Sprite {
   get revealed() {
     if (this._revealed == null) {
       this._revealed = !this.__element.classList.contains(
-        "ember-animated-hidden"
+        'ember-animated-hidden',
       );
     }
     return this._revealed;
@@ -588,8 +595,8 @@ export default class Sprite {
     // at the point in time when this runs, we always have either initial or
     // final measurements, but not both. So this will successfully pick the one
     // we do have, which applies to what we are currently measuring.
-    let transform =
-      (this.initialCumulativeTransform || this.finalCumulativeTransform)!;
+    let transform = (this.initialCumulativeTransform ||
+      this.finalCumulativeTransform)!;
     let bounds = (this.initialBounds || this.finalBounds)!;
 
     this._imposedStyle = {};
@@ -610,29 +617,29 @@ export default class Sprite {
     // values, but for backward compat with CSS 2.0, getComputedStyle
     // actually returns the "used" values for width and height).
 
-    if ((this.element as HTMLElement).style.width === "") {
+    if ((this.element as HTMLElement).style.width === '') {
       this._imposedStyle.width = `${bounds.width / transform.a}px`;
       // TODO: do a more sophisticated size measurement so we don't
       // need to impose border-box. If we're only imposing width OR
       // height and we weren't originally in border box, we can get an
       // incorrect change in the non-imposed dimension.
-      this._imposedStyle["box-sizing"] = "border-box";
+      this._imposedStyle['box-sizing'] = 'border-box';
     }
-    if ((this.element as HTMLElement).style.height === "") {
+    if ((this.element as HTMLElement).style.height === '') {
       this._imposedStyle.height = `${bounds.height / transform.d}px`;
-      this._imposedStyle["box-sizing"] = "border-box";
+      this._imposedStyle['box-sizing'] = 'border-box';
     }
   }
 
   _lazyOffsets(computedStyle: CSSStyleDeclaration) {
-    let offsets: undefined | { top: number, left: number };
+    let offsets: undefined | { top: number; left: number };
     return () => {
       if (!offsets) {
         offsets = findOffsets(
           this.element,
           computedStyle,
           this.transform,
-          this._offsetSprite!
+          this._offsetSprite!,
         );
       }
       return offsets;
@@ -655,13 +662,13 @@ export default class Sprite {
     }
 
     if (
-      computedStyle.position !== "absolute" &&
-      computedStyle.position !== "fixed"
+      computedStyle.position !== 'absolute' &&
+      computedStyle.position !== 'fixed'
     ) {
-      this._imposedStyle!.position = "absolute";
+      this._imposedStyle!.position = 'absolute';
     }
 
-    if (style.top === "" && style.bottom === "") {
+    if (style.top === '' && style.bottom === '') {
       // The user had no preexisting inline vertical positioning, so we take over.
       this._imposedStyle!.top = `${offsets().top}px`;
       this._imposedStyle!.marginTop = '0px';
@@ -669,10 +676,10 @@ export default class Sprite {
       // the user has inline styles for controlling vertical position,
       // but the element was not absolutely positioned, so we apply an
       // offseting transform.
-      ty = offsets().top - parseFloat(computedStyle.top || "0");
+      ty = offsets().top - parseFloat(computedStyle.top || '0');
     }
 
-    if (style.left === "" && style.bottom === "") {
+    if (style.left === '' && style.bottom === '') {
       // The user had no preexisting inline horizontal positioning, so we take over.
       this._imposedStyle!.left = `${offsets().left}px`;
       this._imposedStyle!.marginLeft = `0px`;
@@ -680,7 +687,7 @@ export default class Sprite {
       // the user has inline styles for controlling vertical position,
       // but the element was not absolutely positioned, so we apply an
       // offseting transform.
-      tx = offsets().left - parseFloat(computedStyle.left || "0");
+      tx = offsets().left - parseFloat(computedStyle.left || '0');
     }
     if (tx || ty) {
       this._transform = this.transform.mult(new Transform(1, 0, 0, 1, tx, ty));
@@ -690,12 +697,12 @@ export default class Sprite {
     this._collapsingChildren = collapsedChildren(
       this.element,
       computedStyle,
-      "top"
+      'top',
     );
   }
 
   _cacheOriginalStyles() {
-    let cache: Sprite["_styleCache"] = {};
+    let cache: Sprite['_styleCache'] = {};
     let style = (this.element as HTMLElement).style;
     Object.keys(this._imposedStyle!).forEach(property => {
       (cache as any)[property] = (style as any)[property];
@@ -716,9 +723,9 @@ export default class Sprite {
 
   unlock() {
     warn(
-      "Probable bug in ember-animated: an interrupted sprite tried to unlock itself",
+      'Probable bug in ember-animated: an interrupted sprite tried to unlock itself',
       this.stillInFlight(),
-      { id: "ember-animated-sprite-unlock" }
+      { id: 'ember-animated-sprite-unlock' },
     );
     inFlight.delete(this.element);
     let style = (this.element as HTMLElement).style;
@@ -754,24 +761,29 @@ export default class Sprite {
     @return {void}
   */
   applyStyles(styles: { [cssPropertyName: string]: string }) {
-    debugger;
     if (!this._lockMode) {
       throw new Error("can't apply styles to non-lockable sprite");
     }
     if (styles !== this._imposedStyle) {
       Object.keys(styles).forEach(property => {
         if (this._imposedStyle![property] == null) {
-          this._styleCache![property] = (this.element as HTMLElement).style.getPropertyValue(property);
+          this._styleCache![property] = (this
+            .element as HTMLElement).style.getPropertyValue(property);
         }
         this._imposedStyle![property] = styles[property];
       });
     }
     Object.keys(styles).forEach(property => {
       let val = styles[property];
-      if (typeof val === "number") {
-        throw new Error(`Sprite#applyStyles only accepts string values. Convert any numeric values to strings (with appropriate units) before calling.`);
+      if (typeof val === 'number') {
+        throw new Error(
+          `Sprite#applyStyles only accepts string values. Convert any numeric values to strings (with appropriate units) before calling.`,
+        );
       } else {
-        (this.element as HTMLElement).style.setProperty(property, styles[property]);
+        (this.element as HTMLElement).style.setProperty(
+          property,
+          styles[property],
+        );
       }
     });
   }
@@ -788,7 +800,7 @@ export default class Sprite {
   */
   hide() {
     this._revealed = false;
-    this.__element.classList.add("ember-animated-hidden");
+    this.__element.classList.add('ember-animated-hidden');
   }
 
   /**
@@ -804,7 +816,7 @@ export default class Sprite {
   reveal() {
     if (!this.revealed) {
       this._revealed = true;
-      this.__element.classList.remove("ember-animated-hidden");
+      this.__element.classList.remove('ember-animated-hidden');
     }
   }
 
@@ -824,9 +836,9 @@ export default class Sprite {
   */
   display(flag: boolean) {
     if (flag) {
-      this.__element.classList.remove("ember-animated-none");
+      this.__element.classList.remove('ember-animated-none');
     } else {
-      this.__element.classList.add("ember-animated-none");
+      this.__element.classList.add('ember-animated-none');
     }
   }
 
@@ -846,7 +858,7 @@ export default class Sprite {
     this._transform = t;
     this.applyStyles({
       transform: t.serialize(),
-      transformOrigin: "0 0",
+      transformOrigin: '0 0',
     });
   }
 
@@ -863,7 +875,7 @@ export default class Sprite {
     this._transform = t;
     this.applyStyles({
       transform: t.serialize(),
-      transformOrigin: "0 0",
+      transformOrigin: '0 0',
     });
   }
 
@@ -880,7 +892,7 @@ export default class Sprite {
     let newRelativeBounds = shiftedBounds(
       screenBounds,
       -newOffsetSprite.initialBounds!.left,
-      -newOffsetSprite.initialBounds!.top
+      -newOffsetSprite.initialBounds!.top,
     );
 
     let initialAmbientTransform = this._offsetSprite!.cumulativeTransform;
@@ -894,12 +906,12 @@ export default class Sprite {
         0,
         initialAmbientTransform.d / finalAmbientTransform.d,
         (newRelativeBounds.left - t.tx) / t.a,
-        (newRelativeBounds.top - t.ty) / t.d
-      )
+        (newRelativeBounds.top - t.ty) / t.d,
+      ),
     );
     this._transform = t;
     this._imposedStyle!.transform = t.serialize();
-    this._imposedStyle!.transformOrigin = "0 0";
+    this._imposedStyle!.transformOrigin = '0 0';
     this._imposedStyle!.top = `0px`;
     this._imposedStyle!.left = `0px`;
     this._offsetSprite = newOffsetSprite;
@@ -911,7 +923,7 @@ export default class Sprite {
     if (this._collapsingChildren) {
       let children = this._collapsingChildren;
       for (let i = 0; i < children.length; i++) {
-        children[i].classList.add("ember-animated-top-collapse");
+        children[i].classList.add('ember-animated-top-collapse');
       }
     }
   }
@@ -919,7 +931,7 @@ export default class Sprite {
     if (this._collapsingChildren) {
       let children = this._collapsingChildren;
       for (let i = 0; i < children.length; i++) {
-        children[i].classList.remove("ember-animated-top-collapse");
+        children[i].classList.remove('ember-animated-top-collapse');
       }
     }
   }
@@ -933,12 +945,12 @@ export default class Sprite {
   */
   startAtSprite(otherSprite: Sprite) {
     continueMotions(otherSprite.element, this.element);
-    let diff = this.difference("finalBounds", otherSprite, "initialBounds");
+    let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
     this.startTranslatedBy(-diff.dx, -diff.dy);
     this._initialBounds = resizedBounds(
       this._initialBounds!,
       otherSprite.initialBounds!.width,
-      otherSprite.initialBounds!.height
+      otherSprite.initialBounds!.height,
     );
     this._initialComputedStyle = otherSprite.initialComputedStyle;
     this._initialCumulativeTransform = otherSprite.initialCumulativeTransform;
@@ -956,7 +968,7 @@ export default class Sprite {
     @param {Object} point The x and y coordinates.
     @return {void}
   */
-  startAtPixel({ x, y }: { x?: number, y?: number }) {
+  startAtPixel({ x, y }: { x?: number; y?: number }) {
     let dx = 0;
     let dy = 0;
     if (x != null) {
@@ -997,19 +1009,19 @@ export default class Sprite {
     this._initialBounds = shiftedBounds(
       this._finalBounds!,
       dx - offsetX,
-      dy - offsetY
+      dy - offsetY,
     );
 
     if (this._inInitialPosition) {
       // we were already moved into our priorInitiaBounds position, so we need to compensate
       this.translate(
         this._initialBounds.left - priorInitialBounds.left,
-        this._initialBounds.top - priorInitialBounds.top
+        this._initialBounds.top - priorInitialBounds.top,
       );
     } else {
       this.translate(
         this._initialBounds.left - this._finalBounds!.left,
-        this._initialBounds.top - this._finalBounds!.top
+        this._initialBounds.top - this._finalBounds!.top,
       );
       this._inInitialPosition = true;
     }
@@ -1040,12 +1052,12 @@ export default class Sprite {
     @return {void}
   */
   endAtSprite(otherSprite: Sprite) {
-    let diff = otherSprite.difference("finalBounds", this, "initialBounds");
+    let diff = otherSprite.difference('finalBounds', this, 'initialBounds');
     this.endTranslatedBy(diff.dx, diff.dy);
     this._finalBounds = resizedBounds(
       this._finalBounds!,
       otherSprite.finalBounds!.width,
-      otherSprite.finalBounds!.height
+      otherSprite.finalBounds!.height,
     );
     this._finalComputedStyle = otherSprite.finalComputedStyle;
     this._finalCumulativeTransform = otherSprite.finalCumulativeTransform;
@@ -1062,7 +1074,7 @@ export default class Sprite {
     @param {Object} point The x and y coordinates.
     @return {void}
   */
-  endAtPixel({ x, y }: { x?: number, y?: number }) {
+  endAtPixel({ x, y }: { x?: number; y?: number }) {
     let dx = 0;
     let dy = 0;
     if (x != null) {
@@ -1104,23 +1116,28 @@ export default class Sprite {
   endRelativeTo(otherSprite: Sprite) {
     this.endTranslatedBy(
       otherSprite.finalBounds!.left - otherSprite.initialBounds!.left,
-      otherSprite.finalBounds!.top - otherSprite.initialBounds!.top
+      otherSprite.finalBounds!.top - otherSprite.initialBounds!.top,
     );
   }
 }
 
-function findOffsets(element: Element, computedStyle: CSSStyleDeclaration, transform: Transform, offsetSprite: Sprite) {
+function findOffsets(
+  element: Element,
+  computedStyle: CSSStyleDeclaration,
+  transform: Transform,
+  offsetSprite: Sprite,
+) {
   let ownBounds = element.getBoundingClientRect();
   let left = ownBounds.left;
   let top = ownBounds.top;
   let effectiveOffsetParent;
 
-  if (computedStyle.position !== "fixed") {
+  if (computedStyle.position !== 'fixed') {
     effectiveOffsetParent = offsetSprite.element;
   }
 
   if (effectiveOffsetParent) {
-    if (effectiveOffsetParent.tagName === "BODY") {
+    if (effectiveOffsetParent.tagName === 'BODY') {
       // reading scroll off body doesn't reliably work cross browser
       left += window.scrollX;
       top += window.scrollY;
@@ -1131,14 +1148,17 @@ function findOffsets(element: Element, computedStyle: CSSStyleDeclaration, trans
 
     let eopComputedStyle = getComputedStyle(effectiveOffsetParent);
     if (
-      eopComputedStyle.position !== "static" ||
-      eopComputedStyle.transform !== "none"
+      eopComputedStyle.position !== 'static' ||
+      eopComputedStyle.transform !== 'none'
     ) {
       let eopBounds = effectiveOffsetParent.getBoundingClientRect();
-      left -= eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth || "0");
-      top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth || "0");
+      left -=
+        eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth || '0');
+      top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth || '0');
 
-      let eopTransform = cumulativeTransform(effectiveOffsetParent as HTMLElement);
+      let eopTransform = cumulativeTransform(
+        effectiveOffsetParent as HTMLElement,
+      );
       left /= eopTransform.a;
       top /= eopTransform.d;
     }
@@ -1150,7 +1170,7 @@ function findOffsets(element: Element, computedStyle: CSSStyleDeclaration, trans
   return { top, left };
 }
 
-const SVGNamespace = "http://www.w3.org/2000/svg";
+const SVGNamespace = 'http://www.w3.org/2000/svg';
 
 // We have special handling for SVG elements inside SVG documents. An
 // <svg> tag itself whose parent is not SVG doesn't need special
@@ -1171,7 +1191,7 @@ function getEffectiveOffsetParent(element: HTMLElement) {
   if (isSVG(element)) {
     let cursor = element.parentElement;
     while (cursor && cursor.namespaceURI === SVGNamespace) {
-      if (cursor.tagName === "svg") {
+      if (cursor.tagName === 'svg') {
         return cursor;
       }
       cursor = cursor.parentElement;
@@ -1186,8 +1206,8 @@ function getEffectiveOffsetParent(element: HTMLElement) {
   let cursor = element.parentElement;
   while (cursor && offsetParent && cursor !== offsetParent) {
     let styles = window.getComputedStyle(cursor);
-    let t = styles.transform !== "" ? styles.transform : cursor.style.transform;
-    if (t !== "none") {
+    let t = styles.transform !== '' ? styles.transform : cursor.style.transform;
+    if (t !== 'none') {
       return cursor;
     }
     cursor = cursor.parentElement;
@@ -1202,21 +1222,13 @@ function getSVGLength(element: SVGElement, property: string): number | null {
   return null;
 }
 
-function setSVGLength(
-  element: SVGElement,
-  property: string,
-  values: any
-) {
-  if (typeof (values as any)[property] === "number") {
+function setSVGLength(element: SVGElement, property: string, values: any) {
+  if (typeof (values as any)[property] === 'number') {
     (element as any)[property].baseVal.value = (values as any)[property];
   }
 }
 
-function setAttribute(
-  element: Element,
-  attrName: string,
-  values: any
-) {
+function setAttribute(element: Element, attrName: string, values: any) {
   let value = values[attrName];
   if (value) {
     element.setAttribute(attrName as string, value);
@@ -1238,33 +1250,33 @@ function copyComputedStyle(element: Element): CopiedCSS {
 }
 
 class CopiedCSS {
-  "opacity": string;
-  "font-size": string;
-  "font-family": string;
-  "font-weight": string;
-  "color": string;
-  "background-color": string;
-  "border-color": string;
-  "letter-spacing": string;
-  "line-height": string;
-  "text-align": string;
-  "text-transform": string;
-  "padding": string;
-  "padding-top": string;
-  "padding-bottom": string;
-  "padding-left": string;
-  "padding-right": string;
-  "border-radius": string;
-  "border-top-left-radius": string;
-  "border-top-right-radius": string;
-  "border-bottom-left-radius": string;
-  "border-bottom-right-radius": string;
-  "box-shadow": string;
+  'opacity': string;
+  'font-size': string;
+  'font-family': string;
+  'font-weight': string;
+  'color': string;
+  'background-color': string;
+  'border-color': string;
+  'letter-spacing': string;
+  'line-height': string;
+  'text-align': string;
+  'text-transform': string;
+  'padding': string;
+  'padding-top': string;
+  'padding-bottom': string;
+  'padding-left': string;
+  'padding-right': string;
+  'border-radius': string;
+  'border-top-left-radius': string;
+  'border-top-right-radius': string;
+  'border-bottom-left-radius': string;
+  'border-bottom-right-radius': string;
+  'box-shadow': string;
 }
 
 const COPIED_CSS_PROPERTIES = Object.keys(new CopiedCSS());
 
-type SVGPosition = {
+interface SVGPosition {
   x: number | null;
   y: number | null;
   cx: number | null;
@@ -1273,15 +1285,15 @@ type SVGPosition = {
   width: number | null;
   height: number | null;
   transform: string | null;
-};
+}
 
-type HTMLPosition = {
+interface HTMLPosition {
   top: string | null;
   left: string | null;
   bottom: string | null;
   right: string | null;
   transform: string;
   classList: string[];
-};
+}
 
 type SpritePosition = HTMLPosition | SVGPosition;

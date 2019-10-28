@@ -27,7 +27,7 @@ export default Component.extend({
         fn(node);
       } else if (!/^\s*$/.test(node.textContent)) {
         warn('Found bare text content inside an animator', false, {
-          id: 'ember-animated-bare-text'
+          id: 'ember-animated-bare-text',
         });
       }
       if (node === lastNode) {
@@ -35,5 +35,5 @@ export default Component.extend({
       }
       node = node.nextSibling;
     }
-  }
+  },
 });

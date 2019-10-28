@@ -28,6 +28,6 @@ export default Controller.extend({
     },
     dismiss() {
       this.set('showingModal', false);
-    }
-  }
+    },
+  },
 });

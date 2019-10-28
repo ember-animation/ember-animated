@@ -20,11 +20,11 @@ module('Acceptance | here there', function(hooks) {
     assert.equal(currentURL(), '/demos/here-there');
     assert.ok(
       this.element.querySelector('.left .demo-item'),
-      'found left item'
+      'found left item',
     );
     assert.ok(
       !this.element.querySelector('.right .demo-item'),
-      'did not find left item'
+      'did not find left item',
     );
   });
 
@@ -36,39 +36,39 @@ module('Acceptance | here there', function(hooks) {
     await click(this.element.querySelector('.scenario-here-there button'));
     assert.ok(
       !this.element.querySelector('.left .demo-item'),
-      'did not find left item'
+      'did not find left item',
     );
     assert.ok(
       this.element.querySelector('.right .demo-item'),
-      'found right item'
+      'found right item',
     );
   });
 
   test('toggling with grouping', async function(assert) {
     await visit('/demos/here-there');
     await click(
-      this.element.querySelector('.scenario-here-there input[type="checkbox"]')
+      this.element.querySelector('.scenario-here-there input[type="checkbox"]'),
     );
     click(this.element.querySelector('.scenario-here-there button'));
     await time.advance(100);
     assert.ok(
       this.element.querySelector('.left .demo-item'),
-      'left item in flight'
+      'left item in flight',
     );
     assert.ok(
       this.element.querySelector('.right .demo-item'),
-      'right item in flight'
+      'right item in flight',
     );
     time.runAtSpeed(60);
     await animationsSettled();
 
     assert.ok(
       !this.element.querySelector('.left .demo-item'),
-      'did not find left item'
+      'did not find left item',
     );
     assert.ok(
       this.element.querySelector('.right .demo-item'),
-      'found right item'
+      'found right item',
     );
   });
 });

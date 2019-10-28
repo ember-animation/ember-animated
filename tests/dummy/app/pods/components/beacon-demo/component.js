@@ -27,6 +27,6 @@ export default Component.extend({
     },
     dismiss() {
       this.set('showThing', false);
-    }
-  }
+    },
+  },
 });

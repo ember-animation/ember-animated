@@ -96,8 +96,8 @@ export default Component.extend({
       !this.class,
       {
         id: 'ember-animated-container-class-arg',
-        until: '1.0.0'
-      }
+        until: '1.0.0',
+      },
     );
   },
 
@@ -177,5 +177,5 @@ export default Component.extend({
 
     this.sprite.unlock();
     this.sprite = null;
-  }).restartable()
+  }).restartable(),
 });

@@ -55,14 +55,14 @@ export class Move extends Motion {
         sprite.transform.tx,
         sprite.transform.tx + dx,
         fuzzyZero(dx) ? 0 : duration,
-        this.opts.easing
+        this.opts.easing,
       );
 
       this.yTween = new Tween(
         sprite.transform.ty,
         sprite.transform.ty + dy,
         fuzzyZero(dy) ? 0 : duration,
-        this.opts.easing
+        this.opts.easing,
       );
     } else {
       // Here we are interrupting a prior Move.
@@ -97,13 +97,13 @@ export class Move extends Motion {
         transformDiffX,
         transformDiffX + dx,
         durationX,
-        this.opts.easing
+        this.opts.easing,
       ).plus(this.prior.xTween);
       this.yTween = new Tween(
         transformDiffY,
         transformDiffY + dy,
         durationY,
-        this.opts.easing
+        this.opts.easing,
       ).plus(this.prior.yTween);
     }
 
@@ -115,7 +115,7 @@ export class Move extends Motion {
     while (!this.xTween.done || !this.yTween.done) {
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
-        this.yTween.currentValue - sprite.transform.ty
+        this.yTween.currentValue - sprite.transform.ty,
       );
       yield rAF();
     }

@@ -11,7 +11,7 @@
       writable: true,
       value: function remove() {
         this.parentNode.removeChild(this);
-      }
+      },
     });
   });
 })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);

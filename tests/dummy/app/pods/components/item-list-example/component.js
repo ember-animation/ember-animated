@@ -18,13 +18,13 @@ export default Component.extend({
     },
     set(k, v) {
       return v;
-    }
+    },
   }),
   addItem: task(function*() {
     this.get('motionService').willAnimate({
       task: current,
       duration: this.get('duration'),
-      component: this
+      component: this,
     });
     let items = this.get('items');
     this.set(
@@ -32,14 +32,14 @@ export default Component.extend({
       items
         .concat([makeRandomItem()])
         .sort(this.currentSort)
-        .map(elt => ({ id: elt.id }))
+        .map(elt => ({ id: elt.id })),
     );
   }),
   removeItem: task(function*(which) {
     this.get('motionService').willAnimate({
       task: current,
       duration: this.get('duration'),
-      component: this
+      component: this,
     });
     let items = this.get('items');
     this.set('items', items.filter(i => i !== which));
@@ -50,8 +50,8 @@ export default Component.extend({
     },
     removeItem(which) {
       this.get('removeItem').perform(which);
-    }
-  }
+    },
+  },
 });
 
 function numeric(a, b) {

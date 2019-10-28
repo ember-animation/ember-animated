@@ -27,7 +27,7 @@ export function animationsSettled() {
 export function bounds(element) {
   return relativeBounds(
     element.getBoundingClientRect(),
-    document.querySelector('#ember-testing').getBoundingClientRect()
+    document.querySelector('#ember-testing').getBoundingClientRect(),
   );
 }
 
@@ -40,7 +40,7 @@ export function shape(element) {
     a: transform.a,
     b: transform.b,
     c: transform.c,
-    d: transform.d
+    d: transform.d,
   };
 }
 
@@ -64,11 +64,11 @@ function checkFields(fields, tolerance, value, expected, message) {
 
   this.pushResult({
     result: fields.every(
-      field => Math.abs(value[field] - expected[field]) < tolerance
+      field => Math.abs(value[field] - expected[field]) < tolerance,
     ),
     actual: filteredActual,
     expected: filteredExpected,
-    message: message
+    message: message,
   });
 }
 
@@ -82,7 +82,7 @@ export async function visuallyConstant(target, fn, message) {
     0.25,
     before,
     after,
-    message
+    message,
   );
 }
 
@@ -94,11 +94,11 @@ export function approxEqualColors(value, expected, message) {
   this.pushResult({
     result: channels.every(
       channel =>
-        Math.abs(valueColor[channel] - expectedColor[channel]) < tolerance
+        Math.abs(valueColor[channel] - expectedColor[channel]) < tolerance,
     ),
     actual: value,
     expected,
-    message
+    message,
   });
 }
 
@@ -115,7 +115,7 @@ export function setupAnimationTest(hooks) {
     assert.equalBounds = checkFields.bind(
       assert,
       ['height', 'left', 'top', 'width'],
-      0.25
+      0.25,
     );
 
     // closeness checks accept a custom pixel tolerance
@@ -125,7 +125,7 @@ export function setupAnimationTest(hooks) {
       'height',
       'left',
       'top',
-      'width'
+      'width',
     ]);
 
     assert.visuallyConstant = visuallyConstant;

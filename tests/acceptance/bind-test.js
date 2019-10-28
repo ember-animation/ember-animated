@@ -30,7 +30,7 @@ module('Acceptance | bind', function(hooks) {
 
     await click(findByText(this.element, 'button', '+'));
     let finalNumber = parseInt(
-      this.element.querySelector('.left-count').textContent
+      this.element.querySelector('.left-count').textContent,
     );
     assert.equal(finalNumber, number + 1);
   });

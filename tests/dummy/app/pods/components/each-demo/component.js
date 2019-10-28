@@ -17,5 +17,5 @@ export default Component.extend({
 
   removeItem(item) {
     this.set('items', this.items.filter(i => i !== item));
-  }
+  },
 });

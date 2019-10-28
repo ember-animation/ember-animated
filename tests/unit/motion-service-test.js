@@ -58,7 +58,7 @@ module('Unit | Service | motion', function(hooks) {
       'resolving animation 1',
       'p2 matching animators finished',
       'resolving animation 2',
-      'p1 matching animators finished'
+      'p1 matching animators finished',
     ]);
   });
 
@@ -78,12 +78,12 @@ module('Unit | Service | motion', function(hooks) {
 
     let { matchingAnimatorsFinished } = await p1;
     matchingAnimatorsFinished.then(() =>
-      log.push('p1 matching animators finished')
+      log.push('p1 matching animators finished'),
     );
 
     matchingAnimatorsFinished = (await p2).matchingAnimatorsFinished;
     matchingAnimatorsFinished.then(() =>
-      log.push('p2 matching animators finished')
+      log.push('p2 matching animators finished'),
     );
 
     await wait(5);
@@ -97,7 +97,7 @@ module('Unit | Service | motion', function(hooks) {
       'p1 matching animators finished',
       'p2 matching animators finished',
       'resolving animation 1',
-      'resolving animation 2'
+      'resolving animation 2',
     ]);
   });
 });

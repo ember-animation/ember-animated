@@ -4,13 +4,23 @@ import RSVP from 'rsvp';
 import { EmberRunTimer } from '@ember/runloop/types';
 
 if (!(window as any).Promise) {
-  warn("Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.", false, { id: "ember-animated-missing-microtask" });
-  window.Promise = RSVP.Promise as any as PromiseConstructor;
+  warn(
+    'Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.',
+    false,
+    { id: 'ember-animated-missing-microtask' },
+  );
+  window.Promise = (RSVP.Promise as any) as PromiseConstructor;
 }
 
-const cancellation: WeakMap<Promise<any>, (p: Promise<any>) => void> = new WeakMap();
+const cancellation: WeakMap<
+  Promise<any>,
+  (p: Promise<any>) => void
+> = new WeakMap();
 
-export function registerCancellation(promise: Promise<any>, handler: (p: Promise<any>) => void) {
+export function registerCancellation(
+  promise: Promise<any>,
+  handler: (p: Promise<any>) => void,
+) {
   cancellation.set(promise, handler);
 }
 
@@ -35,7 +45,7 @@ export function rAF() {
   let promise = new Promise(r => {
     resolve = r;
   });
-  nextFrameWaiters.push({ resolve: resolve as any as () => void, promise });
+  nextFrameWaiters.push({ resolve: (resolve as any) as () => void, promise });
   registerCancellation(promise, removeWaiter);
   return promise;
 }
@@ -61,7 +71,7 @@ function removeWaiter(promise: Promise<any>) {
 }
 
 let nextFrame: number | null = null;
-let nextFrameWaiters: ({ promise: Promise<any>, resolve: () => void })[] = [];
+let nextFrameWaiters: ({ promise: Promise<any>; resolve: () => void })[] = [];
 
 // rAF guarantees that callbacks within the same frame will see the
 // same clock. We stash it here so that arbitrary code can easily ask
@@ -73,7 +83,7 @@ export function microwait() {
   return new Promise(resolve => resolve());
 }
 
-export function wait(ms=0) {
+export function wait(ms = 0) {
   if (clock.now === originalClock) {
     let ticket: number;
     let promise = new RSVP.Promise(resolve => {
@@ -104,8 +114,6 @@ export function wait(ms=0) {
   }
 }
 
-
-
 export function afterRender() {
   let ticket: EmberRunTimer;
   let promise = new Promise(resolve => {
@@ -120,17 +128,19 @@ export function afterRender() {
 // This provides a unified place to hook into time control for testing.
 export let clock = {
   now() {
-    return (new Date()).getTime();
-  }
+    return new Date().getTime();
+  },
 };
 
 const originalClock = clock.now;
 
 export function allSettled(promises: Promise<any>[]) {
-  return Promise.all(promises.map(p => {
-    if (p) {
-      return p.catch(() => null);
-    }
-    return;
-  }));
+  return Promise.all(
+    promises.map(p => {
+      if (p) {
+        return p.catch(() => null);
+      }
+      return;
+    }),
+  );
 }

@@ -80,7 +80,7 @@ module('Unit | Motion', function(hooks) {
         error => {
           assert.equal(error ? error.message : undefined, 'simulated failure');
           done();
-        }
+        },
       );
     });
   });
@@ -109,7 +109,7 @@ module('Unit | Motion', function(hooks) {
         error => {
           assert.equal(error ? error.message : undefined, 'simulated failure');
           done();
-        }
+        },
       );
     });
   });

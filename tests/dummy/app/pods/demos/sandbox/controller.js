@@ -9,38 +9,38 @@ export default Controller.extend({
       let width = sprite.finalBounds.width;
 
       sprite.applyStyles({
-        overflow: 'hidden'
+        overflow: 'hidden',
       });
 
       sprite.applyStyles({
-        width: width * 0.2
-      });
-
-      yield wait(duration / 5);
-
-      sprite.applyStyles({
-        width: width * 0.4
+        width: width * 0.2,
       });
 
       yield wait(duration / 5);
 
       sprite.applyStyles({
-        width: width * 0.6
+        width: width * 0.4,
       });
 
       yield wait(duration / 5);
 
       sprite.applyStyles({
-        width: width * 0.8
+        width: width * 0.6,
       });
 
       yield wait(duration / 5);
 
       sprite.applyStyles({
-        width: width
+        width: width * 0.8,
+      });
+
+      yield wait(duration / 5);
+
+      sprite.applyStyles({
+        width: width,
       });
 
       yield wait(duration / 5);
     }
-  }
+  },
 });

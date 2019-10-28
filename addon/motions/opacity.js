@@ -21,9 +21,9 @@ export default function opacity(sprite, opts) {
 export function fadeIn(sprite, opts) {
   let innerOpts = Object.assign(
     {
-      to: 1
+      to: 1,
     },
-    opts
+    opts,
   );
   return opacity(sprite, innerOpts);
 }
@@ -44,9 +44,9 @@ export function fadeIn(sprite, opts) {
 export function fadeOut(sprite, opts) {
   let innerOpts = Object.assign(
     {
-      to: 0
+      to: 0,
     },
-    opts
+    opts,
   );
   return opacity(sprite, innerOpts);
 }
@@ -98,12 +98,12 @@ export class Opacity extends Motion {
       from,
       to,
       proportionalDuration,
-      this.opts.easing !== undefined ? this.opts.easing : linear
+      this.opts.easing !== undefined ? this.opts.easing : linear,
     );
 
     while (!this.tween.done) {
       sprite.applyStyles({
-        opacity: this.tween.currentValue
+        opacity: this.tween.currentValue,
       });
       yield rAF();
     }

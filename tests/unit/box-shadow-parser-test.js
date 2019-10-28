@@ -14,7 +14,7 @@ module('Unit | BoxShadow', function(hooks) {
     test('parsing ' + authoredShadow, function(assert) {
       target.style['box-shadow'] = authoredShadow;
       let shadows = BoxShadow.fromComputedStyle(
-        getComputedStyle(target)['box-shadow']
+        getComputedStyle(target)['box-shadow'],
       );
       assert.equal(shadows.length, expectedShadows.length);
       expectedShadows.forEach((expectedShadow, index) => {
@@ -24,17 +24,17 @@ module('Unit | BoxShadow', function(hooks) {
         assert.equal(
           shadow.blur,
           expectedShadow.blur || 0,
-          `shadow ${index} blur`
+          `shadow ${index} blur`,
         );
         assert.equal(
           shadow.spread,
           expectedShadow.spread,
-          `shadow ${index} spread`
+          `shadow ${index} spread`,
         );
         assert.equal(
           shadow.inset,
           expectedShadow.inset || false,
-          `shadow ${index} inset`
+          `shadow ${index} inset`,
         );
         assert.equal(shadow.color.r, expectedShadow.r, `shadow ${index} r`);
         assert.equal(shadow.color.g, expectedShadow.g, `shadow ${index} g`);
@@ -42,7 +42,7 @@ module('Unit | BoxShadow', function(hooks) {
         assert.equal(
           shadow.color.a,
           expectedShadow.a == null ? 1 : expectedShadow.a,
-          `shadow ${index} a`
+          `shadow ${index} a`,
         );
       });
     });
@@ -51,13 +51,13 @@ module('Unit | BoxShadow', function(hooks) {
   example(`none`, []);
   example(``, []);
   example(`0 0 20px black`, [
-    { x: 0, y: 0, blur: 20, spread: 0, r: 0, g: 0, b: 0 }
+    { x: 0, y: 0, blur: 20, spread: 0, r: 0, g: 0, b: 0 },
   ]);
   example(`1px 2px 3px 4px rgba(5, 6, 7, 0.5) inset`, [
-    { x: 1, y: 2, blur: 3, spread: 4, r: 5, g: 6, b: 7, a: 0.5, inset: true }
+    { x: 1, y: 2, blur: 3, spread: 4, r: 5, g: 6, b: 7, a: 0.5, inset: true },
   ]);
   example(`1px 2px 3px 4px rgba(5, 6, 7, 0.5) inset, 0 0 20px black`, [
     { x: 1, y: 2, blur: 3, spread: 4, r: 5, g: 6, b: 7, a: 0.5, inset: true },
-    { x: 0, y: 0, blur: 20, spread: 0, r: 0, g: 0, b: 0 }
+    { x: 0, y: 0, blur: 20, spread: 0, r: 0, g: 0, b: 0 },
   ]);
 });
