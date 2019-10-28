@@ -81,7 +81,7 @@ module('Unit | Sprite', function(hooks) {
 
   test('Scaled ancestor', function(assert) {
     environment.style.transform = 'scale(0.5)';
-    environment.style.transformOrigin = '0 0';
+    environment.style['transform-origin'] = '0 0';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
@@ -94,7 +94,7 @@ module('Unit | Sprite', function(hooks) {
 
   test('Scaled offsetParent', function(assert) {
     offsetParent.style.transform = 'scale(0.5)';
-    offsetParent.style.transformOrigin = '0 0';
+    offsetParent.style['transform-origin'] = '0 0';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
@@ -397,8 +397,8 @@ module('Unit | Sprite', function(hooks) {
     target.style.width = '5453px';
     target.style.height = '6564px';
     target.style.position = 'absolute';
-    target.style.boxSizing = 'content-box';
-    target.style.marginTop = '8px';
+    target.style['box-sizing'] = 'content-box';
+    target.style['margin-top'] = '8px';
     let m = sprite(target);
     m.lock();
     target.style.top = '3232px';
@@ -407,21 +407,21 @@ module('Unit | Sprite', function(hooks) {
     target.style.height = '6565px';
     target.style.position = 'fixed';
     target.style.boxSizing = 'border-box';
-    target.style.marginTop = '9px';
+    target.style['margin-top'] = '9px';
     m.unlock();
     assert.equal(target.style.top, '3232px', 'top');
     assert.equal(target.style.left, '2424px', 'left');
     assert.equal(target.style.width, '5454px', 'width');
     assert.equal(target.style.height, '6565px', 'height');
     assert.equal(target.style.position, 'fixed', 'position');
-    assert.equal(target.style.boxSizing, 'border-box', 'box-sizing');
-    assert.equal(target.style.marginTop, '9px', 'margin');
+    assert.equal(target.style['box-sizing'], 'border-box', 'box-sizing');
+    assert.equal(target.style['margin-top'], '9px', 'margin');
   });
 
   test('within scrolling context above offset parent', function(assert) {
-    environment.style.overflowY = 'scroll';
+    environment.style['overflow-y'] = 'scroll';
     environment.style.height = '400px';
-    offsetParent.style.marginTop = '200px';
+    offsetParent.style['margin-top'] = '200px';
     offsetParent.style.height = '600px';
     environment.scrollTop = 300;
     let m = sprite(target);
@@ -433,12 +433,12 @@ module('Unit | Sprite', function(hooks) {
   test('within scrolling offset parent', function(assert) {
     intermediate.style.height = '4000px';
     intermediate.style.width = '200%';
-    intermediate.style.paddingTop = '2000px';
+    intermediate.style['padding-top'] = '2000px';
     offsetParent.style.overflow = 'scroll';
     offsetParent.style.height = '100px';
     offsetParent.style.width = '100%';
-    offsetParent.scrollTop = 2000;
-    offsetParent.scrollLeft = 10;
+    offsetParent['scroll-top'] = 2000;
+    offsetParent['scroll-left'] = 10;
     let m = sprite(target);
     assert.visuallyConstant(target, () => {
       m.lock();
@@ -913,17 +913,17 @@ module('Unit | Sprite', function(hooks) {
   }
 
   function addMargins(elt) {
-    elt.style.marginTop = '40px';
-    elt.style.marginLeft = '50px';
-    elt.style.marginRight = '60px';
-    elt.style.marginBottom = '70px';
+    elt.style['margin-top'] = '40px';
+    elt.style['margin-left'] = '50px';
+    elt.style['margin-right'] = '60px';
+    elt.style['margin-bottom'] = '70px';
   }
 
   function addPadding(elt) {
-    elt.style.paddingTop = '8px';
-    elt.style.paddingLeft = '9px';
-    elt.style.paddingRight = '10px';
-    elt.style.paddingBottom = '11px';
+    elt.style['padding-top'] = '8px';
+    elt.style['padding-left'] = '9px';
+    elt.style['padding-right'] = '10px';
+    elt.style['padding-bottom'] = '11px';
   }
 });
 

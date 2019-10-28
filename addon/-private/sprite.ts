@@ -671,7 +671,7 @@ export default class Sprite {
     if (style.top === '' && style.bottom === '') {
       // The user had no preexisting inline vertical positioning, so we take over.
       this._imposedStyle!.top = `${offsets().top}px`;
-      this._imposedStyle!.marginTop = '0px';
+      this._imposedStyle!['margin-top'] = '0px';
     } else if (this._imposedStyle!.position) {
       // the user has inline styles for controlling vertical position,
       // but the element was not absolutely positioned, so we apply an
@@ -682,7 +682,7 @@ export default class Sprite {
     if (style.left === '' && style.bottom === '') {
       // The user had no preexisting inline horizontal positioning, so we take over.
       this._imposedStyle!.left = `${offsets().left}px`;
-      this._imposedStyle!.marginLeft = `0px`;
+      this._imposedStyle!['margin-left'] = `0px`;
     } else if (this._imposedStyle!.position) {
       // the user has inline styles for controlling vertical position,
       // but the element was not absolutely positioned, so we apply an
@@ -728,10 +728,9 @@ export default class Sprite {
       { id: 'ember-animated-sprite-unlock' },
     );
     inFlight.delete(this.element);
-    let style = (this.element as HTMLElement).style;
     let cache = this._styleCache!;
     Object.keys(cache).forEach(property => {
-      style.setProperty(property, cache[property]);
+      setStyle(this.element as HTMLElement, property, cache[property]);
     });
 
     // In case the user has caused our inline-style-driven position
@@ -748,8 +747,8 @@ export default class Sprite {
 
     ```js
     sprite.applyStyles({
-      'opacity': 0,
-      'z-index': 1
+      'opacity': '0',
+      'z-index': '1'
     });
     ```
 
@@ -775,15 +774,12 @@ export default class Sprite {
     }
     Object.keys(styles).forEach(property => {
       let val = styles[property];
-      if (typeof val === 'number') {
+      if (typeof val !== 'string') {
         throw new Error(
-          `Sprite#applyStyles only accepts string values. Convert any numeric values to strings (with appropriate units) before calling.`,
+          `Sprite#applyStyles only accepts string values. Convert any numeric values to strings (with appropriate units) before calling. You passed ${property}=${val}`,
         );
       } else {
-        (this.element as HTMLElement).style.setProperty(
-          property,
-          styles[property],
-        );
+        setStyle(this.element as HTMLElement, property, styles[property]);
       }
     });
   }
@@ -858,7 +854,7 @@ export default class Sprite {
     this._transform = t;
     this.applyStyles({
       transform: t.serialize(),
-      transformOrigin: '0 0',
+      'transform-origin': '0 0',
     });
   }
 
@@ -875,7 +871,7 @@ export default class Sprite {
     this._transform = t;
     this.applyStyles({
       transform: t.serialize(),
-      transformOrigin: '0 0',
+      'transform-origin': '0 0',
     });
   }
 
@@ -911,7 +907,7 @@ export default class Sprite {
     );
     this._transform = t;
     this._imposedStyle!.transform = t.serialize();
-    this._imposedStyle!.transformOrigin = '0 0';
+    this._imposedStyle!['transform-origin'] = '0 0';
     this._imposedStyle!.top = `0px`;
     this._imposedStyle!.left = `0px`;
     this._offsetSprite = newOffsetSprite;
@@ -1235,6 +1231,15 @@ function setAttribute(element: Element, attrName: string, values: any) {
   } else {
     element.removeAttribute(attrName as string);
   }
+}
+
+function setStyle(element: HTMLElement, property: string, value: string) {
+  if (/[A-Z]/.test(property)) {
+    throw new Error(
+      `applyeStyles expects all CSS property names to be formatted as in CSS. Not camelcased. You passed ${property}.`,
+    );
+  }
+  element.style.setProperty(property, value);
 }
 
 // getComputedStyle returns a *live* CSSStyleDeclaration that will

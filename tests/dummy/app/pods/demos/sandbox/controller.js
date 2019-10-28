@@ -13,31 +13,31 @@ export default Controller.extend({
       });
 
       sprite.applyStyles({
-        width: width * 0.2,
+        width: `${width * 0.2}px`,
       });
 
       yield wait(duration / 5);
 
       sprite.applyStyles({
-        width: width * 0.4,
+        width: `${width * 0.4}px`,
       });
 
       yield wait(duration / 5);
 
       sprite.applyStyles({
-        width: width * 0.6,
+        width: `${width * 0.6}px`,
       });
 
       yield wait(duration / 5);
 
       sprite.applyStyles({
-        width: width * 0.8,
+        width: `${width * 0.8}px`,
       });
 
       yield wait(duration / 5);
 
       sprite.applyStyles({
-        width: width,
+        width: `${width}px`,
       });
 
       yield wait(duration / 5);

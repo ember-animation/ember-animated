@@ -76,8 +76,8 @@ module('Unit | Move', function(hooks) {
   });
 
   test('simple motion, interrupted', function(assert) {
-    target.style.marginLeft = '0px';
-    target.style.marginTop = '0px';
+    target.style['margin-left'] = '0px';
+    target.style['margin-top'] = '0px';
     target.style.position = 'relative';
 
     let p = Sprite.offsetParentStartingAt(target);

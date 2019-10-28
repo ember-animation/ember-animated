@@ -3,7 +3,19 @@
 {{/animated-beacon}}
 
 {{#animated-if showThing use=transition duration=500}}
-  <div class="message" {{action "dismiss"}}>
+  <div class="beacon-demo--message" {{action "dismiss"}}>
     Hello
   </div>
 {{/animated-if}}
+
+<style>
+  .beacon-demo--message {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    border: 1px solid black;
+    background-color: yellow;
+  }
+</style>

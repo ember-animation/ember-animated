@@ -71,8 +71,8 @@ export class Resize extends Motion {
 
     while (!this.widthTween.done || !this.heightTween.done) {
       sprite.applyStyles({
-        width: this.widthTween.currentValue,
-        height: this.heightTween.currentValue,
+        width: `${this.widthTween.currentValue}px`,
+        height: `${this.heightTween.currentValue}px`,
       });
       yield rAF();
     }

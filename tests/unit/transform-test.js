@@ -44,7 +44,7 @@ module('Unit | Transform', function(hooks) {
 
   test('Scale x (origin top left)', function(assert) {
     target.style.transform = 'scaleX(0.5)';
-    target.style.transformOrigin = '0px 0px';
+    target.style['transform-origin'] = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
       new Transform(0.5, 0, 0, 1, 0, 0),
@@ -132,7 +132,7 @@ module('Unit | Transform', function(hooks) {
   test('Scale then translate (origin top left)', function(assert) {
     target.style.transform =
       'scaleX(0.5) scaleY(0.7) translateX(123px) translateY(456px)';
-    target.style.transformOrigin = '0px 0px';
+    target.style['transform-origin'] = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
       new Transform(0.5, 0, 0, 0.7, 123 * 0.5, 456 * 0.7),
@@ -142,7 +142,7 @@ module('Unit | Transform', function(hooks) {
   test('Translate then scale (origin top left)', function(assert) {
     target.style.transform =
       'translateX(123px) translateY(456px) scaleX(0.5) scaleY(0.7)';
-    target.style.transformOrigin = '0px 0px';
+    target.style['transform-origin'] = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
       new Transform(0.5, 0, 0, 0.7, 123, 456),
@@ -152,7 +152,7 @@ module('Unit | Transform', function(hooks) {
   test('Stacked transforms', function(assert) {
     myParent.style.transform = 'translateX(-50px) translateY(-20px)';
     target.style.transform = 'translateX(123px) translateY(456px)';
-    target.style.transformOrigin = '0px 0px';
+    target.style['transform-origin'] = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
       new Transform(1, 0, 0, 1, 123 - 50, 456 - 20),
@@ -161,9 +161,9 @@ module('Unit | Transform', function(hooks) {
 
   test('Stacked transforms (origin top left)', function(assert) {
     myParent.style.transform = 'translateX(-50px) translateY(-20px)';
-    myParent.style.transformOrigin = '0px 0px';
+    myParent.style['transform-origin'] = '0px 0px';
     target.style.transform = 'translateX(123px) translateY(456px)';
-    target.style.transformOrigin = '0px 0px';
+    target.style['transform-origin'] = '0px 0px';
     assert.equalTransform(
       cumulativeTransform(target),
       new Transform(1, 0, 0, 1, 123 - 50, 456 - 20),
@@ -207,7 +207,7 @@ module('Unit | Transform', function(hooks) {
   test('Rotate and translate (origin top left)', function(assert) {
     let s = Math.sin((45 * Math.PI) / 180);
     target.style.transform = 'translateX(123px) rotate(45deg)';
-    target.style.transformOrigin = '0px 0px';
+    target.style['transform-origin'] = '0px 0px';
     assert.equalTransform(
       ownTransform(target),
       new Transform(s, s, -s, s, 123, 0),
@@ -225,11 +225,11 @@ module('Unit | Transform', function(hooks) {
   ].forEach(function(transform) {
     test(`Adjusts transform-origin correctly for ${transform}, relative to top left`, function(assert) {
       target.style.transform = transform;
-      target.style.transformOrigin = '0px 0px';
+      target.style['transform-origin'] = '0px 0px';
       let withTopLeftOrigin = ownTransform(target);
 
       target.style.transform = `translateX(-50%) translateY(-50%) ${transform} translateX(50%) translateY(50%)`;
-      target.style.transformOrigin = '50% 50%';
+      target.style['transform-origin'] = '50% 50%';
       let withDefaultOrigin = ownTransform(target);
 
       assert.equalTransform(withDefaultOrigin, withTopLeftOrigin);
@@ -237,11 +237,11 @@ module('Unit | Transform', function(hooks) {
 
     test(`Adjusts transform-origin correctly for ${transform}, relative to center`, function(assert) {
       target.style.transform = transform;
-      target.style.transformOrigin = '50% 50%';
+      target.style['transform-origin'] = '50% 50%';
       let withDefaultOrigin = ownTransform(target);
 
       target.style.transform = `translateX(50%) translateY(50%) ${transform} translateX(-50%) translateY(-50%)`;
-      target.style.transformOrigin = '0px 0px';
+      target.style['transform-origin'] = '0px 0px';
       let withTopLeftOrigin = ownTransform(target);
 
       assert.equalTransform(withTopLeftOrigin, withDefaultOrigin);

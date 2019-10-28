@@ -103,7 +103,7 @@ export class Opacity extends Motion {
 
     while (!this.tween.done) {
       sprite.applyStyles({
-        opacity: this.tween.currentValue,
+        opacity: `${this.tween.currentValue}`,
       });
       yield rAF();
     }

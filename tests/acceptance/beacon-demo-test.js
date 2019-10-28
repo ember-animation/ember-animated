@@ -22,7 +22,7 @@ module('Acceptance | beacon demo', function(hooks) {
     time.pause();
     await click(this.element.querySelector('button'));
     await time.advance(10);
-    let modal = bounds(this.element.querySelector('.message'));
+    let modal = bounds(this.element.querySelector('.beacon-demo--message'));
     let button = bounds(this.element.querySelector('button'));
     assert.closeBounds(5, modal, button, 'modal should be near button');
   });
@@ -33,10 +33,10 @@ module('Acceptance | beacon demo', function(hooks) {
     await animationsSettled();
 
     time.pause();
-    await click(this.element.querySelector('.message'));
+    await click(this.element.querySelector('.beacon-demo--message'));
     await time.advance(490);
 
-    let modal = bounds(this.element.querySelector('.message'));
+    let modal = bounds(this.element.querySelector('.beacon-demo--message'));
     let button = bounds(this.element.querySelector('button'));
     assert.closeBounds(5, modal, button, 'modal should be near button');
   });
