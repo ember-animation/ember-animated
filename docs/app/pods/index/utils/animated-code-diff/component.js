@@ -71,7 +71,7 @@ export default Component.extend({
 
         for (let i = 0; i < chars.length; i++) {
           sprite.applyStyles({
-            width: characterWidth * (i + 1),
+            width: `${characterWidth * (i + 1)}`,
           });
 
           if (chars[i] !== ' ') {

@@ -20,7 +20,7 @@ export default Component.extend({
   transition: function*(context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
     insertedSprites.forEach(sprite => {
-      sprite.applyStyles({ 'z-index': 1 });
+      sprite.applyStyles({ 'z-index': '1' });
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeOut });
     });
@@ -28,7 +28,7 @@ export default Component.extend({
     keptSprites.forEach(move);
 
     removedSprites.forEach(sprite => {
-      sprite.applyStyles({ 'z-index': 1 });
+      sprite.applyStyles({ 'z-index': '1' });
       sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite, { easing: easeIn });
     });

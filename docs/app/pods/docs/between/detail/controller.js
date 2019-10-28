@@ -15,7 +15,7 @@ export default Controller.extend({
     // received and sent sprites are flying above all the others
     receivedSprites.concat(sentSprites).forEach(sprite => {
       sprite.applyStyles({
-        'z-index': 1,
+        'z-index': '1',
       });
     });
 
