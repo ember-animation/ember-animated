@@ -45,15 +45,6 @@ export default EmberObject.extend({
       () => null,
     );
     context.insertedSprites;
-
-    // Each motion contains its own promise that is used by
-    // TransitionContext#animate so that a transition can wait for a
-    // single motion to finish (as opposed to waiting for the whole
-    // transition Task to finish). In this test harness, there is no
-    // distinction, and this extra promises will just generate console
-    // noise if it remains unconsumed.
-    motion._promise.then(() => {}, () => {});
-
     return this.get('runner').perform(motion);
   },
   isAnimating: alias('runner.isRunning'),

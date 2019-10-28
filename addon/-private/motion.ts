@@ -14,18 +14,10 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
   private _motionList: Motion[] | undefined;
   private _inheritedMotionList: Motion[] | undefined;
 
-  private _promise: Promise<unknown>;
-  private _resolve!: () => void;
-  private _reject!: (err: any) => void;
-
   constructor(readonly sprite: Sprite, readonly opts: Partial<T> = {}) {
     this.sprite = sprite;
     this.opts = opts;
     this._setupMotionList();
-    this._promise = new Promise((resolve, reject) => {
-      this._resolve = resolve;
-      this._reject = reject;
-    });
   }
 
   // All motions should read this to decide how long to animate. It allows users
@@ -77,12 +69,6 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
         this.interrupted(others);
       }
       yield* this.animate();
-      this._resolve();
-    } catch (err) {
-      if (err.message !== 'TaskCancelation') {
-        this._reject(err);
-      }
-      throw err;
     } finally {
       rAF().then(() => this._clearMotionList());
     }
