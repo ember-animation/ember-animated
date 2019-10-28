@@ -9,7 +9,7 @@ module('Integration | Component | animated-beacon', function(hooks) {
 
   test('beacons are available in transitions', async function(assert) {
     assert.expect(1);
-    this.set('transition', function * ({ beacons }) {
+    this.set('transition', function*({ beacons }) {
       assert.ok(beacons.thegroup, 'expected one beacon');
     });
 
@@ -33,7 +33,7 @@ module('Integration | Component | animated-beacon', function(hooks) {
 
     let alpha;
 
-    this.set('transition', function * ({ insertedSprites, beacons }) {
+    this.set('transition', function*({ insertedSprites, beacons }) {
       let sprite = insertedSprites[0];
       sprite.startAtSprite(beacons.thegroup);
       let value = bounds(sprite.element);
@@ -47,8 +47,16 @@ module('Integration | Component | animated-beacon', function(hooks) {
       // dimensions (the sprite's element physically does not -- it's
       // up to a motion like scale to decide to do that when it's
       // wanted)
-      assert.equal(beacons.thegroup.initialBounds.width, expected.width, 'width');
-      assert.equal(beacons.thegroup.initialBounds.height, expected.height, 'height');
+      assert.equal(
+        beacons.thegroup.initialBounds.width,
+        expected.width,
+        'width'
+      );
+      assert.equal(
+        beacons.thegroup.initialBounds.height,
+        expected.height,
+        'height'
+      );
     });
 
     await render(hbs`
@@ -74,6 +82,4 @@ module('Integration | Component | animated-beacon', function(hooks) {
     await settled();
     await animationsSettled();
   });
-
-
 });

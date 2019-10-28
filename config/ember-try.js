@@ -7,7 +7,7 @@ module.exports = function() {
     getChannelURL('release'),
     getChannelURL('beta'),
     getChannelURL('canary')
-  ]).then((urls) => {
+  ]).then(urls => {
     return {
       useYarn: true,
 
@@ -17,19 +17,21 @@ module.exports = function() {
           npm: {
             devDependencies: {
               'ember-source': '~2.12.0',
-              'ember-native-dom-event-dispatcher': '~0.6.4',
+              'ember-native-dom-event-dispatcher': '~0.6.4'
             }
           }
         },
         {
           name: 'ember-lts-2.16',
           env: {
-            EMBER_OPTIONAL_FEATURES: JSON.stringify({ 'jquery-integration': true })
+            EMBER_OPTIONAL_FEATURES: JSON.stringify({
+              'jquery-integration': true
+            })
           },
           npm: {
             devDependencies: {
               'ember-source': '~2.16.0',
-              'ember-native-dom-event-dispatcher': '~0.6.4',
+              'ember-native-dom-event-dispatcher': '~0.6.4'
             }
           }
         },
@@ -39,7 +41,7 @@ module.exports = function() {
           npm: {
             devDependencies: {
               'ember-source': '~2.18.0',
-              'ember-native-dom-event-dispatcher': '~0.6.4',
+              'ember-native-dom-event-dispatcher': '~0.6.4'
             }
           }
         },

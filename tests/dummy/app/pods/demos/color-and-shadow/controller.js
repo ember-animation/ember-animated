@@ -5,7 +5,7 @@ import boxShadow from 'ember-animated/motions/box-shadow';
 const backgroundColor = adjustColor.property('background-color');
 
 export default class extends Controller {
-  * transition({ receivedSprites }) {
+  *transition({ receivedSprites }) {
     receivedSprites.forEach(backgroundColor);
     receivedSprites.forEach(boxShadow);
   }

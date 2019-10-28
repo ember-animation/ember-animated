@@ -9,5 +9,4 @@ module('Acceptance | direct style', function(hooks) {
     await visit('/demos/direct-style');
     assert.equal(currentURL(), '/demos/direct-style');
   });
-
 });

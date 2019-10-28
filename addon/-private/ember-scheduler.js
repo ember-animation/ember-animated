@@ -4,13 +4,8 @@ import { addObserver } from '@ember/object/observers';
 import { computed, set } from '@ember/object';
 import ComputedProperty from '@ember/object/computed';
 import { gte } from 'ember-compatibility-helpers';
-import { assign as objectAssign }  from '@ember/polyfills';
-import {
-  spawn,
-  current,
-  stop,
-  logErrors
-} from './scheduler';
+import { assign as objectAssign } from '@ember/polyfills';
+import { spawn, current, stop, logErrors } from './scheduler';
 import Ember from 'ember';
 import { microwait } from '..';
 import { DEBUG } from '@glimmer/env';
@@ -60,10 +55,8 @@ if (gte('3.10.0')) {
       }
     }
   };
-
 }
 objectAssign(TaskProperty.prototype, {
-
   restartable() {
     this._bufferPolicy = cancelAllButLast;
     return this;
@@ -88,7 +81,7 @@ objectAssign(TaskProperty.prototype, {
       for (let i = 0; i < this._observes.length; ++i) {
         let name = this._observes[i];
         let handlerName = `_ember_animated_handler_${handlerCounter++}`;
-        proto[handlerName] = function (...args) {
+        proto[handlerName] = function(...args) {
           let task = this.get(taskName);
           scheduleOnce('actions', task, '_safeInvokeCallback', 'perform', args);
         };
@@ -96,9 +89,7 @@ objectAssign(TaskProperty.prototype, {
       }
     }
   }
-
 });
-
 
 let priv = new WeakMap();
 
@@ -121,16 +112,20 @@ class Task {
     let implementation = privSelf.implementation;
     let policy = privSelf.taskProperty._bufferPolicy;
     if (context.isDestroyed) {
-      throw new Error(`Tried to perform task ${privSelf.name} on an already destroyed object`);
+      throw new Error(
+        `Tried to perform task ${privSelf.name} on an already destroyed object`
+      );
     }
     cleanupOnDestroy(context, this, 'cancelAll');
-    return spawn(function* () {
+    return spawn(function*() {
       if (DEBUG) {
         logErrors(error => {
           if (Ember.testing) {
             Ember.Test.adapter.exception(error);
           } else {
-            microwait().then(() => { throw error; });
+            microwait().then(() => {
+              throw error;
+            });
           }
         });
       }
@@ -143,7 +138,9 @@ class Task {
             yield maybeWait;
           }
         }
-        let finalValue = yield* withRunLoop(implementation.call(context, ...args));
+        let finalValue = yield* withRunLoop(
+          implementation.call(context, ...args)
+        );
         return finalValue;
       } finally {
         join(() => {
@@ -185,7 +182,7 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
     let oldWillDestroy = owner.willDestroy;
     let disposers = [];
 
-    owner.willDestroy = function () {
+    owner.willDestroy = function() {
       for (let i = 0, l = disposers.length; i < l; i++) {
         disposers[i]();
       }

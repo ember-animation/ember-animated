@@ -1,15 +1,11 @@
 import { spawnChild } from './scheduler';
-import {
-  rAF,
-  microwait,
-} from './concurrency-helpers';
+import { rAF, microwait } from './concurrency-helpers';
 
 import { continuedFromElement } from './motion-bridge';
 
 const motions = new WeakMap();
 
 export default class Motion {
-
   constructor(sprite, opts = {}) {
     this.sprite = sprite;
     this.opts = opts;
@@ -35,10 +31,10 @@ export default class Motion {
       this.duration = context.duration;
     }
     let self = this;
-    return spawnChild(function * () {
+    return spawnChild(function*() {
       context.onMotionStart(self.sprite);
       try {
-        yield * self._run();
+        yield* self._run();
       } finally {
         context.onMotionEnd(self.sprite);
       }
@@ -51,21 +47,17 @@ export default class Motion {
   // been interrupted during this frame. You should save any state on
   // `this` in order to influence your own animation. This hook is
   // skipped if there were no other motions.
-  interrupted(/* motions */) {
-  }
+  interrupted(/* motions */) {}
 
   // Implement your animation here. It must be a generator function
   // that yields promises (just like an ember-concurrency task, except
   // you don't need to wrap in `task()` here and you therefore don't
   // get the extra features provided by EC tasks.
-  * animate() {
-  }
-
+  *animate() {}
 
   // --- Begin private methods ---
 
-
-  * _run() {
+  *_run() {
     try {
       let others = this._motionList.filter(m => m !== this);
       if (this._inheritedMotionList) {
@@ -74,7 +66,7 @@ export default class Motion {
       if (others.length > 0) {
         this.interrupted(others);
       }
-      yield * this.animate();
+      yield* this.animate();
       this._resolve();
     } catch (err) {
       if (err.message !== 'TaskCancelation') {
@@ -86,13 +78,11 @@ export default class Motion {
     }
   }
 
-
-
   _setupMotionList() {
     let element = this.sprite.element;
     let motionList = motions.get(element);
     if (!motionList) {
-      motions.set(element, motionList = []);
+      motions.set(element, (motionList = []));
     }
     this._motionList = motionList;
     // we wait here so that if multiple motions are started
@@ -120,5 +110,4 @@ export default class Motion {
     }
     this._motionList = null;
   }
-
 }

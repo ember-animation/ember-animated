@@ -6,12 +6,16 @@ import move from 'ember-animated/motions/move';
 
 let Item = EmberObject.extend({
   style: computed('x', 'y', function() {
-    return htmlSafe(`top: ${parseFloat(this.get('y'))}px; left: ${parseFloat(this.get('x'))}px; `);
+    return htmlSafe(
+      `top: ${parseFloat(this.get('y'))}px; left: ${parseFloat(
+        this.get('x')
+      )}px; `
+    );
   })
 });
 
 export default Controller.extend({
-  transition: function * ({ keptSprites }) {
+  transition: function*({ keptSprites }) {
     keptSprites.forEach(move);
   },
 

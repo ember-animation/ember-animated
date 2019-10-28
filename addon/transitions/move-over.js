@@ -15,35 +15,41 @@ function normalize(dimension, direction) {
     size = bounds => bounds.width;
     if (direction > 0) {
       position = bounds => bounds.left;
-      startTranslatedBy = (sprite, distance) => sprite.startTranslatedBy(distance, 0);
-      endTranslatedBy = (sprite, distance) => sprite.endTranslatedBy(distance, 0);
+      startTranslatedBy = (sprite, distance) =>
+        sprite.startTranslatedBy(distance, 0);
+      endTranslatedBy = (sprite, distance) =>
+        sprite.endTranslatedBy(distance, 0);
     } else {
       position = bounds => -bounds.right;
-      startTranslatedBy = (sprite, distance) => sprite.startTranslatedBy(-distance, 0);
-      endTranslatedBy = (sprite, distance) => sprite.endTranslatedBy(-distance, 0);
+      startTranslatedBy = (sprite, distance) =>
+        sprite.startTranslatedBy(-distance, 0);
+      endTranslatedBy = (sprite, distance) =>
+        sprite.endTranslatedBy(-distance, 0);
     }
   } else {
     size = bounds => bounds.height;
     if (direction > 0) {
       position = bounds => bounds.top;
-      startTranslatedBy = (sprite, distance) => sprite.startTranslatedBy(0, distance);
-      endTranslatedBy = (sprite, distance) => sprite.endTranslatedBy(0, distance);
+      startTranslatedBy = (sprite, distance) =>
+        sprite.startTranslatedBy(0, distance);
+      endTranslatedBy = (sprite, distance) =>
+        sprite.endTranslatedBy(0, distance);
     } else {
       position = bounds => -bounds.bottom;
-      startTranslatedBy = (sprite, distance) => sprite.startTranslatedBy(0, -distance);
-      endTranslatedBy = (sprite, distance) => sprite.endTranslatedBy(0, -distance);
+      startTranslatedBy = (sprite, distance) =>
+        sprite.startTranslatedBy(0, -distance);
+      endTranslatedBy = (sprite, distance) =>
+        sprite.endTranslatedBy(0, -distance);
     }
   }
   return { position, size, startTranslatedBy, endTranslatedBy };
 }
 
-export default function * moveOver(dimension, direction, context) {
-  let {
-    position,
-    size,
-    startTranslatedBy,
-    endTranslatedBy,
-  } = normalize(dimension, direction);
+export default function* moveOver(dimension, direction, context) {
+  let { position, size, startTranslatedBy, endTranslatedBy } = normalize(
+    dimension,
+    direction
+  );
 
   let viewport;
   if (context.insertedSprites.length) {
@@ -51,11 +57,10 @@ export default function * moveOver(dimension, direction, context) {
   } else if (context.keptSprites.length) {
     viewport = context.keptSprites[0].finalBounds;
   } else {
-    throw new Error("Unimplemented");
+    throw new Error('Unimplemented');
   }
 
   if (context.insertedSprites.length) {
-
     // Offset is how far out of place we're going to start the inserted sprite.
     let offset = 0;
 
@@ -94,6 +99,6 @@ export default function * moveOver(dimension, direction, context) {
       follow(sprite, { source: move });
     });
   } else {
-    throw new Error("Unimplemented2");
+    throw new Error('Unimplemented2');
   }
 }

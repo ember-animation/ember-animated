@@ -1,5 +1,5 @@
 import { Tween } from '.';
-import linear from  './easings/linear';
+import linear from './easings/linear';
 
 // We use Element.remove in our color parser below.
 import './element-remove';
@@ -27,10 +27,25 @@ export class Color {
 }
 
 export class ColorTween {
-  constructor(initialColor, finalColor, duration, easing=linear) {
-    this.rTween = new Tween(initialColor.r * initialColor.a, finalColor.r * finalColor.a, duration, easing);
-    this.gTween = new Tween(initialColor.g * initialColor.a, finalColor.g * finalColor.a, duration, easing);
-    this.bTween = new Tween(initialColor.b * initialColor.a, finalColor.b * finalColor.a, duration, easing);
+  constructor(initialColor, finalColor, duration, easing = linear) {
+    this.rTween = new Tween(
+      initialColor.r * initialColor.a,
+      finalColor.r * finalColor.a,
+      duration,
+      easing
+    );
+    this.gTween = new Tween(
+      initialColor.g * initialColor.a,
+      finalColor.g * finalColor.a,
+      duration,
+      easing
+    );
+    this.bTween = new Tween(
+      initialColor.b * initialColor.a,
+      finalColor.b * finalColor.a,
+      duration,
+      easing
+    );
     this.aTween = new Tween(initialColor.a, finalColor.a, duration, easing);
   }
   get currentValue() {
@@ -39,11 +54,13 @@ export class ColorTween {
       r: Math.floor(this.rTween.currentValue / nonZeroAlpha),
       g: Math.floor(this.gTween.currentValue / nonZeroAlpha),
       b: Math.floor(this.bTween.currentValue / nonZeroAlpha),
-      a: this.aTween.currentValue,
+      a: this.aTween.currentValue
     });
   }
   get done() {
-    return [this.rTween, this.gTween, this.bTween, this.aTween].every(tween => tween.done);
+    return [this.rTween, this.gTween, this.bTween, this.aTween].every(
+      tween => tween.done
+    );
   }
 }
 
@@ -55,7 +72,7 @@ function parseComputedColor(c) {
       g: parseInt(m[2]),
       b: parseInt(m[3]),
       a: 1,
-      m,
+      m
     };
   }
   m = /^rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
@@ -65,7 +82,7 @@ function parseComputedColor(c) {
       g: parseInt(m[2]),
       b: parseInt(m[3]),
       a: parseFloat(m[4]),
-      m,
+      m
     };
   }
   throw new Error(`unable to parse color ${c}`);

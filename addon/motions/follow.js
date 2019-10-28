@@ -11,16 +11,20 @@ export class Follow extends Move {
   constructor(sprite, opts) {
     super(sprite, opts);
     if (!(this.opts.source instanceof Move)) {
-      throw new Error("Follow requires a `source` Move to follow");
+      throw new Error('Follow requires a `source` Move to follow');
     }
   }
-  * animate() {
+  *animate() {
     let source = this.opts.source;
     let sprite = this.sprite;
     let transformOffsetX = sprite.transform.tx - source.sprite.transform.tx;
     let transformOffsetY = sprite.transform.ty - source.sprite.transform.ty;
-    this.xTween = new Tween(transformOffsetX, transformOffsetX, 0).plus(source.xTween);
-    this.yTween = new Tween(transformOffsetY, transformOffsetY, 0).plus(source.yTween);
+    this.xTween = new Tween(transformOffsetX, transformOffsetX, 0).plus(
+      source.xTween
+    );
+    this.yTween = new Tween(transformOffsetY, transformOffsetY, 0).plus(
+      source.yTween
+    );
 
     // We don't need this to make our own animation work correctly,
     // but since we are a subclass of Move, and every Move requires

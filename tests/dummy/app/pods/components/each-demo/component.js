@@ -10,12 +10,12 @@ export default Component.extend({
     this.items = ['A', 'B', 'C', 'D', 'E'];
   },
 
-  * transition({ keptSprites, removedSprites }) {
+  *transition({ keptSprites, removedSprites }) {
     keptSprites.forEach(move);
     removedSprites.forEach(fadeOut);
   },
 
-  removeItem(item){
+  removeItem(item) {
     this.set('items', this.items.filter(i => i !== item));
   }
 });

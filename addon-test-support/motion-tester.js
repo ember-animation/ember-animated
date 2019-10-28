@@ -7,8 +7,8 @@ import Sprite from 'ember-animated/-private/sprite';
 export default EmberObject.extend({
   motion: null,
   duration: 1,
-  beforeAnimation(){},
-  afterAnimation(){},
+  beforeAnimation() {},
+  afterAnimation() {},
   run(...args) {
     let motion;
     if (args[0] instanceof Motion) {
@@ -16,11 +16,15 @@ export default EmberObject.extend({
     } else if (args[0] instanceof Sprite) {
       let M = this.motion;
       if (!M) {
-        throw new Error("passing a Sprite to MotionTester#run only works if you've already set a default motion");
+        throw new Error(
+          "passing a Sprite to MotionTester#run only works if you've already set a default motion"
+        );
       }
       motion = new M(args[0]);
     } else {
-      throw new Error("first argument to MotionTester#run must be either a Motion or a Sprite");
+      throw new Error(
+        'first argument to MotionTester#run must be either a Motion or a Sprite'
+      );
     }
 
     if (motion.duration === null) {
@@ -42,9 +46,9 @@ export default EmberObject.extend({
     return this.get('runner').perform(motion);
   },
   isAnimating: alias('runner.isRunning'),
-  runner: task(function * (motion) {
+  runner: task(function*(motion) {
     this.beforeAnimation(motion);
-    yield * motion._run();
+    yield* motion._run();
     this.afterAnimation(motion);
   }).restartable()
 });

@@ -6,4 +6,4 @@ export default Route.extend({
     return this.store.findRecord('person', id);
   }
 });
-//END-SNIPPET 
+//END-SNIPPET

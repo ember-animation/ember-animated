@@ -1,6 +1,6 @@
 import { Color, ColorTween } from './color';
 import { Tween } from '.';
-import linear from  './easings/linear';
+import linear from './easings/linear';
 import './element-remove';
 
 const innerPattern = /^ (\d+)px (\d+)px(?: (\d+)px)?(?: (\d+)px)?( inset)?(?:, )?/;
@@ -35,7 +35,9 @@ export class BoxShadow {
     testElement.style.display = 'none';
     testElement.style['box-shadow'] = string;
     document.body.appendChild(testElement);
-    let result = this.fromComputedStyle(getComputedStyle(testElement)['box-shadow']);
+    let result = this.fromComputedStyle(
+      getComputedStyle(testElement)['box-shadow']
+    );
     testElement.remove();
     return result;
   }
@@ -50,7 +52,9 @@ export class BoxShadow {
   }
 
   toString() {
-    return `${this.inset ? 'inset ' : ''}${this.x}px ${this.y}px ${this.blur}px ${this.spread}px ${this.color.toString()}`;
+    return `${this.inset ? 'inset ' : ''}${this.x}px ${this.y}px ${
+      this.blur
+    }px ${this.spread}px ${this.color.toString()}`;
   }
 }
 
@@ -61,12 +65,12 @@ function emptyShadowOfType(otherShadow) {
     spread: 0,
     x: 0,
     y: 0,
-    inset: otherShadow.inset,
+    inset: otherShadow.inset
   });
 }
 
 export class BoxShadowTween {
-  constructor(fromShadows, toShadows, duration, easing=linear) {
+  constructor(fromShadows, toShadows, duration, easing = linear) {
     let shadowCount = Math.max(fromShadows.length, toShadows.length);
     if (fromShadows.length < shadowCount) {
       fromShadows = fromShadows.slice();
@@ -81,7 +85,10 @@ export class BoxShadowTween {
       }
     }
 
-    this.shadowTweens = fromShadows.map((fromShadow, index) => new OneShadowTween(fromShadow, toShadows[index], duration, easing));
+    this.shadowTweens = fromShadows.map(
+      (fromShadow, index) =>
+        new OneShadowTween(fromShadow, toShadows[index], duration, easing)
+    );
   }
   get currentValue() {
     return this.shadowTweens.map(tween => tween.currentValue);
@@ -93,11 +100,26 @@ export class BoxShadowTween {
 
 class OneShadowTween {
   constructor(fromShadow, toShadow, duration, easing) {
-    this.colorTween = new ColorTween(fromShadow.color, toShadow.color, duration, easing);
+    this.colorTween = new ColorTween(
+      fromShadow.color,
+      toShadow.color,
+      duration,
+      easing
+    );
     this.xTween = new Tween(fromShadow.x, toShadow.x, duration, easing);
     this.yTween = new Tween(fromShadow.y, toShadow.y, duration, easing);
-    this.blurTween = new Tween(fromShadow.blur, toShadow.blur, duration, easing);
-    this.spreadTween = new Tween(fromShadow.spread, toShadow.spread, duration, easing);
+    this.blurTween = new Tween(
+      fromShadow.blur,
+      toShadow.blur,
+      duration,
+      easing
+    );
+    this.spreadTween = new Tween(
+      fromShadow.spread,
+      toShadow.spread,
+      duration,
+      easing
+    );
     this.inset = fromShadow.inset;
   }
 
@@ -108,11 +130,17 @@ class OneShadowTween {
       blur: this.blurTween.currentValue,
       spread: this.spreadTween.currentValue,
       inset: this.inset,
-      color: this.colorTween.currentValue,
+      color: this.colorTween.currentValue
     });
   }
 
   get done() {
-    return [this.colorTween, this.xTween, this.yTween, this.blurTween, this.spreadTween].every(tween => tween.done);
+    return [
+      this.colorTween,
+      this.xTween,
+      this.yTween,
+      this.blurTween,
+      this.spreadTween
+    ].every(tween => tween.done);
   }
 }

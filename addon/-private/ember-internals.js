@@ -28,7 +28,7 @@ export function keyForArray(keyPath) {
     case null:
       return identity;
     default:
-      return (item) => get(item, keyPath);
+      return item => get(item, keyPath);
   }
 }
 

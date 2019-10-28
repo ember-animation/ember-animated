@@ -1,1 +1,3 @@
-export default function(t) { return t; }
+export default function(t) {
+  return t;
+}

@@ -11,9 +11,9 @@ const currentCurves = [];
 */
 
 export default class Tween {
-  constructor(initialValue, finalValue, duration, easing=easeInAndOut) {
+  constructor(initialValue, finalValue, duration, easing = easeInAndOut) {
     if (typeof easing !== 'function') {
-      throw new Error("Tried to make a Tween with an invalid easing function");
+      throw new Error('Tried to make a Tween with an invalid easing function');
     }
     this.curve = MotionCurve.findOrCreate(duration, easing);
     this.initialValue = initialValue;
@@ -29,7 +29,7 @@ export default class Tween {
   plus(otherTween) {
     return new DerivedTween(
       [this, otherTween],
-      (a,b) => a.currentValue + b.currentValue
+      (a, b) => a.currentValue + b.currentValue
     );
   }
 }
@@ -43,7 +43,11 @@ class DerivedTween {
         // its final value around and drop the reference to the actual
         // Tween. This prevents long chains of derived tweens from
         // growing without bound during continuous animations.
-        return { currentValue: t.currentValue, done: true, finalValue: t.finalValue };
+        return {
+          currentValue: t.currentValue,
+          done: true,
+          finalValue: t.finalValue
+        };
       } else {
         return t;
       }
@@ -72,7 +76,9 @@ class MotionCurve {
   // we share motion curves among all concurrent motions that have the
   // same duration that start in the same animation frame.
   static findOrCreate(duration, easing) {
-    let shared = currentCurves.find(c => c.duration === duration && c.easing === easing);
+    let shared = currentCurves.find(
+      c => c.duration === duration && c.easing === easing
+    );
     if (shared) {
       return shared;
     }
@@ -95,7 +101,8 @@ class MotionCurve {
     if (this._lastTick !== currentFrameClock) {
       this._lastTick = currentFrameClock;
       this._runTime = clock.now() - this.startTime;
-      this._timeProgress = this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
+      this._timeProgress =
+        this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
       this._spaceProgress = Math.min(this.easing(this._timeProgress), 1);
       if (this._timeProgress >= 1) {
         this._doneFrames++;

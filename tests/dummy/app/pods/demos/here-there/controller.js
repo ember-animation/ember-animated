@@ -1,13 +1,13 @@
 import Controller from '@ember/controller';
-import { computed } from "@ember/object";
-import { not } from "@ember/object/computed";
+import { computed } from '@ember/object';
+import { not } from '@ember/object/computed';
 import move from 'ember-animated/motions/move';
 
 export default Controller.extend({
   showLeft: true,
   showRight: not('showLeft'),
 
-  transition: function * ({ receivedSprites }) {
+  transition: function*({ receivedSprites }) {
     receivedSprites.forEach(move);
   },
 

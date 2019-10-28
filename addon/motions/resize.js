@@ -1,4 +1,4 @@
-import { Motion, rAF, Tween } from "..";
+import { Motion, rAF, Tween } from '..';
 
 /**
   Smoothly resizes _sprite_ from its the initial size to its final size.
@@ -72,7 +72,7 @@ export class Resize extends Motion {
     while (!this.widthTween.done || !this.heightTween.done) {
       sprite.applyStyles({
         width: this.widthTween.currentValue,
-        height: this.heightTween.currentValue,
+        height: this.heightTween.currentValue
       });
       yield rAF();
     }

@@ -1,7 +1,12 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import { bounds, setupAnimationTest, time, animationsSettled } from 'ember-animated/test-support';
+import {
+  bounds,
+  setupAnimationTest,
+  time,
+  animationsSettled
+} from 'ember-animated/test-support';
 
 module('Acceptance | beacon demo', function(hooks) {
   setupApplicationTest(hooks);
@@ -35,5 +40,4 @@ module('Acceptance | beacon demo', function(hooks) {
     let button = bounds(this.element.querySelector('button'));
     assert.closeBounds(5, modal, button, 'modal should be near button');
   });
-
 });

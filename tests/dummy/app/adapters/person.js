@@ -10,14 +10,16 @@ export default DS.JSONAPIAdapter.extend({
     if (!this._fakePeople) {
       let people = [];
       for (let i = 0; i < 8; i++) {
-        people.push(Object.seal({
-          type: 'person',
-          id: String(i),
-          attributes: Object.seal({
-            name: faker.name.firstName(),
-            'avatar-url': faker.internet.avatar()
+        people.push(
+          Object.seal({
+            type: 'person',
+            id: String(i),
+            attributes: Object.seal({
+              name: faker.name.firstName(),
+              'avatar-url': faker.internet.avatar()
+            })
           })
-        }));
+        );
       }
       // This is a shorthand way to deep copy everything, because
       // Ember Data will mutate the objects we give it.
@@ -37,4 +39,4 @@ export default DS.JSONAPIAdapter.extend({
     };
   }
 });
-//END-SNIPPET 
+//END-SNIPPET

@@ -63,13 +63,13 @@ export default Component.extend({
   tagName: '',
 
   motionService: service('-ea-motion'),
-   /**
+  /**
    * Use a custom tag for the container. Defaults to div.
     @argument tag
     @type String
   */
   tag: 'div',
-   /**
+  /**
    * Whether to animate the initial render. You will probably also need to set
    * initialInsertion=true on a child component of animated-container.
    * Defaults to false.
@@ -82,7 +82,7 @@ export default Component.extend({
     this._super();
     this._signals = null;
     this._signalPromise = null;
-    this._signalResolve= null;
+    this._signalResolve = null;
     this._inserted = false;
     this._startingUp = false;
     this.maybeAnimate = this.maybeAnimate.bind(this);
@@ -91,10 +91,14 @@ export default Component.extend({
       .register(this)
       .observeDescendantAnimations(this, this.maybeAnimate);
 
-    deprecate(`passing a "class" argument to animated-container is deprecated. Switch to angle bracket invocation and pass an HTML attribute instead`, !this.class, {
-      id: 'ember-animated-container-class-arg',
-      until: '1.0.0'
-    });
+    deprecate(
+      `passing a "class" argument to animated-container is deprecated. Switch to angle bracket invocation and pass an HTML attribute instead`,
+      !this.class,
+      {
+        id: 'ember-animated-container-class-arg',
+        until: '1.0.0'
+      }
+    );
   },
 
   didInsertElement() {
@@ -133,14 +137,14 @@ export default Component.extend({
     }
   },
 
-  animate: task(function * (duration, animationTask) {
+  animate: task(function*(duration, animationTask) {
     this._startingUp = true;
     let service = this.get('motionService');
     let sprite;
     let useMotion;
     let element = this._ownElement();
 
-    if (element){
+    if (element) {
       sprite = Sprite.sizedStartingAt(element);
       this.sprite = sprite;
       sprite.lock();
@@ -156,7 +160,7 @@ export default Component.extend({
       this._startingUp = false;
     }
 
-    yield * service.staticMeasurement(() => {
+    yield* service.staticMeasurement(() => {
       if (!sprite) {
         sprite = Sprite.sizedEndingAt(this._ownElement());
         this.sprite = sprite;

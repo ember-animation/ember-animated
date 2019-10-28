@@ -8,5 +8,5 @@ export default function partition(iterator, predicate) {
       falsy.push(item);
     }
   }
-  return [ truthy, falsy ];
+  return [truthy, falsy];
 }

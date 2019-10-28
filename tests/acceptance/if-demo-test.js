@@ -29,6 +29,9 @@ module('Acceptance | if demo', function(hooks) {
     let onePosition = bounds(this.element.querySelector('.message')).left;
     await time.advance(125);
     let twoPosition = bounds(this.element.querySelector('.message')).left;
-    assert.ok(twoPosition < onePosition, `expected element .two to be animating in, ${twoPosition } > ${onePosition}`);
+    assert.ok(
+      twoPosition < onePosition,
+      `expected element .two to be animating in, ${twoPosition} > ${onePosition}`
+    );
   });
 });

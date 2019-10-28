@@ -11,23 +11,33 @@ export class BoxShadowMotion extends Motion {
     if (this.opts.from) {
       from = BoxShadow.fromUserProvidedShadow(this.opts.from);
     } else {
-      from = BoxShadow.fromComputedStyle(this.sprite.initialComputedStyle['box-shadow']);
+      from = BoxShadow.fromComputedStyle(
+        this.sprite.initialComputedStyle['box-shadow']
+      );
     }
 
     let to;
     if (this.opts.to) {
       to = BoxShadow.fromUserProvidedShadow(this.opts.to);
     } else {
-      to = BoxShadow.fromComputedStyle(this.sprite.finalComputedStyle['box-shadow']);
+      to = BoxShadow.fromComputedStyle(
+        this.sprite.finalComputedStyle['box-shadow']
+      );
     }
 
-    let shadowTween = new BoxShadowTween(from, to, this.duration, this.opts.easing);
+    let shadowTween = new BoxShadowTween(
+      from,
+      to,
+      this.duration,
+      this.opts.easing
+    );
     while (!shadowTween.done) {
       this.sprite.applyStyles({
-        'box-shadow': shadowTween.currentValue.map(shadow => shadow.toString()).join(',')
+        'box-shadow': shadowTween.currentValue
+          .map(shadow => shadow.toString())
+          .join(',')
       });
       yield rAF();
     }
   }
 }
-

@@ -1,4 +1,4 @@
-import { Motion, rAF, Tween } from "..";
+import { Motion, rAF, Tween } from '..';
 
 /**
   Smoothly scales _sprite_ from its the initial size to its final size.

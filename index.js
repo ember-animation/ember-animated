@@ -35,7 +35,6 @@ module.exports = {
     }
   },
 
-
   included: function() {
     this._super.apply(this, arguments);
     this.import('vendor/ember-animated.css');

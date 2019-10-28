@@ -34,7 +34,7 @@ export class Move extends Motion {
     this.prior = motions.find(m => m instanceof Move);
   }
 
-  * animate() {
+  *animate() {
     let duration = this.duration;
     let sprite = this.sprite;
 
@@ -93,12 +93,21 @@ export class Move extends Motion {
       // the new tween begins to dominate. Because of the adjustments
       // we did above, the sum of both tweens will end up right where
       // we want to be.
-      this.xTween = new Tween(transformDiffX, transformDiffX + dx, durationX, this.opts.easing).plus(this.prior.xTween);
-      this.yTween = new Tween(transformDiffY, transformDiffY + dy, durationY, this.opts.easing).plus(this.prior.yTween);
+      this.xTween = new Tween(
+        transformDiffX,
+        transformDiffX + dx,
+        durationX,
+        this.opts.easing
+      ).plus(this.prior.xTween);
+      this.yTween = new Tween(
+        transformDiffY,
+        transformDiffY + dy,
+        durationY,
+        this.opts.easing
+      ).plus(this.prior.yTween);
     }
 
-    yield * this._moveIt();
-
+    yield* this._moveIt();
   }
 
   *_moveIt() {
@@ -119,18 +128,17 @@ function fuzzyZero(number) {
   return Math.abs(number) < 0.00001;
 }
 
-
 export function continuePrior(sprite, opts) {
   return new ContinuePrior(sprite, opts).run();
 }
 
 export class ContinuePrior extends Move {
-  * animate() {
+  *animate() {
     if (!this.prior) {
       return;
     }
     this.xTween = this.prior.xTween;
     this.yTween = this.prior.yTween;
-    yield * this._moveIt();
+    yield* this._moveIt();
   }
 }

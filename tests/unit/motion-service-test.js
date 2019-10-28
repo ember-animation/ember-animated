@@ -32,11 +32,13 @@ module('Unit | Service | motion', function(hooks) {
     let sprite2 = { owner: { id: 2 } };
 
     let resolveAnimation1, resolveAnimation2;
-    let animation1 = new Promise(r => resolveAnimation1 = r);
-    let animation2 = new Promise(r => resolveAnimation2 = r);
+    let animation1 = new Promise(r => (resolveAnimation1 = r));
+    let animation2 = new Promise(r => (resolveAnimation2 = r));
 
     let p1 = service.get('farMatch').perform(animation1, [], [], [sprite1]);
-    let p2 = service.get('farMatch').perform(animation2, [sprite1, sprite2], [], []);
+    let p2 = service
+      .get('farMatch')
+      .perform(animation2, [sprite1, sprite2], [], []);
 
     let { matchingAnimatorsFinished: finished1 } = await p1;
     finished1.then(() => log.push('p1 matching animators finished'));
@@ -52,7 +54,12 @@ module('Unit | Service | motion', function(hooks) {
     resolveAnimation2();
     await finished1;
     await finished2;
-    assert.deepEqual(log, ['resolving animation 1', 'p2 matching animators finished', 'resolving animation 2', 'p1 matching animators finished']);
+    assert.deepEqual(log, [
+      'resolving animation 1',
+      'p2 matching animators finished',
+      'resolving animation 2',
+      'p1 matching animators finished'
+    ]);
   });
 
   test('does not entangle animations without matches', async function(assert) {
@@ -63,17 +70,21 @@ module('Unit | Service | motion', function(hooks) {
     let sprite2 = { owner: { id: 2 } };
 
     let resolveAnimation1, resolveAnimation2;
-    let animation1 = new Promise(r => resolveAnimation1 = r);
-    let animation2 = new Promise(r => resolveAnimation2 = r);
+    let animation1 = new Promise(r => (resolveAnimation1 = r));
+    let animation2 = new Promise(r => (resolveAnimation2 = r));
 
     let p1 = service.get('farMatch').perform(animation1, [], [], [sprite1]);
     let p2 = service.get('farMatch').perform(animation2, [sprite2], [], []);
 
     let { matchingAnimatorsFinished } = await p1;
-    matchingAnimatorsFinished.then(() => log.push('p1 matching animators finished'));
+    matchingAnimatorsFinished.then(() =>
+      log.push('p1 matching animators finished')
+    );
 
     matchingAnimatorsFinished = (await p2).matchingAnimatorsFinished;
-    matchingAnimatorsFinished.then(() => log.push('p2 matching animators finished'));
+    matchingAnimatorsFinished.then(() =>
+      log.push('p2 matching animators finished')
+    );
 
     await wait(5);
     log.push('resolving animation 1');
@@ -82,6 +93,11 @@ module('Unit | Service | motion', function(hooks) {
     log.push('resolving animation 2');
     resolveAnimation2();
     await matchingAnimatorsFinished;
-    assert.deepEqual(log, ['p1 matching animators finished', 'p2 matching animators finished', 'resolving animation 1', 'resolving animation 2']);
+    assert.deepEqual(log, [
+      'p1 matching animators finished',
+      'p2 matching animators finished',
+      'resolving animation 1',
+      'resolving animation 2'
+    ]);
   });
 });

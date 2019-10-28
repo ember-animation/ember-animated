@@ -7,4 +7,3 @@ export default DS.Model.extend({
   avatarUrl: attr()
 });
 //END-SNIPPET
-

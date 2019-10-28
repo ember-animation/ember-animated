@@ -1,5 +1,5 @@
-import { Motion, rAF, Tween } from "..";
-import linear from "../easings/linear";
+import { Motion, rAF, Tween } from '..';
+import linear from '../easings/linear';
 
 export default function opacity(sprite, opts) {
   return new Opacity(sprite, opts).run();
@@ -21,7 +21,7 @@ export default function opacity(sprite, opts) {
 export function fadeIn(sprite, opts) {
   let innerOpts = Object.assign(
     {
-      to: 1,
+      to: 1
     },
     opts
   );
@@ -44,7 +44,7 @@ export function fadeIn(sprite, opts) {
 export function fadeOut(sprite, opts) {
   let innerOpts = Object.assign(
     {
-      to: 0,
+      to: 0
     },
     opts
   );
@@ -103,7 +103,7 @@ export class Opacity extends Motion {
 
     while (!this.tween.done) {
       sprite.applyStyles({
-        opacity: this.tween.currentValue,
+        opacity: this.tween.currentValue
       });
       yield rAF();
     }

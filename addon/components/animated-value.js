@@ -45,8 +45,6 @@ import { A } from '@ember/array';
   @public
 */
 
-
-
 export default Component.extend({
   tagName: '',
   layout,

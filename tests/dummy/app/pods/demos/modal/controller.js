@@ -20,7 +20,7 @@ export default Controller.extend({
     this.showMessage(this.lastMessage);
   },
 
-  * backgroundTransition({ removedSprites, insertedSprites, receivedSprites }) {
+  *backgroundTransition({ removedSprites, insertedSprites, receivedSprites }) {
     insertedSprites.concat(receivedSprites).forEach(sprite => {
       sprite.applyStyles({ 'pointer-events': '' });
 
@@ -36,7 +36,7 @@ export default Controller.extend({
     });
   },
 
-  * dialogTransition({ removedSprites, insertedSprites, receivedSprites }) {
+  *dialogTransition({ removedSprites, insertedSprites, receivedSprites }) {
     insertedSprites.forEach(sprite => {
       sprite.startAtPixel({ x: -sprite.finalBounds.width });
       move(sprite);
@@ -46,7 +46,5 @@ export default Controller.extend({
       sprite.endAtPixel({ x: window.outerWidth });
       move(sprite);
     });
-
-  },
-
+  }
 });

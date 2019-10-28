@@ -1,7 +1,12 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import { setupAnimationTest, animationsSettled, bounds, time } from 'ember-animated/test-support';
+import {
+  setupAnimationTest,
+  animationsSettled,
+  bounds,
+  time
+} from 'ember-animated/test-support';
 import QUnit from 'qunit';
 
 module('Acceptance | each demo', function(hooks) {
@@ -11,11 +16,14 @@ module('Acceptance | each demo', function(hooks) {
   test('visiting /eachdemo', async function(assert) {
     await visit('demos/eachdemo');
     assert.equal(currentURL(), 'demos/eachdemo');
-    assert.ok(this.element.querySelector('[data-test-item="A"]'), 'found first item');
+    assert.ok(
+      this.element.querySelector('[data-test-item="A"]'),
+      'found first item'
+    );
   });
 
   hooks.beforeEach(function(assert) {
-    assert.listContents = function( elts, expected, message ) {
+    assert.listContents = function(elts, expected, message) {
       let values = [...elts].map(e => e.textContent.trim());
       this.pushResult({
         result: QUnit.equiv(values, expected),
@@ -36,11 +44,17 @@ module('Acceptance | each demo', function(hooks) {
     let B2Position = bounds(this.element.querySelector('[data-test-item="B"]'));
     await time.advance(1000);
     let B3Position = bounds(this.element.querySelector('[data-test-item="B"]'));
-    assert.strictEqual(B3Position.top, APosition.top, "final B is initial A");
-    assert.notEqual(B2Position.top, BPosition.top, "final B is above initial B");
-    assert.ok(B3Position.top < B2Position.top, "B final is above B intermediate");
+    assert.strictEqual(B3Position.top, APosition.top, 'final B is initial A');
+    assert.notEqual(
+      B2Position.top,
+      BPosition.top,
+      'final B is above initial B'
+    );
+    assert.ok(
+      B3Position.top < B2Position.top,
+      'B final is above B intermediate'
+    );
     time.runAtSpeed(60);
     await animationsSettled();
   });
-
 });

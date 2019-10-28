@@ -11,14 +11,14 @@ export default Component.extend({
     }
   }),
 
-  moveReceived: function * ({ receivedSprites, insertedSprites }) {
+  moveReceived: function*({ receivedSprites, insertedSprites }) {
     receivedSprites.forEach(move);
     // without this, they won't reveal until the end of the whole
     // transition
     insertedSprites.forEach(s => s.reveal());
   },
 
-  moveSent: function * ({ sentSprites, insertedSprites }) {
+  moveSent: function*({ sentSprites, insertedSprites }) {
     sentSprites.forEach(move);
     // without this, they won't reveal until the end of the whole
     // transition
@@ -42,10 +42,12 @@ export default Component.extend({
   }
 });
 
-function numeric(a,b) { return a.id - b.id; }
+function numeric(a, b) {
+  return a.id - b.id;
+}
 
 function makeRandomItem() {
-  return { id: Math.round(Math.random()*1000) };
+  return { id: Math.round(Math.random() * 1000) };
 }
 
 function makeRandomList() {

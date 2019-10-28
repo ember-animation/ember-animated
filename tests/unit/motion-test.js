@@ -7,7 +7,7 @@ import { logErrors } from 'ember-animated/-private/scheduler';
 
 let tester;
 
-module("Unit | Motion", function(hooks) {
+module('Unit | Motion', function(hooks) {
   hooks.beforeEach(function() {
     let fixture = document.querySelector('#qunit-fixture');
     fixture.innerHTML = `
@@ -22,7 +22,7 @@ module("Unit | Motion", function(hooks) {
 
   test('Can be canceled within ember-concurrency tasks', function(assert) {
     class TestMotion extends Motion {
-      * animate() {
+      *animate() {
         this.frames = 0;
         while (true) {
           yield rAF();
@@ -35,33 +35,36 @@ module("Unit | Motion", function(hooks) {
     let motion = new TestMotion(sprite);
     tester.run(motion);
 
-    return rAF().then(() => rAF()).then(() => {
-      // we waited two frames, which is enough for the animation to
-      // start up, then wait for its own rAF, then increment the frame
-      // counter.
-      let frames = motion.frames;
-      assert.ok(frames > 0, "animation is running");
-      tester.get('runner').cancelAll();
-      return rAF().then(() => rAF()).then(() => {
-        // We deliberately waited two frames here to guarantee the
-        // animation is really stopped. If we only waited one frame, we
-        // could miss it if it's rAF happens to resolve later than ours.
-        assert.equal(motion.frames, frames, "stopped animating");
+    return rAF()
+      .then(() => rAF())
+      .then(() => {
+        // we waited two frames, which is enough for the animation to
+        // start up, then wait for its own rAF, then increment the frame
+        // counter.
+        let frames = motion.frames;
+        assert.ok(frames > 0, 'animation is running');
+        tester.get('runner').cancelAll();
+        return rAF()
+          .then(() => rAF())
+          .then(() => {
+            // We deliberately waited two frames here to guarantee the
+            // animation is really stopped. If we only waited one frame, we
+            // could miss it if it's rAF happens to resolve later than ours.
+            assert.equal(motion.frames, frames, 'stopped animating');
+          });
       });
-    });
-
   });
 
   test('results in Task failure when animation throws asynchronously', function(assert) {
     class TestMotion extends Motion {
-      * animate() {
+      *animate() {
         logErrors(err => {
           if (err.message !== 'simulated failure') {
             throw err;
           }
         });
         yield microwait();
-        throw new Error("simulated failure");
+        throw new Error('simulated failure');
       }
     }
 
@@ -69,25 +72,28 @@ module("Unit | Motion", function(hooks) {
     let motion = new TestMotion(sprite);
     let done = assert.async();
     run(() => {
-      tester.run(motion).then(() => {
-        assert.ok(false, "Not supposed to succeed");
-        done();
-      }, error => {
-        assert.equal(error ? error.message : undefined, 'simulated failure');
-        done();
-      });
+      tester.run(motion).then(
+        () => {
+          assert.ok(false, 'Not supposed to succeed');
+          done();
+        },
+        error => {
+          assert.equal(error ? error.message : undefined, 'simulated failure');
+          done();
+        }
+      );
     });
   });
 
   test('results in Task failure when animation throws synchronously', function(assert) {
     class TestMotion extends Motion {
-      * animate() {
+      *animate() {
         logErrors(err => {
           if (err.message !== 'simulated failure') {
             throw err;
           }
         });
-        throw new Error("simulated failure");
+        throw new Error('simulated failure');
       }
     }
 
@@ -95,13 +101,16 @@ module("Unit | Motion", function(hooks) {
     let motion = new TestMotion(sprite);
     let done = assert.async();
     run(() => {
-      tester.run(motion).then(() => {
-        assert.ok(false, "Not supposed to succeed");
-        done();
-      }, error => {
-        assert.equal(error ? error.message : undefined, 'simulated failure');
-        done();
-      });
+      tester.run(motion).then(
+        () => {
+          assert.ok(false, 'Not supposed to succeed');
+          done();
+        },
+        error => {
+          assert.equal(error ? error.message : undefined, 'simulated failure');
+          done();
+        }
+      );
     });
   });
 });

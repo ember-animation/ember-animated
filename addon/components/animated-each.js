@@ -82,14 +82,14 @@ export default Component.extend({
     @type Transition
   */
   use: null,
-   /**
+  /**
    * Specifies data-dependent [Rules](../../rules) that choose which [Transition](../../transitions)
    * to run when the list changes. This takes precedence over `use`.
     @argument rules
     @type Rules
   */
   rules: null,
-   /**
+  /**
    * When true, all the items in the list will animate as [`insertedSprites`](../../sprites) when the `{{#animated-each}}` is first rendered. Defaults to false.
     @argument initialInsertion
     @type Boolean
@@ -112,7 +112,6 @@ export default Component.extend({
     @type String
   */
   key: null,
-
 
   init() {
     this._elementToChild = new WeakMap();
@@ -141,13 +140,21 @@ export default Component.extend({
   _installObservers() {
     let key = this.get('key');
     if (key != null && key !== '@index' && key !== '@identity') {
-      this.addObserver(`items.@each.${key}`, this, this._invalidateRenderedChildren);
+      this.addObserver(
+        `items.@each.${key}`,
+        this,
+        this._invalidateRenderedChildren
+      );
     }
 
     let deps = this.get('_deps');
     if (deps) {
       for (let dep of deps) {
-        this.addObserver(`items.@each.${dep}`, this, this._invalidateRenderedChildren);
+        this.addObserver(
+          `items.@each.${dep}`,
+          this,
+          this._invalidateRenderedChildren
+        );
       }
     }
   },
@@ -175,7 +182,9 @@ export default Component.extend({
   },
 
   _identitySignature(items, getKey) {
-    if (!items) { return []; }
+    if (!items) {
+      return [];
+    }
     let deps = this.get('_deps');
     let signature = [];
     for (let i = 0; i < items.length; i++) {
@@ -208,7 +217,9 @@ export default Component.extend({
     let group = this.get('group') || '__default__';
     this._prevItems = newItems ? newItems.slice() : [];
     this._prevSignature = newSignature;
-    if (!newItems) { newItems = []; }
+    if (!newItems) {
+      newItems = [];
+    }
 
     let oldIndices = new Map();
     oldChildren.forEach((child, index) => {
@@ -220,27 +231,30 @@ export default Component.extend({
       newIndices.set(getKey(item), index);
     });
 
-    let newChildren = newItems.map((value, listIndex) => {
-      let id = getKey(value);
-      let index = oldIndices.get(id);
-      if (index != null) {
-        let child = new Child(group, id, value, listIndex);
-        child.state = 'kept';
-        return child;
-      } else {
-        return new Child(group, id, value, listIndex);
-      }
-    }).concat(
-      oldChildren
-        .filter(child =>
-          (!child.shouldRemove || !this._renderedChildrenStartedMoving) &&
-          newIndices.get(child.id) == null
-        )
-        .map(child => {
-          child.flagForRemoval();
+    let newChildren = newItems
+      .map((value, listIndex) => {
+        let id = getKey(value);
+        let index = oldIndices.get(id);
+        if (index != null) {
+          let child = new Child(group, id, value, listIndex);
+          child.state = 'kept';
           return child;
-        })
-    );
+        } else {
+          return new Child(group, id, value, listIndex);
+        }
+      })
+      .concat(
+        oldChildren
+          .filter(
+            child =>
+              (!child.shouldRemove || !this._renderedChildrenStartedMoving) &&
+              newIndices.get(child.id) == null
+          )
+          .map(child => {
+            child.flagForRemoval();
+            return child;
+          })
+      );
     this._renderedChildren = newChildren;
 
     // in general, a removed sprite that didn't run a motion in the previous
@@ -250,7 +264,10 @@ export default Component.extend({
     // sprites until we can hand them off to the user's transition.
     this._renderedChildrenStartedMoving = false;
 
-    if (typeof FastBoot === 'undefined' && !isStable(oldSignature, newSignature)) {
+    if (
+      typeof FastBoot === 'undefined' &&
+      !isStable(oldSignature, newSignature)
+    ) {
       let transition = this._transitionFor(firstTime, oldItems, newItems);
       this.get('animate').perform(transition, firstTime);
     }
@@ -268,15 +285,19 @@ export default Component.extend({
     this._inserted = true;
   },
 
-  * _ownElements() {
-    if (!this._inserted) { return; }
+  *_ownElements() {
+    if (!this._inserted) {
+      return;
+    }
     let { firstNode, lastNode } = componentNodes(this);
     let node = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
         yield node;
       }
-      if (node === lastNode){ break; }
+      if (node === lastNode) {
+        break;
+      }
       node = node.nextSibling;
     }
   },
@@ -284,7 +305,10 @@ export default Component.extend({
   // This gets called by the motionService when another animator calls
   // willAnimate from within our descendant components.
   maybeReanimate() {
-    if (this.get('animate.isRunning') && !this.get('startAnimation.isRunning')) {
+    if (
+      this.get('animate.isRunning') &&
+      !this.get('startAnimation.isRunning')
+    ) {
       // A new animation is starting below us while we are in
       // progress. We should interrupt ourself in order to adapt to
       // the changing conditions.
@@ -303,7 +327,11 @@ export default Component.extend({
       // could happen.
       this._ancestorWillDestroyUs = false;
       // treat all our sprites as re-inserted, because we had already handed them off as orphans
-      let transition = this._transitionFor(this._firstTime, [], this._prevItems);
+      let transition = this._transitionFor(
+        this._firstTime,
+        [],
+        this._prevItems
+      );
       this.get('animate').perform(transition);
     }
   },
@@ -320,7 +348,12 @@ export default Component.extend({
       sprite.owner = this._elementToChild.get(element);
       removedSprites.push(sprite);
     }
-    this.get('motionService').matchDestroyed(removedSprites, transition, this.get('durationWithDefault'), this.get('finalRemoval'));
+    this.get('motionService').matchDestroyed(
+      removedSprites,
+      transition,
+      this.get('durationWithDefault'),
+      this.get('finalRemoval')
+    );
   },
 
   willDestroyElement() {
@@ -337,7 +370,7 @@ export default Component.extend({
   // this gets called by motionService when we call
   // staticMeasurement. But also whenever *any other* animator calls
   // staticMeasurement, even if we're in the middle of animating.
-  beginStaticMeasurement(){
+  beginStaticMeasurement() {
     if (this._keptSprites) {
       this._keptSprites.forEach(sprite => sprite.unlock());
       this._insertedSprites.forEach(sprite => sprite.unlock());
@@ -345,7 +378,7 @@ export default Component.extend({
     }
   },
 
-  endStaticMeasurement(){
+  endStaticMeasurement() {
     if (this._keptSprites) {
       this._keptSprites.forEach(sprite => sprite.lock());
       this._insertedSprites.forEach(sprite => sprite.lock());
@@ -368,7 +401,6 @@ export default Component.extend({
 
   _partitionKeptAndRemovedSprites(currentSprites) {
     currentSprites.forEach(sprite => {
-
       if (!sprite.element.parentElement) {
         // our currentSprites list was created based on what was in
         // DOM before rendering. Now we are looking after
@@ -386,20 +418,24 @@ export default Component.extend({
         this._removedSprites.push(sprite);
       } else {
         switch (child.state) {
-        case 'kept':
-          this._keptSprites.push(sprite);
-          break;
-        case 'removing':
-          this._removedSprites.push(sprite);
-          break;
-        case 'new':
-          // This can happen when our animation gets restarted due to
-          // another animation possibly messing with our DOM, as opposed
-          // to restarting because our own data changed.
-          this._keptSprites.push(sprite);
-          break;
-        default:
-          warn(`Probable bug in ember-animated: saw unexpected child state ${child.state}`, false, { id: "ember-animated-state" });
+          case 'kept':
+            this._keptSprites.push(sprite);
+            break;
+          case 'removing':
+            this._removedSprites.push(sprite);
+            break;
+          case 'new':
+            // This can happen when our animation gets restarted due to
+            // another animation possibly messing with our DOM, as opposed
+            // to restarting because our own data changed.
+            this._keptSprites.push(sprite);
+            break;
+          default:
+            warn(
+              `Probable bug in ember-animated: saw unexpected child state ${child.state}`,
+              false,
+              { id: 'ember-animated-state' }
+            );
         }
       }
     });
@@ -424,7 +460,7 @@ export default Component.extend({
   //   animators that are still in `runAnimation`, then we are
   //   cleaning up our own sprite state.
   //
-  animate: task(function * (transition, firstTime) {
+  animate: task(function*(transition, firstTime) {
     let {
       parent,
       currentSprites,
@@ -433,11 +469,24 @@ export default Component.extend({
       removedSprites
     } = yield this.get('startAnimation').perform(transition, current());
 
-    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites, firstTime);
-    yield this.get('finalizeAnimation').perform(insertedSprites, keptSprites, removedSprites, matchingAnimatorsFinished);
+    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(
+      transition,
+      parent,
+      currentSprites,
+      insertedSprites,
+      keptSprites,
+      removedSprites,
+      firstTime
+    );
+    yield this.get('finalizeAnimation').perform(
+      insertedSprites,
+      keptSprites,
+      removedSprites,
+      matchingAnimatorsFinished
+    );
   }).restartable(),
 
-  startAnimation: task(function * (transition, animateTask) {
+  startAnimation: task(function*(transition, animateTask) {
     // we remember the transition we're using in case we need to
     // recalculate based on other animators potentially moving our DOM
     // around
@@ -448,9 +497,9 @@ export default Component.extend({
     // everything into static positioning at any point in time, so
     // that any animation that's starting up can figure out what the
     // DOM is going to look like.
-    let keptSprites = this._keptSprites = [];
-    let removedSprites = this._removedSprites = [];
-    let insertedSprites = this._insertedSprites = [];
+    let keptSprites = (this._keptSprites = []);
+    let removedSprites = (this._removedSprites = []);
+    let insertedSprites = (this._insertedSprites = []);
 
     // Start by locating our current sprites based off the actual DOM
     // elements we contain. This records their initial positions.
@@ -469,10 +518,24 @@ export default Component.extend({
 
     // Wait for Ember to render our latest state.
     yield afterRender();
-    return { parent, currentSprites, insertedSprites, keptSprites, removedSprites };
+    return {
+      parent,
+      currentSprites,
+      insertedSprites,
+      keptSprites,
+      removedSprites
+    };
   }),
 
-  runAnimation: task(function * (transition, parent, currentSprites, insertedSprites, keptSprites, removedSprites, firstTime) {
+  runAnimation: task(function*(
+    transition,
+    parent,
+    currentSprites,
+    insertedSprites,
+    keptSprites,
+    removedSprites,
+    firstTime
+  ) {
     // fill the keptSprites and removedSprites lists by comparing what
     // we had in currentSprites with what is still in the DOM now that
     // rendering happened.
@@ -481,8 +544,7 @@ export default Component.extend({
     // perform static measurement. The motionService coordinates this
     // because all animators need to be simultaneously put into their
     // static state via beginStaticMeasurement and endStaticMeasurement.
-    yield * this.get('motionService').staticMeasurement(() => {
-
+    yield* this.get('motionService').staticMeasurement(() => {
       // we care about the final position of our own DOM parent. That
       // lets us nest motions correctly.
       if (parent && !parent.finalBounds) {
@@ -510,12 +572,9 @@ export default Component.extend({
     // some of our sprites may match up with sprites that are entering
     // or leaving other simulatneous animators. So we hit another
     // coordination point via the motionService
-    let { farMatches, matchingAnimatorsFinished, beacons } = yield this.get('motionService.farMatch').perform(
-      current(),
-      insertedSprites,
-      keptSprites,
-      removedSprites
-    );
+    let { farMatches, matchingAnimatorsFinished, beacons } = yield this.get(
+      'motionService.farMatch'
+    ).perform(current(), insertedSprites, keptSprites, removedSprites);
 
     // TODO: This is best effort. The parent isn't necessarily in
     // the initial position at this point, but in practice if people
@@ -528,38 +587,47 @@ export default Component.extend({
       parent.measureInitialBounds();
     }
 
-    let [sentSprites, unmatchedRemovedSprites] = partition(removedSprites, sprite => {
-      let other = farMatches.get(sprite);
-      if (other) {
-        sprite.endAtSprite(other);
-        if (other.revealed && !sprite.revealed) {
-          sprite.startAtSprite(other);
+    let [sentSprites, unmatchedRemovedSprites] = partition(
+      removedSprites,
+      sprite => {
+        let other = farMatches.get(sprite);
+        if (other) {
+          sprite.endAtSprite(other);
+          if (other.revealed && !sprite.revealed) {
+            sprite.startAtSprite(other);
+          }
+          return true;
         }
-        return true;
       }
-    });
+    );
 
     // if any of our inserted sprites have matching far away sprites,
     // they become receivedSprites and they get initialBounds
     // (derived from their far away matching sprite) and motion
     // continuity via `startAtSprite`.
-    let [receivedSprites, unmatchedInsertedSprites] = partition(insertedSprites, sprite => {
-      let other = farMatches.get(sprite);
-      if (other) {
-        sprite.startAtSprite(other);
-        return true;
-      }
-    });
-
-    let [matchedKeptSprites, unmatchedKeptSprites] = partition(keptSprites, sprite => {
-      let other = farMatches.get(sprite);
-      if (other) {
-        if (other.revealed && !sprite.revealed) {
+    let [receivedSprites, unmatchedInsertedSprites] = partition(
+      insertedSprites,
+      sprite => {
+        let other = farMatches.get(sprite);
+        if (other) {
           sprite.startAtSprite(other);
+          return true;
         }
-        return true;
       }
-    });
+    );
+
+    let [matchedKeptSprites, unmatchedKeptSprites] = partition(
+      keptSprites,
+      sprite => {
+        let other = farMatches.get(sprite);
+        if (other) {
+          if (other.revealed && !sprite.revealed) {
+            sprite.startAtSprite(other);
+          }
+          return true;
+        }
+      }
+    );
 
     // let other animators make their own partitioning decisions
     // before we start hiding the sent & received sprites yield
@@ -579,41 +647,46 @@ export default Component.extend({
       unmatchedInsertedSprites = [];
     }
 
-
     // if we are interrupted after this point, any removed children that didn't
     // actually undergo a motion will be immediately destroyed.
     this._renderedChildrenStartedMoving = true;
 
     // Early exit if nothing is happening.
-    if (!transition ||
-        ( unmatchedInsertedSprites.length === 0 &&
-          unmatchedKeptSprites.length === 0 &&
-          unmatchedRemovedSprites.length === 0 &&
-          sentSprites.length === 0 &&
-          receivedSprites.length === 0 &&
-          matchedKeptSprites.length === 0)) {
+    if (
+      !transition ||
+      (unmatchedInsertedSprites.length === 0 &&
+        unmatchedKeptSprites.length === 0 &&
+        unmatchedRemovedSprites.length === 0 &&
+        sentSprites.length === 0 &&
+        receivedSprites.length === 0 &&
+        matchedKeptSprites.length === 0)
+    ) {
       return { matchingAnimatorsFinished };
     }
 
     let context = new TransitionContext(
       this.get('durationWithDefault'),
-      unmatchedInsertedSprites,                      // user-visible insertedSprites
-      unmatchedKeptSprites,                          // user-visible keptSprites
-      unmatchedRemovedSprites,                       // user-visible removedSprites
-      sentSprites,                                   // user-visible sentSprites
-      receivedSprites.concat(matchedKeptSprites),    // user-visible receivedSprites
+      unmatchedInsertedSprites, // user-visible insertedSprites
+      unmatchedKeptSprites, // user-visible keptSprites
+      unmatchedRemovedSprites, // user-visible removedSprites
+      sentSprites, // user-visible sentSprites
+      receivedSprites.concat(matchedKeptSprites), // user-visible receivedSprites
       beacons
-
     );
     let cycle = this._cycleCounter++;
     context.onMotionStart = sprite => this._motionStarted(sprite, cycle);
     context.onMotionEnd = sprite => this._motionEnded(sprite, cycle);
 
-    yield * context._runToCompletion(transition);
+    yield* context._runToCompletion(transition);
     return { matchingAnimatorsFinished };
   }),
 
-  finalizeAnimation: task(function * (insertedSprites, keptSprites, removedSprites, matchingAnimatorsFinished) {
+  finalizeAnimation: task(function*(
+    insertedSprites,
+    keptSprites,
+    removedSprites,
+    matchingAnimatorsFinished
+  ) {
     yield matchingAnimatorsFinished;
 
     // The following cleanup ensures that all the sprites that will
@@ -643,7 +716,6 @@ export default Component.extend({
       // to be done
       yield afterRender();
     }
-
   }),
 
   _motionStarted(sprite, cycle) {
@@ -658,7 +730,7 @@ export default Component.extend({
   _transitionFor(firstTime, oldItems, newItems) {
     let rules = this.get('rules');
     if (rules) {
-      return rules({firstTime, oldItems, newItems});
+      return rules({ firstTime, oldItems, newItems });
     } else {
       return this.get('use');
     }
@@ -666,7 +738,6 @@ export default Component.extend({
 }).reopenClass({
   positionalParams: ['items']
 });
-
 
 class Child {
   constructor(group, id, value, index) {

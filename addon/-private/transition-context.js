@@ -1,7 +1,15 @@
 import { childrenSettled } from './scheduler';
 
 export default class TransitionContext {
-  constructor(duration, insertedSprites, keptSprites, removedSprites, sentSprites, receivedSprites, beacons) {
+  constructor(
+    duration,
+    insertedSprites,
+    keptSprites,
+    removedSprites,
+    sentSprites,
+    receivedSprites,
+    beacons
+  ) {
     this._duration = duration;
     this._insertedSprites = insertedSprites;
     this._keptSprites = keptSprites;
@@ -42,13 +50,13 @@ export default class TransitionContext {
   _prepareSprites(sprites) {
     // Link them up, so that users can conveniently pass sprites
     // around to Motions without also passing the transition context.
-    sprites.forEach(sprite => sprite._transitionContext = this);
+    sprites.forEach(sprite => (sprite._transitionContext = this));
 
     if (!this.prepareSprite) {
       return sprites;
     }
     return sprites.map(sprite => {
-      if (!this._prepared.has(sprite)){
+      if (!this._prepared.has(sprite)) {
         this._prepared.add(sprite);
         sprite = this.prepareSprite(sprite);
       }
@@ -57,7 +65,7 @@ export default class TransitionContext {
   }
 
   *_runToCompletion(transition) {
-    yield * transition(this);
+    yield* transition(this);
     yield childrenSettled();
   }
 }

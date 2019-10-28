@@ -17,13 +17,21 @@ module('Acceptance | orphan', function(hooks) {
     await visit('/demos/orphan');
     await time.advance(1000);
 
-    let opacity = parseFloat(getComputedStyle(this.element.querySelector('.one')).opacity);
-    assert.ok(opacity > 0 && opacity < 1, `expected opacity to be animating, it's ${opacity}`);
+    let opacity = parseFloat(
+      getComputedStyle(this.element.querySelector('.one')).opacity
+    );
+    assert.ok(
+      opacity > 0 && opacity < 1,
+      `expected opacity to be animating, it's ${opacity}`
+    );
 
     let onePosition = bounds(this.element.querySelector('.one')).left;
     let twoPosition = bounds(this.element.querySelector('.two')).left;
 
-    assert.ok(twoPosition > onePosition, `expected element .two to be animating in, ${twoPosition } > ${onePosition}`);
+    assert.ok(
+      twoPosition > onePosition,
+      `expected element .two to be animating in, ${twoPosition} > ${onePosition}`
+    );
     time.runAtSpeed(40);
     await animationsSettled();
     assert.equal(currentURL(), '/demos/orphan');
@@ -37,11 +45,19 @@ module('Acceptance | orphan', function(hooks) {
     await click(this.element.querySelector('button'));
     await time.advance(1000);
 
-    let opacity = parseFloat(getComputedStyle(this.element.querySelector('.one')).opacity);
-    assert.ok(opacity > 0 && opacity < 1, `expected opacity to be animating, it's ${opacity}`);
+    let opacity = parseFloat(
+      getComputedStyle(this.element.querySelector('.one')).opacity
+    );
+    assert.ok(
+      opacity > 0 && opacity < 1,
+      `expected opacity to be animating, it's ${opacity}`
+    );
 
     let onePosition = bounds(this.element.querySelector('.one')).left;
     let twoPosition = bounds(this.element.querySelector('.two')).left;
-    assert.ok(twoPosition > onePosition, `expected element .two to be animating out, ${twoPosition } > ${onePosition}`);
+    assert.ok(
+      twoPosition > onePosition,
+      `expected element .two to be animating out, ${twoPosition} > ${onePosition}`
+    );
   });
 });

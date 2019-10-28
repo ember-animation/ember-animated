@@ -5,8 +5,7 @@ import opacity from 'ember-animated/motions/opacity';
 import { parallel } from 'ember-animated';
 
 export default Controller.extend({
-  transition: function * ({ receivedSprites, sentSprites, removedSprites }) {
-
+  transition: function*({ receivedSprites, sentSprites, removedSprites }) {
     // received and sent sprites are flying above all the others
     receivedSprites.concat(sentSprites).forEach(sprite => {
       sprite.applyStyles({
@@ -23,6 +22,4 @@ export default Controller.extend({
       opacity(sprite, { to: 0 });
     });
   }
-
-
 });

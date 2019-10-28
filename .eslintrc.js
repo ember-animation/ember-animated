@@ -5,10 +5,9 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: [
-    'ember'
-  ],
+  plugins: ['ember'],
   extends: [
+    'plugin:prettier/recommended',
     'eslint:recommended',
     'plugin:ember/recommended'
   ],
@@ -16,9 +15,9 @@ module.exports = {
     browser: true
   },
   rules: {
-    'no-constant-condition': ["error", { checkLoops: false }],
+    'no-constant-condition': ['error', { checkLoops: false }],
     'require-yield': 0,
-    semi: ["error", "always"]
+    semi: ['error', 'always']
   },
   globals: {
     WeakMap: false,
@@ -54,9 +53,13 @@ module.exports = {
         node: true
       },
       plugins: ['node'],
-      rules: Object.assign({}, require('eslint-plugin-node').configs.recommended.rules, {
-        // add your custom rules and overrides for node files here
-      })
+      rules: Object.assign(
+        {},
+        require('eslint-plugin-node').configs.recommended.rules,
+        {
+          // add your custom rules and overrides for node files here
+        }
+      )
     }
   ]
 };

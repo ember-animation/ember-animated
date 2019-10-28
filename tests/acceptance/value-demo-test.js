@@ -30,9 +30,9 @@ module('Acceptance | value demo', function(hooks) {
     number = parseInt(this.element.querySelector('.numbers').textContent);
 
     await click(findByText(this.element, 'button', '+'));
-    let finalNumber = parseInt(this.element.querySelector('.numbers').textContent);
+    let finalNumber = parseInt(
+      this.element.querySelector('.numbers').textContent
+    );
     assert.equal(finalNumber, number + 1);
-
   });
-
 });

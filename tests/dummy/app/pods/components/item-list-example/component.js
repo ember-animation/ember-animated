@@ -16,20 +16,26 @@ export default Component.extend({
       }
       return result.sort(numeric);
     },
-    set(k,v) {
+    set(k, v) {
       return v;
     }
   }),
-  addItem: task(function * () {
+  addItem: task(function*() {
     this.get('motionService').willAnimate({
       task: current,
       duration: this.get('duration'),
       component: this
     });
     let items = this.get('items');
-    this.set('items', items.concat([makeRandomItem()]).sort(this.currentSort).map(elt => ({ id: elt.id })));
+    this.set(
+      'items',
+      items
+        .concat([makeRandomItem()])
+        .sort(this.currentSort)
+        .map(elt => ({ id: elt.id }))
+    );
   }),
-  removeItem: task(function * (which) {
+  removeItem: task(function*(which) {
     this.get('motionService').willAnimate({
       task: current,
       duration: this.get('duration'),
@@ -48,8 +54,10 @@ export default Component.extend({
   }
 });
 
-function numeric(a,b) { return a.id - b.id; }
+function numeric(a, b) {
+  return a.id - b.id;
+}
 
 function makeRandomItem() {
-  return { id: Math.round(Math.random()*1000) };
+  return { id: Math.round(Math.random() * 1000) };
 }
