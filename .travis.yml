@@ -39,7 +39,9 @@ jobs:
       install:
         - yarn install --production
         - cd docs
-        - yarn
+        # absurdly, yarn seems to fail reliably on the first try and succeed on
+        # the second
+        - until yarn install; do echo "Retrying yarn"; done
       script:
         - yarn run lint:hbs
         - yarn run lint:js
