@@ -67,8 +67,7 @@
   },
   "resolutions": {
     "ember-cli-addon-docs/ember-data": "3.10.0",
-    "ember-cli-addon-docs/ember-component-css": "^0.6.7",
-    "ember-cli-addon-docs/ember-auto-import/typescript-memoize/core-js": "^2.6.9"
+    "ember-cli-addon-docs/ember-component-css": "^0.6.7"
   },
   "ember-addon": {
     "paths": [
