@@ -22,7 +22,8 @@ before_install:
   - export PATH=$HOME/.yarn/bin:$PATH
 
 install:
-  - yarn install --non-interactive
+  # absurdly, yarn reliably fails on the first try and succeeds on the second here.
+  - until yarn install --non-interactive; do echo "trying yarn again"; done
 
 script:
   - yarn lint:hbs
