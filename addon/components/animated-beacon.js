@@ -88,19 +88,23 @@ export default Component.extend({
   },
 
   _firstChildElement() {
-    if (!this._inserted) { return; }
+    if (!this._inserted) {
+      return;
+    }
     let { firstNode, lastNode } = componentNodes(this);
     let node = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
         return node;
       }
-      if (node === lastNode){ break; }
+      if (node === lastNode) {
+        break;
+      }
       node = node.nextSibling;
     }
   },
 
-  participate: task(function * () {
+  participate: task(function*() {
     let element = this._firstChildElement();
     if (!element) {
       return;
@@ -110,14 +114,10 @@ export default Component.extend({
 
     yield afterRender();
     yield microwait();
-    yield * this.get('motionService').staticMeasurement(() => {
+    yield* this.get('motionService').staticMeasurement(() => {
       offsetParent.measureFinalBounds();
       sprite.measureFinalBounds();
     });
-    yield this.get('motionService.addBeacon').perform(
-      this.name,
-      sprite
-    );
-  }).restartable()
-
+    yield this.get('motionService.addBeacon').perform(this.name, sprite);
+  }).restartable(),
 });

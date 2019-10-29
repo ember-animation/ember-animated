@@ -10,9 +10,9 @@ export default Component.extend({
     toggle() {
       this.set('listMode', !this.get('listMode'));
     },
-    normal(){
+    normal() {
       this.set('noAdjustments', !this.get('noAdjustments'));
-    }
-  }
+    },
+  },
 });
 //END-SNIPPET

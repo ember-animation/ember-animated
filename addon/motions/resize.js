@@ -1,4 +1,4 @@
-import { Motion, rAF, Tween } from "..";
+import { Motion, rAF, Tween } from '..';
 
 /**
   Smoothly resizes _sprite_ from its the initial size to its final size.
@@ -44,13 +44,13 @@ export class Resize extends Motion {
         sprite.initialBounds.width / sprite.initialCumulativeTransform.a,
         sprite.finalBounds.width / sprite.finalCumulativeTransform.a,
         duration,
-        this.opts.easing
+        this.opts.easing,
       );
       this.heightTween = new Tween(
         sprite.initialBounds.height / sprite.initialCumulativeTransform.d,
         sprite.finalBounds.height / sprite.finalCumulativeTransform.d,
         duration,
-        this.opts.easing
+        this.opts.easing,
       );
     } else {
       this.widthTween = new Tween(
@@ -58,21 +58,21 @@ export class Resize extends Motion {
         sprite.finalBounds.width / sprite.finalCumulativeTransform.a -
           this.prior.sprite.finalBounds.width,
         duration,
-        this.opts.easing
+        this.opts.easing,
       ).plus(this.prior.widthTween);
       this.heightTween = new Tween(
         0,
         sprite.finalBounds.height / sprite.finalCumulativeTransform.d -
           this.prior.sprite.finalBounds.height,
         duration,
-        this.opts.easing
+        this.opts.easing,
       ).plus(this.prior.heightTween);
     }
 
     while (!this.widthTween.done || !this.heightTween.done) {
       sprite.applyStyles({
-        width: this.widthTween.currentValue,
-        height: this.heightTween.currentValue,
+        width: `${this.widthTween.currentValue}px`,
+        height: `${this.heightTween.currentValue}px`,
       });
       yield rAF();
     }

@@ -49,8 +49,10 @@ export default Component.extend({
   layout,
   tagName: '',
   realGroup: computed('group', function() {
-    return this.get('group') || `animated_if_${Math.floor(Math.random()*1000000)}`;
+    return (
+      this.get('group') || `animated_if_${Math.floor(Math.random() * 1000000)}`
+    );
   }),
 }).reopenClass({
-  positionalParams: ['predicate']
+  positionalParams: ['predicate'],
 });

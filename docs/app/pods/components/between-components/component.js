@@ -5,7 +5,6 @@ import scale from 'ember-animated/motions/scale';
 import { parallel } from 'ember-animated';
 import { later } from '@ember/runloop';
 
-
 export default Component.extend({
   init() {
     this._super();
@@ -19,10 +18,15 @@ export default Component.extend({
     for (let i = 0; i < 7; i++) {
       result.push(makeRandomItem(i));
     }
-    return (result);
+    return result;
   },
 
-  transition: function * ({ insertedSprites, keptSprites, removedSprites, beacons }) {
+  transition: function*({
+    insertedSprites,
+    keptSprites,
+    removedSprites,
+    beacons,
+  }) {
     insertedSprites.forEach(sprite => {
       sprite.startAtSprite(beacons.add);
       parallel(move(sprite, scale(sprite)));
@@ -38,12 +42,17 @@ export default Component.extend({
     });
   },
 
-
   actions: {
     addItem() {
       let items = this.get('items');
       let index = Math.floor(Math.random() * Math.floor(10));
-      this.set('items', items.slice(0, 0).concat([makeRandomItem(index)]).concat(items.slice(0)));
+      this.set(
+        'items',
+        items
+          .slice(0, 0)
+          .concat([makeRandomItem(index)])
+          .concat(items.slice(0)),
+      );
     },
     removeItem(which) {
       let items = this.get('items');
@@ -56,14 +65,23 @@ export default Component.extend({
     restoreItem(which, index) {
       let items = this.get('items');
       this.set('items', items.concat(items.splice(index, 0, which)));
-    }
-  }
+    },
+  },
 });
 
-
 function makeRandomItem(index) {
-  var messages = ["Hi", "Hello", "Invitation", "Thank You", "Congratulations", "Namaste", "Happy Birthday", "Aloha", "Welcome","Urgent"];
-  return { id: Math.round(Math.random()*1000), message: messages[index] };
+  let messages = [
+    'Hi',
+    'Hello',
+    'Invitation',
+    'Thank You',
+    'Congratulations',
+    'Namaste',
+    'Happy Birthday',
+    'Aloha',
+    'Welcome',
+    'Urgent',
+  ];
+  return { id: Math.round(Math.random() * 1000), message: messages[index] };
 }
 //END-SNIPPET
-

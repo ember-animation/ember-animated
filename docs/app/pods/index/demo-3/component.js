@@ -6,28 +6,29 @@ import { wait } from 'ember-animated';
 import dedent from '../utils/dedent';
 
 export default Component.extend({
-
-  * collapse({ receivedSprites }) {
+  *collapse({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       move(sprite);
       scale(sprite);
     }
   },
 
-  * shuffle({ receivedSprites }) {
+  *shuffle({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
-        zIndex: (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
+        zIndex: `${(receivedSprites.length - receivedSprites.indexOf(sprite)) *
+          100}`,
       });
       move(sprite);
       scale(sprite);
     }
   },
 
-  * shuffleWithStagger({ receivedSprites }) {
+  *shuffleWithStagger({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
-        zIndex: (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
+        zIndex: `${(receivedSprites.length - receivedSprites.indexOf(sprite)) *
+          100}`,
       });
       move(sprite);
       scale(sprite);
@@ -44,7 +45,7 @@ export default Component.extend({
       images: [
         'images/nature-1.jpeg',
         'images/nature-2.jpeg',
-        'images/nature-3.jpeg'
+        'images/nature-3.jpeg',
       ],
     },
     {
@@ -52,21 +53,23 @@ export default Component.extend({
       images: [
         'images/architecture-1.jpeg',
         'images/architecture-2.jpeg',
-        'images/architecture-3.jpeg'
-      ]
+        'images/architecture-3.jpeg',
+      ],
     },
     {
       name: 'Food',
       images: [
         'images/food-1.jpeg',
         'images/food-2.jpeg',
-        'images/food-3.jpeg'
-      ]
+        'images/food-3.jpeg',
+      ],
     },
   ]),
 
   selectedCategory: computed('selectedCategoryName', function() {
-    return this.categories.find(category => category.name === this.selectedCategoryName);
+    return this.categories.find(
+      category => category.name === this.selectedCategoryName,
+    );
   }),
 
   componentDiff: dedent`
@@ -90,6 +93,5 @@ export default Component.extend({
         }
 
       });
-  `
-
+  `,
 });

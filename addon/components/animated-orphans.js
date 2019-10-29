@@ -4,12 +4,10 @@ import Component from '@ember/component';
 import layout from '../templates/components/animated-orphans';
 import { task } from '../-private/ember-scheduler';
 import { afterRender, microwait, continueMotions } from '..';
-import TransitionContext from '../-private/transition-context';
-import {
-  spawnChild,
-  childrenSettled,
-  current
-} from '../-private/scheduler';
+import TransitionContext, {
+  runToCompletion,
+} from '../-private/transition-context';
+import { spawnChild, childrenSettled, current } from '../-private/scheduler';
 import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
 import '../element-remove';
@@ -36,21 +34,20 @@ export default Component.extend({
     this._childToTransition = new WeakMap();
     this._inserted = false;
     this._cycleCounter = 0;
-
   },
 
   didInsertElement() {
     this._inserted = true;
     this.animateOrphans = this.animateOrphans.bind(this);
     this.reanimate = this.reanimate.bind(this);
-    this.get("motionService")
+    this.get('motionService')
       .register(this)
       .observeOrphans(this.animateOrphans)
       .observeAnimations(this.reanimate);
   },
 
   willDestroyElement() {
-    this.get("motionService")
+    this.get('motionService')
       .unregister(this)
       .unobserveOrphans(this.animateOrphans)
       .unobserveAnimations(this.reanimate);
@@ -68,7 +65,7 @@ export default Component.extend({
       }),
       transition,
       duration,
-      shouldAnimateRemoved
+      shouldAnimateRemoved,
     });
     this.reanimate();
   },
@@ -89,21 +86,27 @@ export default Component.extend({
 
   isAnimating: alias('animate.isRunning'),
 
-  animate: task(function * ({ ownSprite, activeSprites }) {
+  animate: task(function*({ ownSprite, activeSprites }) {
     yield this.get('startAnimation').perform(ownSprite);
-    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(activeSprites, ownSprite);
-    yield this.get('finalizeAnimation').perform(activeSprites, matchingAnimatorsFinished);
+    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(
+      activeSprites,
+      ownSprite,
+    );
+    yield this.get('finalizeAnimation').perform(
+      activeSprites,
+      matchingAnimatorsFinished,
+    );
   }).restartable(),
 
-  startAnimation: task(function * (ownSprite) {
+  startAnimation: task(function*(ownSprite) {
     yield afterRender();
     ownSprite.measureFinalBounds();
   }),
 
-  runAnimation: task(function * (activeSprites, ownSprite) {
+  runAnimation: task(function*(activeSprites, ownSprite) {
     // we don't need any static measurements, but we wait for this so
     // we stay on the same timing as all the other animators
-    yield * this.get('motionService').staticMeasurement(() => {});
+    yield* this.get('motionService').staticMeasurement(() => {});
 
     // Some of the new orphan transitions may be handing us sprites we
     // already have matches for, in which case our active sprites take
@@ -114,23 +117,31 @@ export default Component.extend({
         activeIds[`${sprite.owner.group}/${sprite.owner.id}`] = true;
       }
       for (let entry of this._newOrphanTransitions) {
-        entry.removedSprites = entry.removedSprites.filter(s => !activeIds[`${s.owner.group}/${s.owner.id}`]);
+        entry.removedSprites = entry.removedSprites.filter(
+          s => !activeIds[`${s.owner.group}/${s.owner.id}`],
+        );
       }
     }
 
     // our sprites from prior animation runs are eligible to be
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
-    let { farMatches, matchingAnimatorsFinished } = yield this.get('motionService.farMatch').perform(
+    let { farMatches, matchingAnimatorsFinished } = yield this.get(
+      'motionService.farMatch',
+    ).perform(
       current(),
       [],
       [],
-      activeSprites.concat(...this._newOrphanTransitions.map(t => t.removedSprites))
+      activeSprites.concat(
+        ...this._newOrphanTransitions.map(t => t.removedSprites),
+      ),
     );
 
     let cycle = this._cycleCounter++;
 
-    for (let { transition, duration, sprites } of this._groupActiveSprites(activeSprites)) {
+    for (let { transition, duration, sprites } of this._groupActiveSprites(
+      activeSprites,
+    )) {
       let [sentSprites, removedSprites] = partition(sprites, sprite => {
         let other = farMatches.get(sprite);
         if (other) {
@@ -147,16 +158,16 @@ export default Component.extend({
         [],
         removedSprites,
         sentSprites,
-        []
+        [],
       );
       context.onMotionStart = this._onMotionStart.bind(this, cycle);
       context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
-      spawnChild(function * () {
+      spawnChild(function*() {
         // let other animators make their own partitioning decisions
         // before we start hiding the sent & received sprites
         yield microwait();
         sentSprites.forEach(s => s.hide());
-        yield * context._runToCompletion(transition);
+        yield* runToCompletion(context, transition);
       });
     }
 
@@ -170,7 +181,12 @@ export default Component.extend({
       // so any animated descendants need to get hidden before one of
       // their ancestors clones them.
       let entry = this._newOrphanTransitions.pop();
-      let { transition, duration, removedSprites, shouldAnimateRemoved } = entry;
+      let {
+        transition,
+        duration,
+        removedSprites,
+        shouldAnimateRemoved,
+      } = entry;
 
       if (removedSprites.length === 0) {
         // This can happen due to our filtering based on activeIds
@@ -184,19 +200,22 @@ export default Component.extend({
         this._childToTransition.set(sprite.owner, entry);
       }
 
-      let [sentSprites, unmatchedRemovedSprites] = partition(removedSprites, sprite => {
-        let other = farMatches.get(sprite);
-        if (other) {
-          sprite.endAtSprite(other);
-          if (other.revealed && !sprite.revealed) {
-            sprite.startAtSprite(other);
+      let [sentSprites, unmatchedRemovedSprites] = partition(
+        removedSprites,
+        sprite => {
+          let other = farMatches.get(sprite);
+          if (other) {
+            sprite.endAtSprite(other);
+            if (other.revealed && !sprite.revealed) {
+              sprite.startAtSprite(other);
+            }
+            return true;
           }
-          return true;
-        }
-      });
+        },
+      );
 
       let self = this;
-      spawnChild(function * () {
+      spawnChild(function*() {
         yield microwait();
         sentSprites.forEach(s => s.hide());
 
@@ -224,13 +243,17 @@ export default Component.extend({
           [],
           removedSprites,
           sentSprites,
-          []
+          [],
         );
-        context.onMotionStart = self._onFirstMotionStart.bind(self, activeSprites, cycle);
+        context.onMotionStart = self._onFirstMotionStart.bind(
+          self,
+          activeSprites,
+          cycle,
+        );
         context.onMotionEnd = self._onMotionEnd.bind(self, cycle);
         context.prepareSprite = self._prepareSprite.bind(self);
 
-        yield * context._runToCompletion(transition);
+        yield* runToCompletion(context, transition);
       });
     }
 
@@ -238,7 +261,7 @@ export default Component.extend({
     return { matchingAnimatorsFinished };
   }),
 
-  finalizeAnimation: task(function * (activeSprites, matchingAnimatorsFinished) {
+  finalizeAnimation: task(function*(activeSprites, matchingAnimatorsFinished) {
     yield matchingAnimatorsFinished;
     for (let sprite of activeSprites) {
       sprite.element.remove();
@@ -246,23 +269,27 @@ export default Component.extend({
   }),
 
   _findActiveSprites(ownSprite) {
-    if (!this._inserted) { return []; }
-    return Array.from(this.element.children).map(element => {
-      let child = this._elementToChild.get(element);
-      if (child.shouldRemove) {
-        // child was not animating in the previously interrupted
-        // animation, so its safe to remove
-        element.remove();
-      } else {
-        let sprite = Sprite.positionedStartingAt(element, ownSprite);
-        sprite.owner = child;
-        // we need to flag each existing child for removal at the
-        // start of each animation. That's what reinitializes its
-        // removal blockers count.
-        child.flagForRemoval();
-        return sprite;
-      }
-    }).filter(Boolean);
+    if (!this._inserted) {
+      return [];
+    }
+    return Array.from(this.element.children)
+      .map(element => {
+        let child = this._elementToChild.get(element);
+        if (child.shouldRemove) {
+          // child was not animating in the previously interrupted
+          // animation, so its safe to remove
+          element.remove();
+        } else {
+          let sprite = Sprite.positionedStartingAt(element, ownSprite);
+          sprite.owner = child;
+          // we need to flag each existing child for removal at the
+          // start of each animation. That's what reinitializes its
+          // removal blockers count.
+          child.flagForRemoval();
+          return sprite;
+        }
+      })
+      .filter(Boolean);
   },
 
   _groupActiveSprites(activeSprites) {
@@ -271,7 +298,7 @@ export default Component.extend({
       let { transition, duration } = this._childToTransition.get(sprite.owner);
       let group = groups.find(g => g.transition === transition);
       if (!group) {
-        group = { transition, duration, sprites: []};
+        group = { transition, duration, sprites: [] };
         groups.push(group);
       }
       group.sprites.push(sprite);
@@ -289,7 +316,6 @@ export default Component.extend({
 
   _onFirstMotionStart(activeSprites, cycle, sprite) {
     if (activeSprites.indexOf(sprite) === -1) {
-
       // in most animators, sprites are still living in their normal place in
       // the DOM, and so they will necessarily start out with their appearance
       // matching initialComputedStyles. But here we're dealing with an orphan
@@ -322,6 +348,5 @@ export default Component.extend({
 
   _onMotionEnd(cycle, sprite) {
     sprite.owner.unblock(cycle);
-  }
-
+  },
 });

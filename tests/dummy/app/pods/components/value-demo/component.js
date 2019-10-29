@@ -1,4 +1,3 @@
-
 import Component from '@ember/component';
 import { toLeft, toRight } from 'ember-animated/transitions/move-over';
 
@@ -12,14 +11,13 @@ export default Component.extend({
   },
 
   counter: 10,
-  
+
   actions: {
     increment() {
       this.set('counter', this.get('counter') + 1);
     },
     decrement() {
       this.set('counter', this.get('counter') - 1);
-    }
-  }
+    },
+  },
 });
-

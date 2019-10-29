@@ -45,14 +45,12 @@ import { A } from '@ember/array';
   @public
 */
 
-
-
 export default Component.extend({
   tagName: '',
   layout,
   items: computed('value', function() {
     return A([this.get('value')]);
-  })
+  }),
 }).reopenClass({
-  positionalParams: ['value']
+  positionalParams: ['value'],
 });

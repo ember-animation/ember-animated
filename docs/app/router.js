@@ -3,12 +3,12 @@ import config from './config/environment';
 
 const Router = AddonDocsRouter.extend({
   location: config.locationType,
-  rootURL: config.rootURL
+  rootURL: config.rootURL,
 });
 
 Router.map(function() {
   docsRoute(this, function() {
-    this.route('between', function(){
+    this.route('between', function() {
       this.route('detail', { path: '/:id' });
     });
     this.route('sprites');

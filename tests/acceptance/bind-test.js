@@ -29,9 +29,9 @@ module('Acceptance | bind', function(hooks) {
     number = parseInt(this.element.querySelector('.left-count').textContent);
 
     await click(findByText(this.element, 'button', '+'));
-    let finalNumber = parseInt(this.element.querySelector('.left-count').textContent);
+    let finalNumber = parseInt(
+      this.element.querySelector('.left-count').textContent,
+    );
     assert.equal(finalNumber, number + 1);
-
   });
-
 });

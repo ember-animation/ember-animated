@@ -15,44 +15,48 @@
 */
 
 export default class Transform {
-  constructor(a, b, c, d, tx, ty) {
-    // WARNING: never mutate an existing Transform. Some of them are
-    // shared. Operations need to return new Transforms instead.
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.tx = tx;
-    this.ty = ty;
-  }
-  serialize() {
+  constructor(
+    readonly a: number,
+    readonly b: number,
+    readonly c: number,
+    readonly d: number,
+    readonly tx: number,
+    readonly ty: number,
+  ) {}
+
+  serialize(): string {
     return `matrix(${this.a}, ${this.b}, ${this.c}, ${this.d}, ${this.tx}, ${this.ty})`;
   }
 
   // See the comment below on `const identity`.
-  isIdentity() {
-    return this === identity || (
-      this.a === 1 &&
+  isIdentity(): boolean {
+    return (
+      this === identity ||
+      (this.a === 1 &&
         this.b === 0 &&
         this.c === 0 &&
         this.d === 1 &&
         this.tx === 0 &&
-        this.ty === 0
+        this.ty === 0)
     );
   }
 
-  mult(other) {
+  mult(other: Transform): Transform {
     // This is deliberately not isIdentity(). I'm optimizing for the
     // case where there was no preexisting transform at all.
-    if (this === identity) { return other; }
-    if (other === identity) { return this; }
+    if (this === identity) {
+      return other;
+    }
+    if (other === identity) {
+      return this;
+    }
     return new Transform(
       this.a * other.a + this.c * other.b,
       this.b * other.a + this.d * other.b,
       this.a * other.c + this.c * other.d,
       this.b * other.c + this.d * other.d,
       this.a * other.tx + this.c * other.ty + this.tx,
-      this.b * other.tx + this.d * other.ty + this.ty
+      this.b * other.tx + this.d * other.ty + this.ty,
     );
   }
 }
@@ -72,16 +76,17 @@ export const identity = new Transform(1, 0, 0, 1, 0, 0);
 
 const matrixPattern = /matrix\((.*)\)/;
 
-function parseTransform(matrixString) {
+function parseTransform(matrixString: string): Transform {
   let match = matrixPattern.exec(matrixString);
   if (!match) {
     return identity;
   }
-  return new Transform(...match[1].split(',').map(parseFloat));
+  let [a, b, c, d, tx, ty] = match[1].split(',').map(parseFloat);
+  return new Transform(a, b, c, d, tx, ty);
 }
 
-function parseOrigin(originString) {
-  return originString.split(' ').map(parseFloat);
+function parseOrigin(originString: string): [number, number] {
+  return originString.split(' ').map(parseFloat) as [number, number];
 }
 
 /**
@@ -93,10 +98,11 @@ function parseOrigin(originString) {
   @param {HTMLElement} elt
   @return {Transform}
 */
-export function cumulativeTransform(elt) {
+export function cumulativeTransform(elt: HTMLElement) {
   let accumulator = null;
-  while (elt && elt.nodeType === 1) {
-    let transform = ownTransform(elt);
+  let current: HTMLElement | null = elt;
+  while (current && current.nodeType === 1) {
+    let transform = ownTransform(current);
     if (transform !== identity && !transform.isIdentity()) {
       if (accumulator) {
         accumulator = transform.mult(accumulator);
@@ -104,7 +110,7 @@ export function cumulativeTransform(elt) {
         accumulator = transform;
       }
     }
-    elt = elt.parentElement;
+    current = current.parentElement;
   }
   return accumulator || identity;
 }
@@ -117,9 +123,10 @@ export function cumulativeTransform(elt) {
  * @param {HTMLElement} elt
  * @return {Transform} instance representing this element's css transform property.
  */
-export function ownTransform(elt) {
+export function ownTransform(elt: HTMLElement): Transform {
   let eltStyles = window.getComputedStyle(elt);
-  let t = eltStyles.transform !== '' ? eltStyles.transform : elt.style.transform;
+  let t =
+    eltStyles.transform !== '' ? eltStyles.transform! : elt.style.transform!;
   if (t === 'none') {
     // This constant value is an optimization, and we rely on that in
     // cumulativeTransform
@@ -128,14 +135,19 @@ export function ownTransform(elt) {
   let matrix = parseTransform(t);
   if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
     // If there is any rotation, scaling, or skew we need to do it within the context of transform-origin.
-    let origin = eltStyles.transformOrigin !== '' ? eltStyles.transformOrigin : elt.style.transformOrigin;
+    let origin =
+      eltStyles.getPropertyValue('transform-origin') !== ''
+        ? eltStyles.getPropertyValue('transform-origin')!
+        : elt.style.getPropertyValue('transform-origin')!;
     let [originX, originY] = parseOrigin(origin);
     if (originX === 0 && originY === 0) {
       // transform origin is at 0,0 so it will have no effect, so we're done.
       return matrix;
     }
 
-    return (new Transform(1, 0, 0, 1, originX, originY)).mult(matrix).mult(new Transform(1, 0, 0, 1, -originX, -originY));
+    return new Transform(1, 0, 0, 1, originX, originY)
+      .mult(matrix)
+      .mult(new Transform(1, 0, 0, 1, -originX, -originY));
   } else {
     // This case is an optimization for when there is only translation.
     return matrix;

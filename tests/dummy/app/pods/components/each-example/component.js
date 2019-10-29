@@ -6,7 +6,7 @@ import move from 'ember-animated/motions/move';
 import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 
 export default Component.extend({
-  transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+  transition: function*({ insertedSprites, keptSprites, removedSprites }) {
     insertedSprites.forEach(sprite => {
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeOut });
@@ -32,18 +32,23 @@ export default Component.extend({
       }
       return A(result.sort(numeric));
     },
-    set(k,v) {
+    set(k, v) {
       return A(v);
-    }
+    },
   }),
 
-  chaos: task(function * (running) {
-    if (!running) { return; }
+  chaos: task(function*(running) {
+    if (!running) {
+      return;
+    }
     while (true) {
       yield timeout(1000);
       this.send('addItem');
       yield timeout(1000);
-      this.send('removeItem', this.get('items')[Math.floor(Math.random()*this.get('items.length'))]);
+      this.send(
+        'removeItem',
+        this.get('items')[Math.floor(Math.random() * this.get('items.length'))],
+      );
     }
   }).restartable(),
 
@@ -53,7 +58,13 @@ export default Component.extend({
       // This deliberately uses stable keys but unstable objects
       let item = makeRandomItem();
       this.set('message', `add ${item.id}`);
-      this.set('items', items.concat([item]).sort(this.currentSort).map(elt => ({ id: elt.id })));
+      this.set(
+        'items',
+        items
+          .concat([item])
+          .sort(this.currentSort)
+          .map(elt => ({ id: elt.id })),
+      );
     },
     removeItem(which) {
       let items = this.get('items');
@@ -63,7 +74,13 @@ export default Component.extend({
     replaceItem(which) {
       let items = this.get('items');
       let index = items.indexOf(which);
-      this.set('items', items.slice(0, index).concat([makeRandomItem()]).concat(items.slice(index+1)));
+      this.set(
+        'items',
+        items
+          .slice(0, index)
+          .concat([makeRandomItem()])
+          .concat(items.slice(index + 1)),
+      );
     },
     mutate(item) {
       set(item, 'id', makeRandomItem().id);
@@ -83,15 +100,16 @@ export default Component.extend({
     },
     stopChaos() {
       this.get('chaos').perform(false);
-    }
-
-  }
+    },
+  },
 });
 
-function numeric(a,b) { return a.id - b.id; }
+function numeric(a, b) {
+  return a.id - b.id;
+}
 
 function makeRandomItem() {
-  return { id: Math.round(Math.random()*1000) };
+  return { id: Math.round(Math.random() * 1000) };
 }
 
 function random() {

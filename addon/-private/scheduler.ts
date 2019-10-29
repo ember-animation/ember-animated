@@ -37,19 +37,21 @@ API
 
 */
 
-import { Promise } from '..';
+import { registerCancellation, fireCancellation } from './concurrency-helpers';
 
-export function spawn(genFn) {
+// TODO: specialize the Generator types here so you can only yield promises and
+// get back the promise's resolved type.
+export function spawn(genFn: () => Generator) {
   let m = new MicroRoutine(genFn, false);
   return m.promise;
 }
 
-export function spawnChild(genFn) {
+export function spawnChild(genFn: () => Generator) {
   let m = new MicroRoutine(genFn, true);
   return m.promise;
 }
 
-export function stop(microRoutinePromise) {
+export function stop(microRoutinePromise: Promise<any>) {
   if (microRoutinePromise === current()) {
     let e = new Error('TaskCancelation');
     e.message = 'TaskCancelation';
@@ -61,7 +63,7 @@ export function stop(microRoutinePromise) {
   }
 }
 
-export function logErrors(fn) {
+export function logErrors(fn: (err: Error) => void) {
   ensureCurrent('logErrors').errorLogger = fn;
 }
 
@@ -70,27 +72,34 @@ export function current() {
   if (cur) {
     return cur.promise;
   }
+  return;
 }
 
-export function childrenSettled() {
+export async function childrenSettled() {
   return Promise.all(
-    ensureCurrent('childrenSettled').linked.map(
-      child => child.promise.catch(() => null)
-    )
+    ensureCurrent('childrenSettled').linked.map(child =>
+      child.promise.catch(() => null),
+    ),
   );
 }
 
-let withCurrent, getCurrent, onStack;
+interface StackEntry {
+  microroutine: MicroRoutine | undefined;
+  throw: Error | undefined;
+}
+let withCurrent: (routine: MicroRoutine, fn: () => void) => void;
+let getCurrent: () => MicroRoutine | undefined;
+let onStack: (routine: MicroRoutine) => StackEntry | undefined;
 {
-  let cur;
-  let prior = [];
+  let cur: MicroRoutine | undefined;
+  let prior: StackEntry[] = [];
   withCurrent = function(routine, fn) {
-    prior.unshift({ microroutine: cur });
+    prior.unshift({ microroutine: cur, throw: undefined });
     cur = routine;
     try {
       return fn();
     } finally {
-      let restore = prior.shift();
+      let restore = prior.shift()!;
       cur = restore.microroutine;
       if (restore.throw) {
         /*
@@ -112,7 +121,7 @@ let withCurrent, getCurrent, onStack;
   };
 }
 
-function ensureCurrent(label) {
+function ensureCurrent(label: string) {
   let cur = getCurrent();
   if (!cur) {
     throw new Error(`${label}: only works inside a running microroutine`);
@@ -120,50 +129,61 @@ function ensureCurrent(label) {
   return cur;
 }
 
-
-let loggedErrors = new WeakMap();
-let microRoutines = new WeakMap();
+let loggedErrors: WeakSet<Error> = new WeakSet();
+let microRoutines: WeakMap<Promise<any>, MicroRoutine> = new WeakMap();
 
 class MicroRoutine {
-  constructor(genFn, linked) {
-    this.linked = [];
+  private generator: Generator;
+  private resolve!: (value?: any) => void;
+  private reject!: (reason?: any) => void;
+  private stopped = false;
+  private state!: IteratorResult<any>;
+
+  linked: MicroRoutine[] = [];
+  errorLogger: ((e: Error) => void) | undefined;
+  promise: Promise<any>;
+
+  constructor(genFn: () => Generator, linkToParent: boolean) {
     this.generator = genFn();
     this.promise = new Promise((res, rej) => {
       this.resolve = res;
       this.reject = rej;
     });
     microRoutines.set(this.promise, this);
-    this.promise.__ec_cancel__ = this.stop.bind(this);
-    this.stopped = false;
-    if (linked) {
+    registerCancellation(this.promise, this.stop.bind(this));
+
+    if (linkToParent) {
       let parent = ensureCurrent('spawnChild');
       parent.linked.push(this);
       this.errorLogger = parent.errorLogger;
-    } else {
-      this.errorLogger = null;
     }
     this.wake('fulfilled', undefined);
   }
-  wake(state, value) {
-    if (this.stopped) { return; }
+  wake(state: 'fulfilled' | 'rejected', value: any) {
+    if (this.stopped) {
+      return;
+    }
     withCurrent(this, () => {
       try {
         if (state === 'fulfilled') {
           this.state = this.generator.next(value);
         } else {
-          this.state = this.generator.throw(value);
+          // All native generators have a throw, Typescript doesn't seem to know
+          // that because it defines Generator as just an Iterator.
+          this.state = this.generator.throw!(value);
         }
         if (this.state.done) {
           this.resolve(this.state.value);
         } else {
           Promise.resolve(this.state.value).then(
             value => this.wake('fulfilled', value),
-            reason => this.wake('rejected', reason)
+            reason => this.wake('rejected', reason),
           );
         }
-      } catch(err) {
+      } catch (err) {
         this.state = {
-          done: true
+          done: true,
+          value: undefined,
         };
         this.linked.forEach(microRoutine => {
           microRoutine.stop();
@@ -171,8 +191,8 @@ class MicroRoutine {
         if (err.message !== 'TaskCancelation') {
           this.reject(err);
           if (this.errorLogger) {
-            if (!loggedErrors.get(err)) {
-              loggedErrors.set(err, true);
+            if (!loggedErrors.has(err)) {
+              loggedErrors.add(err);
               this.errorLogger.call(null, err);
             }
           }
@@ -182,8 +202,8 @@ class MicroRoutine {
   }
   stop() {
     this.stopped = true;
-    if (this.state && isPromise(this.state.value) && typeof this.state.value.__ec_cancel__ === 'function') {
-      this.state.value.__ec_cancel__();
+    if (this.state && isPromise(this.state.value)) {
+      fireCancellation(this.state.value);
     }
     this.linked.forEach(microRoutine => {
       microRoutine.stop();
@@ -213,19 +233,19 @@ class MicroRoutine {
   }
 }
 
-function cancelGenerator(generator) {
+function cancelGenerator(generator: Generator) {
   let e = new Error('TaskCancelation');
   e.message = 'TaskCancelation';
   try {
-    generator.throw(e);
-  } catch(err) {
+    generator.throw!(e);
+  } catch (err) {
     if (err.message !== 'TaskCancelation') {
       throw err;
     }
   }
 }
 
-function isPromise(thing) {
+function isPromise(thing: any): thing is Promise<any> {
   return thing && typeof thing.then === 'function';
 }
 
@@ -235,9 +255,9 @@ function isPromise(thing) {
 // This allows point-free style, like:
 //   sprites.forEach(parallel(move, scale)).
 //
-export function parallel(...functions) {
-  return function(...args) {
-    return Promise.all(functions.map(f => f.apply(this, args)));
+export function parallel(...functions: Function[]) {
+  return function(...args: any[]) {
+    return Promise.all(functions.map(f => f.apply(null, args)));
   };
 }
 
@@ -247,11 +267,11 @@ export function parallel(...functions) {
 // This allows point-free style, like:
 //   sprites.forEach(serial(scale, move)).
 //
-export function serial(...functions) {
-  return function (...args) {
-    return spawnChild(function * () {
+export function serial(...functions: Function[]) {
+  return function(...args: any[]) {
+    return spawnChild(function*() {
       for (let fn of functions) {
-        yield fn.apply(this, args);
+        yield fn.apply(null, args);
       }
     });
   };

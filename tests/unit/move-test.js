@@ -5,13 +5,13 @@ import { Move } from 'ember-animated/motions/move';
 import {
   equalBounds,
   approxEqualPixels,
-  visuallyConstant
+  visuallyConstant,
 } from '../helpers/assertions';
 import { MotionTester, TimeControl } from 'ember-animated/test-support';
 
 let tester, environment, offsetParent, target, innerContent, time;
 
-module("Unit | Move", function(hooks) {
+module('Unit | Move', function(hooks) {
   hooks.beforeEach(function(assert) {
     assert.equalBounds = equalBounds;
     assert.approxEqualPixels = approxEqualPixels;
@@ -20,7 +20,7 @@ module("Unit | Move", function(hooks) {
     time = new TimeControl();
 
     tester = MotionTester.create({
-      motion: Move
+      motion: Move,
     });
 
     let fixture = document.querySelector('#qunit-fixture');
@@ -48,7 +48,7 @@ module("Unit | Move", function(hooks) {
     time.finished();
   });
 
-  test("simple motion", function(assert) {
+  test('simple motion', function(assert) {
     assert.expect(2);
     let p = Sprite.offsetParentStartingAt(target);
     p.measureFinalBounds();
@@ -75,9 +75,9 @@ module("Unit | Move", function(hooks) {
     });
   });
 
-  test("simple motion, interrupted", function(assert) {
-    target.style.marginLeft = '0px';
-    target.style.marginTop = '0px';
+  test('simple motion, interrupted', function(assert) {
+    target.style['margin-left'] = '0px';
+    target.style['margin-top'] = '0px';
     target.style.position = 'relative';
 
     let p = Sprite.offsetParentStartingAt(target);
@@ -90,14 +90,21 @@ module("Unit | Move", function(hooks) {
     s.measureFinalBounds();
     s.lock();
 
-
     run(() => {
       tester.run(s, { duration: 1000 });
     });
 
     return time.advance(500).then(() => {
-      assert.approxEqualPixels(s.getCurrentBounds().top, s.initialBounds.top + 200, 'top');
-      assert.approxEqualPixels(s.getCurrentBounds().left, s.initialBounds.left + 150, 'left');
+      assert.approxEqualPixels(
+        s.getCurrentBounds().top,
+        s.initialBounds.top + 200,
+        'top',
+      );
+      assert.approxEqualPixels(
+        s.getCurrentBounds().left,
+        s.initialBounds.left + 150,
+        'left',
+      );
       let newSprite = Sprite.positionedStartingAt(target, p);
       newSprite.lock();
       target.style.left = '400px';
@@ -109,8 +116,16 @@ module("Unit | Move", function(hooks) {
       run(() => {
         tester.run(newSprite, { duration: 1000 });
       });
-      assert.approxEqualPixels(newSprite.getCurrentBounds().top, s.initialBounds.top + 200, 'top continuity');
-      assert.approxEqualPixels(newSprite.getCurrentBounds().left, s.initialBounds.left + 150, 'left continuity');
+      assert.approxEqualPixels(
+        newSprite.getCurrentBounds().top,
+        s.initialBounds.top + 200,
+        'top continuity',
+      );
+      assert.approxEqualPixels(
+        newSprite.getCurrentBounds().left,
+        s.initialBounds.left + 150,
+        'left continuity',
+      );
       return time.advance(1005).then(() => {
         assert.visuallyConstant(target, () => {
           newSprite.unlock();
@@ -119,7 +134,7 @@ module("Unit | Move", function(hooks) {
     });
   });
 
-  test("interrupting with same destination does not extend animation time", function(assert) {
+  test('interrupting with same destination does not extend animation time', function(assert) {
     let p = Sprite.offsetParentStartingAt(target);
     p.measureFinalBounds();
     let s = Sprite.positionedStartingAt(target, p);
@@ -134,7 +149,11 @@ module("Unit | Move", function(hooks) {
     });
 
     return time.advance(500).then(() => {
-      assert.approxEqualPixels(s.getCurrentBounds().top, s.initialBounds.top + 25, 'top');
+      assert.approxEqualPixels(
+        s.getCurrentBounds().top,
+        s.initialBounds.top + 25,
+        'top',
+      );
       let newSprite = Sprite.positionedStartingAt(target, p);
       newSprite.lock();
       newSprite.unlock();
@@ -146,7 +165,7 @@ module("Unit | Move", function(hooks) {
         tester.run(newSprite, { duration: 1000 });
       });
       return time.advance(501).then(() => {
-        assert.ok(!tester.get('isAnimating'), "should be finished by now");
+        assert.ok(!tester.get('isAnimating'), 'should be finished by now');
       });
     });
   });

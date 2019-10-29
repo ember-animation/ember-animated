@@ -1,6 +1,6 @@
 import { rAF, currentFrameClock, clock } from './concurrency-helpers';
 import { easeInAndOut } from '../easings/cosine';
-const currentCurves = [];
+const currentCurves: MotionCurve[] = [];
 
 /*
   A Tween automatically recalculates on demand at most once per
@@ -11,13 +11,19 @@ const currentCurves = [];
 */
 
 export default class Tween {
-  constructor(initialValue, finalValue, duration, easing=easeInAndOut) {
+  private curve: MotionCurve;
+  private diff: number;
+
+  constructor(
+    readonly initialValue: number,
+    readonly finalValue: number,
+    duration: number,
+    easing = easeInAndOut,
+  ) {
     if (typeof easing !== 'function') {
-      throw new Error("Tried to make a Tween with an invalid easing function");
+      throw new Error('Tried to make a Tween with an invalid easing function');
     }
     this.curve = MotionCurve.findOrCreate(duration, easing);
-    this.initialValue = initialValue;
-    this.finalValue = finalValue;
     this.diff = finalValue - initialValue;
   }
   get currentValue() {
@@ -26,29 +32,34 @@ export default class Tween {
   get done() {
     return this.curve.done;
   }
-  plus(otherTween) {
+  plus(otherTween: Tween) {
     return new DerivedTween(
       [this, otherTween],
-      (a,b) => a.currentValue + b.currentValue
+      (a: Tween, b: Tween) => a.currentValue + b.currentValue,
     );
   }
 }
 
 class DerivedTween {
-  constructor(inputs, combinator) {
+  private _finalValue: number | null = null;
+  private inputs: Tween[];
+
+  constructor(
+    inputs: Tween[],
+    private combinator: (...inputs: Tween[]) => number,
+  ) {
     this._finalValue = null;
     this.inputs = inputs.map(t => {
       if (t.done) {
-        // If one of our inputs has already finished, we can just keep
-        // its final value around and drop the reference to the actual
-        // Tween. This prevents long chains of derived tweens from
-        // growing without bound during continuous animations.
-        return { currentValue: t.currentValue, done: true, finalValue: t.finalValue };
+        // If one of our inputs has already finished, we can just keep its final
+        // value around and drop the reference to the original Tween. This
+        // prevents long chains of derived tweens from growing without bound
+        // during continuous animations.
+        return new Tween(t.currentValue, t.currentValue, 0);
       } else {
         return t;
       }
     });
-    this.combinator = combinator;
   }
   get finalValue() {
     if (this._finalValue == null) {
@@ -71,8 +82,10 @@ class DerivedTween {
 class MotionCurve {
   // we share motion curves among all concurrent motions that have the
   // same duration that start in the same animation frame.
-  static findOrCreate(duration, easing) {
-    let shared = currentCurves.find(c => c.duration === duration && c.easing === easing);
+  static findOrCreate(duration: number, easing: (t: number) => number) {
+    let shared = currentCurves.find(
+      c => c.duration === duration && c.easing === easing,
+    );
     if (shared) {
       return shared;
     }
@@ -84,18 +97,26 @@ class MotionCurve {
     return created;
   }
 
-  constructor(duration, easing) {
+  private startTime: number;
+  private _doneFrames = 0;
+  private _lastTick: number | undefined;
+  private _runTime: number | undefined;
+  private _timeProgress: number | undefined;
+  private _spaceProgress: number | undefined;
+
+  constructor(
+    readonly duration: number,
+    private easing: (t: number) => number,
+  ) {
     this.startTime = clock.now();
-    this.duration = duration;
-    this.easing = easing;
-    this._doneFrames = 0;
     this._tick();
   }
   _tick() {
     if (this._lastTick !== currentFrameClock) {
       this._lastTick = currentFrameClock;
       this._runTime = clock.now() - this.startTime;
-      this._timeProgress = this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
+      this._timeProgress =
+        this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
       this._spaceProgress = Math.min(this.easing(this._timeProgress), 1);
       if (this._timeProgress >= 1) {
         this._doneFrames++;
@@ -104,15 +125,15 @@ class MotionCurve {
   }
   get runTime() {
     this._tick();
-    return this._runTime;
+    return this._runTime!;
   }
   get timeProgress() {
     this._tick();
-    return this._timeProgress;
+    return this._timeProgress!;
   }
   get spaceProgress() {
     this._tick();
-    return this._spaceProgress;
+    return this._spaceProgress!;
   }
 
   // Tweens are not considered done until they have been done for more

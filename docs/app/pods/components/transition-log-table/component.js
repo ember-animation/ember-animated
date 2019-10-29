@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import { A } from '@ember/array';
 
-function printSprites (context) {
+function printSprites(context) {
   return {
-    inserted: context._insertedSprites.map(s =>  s.owner.value.message),
+    inserted: context._insertedSprites.map(s => s.owner.value.message),
     kept: context._keptSprites.map(s => s.owner.value.message),
-    removed: context._removedSprites.map(s =>s.owner.value.message)
+    removed: context._removedSprites.map(s => s.owner.value.message),
   };
 }
 
@@ -17,7 +17,7 @@ export default Component.extend({
   },
   logTransition(context) {
     this.messages.pushObject(printSprites(context));
-  }
+  },
 });
 
 export const extensions = {
@@ -28,5 +28,5 @@ export const extensions = {
   transition: function(context) {
     this.logTransition(context);
     return this._super(context);
-  }
+  },
 };

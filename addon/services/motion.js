@@ -2,13 +2,7 @@ import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
 import { task } from '../-private/ember-scheduler';
-import {
-  microwait,
-  rAF,
-  afterRender,
-  allSettled
-} from '..';
-
+import { microwait, rAF, afterRender, allSettled } from '..';
 
 const MotionService = Service.extend({
   init() {
@@ -43,7 +37,9 @@ const MotionService = Service.extend({
   // animator.
   observeOrphans(fn) {
     if (this._orphanObserver) {
-      throw new Error("Only one animated-orphans component can be used at one time");
+      throw new Error(
+        'Only one animated-orphans component can be used at one time',
+      );
     }
     this._orphanObserver = fn;
     return this;
@@ -75,9 +71,14 @@ const MotionService = Service.extend({
     return this;
   },
   unobserveDescendantAnimations(component, fn) {
-    let entry = this._descendantObservers.find(e => e.component === component && e.fn === fn);
+    let entry = this._descendantObservers.find(
+      e => e.component === component && e.fn === fn,
+    );
     if (entry) {
-      this._descendantObservers.splice(this._descendantObservers.indexOf(entry), 1);
+      this._descendantObservers.splice(
+        this._descendantObservers.indexOf(entry),
+        1,
+      );
     }
     return this;
   },
@@ -97,7 +98,10 @@ const MotionService = Service.extend({
         // element's parent which is the actual animator.
         let observers = this._ancestorObservers.get(ancestorComponent);
         if (!observers) {
-          this._ancestorObservers.set(ancestorComponent, observers = new Map());
+          this._ancestorObservers.set(
+            ancestorComponent,
+            (observers = new Map()),
+          );
         }
         observers.set(fn, id);
         id = null;
@@ -105,7 +109,7 @@ const MotionService = Service.extend({
     }
     return this;
   },
-  unobserveAncestorAnimations(component, fn){
+  unobserveAncestorAnimations(component, fn) {
     for (let ancestorComponent of ancestorsOf(component)) {
       let observers = this._ancestorObservers.get(ancestorComponent);
       if (observers) {
@@ -119,7 +123,7 @@ const MotionService = Service.extend({
   // animations are running. It's timing is deliberately not
   // synchronous, so that you can bind it into a template without
   // getting double-render errors.
-  isAnimating: computed(function () {
+  isAnimating: computed(function() {
     return this.get('isAnimatingSync');
   }),
 
@@ -131,12 +135,12 @@ const MotionService = Service.extend({
   }),
 
   // Invalidation support for isAnimating
-  _invalidateIsAnimating: task(function * () {
+  _invalidateIsAnimating: task(function*() {
     yield rAF();
     this.notifyPropertyChange('isAnimating');
   }).observes('isAnimatingSync'),
 
-  waitUntilIdle: task(function * () {
+  waitUntilIdle: task(function*() {
     // we are idle if we experience two frames in a row with nothing
     // animating.
     while (true) {
@@ -163,12 +167,12 @@ const MotionService = Service.extend({
     }
   },
 
-  addBeacon: task(function * (name, beacon) {
-    if(!this._beacons) {
+  addBeacon: task(function*(name, beacon) {
+    if (!this._beacons) {
       this._beacons = {};
     }
-    if(this._beacons[name]){
-      throw new Error("There is more than one beacon named", name);
+    if (this._beacons[name]) {
+      throw new Error('There is more than one beacon named', name);
     }
 
     this._beacons[name] = beacon;
@@ -179,9 +183,22 @@ const MotionService = Service.extend({
     this._beacons = null;
   }),
 
-  farMatch: task(function * (runAnimationTask, inserted, kept, removed, longWait=false) {
+  farMatch: task(function*(
+    runAnimationTask,
+    inserted,
+    kept,
+    removed,
+    longWait = false,
+  ) {
     let matches = new Map();
-    let mine = { inserted, kept, removed, matches, runAnimationTask, otherTasks: new Map() };
+    let mine = {
+      inserted,
+      kept,
+      removed,
+      matches,
+      runAnimationTask,
+      otherTasks: new Map(),
+    };
     this._rendezvous.push(mine);
     yield microwait();
     if (longWait) {
@@ -195,7 +212,9 @@ const MotionService = Service.extend({
 
     if (this.get('farMatch.concurrency') > 1) {
       this._rendezvous.forEach(target => {
-        if (target === mine) { return; }
+        if (target === mine) {
+          return;
+        }
         performMatches(mine, target);
         performMatches(target, mine);
       });
@@ -204,7 +223,7 @@ const MotionService = Service.extend({
     return {
       farMatches: matches,
       matchingAnimatorsFinished: allSettled([...mine.otherTasks.keys()]),
-      beacons: this._beacons
+      beacons: this._beacons,
     };
   }),
 
@@ -213,7 +232,8 @@ const MotionService = Service.extend({
 
     // tell any of our ancestors who are observing their descendants
     let ancestors = [...ancestorsOf(component)];
-    for (let { component: observingComponent, fn } of this._descendantObservers) {
+    for (let { component: observingComponent, fn } of this
+      ._descendantObservers) {
       if (ancestors.indexOf(observingComponent) !== -1) {
         fn(message);
       }
@@ -227,10 +247,10 @@ const MotionService = Service.extend({
         if (child) {
           fn(child.state);
         } // the else case here applies to descendants that are about
-          // to be unrendered (not animated away -- immediately
-          // dropped). They will still have an opportunity to animate
-          // too, but they do it via their own willDestroyElement
-          // hook, not the this early-warning hook.
+        // to be unrendered (not animated away -- immediately
+        // dropped). They will still have an opportunity to animate
+        // too, but they do it via their own willDestroyElement
+        // hook, not the this early-warning hook.
       }
     }
 
@@ -240,7 +260,7 @@ const MotionService = Service.extend({
     }
   },
 
-  staticMeasurement: function * (fn) {
+  staticMeasurement: function*(fn) {
     let measurement = { fn, resolved: false, value: null };
     this._measurements.push(measurement);
     try {
@@ -256,8 +276,10 @@ const MotionService = Service.extend({
         this._measurements.forEach(m => {
           try {
             m.value = m.fn();
-          } catch(err) {
-            setTimeout(function() { throw err; }, 0);
+          } catch (err) {
+            setTimeout(function() {
+              throw err;
+            }, 0);
           }
           m.resolved = true;
         });
@@ -267,15 +289,16 @@ const MotionService = Service.extend({
     } finally {
       this._measurements.splice(this._measurements.indexOf(measurement), 1);
     }
-  }
-
+  },
 });
 
 function performMatches(sink, source) {
   sink.inserted.concat(sink.kept).forEach(sprite => {
     let match = source.removed.find(
       mySprite =>
-        sprite.owner.group == mySprite.owner.group && sprite.owner.id === mySprite.owner.id);
+        sprite.owner.group == mySprite.owner.group &&
+        sprite.owner.id === mySprite.owner.id,
+    );
     if (match) {
       sink.matches.set(sprite, match);
       sink.otherTasks.set(source.runAnimationTask, true);
@@ -285,7 +308,7 @@ function performMatches(sink, source) {
   });
 }
 
-function * ancestorsOf(component) {
+function* ancestorsOf(component) {
   let pointer = component.parentView;
   while (pointer) {
     yield pointer;

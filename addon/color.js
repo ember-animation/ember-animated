@@ -1,5 +1,5 @@
 import { Tween } from '.';
-import linear from  './easings/linear';
+import linear from './easings/linear';
 
 // We use Element.remove in our color parser below.
 import './element-remove';
@@ -27,10 +27,25 @@ export class Color {
 }
 
 export class ColorTween {
-  constructor(initialColor, finalColor, duration, easing=linear) {
-    this.rTween = new Tween(initialColor.r * initialColor.a, finalColor.r * finalColor.a, duration, easing);
-    this.gTween = new Tween(initialColor.g * initialColor.a, finalColor.g * finalColor.a, duration, easing);
-    this.bTween = new Tween(initialColor.b * initialColor.a, finalColor.b * finalColor.a, duration, easing);
+  constructor(initialColor, finalColor, duration, easing = linear) {
+    this.rTween = new Tween(
+      initialColor.r * initialColor.a,
+      finalColor.r * finalColor.a,
+      duration,
+      easing,
+    );
+    this.gTween = new Tween(
+      initialColor.g * initialColor.a,
+      finalColor.g * finalColor.a,
+      duration,
+      easing,
+    );
+    this.bTween = new Tween(
+      initialColor.b * initialColor.a,
+      finalColor.b * finalColor.a,
+      duration,
+      easing,
+    );
     this.aTween = new Tween(initialColor.a, finalColor.a, duration, easing);
   }
   get currentValue() {
@@ -43,7 +58,9 @@ export class ColorTween {
     });
   }
   get done() {
-    return [this.rTween, this.gTween, this.bTween, this.aTween].every(tween => tween.done);
+    return [this.rTween, this.gTween, this.bTween, this.aTween].every(
+      tween => tween.done,
+    );
   }
 }
 

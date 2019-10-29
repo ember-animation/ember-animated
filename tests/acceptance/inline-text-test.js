@@ -13,7 +13,6 @@ module('Acceptance | inline text', function(hooks) {
     }
   });
 
-
   test('visiting /inline-text', async function(assert) {
     await visit('/demos/inline-text');
     assert.equal(currentURL(), '/demos/inline-text');

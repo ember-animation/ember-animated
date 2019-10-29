@@ -6,8 +6,8 @@ module.exports = function(deployTarget) {
     build: {},
     git: {
       repo: 'git@github.com:ember-animation/ember-animated',
-      worktreePath: '../../deploy-ember-animated-docs'
-    }
+      worktreePath: '../../deploy-ember-animated-docs',
+    },
   };
 
   if (deployTarget === 'development') {

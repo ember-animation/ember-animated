@@ -1,13 +1,34 @@
 import { schedule, cancel } from '@ember/runloop';
 import { warn } from '@ember/debug';
 import RSVP from 'rsvp';
+import { EmberRunTimer } from '@ember/runloop/types';
 
-export let Promise;
-if (window.Promise) {
-  Promise = window.Promise;
-} else {
-  warn("Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.", false, { id: "ember-animated-missing-microtask" });
-  Promise = RSVP.Promise;
+if (!(window as any).Promise) {
+  warn(
+    'Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.',
+    false,
+    { id: 'ember-animated-missing-microtask' },
+  );
+  window.Promise = (RSVP.Promise as any) as PromiseConstructor;
+}
+
+const cancellation: WeakMap<
+  Promise<any>,
+  (p: Promise<any>) => void
+> = new WeakMap();
+
+export function registerCancellation(
+  promise: Promise<any>,
+  handler: (p: Promise<any>) => void,
+) {
+  cancellation.set(promise, handler);
+}
+
+export function fireCancellation(promise: Promise<any>) {
+  let fn = cancellation.get(promise);
+  if (fn) {
+    fn(promise);
+  }
 }
 
 // This is a cancelable way to requestAnimationFrame that's designed
@@ -20,52 +41,57 @@ export function rAF() {
   if (!nextFrame) {
     nextFrame = requestAnimationFrame(rAFDidFire);
   }
-  let promise = new Promise(resolve => {
-    nextFrameWaiters.push(resolve);
+  let resolve;
+  let promise = new Promise(r => {
+    resolve = r;
   });
-  promise.__ec_cancel__ = removeWaiter.bind(promise);
+  nextFrameWaiters.push({ resolve: (resolve as any) as () => void, promise });
+  registerCancellation(promise, removeWaiter);
   return promise;
 }
 
-function rAFDidFire(clock) {
+function rAFDidFire(clock: number) {
   nextFrame = null;
   currentFrameClock = clock;
   let waiters = nextFrameWaiters;
   nextFrameWaiters = [];
   for (let i = 0; i < waiters.length; i++) {
-    waiters[i]();
+    waiters[i].resolve();
   }
 }
 
-function removeWaiter() {
-  let index = nextFrameWaiters.indexOf(this);
-  if (index > -1) {
-    nextFrameWaiters.splice(index, 1);
+function removeWaiter(promise: Promise<any>) {
+  let pair = nextFrameWaiters.find(pair => pair.promise === promise);
+  if (pair) {
+    let index = nextFrameWaiters.indexOf(pair);
+    if (index > -1) {
+      nextFrameWaiters.splice(index, 1);
+    }
   }
 }
 
-let nextFrame;
-let nextFrameWaiters = [];
+let nextFrame: number | null = null;
+let nextFrameWaiters: ({ promise: Promise<any>; resolve: () => void })[] = [];
 
 // rAF guarantees that callbacks within the same frame will see the
 // same clock. We stash it here so that arbitrary code can easily ask
 // "did I already do that this frame?" without needing to thread the
 // clock values around.
-export let currentFrameClock = null;
+export let currentFrameClock = -Infinity;
 
 export function microwait() {
   return new Promise(resolve => resolve());
 }
 
-export function wait(ms=0) {
+export function wait(ms = 0) {
   if (clock.now === originalClock) {
-    let ticket;
+    let ticket: number;
     let promise = new RSVP.Promise(resolve => {
-      ticket = setTimeout(resolve, ms);
+      ticket = window.setTimeout(resolve, ms);
     });
-    promise.__ec_cancel__ = () => {
+    registerCancellation(promise, () => {
       clearTimeout(ticket);
-    };
+    });
     return promise;
   } else {
     let canceled = false;
@@ -81,39 +107,40 @@ export function wait(ms=0) {
       }
       checkIt();
     });
-    promise.__ec_cancel__ = () => {
+    registerCancellation(promise, () => {
       canceled = true;
-    };
+    });
     return promise;
   }
 }
 
-
-
 export function afterRender() {
-  let ticket;
+  let ticket: EmberRunTimer;
   let promise = new Promise(resolve => {
     ticket = schedule('afterRender', resolve);
   });
-  promise.__ec_cancel__ = () => {
+  registerCancellation(promise, () => {
     cancel(ticket);
-  };
+  });
   return promise;
 }
 
 // This provides a unified place to hook into time control for testing.
 export let clock = {
   now() {
-    return (new Date()).getTime();
-  }
+    return new Date().getTime();
+  },
 };
 
 const originalClock = clock.now;
 
-export function allSettled(promises) {
-  return Promise.all(promises.map(p => {
-    if (p) {
-      return p.catch(() => null);
-    }
-  }));
+export function allSettled(promises: Promise<any>[]) {
+  return Promise.all(
+    promises.map(p => {
+      if (p) {
+        return p.catch(() => null);
+      }
+      return;
+    }),
+  );
 }

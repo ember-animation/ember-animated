@@ -14,8 +14,8 @@ module.exports = function(environment) {
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
 
     APP: {
@@ -26,8 +26,8 @@ module.exports = function(environment) {
     // Enable fake data in all environments (by default ember-faker
     // does not include itself in production)
     'ember-faker': {
-      enabled: true
-    }
+      enabled: true,
+    },
   };
 
   if (environment === 'development') {

@@ -37,7 +37,6 @@ export default Component.extend({
 
     resumeProgress() {
       this.get('startProgress').perform();
-    }
-  }
-
+    },
+  },
 });

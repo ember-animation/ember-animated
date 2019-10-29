@@ -25,12 +25,15 @@ export default Component.extend({
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
         fn(node);
-      } else if (! /^\s*$/.test(node.textContent)) {
-        warn("Found bare text content inside an animator", false, { id: "ember-animated-bare-text" });
+      } else if (!/^\s*$/.test(node.textContent)) {
+        warn('Found bare text content inside an animator', false, {
+          id: 'ember-animated-bare-text',
+        });
       }
-      if (node === lastNode){ break; }
+      if (node === lastNode) {
+        break;
+      }
       node = node.nextSibling;
     }
-  }
-
+  },
 });
