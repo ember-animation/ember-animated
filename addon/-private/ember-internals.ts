@@ -9,9 +9,12 @@
 import { get } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import Ember from 'ember';
-const { getViewBounds } = Ember.ViewUtils;
+import Component from '@ember/component';
+const { getViewBounds } = (Ember.ViewUtils as unknown) as {
+  getViewBounds(view: Component): { firstNode: Node; lastNode: Node };
+};
 
-export function componentNodes(view) {
+export function componentNodes(view: Component) {
   let bounds = getViewBounds(view);
   return {
     firstNode: bounds.firstNode,
@@ -19,7 +22,7 @@ export function componentNodes(view) {
   };
 }
 
-export function keyForArray(keyPath) {
+export function keyForArray(keyPath: string) {
   switch (keyPath) {
     case '@index':
       return index;
@@ -28,15 +31,15 @@ export function keyForArray(keyPath) {
     case null:
       return identity;
     default:
-      return item => get(item, keyPath);
+      return (item: any) => get(item, keyPath);
   }
 }
 
-function index(item, index) {
+function index(_item: any, index: number) {
   return String(index);
 }
 
-function identity(item) {
+function identity(item: any) {
   switch (typeof item) {
     case 'string':
     case 'number':
