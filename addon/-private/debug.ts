@@ -1,10 +1,15 @@
 import { DEBUG } from '@glimmer/env';
+import TransitionContext from './transition-context';
+import Sprite from './sprite';
 
 let printSprites;
 
 if (DEBUG) {
-  printSprites = function printSprites(context, label) {
-    let isOrphan;
+  printSprites = function printSprites(
+    context: TransitionContext,
+    label?: string,
+  ) {
+    let isOrphan: boolean | null = null;
     let prefix = label ? label + ' ' : '';
     /* eslint no-console:0 */
     let spriteSummary = ['inserted', 'kept', 'removed', 'sent', 'received']
@@ -12,7 +17,7 @@ if (DEBUG) {
         return (
           type +
           '=' +
-          context[`_${type}Sprites`]
+          ((context as any)[`_${type}Sprites`] as Sprite[])
             .map(s => {
               if (isOrphan == null) {
                 // the first time we encounter a sprite, we use it to get a
@@ -29,7 +34,7 @@ if (DEBUG) {
                     'animated-orphans',
                   );
               }
-              return s.owner.id;
+              return s.owner!.id;
             })
             .join(',')
         );

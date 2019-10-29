@@ -71,7 +71,7 @@ export default class Sprite {
   }
 
   private __element!: Element;
-  owner: unknown;
+  owner: { id: string } | null;
   private _transform: Transform | null = null;
   private _cumulativeTransform: Transform | null = null;
   private _offsetSprite: Sprite | null;
