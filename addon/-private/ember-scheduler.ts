@@ -9,32 +9,32 @@ import Ember from 'ember';
 import { microwait } from '..';
 import { DEBUG } from '@glimmer/env';
 
-export function task(taskFn) {
-  let tp = _computed(function(propertyName) {
+export function task(taskFn: (...args: unknown[]) => Generator) {
+  let tp = (_computed(function(this: object, propertyName: string) {
     return new Task(this, taskFn, tp, propertyName);
-  });
+  }) as unknown) as TaskProperty;
 
   Object.setPrototypeOf(tp, TaskProperty.prototype);
   return tp;
 }
 
-function _computed(fn) {
+function _computed(fn: (this: object, propertyName: string) => Task) {
   if (!gte('3.10.0')) {
     return computed(fn);
   }
-  let cp = function(proto, key) {
-    if (cp.setup !== undefined) {
-      cp.setup(proto, key);
+  let cp = function(proto: object, key: string) {
+    if ((cp as any).setup !== undefined) {
+      (cp as any).setup(proto, key);
     }
-    return computed(fn)(...arguments);
+    return (computed(fn) as any)(...arguments);
   };
-  Ember._setClassicDecorator(cp);
+  (Ember as any)._setClassicDecorator(cp);
   return cp;
 }
 
 let handlerCounter = 0;
 
-let BaseTaskProperty;
+let BaseTaskProperty: { new (): object };
 
 if (gte('3.10.0')) {
   BaseTaskProperty = class {};
@@ -42,7 +42,12 @@ if (gte('3.10.0')) {
   BaseTaskProperty = ComputedProperty;
 }
 
+type BufferPolicy = (task: Task, priv: TaskPrivate) => Promise<void> | void;
+
 export class TaskProperty extends BaseTaskProperty {
+  _bufferPolicy: BufferPolicy | undefined;
+  private _observes: string[] | undefined;
+
   restartable() {
     this._bufferPolicy = cancelAllButLast;
     return this;
@@ -53,36 +58,55 @@ export class TaskProperty extends BaseTaskProperty {
     return this;
   }
 
-  observes(...deps) {
+  observes(...deps: string[]) {
     this._observes = deps;
     return this;
   }
 
-  setup(proto, taskName) {
+  setup(proto: object, taskName: string) {
+    // @ts-ignore: depending on the ember version we may or may not have a super
+    // method.
     if (super.setup) {
+      // @ts-ignore
       super.setup(...arguments);
     }
     if (this._observes) {
       let handlerName = `_ember_animated_handler_${handlerCounter++}`;
-      proto[handlerName] = function() {
+      (proto as any)[handlerName] = function() {
         let task = this.get(taskName);
-        scheduleOnce('actions', task, '_safePerform', []);
+        scheduleOnce('actions', task, '_safePerform');
       };
       for (let i = 0; i < this._observes.length; ++i) {
         let name = this._observes[i];
-        addObserver(proto, name, null, handlerName);
+        (addObserver as any)(proto, name, null, handlerName);
       }
     }
   }
 }
 
-let priv = new WeakMap();
-function getPriv(task) {
-  return priv.get(task);
+interface TaskPrivate {
+  context: object;
+  implementation: (...args: unknown[]) => Generator;
+  instances: Promise<void>[];
+  taskProperty: TaskProperty;
+  name: string;
+}
+
+let priv: WeakMap<Task, TaskPrivate> = new WeakMap();
+function getPriv(task: Task): TaskPrivate {
+  return priv.get(task)!;
 }
 
 class Task {
-  constructor(context, implementation, taskProperty, name) {
+  concurrency = 0;
+  isRunning = false;
+
+  constructor(
+    context: object,
+    implementation: TaskPrivate['implementation'],
+    taskProperty: TaskProperty,
+    name: string,
+  ) {
     priv.set(this, {
       context,
       implementation,
@@ -90,16 +114,14 @@ class Task {
       taskProperty,
       name,
     });
-    this.concurrency = 0;
-    this.isRunning = false;
   }
-  perform(...args) {
+  perform(...args: unknown[]) {
     let self = this;
     let privSelf = getPriv(this);
     let context = privSelf.context;
     let implementation = privSelf.implementation;
     let policy = privSelf.taskProperty._bufferPolicy;
-    if (context.isDestroyed) {
+    if ((context as any).isDestroyed) {
       throw new Error(
         `Tried to perform task ${privSelf.name} on an already destroyed object`,
       );
@@ -108,18 +130,14 @@ class Task {
     return spawn(function*() {
       if (DEBUG) {
         logErrors(error => {
-          if (Ember.testing) {
-            Ember.Test.adapter.exception(error);
-          } else {
-            microwait().then(() => {
-              throw error;
-            });
-          }
+          microwait().then(() => {
+            throw error;
+          });
         });
       }
 
       try {
-        self._addInstance(current());
+        self._addInstance(current()!);
         if (policy) {
           let maybeWait = policy(self, privSelf);
           if (maybeWait) {
@@ -132,7 +150,7 @@ class Task {
         return finalValue;
       } finally {
         join(() => {
-          self._removeInstance(current());
+          self._removeInstance(current()!);
         });
       }
     });
@@ -140,27 +158,34 @@ class Task {
   cancelAll() {
     getPriv(this).instances.forEach(i => stop(i));
   }
-  _addInstance(i) {
+  _addInstance(i: Promise<void>) {
     getPriv(this).instances.push(i);
     set(this, 'isRunning', true);
     set(this, 'concurrency', this.concurrency + 1);
   }
-  _removeInstance(i) {
+  _removeInstance(i: Promise<void>) {
     let instances = getPriv(this).instances;
     instances.splice(instances.indexOf(i), 1);
     set(this, 'concurrency', this.concurrency - 1);
     set(this, 'isRunning', this.concurrency > 0);
   }
-  _safePerform(args) {
+  _safePerform() {
     let { context } = getPriv(this);
-    if (!context.isDestroyed) {
-      this.perform(...args);
+    if (!(context as any).isDestroyed) {
+      this.perform();
     }
   }
 }
 
 // cribbed from machty's ember-concurrency
-function cleanupOnDestroy(owner, object) {
+function cleanupOnDestroy(
+  owner: {
+    willDestroy?: Function & {
+      __ember_processes_destroyers__?: (() => void)[];
+    };
+  },
+  object: { cancelAll(): void },
+) {
   if (!owner.willDestroy) {
     // we're running in non Ember object (possibly in a test mock)
     return;
@@ -168,7 +193,7 @@ function cleanupOnDestroy(owner, object) {
 
   if (!owner.willDestroy.__ember_processes_destroyers__) {
     let oldWillDestroy = owner.willDestroy;
-    let disposers = [];
+    let disposers: (() => void)[] = [];
 
     owner.willDestroy = function() {
       for (let i = 0, l = disposers.length; i < l; i++) {
@@ -191,23 +216,24 @@ function cleanupOnDestroy(owner, object) {
   });
 }
 
-function cancelAllButLast(task, privTask) {
+function cancelAllButLast(_task: Task, privTask: TaskPrivate) {
   let instances = privTask.instances;
   for (let i = 0; i < instances.length - 1; i++) {
     stop(instances[i]);
   }
 }
 
-function drop(task, privTask) {
+function drop(_task: Task, privTask: TaskPrivate) {
   let instances = privTask.instances;
   for (let i = 1; i < instances.length; i++) {
     stop(instances[i]);
   }
 }
 
-function* withRunLoop(generator) {
-  let state;
-  let nextValue;
+function* withRunLoop(generator: Generator) {
+  let state!: IteratorResult<any>;
+  let threw: Error | undefined;
+  let nextValue: any;
   let fulfilled = true;
   while (true) {
     join(() => {
@@ -218,18 +244,16 @@ function* withRunLoop(generator) {
           state = generator.throw(nextValue);
         }
       } catch (err) {
-        state = {
-          threw: err,
-        };
+        threw = err;
       }
     });
 
-    if (state.done) {
-      return state.value;
+    if (threw) {
+      throw threw;
     }
 
-    if (state.threw) {
-      throw state.threw;
+    if (state.done) {
+      return state.value;
     }
 
     try {
@@ -242,6 +266,6 @@ function* withRunLoop(generator) {
   }
 }
 
-export function timeout(ms) {
+export function timeout(ms: number) {
   return new EmberPromise(resolve => setTimeout(resolve, ms));
 }
