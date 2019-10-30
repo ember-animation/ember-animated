@@ -1,10 +1,13 @@
-import Component from '@ember/component';
-import layout from '../templates/components/animated-beacon';
+import Component, { TemplateFactory } from '@ember/component';
 import { inject as service } from '@ember/service';
-import { task } from '../-private/ember-scheduler';
+import { task, Task } from '../-private/ember-scheduler';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
+
+// @ts-ignore: templates don't have types
+import layout from '../templates/components/animated-beacon';
+import ComputedProperty from '@ember/object/computed';
 
 /**
   A component that marks a region of the page that
@@ -62,49 +65,49 @@ import Sprite from '../-private/sprite';
   @class animated-beacon
   @public
 */
-export default Component.extend({
-  layout,
-  motionService: service('-ea-motion'),
-  tagName: '',
+export default class AnimatedBeacon extends Component {
+  layout: TemplateFactory = layout;
+  name: string | undefined;
 
-  init() {
-    this._super();
-    this.inserted = false;
-  },
+  @service('-ea-motion' as any) motionService: any;
+
+  tagName = '';
+  _inserted = false;
 
   didInsertElement() {
-    this._super();
+    super.didInsertElement();
     this._inserted = true;
     this.animationStarting = this.animationStarting.bind(this);
     this.get('motionService').observeAnimations(this.animationStarting);
-  },
+  }
+
   willDestroyElement() {
-    this._super();
+    super.willDestroyElement();
     this.get('motionService').unobserveAnimations(this.animationStarting);
-  },
+  }
 
   animationStarting() {
     this.get('participate').perform();
-  },
+  }
 
-  _firstChildElement() {
-    if (!this._inserted) {
-      return;
-    }
-    let { firstNode, lastNode } = componentNodes(this);
-    let node = firstNode;
-    while (node) {
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        return node;
+  _firstChildElement(): Element | undefined {
+    if (this._inserted) {
+      let { firstNode, lastNode } = componentNodes(this);
+      let node: Node | null = firstNode;
+      while (node) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          return node as Element;
+        }
+        if (node === lastNode) {
+          break;
+        }
+        node = node.nextSibling;
       }
-      if (node === lastNode) {
-        break;
-      }
-      node = node.nextSibling;
     }
-  },
+    return undefined;
+  }
 
-  participate: task(function*() {
+  @task(function*(this: AnimatedBeacon) {
     let element = this._firstChildElement();
     if (!element) {
       return;
@@ -118,6 +121,9 @@ export default Component.extend({
       offsetParent.measureFinalBounds();
       sprite.measureFinalBounds();
     });
-    yield this.get('motionService.addBeacon').perform(this.name, sprite);
-  }).restartable(),
-});
+    yield this.get('motionService')
+      .get('addBeacon')
+      .perform(this.name, sprite);
+  })
+  participate!: ComputedProperty<Task>;
+}

@@ -15,7 +15,7 @@ export function task(taskFn: (...args: unknown[]) => Generator) {
   }) as unknown) as TaskProperty;
 
   Object.setPrototypeOf(tp, TaskProperty.prototype);
-  return tp;
+  return tp as ((proto: object, key: string) => any) & TaskProperty;
 }
 
 function _computed(fn: (this: object, propertyName: string) => Task) {
@@ -97,7 +97,7 @@ function getPriv(task: Task): TaskPrivate {
   return priv.get(task)!;
 }
 
-class Task {
+export class Task {
   concurrency = 0;
   isRunning = false;
 
