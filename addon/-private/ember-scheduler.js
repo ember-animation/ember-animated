@@ -4,7 +4,6 @@ import { addObserver } from '@ember/object/observers';
 import { computed, set } from '@ember/object';
 import ComputedProperty from '@ember/object/computed';
 import { gte } from 'ember-compatibility-helpers';
-import { assign as objectAssign } from '@ember/polyfills';
 import { spawn, current, stop, logErrors } from './scheduler';
 import Ember from 'ember';
 import { microwait } from '..';
@@ -12,11 +11,7 @@ import { DEBUG } from '@glimmer/env';
 
 export function task(taskFn) {
   let tp = _computed(function(propertyName) {
-    const task = new Task(this, taskFn, tp, propertyName);
-
-    task._bufferPolicy = null;
-    task._observes = null;
-    return task;
+    return new Task(this, taskFn, tp, propertyName);
   });
 
   Object.setPrototypeOf(tp, TaskProperty.prototype);
@@ -24,31 +19,29 @@ export function task(taskFn) {
 }
 
 function _computed(fn) {
-  if (gte('3.10.0')) {
-    let cp = function(proto, key) {
-      if (cp.setup !== undefined) {
-        cp.setup(proto, key);
-      }
-
-      return computed(fn)(...arguments);
-    };
-
-    Ember._setClassicDecorator(cp);
-
-    return cp;
-  } else {
+  if (!gte('3.10.0')) {
     return computed(fn);
   }
+  let cp = function(proto, key) {
+    if (cp.setup !== undefined) {
+      cp.setup(proto, key);
+    }
+    return computed(fn)(...arguments);
+  };
+  Ember._setClassicDecorator(cp);
+  return cp;
 }
 
 let handlerCounter = 0;
 
-export let TaskProperty;
+let BaseTaskProperty;
 
 if (gte('3.10.0')) {
-  TaskProperty = class {};
+  BaseTaskProperty = class {
+    callSuperSetup() {}
+  };
 } else {
-  TaskProperty = class extends ComputedProperty {
+  BaseTaskProperty = class extends ComputedProperty {
     callSuperSetup() {
       if (super.setup) {
         super.setup(...arguments);
@@ -56,40 +49,38 @@ if (gte('3.10.0')) {
     }
   };
 }
-objectAssign(TaskProperty.prototype, {
+
+export class TaskProperty extends BaseTaskProperty {
   restartable() {
     this._bufferPolicy = cancelAllButLast;
     return this;
-  },
+  }
 
   drop() {
     this._bufferPolicy = drop;
     return this;
-  },
+  }
 
   observes(...deps) {
     this._observes = deps;
     return this;
-  },
+  }
 
   setup(proto, taskName) {
-    if (this.callSuperSetup) {
-      this.callSuperSetup(...arguments);
-    }
-
+    this.callSuperSetup(...arguments);
     if (this._observes) {
       for (let i = 0; i < this._observes.length; ++i) {
         let name = this._observes[i];
         let handlerName = `_ember_animated_handler_${handlerCounter++}`;
         proto[handlerName] = function(...args) {
           let task = this.get(taskName);
-          scheduleOnce('actions', task, '_safeInvokeCallback', 'perform', args);
+          scheduleOnce('actions', task, '_safePerform', args);
         };
         addObserver(proto, name, null, handlerName);
       }
     }
-  },
-});
+  }
+}
 
 let priv = new WeakMap();
 
@@ -163,10 +154,10 @@ class Task {
     set(this, 'concurrency', this.concurrency - 1);
     set(this, 'isRunning', this.concurrency > 0);
   }
-  _safeInvokeCallback(method, args) {
+  _safePerform(args) {
     let { context } = priv.get(this);
     if (!context.isDestroyed) {
-      this[method].apply(this, args);
+      this.perform(...args);
     }
   }
 }
