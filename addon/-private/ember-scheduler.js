@@ -37,17 +37,9 @@ let handlerCounter = 0;
 let BaseTaskProperty;
 
 if (gte('3.10.0')) {
-  BaseTaskProperty = class {
-    callSuperSetup() {}
-  };
+  BaseTaskProperty = class {};
 } else {
-  BaseTaskProperty = class extends ComputedProperty {
-    callSuperSetup() {
-      if (super.setup) {
-        super.setup(...arguments);
-      }
-    }
-  };
+  BaseTaskProperty = ComputedProperty;
 }
 
 export class TaskProperty extends BaseTaskProperty {
@@ -67,15 +59,17 @@ export class TaskProperty extends BaseTaskProperty {
   }
 
   setup(proto, taskName) {
-    this.callSuperSetup(...arguments);
+    if (super.setup) {
+      super.setup(...arguments);
+    }
     if (this._observes) {
+      let handlerName = `_ember_animated_handler_${handlerCounter++}`;
+      proto[handlerName] = function() {
+        let task = this.get(taskName);
+        scheduleOnce('actions', task, '_safePerform', []);
+      };
       for (let i = 0; i < this._observes.length; ++i) {
         let name = this._observes[i];
-        let handlerName = `_ember_animated_handler_${handlerCounter++}`;
-        proto[handlerName] = function(...args) {
-          let task = this.get(taskName);
-          scheduleOnce('actions', task, '_safePerform', args);
-        };
         addObserver(proto, name, null, handlerName);
       }
     }
@@ -83,6 +77,9 @@ export class TaskProperty extends BaseTaskProperty {
 }
 
 let priv = new WeakMap();
+function getPriv(task) {
+  return priv.get(task);
+}
 
 class Task {
   constructor(context, implementation, taskProperty, name) {
@@ -98,7 +95,7 @@ class Task {
   }
   perform(...args) {
     let self = this;
-    let privSelf = priv.get(this);
+    let privSelf = getPriv(this);
     let context = privSelf.context;
     let implementation = privSelf.implementation;
     let policy = privSelf.taskProperty._bufferPolicy;
@@ -107,7 +104,7 @@ class Task {
         `Tried to perform task ${privSelf.name} on an already destroyed object`,
       );
     }
-    cleanupOnDestroy(context, this, 'cancelAll');
+    cleanupOnDestroy(context, this);
     return spawn(function*() {
       if (DEBUG) {
         logErrors(error => {
@@ -141,21 +138,21 @@ class Task {
     });
   }
   cancelAll() {
-    priv.get(this).instances.forEach(i => stop(i));
+    getPriv(this).instances.forEach(i => stop(i));
   }
   _addInstance(i) {
-    priv.get(this).instances.push(i);
+    getPriv(this).instances.push(i);
     set(this, 'isRunning', true);
     set(this, 'concurrency', this.concurrency + 1);
   }
   _removeInstance(i) {
-    let instances = priv.get(this).instances;
+    let instances = getPriv(this).instances;
     instances.splice(instances.indexOf(i), 1);
     set(this, 'concurrency', this.concurrency - 1);
     set(this, 'isRunning', this.concurrency > 0);
   }
   _safePerform(args) {
-    let { context } = priv.get(this);
+    let { context } = getPriv(this);
     if (!context.isDestroyed) {
       this.perform(...args);
     }
@@ -163,7 +160,7 @@ class Task {
 }
 
 // cribbed from machty's ember-concurrency
-function cleanupOnDestroy(owner, object, cleanupMethodName) {
+function cleanupOnDestroy(owner, object) {
   if (!owner.willDestroy) {
     // we're running in non Ember object (possibly in a test mock)
     return;
@@ -185,7 +182,7 @@ function cleanupOnDestroy(owner, object, cleanupMethodName) {
 
   owner.willDestroy.__ember_processes_destroyers__.push(() => {
     try {
-      object[cleanupMethodName]();
+      object.cancelAll();
     } catch (err) {
       if (err.message !== 'TaskCancelation') {
         throw err;
