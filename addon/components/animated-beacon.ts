@@ -4,6 +4,7 @@ import { task, Task } from '../-private/ember-scheduler';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
+import { gte } from 'ember-compatibility-helpers';
 
 // @ts-ignore: templates don't have types
 import layout from '../templates/components/animated-beacon';
@@ -66,18 +67,29 @@ import ComputedProperty from '@ember/object/computed';
   @public
 */
 export default class AnimatedBeacon extends Component {
-  layout!: TemplateFactory;
   name: string | undefined;
-  _inserted: boolean;
+
+  layout: TemplateFactory = layout;
+  tagName = '';
+  _inserted = false;
 
   @service('-ea-motion' as any) motionService: any;
 
   constructor(properties: any | undefined) {
-    properties.tagName = '';
-    properties.layout = layout;
-    super(properties);
-    this._inserted = false;
-    this.name = properties.name;
+    super(
+      gte('3.8.0')
+        ? properties
+        : // in older Ember, for the Component base class to see these class
+          // properties they must go into super:
+          Object.assign(properties, { layout, tagName: '' }),
+    );
+    if (!gte('3.8.0')) {
+      // in older Ember, any declared by not initialized class properties that
+      // come in as arguments need to get re-set here because typescript
+      // initializes them to undefined *after* Ember has already set them in
+      // super.
+      this.name = properties.name;
+    }
   }
 
   didInsertElement() {
