@@ -139,7 +139,6 @@ export default class AnimatedBeacon extends Component {
       offsetParent.measureFinalBounds();
       sprite.measureFinalBounds();
     });
-    debugger;
     yield this.get('motionService')
       .get('addBeacon')
       .perform(this.name, sprite);
