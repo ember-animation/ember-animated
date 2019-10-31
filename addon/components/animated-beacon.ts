@@ -80,11 +80,11 @@ export default class AnimatedBeacon extends Component {
       gte('3.8.0')
         ? properties
         : // in older Ember, for the Component base class to see these class
-          // properties they must go into super:
+          // properties they must get passed into super:
           Object.assign(properties, { layout, tagName: '' }),
     );
     if (!gte('3.8.0')) {
-      // in older Ember, any declared by not initialized class properties that
+      // in older Ember, any declared but not initialized class properties that
       // come in as arguments need to get re-set here because typescript
       // initializes them to undefined *after* Ember has already set them in
       // super.
