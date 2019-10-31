@@ -66,13 +66,19 @@ import ComputedProperty from '@ember/object/computed';
   @public
 */
 export default class AnimatedBeacon extends Component {
-  layout: TemplateFactory = layout;
+  layout!: TemplateFactory;
   name: string | undefined;
+  _inserted: boolean;
 
   @service('-ea-motion' as any) motionService: any;
 
-  tagName = '';
-  _inserted = false;
+  constructor(properties: any | undefined) {
+    properties.tagName = '';
+    properties.layout = layout;
+    super(properties);
+    this._inserted = false;
+    this.name = properties.name;
+  }
 
   didInsertElement() {
     super.didInsertElement();
@@ -121,6 +127,7 @@ export default class AnimatedBeacon extends Component {
       offsetParent.measureFinalBounds();
       sprite.measureFinalBounds();
     });
+    debugger;
     yield this.get('motionService')
       .get('addBeacon')
       .perform(this.name, sprite);
