@@ -5,7 +5,8 @@ import { task, Task } from '../-private/ember-scheduler';
 import { microwait, rAF, afterRender, allSettled } from '..';
 import Sprite from '../-private/sprite';
 import ComputedProperty from '@ember/object/computed';
-import TransitionContext from 'ember-animated/-private/transition-context';
+import Child from '../-private/child';
+import { Transition } from '../-private/transition';
 
 interface Animator extends EmberObject {
   beginStaticMeasurement(): void;
@@ -25,28 +26,23 @@ type AnimationObserver = (args: {
   duration: number;
 }) => void;
 
+type AncestorObserver = (state: Child['state']) => void;
+
 interface BaseComponentLike extends EmberObject {
   parentView: ComponentLike | undefined;
 }
 
-interface AniamtedListElement extends BaseComponentLike {
+interface AnimatedListElement extends BaseComponentLike {
   isEmberAnimatedListElement: true;
   child: Child;
 }
 
-type ComponentLike = BaseComponentLike | AniamtedListElement;
+type ComponentLike = BaseComponentLike | AnimatedListElement;
 
 interface Measurement {
   fn: () => void;
   resolved: boolean;
   value: any;
-}
-
-// TODO: this will come natively from the class in animated-each when that is
-// converted to typescript.
-interface Child {
-  id: string;
-  state: string;
 }
 
 interface Rendezvous {
@@ -68,7 +64,10 @@ export default class MotionService extends Service {
     component: ComponentLike;
     fn: AnimationObserver;
   })[] = [];
-  _ancestorObservers = new WeakMap();
+  _ancestorObservers: WeakMap<
+    ComponentLike,
+    Map<AncestorObserver, string>
+  > = new WeakMap();
   _beacons: { [name: string]: Sprite } | null = null;
 
   // === Notification System ===
@@ -144,7 +143,7 @@ export default class MotionService extends Service {
   // ancestors of the given component. The fn will be told whether
   // component is going to be destroyed or not at the end of the
   // animation.
-  observeAncestorAnimations(component: ComponentLike, fn: AnimationObserver) {
+  observeAncestorAnimations(component: ComponentLike, fn: AncestorObserver) {
     let id;
     for (let ancestorComponent of ancestorsOf(component)) {
       // when we find an animated list element, we save its ID
@@ -166,7 +165,7 @@ export default class MotionService extends Service {
     }
     return this;
   }
-  unobserveAncestorAnimations(component: ComponentLike, fn: AnimationObserver) {
+  unobserveAncestorAnimations(component: ComponentLike, fn: AncestorObserver) {
     for (let ancestorComponent of ancestorsOf(component)) {
       let observers = this._ancestorObservers.get(ancestorComponent);
       if (observers) {
@@ -217,7 +216,7 @@ export default class MotionService extends Service {
 
   matchDestroyed(
     removed: Sprite[],
-    transition: TransitionContext,
+    transition: Transition,
     duration: number,
     shouldAnimateRemoved: boolean,
   ) {

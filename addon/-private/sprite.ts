@@ -9,6 +9,7 @@ import {
   resizedBounds,
   emptyBounds,
 } from './bounds';
+import Child from './child';
 
 const inFlight = new WeakMap();
 
@@ -72,9 +73,7 @@ export default class Sprite {
 
   private __element!: Element;
 
-  // TODO: this is the Child class from animated-each, once that is converted to
-  // TS.
-  owner: { id: string; group?: string } | null;
+  owner: Child | null = null;
 
   private _transform: Transform | null = null;
   private _cumulativeTransform: Transform | null = null;
@@ -104,7 +103,6 @@ export default class Sprite {
     offsetSprite: Sprite | null,
   ) {
     this.element = element;
-    this.owner = null;
     this._offsetSprite = offsetSprite;
 
     this._lockedToInitialPosition = inInitialPosition;

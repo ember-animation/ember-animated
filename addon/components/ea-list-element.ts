@@ -2,6 +2,7 @@ import { warn } from '@ember/debug';
 import Component from '@ember/component';
 import { componentNodes } from '../-private/ember-internals';
 import { gte } from 'ember-compatibility-helpers';
+import Child from '../-private/child';
 
 /*
    This component has one job: tracking which DOM elements correspond
@@ -58,9 +59,4 @@ export default class extends Component {
       node = node.nextSibling;
     }
   }
-}
-
-// TODO: replace with real one from animated-each
-interface Child {
-  id: string;
 }

@@ -1,11 +1,12 @@
 import { childrenSettled } from './scheduler';
 import Sprite from './sprite';
+import { Transition } from './transition';
 
 const spriteContext = new WeakMap();
 
 export function* runToCompletion(
   context: TransitionContext,
-  transition: GeneratorFunction,
+  transition: Transition,
 ) {
   yield* transition(context);
   yield childrenSettled();
