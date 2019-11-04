@@ -5,11 +5,11 @@ import linear from './easings/linear';
 import './element-remove';
 
 export class Color {
-  static fromComputedStyle(colorString) {
+  static fromComputedStyle(colorString: string) {
     let channels = parseComputedColor(colorString);
     return new Color(channels, channels.m[0]);
   }
-  static fromUserProvidedColor(colorString) {
+  static fromUserProvidedColor(colorString: string) {
     return new Color(parseUserProvidedColor(colorString), colorString);
   }
 
@@ -17,17 +17,34 @@ export class Color {
     return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
   }
 
-  constructor({ r, g, b, a }, sourceString) {
+  readonly r: number;
+  readonly g: number;
+  readonly b: number;
+  readonly a: number;
+
+  constructor(
+    { r, g, b, a }: { r: number; g: number; b: number; a: number },
+    readonly sourceString: string,
+  ) {
     this.r = r;
     this.g = g;
     this.b = b;
     this.a = a;
-    this.sourceString = sourceString;
   }
 }
 
 export class ColorTween {
-  constructor(initialColor, finalColor, duration, easing = linear) {
+  private rTween: Tween;
+  private gTween: Tween;
+  private bTween: Tween;
+  private aTween: Tween;
+
+  constructor(
+    initialColor: Color,
+    finalColor: Color,
+    duration: number,
+    easing: (time: number) => number = linear,
+  ) {
     this.rTween = new Tween(
       initialColor.r * initialColor.a,
       finalColor.r * finalColor.a,
@@ -50,12 +67,15 @@ export class ColorTween {
   }
   get currentValue() {
     let nonZeroAlpha = this.aTween.currentValue || 1;
-    return new Color({
-      r: Math.floor(this.rTween.currentValue / nonZeroAlpha),
-      g: Math.floor(this.gTween.currentValue / nonZeroAlpha),
-      b: Math.floor(this.bTween.currentValue / nonZeroAlpha),
-      a: this.aTween.currentValue,
-    });
+    return new Color(
+      {
+        r: Math.floor(this.rTween.currentValue / nonZeroAlpha),
+        g: Math.floor(this.gTween.currentValue / nonZeroAlpha),
+        b: Math.floor(this.bTween.currentValue / nonZeroAlpha),
+        a: this.aTween.currentValue,
+      },
+      '',
+    );
   }
   get done() {
     return [this.rTween, this.gTween, this.bTween, this.aTween].every(
@@ -64,7 +84,7 @@ export class ColorTween {
   }
 }
 
-function parseComputedColor(c) {
+function parseComputedColor(c: string) {
   let m = /^rgb\((\d+), (\d+), (\d+)\)/.exec(c);
   if (m) {
     return {
@@ -88,12 +108,12 @@ function parseComputedColor(c) {
   throw new Error(`unable to parse color ${c}`);
 }
 
-function parseUserProvidedColor(c) {
+function parseUserProvidedColor(c: string) {
   let testElement = document.createElement('div');
   testElement.style.display = 'none';
   testElement.style.color = c;
   document.body.appendChild(testElement);
-  let result = parseComputedColor(getComputedStyle(testElement).color);
+  let result = parseComputedColor(getComputedStyle(testElement).color!);
   testElement.remove();
   return result;
 }
