@@ -9,7 +9,7 @@ import Ember from 'ember';
 import { microwait } from '..';
 import { DEBUG } from '@glimmer/env';
 
-export function task(taskFn: (...args: unknown[]) => Generator) {
+export function task(taskFn: (...args: any[]) => Generator) {
   let tp = (_computed(function(this: object, propertyName: string) {
     return new Task(this, taskFn, tp, propertyName);
   }) as unknown) as TaskProperty;

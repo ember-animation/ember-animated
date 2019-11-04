@@ -71,7 +71,11 @@ export default class Sprite {
   }
 
   private __element!: Element;
-  owner: { id: string } | null;
+
+  // TODO: this is the Child class from animated-each, once that is converted to
+  // TS.
+  owner: { id: string; group?: string } | null;
+
   private _transform: Transform | null = null;
   private _cumulativeTransform: Transform | null = null;
   private _offsetSprite: Sprite | null;
