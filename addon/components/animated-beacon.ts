@@ -9,6 +9,7 @@ import { gte } from 'ember-compatibility-helpers';
 // @ts-ignore: templates don't have types
 import layout from '../templates/components/animated-beacon';
 import ComputedProperty from '@ember/object/computed';
+import MotionService from 'dummy/services/-ea-motion';
 
 /**
   A component that marks a region of the page that
@@ -73,7 +74,8 @@ export default class AnimatedBeacon extends Component {
   tagName = '';
   _inserted = false;
 
-  @service('-ea-motion' as any) motionService: any;
+  @service('-ea-motion')
+  motionService!: MotionService;
 
   constructor(properties: any | undefined) {
     super(

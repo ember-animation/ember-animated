@@ -396,3 +396,9 @@ function* ancestorsOf(component: ComponentLike) {
     pointer = pointer.parentView;
   }
 }
+
+declare module '@ember/service' {
+  interface Registry {
+    '-ea-motion': MotionService;
+  }
+}
