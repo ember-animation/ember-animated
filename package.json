@@ -32,7 +32,7 @@
     "ember-cli-htmlbars": "^3.0.1",
     "ember-cli-typescript": "^2.0.0-rc.2",
     "ember-compatibility-helpers": "^1.2.0",
-    "ember-element-helper": "^0.1.1",
+    "ember-element-helper": "^0.2.0",
     "ember-let-polyfill": "^0.1.0",
     "ember-maybe-import-regenerator": "^0.1.5",
     "ember-named-arguments-polyfill": "^1.0.0"
