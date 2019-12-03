@@ -4,7 +4,7 @@ import opacity from 'ember-animated/motions/opacity';
   Fades inserted, removed, and kept sprites.
 
   ```js
-  import fade from 'ember-animated/transitions/fade'
+  import fade from 'ember-animated/transitions/fade';
 
   export default Component.extend({
     transition: fade
