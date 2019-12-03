@@ -1,7 +1,10 @@
 import { computed } from '@ember/object';
 import Component from '@ember/component';
-import layout from '../templates/components/animated-value';
 import { A } from '@ember/array';
+import { gte } from 'ember-compatibility-helpers';
+
+// @ts-ignore: templates don't have types
+import layout from '../templates/components/animated-value';
 
 /**
   A component that animates when a single value changes.
@@ -45,12 +48,42 @@ import { A } from '@ember/array';
   @public
 */
 
-export default Component.extend({
-  tagName: '',
-  layout,
-  items: computed('value', function() {
-    return A([this.get('value')]);
-  }),
-}).reopenClass({
+class AnimatedValueComponent extends Component {
+  /**
+   * The data you are trying to render.
+    @argument items
+    @type unknown
+  */
+  value!: unknown;
+
+  tagName = '';
+  layout = layout;
+
+  @computed('value')
+  get items() {
+    return A([this.value]);
+  }
+
+  constructor(properties: any | undefined) {
+    super(
+      gte('3.8.0')
+        ? properties
+        : // in older Ember, for the Component base class to see these class
+          // properties they must get passed into super:
+          Object.assign(properties, { layout, tagName: '' }),
+    );
+    if (!gte('3.8.0')) {
+      // in older Ember, any declared but not initialized class properties that
+      // come in as arguments need to get re-set here because typescript
+      // initializes them to undefined *after* Ember has already set them in
+      // super.
+      this.value = properties.value;
+    }
+  }
+}
+
+AnimatedValueComponent.reopenClass({
   positionalParams: ['value'],
 });
+
+export default AnimatedValueComponent;
