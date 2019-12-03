@@ -6,9 +6,9 @@ import './element-remove';
 const innerPattern = /^ (\d+)px (\d+)px(?: (\d+)px)?(?: (\d+)px)?( inset)?(?:, )?/;
 
 export class BoxShadow {
-  static fromComputedStyle(string) {
+  static fromComputedStyle(string: string) {
     let originalString = string;
-    let shadows = [];
+    let shadows: BoxShadow[] = [];
     if (!string || string === 'none') {
       return shadows;
     }
@@ -30,19 +30,40 @@ export class BoxShadow {
     return shadows;
   }
 
-  static fromUserProvidedShadow(string) {
+  static fromUserProvidedShadow(string: string) {
     let testElement = document.createElement('div');
     testElement.style.display = 'none';
-    testElement.style['box-shadow'] = string;
+    testElement.style.boxShadow = string;
     document.body.appendChild(testElement);
     let result = this.fromComputedStyle(
-      getComputedStyle(testElement)['box-shadow'],
+      getComputedStyle(testElement).boxShadow!,
     );
     testElement.remove();
     return result;
   }
 
-  constructor({ color, x, y, blur, spread, inset }) {
+  readonly color: Color;
+  readonly x: number;
+  readonly y: number;
+  readonly blur: number;
+  readonly spread: number;
+  readonly inset: boolean;
+
+  constructor({
+    color,
+    x,
+    y,
+    blur,
+    spread,
+    inset,
+  }: {
+    color: Color;
+    x: number;
+    y: number;
+    blur: number;
+    spread: number;
+    inset: boolean;
+  }) {
     this.color = color;
     this.x = x;
     this.y = y;
@@ -58,7 +79,7 @@ export class BoxShadow {
   }
 }
 
-function emptyShadowOfType(otherShadow) {
+function emptyShadowOfType(otherShadow: BoxShadow) {
   return new BoxShadow({
     color: Color.fromComputedStyle('rgba(0, 0, 0, 0)'),
     blur: 0,
@@ -70,7 +91,14 @@ function emptyShadowOfType(otherShadow) {
 }
 
 export class BoxShadowTween {
-  constructor(fromShadows, toShadows, duration, easing = linear) {
+  private shadowTweens: OneShadowTween[];
+
+  constructor(
+    fromShadows: BoxShadow[],
+    toShadows: BoxShadow[],
+    duration: number,
+    easing: (time: number) => number = linear,
+  ) {
     let shadowCount = Math.max(fromShadows.length, toShadows.length);
     if (fromShadows.length < shadowCount) {
       fromShadows = fromShadows.slice();
@@ -99,7 +127,19 @@ export class BoxShadowTween {
 }
 
 class OneShadowTween {
-  constructor(fromShadow, toShadow, duration, easing) {
+  private colorTween: ColorTween;
+  private xTween: Tween;
+  private yTween: Tween;
+  private blurTween: Tween;
+  private spreadTween: Tween;
+  private inset: boolean;
+
+  constructor(
+    fromShadow: BoxShadow,
+    toShadow: BoxShadow,
+    duration: number,
+    easing: (time: number) => number,
+  ) {
     this.colorTween = new ColorTween(
       fromShadow.color,
       toShadow.color,

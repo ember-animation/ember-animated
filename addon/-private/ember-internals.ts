@@ -22,7 +22,9 @@ export function componentNodes(view: Component) {
   };
 }
 
-export function keyForArray(keyPath: string) {
+export function keyForArray(
+  keyPath: string | undefined | null,
+): (item: unknown, index: number) => string {
   switch (keyPath) {
     case '@index':
       return index;
@@ -31,15 +33,15 @@ export function keyForArray(keyPath: string) {
     case null:
       return identity;
     default:
-      return (item: any) => get(item, keyPath);
+      return (item: unknown) => get(item as any, keyPath);
   }
 }
 
-function index(_item: any, index: number) {
+function index(_item: unknown, index: number) {
   return String(index);
 }
 
-function identity(item: any) {
+function identity(item: unknown) {
   switch (typeof item) {
     case 'string':
     case 'number':

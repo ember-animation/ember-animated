@@ -1,21 +1,74 @@
-import { computed } from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
-import { task } from '../-private/ember-scheduler';
+import { task, Task } from '../-private/ember-scheduler';
 import { microwait, rAF, afterRender, allSettled } from '..';
+import Sprite from '../-private/sprite';
+import ComputedProperty from '@ember/object/computed';
+import Child from '../-private/child';
+import { Transition } from '../-private/transition';
 
-const MotionService = Service.extend({
-  init() {
-    this._super();
-    this._rendezvous = [];
-    this._measurements = [];
-    this._animators = A();
-    this._orphanObserver = null;
-    this._animationObservers = [];
-    this._descendantObservers = [];
-    this._ancestorObservers = new WeakMap();
-    this._beacons = null;
-  },
+interface Animator extends EmberObject {
+  beginStaticMeasurement(): void;
+  endStaticMeasurement(): void;
+  isAnimating: boolean;
+}
+
+type OrphanObserver = (
+  removed: Sprite[],
+  transition: unknown,
+  duration: number,
+  shouldAnimateRemoved: boolean,
+) => void;
+
+type AnimationObserver = (args: {
+  task: Promise<void>;
+  duration: number;
+}) => void;
+
+type AncestorObserver = (state: Child['state']) => void;
+
+interface BaseComponentLike extends EmberObject {
+  parentView: ComponentLike | undefined;
+}
+
+interface AnimatedListElement extends BaseComponentLike {
+  isEmberAnimatedListElement: true;
+  child: Child;
+}
+
+type ComponentLike = BaseComponentLike | AnimatedListElement;
+
+interface Measurement {
+  fn: () => void;
+  resolved: boolean;
+  value: any;
+}
+
+interface Rendezvous {
+  inserted: Sprite[];
+  kept: Sprite[];
+  removed: Sprite[];
+  matches: Map<Sprite, Sprite>;
+  runAnimationTask: Promise<void>;
+  otherTasks: Map<Promise<void>, true>;
+}
+
+export default class MotionService extends Service {
+  _rendezvous: Rendezvous[] = [];
+  _measurements: Measurement[] = [];
+  _animators = A<Animator>();
+  _orphanObserver: OrphanObserver | null = null;
+  _animationObservers: AnimationObserver[] = [];
+  _descendantObservers: ({
+    component: ComponentLike;
+    fn: AnimationObserver;
+  })[] = [];
+  _ancestorObservers: WeakMap<
+    ComponentLike,
+    Map<AncestorObserver, string>
+  > = new WeakMap();
+  _beacons: { [name: string]: Sprite } | null = null;
 
   // === Notification System ===
 
@@ -24,18 +77,18 @@ const MotionService = Service.extend({
   // have:
   //    - an isAnimating property
   //    - beginStaticMeasurement and endStaticMeasurement methods
-  register(animator) {
+  register(animator: Animator) {
     this._animators.pushObject(animator);
     return this;
-  },
-  unregister(animator) {
+  }
+  unregister(animator: Animator) {
     this._animators.removeObject(animator);
     return this;
-  },
+  }
 
   // Register to receive any sprites that are orphaned by a destroyed
   // animator.
-  observeOrphans(fn) {
+  observeOrphans(fn: OrphanObserver) {
     if (this._orphanObserver) {
       throw new Error(
         'Only one animated-orphans component can be used at one time',
@@ -43,34 +96,37 @@ const MotionService = Service.extend({
     }
     this._orphanObserver = fn;
     return this;
-  },
-  unobserveOrphans(fn) {
+  }
+  unobserveOrphans(fn: OrphanObserver) {
     if (this._orphanObserver === fn) {
       this._orphanObserver = null;
     }
     return this;
-  },
+  }
 
   // Register to know when an animation is starting anywhere in the app.
-  observeAnimations(fn) {
+  observeAnimations(fn: AnimationObserver) {
     this._animationObservers.push(fn);
     return this;
-  },
-  unobserveAnimations(fn) {
+  }
+  unobserveAnimations(fn: AnimationObserver) {
     let index = this._animationObservers.indexOf(fn);
     if (index !== -1) {
       this._animationObservers.splice(index, 1);
     }
     return this;
-  },
+  }
 
   // Register to know when an animation is starting within the
   // descendants of the given component
-  observeDescendantAnimations(component, fn) {
+  observeDescendantAnimations(component: ComponentLike, fn: AnimationObserver) {
     this._descendantObservers.push({ component, fn });
     return this;
-  },
-  unobserveDescendantAnimations(component, fn) {
+  }
+  unobserveDescendantAnimations(
+    component: ComponentLike,
+    fn: AnimationObserver,
+  ) {
     let entry = this._descendantObservers.find(
       e => e.component === component && e.fn === fn,
     );
@@ -81,18 +137,18 @@ const MotionService = Service.extend({
       );
     }
     return this;
-  },
+  }
 
   // Register to know when an animation is starting among the
   // ancestors of the given component. The fn will be told whether
   // component is going to be destroyed or not at the end of the
   // animation.
-  observeAncestorAnimations(component, fn) {
+  observeAncestorAnimations(component: ComponentLike, fn: AncestorObserver) {
     let id;
     for (let ancestorComponent of ancestorsOf(component)) {
       // when we find an animated list element, we save its ID
-      if (ancestorComponent.isEmberAnimatedListElement) {
-        id = ancestorComponent.get('child.id');
+      if ('isEmberAnimatedListElement' in ancestorComponent) {
+        id = ancestorComponent.child.id;
       } else if (id != null) {
         // if we found an ID on the last loop, now we've got the list
         // element's parent which is the actual animator.
@@ -108,8 +164,8 @@ const MotionService = Service.extend({
       }
     }
     return this;
-  },
-  unobserveAncestorAnimations(component, fn) {
+  }
+  unobserveAncestorAnimations(component: ComponentLike, fn: AncestorObserver) {
     for (let ancestorComponent of ancestorsOf(component)) {
       let observers = this._ancestorObservers.get(ancestorComponent);
       if (observers) {
@@ -117,30 +173,33 @@ const MotionService = Service.extend({
       }
     }
     return this;
-  },
+  }
 
   // This is a publicly visible property you can use to know if any
   // animations are running. It's timing is deliberately not
   // synchronous, so that you can bind it into a template without
   // getting double-render errors.
-  isAnimating: computed(function() {
+  @computed()
+  get isAnimating() {
     return this.get('isAnimatingSync');
-  }),
+  }
 
   // Synchronously updated version of isAnimating. If you try to
   // depend on this in a template you will get double-render errors
   // (because the act of rendering can cause animations to begin).
-  isAnimatingSync: computed('_animators.@each.isAnimating', function() {
+  @computed('_animators.@each.isAnimating')
+  get isAnimatingSync() {
     return this.get('_animators').any(animator => animator.get('isAnimating'));
-  }),
+  }
 
   // Invalidation support for isAnimating
-  _invalidateIsAnimating: task(function*() {
+  @(task(function*(this: MotionService) {
     yield rAF();
     this.notifyPropertyChange('isAnimating');
-  }).observes('isAnimatingSync'),
+  }).observes('isAnimatingSync'))
+  _invalidateIsAnimating!: ComputedProperty<Task>;
 
-  waitUntilIdle: task(function*() {
+  @task(function*(this: MotionService) {
     // we are idle if we experience two frames in a row with nothing
     // animating.
     while (true) {
@@ -152,9 +211,15 @@ const MotionService = Service.extend({
         }
       }
     }
-  }),
+  })
+  waitUntilIdle!: ComputedProperty<Task>;
 
-  matchDestroyed(removed, transition, duration, shouldAnimateRemoved) {
+  matchDestroyed(
+    removed: Sprite[],
+    transition: Transition,
+    duration: number,
+    shouldAnimateRemoved: boolean,
+  ) {
     if (this._orphanObserver && removed.length > 0) {
       // if these orphaned sprites may be capable of animating,
       // delegate them to the orphanObserver. It will do farMatching
@@ -165,14 +230,14 @@ const MotionService = Service.extend({
       // can't be animated.
       this.get('farMatch').perform(null, [], [], removed, true);
     }
-  },
+  }
 
-  addBeacon: task(function*(name, beacon) {
+  @task(function*(this: MotionService, name: string, beacon: Sprite) {
     if (!this._beacons) {
       this._beacons = {};
     }
     if (this._beacons[name]) {
-      throw new Error('There is more than one beacon named', name);
+      throw new Error(`There is more than one beacon named "${name}"`);
     }
 
     this._beacons[name] = beacon;
@@ -181,13 +246,15 @@ const MotionService = Service.extend({
     // allows other farMatches to finish
     yield microwait();
     this._beacons = null;
-  }),
+  })
+  addBeacon!: ComputedProperty<Task>;
 
-  farMatch: task(function*(
-    runAnimationTask,
-    inserted,
-    kept,
-    removed,
+  @task(function*(
+    this: MotionService,
+    runAnimationTask: Promise<void>,
+    inserted: Sprite[],
+    kept: Sprite[],
+    removed: Sprite[],
     longWait = false,
   ) {
     let matches = new Map();
@@ -210,7 +277,7 @@ const MotionService = Service.extend({
       yield microwait();
     }
 
-    if (this.get('farMatch.concurrency') > 1) {
+    if (this.get('farMatch').concurrency > 1) {
       this._rendezvous.forEach(target => {
         if (target === mine) {
           return;
@@ -225,9 +292,20 @@ const MotionService = Service.extend({
       matchingAnimatorsFinished: allSettled([...mine.otherTasks.keys()]),
       beacons: this._beacons,
     };
-  }),
+  })
+  farMatch!: ComputedProperty<Task>;
 
-  willAnimate({ task, duration, component, children }) {
+  willAnimate({
+    task,
+    duration,
+    component,
+    children,
+  }: {
+    task: Promise<void>;
+    duration: number;
+    component: ComponentLike;
+    children: Child[];
+  }) {
     let message = { task, duration };
 
     // tell any of our ancestors who are observing their descendants
@@ -258,10 +336,10 @@ const MotionService = Service.extend({
     for (let fn of this._animationObservers) {
       fn(message);
     }
-  },
+  }
 
-  staticMeasurement: function*(fn) {
-    let measurement = { fn, resolved: false, value: null };
+  *staticMeasurement(fn: Measurement['fn']) {
+    let measurement: Measurement = { fn, resolved: false, value: null };
     this._measurements.push(measurement);
     try {
       // allow all concurrent animators to join in with our single
@@ -289,15 +367,17 @@ const MotionService = Service.extend({
     } finally {
       this._measurements.splice(this._measurements.indexOf(measurement), 1);
     }
-  },
-});
+  }
+}
 
-function performMatches(sink, source) {
+function performMatches(sink: Rendezvous, source: Rendezvous) {
   sink.inserted.concat(sink.kept).forEach(sprite => {
     let match = source.removed.find(
+      // TODO: an OwnedSprite type could eliminate the need for these
+      // non-nullable casts.
       mySprite =>
-        sprite.owner.group == mySprite.owner.group &&
-        sprite.owner.id === mySprite.owner.id,
+        sprite.owner!.group == mySprite.owner!.group &&
+        sprite.owner!.id === mySprite.owner!.id,
     );
     if (match) {
       sink.matches.set(sprite, match);
@@ -308,7 +388,7 @@ function performMatches(sink, source) {
   });
 }
 
-function* ancestorsOf(component) {
+function* ancestorsOf(component: ComponentLike) {
   let pointer = component.parentView;
   while (pointer) {
     yield pointer;
@@ -316,4 +396,8 @@ function* ancestorsOf(component) {
   }
 }
 
-export default MotionService;
+declare module '@ember/service' {
+  interface Registry {
+    '-ea-motion': MotionService;
+  }
+}
