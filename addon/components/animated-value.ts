@@ -47,7 +47,7 @@ import layout from '../templates/components/animated-value';
   @public
 */
 
-class AnimatedValueComponent extends Component {
+export default class AnimatedValueComponent extends Component {
   /**
    * The data you are trying to render.
     @argument items
@@ -58,14 +58,10 @@ class AnimatedValueComponent extends Component {
   tagName = '';
   layout = layout;
 
+  static positionalParams = ['value'];
+
   @computed('value')
   get items() {
     return A([this.value]);
   }
 }
-
-AnimatedValueComponent.reopenClass({
-  positionalParams: ['value'],
-});
-
-export default AnimatedValueComponent;

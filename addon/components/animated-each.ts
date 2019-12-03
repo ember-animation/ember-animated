@@ -60,6 +60,7 @@ import { Transition } from '../-private/transition';
 export default class AnimatedEach extends Component {
   layout = layout;
   tagName = '';
+  static positionalParams = ['items'];
 
   @service('-ea-motion')
   motionService!: MotionService;
@@ -803,10 +804,6 @@ export default class AnimatedEach extends Component {
     }
   }
 }
-
-AnimatedEach.reopenClass({
-  positionalParams: ['items'],
-});
 
 function isStable(before: string[], after: string[]) {
   if (before.length !== after.length) {

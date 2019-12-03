@@ -48,9 +48,10 @@ import layout from '../templates/components/animated-if';
   @class animated-if
   @public
 */
-class AnimatedIfComponent extends Component {
+export default class AnimatedIfComponent extends Component {
   layout = layout;
   tagName = '';
+  static positionalParams = ['predicate'];
 
   group: string | undefined;
 
@@ -59,9 +60,3 @@ class AnimatedIfComponent extends Component {
     return this.group || `animated_if_${Math.floor(Math.random() * 1000000)}`;
   }
 }
-
-AnimatedIfComponent.reopenClass({
-  positionalParams: ['predicate'],
-});
-
-export default AnimatedIfComponent;
