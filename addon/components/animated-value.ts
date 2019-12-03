@@ -1,7 +1,6 @@
 import { computed } from '@ember/object';
 import Component from '@ember/component';
 import { A } from '@ember/array';
-import { gte } from 'ember-compatibility-helpers';
 
 // @ts-ignore: templates don't have types
 import layout from '../templates/components/animated-value';
@@ -62,23 +61,6 @@ class AnimatedValueComponent extends Component {
   @computed('value')
   get items() {
     return A([this.value]);
-  }
-
-  constructor(properties: any | undefined) {
-    super(
-      gte('3.8.0')
-        ? properties
-        : // in older Ember, for the Component base class to see these class
-          // properties they must get passed into super:
-          Object.assign(properties, { layout, tagName: '' }),
-    );
-    if (!gte('3.8.0')) {
-      // in older Ember, any declared but not initialized class properties that
-      // come in as arguments need to get re-set here because typescript
-      // initializes them to undefined *after* Ember has already set them in
-      // super.
-      this.value = properties.value;
-    }
   }
 }
 

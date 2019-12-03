@@ -11,7 +11,6 @@ import TransitionContext, {
 import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
-import { gte } from 'ember-compatibility-helpers';
 import Child from '../-private/child';
 import assertNever from 'assert-never';
 
@@ -158,30 +157,6 @@ export default class AnimatedEach extends Component {
   private _removedSprites: Sprite[] | null = null;
   private _lastTransition: Transition | null = null;
   private _ancestorWillDestroyUs = false;
-
-  constructor(properties: any | undefined) {
-    super(
-      gte('3.8.0')
-        ? properties
-        : // in older Ember, for the Component base class to see these class
-          // properties they must get passed into super:
-          Object.assign(properties, { layout, tagName: '' }),
-    );
-    if (!gte('3.8.0')) {
-      // in older Ember, any declared but not initialized class properties that
-      // come in as arguments need to get re-set here because typescript
-      // initializes them to undefined *after* Ember has already set them in
-      // super.
-      this.items = properties.items;
-      this.group = properties.group;
-      this.duration = properties.duration;
-      this.use = properties.use;
-      this.rules = properties.rules;
-      this.initialInsertion = properties.initialInsertion;
-      this.finalRemoval = properties.finalRemoval;
-      this.watch = properties.watch;
-    }
-  }
 
   init() {
     super.init();
