@@ -1,12 +1,15 @@
 import Component from '@ember/component';
-import layout from '../templates/components/animated-if';
 import { computed } from '@ember/object';
+
+// @ts-ignore: templates don't have types
+import layout from '../templates/components/animated-if';
+
 /**
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes.
   Animated-if uses the same arguments as animated-each.
   ```hbs
   <button {{action toggleThing}}>Toggle</button>
-  
+
   {{#animated-if showThing use=transition}}
       <div class="message" {{action "toggleThing"}}>
           myContent
@@ -45,14 +48,20 @@ import { computed } from '@ember/object';
   @class animated-if
   @public
 */
-export default Component.extend({
-  layout,
-  tagName: '',
-  realGroup: computed('group', function() {
-    return (
-      this.get('group') || `animated_if_${Math.floor(Math.random() * 1000000)}`
-    );
-  }),
-}).reopenClass({
+class AnimatedIfComponent extends Component {
+  layout = layout;
+  tagName = '';
+
+  group: string | undefined;
+
+  @computed('group')
+  get realGroup() {
+    return this.group || `animated_if_${Math.floor(Math.random() * 1000000)}`;
+  }
+}
+
+AnimatedIfComponent.reopenClass({
   positionalParams: ['predicate'],
 });
+
+export default AnimatedIfComponent;
