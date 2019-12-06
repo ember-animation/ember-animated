@@ -1,13 +1,15 @@
-import { alias } from '@ember/object/computed';
+import ComputedProperty, { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { Resize } from '../motions/resize';
-import { task } from '../-private/ember-scheduler';
+import { task, Task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
-import layout from '../templates/components/animated-container';
-import { deprecate } from '@ember/application/deprecations';
+import layout from 'ember-animated/templates/components/animated-container';
+import MotionService from 'dummy/services/-ea-motion';
+import { action } from '@ember/object';
+import { MotionConstructor } from '../-private/motion';
 
 /**
  Provides a boundary between animator components and the surrounding document
@@ -58,17 +60,20 @@ import { deprecate } from '@ember/application/deprecations';
   @class animated-container
   @public
 */
-export default Component.extend({
-  layout,
-  tagName: '',
+export default class AnimatedContainerComponent extends Component {
+  layout = layout;
+  tagName = '';
 
-  motionService: service('-ea-motion'),
+  @service('-ea-motion')
+  motionService!: MotionService;
+
   /**
    * Use a custom tag for the container. Defaults to div.
     @argument tag
     @type String
   */
-  tag: 'div',
+  tag = 'div';
+
   /**
    * Whether to animate the initial render. You will probably also need to set
    * initialInsertion=true on a child component of animated-container.
@@ -76,71 +81,84 @@ export default Component.extend({
     @argument onInitialRender
     @type Boolean
   */
-  onInitialRender: false,
+  onInitialRender = false;
 
-  init() {
-    this._super();
-    this._signals = null;
-    this._signalPromise = null;
-    this._signalResolve = null;
-    this._inserted = false;
-    this._startingUp = false;
-    this.maybeAnimate = this.maybeAnimate.bind(this);
-    this.sprite = null;
+  /**
+   * Use a custom tag for the container. Defaults to div.
+    @argument motion
+    @type String
+  */
+  motion: MotionConstructor = Resize;
+
+  private _inserted = false;
+  private _startingUp = false;
+  private sprite: Sprite | null = null;
+
+  constructor(properties: object | undefined) {
+    super(properties);
     this.get('motionService')
       .register(this)
-      .observeDescendantAnimations(this, this.maybeAnimate);
-
-    deprecate(
-      `passing a "class" argument to animated-container is deprecated. Switch to angle bracket invocation and pass an HTML attribute instead`,
-      !this.class,
-      {
-        id: 'ember-animated-container-class-arg',
-        until: '1.0.0',
-      },
-    );
-  },
+      .observeDescendantAnimations(this as any, this.maybeAnimate); // TODO: shouldn't need this cast;
+  }
 
   didInsertElement() {
     this._inserted = true;
-  },
+  }
 
-  _ownElement() {
-    if (this._inserted) {
-      return componentNodes(this).firstNode;
+  private _ownElement() {
+    if (!this._inserted) {
+      return undefined;
     }
-  },
+    let { firstNode, lastNode } = componentNodes(this);
+    let node: Node | null = firstNode;
+    while (node) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        return node as Element;
+      }
+      if (node === lastNode) {
+        break;
+      }
+      node = node.nextSibling;
+    }
+    return undefined;
+  }
 
   willDestroyElement() {
     this.get('motionService')
       .unregister(this)
-      .unobserveDescendantAnimations(this, this.maybeAnimate);
-  },
+      .unobserveDescendantAnimations(this as any, this.maybeAnimate); // TODO: shouldn't need this cast
+  }
 
-  isAnimating: alias('animate.isRunning'),
+  @alias('animated.isRunning')
+  isAnimating!: boolean;
 
-  maybeAnimate({ duration, task }) {
+  @action
+  maybeAnimate({ duration, task }: { duration: number; task: Promise<void> }) {
     if (!this._startingUp) {
       this.get('animate').perform(duration, task);
     }
-  },
+  }
 
   beginStaticMeasurement() {
     if (this.sprite) {
       this.sprite.unlock();
     }
-  },
+  }
 
   endStaticMeasurement() {
     if (this.sprite) {
       this.sprite.lock();
     }
-  },
+  }
 
-  animate: task(function*(duration, animationTask) {
+  @(task(function*(
+    this: AnimatedContainerComponent,
+    duration: number,
+    animationTask: Promise<void>,
+  ) {
     this._startingUp = true;
     let service = this.get('motionService');
-    let sprite;
+    let sprite: Sprite;
     let useMotion;
     let element = this._ownElement();
 
@@ -162,7 +180,9 @@ export default Component.extend({
 
     yield* service.staticMeasurement(() => {
       if (!sprite) {
-        sprite = Sprite.sizedEndingAt(this._ownElement());
+        // ownElement is non-null here because we waited for render above, and
+        // our own template definitely contains an Element
+        sprite = Sprite.sizedEndingAt(this._ownElement()!);
         this.sprite = sprite;
       } else {
         sprite.measureFinalBounds();
@@ -170,12 +190,13 @@ export default Component.extend({
     });
 
     if (useMotion) {
-      yield* new (this.motion || Resize)(this.sprite, { duration })._run();
+      yield* new this.motion(this.sprite!, { duration })._run();
     }
 
     yield animationTask;
 
-    this.sprite.unlock();
+    this.sprite!.unlock();
     this.sprite = null;
-  }).restartable(),
-});
+  }).restartable())
+  animate!: ComputedProperty<Task>;
+}

@@ -6,8 +6,12 @@ import Sprite from './sprite';
 
 const motions: WeakMap<Element, Motion[]> = new WeakMap();
 
-interface BaseOptions {
+export interface BaseOptions {
   duration: number;
+}
+
+export interface MotionConstructor<T extends BaseOptions = BaseOptions> {
+  new (sprite: Sprite, opts: Partial<T>): Motion<T>;
 }
 
 export default abstract class Motion<T extends BaseOptions = BaseOptions> {
@@ -55,7 +59,7 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
   // that yields promises (just like an ember-concurrency task, except
   // you don't need to wrap in `task()` here and you therefore don't
   // get the extra features provided by EC tasks.
-  *animate() {}
+  *animate(): Generator<Promise<unknown>, void, unknown> {}
 
   // --- Begin private methods ---
 

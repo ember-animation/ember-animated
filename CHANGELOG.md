@@ -7,6 +7,7 @@
  - BREAKING: we no longer export `Promise` from "ember-animated". In the environments where Ember Animated actually works, we always exported the native `Promise` anyway. We just used this as a place to check for native `Promise` support. This is awkward for TypeScript users, because the compiler reserves the name `Promise` in any file that has async functions.
  - HOUSEKEEPING: the docs are now a totally standalone app in the /docs subdirectory, as opposed to using the addon's dummy app. This lets us be more strict in the addon's test suite without involving all the complexities of the docs app.
  - ENHANCEMENT: `{{#animated-each}}` now supports an `{{else}}` block just like Ember's normal `{{#each}}`. By @esbanarango.
+ - BREAKING: AnimatedContainer no longer accepts `@class=`, use `class=` instead. This had already been deprecated since 0.5.0.
 
 # 0.9.0
  - BUGFIX: fix a flicker when interpolating colors near alpha zero.
