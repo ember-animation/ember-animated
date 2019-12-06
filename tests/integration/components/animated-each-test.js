@@ -447,7 +447,11 @@ module('Integration | Component | animated each', function(hooks) {
       keptSprites,
     }) {
       innerCounter++;
-      assert.deepEqual(keptSprites.map(s => s.owner.id), [], 'kept sprites');
+      assert.deepEqual(
+        keptSprites.map(s => s.owner.id),
+        [],
+        'kept sprites',
+      );
       assert.deepEqual(
         insertedSprites.map(s => s.owner.id),
         [],

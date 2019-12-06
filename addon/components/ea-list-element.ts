@@ -1,7 +1,6 @@
 import { warn } from '@ember/debug';
 import Component from '@ember/component';
 import { componentNodes } from '../-private/ember-internals';
-import { gte } from 'ember-compatibility-helpers';
 import Child from '../-private/child';
 
 /*
@@ -15,24 +14,6 @@ export default class extends Component {
 
   child!: Child;
   elementToChild!: Map<Element, Child>;
-
-  constructor(properties: any | undefined) {
-    super(
-      gte('3.8.0')
-        ? properties
-        : // in older Ember, for the Component base class to see these class
-          // properties they must get passed into super:
-          Object.assign(properties, { tagName: '' }),
-    );
-    if (!gte('3.8.0')) {
-      // in older Ember, any declared but not initialized class properties that
-      // come in as arguments need to get re-set here because typescript
-      // initializes them to undefined *after* Ember has already set them in
-      // super.
-      this.elementToChild = properties.elementToChild;
-      this.child = properties.child;
-    }
-  }
 
   didRender() {
     let mapping = this.get('elementToChild');

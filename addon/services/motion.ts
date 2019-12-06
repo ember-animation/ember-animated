@@ -60,10 +60,10 @@ export default class MotionService extends Service {
   _animators = A<Animator>();
   _orphanObserver: OrphanObserver | null = null;
   _animationObservers: AnimationObserver[] = [];
-  _descendantObservers: ({
+  _descendantObservers: {
     component: ComponentLike;
     fn: AnimationObserver;
-  })[] = [];
+  }[] = [];
   _ancestorObservers: WeakMap<
     ComponentLike,
     Map<AncestorObserver, string>

@@ -435,11 +435,11 @@ export default class Sprite {
     } else {
       let style = (this.element as HTMLElement).style;
       let p = pos as HTMLPosition;
-      style.top = p.top;
-      style.left = p.left;
-      style.right = p.right;
-      style.bottom = p.bottom;
-      style.transform = p.transform;
+      style.top = p.top ?? '';
+      style.left = p.left ?? '';
+      style.right = p.right ?? '';
+      style.bottom = p.bottom ?? '';
+      style.transform = p.transform ?? '';
 
       for (let cls of p.classList) {
         this.element.classList.add(cls);
@@ -468,8 +468,9 @@ export default class Sprite {
     this._initialComputedStyle = copyComputedStyle(this.element);
     this._initialPosition = this._getCurrentPosition();
     this._originalInitialBounds = this._initialBounds;
-    this._initialCumulativeTransform = cumulativeTransform(this
-      .element as HTMLElement);
+    this._initialCumulativeTransform = cumulativeTransform(
+      this.element as HTMLElement,
+    );
   }
 
   measureFinalBounds() {
@@ -488,8 +489,9 @@ export default class Sprite {
     this._finalComputedStyle = copyComputedStyle(this.element);
     this._finalPosition = this._getCurrentPosition();
     this._originalFinalBounds = this._finalBounds;
-    this._finalCumulativeTransform = cumulativeTransform(this
-      .element as HTMLElement);
+    this._finalCumulativeTransform = cumulativeTransform(
+      this.element as HTMLElement,
+    );
   }
 
   /**
@@ -563,8 +565,9 @@ export default class Sprite {
   */
   get cumulativeTransform() {
     if (!this._cumulativeTransform) {
-      this._cumulativeTransform = cumulativeTransform(this
-        .element as HTMLElement);
+      this._cumulativeTransform = cumulativeTransform(
+        this.element as HTMLElement,
+      );
     }
     return this._cumulativeTransform;
   }

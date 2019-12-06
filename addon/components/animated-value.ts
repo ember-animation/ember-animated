@@ -1,7 +1,9 @@
 import { computed } from '@ember/object';
 import Component from '@ember/component';
-import layout from '../templates/components/animated-value';
 import { A } from '@ember/array';
+
+// @ts-ignore: templates don't have types
+import layout from '../templates/components/animated-value';
 
 /**
   A component that animates when a single value changes.
@@ -45,12 +47,21 @@ import { A } from '@ember/array';
   @public
 */
 
-export default Component.extend({
-  tagName: '',
-  layout,
-  items: computed('value', function() {
-    return A([this.get('value')]);
-  }),
-}).reopenClass({
-  positionalParams: ['value'],
-});
+export default class AnimatedValueComponent extends Component {
+  /**
+   * The data you are trying to render.
+    @argument items
+    @type unknown
+  */
+  value!: unknown;
+
+  tagName = '';
+  layout = layout;
+
+  static positionalParams = ['value'];
+
+  @computed('value')
+  get items() {
+    return A([this.value]);
+  }
+}
