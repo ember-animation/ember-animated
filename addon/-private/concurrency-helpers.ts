@@ -71,7 +71,7 @@ function removeWaiter(promise: Promise<any>) {
 }
 
 let nextFrame: number | null = null;
-let nextFrameWaiters: ({ promise: Promise<any>; resolve: () => void })[] = [];
+let nextFrameWaiters: { promise: Promise<any>; resolve: () => void }[] = [];
 
 // rAF guarantees that callbacks within the same frame will see the
 // same clock. We stash it here so that arbitrary code can easily ask

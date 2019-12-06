@@ -69,7 +69,10 @@ export default Component.extend({
     removeItem(which) {
       let items = this.get('items');
       this.set('message', `remove ${which.id}`);
-      this.set('items', items.filter(i => i !== which));
+      this.set(
+        'items',
+        items.filter(i => i !== which),
+      );
     },
     replaceItem(which) {
       let items = this.get('items');

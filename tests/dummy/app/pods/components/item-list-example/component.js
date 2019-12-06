@@ -42,7 +42,10 @@ export default Component.extend({
       component: this,
     });
     let items = this.get('items');
-    this.set('items', items.filter(i => i !== which));
+    this.set(
+      'items',
+      items.filter(i => i !== which),
+    );
   }),
   actions: {
     addItem() {
