@@ -1,4 +1,5 @@
-# master
+# 0.10.0
+
  - BREAKING: drop support for Ember < 3.8
 
  - BREAKING: drop support for node 6.
