@@ -48,11 +48,8 @@ export class Resize extends Motion<Options> {
     let widthTween: Tween | DerivedTween;
     let heightTween: Tween | DerivedTween;
 
-    if (!sprite.hasInitialBounds() || !sprite.hasFinalBounds()) {
-      throw new Error(
-        'resize expects a sprite with both initial and final bounds',
-      );
-    }
+    sprite.assertHasInitialBounds();
+    sprite.assertHasFinalBounds();
 
     if (!this.prior) {
       widthTween = this.widthTween = new Tween(
