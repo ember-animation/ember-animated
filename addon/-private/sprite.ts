@@ -79,14 +79,14 @@ export default class Sprite {
   private _cumulativeTransform: Transform | null = null;
   private _offsetSprite: Sprite | null;
   private _lockedToInitialPosition: boolean;
-  private _finalComputedStyle: unknown;
+  private _finalComputedStyle: CopiedCSS | null = null;
   private _finalBounds: DOMRect | null = null;
-  private _originalFinalBounds: unknown;
+  private _originalFinalBounds: DOMRect | null = null;
   private _finalPosition: SpritePosition | null = null;
   private _finalCumulativeTransform: Transform | null = null;
-  private _initialComputedStyle: unknown;
+  private _initialComputedStyle: CopiedCSS | null = null;
   private _initialBounds: DOMRect | null = null;
-  private _originalInitialBounds: unknown;
+  private _originalInitialBounds: DOMRect | null = null;
   private _initialPosition: SpritePosition | null = null;
   private _initialCumulativeTransform: Transform | null = null;
   private _revealed: unknown;
@@ -108,11 +108,7 @@ export default class Sprite {
     this._lockedToInitialPosition = inInitialPosition;
     if (inInitialPosition) {
       this.measureInitialBounds();
-      this._finalComputedStyle = null;
-      this._originalFinalBounds = null;
     } else {
-      this._initialComputedStyle = null;
-      this._originalInitialBounds = null;
       this.measureFinalBounds();
     }
 
@@ -473,6 +469,10 @@ export default class Sprite {
     );
   }
 
+  hasInitialBounds(): this is SpriteWithInitialBounds {
+    return Boolean(this._initialBounds);
+  }
+
   measureFinalBounds() {
     if (this._finalBounds) {
       throw new Error('Sprite already has final bounds');
@@ -492,6 +492,10 @@ export default class Sprite {
     this._finalCumulativeTransform = cumulativeTransform(
       this.element as HTMLElement,
     );
+  }
+
+  hasFinalBounds(): this is SpriteWithFinalBounds {
+    return Boolean(this._finalBounds);
   }
 
   /**
@@ -1298,3 +1302,19 @@ interface HTMLPosition {
 }
 
 type SpritePosition = HTMLPosition | SVGPosition;
+
+export interface SpriteWithInitialBounds extends Sprite {
+  initialBounds: DOMRect;
+  initialComputedStyle: CopiedCSS;
+  initialPosition: DOMRect;
+  originalInitialBounds: DOMRect;
+  initialCumulativeTransform: Transform;
+}
+
+export interface SpriteWithFinalBounds extends Sprite {
+  finalBounds: DOMRect;
+  finalComputedStyle: CopiedCSS;
+  finalPosition: DOMRect;
+  originalFinalBounds: DOMRect;
+  finalCumulativeTransform: Transform;
+}

@@ -32,21 +32,22 @@ export default class Tween {
   get done() {
     return this.curve.done;
   }
-  plus(otherTween: Tween) {
+  plus(otherTween: Tween | DerivedTween) {
     return new DerivedTween(
       [this, otherTween],
-      (a: Tween, b: Tween) => a.currentValue + b.currentValue,
+      (a: Tween | DerivedTween, b: Tween | DerivedTween) =>
+        a.currentValue + b.currentValue,
     );
   }
 }
 
-class DerivedTween {
+export class DerivedTween {
   private _finalValue: number | null = null;
-  private inputs: Tween[];
+  private inputs: (Tween | DerivedTween)[];
 
   constructor(
-    inputs: Tween[],
-    private combinator: (...inputs: Tween[]) => number,
+    inputs: (Tween | DerivedTween)[],
+    private combinator: (...inputs: (Tween | DerivedTween)[]) => number,
   ) {
     this._finalValue = null;
     this.inputs = inputs.map(t => {
@@ -74,7 +75,7 @@ class DerivedTween {
   get currentValue() {
     return this.combinator(...this.inputs);
   }
-  get done() {
+  get done(): boolean {
     return !this.inputs.find(t => !t.done);
   }
 }
