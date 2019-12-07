@@ -469,8 +469,10 @@ export default class Sprite {
     );
   }
 
-  hasInitialBounds(): this is SpriteWithInitialBounds {
-    return Boolean(this._initialBounds);
+  assertHasInitialBounds(): asserts this is SpriteWithInitialBounds {
+    if (!this._initialBounds) {
+      throw new Error(`sprite does not have initialBounds`);
+    }
   }
 
   measureFinalBounds() {
@@ -494,8 +496,10 @@ export default class Sprite {
     );
   }
 
-  hasFinalBounds(): this is SpriteWithFinalBounds {
-    return Boolean(this._finalBounds);
+  assertHasFinalBounds(): asserts this is SpriteWithFinalBounds {
+    if (!this._finalBounds) {
+      throw new Error(`sprite does not have finalBounds`);
+    }
   }
 
   /**
