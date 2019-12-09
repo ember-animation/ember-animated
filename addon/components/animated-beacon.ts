@@ -8,7 +8,7 @@ import Sprite from '../-private/sprite';
 // @ts-ignore: templates don't have types
 import layout from '../templates/components/animated-beacon';
 import ComputedProperty from '@ember/object/computed';
-import MotionService from 'dummy/services/-ea-motion';
+import MotionService from 'ember-animated/services/motion';
 
 /**
   A component that marks a region of the page that
