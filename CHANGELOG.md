@@ -8,6 +8,7 @@
  - HOUSEKEEPING: the docs are now a totally standalone app in the /docs subdirectory, as opposed to using the addon's dummy app. This lets us be more strict in the addon's test suite without involving all the complexities of the docs app.
  - ENHANCEMENT: `{{#animated-each}}` now supports an `{{else}}` block just like Ember's normal `{{#each}}`. By @esbanarango.
  - BREAKING: AnimatedContainer no longer accepts `@class=`, use `class=` instead. This had already been deprecated since 0.5.0.
+ - HOUSEKEEPING: the bulk of our internals are now implemented in TypeScript.
 
 # 0.9.0
  - BUGFIX: fix a flicker when interpolating colors near alpha zero.
