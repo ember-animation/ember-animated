@@ -7,7 +7,7 @@ import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
 import layout from 'ember-animated/templates/components/animated-container';
-import MotionService from 'dummy/services/-ea-motion';
+import MotionService from 'ember-animated/services/motion';
 import { action } from '@ember/object';
 import { MotionConstructor } from '../-private/motion';
 
