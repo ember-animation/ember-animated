@@ -1,13 +1,13 @@
 <div class="scenario-bind clearfix">
   <AnimatedContainer>
-    {{#animated-value counter rules=rules duration=1000 as |v|}}
+    {{#animated-value this.counter rules=this.rules duration=1000 as |v|}}
       <span class="left-count">{{v}}</span>
     {{/animated-value}}
   </AnimatedContainer>
 
-  {{#if showBoth}}
+  {{#if this.showBoth}}
     <AnimatedContainer>
-      {{#animated-value counter rules=rules2 duration=1000 as |v|}}
+      {{#animated-value this.counter rules=this.rules2 duration=1000 as |v|}}
         <span class="right-count">{{v}}</span>
       {{/animated-value}}
     </AnimatedContainer>
@@ -15,5 +15,5 @@
 
   <button {{action "increment"}}>+</button>
   <button {{action "decrement"}}>-</button>
-  <input type="checkbox" checked={{showBoth}} onchange={{action (mut showBoth) (not showBoth)}}>
+  <input type="checkbox" checked={{this.showBoth}} onchange={{action (mut this.showBoth) (not this.showBoth)}}>
 </div>

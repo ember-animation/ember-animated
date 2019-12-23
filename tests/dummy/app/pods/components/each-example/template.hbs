@@ -2,14 +2,14 @@
   <button {{action "addItem"}}>Add Item</button>
   <button {{action "shuffle"}}>Shuffle</button>
   <button {{action "sortNumeric"}}>Sort</button>
-  {{#if chaos.isRunning}}
+  {{#if this.chaos.isRunning}}
     <button {{action "stopChaos"}}>Stop</button>
   {{else}}
     <button {{action "startChaos"}}>Auto</button>
   {{/if}}
 
   <AnimatedContainer>
-    {{#animated-each items key="id" use=transition as |item|}}
+    {{#animated-each this.items key="id" use=this.transition as |item|}}
       <div>
         {{item.id}}
         <button {{action "removeItem" item}}>X</button>
@@ -19,5 +19,5 @@
     {{/animated-each}}
   </AnimatedContainer>
 
-  This is after the list. {{message}}
+  This is after the list. {{this.message}}
 </div>

@@ -1,7 +1,7 @@
-{{#animated-value "index-route" initialInsertion=true finalRemoval=true use=transition duration=1000}}
+{{#animated-value "index-route" initialInsertion=true finalRemoval=true use=this.transition duration=1000}}
   <div class="hero-list">
-    {{#each model as |person|}}
-      {{#link-to "demos.hero.detail" person.id tagName="div"}}
+    {{#each this.model as |person|}}
+      <LinkTo @route="demos.hero.detail" @model={{person.id}} @tagName="div">
         <AnimatedContainer>
           {{#animated-value person duration=1000 as |p|}}
             <div class="hero-list-image">
@@ -11,7 +11,7 @@
           {{/animated-value}}
         </AnimatedContainer>
         <p>{{person.name}}</p>
-      {{/link-to}}
+      </LinkTo>
     {{/each}}
   </div>
 {{/animated-value}}

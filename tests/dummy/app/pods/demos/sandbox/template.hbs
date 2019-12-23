@@ -1,5 +1,5 @@
 <div class="p-6">
-  {{#animated-value "hello" use=typingTransition initialInsertion=true duration=750 as |text|}}
+  {{#animated-value "hello" use=this.typingTransition initialInsertion=true duration=750 as |text|}}
     <h1 class='inline-block font-mono'>{{text}}</h1>
   {{/animated-value}}
 </div>

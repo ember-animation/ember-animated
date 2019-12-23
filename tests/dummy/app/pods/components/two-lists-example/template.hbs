@@ -1,10 +1,10 @@
 <div class="scenario-two-lists2 clearfix">
   <div class="controls">
-    <label>Bounce back <input type="checkbox" checked={{bounceBack}} onchange={{action (mut bounceBack) (not bounceBack)}}></label>
+    <label>Bounce back <input type="checkbox" checked={{this.bounceBack}} onchange={{action (mut this.bounceBack) (not this.bounceBack)}}></label>
   </div>
 
   <AnimatedContainer>
-    {{#animated-each leftItems use=transition as |item|}}
+    {{#animated-each this.leftItems use=this.transition as |item|}}
       <div>
         {{item.id}}
         <button {{action "move" item}}>&rarr;</button>
@@ -13,7 +13,7 @@
   </AnimatedContainer>
 
   <AnimatedContainer>
-    {{#animated-each rightItems use=transition as |item|}}
+    {{#animated-each this.rightItems use=this.transition as |item|}}
       <div>
         <button {{action "move" item}}>&larr;</button>
         {{item.id}}
