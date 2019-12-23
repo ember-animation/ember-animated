@@ -1,8 +1,7 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { currentURL, visit, click } from '@ember/test-helpers';
-import { TimeControl } from 'ember-animated/test-support';
-import { animationsSettled } from 'ember-animated/test-support';
+import { TimeControl, animationsSettled } from 'ember-animated/test-support';
 
 module('Acceptance | here there', function(hooks) {
   setupApplicationTest(hooks);
@@ -49,7 +48,7 @@ module('Acceptance | here there', function(hooks) {
     await click(
       this.element.querySelector('.scenario-here-there input[type="checkbox"]'),
     );
-    click(this.element.querySelector('.scenario-here-there button'));
+    await click(this.element.querySelector('.scenario-here-there button'));
     await time.advance(100);
     assert.ok(
       this.element.querySelector('.left .demo-item'),

@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import QUnit, { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import {
@@ -7,7 +7,6 @@ import {
   bounds,
   time,
 } from 'ember-animated/test-support';
-import QUnit from 'qunit';
 
 module('Acceptance | each demo', function(hooks) {
   setupApplicationTest(hooks);

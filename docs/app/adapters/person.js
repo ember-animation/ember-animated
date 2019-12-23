@@ -1,8 +1,8 @@
 //BEGIN-SNIPPET person-snippet.js
-import DS from 'ember-data';
+import JSONAPIAdapter from '@ember-data/adapter/json-api';
 import faker from 'faker';
 
-export default DS.JSONAPIAdapter.extend({
+export default JSONAPIAdapter.extend({
   shouldReloadAll() {
     return true;
   },

@@ -550,8 +550,8 @@ module('Integration | Component | animated container', function(hooks) {
     `);
 
     let elt = this.element.querySelector('.animated-container');
-    assert.ok(elt.classList.contains('hello'), 'found hello');
-    assert.ok(elt.classList.contains('world'), 'found world');
+    assert.dom(elt).hasClass('hello', 'found hello');
+    assert.dom(elt).hasClass('world', 'found world');
     assert.equal(elt.dataset['foo'], 'bar');
   });
 

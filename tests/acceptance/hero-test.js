@@ -34,7 +34,7 @@ module('Acceptance | hero', function(hooks) {
   test('index to detail', async function(assert) {
     await visit('/demos/hero');
     time.pause();
-    click('.hero-list-image');
+    await click('.hero-list-image');
     await time.advance(50);
     let orphans = this.element.querySelectorAll(
       '.animated-orphans .hero-list-image',
@@ -52,7 +52,7 @@ module('Acceptance | hero', function(hooks) {
   test('detail to index', async function(assert) {
     await visit('/demos/hero/0');
     time.pause();
-    click('.hero-detail a');
+    await click('.hero-detail a');
     await time.advance(50);
     let images = this.element.querySelectorAll('.hero-list .hero-list-image')
       .length;
@@ -69,7 +69,7 @@ module('Acceptance | hero', function(hooks) {
   test('index to detail with interruption', async function(assert) {
     await visit('/demos/hero');
     time.pause();
-    click('.hero-list-image');
+    await click('.hero-list-image');
     await time.advance(50);
     let beforeInterruption = document
       .querySelector('.hero-detail-image')

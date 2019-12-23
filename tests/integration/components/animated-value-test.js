@@ -21,10 +21,7 @@ module('Integration | Component | animated value', function(hooks) {
       {{/animated-value}}
     `);
 
-    assert.equal(
-      this.element.querySelector('span').textContent.trim(),
-      'hello',
-    );
+    assert.dom(this.element.querySelector('span')).hasText('hello');
   });
 
   test('it animates when a watched property is mutated', async function(assert) {
@@ -57,10 +54,7 @@ module('Integration | Component | animated value', function(hooks) {
 
     await animationsSettled();
 
-    assert.equal(
-      this.element.querySelector('.test-child').textContent.trim(),
-      'a',
-    );
+    assert.dom(this.element.querySelector('.test-child')).hasText('a');
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 });
