@@ -8,7 +8,7 @@ import layout from '../templates/components/animated-if';
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes.
   Animated-if uses the same arguments as animated-each.
   ```hbs
-  <button {{action toggleThing}}>Toggle</button>
+  <button type="button" {{action toggleThing}}>Toggle</button>
 
   {{#animated-if showThing use=transition}}
       <div class="message" {{action "toggleThing"}}>

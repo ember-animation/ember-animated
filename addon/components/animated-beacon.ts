@@ -16,7 +16,7 @@ import MotionService from 'ember-animated/services/motion';
 
   ```hbs
   {{#animated-beacon name="one"}}
-    <button {{action "launch"}}>Launch</button>
+    <button type="button" {{action "launch"}}>Launch</button>
   {{/animated-beacon}}
 
   {{#animated-if showThing use=transition}}

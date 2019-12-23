@@ -15,8 +15,8 @@ import layout from '../templates/components/animated-value';
       {{/animated-value}}
     </AnimatedContainer>
 
-    <button {{action "increment"}}>+</button>
-    <button {{action "decrement"}}>-</button>
+    <button type="button" {{action "increment"}}>+</button>
+    <button type="button" {{action "decrement"}}>-</button>
   ```
   ```js
   import Component from '@ember/component';

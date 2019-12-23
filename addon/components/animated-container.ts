@@ -16,7 +16,7 @@ import { MotionConstructor } from '../-private/motion';
  which smoothly resizes as animators change. Use animated-container whenever you
  need to "hold a place for" some animated content while that content is animating.
   ```hbs
-  <button {{action toggleThing}}>Toggle</button>
+  <button type="button" {{action toggleThing}}>Toggle</button>
   <AnimatedContainer>
     {{#animated-if showThing use=transition }}
         <div class="message" {{action "toggleThing"}}>

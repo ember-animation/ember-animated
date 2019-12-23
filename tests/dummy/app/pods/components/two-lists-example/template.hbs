@@ -7,7 +7,7 @@
     {{#animated-each this.leftItems use=this.transition as |item|}}
       <div>
         {{item.id}}
-        <button {{action "move" item}}>&rarr;</button>
+        <button type="button" {{action "move" item}}>&rarr;</button>
       </div>
     {{/animated-each}}
   </AnimatedContainer>
@@ -15,7 +15,7 @@
   <AnimatedContainer>
     {{#animated-each this.rightItems use=this.transition as |item|}}
       <div>
-        <button {{action "move" item}}>&larr;</button>
+        <button type="button" {{action "move" item}}>&larr;</button>
         {{item.id}}
       </div>
     {{/animated-each}}

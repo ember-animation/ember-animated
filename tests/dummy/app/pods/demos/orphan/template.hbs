@@ -2,11 +2,11 @@
 
   {{! make sure the orphans have a different offset parent than their original sprites to make sure we can counteract it }}
   <div style="position: relative; top: 40px">
-    {{animated-orphans}}
+    <AnimatedOrphans/>
   </div>
 
 
-  <button {{action "toggle"}}>Toggle</button>
+  <button type="button" {{action "toggle"}}>Toggle</button>
 
   {{#if this.showDetail}}
 

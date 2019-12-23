@@ -1,6 +1,6 @@
 {{! BEGIN-SNIPPET svg-snippet.hbs}}
 <div class="svg-move">
-  <button {{action "move"}}>Move</button>
+  <button type="button" {{action "move"}}>Move</button>
 </div>
 <svg width="600" height="600" >
   {{#animated-each bubbles key="id" watch="x,y,r" use=moveThem duration=1000 as |bubble|}}

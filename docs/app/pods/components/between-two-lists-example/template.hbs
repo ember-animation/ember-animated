@@ -16,7 +16,7 @@
             <img src={{item.image}}>
           </div>
           <div class="name">{{item.message}}</div>
-          <button {{action "move" item}}>{{svg-jar "ban"}}</button>
+          <button type="button" {{action "move" item}}>{{svg-jar "ban"}}</button>
         </div>
       {{/animated-each}}
     </AnimatedContainer>
@@ -28,7 +28,7 @@
         <div class="each-item">
           <div class="icon"><img src={{item.image}}></div>
           <div class="name">{{item.message}}</div>
-          <button {{action "move" item}}>{{svg-jar "check"}}</button>
+          <button type="button" {{action "move" item}}>{{svg-jar "check"}}</button>
         </div>
       {{/animated-each}}
     </AnimatedContainer>

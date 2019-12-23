@@ -13,7 +13,7 @@
     </AnimatedContainer>
   {{/if}}
 
-  <button {{action "increment"}}>+</button>
-  <button {{action "decrement"}}>-</button>
+  <button type="button" {{action "increment"}}>+</button>
+  <button type="button" {{action "decrement"}}>-</button>
   <input type="checkbox" checked={{this.showBoth}} onchange={{action (mut this.showBoth) (not this.showBoth)}}>
 </div>

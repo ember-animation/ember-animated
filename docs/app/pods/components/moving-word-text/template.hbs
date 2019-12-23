@@ -1,7 +1,7 @@
 {{! BEGIN-SNIPPET moving-word-text-snippet.hbs }}
 <div class="moving-word-demo">
   <div style="position: absolute">{{animated-orphans}}</div>
-  <button {{action "toggle"}}>Toggle</button>
+  <button type="button" {{action "toggle"}}>Toggle</button>
 
   {{#moving-words-demo as |demo|}}
     <AnimatedContainer>

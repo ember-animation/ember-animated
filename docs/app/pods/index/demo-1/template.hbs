@@ -6,7 +6,7 @@
           <p class='text-lg'>How many guests?</p>
           <div class="ml-4 ">
             <div class="flex items-center">
-              <button {{action 'removeGuest'}}
+              <button type="button" {{action 'removeGuest'}}
                 disabled={{eq this.guests 1}}
                 class='
                   homepage-demo1-button
@@ -18,7 +18,7 @@
               <span class='text-pink font-bold w-8 text-center text-lg'>
                 {{guests}}
               </span>
-              <button {{action 'addGuest' 'guests'}}
+              <button type="button" {{action 'addGuest' 'guests'}}
                 disabled={{eq guests 6}}
                 class='
                   homepage-demo1-button

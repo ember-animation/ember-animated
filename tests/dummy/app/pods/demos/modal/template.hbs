@@ -11,8 +11,8 @@
   </div>
 {{/if}}
 
-<button {{action this.showRandomMessage}}>Show</button>
-<button disabled={{not this.lastMessage}} {{action this.showPreviousMessage}}>Show Previous</button>
+<button type="button" {{action this.showRandomMessage}}>Show</button>
+<button type="button" disabled={{not this.lastMessage}} {{action this.showPreviousMessage}}>Show Previous</button>
 
 
 <AnimatedOrphans />

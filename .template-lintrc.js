@@ -13,8 +13,6 @@ module.exports = {
     'no-outlet-outside-routes': false,
 
     // disabled until we can finish updating
-    'no-implicit-this': false,
-    'require-button-type': false,
     'no-curly-component-invocation': false,
     'no-action': false,
   },
