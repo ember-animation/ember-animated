@@ -5,7 +5,7 @@ module.exports = {
   rules: {
     'attribute-indentation': false,
     'no-inline-styles': false,
-    'img-alt-attributes': false,
+    'require-valid-alt-text': false,
     'no-invalid-interactive': false,
     'table-groups': false,
     quotes: false,
