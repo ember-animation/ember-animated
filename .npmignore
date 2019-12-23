@@ -22,6 +22,7 @@
 /ember-cli-build.js
 /testem.js
 /tests/
+/fastboot-tests/
 /docs/
 /yarn.lock
 .gitkeep
@@ -30,3 +31,5 @@
 /.node_modules.ember-try/
 /bower.json.ember-try
 /package.json.ember-try
+
+
