@@ -268,18 +268,17 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('can perform tasks based on observation', function(assert) {
+  test('can perform tasks based on observation', async function(assert) {
     let Class = EmberObject.extend({
       hello: task(function*() {
         assert.log('ok');
       }).observes('foo'),
     });
     let object = Class.create();
-
     run(() => {
       object.set('foo', 'bar');
     });
-
+    await assert.waitUntilLogContains('ok');
     assert.logEquals(['ok']);
   });
 

@@ -1,4 +1,5 @@
 import { cumulativeTransform } from 'ember-animated/-private/transform';
+import { waitUntil } from '@ember/test-helpers';
 
 export function approxEqualPixels(value, expected, message) {
   // Tolerate errors less than a quarter pixels. This prevents any invisible rounding errors from failing our tests.
@@ -73,6 +74,9 @@ export function installLogging(assert) {
   assert._logBuffer = [];
   assert.log = function(message) {
     this._logBuffer.push(message);
+  };
+  assert.waitUntilLogContains = async function(expected) {
+    await waitUntil(() => assert._logBuffer.indexOf(expected) !== -1);
   };
   assert.logEquals = function(value, label) {
     this.deepEqual(this._logBuffer, value, label);
