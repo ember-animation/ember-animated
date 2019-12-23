@@ -1,1 +1,1 @@
-export { JSONAPISerializer } from '@ember-data/serializers';
+export { default } from '@ember-data/serializer/json-api';
