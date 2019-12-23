@@ -4,6 +4,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true,
+    },
   },
   plugins: ['ember', '@typescript-eslint'],
   extends: [
@@ -18,6 +21,7 @@ module.exports = {
     'no-var': 'error',
     'no-constant-condition': ['error', { checkLoops: false }],
     'require-yield': 0,
+    'ember/no-jquery': 'error',
     semi: 0,
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': 'error',
