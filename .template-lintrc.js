@@ -18,4 +18,7 @@ module.exports = {
     'require-valid-alt-text': false,
     'no-action': false,
   },
+
+  // the docs app lints itself
+  ignore: ['docs'],
 };
