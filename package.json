@@ -95,9 +95,5 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
-  },
-  "resolutions": {
-    "ember-cli-addon-docs/ember-data": "3.10.0",
-    "ember-cli-addon-docs/ember-component-css": "^0.6.7"
   }
 }
