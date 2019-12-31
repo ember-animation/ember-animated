@@ -42,7 +42,7 @@
     "ember-cli-sass": "^10.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-uglify": "^3.0.0",
-    "ember-component-css": "^0.6.7",
+    "ember-component-css": "^0.7.4",
     "ember-data": "~3.15.0",
     "ember-export-application-global": "^2.0.1",
     "ember-faker": "^1.2.1",
@@ -70,7 +70,7 @@
   },
   "resolutions": {
     "ember-cli-addon-docs/ember-data": "^3.15.0",
-    "ember-cli-addon-docs/ember-component-css": "^0.6.7"
+    "ember-cli-addon-docs/ember-component-css": "^0.7.4"
   },
   "ember-addon": {
     "paths": [
