@@ -4,6 +4,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true,
+    },
   },
   plugins: ['ember'],
   extends: [
@@ -19,6 +22,7 @@ module.exports = {
     'require-yield': 0,
     semi: ['error', 'always'],
     'no-var': 'error',
+    'ember/no-jquery': 'error',
   },
   overrides: [
     // node files
@@ -35,7 +39,6 @@ module.exports = {
       ],
       parserOptions: {
         sourceType: 'script',
-        ecmaVersion: 2015,
       },
       env: {
         browser: false,
