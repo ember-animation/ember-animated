@@ -727,7 +727,10 @@ export default class Sprite {
 
   unlock() {
     warn(
-      'Probable bug in ember-animated: an interrupted sprite tried to unlock itself',
+      `Probable bug in ember-animated: an interrupted sprite tried to unlock itself.
+       This is usually caused by a direct child of an animated component also being an
+       animated component. To fix it, wrap the child in another DOM element. 
+       https://github.com/ember-animation/ember-animated/issues/178`,
       this.stillInFlight(),
       { id: 'ember-animated-sprite-unlock' },
     );
