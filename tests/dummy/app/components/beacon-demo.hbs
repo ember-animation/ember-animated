@@ -2,7 +2,7 @@
   <button {{action "launch"}}>Launch</button>
 {{/animated-beacon}}
 
-{{#animated-if showThing use=transition duration=500}}
+{{#animated-if this.showThing use=this.transition duration=500}}
   <div class="beacon-demo--message" {{action "dismiss"}}>
     Hello
   </div>

@@ -1,6 +1,6 @@
-<button {{action toggleThing}}>Toggle</button>
+<button {{action this.toggleThing}}>Toggle</button>
 <AnimatedContainer>
-  {{#animated-if showThing use=transition }}
+  {{#animated-if this.showThing use=this.transition }}
     <div class="message" {{action "toggleThing"}}>
       Hello!
     </div>

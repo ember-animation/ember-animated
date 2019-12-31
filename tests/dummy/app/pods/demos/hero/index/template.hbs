@@ -1,6 +1,6 @@
-{{#animated-value "index-route" initialInsertion=true finalRemoval=true use=transition duration=1000}}
+{{#animated-value "index-route" initialInsertion=true finalRemoval=true use=this.transition duration=1000}}
   <div class="hero-list">
-    {{#each model as |person|}}
+    {{#each this.model as |person|}}
       {{#link-to "demos.hero.detail" person.id tagName="div"}}
         <AnimatedContainer>
           {{#animated-value person duration=1000 as |p|}}
