@@ -1,12 +1,12 @@
 <div class="hero-detail">
-  {{#link-to "demos.hero.index"}}Back to list{{/link-to}}
+  <LinkTo @route="demos.hero.index">Back to list</LinkTo>
 
   <h2>{{this.model.name}}</h2>
 
   <AnimatedContainer>
     {{#animated-value this.model use=this.transition duration=1000 as |m|}}
       <div class="hero-detail-image">
-        <img src={{m.avatarUrl}}>
+        <img alt="avatar for {{m.name}}" src={{m.avatarUrl}}>
         <span>Big Image</span>
       </div>
     {{/animated-value}}

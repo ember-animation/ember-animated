@@ -17,7 +17,7 @@ import '../element-remove';
   after their original parent component has been destroyed. This relies on cloning
   DOM nodes, and the cloned nodes will be inserted as children of animated-orphans.
   ```hbs
-  {{animated-orphans}}
+  <AnimatedOrphans/>
   ```
   @class animated-orphans
   @public

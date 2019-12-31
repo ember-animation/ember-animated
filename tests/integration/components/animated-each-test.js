@@ -404,7 +404,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('items', ['a', 'b', 'c'].map(makeItem));
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#animated-each items use=outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
@@ -489,7 +489,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('items', ['a', 'b', 'c'].map(makeItem));
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#animated-each items use=outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
@@ -586,7 +586,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('items', ['a']);
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#if alive}}
         {{#animated-each items use=transition as |item|}}
           <div class="test-child">
@@ -615,7 +615,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('alive', true);
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#if alive}}
         {{#animated-each items use=transition finalRemoval=true as |item|}}
           <div class="test-child">
