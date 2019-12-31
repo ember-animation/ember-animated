@@ -49,7 +49,7 @@ module('Acceptance | here there', function(hooks) {
     await click(
       this.element.querySelector('.scenario-here-there input[type="checkbox"]'),
     );
-    click(this.element.querySelector('.scenario-here-there button'));
+    await click(this.element.querySelector('.scenario-here-there button'));
     await time.advance(100);
     assert.ok(
       this.element.querySelector('.left .demo-item'),

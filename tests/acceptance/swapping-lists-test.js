@@ -22,7 +22,7 @@ module('Acceptance | swapping lists', function(hooks) {
 
   test('toggling with animated receiving side', async function(assert) {
     await visit('/demos/swapping-lists');
-    click(this.element.querySelector('button'));
+    await click(this.element.querySelector('button'));
     await time.advance(100);
     let listPosition = this.element
       .querySelector('.right')
@@ -44,7 +44,7 @@ module('Acceptance | swapping lists', function(hooks) {
   test('toggling with animated sending side', async function(assert) {
     await visit('/demos/swapping-lists');
     await click(this.element.querySelector('.sending-side > input'));
-    click(this.element.querySelector('button'));
+    await click(this.element.querySelector('button'));
     await time.advance(100);
 
     let hidden = this.element.querySelectorAll(
