@@ -1,4 +1,4 @@
-{{#animated-value predicate key=key rules=rules use=use duration=duration group=realGroup initialInsertion=initialInsertion finalRemoval=finalRemoval as |currentPredicate|}}
+{{#animated-value this.predicate key=this.key rules=this.rules use=this.use duration=this.duration group=this.realGroup initialInsertion=this.initialInsertion finalRemoval=this.finalRemoval as |currentPredicate|}}
   {{#if currentPredicate}}
     {{yield}}
   {{else}}
