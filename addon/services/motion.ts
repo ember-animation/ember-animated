@@ -14,9 +14,9 @@ interface Animator extends EmberObject {
   isAnimating: boolean;
 }
 
-type OrphanObserver = (
+export type OrphanObserver = (
   removed: Sprite[],
-  transition: unknown,
+  transition: Transition,
   duration: number,
   shouldAnimateRemoved: boolean,
 ) => void;
@@ -257,7 +257,7 @@ export default class MotionService extends Service {
     removed: Sprite[],
     longWait = false,
   ) {
-    let matches = new Map();
+    let matches = new Map() as Map<Sprite, Sprite>;
     let mine = {
       inserted,
       kept,

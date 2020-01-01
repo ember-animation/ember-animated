@@ -1,8 +1,13 @@
-import { alias } from '@ember/object/computed';
+import {
+  classNames,
+  layout as templateLayout,
+} from '@ember-decorators/component';
 import { inject as service } from '@ember/service';
+import ComputedProperty, { alias } from '@ember/object/computed';
 import Component from '@ember/component';
+// @ts-ignore: templates don't have types
 import layout from '../templates/components/animated-orphans';
-import { task } from '../-private/ember-scheduler';
+import { task, Task } from '../-private/ember-scheduler';
 import { afterRender, microwait, continueMotions } from '..';
 import TransitionContext, {
   runToCompletion,
@@ -11,6 +16,9 @@ import { spawnChild, childrenSettled, current } from '../-private/scheduler';
 import Sprite from '../-private/sprite';
 import partition from '../-private/partition';
 import '../element-remove';
+import MotionService from '../services/motion';
+import { action } from '@ember/object';
+import { Transition } from '../-private/transition';
 
 /**
   A component that adopts any orphaned sprites so they can continue animating even
@@ -22,43 +30,51 @@ import '../element-remove';
   @class animated-orphans
   @public
 */
-export default Component.extend({
-  layout,
-  classNames: ['animated-orphans'],
-  motionService: service('-ea-motion'),
+@templateLayout(layout)
+@classNames('animated-orphans')
+export default class AnimatedOrphans extends Component {
+  @service('-ea-motion')
+  motionService!: MotionService;
 
-  init() {
-    this._super();
-    this._newOrphanTransitions = [];
-    this._elementToChild = new WeakMap();
-    this._childToTransition = new WeakMap();
-    this._inserted = false;
-    this._cycleCounter = 0;
-  },
+  private _newOrphanTransitions = [] as {
+    removedSprites: Sprite[];
+    transition: Transition;
+    duration: number;
+    shouldAnimateRemoved: boolean;
+  }[];
+  private _elementToChild = new WeakMap();
+  private _childToTransition = new WeakMap();
+  private _inserted = false;
+  private _cycleCounter = 0;
 
   didInsertElement() {
     this._inserted = true;
-    this.animateOrphans = this.animateOrphans.bind(this);
-    this.reanimate = this.reanimate.bind(this);
     this.get('motionService')
       .register(this)
       .observeOrphans(this.animateOrphans)
       .observeAnimations(this.reanimate);
-  },
+  }
 
   willDestroyElement() {
     this.get('motionService')
       .unregister(this)
       .unobserveOrphans(this.animateOrphans)
       .unobserveAnimations(this.reanimate);
-  },
+  }
 
-  animateOrphans(removedSprites, transition, duration, shouldAnimateRemoved) {
+  @action
+  animateOrphans(
+    removedSprites: Sprite[],
+    transition: Transition,
+    duration: number,
+    shouldAnimateRemoved: boolean,
+  ) {
     this._newOrphanTransitions.push({
-      removedSprites: removedSprites.map(sprite => {
+      removedSprites: removedSprites.map((sprite: Sprite) => {
         // we clone the owner objects so that our sprite garbage
         // collection is entirely detached from the original
         // animator's
+        sprite.assertHasOwner();
         sprite.owner = sprite.owner.clone();
         sprite.owner.flagForRemoval();
         return sprite;
@@ -68,42 +84,46 @@ export default Component.extend({
       shouldAnimateRemoved,
     });
     this.reanimate();
-  },
+  }
 
+  @action
   reanimate() {
-    if (!this.get('startAnimation.isRunning')) {
+    if (!this.get('startAnimation.isRunning' as any)) {
       let ownSprite = new Sprite(this.element, true, null, null);
       let activeSprites = this._findActiveSprites(ownSprite);
       this.get('animate').perform({ ownSprite, activeSprites });
     }
-  },
+  }
 
   beginStaticMeasurement() {
     // we don't have any impact on static layout
-  },
+  }
 
-  endStaticMeasurement() {},
+  endStaticMeasurement() {}
 
-  isAnimating: alias('animate.isRunning'),
+  @alias('animate.isRunning')
+  isAnimating!: boolean;
 
-  animate: task(function*({ ownSprite, activeSprites }) {
+  @(task(function*(this: AnimatedOrphans, { ownSprite, activeSprites }) {
     yield this.get('startAnimation').perform(ownSprite);
-    let { matchingAnimatorsFinished } = yield this.get('runAnimation').perform(
+    let { matchingAnimatorsFinished } = (yield this.get('runAnimation').perform(
       activeSprites,
       ownSprite,
-    );
+    )) as { matchingAnimatorsFinished: Promise<void> };
     yield this.get('finalizeAnimation').perform(
       activeSprites,
       matchingAnimatorsFinished,
     );
-  }).restartable(),
+  }).restartable())
+  animate!: ComputedProperty<Task>;
 
-  startAnimation: task(function*(ownSprite) {
+  @task(function*(this: AnimatedOrphans, ownSprite) {
     yield afterRender();
     ownSprite.measureFinalBounds();
-  }),
+  })
+  startAnimation!: ComputedProperty<Task>;
 
-  runAnimation: task(function*(activeSprites, ownSprite) {
+  @task(function*(this: AnimatedOrphans, activeSprites, ownSprite) {
     // we don't need any static measurements, but we wait for this so
     // we stay on the same timing as all the other animators
     yield* this.get('motionService').staticMeasurement(() => {});
@@ -117,25 +137,31 @@ export default Component.extend({
         activeIds[`${sprite.owner.group}/${sprite.owner.id}`] = true;
       }
       for (let entry of this._newOrphanTransitions) {
-        entry.removedSprites = entry.removedSprites.filter(
-          s => !activeIds[`${s.owner.group}/${s.owner.id}`],
-        );
+        entry.removedSprites = entry.removedSprites.filter((s: Sprite) => {
+          s.assertHasOwner();
+          return !activeIds[`${s.owner.group}/${s.owner.id}`];
+        });
       }
     }
 
     // our sprites from prior animation runs are eligible to be
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
-    let { farMatches, matchingAnimatorsFinished } = yield this.get(
-      'motionService.farMatch',
-    ).perform(
-      current(),
-      [],
-      [],
-      activeSprites.concat(
-        ...this._newOrphanTransitions.map(t => t.removedSprites),
-      ),
-    );
+    let { farMatches, matchingAnimatorsFinished } = (yield this.get(
+      'motionService',
+    )
+      .get('farMatch')
+      .perform(
+        current(),
+        [],
+        [],
+        activeSprites.concat(
+          ...this._newOrphanTransitions.map(t => t.removedSprites),
+        ),
+      )) as {
+      matchingAnimatorsFinished: Promise<void>;
+      farMatches: Map<Sprite, Sprite>;
+    };
 
     let cycle = this._cycleCounter++;
 
@@ -151,6 +177,7 @@ export default Component.extend({
           }
           return true;
         }
+        return false;
       });
       let context = new TransitionContext(
         duration,
@@ -159,9 +186,10 @@ export default Component.extend({
         removedSprites,
         sentSprites,
         [],
+        {},
+        this._onMotionStart.bind(this, cycle),
+        this._onMotionEnd.bind(this, cycle),
       );
-      context.onMotionStart = this._onMotionStart.bind(this, cycle);
-      context.onMotionEnd = this._onMotionEnd.bind(this, cycle);
       spawnChild(function*() {
         // let other animators make their own partitioning decisions
         // before we start hiding the sent & received sprites
@@ -180,7 +208,7 @@ export default Component.extend({
       // because each one is going to potentially trigger DOM cloning,
       // so any animated descendants need to get hidden before one of
       // their ancestors clones them.
-      let entry = this._newOrphanTransitions.pop();
+      let entry = this._newOrphanTransitions.pop()!;
       let {
         transition,
         duration,
@@ -195,7 +223,10 @@ export default Component.extend({
         continue;
       }
 
-      for (let sprite of removedSprites) {
+      for (let _sprite of removedSprites) {
+        // typesecript workaround for https://github.com/microsoft/TypeScript/issues/35940
+        let sprite: Sprite = _sprite;
+        sprite.assertHasOwner();
         sprite.rehome(ownSprite);
         this._childToTransition.set(sprite.owner, entry);
       }
@@ -211,6 +242,7 @@ export default Component.extend({
             }
             return true;
           }
+          return false;
         },
       );
 
@@ -225,7 +257,7 @@ export default Component.extend({
           return;
         }
 
-        let removedSprites;
+        let removedSprites: Sprite[];
         if (shouldAnimateRemoved) {
           removedSprites = unmatchedRemovedSprites;
         } else {
@@ -244,13 +276,10 @@ export default Component.extend({
           removedSprites,
           sentSprites,
           [],
+          {},
+          self._onFirstMotionStart.bind(self, activeSprites, cycle),
+          self._onMotionEnd.bind(self, cycle),
         );
-        context.onMotionStart = self._onFirstMotionStart.bind(
-          self,
-          activeSprites,
-          cycle,
-        );
-        context.onMotionEnd = self._onMotionEnd.bind(self, cycle);
         context.prepareSprite = self._prepareSprite.bind(self);
 
         yield* runToCompletion(context, transition);
@@ -259,16 +288,18 @@ export default Component.extend({
 
     yield childrenSettled();
     return { matchingAnimatorsFinished };
-  }),
+  })
+  runAnimation!: ComputedProperty<Task>;
 
-  finalizeAnimation: task(function*(activeSprites, matchingAnimatorsFinished) {
+  @task(function*(activeSprites, matchingAnimatorsFinished) {
     yield matchingAnimatorsFinished;
     for (let sprite of activeSprites) {
       sprite.element.remove();
     }
-  }),
+  })
+  finalizeAnimation!: ComputedProperty<Task>;
 
-  _findActiveSprites(ownSprite) {
+  _findActiveSprites(ownSprite: Sprite) {
     if (!this._inserted) {
       return [];
     }
@@ -279,6 +310,7 @@ export default Component.extend({
           // child was not animating in the previously interrupted
           // animation, so its safe to remove
           element.remove();
+          return undefined;
         } else {
           let sprite = Sprite.positionedStartingAt(element, ownSprite);
           sprite.owner = child;
@@ -290,11 +322,16 @@ export default Component.extend({
         }
       })
       .filter(Boolean);
-  },
+  }
 
-  _groupActiveSprites(activeSprites) {
-    let groups = [];
-    for (let sprite of activeSprites) {
+  _groupActiveSprites(
+    activeSprites: Sprite[],
+  ): { transition: Transition; duration: number; sprites: Sprite[] }[] {
+    let groups = [] as ReturnType<AnimatedOrphans['_groupActiveSprites']>;
+    for (let _sprite of activeSprites) {
+      // ts workaround for https://github.com/microsoft/TypeScript/issues/35940
+      let sprite: Sprite = _sprite;
+      sprite.assertHasOwner();
       let { transition, duration } = this._childToTransition.get(sprite.owner);
       let group = groups.find(g => g.transition === transition);
       if (!group) {
@@ -304,17 +341,17 @@ export default Component.extend({
       group.sprites.push(sprite);
     }
     return groups;
-  },
+  }
 
-  _prepareSprite(sprite) {
+  _prepareSprite(sprite: Sprite) {
     sprite.hide();
-    let newElement = sprite.element.cloneNode(true);
+    let newElement = sprite.element.cloneNode(true) as Element;
     continueMotions(sprite.element, newElement);
     sprite.element = newElement;
     return sprite;
-  },
+  }
 
-  _onFirstMotionStart(activeSprites, cycle, sprite) {
+  _onFirstMotionStart(activeSprites: Sprite[], cycle: number, sprite: Sprite) {
     if (activeSprites.indexOf(sprite) === -1) {
       // in most animators, sprites are still living in their normal place in
       // the DOM, and so they will necessarily start out with their appearance
@@ -338,15 +375,18 @@ export default Component.extend({
       activeSprites.push(sprite);
       this._elementToChild.set(sprite.element, sprite.owner);
     }
+    sprite.assertHasOwner();
     sprite.owner.block(cycle);
-  },
+  }
 
-  _onMotionStart(cycle, sprite) {
+  _onMotionStart(cycle: number, sprite: Sprite) {
+    sprite.assertHasOwner();
     sprite.reveal();
     sprite.owner.block(cycle);
-  },
+  }
 
-  _onMotionEnd(cycle, sprite) {
+  _onMotionEnd(cycle: number, sprite: Sprite) {
+    sprite.assertHasOwner();
     sprite.owner.unblock(cycle);
-  },
-});
+  }
+}
