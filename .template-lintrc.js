@@ -11,14 +11,19 @@ module.exports = {
     quotes: false,
     'no-unused-block-params': false,
     'no-outlet-outside-routes': false,
+    'no-curly-component-invocation': {
+      allow: [
+        'animated-value',
+        'animated-each',
+        'animated-if',
+        'animated-beacon',
+      ],
+    },
 
     // disabling these until we can complete the octane-style upgrade
-    'no-curly-component-invocation': false,
-    'no-implicit-this': false,
-    'require-valid-alt-text': false,
     'no-action': false,
   },
 
   // the docs app lints itself
-  ignore: ['docs'],
+  ignore: ['docs/**'],
 };

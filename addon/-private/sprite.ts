@@ -475,6 +475,12 @@ export default class Sprite {
     }
   }
 
+  assertHasOwner(): asserts this is SpriteWithOwner {
+    if (!this.owner) {
+      throw new Error(`sprite does not have owner`);
+    }
+  }
+
   measureFinalBounds() {
     if (this._finalBounds) {
       throw new Error('Sprite already has final bounds');
@@ -766,7 +772,7 @@ export default class Sprite {
     @param {Object} styles The styles to apply to the sprite.
     @return {void}
   */
-  applyStyles(styles: { [cssPropertyName: string]: string }) {
+  applyStyles<T extends { [P in keyof T]: string }>(styles: T) {
     if (!this._lockMode) {
       throw new Error("can't apply styles to non-lockable sprite");
     }
@@ -776,17 +782,21 @@ export default class Sprite {
           this._styleCache![property] = (this
             .element as HTMLElement).style.getPropertyValue(property);
         }
-        this._imposedStyle![property] = styles[property];
+        this._imposedStyle![property] = styles[property as keyof T];
       });
     }
     Object.keys(styles).forEach(property => {
-      let val = styles[property];
+      let val = styles[property as keyof T];
       if (typeof val !== 'string') {
         throw new Error(
           `Sprite#applyStyles only accepts string values. Convert any numeric values to strings (with appropriate units) before calling. You passed ${property}=${val}`,
         );
       } else {
-        setStyle(this.element as HTMLElement, property, styles[property]);
+        setStyle(
+          this.element as HTMLElement,
+          property,
+          styles[property as keyof T],
+        );
       }
     });
   }
@@ -1324,4 +1334,8 @@ export interface SpriteWithFinalBounds extends Sprite {
   finalPosition: DOMRect;
   originalFinalBounds: DOMRect;
   finalCumulativeTransform: Transform;
+}
+
+export interface SpriteWithOwner extends Sprite {
+  owner: Child;
 }

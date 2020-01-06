@@ -1,0 +1,21 @@
+{{#animated-beacon name="one"}}
+  <button {{action "launch"}}>Launch</button>
+{{/animated-beacon}}
+
+{{#animated-if this.showThing use=this.transition duration=500}}
+  <div class="beacon-demo--message" {{action "dismiss"}}>
+    Hello
+  </div>
+{{/animated-if}}
+
+<style>
+  .beacon-demo--message {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    border: 1px solid black;
+    background-color: yellow;
+  }
+</style>

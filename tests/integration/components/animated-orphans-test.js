@@ -30,7 +30,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     this.set('showIt', true);
 
     await render(hbs`
-  {{animated-orphans}}
+  <AnimatedOrphans/>
 
   {{#if showIt}}
     {{#animated-value "one" use=t1 finalRemoval=true }}
@@ -52,7 +52,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     assert.expect(4);
     this.set('showIt', true);
     await render(hbs`
-  {{animated-orphans}}
+  <AnimatedOrphans/>
 
   {{#if showIt}}
     {{#animated-value "one" use=t1 finalRemoval=true}}
@@ -93,7 +93,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
   <div style="position: fixed; top: 0px; left: 0px">
-   {{animated-orphans}}
+   <AnimatedOrphans/>
   </div>
 
   {{#if showIt}}
@@ -128,7 +128,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
   <div style="position: fixed; top: 0px; left: 0px">
-   {{animated-orphans}}
+   <AnimatedOrphans/>
   </div>
 
   {{#if showIt}}
@@ -161,7 +161,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
   <div style="position: fixed; top: 0px; left: 0px">
-   {{animated-orphans}}
+   <AnimatedOrphans/>
   </div>
 
   {{#if showIt}}
@@ -236,7 +236,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
   <div style="position: fixed; top: 0px; left: 0px">
-   {{animated-orphans}}
+   <AnimatedOrphans/>
   </div>
 
   {{#if showIt}}
@@ -333,7 +333,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     await render(hbs`
   {{! this is fixed because it's not supposed to move during animations, but the QUnit test harness is appending test results above us }}
   <div style="position: fixed; top: 0px; left: 0px">
-   {{animated-orphans}}
+   <AnimatedOrphans/>
   </div>
 
   {{#if showIt}}

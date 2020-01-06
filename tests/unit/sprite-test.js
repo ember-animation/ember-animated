@@ -1271,6 +1271,6 @@ module('Unit | Sprite', function(hooks) {
       !target.classList.contains('extra'),
       'extra should have been cleaned up',
     );
-    assert.ok(target.classList.contains('b'), 'keeps the b class');
+    assert.dom(target).hasClass('b', 'keeps the b class');
   });
 });

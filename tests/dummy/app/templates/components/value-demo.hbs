@@ -1,0 +1,7 @@
+<AnimatedContainer>
+  {{#animated-value this.counter rules=this.rules duration=100 as |v|}}
+    <span class="numbers">{{v}}</span>
+  {{/animated-value}}
+</AnimatedContainer>
+<button {{action "increment"}}>+</button>
+<button {{action "decrement"}}>-</button>

@@ -118,7 +118,7 @@ export default class AnimatedEach extends Component {
   /**
     When true, all the items in the list will animate as [`removedSprites`](../../sprites) when the `{{#animated-each}}` is destroyed. Defaults to false.
 
-    Note that an `{{animated-orphans}}` component must be actively rendered when this animator is removed for this option to have any effect.
+    Note that an `<AnimatedOrphans/>` component must be actively rendered when this animator is removed for this option to have any effect.
 
     @argument finalRemoval
     @type Boolean
