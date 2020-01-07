@@ -27,7 +27,7 @@ import AnimatedOrphans from './animated-orphans';
  */
 @templateLayout(layout)
 @classNames('animated-orphans')
-export default class _AnimatedOrphans extends Component {
+export default class PrivateAnimatedOrphans extends Component {
   @service('-ea-motion')
   motionService!: MotionService;
 
@@ -111,7 +111,7 @@ export default class _AnimatedOrphans extends Component {
   @alias('animate.isRunning')
   isAnimating!: boolean;
 
-  @(task(function*(this: _AnimatedOrphans, { ownSprite, activeSprites }) {
+  @(task(function*(this: PrivateAnimatedOrphans, { ownSprite, activeSprites }) {
     yield this.get('startAnimation').perform(ownSprite);
     let { matchingAnimatorsFinished } = (yield this.get('runAnimation').perform(
       activeSprites,
@@ -124,13 +124,13 @@ export default class _AnimatedOrphans extends Component {
   }).restartable())
   animate!: ComputedProperty<Task>;
 
-  @task(function*(this: _AnimatedOrphans, ownSprite) {
+  @task(function*(this: PrivateAnimatedOrphans, ownSprite) {
     yield afterRender();
     ownSprite.measureFinalBounds();
   })
   startAnimation!: ComputedProperty<Task>;
 
-  @task(function*(this: _AnimatedOrphans, activeSprites, ownSprite) {
+  @task(function*(this: PrivateAnimatedOrphans, activeSprites, ownSprite) {
     // we don't need any static measurements, but we wait for this so
     // we stay on the same timing as all the other animators
     yield* this.get('motionService').staticMeasurement(() => {});
@@ -334,7 +334,9 @@ export default class _AnimatedOrphans extends Component {
   _groupActiveSprites(
     activeSprites: Sprite[],
   ): { transition: Transition; duration: number; sprites: Sprite[] }[] {
-    let groups = [] as ReturnType<_AnimatedOrphans['_groupActiveSprites']>;
+    let groups = [] as ReturnType<
+      PrivateAnimatedOrphans['_groupActiveSprites']
+    >;
     for (let _sprite of activeSprites) {
       // ts workaround for https://github.com/microsoft/TypeScript/issues/35940
       let sprite: Sprite = _sprite;
