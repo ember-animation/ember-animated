@@ -5,7 +5,7 @@ import {
   setupAnimationTest,
   animationsSettled,
   time,
-  bounds
+  bounds,
 } from 'ember-animated/test-support';
 
 module('Acceptance | container demo', function(hooks) {
@@ -18,7 +18,6 @@ module('Acceptance | container demo', function(hooks) {
     assert.equal(currentURL(), 'demos/containerdemo');
   });
 
-
   test('toggle container', async function(assert) {
     await visit('/demos/containerdemo');
     await animationsSettled();
@@ -30,6 +29,9 @@ module('Acceptance | container demo', function(hooks) {
     let onePosition = bounds(this.element.querySelector('.message')).left;
     await time.advance(125);
     let twoPosition = bounds(this.element.querySelector('.message')).left;
-    assert.ok(twoPosition < onePosition, `expected element .two to be animating in, ${twoPosition } > ${onePosition}`);
+    assert.ok(
+      twoPosition < onePosition,
+      `expected element .two to be animating in, ${twoPosition} > ${onePosition}`,
+    );
   });
 });

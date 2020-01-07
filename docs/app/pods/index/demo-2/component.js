@@ -5,20 +5,19 @@ import { fadeIn, fadeOut } from 'ember-animated/motions/opacity';
 import dedent from '../utils/dedent';
 
 const MESSAGES = [
-  "Your message has been sent!",
-  "You successfully deleted the database. On production.",
-  "You upgraded your plan.",
-  "You emailed 7,042 people the poop emoji.",
-  "Your document was saved.",
-  "Did you try turning it off and on again?",
-  "The settings were updated.",
+  'Your message has been sent!',
+  'You successfully deleted the database. On production.',
+  'You upgraded your plan.',
+  'You emailed 7,042 people the poop emoji.',
+  'Your document was saved.',
+  'Did you try turning it off and on again?',
+  'The settings were updated.',
   "'Join the army', they said!",
   "'See the world!', they said!",
   "I'd rather be sailing.",
 ];
 
 export default Component.extend({
-
   init() {
     this._super(...arguments);
     this.set('notifications', A([]));
@@ -26,7 +25,7 @@ export default Component.extend({
 
   nextId: 0,
 
-  * originalTransition({ insertedSprites, removedSprites, keptSprites }) {
+  *originalTransition({ insertedSprites, removedSprites, keptSprites }) {
     for (let sprite of insertedSprites) {
       fadeIn(sprite);
     }
@@ -41,7 +40,7 @@ export default Component.extend({
     }
   },
 
-  * separateTransition({ insertedSprites, removedSprites, keptSprites }) {
+  *separateTransition({ insertedSprites, removedSprites, keptSprites }) {
     for (let sprite of insertedSprites) {
       sprite.startTranslatedBy(0, -sprite.finalBounds.height);
       move(sprite);
@@ -61,7 +60,7 @@ export default Component.extend({
       let id = this.get('nextId');
       this.get('notifications').pushObject({
         id,
-        text: MESSAGES[id % MESSAGES.length]
+        text: MESSAGES[id % MESSAGES.length],
       });
 
       this.incrementProperty('nextId');
@@ -69,7 +68,7 @@ export default Component.extend({
 
     destroyNotification(notification) {
       this.get('notifications').removeObject(notification);
-    }
+    },
   },
 
   templateDiff: dedent`
@@ -103,6 +102,5 @@ export default Component.extend({
     +   }
 
       });
-  `
-
+  `,
 });

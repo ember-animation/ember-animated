@@ -1,3 +1,3 @@
-{{#animated-each items key=key rules=rules use=use duration=duration group=group watch=watch initialInsertion=initialInsertion finalRemoval=finalRemoval as |item|}}
+{{#animated-each this.items key=this.key rules=this.rules use=this.use duration=this.duration group=this.group watch=this.watch initialInsertion=this.initialInsertion finalRemoval=this.finalRemoval as |item|}}
   {{yield item}}
 {{/animated-each}}

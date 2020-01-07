@@ -3,7 +3,6 @@ import fade from 'ember-animated/transitions/fade';
 import dedent from '../utils/dedent';
 
 export default Component.extend({
-
   transitionsRunning: 0,
 
   guests: 1,
@@ -21,7 +20,7 @@ export default Component.extend({
       if (this.guests > 1) {
         this.decrementProperty('guests');
       }
-    }
+    },
   },
 
   templateDiff: dedent`
@@ -55,6 +54,5 @@ export default Component.extend({
           }
         }
       });
-  `
-
+  `,
 });

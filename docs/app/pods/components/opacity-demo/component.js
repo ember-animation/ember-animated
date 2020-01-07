@@ -4,9 +4,9 @@ import { fadeOut, fadeIn } from 'ember-animated/motions/opacity';
 
 export default Component.extend({
   fadeMessage: false,
-  mail: "Hello",
+  mail: 'Hello',
 
-  transition: function * ({ insertedSprites, removedSprites }) {
+  transition: function*({ insertedSprites, removedSprites }) {
     insertedSprites.forEach(fadeIn);
     removedSprites.forEach(fadeOut);
   },

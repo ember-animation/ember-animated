@@ -33,30 +33,38 @@ jobs:
       script:
         - yarn run lint:hbs
         - yarn run lint:js
+        - yarn run typecheck
         - yarn test
     - name: Docs Tests
       install:
         - yarn install --production
         - cd docs
-        - yarn
+        # absurdly, yarn seems to fail reliably on the first try and succeed on
+        # the second
+        - until yarn install; do echo "Retrying yarn"; done
       script:
         - yarn run lint:hbs
         - yarn run lint:js
         - yarn test
 
 
+    - stage: "Additional Tests"
+      name: "Floating Dependencies"
+      install:
+        - npm install --no-package-lock
+      script:
+        - npm test
+
     # we recommend new addons test the current and previous LTS
     # as well as latest stable release (bonus points to beta/canary)
     - stage: Additional Tests
-      env: EMBER_TRY_SCENARIO=ember-lts-2.12
-    - env: EMBER_TRY_SCENARIO=ember-lts-2.16
-    - env: EMBER_TRY_SCENARIO=ember-lts-2.18
-    - env: EMBER_TRY_SCENARIO=ember-lts-3.4
-    - env: EMBER_TRY_SCENARIO=ember-lts-3.8
+      env: EMBER_TRY_SCENARIO=ember-lts-3.8
     - env: EMBER_TRY_SCENARIO=ember-lts-3.12
     - env: EMBER_TRY_SCENARIO=ember-release
     - env: EMBER_TRY_SCENARIO=ember-beta
     - env: EMBER_TRY_SCENARIO=ember-canary
+    - env: EMBER_TRY_SCENARIO=ember-default-with-jquery
+    - env: EMBER_TRY_SCENARIO=ember-classic
 
     - stage: Deploy
       if: (branch = master or tag is present or branch = split-docs) and type = push

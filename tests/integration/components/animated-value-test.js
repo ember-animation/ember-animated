@@ -3,7 +3,10 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { animationsSettled, setupAnimationTest } from 'ember-animated/test-support';
+import {
+  animationsSettled,
+  setupAnimationTest,
+} from 'ember-animated/test-support';
 import { run } from '@ember/runloop';
 
 module('Integration | Component | animated value', function(hooks) {
@@ -18,14 +21,18 @@ module('Integration | Component | animated value', function(hooks) {
       {{/animated-value}}
     `);
 
-    assert.equal(this.element.querySelector('span').textContent.trim(), 'hello');
+    assert.dom(this.element.querySelector('span')).hasText('hello');
   });
 
   test('it animates when a watched property is mutated', async function(assert) {
     assert.expect(5);
     let transitionCounter = 0;
-    this.set('item', { id: 'a', x: 1, y: 2});
-    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+    this.set('item', { id: 'a', x: 1, y: 2 });
+    this.set('transition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 1, 'kept sprites');
         assert.equal(insertedSprites.length, 0, 'inserted sprites');
@@ -47,7 +54,7 @@ module('Integration | Component | animated value', function(hooks) {
 
     await animationsSettled();
 
-    assert.equal(this.element.querySelector('.test-child').textContent.trim(), 'a');
+    assert.dom(this.element.querySelector('.test-child')).hasText('a');
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 });

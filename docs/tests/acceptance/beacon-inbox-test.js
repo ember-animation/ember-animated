@@ -4,7 +4,7 @@ import { click } from '@ember/test-helpers';
 import { bounds, time, setupAnimationTest } from 'ember-animated/test-support';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Beacon Demo', function(hooks){
+module('Integration | Beacon Demo', function(hooks) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
@@ -19,7 +19,4 @@ module('Integration | Beacon Demo', function(hooks){
     let button = bounds(this.element.querySelector('button'));
     assert.closeBounds(5, modal, button, 'modal should be near button');
   });
-
-
 });
-

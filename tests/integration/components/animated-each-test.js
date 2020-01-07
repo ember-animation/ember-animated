@@ -7,9 +7,9 @@ import QUnit, { module, test } from 'qunit';
 import {
   animationsSettled,
   time,
-  setupAnimationTest
+  setupAnimationTest,
 } from 'ember-animated/test-support';
-import { Promise, Motion, wait } from 'ember-animated';
+import { Motion, wait } from 'ember-animated';
 import { run } from '@ember/runloop';
 
 module('Integration | Component | animated each', function(hooks) {
@@ -17,13 +17,13 @@ module('Integration | Component | animated each', function(hooks) {
   setupAnimationTest(hooks);
 
   hooks.beforeEach(function(assert) {
-    assert.listContents = function( elts, expected, message ) {
+    assert.listContents = function(elts, expected, message) {
       let values = [...elts].map(e => e.textContent.trim());
       this.pushResult({
         result: QUnit.equiv(values, expected),
         actual: values,
         expected: expected,
-        message: message
+        message: message,
       });
     };
   });
@@ -38,8 +38,16 @@ module('Integration | Component | animated each', function(hooks) {
       {{/animated-each}}
     `);
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
-    assert.listContents(this.element.querySelectorAll('.test-child-index'), ['0', '1', '2']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), [
+      'a',
+      'b',
+      'c',
+    ]);
+    assert.listContents(this.element.querySelectorAll('.test-child-index'), [
+      '0',
+      '1',
+      '2',
+    ]);
   });
 
   test('it renders when list is missing', async function(assert) {
@@ -66,7 +74,7 @@ module('Integration | Component | animated each', function(hooks) {
   test('it can transition at first render', async function(assert) {
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);
-    this.set('transition', function * ({ insertedSprites }) {
+    this.set('transition', function*({ insertedSprites }) {
       assert.equal(insertedSprites.length, 3);
       transitionCounter++;
     });
@@ -78,7 +86,11 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), [
+      'a',
+      'b',
+      'c',
+    ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -87,7 +99,7 @@ module('Integration | Component | animated each', function(hooks) {
     // our "time" test helper, so we can manipulate it to make sure we
     // see the state during animation without actually doing any
     // waiting around.
-    this.set('transition', function * () {
+    this.set('transition', function*() {
       yield wait(1000);
     });
 
@@ -102,13 +114,22 @@ module('Integration | Component | animated each', function(hooks) {
     time.pause();
     this.set('items', ['b', 'c', 'q']);
     await time.advance(500); // halfway through the animation
-    assert.equal(this.element.querySelector('.test-child[data-item="b"]').dataset['index'], "0");
-    assert.equal(this.element.querySelector('.test-child[data-item="c"]').dataset['index'], "1");
-    assert.equal(this.element.querySelector('.test-child[data-item="q"]').dataset['index'], "2");
+    assert.equal(
+      this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
+      '0',
+    );
+    assert.equal(
+      this.element.querySelector('.test-child[data-item="c"]').dataset['index'],
+      '1',
+    );
+    assert.equal(
+      this.element.querySelector('.test-child[data-item="q"]').dataset['index'],
+      '2',
+    );
   });
 
   test(`it doesn't change each removed item's index while it's being animated away`, async function(assert) {
-    this.set('transition', function * () {
+    this.set('transition', function*() {
       yield wait(1000);
     });
 
@@ -123,13 +144,20 @@ module('Integration | Component | animated each', function(hooks) {
     time.pause();
     this.set('items', ['a', 'c']);
     await time.advance(500);
-    assert.equal(this.element.querySelector('.test-child[data-item="b"]').dataset['index'], "1");
+    assert.equal(
+      this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
+      '1',
+    );
   });
 
   test('it updates when list is replaced', async function(assert) {
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);
-    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+    this.set('transition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
         assert.equal(insertedSprites.length, 1, 'inserted sprites');
@@ -148,14 +176,22 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), [
+      'a',
+      'x',
+      'c',
+    ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it updates when list is mutated', async function(assert) {
     let transitionCounter = 0;
     this.set('items', A(['a', 'b', 'c']));
-    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+    this.set('transition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
         assert.equal(insertedSprites.length, 1, 'inserted sprites');
@@ -174,15 +210,23 @@ module('Integration | Component | animated each', function(hooks) {
       this.get('items').replace(1, 1, ['x']);
     });
     await animationsSettled();
-    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), [
+      'a',
+      'x',
+      'c',
+    ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it animates when an id is mutated', async function(assert) {
     assert.expect(5);
     let transitionCounter = 0;
-    this.set('items', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
-    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+    this.set('items', A([{ id: 'a' }, { id: 'b' }, { id: 'c' }]));
+    this.set('transition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 2, 'kept sprites');
         assert.equal(insertedSprites.length, 1, 'inserted sprites');
@@ -200,15 +244,23 @@ module('Integration | Component | animated each', function(hooks) {
       set(this.get('items')[1], 'id', 'x');
     });
     await animationsSettled();
-    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'x', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), [
+      'a',
+      'x',
+      'c',
+    ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it animates when a watched property is mutated', async function(assert) {
     assert.expect(5);
     let transitionCounter = 0;
-    this.set('items', A([{ id: 'a', x: 1, y: 2}, {id: 'b'}, {id: 'c'}]));
-    this.set('transition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+    this.set('items', A([{ id: 'a', x: 1, y: 2 }, { id: 'b' }, { id: 'c' }]));
+    this.set('transition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
       if (++transitionCounter === 1) {
         assert.equal(keptSprites.length, 3, 'kept sprites');
         assert.equal(insertedSprites.length, 0, 'inserted sprites');
@@ -230,22 +282,26 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(this.element.querySelectorAll('.test-child'), [
+      'a',
+      'b',
+      'c',
+    ]);
     assert.equal(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it can match sprites that are leaving another component', async function(assert) {
     assert.expect(10);
 
-    this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
+    this.set('leftItems', A([{ id: 'a' }, { id: 'b' }, { id: 'c' }]));
     this.set('rightItems', A([]));
 
-    this.set('leftTransition', function * () {
-      throw new Error("unexpected transition");
+    this.set('leftTransition', function*() {
+      throw new Error('unexpected transition');
     });
 
-    this.set('rightTransition', function * () {
-      throw new Error("unexpected transition");
+    this.set('rightTransition', function*() {
+      throw new Error('unexpected transition');
     });
 
     await render(hbs`
@@ -259,40 +315,51 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    this.set('leftTransition', function * ({ receivedSprites, insertedSprites, removedSprites, keptSprites, sentSprites }) {
-      assert.equal(keptSprites.length, 2, "left kept");
-      assert.equal(removedSprites.length, 0, "left removed");
-      assert.equal(sentSprites.length, 1, "left sent");
-      assert.equal(receivedSprites.length, 0, "left received");
-      assert.equal(insertedSprites.length, 0, "left inserted");
+    this.set('leftTransition', function*({
+      receivedSprites,
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+      sentSprites,
+    }) {
+      assert.equal(keptSprites.length, 2, 'left kept');
+      assert.equal(removedSprites.length, 0, 'left removed');
+      assert.equal(sentSprites.length, 1, 'left sent');
+      assert.equal(receivedSprites.length, 0, 'left received');
+      assert.equal(insertedSprites.length, 0, 'left inserted');
     });
 
-    this.set('rightTransition', function * ({ receivedSprites, insertedSprites, removedSprites, keptSprites, sentSprites }) {
-      assert.equal(keptSprites.length, 0, "right kept");
-      assert.equal(removedSprites.length, 0, "right removed");
-      assert.equal(sentSprites.length, 0, "right sent");
-      assert.equal(receivedSprites.length, 1, "right received");
-      assert.equal(insertedSprites.length, 0, "right inserted");
-
+    this.set('rightTransition', function*({
+      receivedSprites,
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+      sentSprites,
+    }) {
+      assert.equal(keptSprites.length, 0, 'right kept');
+      assert.equal(removedSprites.length, 0, 'right removed');
+      assert.equal(sentSprites.length, 0, 'right sent');
+      assert.equal(receivedSprites.length, 1, 'right received');
+      assert.equal(insertedSprites.length, 0, 'right inserted');
     });
 
-    this.set('leftItems', A([{ id: 'a'}, {id: 'c'}]));
-    this.set('rightItems', A([{id: 'b'}, ]));
+    this.set('leftItems', A([{ id: 'a' }, { id: 'c' }]));
+    this.set('rightItems', A([{ id: 'b' }]));
     await animationsSettled();
   });
 
   test('it can match sprites that are leaving a destroyed component', async function(assert) {
     assert.expect(1);
 
-    this.set('leftItems', A([{ id: 'a'}, {id: 'b'}, {id: 'c'}]));
-    this.set('rightItems', A([{id: 'b'}, ]));
+    this.set('leftItems', A([{ id: 'a' }, { id: 'b' }, { id: 'c' }]));
+    this.set('rightItems', A([{ id: 'b' }]));
 
-    this.set('leftTransition', function * () {
-      throw new Error("unexpected left transition");
+    this.set('leftTransition', function*() {
+      throw new Error('unexpected left transition');
     });
 
-    this.set('rightTransition', function * () {
-      throw new Error("unexpected right transition");
+    this.set('rightTransition', function*() {
+      throw new Error('unexpected right transition');
     });
 
     this.set('leftAlive', true);
@@ -311,13 +378,12 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-
-    this.set('leftTransition', function * () {
-      throw new Error("unexpected left transition");
+    this.set('leftTransition', function*() {
+      throw new Error('unexpected left transition');
     });
 
-    this.set('rightTransition', function * ({ receivedSprites }) {
-      assert.equal(receivedSprites.length, 1, "right found match");
+    this.set('rightTransition', function*({ receivedSprites }) {
+      assert.equal(receivedSprites.length, 1, 'right found match');
     });
 
     this.set('leftAlive', false);
@@ -331,14 +397,14 @@ module('Integration | Component | animated each', function(hooks) {
     function makeItem(id) {
       return {
         id,
-        comments: [{ id: `comment-${id}`}]
+        comments: [{ id: `comment-${id}` }],
       };
     }
 
     this.set('items', ['a', 'b', 'c'].map(makeItem));
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#animated-each items use=outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
@@ -351,24 +417,56 @@ module('Integration | Component | animated each', function(hooks) {
 
     await animationsSettled();
 
-    this.set('outerTransition', function * ({ insertedSprites, removedSprites, keptSprites }) {
-      assert.deepEqual(keptSprites.map(s => s.owner.id), ['a', 'c'], 'kept sprites');
-      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(removedSprites.map(s => s.owner.id), ['b'], 'removed sprites');
+    this.set('outerTransition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
+      assert.deepEqual(
+        keptSprites.map(s => s.owner.id),
+        ['a', 'c'],
+        'kept sprites',
+      );
+      assert.deepEqual(
+        insertedSprites.map(s => s.owner.id),
+        [],
+        'inserted sprites',
+      );
+      assert.deepEqual(
+        removedSprites.map(s => s.owner.id),
+        ['b'],
+        'removed sprites',
+      );
     });
 
     let innerCounter = 0;
 
-    this.set('innerTransition', function * ({ insertedSprites, removedSprites, keptSprites }) {
+    this.set('innerTransition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
       innerCounter++;
-      assert.deepEqual(keptSprites.map(s => s.owner.id), [], 'kept sprites');
-      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(removedSprites.map(s => s.owner.id), ['comment-b'], 'removed sprites');
+      assert.deepEqual(
+        keptSprites.map(s => s.owner.id),
+        [],
+        'kept sprites',
+      );
+      assert.deepEqual(
+        insertedSprites.map(s => s.owner.id),
+        [],
+        'inserted sprites',
+      );
+      assert.deepEqual(
+        removedSprites.map(s => s.owner.id),
+        ['comment-b'],
+        'removed sprites',
+      );
     });
 
     this.set('items', ['a', 'c'].map(makeItem));
     await animationsSettled();
-    assert.equal(innerCounter, 1, "inner transition should run once");
+    assert.equal(innerCounter, 1, 'inner transition should run once');
   });
 
   test('child animator reacts appropriately if its planned destruction is cancelled', async function(assert) {
@@ -377,21 +475,21 @@ module('Integration | Component | animated each', function(hooks) {
     // a motion that never finishes
     class TestMotion extends Motion {
       *animate() {
-        yield (new Promise(() => {}));
+        yield new Promise(() => {});
       }
     }
 
     function makeItem(id) {
       return {
         id,
-        comments: [{ id: `comment-${id}`}]
+        comments: [{ id: `comment-${id}` }],
       };
     }
 
     this.set('items', ['a', 'b', 'c'].map(makeItem));
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#animated-each items use=outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
@@ -406,13 +504,13 @@ module('Integration | Component | animated each', function(hooks) {
 
     // Create animations that will block forever and notify us when they have started
     let sawOuter, sawInner;
-    let outerIsAnimating = new Promise(r => sawOuter = r);
-    let innerIsAnimating = new Promise(r => sawInner = r);
-    this.set('outerTransition', function * ({ removedSprites }) {
+    let outerIsAnimating = new Promise(r => (sawOuter = r));
+    let innerIsAnimating = new Promise(r => (sawInner = r));
+    this.set('outerTransition', function*({ removedSprites }) {
       removedSprites.forEach(s => new TestMotion(s).run());
       sawOuter();
     });
-    this.set('innerTransition', function * ({ removedSprites }) {
+    this.set('innerTransition', function*({ removedSprites }) {
       removedSprites.forEach(s => new TestMotion(s).run());
       sawInner();
     });
@@ -424,32 +522,63 @@ module('Integration | Component | animated each', function(hooks) {
     await outerIsAnimating;
     await innerIsAnimating;
 
-    this.set('outerTransition', function * ({ insertedSprites, removedSprites, keptSprites }) {
-      assert.deepEqual(keptSprites.map(s => s.owner.id).sort(), ['a', 'b', 'c'], 'kept sprites');
-      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(removedSprites.map(s => s.owner.id), [], 'removed sprites');
+    this.set('outerTransition', function*({
+      insertedSprites,
+      removedSprites,
+      keptSprites,
+    }) {
+      assert.deepEqual(
+        keptSprites.map(s => s.owner.id).sort(),
+        ['a', 'b', 'c'],
+        'kept sprites',
+      );
+      assert.deepEqual(
+        insertedSprites.map(s => s.owner.id),
+        [],
+        'inserted sprites',
+      );
+      assert.deepEqual(
+        removedSprites.map(s => s.owner.id),
+        [],
+        'removed sprites',
+      );
     });
 
     let innerCounter = 0;
-    this.set('innerTransition', function * ({ receivedSprites, insertedSprites, removedSprites }) {
+    this.set('innerTransition', function*({
+      receivedSprites,
+      insertedSprites,
+      removedSprites,
+    }) {
       innerCounter++;
-      assert.deepEqual(receivedSprites.map(s => s.owner.id), ['comment-b'], 'received sprites');
-      assert.deepEqual(insertedSprites.map(s => s.owner.id), [], 'inserted sprites');
-      assert.deepEqual(removedSprites.map(s => s.owner.id), [], 'removed sprites');
+      assert.deepEqual(
+        receivedSprites.map(s => s.owner.id),
+        ['comment-b'],
+        'received sprites',
+      );
+      assert.deepEqual(
+        insertedSprites.map(s => s.owner.id),
+        [],
+        'inserted sprites',
+      );
+      assert.deepEqual(
+        removedSprites.map(s => s.owner.id),
+        [],
+        'removed sprites',
+      );
     });
-
 
     // Interrupt with a new animation that undoes the previous change
     this.set('items', ['a', 'b', 'c'].map(makeItem));
 
     await animationsSettled();
-    assert.equal(innerCounter, 1, "inner transition should run once");
+    assert.equal(innerCounter, 1, 'inner transition should run once');
   });
 
-  test("does not animate removed sprites at final destruction by default", async function(assert) {
+  test('does not animate removed sprites at final destruction by default', async function(assert) {
     let transitionCounter = 0;
 
-    this.set('transition', function * () {
+    this.set('transition', function*() {
       transitionCounter++;
     });
 
@@ -457,7 +586,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('items', ['a']);
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#if alive}}
         {{#animated-each items use=transition as |item|}}
           <div class="test-child">
@@ -475,18 +604,18 @@ module('Integration | Component | animated each', function(hooks) {
     assert.equal(transitionCounter, 0, 'transitionCounter');
   });
 
-  test("can opt in to animating removed sprites at final destruction", async function(assert) {
+  test('can opt in to animating removed sprites at final destruction', async function(assert) {
     let transitionCounter = 0;
 
     this.set('items', ['a']);
-    this.set('transition', function * () {
+    this.set('transition', function*() {
       transitionCounter++;
     });
 
     this.set('alive', true);
 
     await render(hbs`
-      <div style="position: fixed; top: 0; left: 0">{{animated-orphans}}</div>
+      <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
       {{#if alive}}
         {{#animated-each items use=transition finalRemoval=true as |item|}}
           <div class="test-child">
