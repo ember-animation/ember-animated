@@ -10,11 +10,12 @@ import { get } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import Ember from 'ember';
 import Component from '@ember/component';
+import { ComponentLike } from '../services/motion';
 const { getViewBounds } = (Ember.ViewUtils as unknown) as {
   getViewBounds(view: Component): { firstNode: Node; lastNode: Node };
 };
 
-export function * ancestorsOf(component: Component) {
+export function * ancestorsOf(component: ComponentLike) {
   let pointer = component.parentView;
   while (pointer) {
     yield pointer;

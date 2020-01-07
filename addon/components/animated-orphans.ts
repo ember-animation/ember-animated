@@ -15,10 +15,8 @@ import '../element-remove';
   @public
 */
 @templateLayout(layout)
-export default class AnimatedOprhans extends Component {
-  isEmberAnimatedOrphans = true;
-
-  private _isDestroying = false;
+export default class AnimatedOrphans extends Component {
+  _isDestroying = false;
 
   willDestroyElement() {
     this._isDestroying = true;
