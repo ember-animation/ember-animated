@@ -60,7 +60,10 @@ export default class MotionService extends Service {
   _rendezvous: Rendezvous[] = [];
   _measurements: Measurement[] = [];
   _animators = A<Animator>();
-  _orphanObservers: { fn: OrphanObserver, animatedOrphans: AnimatedOrphans }[] = [];
+  _orphanObservers: {
+    fn: OrphanObserver;
+    animatedOrphans: AnimatedOrphans;
+  }[] = [];
   _animationObservers: AnimationObserver[] = [];
   _descendantObservers: {
     component: ComponentLike;
@@ -91,7 +94,7 @@ export default class MotionService extends Service {
   // Register to receive any sprites that are orphaned by a destroyed
   // animator.
   observeOrphans(fn: OrphanObserver, animatedOrphans: AnimatedOrphans) {
-    this._orphanObservers.push({fn, animatedOrphans});
+    this._orphanObservers.push({ fn, animatedOrphans });
     return this;
   }
   unobserveOrphans(fn: OrphanObserver) {
@@ -217,7 +220,7 @@ export default class MotionService extends Service {
     transition: Transition,
     duration: number,
     shouldAnimateRemoved: boolean,
-    animatorComponent: BaseComponentLike
+    animatorComponent: BaseComponentLike,
   ) {
     if (this._orphanObservers.length > 0 && removed.length > 0) {
       // if these orphaned sprites may be capable of animating,
@@ -226,8 +229,11 @@ export default class MotionService extends Service {
 
       // find closest ancestor <AnimatedOrphans/> that is not in the process of being destroyed
       let closestAnimatedOrphans: AnimatedOrphans | undefined;
-      for(let ancestorComponent of ancestorsOf(animatorComponent)) {
-        if (ancestorComponent instanceof AnimatedOrphans && !ancestorComponent._isDestroying) {
+      for (let ancestorComponent of ancestorsOf(animatorComponent)) {
+        if (
+          ancestorComponent instanceof AnimatedOrphans &&
+          !ancestorComponent._isDestroying
+        ) {
           closestAnimatedOrphans = ancestorComponent;
           break;
         }

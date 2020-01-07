@@ -15,7 +15,7 @@ const { getViewBounds } = (Ember.ViewUtils as unknown) as {
   getViewBounds(view: Component): { firstNode: Node; lastNode: Node };
 };
 
-export function * ancestorsOf(component: ComponentLike) {
+export function* ancestorsOf(component: ComponentLike) {
   let pointer = component.parentView;
   while (pointer) {
     yield pointer;

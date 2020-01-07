@@ -396,7 +396,7 @@ export default class AnimatedEach extends Component {
       this.get('durationWithDefault'),
       this.get('finalRemoval'),
       // @ts-ignore
-      this
+      this,
     );
   }
 

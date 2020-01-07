@@ -47,8 +47,10 @@ export default class _AnimatedOrphans extends Component {
   init() {
     super.init();
 
-    if(!this.parent) {
-      throw new Error(`{{-animated-orphans}} cannot be used directly, use <AnimatedOrphans/> instead.`);
+    if (!this.parent) {
+      throw new Error(
+        `{{-animated-orphans}} cannot be used directly, use <AnimatedOrphans/> instead.`,
+      );
     }
   }
 
