@@ -25,7 +25,8 @@ if (environment === 'test') {
 ```js
 // some-component.js
 
-import ENV from '@cardstack/cardhost/config/environment';
+import ENV from 'my-app-name/config/environment';
+// ...more imports
 
 export default class SomeComponent extends Component {
     let duration = ENV.animationSpeed || 500;
@@ -35,6 +36,8 @@ export default class SomeComponent extends Component {
       move(sprite, { duration });
     });
   }
+
+  // ...more component code
 }
 ```
 
