@@ -16,6 +16,7 @@ Router.map(function() {
     this.route('motions');
     this.route('rules');
     this.route('beacons');
+    this.route('testing');
   });
   this.route('not-found', { path: '/*path' });
 });

@@ -1,13 +1,13 @@
-# Testing
+# Testing Overview
 
 This section will cover tools that you can use to test and debug an app that has animations.
 
 Here are some common questions that the testing tools help address:
 
-1. How can you make sure that animations do not slow down your tests?
-2. How do you wait for animations to finish before making test assertions or snapshots?
-3. How can you test app state partway through an animation?
-4. What is the best way to debug animations that do not look how you expect them to?
+- How can you make sure that animations do not slow down your tests?
+- How do you wait for animations to finish before making test assertions or snapshots?
+- How can you test app state partway through an animation?
+- What is the best way to debug animations that do not look how you expect them to?
 
 ## Animation duration in tests
 
