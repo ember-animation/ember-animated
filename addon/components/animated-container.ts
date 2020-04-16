@@ -62,7 +62,6 @@ import { MotionConstructor } from '../-private/motion';
 */
 export default class AnimatedContainerComponent extends Component {
   layout = layout;
-  tagName = '';
 
   @service('-ea-motion')
   motionService!: MotionService;
@@ -72,7 +71,7 @@ export default class AnimatedContainerComponent extends Component {
     @argument tag
     @type String
   */
-  tag = 'div';
+  tag = this.args.tag || 'div';
 
   /**
    * Whether to animate the initial render. You will probably also need to set
