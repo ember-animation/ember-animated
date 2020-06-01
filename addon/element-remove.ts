@@ -7,10 +7,13 @@ interface Window {
   DocumentType: any;
 }
 
-const classPrototypes =
-  [window.Element, window.CharacterData,window.DocumentType]
-    .filter( (klass) => klass )
-    .map( (klass) => klass.prototype );
+const classPrototypes = [
+  window.Element,
+  window.CharacterData,
+  window.DocumentType,
+]
+  .filter(klass => klass)
+  .map(klass => klass.prototype);
 
 (function(arr) {
   arr.forEach(function(item) {
