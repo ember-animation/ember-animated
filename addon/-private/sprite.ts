@@ -1253,7 +1253,7 @@ function setAttribute(element: Element, attrName: string, values: any) {
 function setStyle(element: HTMLElement, property: string, value: string) {
   if (/[A-Z]/.test(property)) {
     throw new Error(
-      `applyeStyles expects all CSS property names to be formatted as in CSS. Not camelcased. You passed ${property}.`,
+      `applyStyles expects all CSS property names to be formatted as in CSS. Not camelcased. You passed ${property}.`,
     );
   }
   element.style.setProperty(property, value);

@@ -1,3 +1,5 @@
+import '../domrect-polyfill';
+
 /**
   Shifts the coordinates of the given bounds using the provided
   x and y axis offset.

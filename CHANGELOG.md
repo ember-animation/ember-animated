@@ -1,3 +1,12 @@
+# 0.10.1
+
+ - BUGFIX: polyfill DOMRect on browsers that don't have it, by @SergeAstapov
+ - DOCS: fixes to one of the demos by @akashdsouza
+ - HOUSEKEEPING: ported more internals to typescript
+ - ENHANCEMENT: improved warning message by @rwwagner90
+ - HOUSEKEEPING: switched to github actions for CI
+ - HOUSEKEEPING: upgraded many devDependencies
+
 # 0.10.0
  - BREAKING: drop support for Ember < 3.8
  - BREAKING: drop support for node 6.
