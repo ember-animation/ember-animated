@@ -20,6 +20,10 @@ module.exports = {
     browser: true,
   },
   rules: {
+    // pending complete octane style upgrade
+    'ember/no-get': 0,
+    'ember/use-ember-data-rfc-395-imports': 0,
+
     'no-var': 'error',
     'no-constant-condition': ['error', { checkLoops: false }],
     'require-yield': 0,
