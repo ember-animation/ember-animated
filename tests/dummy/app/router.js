@@ -31,5 +31,6 @@ Router.map(function() {
     this.route('modal');
     this.route('sandbox');
     this.route('color-and-shadow');
+    this.route('card');
   });
 });
