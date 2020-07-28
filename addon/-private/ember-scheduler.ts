@@ -1,5 +1,6 @@
 import { Promise as EmberPromise } from 'rsvp';
 import { join, scheduleOnce } from '@ember/runloop';
+// eslint-disable-next-line ember/no-observers
 import { addObserver } from '@ember/object/observers';
 import { computed, set } from '@ember/object';
 import ComputedProperty from '@ember/object/computed';
