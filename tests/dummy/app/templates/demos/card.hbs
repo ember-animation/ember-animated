@@ -6,22 +6,23 @@
 
 {{#if this.viewBig }}
   {{#animated-match "hello-world-card" as |animator|}}
-  <div {{animator.sprite "outside"}} class="big card">
+  here: {{animator}} {{debugger}}
+  {{!-- <div {{sprite "outside"}} class="big card">
     {{#animator.sprites "inside"}}
-    <h2 {{animator.sprite "title"}}>Hello World</h2>
+    <h2 {{sprite "title"}}>Hello World</h2>
     <p>
       Omnis omnis eius cupiditate neque molestias. Aut consequatur officia qui impedit aspernatur praesentium dolores et. Et non animi molestiae eius dolor nulla non. Nihil provident commodi earum qui. Corrupti iusto provident maiores hic dolorum ipsam qui non. Id aperiam magni culpa. Consequatur quia provident occaecati delectus facilis. Et voluptate voluptatibus soluta molestiae eos expedita ea voluptas. Voluptas et autem sed numquam quia ducimus deserunt perspiciatis. Voluptatem recusandae aut at nihil odit error voluptatibus id.
     </p>
     {{/animator.sprites}}
-  </div>
+  </div> --}}
   {{/animated-match}}
 {{else}}
   {{#animated-match "hello-world-card" as |animator|}}
-  <div {{animator.sprite "outside"}} class="small card">
+  {{!-- <div {{sprite "outside"}} class="small card">
     {{#animator.sprites "inside"}}
-      <h2 {{animator.sprite "title"}}>Hello World</h2>
+      <h2 {{sprite "title"}}>Hello World</h2>
     {{/animator.sprites}}
-  </div>
+  </div> --}}
   {{/animated-match}}
 {{/if}}
 
