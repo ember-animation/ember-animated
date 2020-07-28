@@ -14,7 +14,7 @@ jobs:
     - name: Install node
       uses: actions/setup-node@v1
       with:
-        node-version: 8.x
+        node-version: 10.x
 
     - name: Get yarn cache
       id: yarn-cache
@@ -48,7 +48,7 @@ jobs:
     - name: Install node
       uses: actions/setup-node@v1
       with:
-        node-version: 8.x
+        node-version: 10.x
 
     - name: Get yarn cache
       id: yarn-cache
@@ -92,7 +92,7 @@ jobs:
     - name: Install node
       uses: actions/setup-node@v1
       with:
-        node-version: 8.x
+        node-version: 10.x
 
     - name: Get yarn cache
       id: yarn-cache

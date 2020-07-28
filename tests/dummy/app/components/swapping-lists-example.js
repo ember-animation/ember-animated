@@ -3,13 +3,18 @@ import move from 'ember-animated/motions/move';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  transition: computed('animateSendingSide', function() {
-    if (this.get('animateSendingSide')) {
-      return this.moveSent;
-    } else {
-      return this.moveReceived;
-    }
-  }),
+  transition: computed(
+    'animateSendingSide',
+    'moveSent',
+    'moveReceived',
+    function() {
+      if (this.get('animateSendingSide')) {
+        return this.moveSent;
+      } else {
+        return this.moveReceived;
+      }
+    },
+  ),
 
   moveReceived: function*({ receivedSprites, insertedSprites }) {
     receivedSprites.forEach(move);

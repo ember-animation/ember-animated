@@ -16,7 +16,8 @@ export default Component.extend({
   *shuffle({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
-        'z-index': `${(receivedSprites.length - receivedSprites.indexOf(sprite)) *
+        'z-index': `${(receivedSprites.length -
+          receivedSprites.indexOf(sprite)) *
           100}`,
       });
       move(sprite);
@@ -27,7 +28,8 @@ export default Component.extend({
   *shuffleWithStagger({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
-        'z-index': `${(receivedSprites.length - receivedSprites.indexOf(sprite)) *
+        'z-index': `${(receivedSprites.length -
+          receivedSprites.indexOf(sprite)) *
           100}`,
       });
       move(sprite);

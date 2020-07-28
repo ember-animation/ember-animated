@@ -175,10 +175,14 @@ export default class MotionService extends Service {
     return this;
   }
 
-  // This is a publicly visible property you can use to know if any
-  // animations are running. It's timing is deliberately not
-  // synchronous, so that you can bind it into a template without
-  // getting double-render errors.
+  // This is a publicly visible property you can use to know if any animations
+  // are running. It's timing is deliberately not synchronous, so that you can
+  // bind it into a template without getting double-render errors.
+  //
+  // We have an un-observed dependency on an internal property *on purpose*, so
+  // this lint rule needs to be disabled:
+  //
+  // eslint-disable-next-line ember/require-computed-property-dependencies
   @computed()
   get isAnimating() {
     return this.get('isAnimatingSync');

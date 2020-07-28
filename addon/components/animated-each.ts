@@ -171,6 +171,7 @@ export default class AnimatedEach extends Component {
   _installObservers() {
     let key = this.get('key');
     if (key != null && key !== '@index' && key !== '@identity') {
+      // eslint-disable-next-line ember/no-observers
       this.addObserver(
         `items.@each.${key}` as any,
         this,
@@ -181,6 +182,7 @@ export default class AnimatedEach extends Component {
     let deps = this._deps;
     if (deps) {
       for (let dep of deps) {
+        // eslint-disable-next-line ember/no-observers
         this.addObserver(
           `items.@each.${dep}` as any,
           this,
@@ -236,10 +238,14 @@ export default class AnimatedEach extends Component {
     return signature;
   }
 
-  // this is where we handle most of the model state management. Based
-  // on the `items` array we were given and our own earlier state, we
-  // update a list of Child models that will be rendered by our
-  // template and decide whether an animation is needed.
+  /* eslint-disable ember/require-computed-property-dependencies, ember/no-side-effects */
+  // turning off these two rules for this method because we manage our own
+  // internal state and know what we're doing.
+
+  // this is where we handle most of the model state management. Based on the
+  // `items` array we were given and our own earlier state, we update a list of
+  // Child models that will be rendered by our template and decide whether an
+  // animation is needed.
   @computed('items.[]', 'group')
   get renderedChildren() {
     let firstTime = this._firstTime;
@@ -312,6 +318,8 @@ export default class AnimatedEach extends Component {
 
     return newChildren;
   }
+
+  /* eslint-enable ember/require-computed-property-dependencies, ember/no-side-effects */
 
   @alias('animate.isRunning')
   isAnimating!: boolean;
