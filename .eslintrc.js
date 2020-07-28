@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
@@ -22,7 +24,6 @@ module.exports = {
     'no-constant-condition': ['error', { checkLoops: false }],
     'require-yield': 0,
     semi: 0,
-    'ember/no-jquery': 'error',
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': 'error',
     '@typescript-eslint/ban-types': 'error',
@@ -84,15 +85,11 @@ module.exports = {
         node: true,
       },
       plugins: ['node'],
-      rules: Object.assign(
-        {},
-        /* eslint-disable-next-line @typescript-eslint/no-require-imports */
-        require('eslint-plugin-node').configs.recommended.rules,
-        {
-          '@typescript-eslint/no-var-requires': 0,
-          '@typescript-eslint/no-require-imports': 0,
-        },
-      ),
+      extends: ['plugin:node/recommended'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 0,
+        '@typescript-eslint/no-require-imports': 0,
+      },
     },
   ],
 };
