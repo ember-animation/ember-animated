@@ -286,8 +286,21 @@
   z-index: 1;
 }
 
-.scenario-card > .big {
-  border: 1px solid black;
+.scenario-card > .card {
+  border: 1px solid #2020cc;
   border-radius: 5px;
-  background-color: blue;
+  background-color:#a5a5ff;
+}
+
+.scenario-card > .big {
+  margin-top: 4rem;
+  width: 20rem;
+  margin-left: 10rem;
+  padding: 1.5rem;
+}
+
+.scenario-card > .small {
+  margin-top: 4rem;
+  width: 10rem;
+  padding: 1.5rem;
 }
