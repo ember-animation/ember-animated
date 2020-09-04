@@ -9,6 +9,7 @@
 import { get } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import Ember from 'ember';
+import { warn } from '@ember/debug';
 import Component from '@ember/component';
 const { getViewBounds } = (Ember.ViewUtils as unknown) as {
   getViewBounds(view: Component): { firstNode: Node; lastNode: Node };
@@ -20,6 +21,24 @@ export function componentNodes(view: Component) {
     firstNode: bounds.firstNode,
     lastNode: bounds.lastNode,
   };
+}
+
+export function forEachElement(view: Component, fn: (elt: Element) => void) {
+  let { firstNode, lastNode } = componentNodes(view);
+  let node: Node | null = firstNode;
+  while (node) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      fn(node as Element);
+    } else if (!/^\s*$/.test(node.textContent!)) {
+      warn('Found bare text content inside an animator', false, {
+        id: 'ember-animated-bare-text',
+      });
+    }
+    if (node === lastNode) {
+      break;
+    }
+    node = node.nextSibling;
+  }
 }
 
 export function keyForArray(

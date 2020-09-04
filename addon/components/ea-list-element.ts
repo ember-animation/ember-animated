@@ -1,6 +1,5 @@
-import { warn } from '@ember/debug';
 import Component from '@ember/component';
-import { componentNodes } from '../-private/ember-internals';
+import { forEachElement } from '../-private/ember-internals';
 import Child from '../-private/child';
 
 /*
@@ -18,26 +17,8 @@ export default class extends Component {
   didRender() {
     let mapping = this.get('elementToChild');
     let child = this.get('child');
-    this._forEachElement(elt => {
+    forEachElement(this, elt => {
       mapping.set(elt, child);
     });
-  }
-
-  _forEachElement(fn: (elt: Element) => void) {
-    let { firstNode, lastNode } = componentNodes(this);
-    let node: Node | null = firstNode;
-    while (node) {
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        fn(node as Element);
-      } else if (!/^\s*$/.test(node.textContent!)) {
-        warn('Found bare text content inside an animator', false, {
-          id: 'ember-animated-bare-text',
-        });
-      }
-      if (node === lastNode) {
-        break;
-      }
-      node = node.nextSibling;
-    }
   }
 }
