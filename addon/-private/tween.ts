@@ -118,7 +118,7 @@ class MotionCurve {
       this._runTime = clock.now() - this.startTime;
       this._timeProgress =
         this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);
-      this._spaceProgress = Math.min(this.easing(this._timeProgress), 1);
+      this._spaceProgress = this.easing(this._timeProgress);
       if (this._timeProgress >= 1) {
         this._doneFrames++;
       }

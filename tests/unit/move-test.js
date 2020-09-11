@@ -169,4 +169,29 @@ module('Unit | Move', function(hooks) {
       });
     });
   });
+
+  test('overshooting motion', async function(assert) {
+    target.style['margin-left'] = '0px';
+    target.style['margin-top'] = '0px';
+    target.style.position = 'relative';
+
+    let p = Sprite.offsetParentStartingAt(target);
+    p.measureFinalBounds();
+    let s = Sprite.positionedStartingAt(target, p);
+    target.style.left = '400px';
+    s.measureFinalBounds();
+    s.lock();
+
+    let motion = new Move(s, {
+      easing: (v) => v < 0.5 ? -v : 2 - v
+    });
+
+    tester.run(motion, { duration: 400 });
+    await time.advance(100);
+    assert.equal(s.getCurrentBounds().left, -100);
+    await time.advance(200);
+    assert.equal(s.getCurrentBounds().left, 500);
+    await time.advance(100);
+    assert.equal(s.getCurrentBounds().left, 400);
+  });
 });
