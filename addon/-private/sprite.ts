@@ -400,7 +400,8 @@ export default class Sprite {
         bottom: style.bottom,
         right: style.right,
         transform: style.transform,
-        classList: Array.from(this.element.classList),
+        classList: Array.from(this.element.classList)
+          .filter(c => !c.includes('ember-animated-')),
       };
     }
   }
@@ -735,7 +736,7 @@ export default class Sprite {
     warn(
       `Probable bug in ember-animated: an interrupted sprite tried to unlock itself.
        This is usually caused by a direct child of an animated component also being an
-       animated component. To fix it, wrap the child in another DOM element. 
+       animated component. To fix it, wrap the child in another DOM element.
        https://github.com/ember-animation/ember-animated/issues/178`,
       this.stillInFlight(),
       { id: 'ember-animated-sprite-unlock' },
