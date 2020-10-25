@@ -38,7 +38,7 @@ jobs:
     - name: typecheck
       run: yarn typecheck
     - name: tests
-      run: yarn test
+      run: yarn test:ember
 
   docs:
     name: "Docs"
