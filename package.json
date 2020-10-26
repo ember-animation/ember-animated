@@ -37,7 +37,7 @@
     "ember-cli-typescript": "^3.1.1",
     "ember-compatibility-helpers": "^1.2.0",
     "ember-decorators": "^6.1.1",
-    "ember-element-helper": "^0.2.0",
+    "ember-element-helper": "^0.3.0",
     "ember-maybe-import-regenerator": "^0.1.5",
     "ember-named-arguments-polyfill": "^1.0.0"
   },
