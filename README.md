@@ -13,6 +13,7 @@ Compatibility
 * Ember CLI v2.13 or above
 * Node.js v10 or above
 
+Note: If using this library with `ember-source@3.8.x`, you will need to use `ember-element-helper@0.3.1` to ensure that splattributes and dynamic `@tagName` work with `animated-container`.
 
 Installation
 ------------------------------------------------------------------------------
