@@ -183,7 +183,7 @@ module('Unit | Move', function(hooks) {
     s.lock();
 
     let motion = new Move(s, {
-      easing: (v) => v < 0.5 ? -v : 2 - v
+      easing: v => (v < 0.5 ? -v : 2 - v),
     });
 
     tester.run(motion, { duration: 400 });
