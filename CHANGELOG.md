@@ -1,3 +1,10 @@
+# 0.11.0
+ - HOUSEKEEPING: fix lint error in demo code by @balinterdi
+ - HOUSEKEEPING: update CI config for PRs by SergeAstapov
+ - HOUSEKEEPING: update the ember-element-helper version to eliminate warning under embroier by @lukemelia
+ - ENHANCEMENT: allow easings to overshoot by @nibynic
+ - BUGFIX: polyfill was breaking under fastboot by @madnificent
+
 # 0.10.1
 
  - BUGFIX: polyfill DOMRect on browsers that don't have it, by @SergeAstapov
