@@ -10,7 +10,7 @@ import layout from '../templates/components/animated-value';
   Animated-value uses the same arguments as animated-each.
   ```hbs
     <AnimatedContainer>
-      {{#animated-value counter rules=rules duration=100 as |v|}}
+      {{#animated-value this.counter rules=this.rules duration=100 as |v|}}
           <span class="numbers">{{v}}</span>
       {{/animated-value}}
     </AnimatedContainer>
