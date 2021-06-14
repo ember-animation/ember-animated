@@ -2,11 +2,13 @@ import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
 import { task, Task } from '../-private/ember-scheduler';
+import { ancestorsOf } from '../-private/ember-internals';
 import { microwait, rAF, afterRender, allSettled } from '..';
 import Sprite from '../-private/sprite';
 import ComputedProperty from '@ember/object/computed';
 import Child from '../-private/child';
 import { Transition } from '../-private/transition';
+import AnimatedOrphans from '../components/animated-orphans';
 
 interface Animator extends EmberObject {
   beginStaticMeasurement(): void;
@@ -37,7 +39,7 @@ interface AnimatedListElement extends BaseComponentLike {
   child: Child;
 }
 
-type ComponentLike = BaseComponentLike | AnimatedListElement;
+export type ComponentLike = BaseComponentLike | AnimatedListElement;
 
 interface Measurement {
   fn: () => void;
@@ -58,7 +60,10 @@ export default class MotionService extends Service {
   _rendezvous: Rendezvous[] = [];
   _measurements: Measurement[] = [];
   _animators = A<Animator>();
-  _orphanObserver: OrphanObserver | null = null;
+  _orphanObservers: {
+    fn: OrphanObserver;
+    animatedOrphans: AnimatedOrphans;
+  }[] = [];
   _animationObservers: AnimationObserver[] = [];
   _descendantObservers: {
     component: ComponentLike;
@@ -88,18 +93,14 @@ export default class MotionService extends Service {
 
   // Register to receive any sprites that are orphaned by a destroyed
   // animator.
-  observeOrphans(fn: OrphanObserver) {
-    if (this._orphanObserver) {
-      throw new Error(
-        'Only one animated-orphans component can be used at one time',
-      );
-    }
-    this._orphanObserver = fn;
+  observeOrphans(fn: OrphanObserver, animatedOrphans: AnimatedOrphans) {
+    this._orphanObservers.push({ fn, animatedOrphans });
     return this;
   }
   unobserveOrphans(fn: OrphanObserver) {
-    if (this._orphanObserver === fn) {
-      this._orphanObserver = null;
+    let index = this._orphanObservers.findIndex(o => o.fn === fn);
+    if (index !== -1) {
+      this._orphanObservers.splice(index, 1);
     }
     return this;
   }
@@ -223,12 +224,32 @@ export default class MotionService extends Service {
     transition: Transition,
     duration: number,
     shouldAnimateRemoved: boolean,
+    animatorComponent: BaseComponentLike,
   ) {
-    if (this._orphanObserver && removed.length > 0) {
+    if (this._orphanObservers.length > 0 && removed.length > 0) {
       // if these orphaned sprites may be capable of animating,
       // delegate them to the orphanObserver. It will do farMatching
       // for them.
-      this._orphanObserver(removed, transition, duration, shouldAnimateRemoved);
+
+      // find closest ancestor <AnimatedOrphans/> that is not in the process of being destroyed
+      let closestAnimatedOrphans: AnimatedOrphans | undefined;
+      for (let ancestorComponent of ancestorsOf(animatorComponent)) {
+        if (
+          ancestorComponent instanceof AnimatedOrphans &&
+          !ancestorComponent._isDestroying
+        ) {
+          closestAnimatedOrphans = ancestorComponent;
+          break;
+        }
+      }
+
+      if (!closestAnimatedOrphans) {
+        throw new Error('Could not find <AnimatedOrphans/> ancestor');
+      }
+
+      this._orphanObservers
+        .find(o => o.animatedOrphans === closestAnimatedOrphans)
+        ?.fn(removed, transition, duration, shouldAnimateRemoved);
     } else {
       // otherwise, we make them available for far matching but they
       // can't be animated.
@@ -390,14 +411,6 @@ function performMatches(sink: Rendezvous, source: Rendezvous) {
       source.otherTasks.set(sink.runAnimationTask, true);
     }
   });
-}
-
-function* ancestorsOf(component: ComponentLike) {
-  let pointer = component.parentView;
-  while (pointer) {
-    yield pointer;
-    pointer = pointer.parentView;
-  }
 }
 
 declare module '@ember/service' {

@@ -403,6 +403,8 @@ export default class AnimatedEach extends Component {
       transition,
       this.get('durationWithDefault'),
       this.get('finalRemoval'),
+      // @ts-ignore
+      this,
     );
   }
 

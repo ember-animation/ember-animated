@@ -18,6 +18,7 @@ module.exports = {
         'animated-each',
         'animated-if',
         'animated-beacon',
+        '-animated-orphans',
       ],
     },
 
