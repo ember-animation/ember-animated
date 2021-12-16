@@ -1,11 +1,11 @@
 // Polyfill Element.remove on IE11
 // from:https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/remove()/remove().md
 
-interface Window {
-  Element: any;
-  CharacterData: any;
-  DocumentType: any;
-}
+// interface window {
+//   Element: any;
+//   CharacterData: any;
+//   DocumentType: any;
+// }
 
 const classPrototypes = [
   window.Element,

@@ -365,7 +365,10 @@ export default class AnimatedOrphans extends Component {
       // line-height that gives us the "used value" not the "computed value".
       // The used value doesn't inherit correctly, so we can't set it here, so
       // we're pulling that one out.
-      let s = Object.assign({}, sprite.initialComputedStyle);
+      let s: Record<string, any> = Object.assign(
+        {},
+        sprite.initialComputedStyle,
+      );
       delete s['line-height'];
       sprite.applyStyles(s);
 

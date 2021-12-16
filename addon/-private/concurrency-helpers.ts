@@ -79,7 +79,7 @@ let nextFrameWaiters: { promise: Promise<any>; resolve: () => void }[] = [];
 // clock values around.
 export let currentFrameClock = -Infinity;
 
-export function microwait() {
+export function microwait(): Promise<void> {
   return new Promise(resolve => resolve());
 }
 
