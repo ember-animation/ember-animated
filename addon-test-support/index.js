@@ -1,10 +1,10 @@
 import { getContext } from '@ember/test-helpers';
 import { resolve } from 'rsvp';
 import { run } from '@ember/runloop';
+import { Color } from 'ember-animated/color';
 import { relativeBounds } from 'ember-animated/-private/bounds';
 import { cumulativeTransform } from 'ember-animated/-private/transform';
 import TimeControl from './time-control';
-import { Color } from '../color';
 
 export { TimeControl };
 export { default as MotionTester } from './motion-tester';

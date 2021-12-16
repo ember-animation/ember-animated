@@ -6,7 +6,7 @@ import Component from '@ember/component';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, settled } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+import { hbs } from 'ember-cli-htmlbars';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { current } from 'ember-animated/-private/scheduler';
@@ -469,7 +469,7 @@ module('Integration | Component | animated container', function(hooks) {
 
   test('has visual continuity at start', async function(assert) {
     this.set('transition', function*() {});
-    await this.render(hbs`
+    await render(hbs`
       <AnimatedContainer>
         {{#animated-if showThing use=transition duration=1000}}
           <div>Content</div>
@@ -488,7 +488,7 @@ module('Integration | Component | animated container', function(hooks) {
 
   test('has visual continuity at end', async function(assert) {
     this.set('transition', function*() {});
-    await this.render(hbs`
+    await render(hbs`
       <AnimatedContainer>
         {{#animated-if showThing use=transition duration=1000}}
           <div>Content</div>
@@ -509,7 +509,7 @@ module('Integration | Component | animated container', function(hooks) {
 
   test('has visual continuity at start when inside scaling', async function(assert) {
     this.set('transition', function*() {});
-    await this.render(hbs`
+    await render(hbs`
       <div style="transform: scale(0.5)">
         <AnimatedContainer>
           {{#animated-if showThing use=transition duration=1000}}
@@ -532,7 +532,7 @@ module('Integration | Component | animated container', function(hooks) {
     this.set('transition', function*() {});
     this.set('showThing', true);
     time.pause();
-    await this.render(hbs`
+    await render(hbs`
       <AnimatedContainer @onInitialRender={{true}}>
         {{#animated-if showThing use=transition initialInsertion=true duration=1000}}
           <div style="height: 100px">Content</div>
