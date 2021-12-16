@@ -1,15 +1,15 @@
 import { test, module } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 import { time, setupAnimationTest, bounds } from 'ember-animated/test-support';
-import hbs from 'htmlbars-inline-precompile';
+import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Sprites Example', function(hooks) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
   test('it renders', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
     {{sprites-example}}
     `);
     assert.equal(
@@ -20,7 +20,7 @@ module('Integration | Sprites Example', function(hooks) {
   });
 
   test('adding an email', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
     {{sprites-example}}
     `);
     await time.pause();
@@ -33,7 +33,7 @@ module('Integration | Sprites Example', function(hooks) {
   });
 
   test('deleting an email', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
     {{sprites-example}}
     `);
     let emails = this.element.querySelectorAll('.each-item');
@@ -48,7 +48,7 @@ module('Integration | Sprites Example', function(hooks) {
   });
 
   test('transitions get logged to screen', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
       {{#transition-log-table as |logTransition|}}
         {{logged-sprites logTransition=logTransition}}
       {{/transition-log-table}}

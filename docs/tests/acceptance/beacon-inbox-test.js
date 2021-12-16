@@ -1,15 +1,15 @@
 import { skip, module } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 import { bounds, time, setupAnimationTest } from 'ember-animated/test-support';
-import hbs from 'htmlbars-inline-precompile';
+import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Beacon Demo', function(hooks) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
   skip('visiting /between-components', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
       {{between-components}}
     `);
     await time.pause();

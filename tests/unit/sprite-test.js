@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { ownTransform } from 'ember-animated/-private/transform';
 import { shiftedBounds } from 'ember-animated/-private/bounds';
 import Sprite from 'ember-animated/-private/sprite';
-import hbs from 'htmlbars-inline-precompile';
+import { hbs } from 'ember-cli-htmlbars';
 import { bounds, setupAnimationTest } from 'ember-animated/test-support';
 import { render, settled } from '@ember/test-helpers';
 import {
@@ -932,7 +932,7 @@ module('Unit | Sprite', function(hooks) {
   setupAnimationTest(hooks);
 
   test('svg elements can use the top <svg> tag as their offset parent', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
 </svg>
@@ -948,7 +948,7 @@ module('Unit | Sprite', function(hooks) {
   });
 
   test('svg elements can use a nested <svg> tag as their offset parent', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <svg class="inside">
     <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
@@ -966,7 +966,7 @@ module('Unit | Sprite', function(hooks) {
   });
 
   test('svg elements skip over <g> when finding their offset parent', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <svg class="inside">
     <g>
@@ -986,7 +986,7 @@ module('Unit | Sprite', function(hooks) {
   });
 
   test('SVG rect with manipulated size', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
 </svg>
@@ -1029,7 +1029,7 @@ module('Unit | Sprite', function(hooks) {
   });
 
   test('SVG rect with manipulated x and y', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
 </svg>
@@ -1069,7 +1069,7 @@ module('Unit | Sprite', function(hooks) {
   });
 
   test('SVG circle with manipulated position', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
 </svg>
@@ -1109,7 +1109,7 @@ module('Unit | Sprite', function(hooks) {
   });
 
   test('SVG circle with manipulated radius', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
 </svg>
@@ -1151,7 +1151,7 @@ module('Unit | Sprite', function(hooks) {
   });
 
   test('can read initial and final SVG dimensions', async function(assert) {
-    await this.render(hbs`
+    await render(hbs`
 <svg width=1000 height=1000>
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
 </svg>
