@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request: {}
+
+jobs:
+  test-library:
+    name: "Library"
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint
+        run: yarn lint
+      - name: Run Tests
+        run: yarn test:ember
+
+  test-library-floating:
+    name: "Library - Floating Dependencies"
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn install --no-lockfile
+      - name: Run Tests
+        run: yarn test:ember
+
+  test-docs:
+    name: "Docs"
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
+          # Disable yarn cache as it cause issues in CI due to double install.
+          # cache: yarn
+      - name: Install Library Dependencies
+        run: yarn --production --frozen-lockfile
+      - name: Install Docs Dependencies
+        # Absurdly, yarn always fails on the first try here.
+        # https://github.com/yarnpkg/yarn/issues/2629
+        run: until yarn install --frozen-lockfile; do echo "Retrying yarn"; done
+        working-directory: docs
+      - name: Lint
+        run: yarn lint
+        working-directory: docs
+      - name: Run Tests
+        run: yarn test:ember
+        working-directory: docs
+
+  ember-compatibility:
+    name: ${{ matrix.try-scenario }}
+    runs-on: ubuntu-latest
+    needs: 'test-library'
+    env:
+      CI: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        try-scenario:
+          - ember-lts-3.12
+          - ember-lts-3.16
+          - ember-lts-3.20
+          - ember-lts-3.24
+#          - ember-release
+#          - ember-beta
+#          - ember-canary
+          - ember-classic
+          - ember-default-with-jquery
+#          - embroider-safe
+#          - embroider-optimized
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run Tests
+        run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
