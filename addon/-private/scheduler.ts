@@ -83,6 +83,14 @@ export async function childrenSettled() {
   );
 }
 
+interface TaskCancelationError extends Error {
+  message: string;
+}
+
+function isTaskCancelationError(x: unknown) {
+  return (x as TaskCancelationError).message === 'TaskCancelation';
+}
+
 interface StackEntry {
   microroutine: MicroRoutine | undefined;
   throw: Error | undefined;
@@ -188,12 +196,12 @@ class MicroRoutine {
         this.linked.forEach(microRoutine => {
           microRoutine.stop();
         });
-        if (err.message !== 'TaskCancelation') {
+        if (!isTaskCancelationError(err)) {
           this.reject(err);
           if (this.errorLogger) {
-            if (!loggedErrors.has(err)) {
-              loggedErrors.add(err);
-              this.errorLogger.call(null, err);
+            if (!loggedErrors.has(err as TaskCancelationError)) {
+              loggedErrors.add(err as TaskCancelationError);
+              this.errorLogger.call(null, err as TaskCancelationError);
             }
           }
         }
@@ -239,7 +247,7 @@ function cancelGenerator(generator: Generator) {
   try {
     generator.throw!(e);
   } catch (err) {
-    if (err.message !== 'TaskCancelation') {
+    if (!isTaskCancelationError(err)) {
       throw err;
     }
   }
@@ -255,7 +263,7 @@ function isPromise(thing: any): thing is Promise<any> {
 // This allows point-free style, like:
 //   sprites.forEach(parallel(move, scale)).
 //
-export function parallel(...functions: Function[]) {
+export function parallel(...functions: ((...args: any[]) => unknown)[]) {
   return function(...args: any[]) {
     return Promise.all(functions.map(f => f.apply(null, args)));
   };
@@ -267,7 +275,7 @@ export function parallel(...functions: Function[]) {
 // This allows point-free style, like:
 //   sprites.forEach(serial(scale, move)).
 //
-export function serial(...functions: Function[]) {
+export function serial(...functions: ((...args: any[]) => unknown)[]) {
   return function(...args: any[]) {
     return spawnChild(function*() {
       for (let fn of functions) {
