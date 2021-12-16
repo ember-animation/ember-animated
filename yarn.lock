@@ -6897,7 +6897,7 @@ ember-cli-babel@^7.17.2:
     rimraf "^3.0.1"
     semver "^5.5.0"
 
-ember-cli-babel@^7.18.0, ember-cli-babel@^7.19.0, ember-cli-babel@^7.21.0:
+ember-cli-babel@^7.18.0, ember-cli-babel@^7.19.0:
   version "7.21.0"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-7.21.0.tgz#c79e888876aee87dfc3260aee7cb580b74264bbc"
   integrity sha512-jHVi9melAibo0DrAG3GAxid+29xEyjBoU53652B4qcu3Xp58feZGTH/JGXovH7TjvbeNn65zgNyoV3bk1onULw==
@@ -6962,7 +6962,7 @@ ember-cli-babel@^7.23.0, ember-cli-babel@^7.23.1, ember-cli-babel@^7.8.0:
     rimraf "^3.0.1"
     semver "^5.5.0"
 
-ember-cli-babel@^7.26.6:
+ember-cli-babel@^7.26.6, ember-cli-babel@^7.26.7:
   version "7.26.7"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-7.26.7.tgz#09b9f5ca0b6b834b84c85a10759cc6174386d764"
   integrity sha512-dNAxMW5BPlx1fidoG7jV2c7iWaGDU7DF6HUZ+rvEULsP+HpmuXN285CMGnuORh+nVJmqO/FhZfa9OToEm08d6w==
