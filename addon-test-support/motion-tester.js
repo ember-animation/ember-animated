@@ -48,7 +48,7 @@ export default EmberObject.extend({
     return this.get('runner').perform(motion);
   },
   isAnimating: alias('runner.isRunning'),
-  runner: task(function*(motion) {
+  runner: task(function* (motion) {
     this.beforeAnimation(motion);
     yield* motion._run();
     this.afterAnimation(motion);

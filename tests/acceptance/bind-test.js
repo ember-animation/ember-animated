@@ -6,23 +6,23 @@ import { findByText } from '../helpers/dom';
 
 let time;
 
-module('Acceptance | bind', function(hooks) {
+module('Acceptance | bind', function (hooks) {
   setupApplicationTest(hooks);
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     time = new TimeControl();
     time.runAtSpeed(40);
   });
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     time.finished();
     time = null;
   });
 
-  test('visiting /bind', async function(assert) {
+  test('visiting /bind', async function (assert) {
     await visit('/demos/bind');
     assert.strictEqual(currentURL(), '/demos/bind');
   });
 
-  test('clicking the button', async function(assert) {
+  test('clicking the button', async function (assert) {
     let number;
 
     await visit('/demos/bind');

@@ -289,11 +289,11 @@ export default class AnimatedEach extends Component {
       .concat(
         oldChildren
           .filter(
-            child =>
+            (child) =>
               (!child.shouldRemove || !this._renderedChildrenStartedMoving) &&
               newIndices.get(child.id) == null,
           )
-          .map(child => {
+          .map((child) => {
             child.flagForRemoval();
             return child;
           }),
@@ -422,17 +422,17 @@ export default class AnimatedEach extends Component {
   // staticMeasurement, even if we're in the middle of animating.
   beginStaticMeasurement() {
     if (this._keptSprites) {
-      this._keptSprites.forEach(sprite => sprite.unlock());
-      this._insertedSprites!.forEach(sprite => sprite.unlock());
-      this._removedSprites!.forEach(sprite => sprite.display(false));
+      this._keptSprites.forEach((sprite) => sprite.unlock());
+      this._insertedSprites!.forEach((sprite) => sprite.unlock());
+      this._removedSprites!.forEach((sprite) => sprite.display(false));
     }
   }
 
   endStaticMeasurement() {
     if (this._keptSprites) {
-      this._keptSprites.forEach(sprite => sprite.lock());
-      this._insertedSprites!.forEach(sprite => sprite.lock());
-      this._removedSprites!.forEach(sprite => sprite.display(true));
+      this._keptSprites.forEach((sprite) => sprite.lock());
+      this._insertedSprites!.forEach((sprite) => sprite.lock());
+      this._removedSprites!.forEach((sprite) => sprite.display(true));
     }
   }
 
@@ -450,7 +450,7 @@ export default class AnimatedEach extends Component {
   }
 
   _partitionKeptAndRemovedSprites(currentSprites: Sprite[]) {
-    currentSprites.forEach(sprite => {
+    currentSprites.forEach((sprite) => {
       if (!sprite.element.parentElement) {
         // our currentSprites list was created based on what was in
         // DOM before rendering. Now we are looking after
@@ -506,7 +506,7 @@ export default class AnimatedEach extends Component {
   //   animators that are still in `runAnimation`, then we are
   //   cleaning up our own sprite state.
   //
-  @(task(function*(
+  @task(function* (
     this: AnimatedEach,
     transition: Transition,
     firstTime: boolean,
@@ -541,10 +541,10 @@ export default class AnimatedEach extends Component {
       removedSprites,
       matchingAnimatorsFinished,
     );
-  }).restartable())
+  }).restartable()
   animate!: ComputedProperty<Task>;
 
-  @task(function*(this: AnimatedEach, transition, animateTask) {
+  @task(function* (this: AnimatedEach, transition, animateTask) {
     // we remember the transition we're using in case we need to
     // recalculate based on other animators potentially moving our DOM
     // around
@@ -572,7 +572,7 @@ export default class AnimatedEach extends Component {
     });
 
     // Make all our current sprites absolutely positioned so they won't move during render.
-    currentSprites.forEach(sprite => sprite.lock());
+    currentSprites.forEach((sprite) => sprite.lock());
 
     // Wait for Ember to render our latest state.
     yield afterRender();
@@ -586,7 +586,7 @@ export default class AnimatedEach extends Component {
   })
   startAnimation!: ComputedProperty<Task>; // todo: restartable?
 
-  @task(function*(
+  @task(function* (
     this: AnimatedEach,
     transition: Transition,
     parent: Sprite,
@@ -614,7 +614,7 @@ export default class AnimatedEach extends Component {
       for (let element of this._ownElements()) {
         // now is when we find all the newly inserted sprites and
         // remember their final bounds.
-        if (!currentSprites.find(sprite => sprite.element === element)) {
+        if (!currentSprites.find((sprite) => sprite.element === element)) {
           if (!parent) {
             parent = Sprite.offsetParentEndingAt(element);
           }
@@ -625,7 +625,7 @@ export default class AnimatedEach extends Component {
         }
       }
       // and remember the final bounds of all our kept sprites
-      keptSprites.forEach(sprite => sprite.measureFinalBounds());
+      keptSprites.forEach((sprite) => sprite.measureFinalBounds());
     });
 
     // at this point we know all the geometry of our own sprites. But
@@ -655,7 +655,7 @@ export default class AnimatedEach extends Component {
 
     let [sentSprites, unmatchedRemovedSprites] = partition(
       removedSprites,
-      sprite => {
+      (sprite) => {
         let other = farMatches.get(sprite);
         if (other) {
           sprite.endAtSprite(other);
@@ -674,7 +674,7 @@ export default class AnimatedEach extends Component {
     // continuity via `startAtSprite`.
     let [receivedSprites, unmatchedInsertedSprites] = partition(
       insertedSprites,
-      sprite => {
+      (sprite) => {
         let other = farMatches.get(sprite);
         if (other) {
           sprite.startAtSprite(other);
@@ -686,7 +686,7 @@ export default class AnimatedEach extends Component {
 
     let [matchedKeptSprites, unmatchedKeptSprites] = partition(
       keptSprites,
-      sprite => {
+      (sprite) => {
         let other = farMatches.get(sprite);
         if (other) {
           if (other.revealed && !sprite.revealed) {
@@ -702,8 +702,8 @@ export default class AnimatedEach extends Component {
     // before we start hiding the sent & received sprites yield
     yield microwait();
 
-    matchedKeptSprites.forEach(s => s.hide());
-    sentSprites.forEach(s => s.hide());
+    matchedKeptSprites.forEach((s) => s.hide());
+    sentSprites.forEach((s) => s.hide());
 
     // By default, we don't treat sprites as "inserted" when our
     // component first renders. You can override that by setting
@@ -712,7 +712,7 @@ export default class AnimatedEach extends Component {
       // Here we are effectively hiding the inserted sprites from the
       // user's transition function and just immediately revealing
       // them in their final positions instead.
-      unmatchedInsertedSprites.forEach(s => s.reveal());
+      unmatchedInsertedSprites.forEach((s) => s.reveal());
       unmatchedInsertedSprites = [];
     }
 
@@ -751,7 +751,7 @@ export default class AnimatedEach extends Component {
   })
   runAnimation!: ComputedProperty<Task>;
 
-  @task(function*(
+  @task(function* (
     this: AnimatedEach,
     insertedSprites: Sprite[],
     keptSprites: Sprite[],
@@ -767,11 +767,11 @@ export default class AnimatedEach extends Component {
     // here, and if a previous transition was interrupted before an
     // inserted sprite could be revealed, it could have become a kept
     // sprite for us.
-    keptSprites.forEach(sprite => {
+    keptSprites.forEach((sprite) => {
       sprite.unlock();
       sprite.reveal();
     });
-    insertedSprites.forEach(sprite => {
+    insertedSprites.forEach((sprite) => {
       sprite.unlock();
       sprite.reveal();
     });

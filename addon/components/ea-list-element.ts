@@ -18,7 +18,7 @@ export default class extends Component {
   didRender() {
     let mapping = this.get('elementToChild');
     let child = this.get('child');
-    this._forEachElement(elt => {
+    this._forEachElement((elt) => {
       mapping.set(elt, child);
     });
   }

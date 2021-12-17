@@ -63,13 +63,13 @@ export default class TransitionContext {
   private _prepareSprites(sprites: Sprite[]): Sprite[] {
     // Link them up, so that users can conveniently pass sprites
     // around to Motions without also passing the transition context.
-    sprites.forEach(sprite => {
+    sprites.forEach((sprite) => {
       spriteContext.set(sprite, this);
     });
     if (!this.prepareSprite) {
       return sprites;
     }
-    return sprites.map(sprite => {
+    return sprites.map((sprite) => {
       if (!this._prepared.has(sprite)) {
         this._prepared.add(sprite);
         sprite = this.prepareSprite!(sprite);

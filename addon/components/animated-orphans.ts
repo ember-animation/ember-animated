@@ -104,7 +104,7 @@ export default class AnimatedOrphans extends Component {
   @alias('animate.isRunning')
   isAnimating!: boolean;
 
-  @(task(function*(this: AnimatedOrphans, { ownSprite, activeSprites }) {
+  @task(function* (this: AnimatedOrphans, { ownSprite, activeSprites }) {
     yield this.get('startAnimation').perform(ownSprite);
     let { matchingAnimatorsFinished } = (yield this.get('runAnimation').perform(
       activeSprites,
@@ -114,16 +114,16 @@ export default class AnimatedOrphans extends Component {
       activeSprites,
       matchingAnimatorsFinished,
     );
-  }).restartable())
+  }).restartable()
   animate!: ComputedProperty<Task>;
 
-  @task(function*(this: AnimatedOrphans, ownSprite) {
+  @task(function* (this: AnimatedOrphans, ownSprite) {
     yield afterRender();
     ownSprite.measureFinalBounds();
   })
   startAnimation!: ComputedProperty<Task>;
 
-  @task(function*(this: AnimatedOrphans, activeSprites, ownSprite) {
+  @task(function* (this: AnimatedOrphans, activeSprites, ownSprite) {
     // we don't need any static measurements, but we wait for this so
     // we stay on the same timing as all the other animators
     yield* this.get('motionService').staticMeasurement(() => {});
@@ -156,7 +156,7 @@ export default class AnimatedOrphans extends Component {
         [],
         [],
         activeSprites.concat(
-          ...this._newOrphanTransitions.map(t => t.removedSprites),
+          ...this._newOrphanTransitions.map((t) => t.removedSprites),
         ),
       )) as {
       matchingAnimatorsFinished: Promise<void>;
@@ -168,7 +168,7 @@ export default class AnimatedOrphans extends Component {
     for (let { transition, duration, sprites } of this._groupActiveSprites(
       activeSprites,
     )) {
-      let [sentSprites, removedSprites] = partition(sprites, sprite => {
+      let [sentSprites, removedSprites] = partition(sprites, (sprite) => {
         let other = farMatches.get(sprite);
         if (other) {
           sprite.endAtSprite(other);
@@ -190,11 +190,11 @@ export default class AnimatedOrphans extends Component {
         this._onMotionStart.bind(this, cycle),
         this._onMotionEnd.bind(this, cycle),
       );
-      spawnChild(function*() {
+      spawnChild(function* () {
         // let other animators make their own partitioning decisions
         // before we start hiding the sent & received sprites
         yield microwait();
-        sentSprites.forEach(s => s.hide());
+        sentSprites.forEach((s) => s.hide());
         yield* runToCompletion(context, transition);
       });
     }
@@ -209,12 +209,8 @@ export default class AnimatedOrphans extends Component {
       // so any animated descendants need to get hidden before one of
       // their ancestors clones them.
       let entry = this._newOrphanTransitions.pop()!;
-      let {
-        transition,
-        duration,
-        removedSprites,
-        shouldAnimateRemoved,
-      } = entry;
+      let { transition, duration, removedSprites, shouldAnimateRemoved } =
+        entry;
 
       if (removedSprites.length === 0) {
         // This can happen due to our filtering based on activeIds
@@ -233,7 +229,7 @@ export default class AnimatedOrphans extends Component {
 
       let [sentSprites, unmatchedRemovedSprites] = partition(
         removedSprites,
-        sprite => {
+        (sprite) => {
           let other = farMatches.get(sprite);
           if (other) {
             sprite.endAtSprite(other);
@@ -247,9 +243,9 @@ export default class AnimatedOrphans extends Component {
       );
 
       let self = this;
-      spawnChild(function*() {
+      spawnChild(function* () {
         yield microwait();
-        sentSprites.forEach(s => s.hide());
+        sentSprites.forEach((s) => s.hide());
 
         // now that we've hidden any sent sprites, we can bail out
         // early if there is no transition they want to run
@@ -291,7 +287,7 @@ export default class AnimatedOrphans extends Component {
   })
   runAnimation!: ComputedProperty<Task>;
 
-  @task(function*(activeSprites, matchingAnimatorsFinished) {
+  @task(function* (activeSprites, matchingAnimatorsFinished) {
     yield matchingAnimatorsFinished;
     for (let sprite of activeSprites) {
       sprite.element.remove();
@@ -304,7 +300,7 @@ export default class AnimatedOrphans extends Component {
       return [];
     }
     return Array.from(this.element.children)
-      .map(element => {
+      .map((element) => {
         let child = this._elementToChild.get(element);
         if (child.shouldRemove) {
           // child was not animating in the previously interrupted
@@ -333,7 +329,7 @@ export default class AnimatedOrphans extends Component {
       let sprite: Sprite = _sprite;
       sprite.assertHasOwner();
       let { transition, duration } = this._childToTransition.get(sprite.owner);
-      let group = groups.find(g => g.transition === transition);
+      let group = groups.find((g) => g.transition === transition);
       if (!group) {
         group = { transition, duration, sprites: [] };
         groups.push(group);

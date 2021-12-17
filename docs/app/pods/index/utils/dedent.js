@@ -19,7 +19,7 @@ export default function dedent(strings) {
   // now strip indentation
   let lines = result.split('\n');
   let mindent = null;
-  lines.forEach(function(l) {
+  lines.forEach(function (l) {
     let m = l.match(/^(\s+)\S+/);
     if (m) {
       let indent = m[1].length;
@@ -33,10 +33,10 @@ export default function dedent(strings) {
   });
 
   if (mindent !== null) {
-    (function() {
+    (function () {
       let m = mindent; // appease Flow
       result = lines
-        .map(function(l) {
+        .map(function (l) {
           return l[0] === ' ' ? l.slice(m) : l;
         })
         .join('\n');

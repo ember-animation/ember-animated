@@ -13,9 +13,9 @@ import { DEBUG } from '@glimmer/env';
 type HostObject = Record<string, any>;
 
 export function task(taskFn: (...args: any[]) => Generator) {
-  let tp = (_computed(function(this: HostObject, propertyName: string) {
+  let tp = _computed(function (this: HostObject, propertyName: string) {
     return new Task(this, taskFn, tp, propertyName);
-  }) as unknown) as TaskProperty;
+  }) as unknown as TaskProperty;
 
   Object.setPrototypeOf(tp, TaskProperty.prototype);
   return tp as ((proto: any, key: string) => any) & TaskProperty;
@@ -25,7 +25,7 @@ function _computed(fn: (this: HostObject, propertyName: string) => Task) {
   if (!gte('3.10.0')) {
     return computed(fn);
   }
-  let cp = function(proto: HostObject, key: string) {
+  let cp = function (proto: HostObject, key: string) {
     if ((cp as any).setup !== undefined) {
       (cp as any).setup(proto, key);
     }
@@ -75,7 +75,7 @@ export class TaskProperty extends BaseTaskProperty {
     }
     if (this._observes) {
       let handlerName = `_ember_animated_handler_${handlerCounter++}`;
-      (proto as any)[handlerName] = function() {
+      (proto as any)[handlerName] = function () {
         let task = this.get(taskName);
         scheduleOnce('actions', task, '_safePerform');
       };
@@ -130,9 +130,9 @@ export class Task {
       );
     }
     cleanupOnDestroy(context, this);
-    return spawn(function*() {
+    return spawn(function* () {
       if (DEBUG) {
-        logErrors(error => {
+        logErrors((error) => {
           microwait().then(() => {
             throw error;
           });
@@ -159,7 +159,7 @@ export class Task {
     });
   }
   cancelAll() {
-    getPriv(this).instances.forEach(i => stop(i));
+    getPriv(this).instances.forEach((i) => stop(i));
   }
   _addInstance(i: Promise<void>) {
     getPriv(this).instances.push(i);
@@ -198,7 +198,7 @@ function cleanupOnDestroy(
     let oldWillDestroy = owner.willDestroy;
     let disposers: (() => void)[] = [];
 
-    owner.willDestroy = function() {
+    owner.willDestroy = function () {
       for (let i = 0, l = disposers.length; i < l; i++) {
         disposers[i]();
       }
@@ -272,5 +272,5 @@ function* withRunLoop(generator: Generator): Generator {
 }
 
 export function timeout(ms: number) {
-  return new EmberPromise(resolve => setTimeout(resolve, ms));
+  return new EmberPromise((resolve) => setTimeout(resolve, ms));
 }

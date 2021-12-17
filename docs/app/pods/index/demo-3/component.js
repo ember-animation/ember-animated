@@ -16,9 +16,9 @@ export default Component.extend({
   *shuffle({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
-        'z-index': `${(receivedSprites.length -
-          receivedSprites.indexOf(sprite)) *
-          100}`,
+        'z-index': `${
+          (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
+        }`,
       });
       move(sprite);
       scale(sprite);
@@ -28,9 +28,9 @@ export default Component.extend({
   *shuffleWithStagger({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
-        'z-index': `${(receivedSprites.length -
-          receivedSprites.indexOf(sprite)) *
-          100}`,
+        'z-index': `${
+          (receivedSprites.length - receivedSprites.indexOf(sprite)) * 100
+        }`,
       });
       move(sprite);
       scale(sprite);
@@ -68,9 +68,9 @@ export default Component.extend({
     },
   ]),
 
-  selectedCategory: computed('selectedCategoryName', function() {
+  selectedCategory: computed('selectedCategoryName', function () {
     return this.categories.find(
-      category => category.name === this.selectedCategoryName,
+      (category) => category.name === this.selectedCategoryName,
     );
   }),
 

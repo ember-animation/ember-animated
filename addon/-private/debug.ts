@@ -13,12 +13,12 @@ if (DEBUG) {
     let prefix = label ? label + ' ' : '';
     /* eslint no-console:0 */
     let spriteSummary = ['inserted', 'kept', 'removed', 'sent', 'received']
-      .map(type => {
+      .map((type) => {
         return (
           type +
           '=' +
           ((context as any)[`_${type}Sprites`] as Sprite[])
-            .map(s => {
+            .map((s) => {
               if (isOrphan == null) {
                 // the first time we encounter a sprite, we use it to get a
                 // handle on whether this whole transition is happening
@@ -43,7 +43,7 @@ if (DEBUG) {
     console.log(prefix + spriteSummary + (isOrphan ? ' | (orphan)' : ''));
   };
 } else {
-  printSprites = function() {};
+  printSprites = function () {};
 }
 
 export { printSprites };

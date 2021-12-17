@@ -77,7 +77,7 @@ export function current() {
 
 export async function childrenSettled() {
   return Promise.all(
-    ensureCurrent('childrenSettled').linked.map(child =>
+    ensureCurrent('childrenSettled').linked.map((child) =>
       child.promise.catch(() => null),
     ),
   );
@@ -101,7 +101,7 @@ let onStack: (routine: MicroRoutine) => StackEntry | undefined;
 {
   let cur: MicroRoutine | undefined;
   let prior: StackEntry[] = [];
-  withCurrent = function(routine, fn) {
+  withCurrent = function (routine, fn) {
     prior.unshift({ microroutine: cur, throw: undefined });
     cur = routine;
     try {
@@ -121,11 +121,11 @@ let onStack: (routine: MicroRoutine) => StackEntry | undefined;
       }
     }
   };
-  getCurrent = function() {
+  getCurrent = function () {
     return cur;
   };
-  onStack = function(microroutine) {
-    return prior.find(entry => entry.microroutine === microroutine);
+  onStack = function (microroutine) {
+    return prior.find((entry) => entry.microroutine === microroutine);
   };
 }
 
@@ -184,8 +184,8 @@ class MicroRoutine {
           this.resolve(this.state.value);
         } else {
           Promise.resolve(this.state.value).then(
-            value => this.wake('fulfilled', value),
-            reason => this.wake('rejected', reason),
+            (value) => this.wake('fulfilled', value),
+            (reason) => this.wake('rejected', reason),
           );
         }
       } catch (err) {
@@ -193,7 +193,7 @@ class MicroRoutine {
           done: true,
           value: undefined,
         };
-        this.linked.forEach(microRoutine => {
+        this.linked.forEach((microRoutine) => {
           microRoutine.stop();
         });
         if (!isTaskCancelationError(err)) {
@@ -213,7 +213,7 @@ class MicroRoutine {
     if (this.state && isPromise(this.state.value)) {
       fireCancellation(this.state.value);
     }
-    this.linked.forEach(microRoutine => {
+    this.linked.forEach((microRoutine) => {
       microRoutine.stop();
     });
     let e = new Error('TaskCancelation');
@@ -264,8 +264,8 @@ function isPromise(thing: any): thing is Promise<any> {
 //   sprites.forEach(parallel(move, scale)).
 //
 export function parallel(...functions: ((...args: any[]) => unknown)[]) {
-  return function(...args: any[]) {
-    return Promise.all(functions.map(f => f.apply(null, args)));
+  return function (...args: any[]) {
+    return Promise.all(functions.map((f) => f.apply(null, args)));
   };
 }
 
@@ -276,8 +276,8 @@ export function parallel(...functions: ((...args: any[]) => unknown)[]) {
 //   sprites.forEach(serial(scale, move)).
 //
 export function serial(...functions: ((...args: any[]) => unknown)[]) {
-  return function(...args: any[]) {
-    return spawnChild(function*() {
+  return function (...args: any[]) {
+    return spawnChild(function* () {
       for (let fn of functions) {
         yield fn.apply(null, args);
       }

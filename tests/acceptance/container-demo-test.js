@@ -8,17 +8,17 @@ import {
   bounds,
 } from 'ember-animated/test-support';
 
-module('Acceptance | container demo', function(hooks) {
+module('Acceptance | container demo', function (hooks) {
   setupApplicationTest(hooks);
   setupAnimationTest(hooks);
 
-  test('visiting /container-demo', async function(assert) {
+  test('visiting /container-demo', async function (assert) {
     await visit('demos/containerdemo');
 
     assert.strictEqual(currentURL(), 'demos/containerdemo');
   });
 
-  test('toggle container', async function(assert) {
+  test('toggle container', async function (assert) {
     await visit('/demos/containerdemo');
     await animationsSettled();
 

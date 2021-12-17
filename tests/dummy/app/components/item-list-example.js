@@ -20,7 +20,7 @@ export default Component.extend({
       return v;
     },
   }),
-  addItem: task(function*() {
+  addItem: task(function* () {
     this.get('motionService').willAnimate({
       task: current,
       duration: this.get('duration'),
@@ -32,10 +32,10 @@ export default Component.extend({
       items
         .concat([makeRandomItem()])
         .sort(this.currentSort)
-        .map(elt => ({ id: elt.id })),
+        .map((elt) => ({ id: elt.id })),
     );
   }),
-  removeItem: task(function*(which) {
+  removeItem: task(function* (which) {
     this.get('motionService').willAnimate({
       task: current,
       duration: this.get('duration'),
@@ -44,7 +44,7 @@ export default Component.extend({
     let items = this.get('items');
     this.set(
       'items',
-      items.filter(i => i !== which),
+      items.filter((i) => i !== which),
     );
   }),
   actions: {

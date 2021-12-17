@@ -11,15 +11,15 @@ export default Component.extend({
     this.set('showThing', !this.get('showThing'));
   },
 
-  transition: function*({ insertedSprites, keptSprites, removedSprites }) {
-    insertedSprites.forEach(sprite => {
+  transition: function* ({ insertedSprites, keptSprites, removedSprites }) {
+    insertedSprites.forEach((sprite) => {
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeOut });
     });
 
     keptSprites.forEach(move);
 
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       sprite.endAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeIn });
     });

@@ -35,7 +35,7 @@ export default DS.JSONAPIAdapter.extend({
   findRecord(store, type, id) {
     let payload = this._makeFakePeople();
     return {
-      data: payload.data.find(entry => entry.id === id),
+      data: payload.data.find((entry) => entry.id === id),
     };
   },
 });

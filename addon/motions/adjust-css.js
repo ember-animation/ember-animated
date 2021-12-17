@@ -14,7 +14,7 @@ export default function adjustCSS(propertyName, sprite, opts) {
   return new AdjustCSS(propertyName, sprite, opts).run();
 }
 
-adjustCSS.property = function(propertyName) {
+adjustCSS.property = function (propertyName) {
   return this.bind(null, propertyName);
 };
 
@@ -28,7 +28,7 @@ export class AdjustCSS extends Motion {
 
   interrupted(motions) {
     this.prior = motions.find(
-      m => m instanceof AdjustCSS && m.propertyName === this.propertyName,
+      (m) => m instanceof AdjustCSS && m.propertyName === this.propertyName,
     );
   }
 

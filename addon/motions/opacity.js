@@ -59,7 +59,7 @@ export class Opacity extends Motion {
   }
 
   interrupted(motions) {
-    this.prior = motions.find(m => m instanceof this.constructor);
+    this.prior = motions.find((m) => m instanceof this.constructor);
   }
 
   /*

@@ -1,17 +1,17 @@
 import { module, test } from 'qunit';
 import { BoxShadow } from 'ember-animated/box-shadow';
 
-module('Unit | BoxShadow', function(hooks) {
+module('Unit | BoxShadow', function (hooks) {
   let target;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     let fixture = document.querySelector('#qunit-fixture');
     fixture.innerHTML = `<div class="target"></div>`;
     target = fixture.querySelector('.target');
   });
 
   function example(authoredShadow, expect, expectedShadows) {
-    test('parsing ' + authoredShadow, function(assert) {
+    test('parsing ' + authoredShadow, function (assert) {
       assert.expect(expect);
 
       target.style['box-shadow'] = authoredShadow;

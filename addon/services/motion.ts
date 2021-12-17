@@ -64,10 +64,8 @@ export default class MotionService extends Service {
     component: ComponentLike;
     fn: AnimationObserver;
   }[] = [];
-  _ancestorObservers: WeakMap<
-    ComponentLike,
-    Map<AncestorObserver, string>
-  > = new WeakMap();
+  _ancestorObservers: WeakMap<ComponentLike, Map<AncestorObserver, string>> =
+    new WeakMap();
   _beacons: { [name: string]: Sprite } | null = null;
 
   // === Notification System ===
@@ -128,7 +126,7 @@ export default class MotionService extends Service {
     fn: AnimationObserver,
   ) {
     let entry = this._descendantObservers.find(
-      e => e.component === component && e.fn === fn,
+      (e) => e.component === component && e.fn === fn,
     );
     if (entry) {
       this._descendantObservers.splice(
@@ -193,17 +191,19 @@ export default class MotionService extends Service {
   // (because the act of rendering can cause animations to begin).
   @computed('_animators.@each.isAnimating')
   get isAnimatingSync() {
-    return this.get('_animators').any(animator => animator.get('isAnimating'));
+    return this.get('_animators').any((animator) =>
+      animator.get('isAnimating'),
+    );
   }
 
   // Invalidation support for isAnimating
-  @(task(function*(this: MotionService) {
+  @task(function* (this: MotionService) {
     yield rAF();
     this.notifyPropertyChange('isAnimating');
-  }).observes('isAnimatingSync'))
+  }).observes('isAnimatingSync')
   _invalidateIsAnimating!: ComputedProperty<Task>;
 
-  @task(function*(this: MotionService) {
+  @task(function* (this: MotionService) {
     // we are idle if we experience two frames in a row with nothing
     // animating.
     while (true) {
@@ -236,7 +236,7 @@ export default class MotionService extends Service {
     }
   }
 
-  @task(function*(this: MotionService, name: string, beacon: Sprite) {
+  @task(function* (this: MotionService, name: string, beacon: Sprite) {
     if (!this._beacons) {
       this._beacons = {};
     }
@@ -253,7 +253,7 @@ export default class MotionService extends Service {
   })
   addBeacon!: ComputedProperty<Task>;
 
-  @task(function*(
+  @task(function* (
     this: MotionService,
     runAnimationTask: Promise<void>,
     inserted: Sprite[],
@@ -282,7 +282,7 @@ export default class MotionService extends Service {
     }
 
     if (this.get('farMatch').concurrency > 1) {
-      this._rendezvous.forEach(target => {
+      this._rendezvous.forEach((target) => {
         if (target === mine) {
           return;
         }
@@ -325,7 +325,7 @@ export default class MotionService extends Service {
     let observers = this._ancestorObservers.get(component);
     if (observers) {
       for (let [fn, id] of observers.entries()) {
-        let child = children.find(child => child.id === id);
+        let child = children.find((child) => child.id === id);
         if (child) {
           fn(child.state);
         } // the else case here applies to descendants that are about
@@ -354,18 +354,18 @@ export default class MotionService extends Service {
         // we are the first concurrent task to wake up, so we do the
         // actual resolution for everyone.
         let animators = this.get('_animators');
-        animators.forEach(animator => animator.beginStaticMeasurement());
-        this._measurements.forEach(m => {
+        animators.forEach((animator) => animator.beginStaticMeasurement());
+        this._measurements.forEach((m) => {
           try {
             m.value = m.fn();
           } catch (err) {
-            setTimeout(function() {
+            setTimeout(function () {
               throw err;
             }, 0);
           }
           m.resolved = true;
         });
-        animators.forEach(animator => animator.endStaticMeasurement());
+        animators.forEach((animator) => animator.endStaticMeasurement());
       }
       return measurement.value;
     } finally {
@@ -375,11 +375,11 @@ export default class MotionService extends Service {
 }
 
 function performMatches(sink: Rendezvous, source: Rendezvous) {
-  sink.inserted.concat(sink.kept).forEach(sprite => {
+  sink.inserted.concat(sink.kept).forEach((sprite) => {
     let match = source.removed.find(
       // TODO: an OwnedSprite type could eliminate the need for these
       // non-nullable casts.
-      mySprite =>
+      (mySprite) =>
         sprite.owner!.group == mySprite.owner!.group &&
         sprite.owner!.id === mySprite.owner!.id,
     );

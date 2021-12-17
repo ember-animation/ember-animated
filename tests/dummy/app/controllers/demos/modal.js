@@ -21,7 +21,7 @@ export default Controller.extend({
   },
 
   *backgroundTransition({ removedSprites, insertedSprites, receivedSprites }) {
-    insertedSprites.concat(receivedSprites).forEach(sprite => {
+    insertedSprites.concat(receivedSprites).forEach((sprite) => {
       sprite.applyStyles({ 'pointer-events': '' });
 
       // this animates them to their natural opacity, which is determined by our
@@ -30,19 +30,19 @@ export default Controller.extend({
     });
 
     // and this fades to zero opacity
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       sprite.applyStyles({ 'pointer-events': 'none' });
       opacity(sprite, { to: 0 });
     });
   },
 
   *dialogTransition({ removedSprites, insertedSprites, receivedSprites }) {
-    insertedSprites.forEach(sprite => {
+    insertedSprites.forEach((sprite) => {
       sprite.startAtPixel({ x: -sprite.finalBounds.width });
       move(sprite);
     });
     receivedSprites.forEach(move);
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       sprite.endAtPixel({ x: window.outerWidth });
       move(sprite);
     });

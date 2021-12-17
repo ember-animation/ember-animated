@@ -6,15 +6,15 @@ import move from 'ember-animated/motions/move';
 import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 
 export default Component.extend({
-  transition: function*({ insertedSprites, keptSprites, removedSprites }) {
-    insertedSprites.forEach(sprite => {
+  transition: function* ({ insertedSprites, keptSprites, removedSprites }) {
+    insertedSprites.forEach((sprite) => {
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeOut });
     });
 
     keptSprites.forEach(move);
 
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       // the 0.8 here is purely so I can easily see that the elements
       // are being properly removed immediately after they get far
       // enough
@@ -37,7 +37,7 @@ export default Component.extend({
     },
   }),
 
-  chaos: task(function*(running) {
+  chaos: task(function* (running) {
     if (!running) {
       return;
     }
@@ -63,7 +63,7 @@ export default Component.extend({
         items
           .concat([item])
           .sort(this.currentSort)
-          .map(elt => ({ id: elt.id })),
+          .map((elt) => ({ id: elt.id })),
       );
     },
     removeItem(which) {
@@ -71,7 +71,7 @@ export default Component.extend({
       this.set('message', `remove ${which.id}`);
       this.set(
         'items',
-        items.filter(i => i !== which),
+        items.filter((i) => i !== which),
       );
     },
     replaceItem(which) {

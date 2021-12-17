@@ -9,7 +9,7 @@ if (!(window as any).Promise) {
     false,
     { id: 'ember-animated-missing-microtask' },
   );
-  window.Promise = (RSVP.Promise as any) as PromiseConstructor;
+  window.Promise = RSVP.Promise as any as PromiseConstructor;
 }
 
 const cancellation: WeakMap<
@@ -42,10 +42,10 @@ export function rAF() {
     nextFrame = requestAnimationFrame(rAFDidFire);
   }
   let resolve;
-  let promise = new Promise(r => {
+  let promise = new Promise((r) => {
     resolve = r;
   });
-  nextFrameWaiters.push({ resolve: (resolve as any) as () => void, promise });
+  nextFrameWaiters.push({ resolve: resolve as any as () => void, promise });
   registerCancellation(promise, removeWaiter);
   return promise;
 }
@@ -61,7 +61,7 @@ function rAFDidFire(clock: number) {
 }
 
 function removeWaiter(promise: Promise<any>) {
-  let pair = nextFrameWaiters.find(pair => pair.promise === promise);
+  let pair = nextFrameWaiters.find((pair) => pair.promise === promise);
   if (pair) {
     let index = nextFrameWaiters.indexOf(pair);
     if (index > -1) {
@@ -80,13 +80,13 @@ let nextFrameWaiters: { promise: Promise<any>; resolve: () => void }[] = [];
 export let currentFrameClock = -Infinity;
 
 export function microwait(): Promise<void> {
-  return new Promise(resolve => resolve());
+  return new Promise((resolve) => resolve());
 }
 
 export function wait(ms = 0) {
   if (clock.now === originalClock) {
     let ticket: number;
-    let promise = new RSVP.Promise(resolve => {
+    let promise = new RSVP.Promise((resolve) => {
       ticket = window.setTimeout(resolve, ms);
     });
     registerCancellation(promise, () => {
@@ -96,7 +96,7 @@ export function wait(ms = 0) {
   } else {
     let canceled = false;
     let started = clock.now();
-    let promise = new RSVP.Promise(resolve => {
+    let promise = new RSVP.Promise((resolve) => {
       function checkIt() {
         if (!canceled) {
           if (clock.now() - started > ms) {
@@ -116,7 +116,7 @@ export function wait(ms = 0) {
 
 export function afterRender() {
   let ticket: EmberRunTimer;
-  let promise = new Promise(resolve => {
+  let promise = new Promise((resolve) => {
     ticket = schedule('afterRender', resolve);
   });
   registerCancellation(promise, () => {
@@ -136,7 +136,7 @@ const originalClock = clock.now;
 
 export function allSettled(promises: Promise<any>[]) {
   return Promise.all(
-    promises.map(p => {
+    promises.map((p) => {
       if (p) {
         return p.catch(() => null);
       }

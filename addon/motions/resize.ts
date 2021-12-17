@@ -36,7 +36,7 @@ export class Resize extends Motion<Options> {
   heightTween: Tween | DerivedTween | null = null;
 
   interrupted(motions: Motion[]) {
-    let prior = motions.find(m => m instanceof this.constructor);
+    let prior = motions.find((m) => m instanceof this.constructor);
     if (prior) {
       this.prior = prior as Resize;
     }

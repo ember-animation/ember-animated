@@ -17,11 +17,11 @@ export default Component.extend({
   originalLines: linesFromDiff('diff', 'before'),
   finalLines: linesFromDiff('diff', 'after'),
 
-  activeLines: computed('isShowingFinal', function() {
+  activeLines: computed('isShowingFinal', function () {
     return this.isShowingFinal ? this.finalLines : this.originalLines;
   }),
 
-  codeTransition: function*({
+  codeTransition: function* ({
     duration,
     insertedSprites,
     removedSprites,
@@ -34,13 +34,13 @@ export default Component.extend({
       removedSprites.forEach(fadeOut);
 
       // Need to set inserted sprites to 0 opacity in case their animation is interrupted
-      insertedSprites.forEach(sprite => {
+      insertedSprites.forEach((sprite) => {
         sprite.applyStyles({
           opacity: '0',
         });
       });
 
-      keptSprites.map(sprite => {
+      keptSprites.map((sprite) => {
         fadeIn(sprite);
         move(sprite);
       });
@@ -84,7 +84,7 @@ export default Component.extend({
       this.onAnimationChange(false);
     } else {
       removedSprites.forEach(fadeOut);
-      keptSprites.map(sprite => {
+      keptSprites.map((sprite) => {
         fadeIn(sprite);
         move(sprite);
       });
@@ -96,7 +96,7 @@ export default Component.extend({
 });
 
 function linesFromDiff(diffProperty, beforeOrAfter) {
-  return computed(function() {
+  return computed(function () {
     let lineObjects = getLineObjectsFromDiff(this[diffProperty], beforeOrAfter);
     let language = this.label.substr(this.label.lastIndexOf('.') + 1);
 
@@ -105,7 +105,7 @@ function linesFromDiff(diffProperty, beforeOrAfter) {
 }
 
 function highlightLineObjects(lineObjects, language) {
-  let code = lineObjects.map(lineObject => lineObject.text).join('\n');
+  let code = lineObjects.map((lineObject) => lineObject.text).join('\n');
   let highlightedCode = highlightCode(code, language);
 
   return highlightedCode.split('\n').map((text, index) => ({
@@ -139,9 +139,9 @@ function getLineObjectsFromDiff(diff, beforeOrAfter) {
 }
 
 function groupedLines(lineObjects) {
-  let isAddedLine = lineObject => lineObject.text.indexOf('+') === 0;
-  let isRemovedLine = lineObject => lineObject.text.indexOf('-') === 0;
-  let isModifiedLine = lineObject =>
+  let isAddedLine = (lineObject) => lineObject.text.indexOf('+') === 0;
+  let isRemovedLine = (lineObject) => lineObject.text.indexOf('-') === 0;
+  let isModifiedLine = (lineObject) =>
     isAddedLine(lineObject) || isRemovedLine(lineObject);
   let hasAddedOrRemovedLines = lineObjects.filter(isModifiedLine).length > 0;
 
@@ -161,7 +161,7 @@ function groupedLines(lineObjects) {
 
       return lineObject;
     })
-    .map(lineObject => {
+    .map((lineObject) => {
       /*
       If we have either addded or removed lines, all text has a 2-space indent
       right now, so we remove it.

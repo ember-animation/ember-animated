@@ -17,9 +17,9 @@ export default Component.extend({
     return result;
   },
 
-  transition: function*(context) {
+  transition: function* (context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
-    insertedSprites.forEach(sprite => {
+    insertedSprites.forEach((sprite) => {
       sprite.applyStyles({ 'z-index': '1' });
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeOut });
@@ -27,7 +27,7 @@ export default Component.extend({
 
     keptSprites.forEach(move);
 
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       sprite.applyStyles({ 'z-index': '1' });
       sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite, { easing: easeIn });
@@ -51,7 +51,10 @@ export default Component.extend({
     },
     deleteItems() {
       let items = this.get('items');
-      this.set('items', items.filter(item => !item.deleteMessage));
+      this.set(
+        'items',
+        items.filter((item) => !item.deleteMessage),
+      );
     },
   },
 });

@@ -20,7 +20,7 @@ import opacity from 'ember-animated/motions/opacity';
   @function fade
   @export default
 */
-export default function*({
+export default function* ({
   removedSprites,
   insertedSprites,
   keptSprites,
@@ -29,7 +29,7 @@ export default function*({
   // We yield Promise.all here because we want to wait for this
   // step before starting what comes after.
   yield Promise.all(
-    removedSprites.map(s => {
+    removedSprites.map((s) => {
       if (s.revealed) {
         return opacity(s, {
           to: 0,
@@ -43,7 +43,7 @@ export default function*({
   // or kept sprites. Note that we get keptSprites if some things
   // were fading out and then we get interrupted and decide to
   // keep them around after all.
-  insertedSprites.concat(keptSprites).map(s =>
+  insertedSprites.concat(keptSprites).map((s) =>
     opacity(s, {
       to: 1,
       duration: duration / 2,

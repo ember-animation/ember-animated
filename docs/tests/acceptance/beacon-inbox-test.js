@@ -4,11 +4,11 @@ import { render, click } from '@ember/test-helpers';
 import { bounds, time, setupAnimationTest } from 'ember-animated/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Beacon Demo', function(hooks) {
+module('Integration | Beacon Demo', function (hooks) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
-  skip('visiting /between-components', async function(assert) {
+  skip('visiting /between-components', async function (assert) {
     await render(hbs`
       {{between-components}}
     `);

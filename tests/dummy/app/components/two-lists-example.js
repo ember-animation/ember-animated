@@ -6,7 +6,7 @@ import move from 'ember-animated/motions/move';
 export default Component.extend({
   bounceBack: false,
 
-  transition: function*({ keptSprites, sentSprites, receivedSprites }) {
+  transition: function* ({ keptSprites, sentSprites, receivedSprites }) {
     // The parts of each list that haven't changed moves to accomodate
     // inserted and removed peers
     keptSprites.forEach(move);
@@ -23,7 +23,7 @@ export default Component.extend({
     // Without this, they would get the default behavior for
     // receivedSprites, which is starting at the same location as the
     // corresponding element in the other list.
-    receivedSprites.forEach(sprite => sprite.moveToFinalPosition());
+    receivedSprites.forEach((sprite) => sprite.moveToFinalPosition());
   },
 
   leftItems: computed({

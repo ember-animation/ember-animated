@@ -79,7 +79,7 @@ export class ColorTween {
   }
   get done() {
     return [this.rTween, this.gTween, this.bTween, this.aTween].every(
-      tween => tween.done,
+      (tween) => tween.done,
     );
   }
 }

@@ -3,24 +3,24 @@ import { setupApplicationTest } from 'ember-qunit';
 import { currentURL, visit, click } from '@ember/test-helpers';
 import { TimeControl, animationsSettled } from 'ember-animated/test-support';
 
-module('Acceptance | swapping lists', function(hooks) {
+module('Acceptance | swapping lists', function (hooks) {
   setupApplicationTest(hooks);
 
   let time;
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     time = new TimeControl();
   });
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     time.finished();
     time = null;
   });
 
-  test('visiting /swapping-lists', async function(assert) {
+  test('visiting /swapping-lists', async function (assert) {
     await visit('/demos/swapping-lists');
     assert.strictEqual(currentURL(), '/demos/swapping-lists');
   });
 
-  test('toggling with animated receiving side', async function(assert) {
+  test('toggling with animated receiving side', async function (assert) {
     await visit('/demos/swapping-lists');
     await click(this.element.querySelector('button'));
     await time.advance(100);
@@ -28,7 +28,7 @@ module('Acceptance | swapping lists', function(hooks) {
       .querySelector('.right')
       .getBoundingClientRect().left;
     let leftwardCount = 0;
-    [...this.element.querySelectorAll('.right > div')].forEach(element => {
+    [...this.element.querySelectorAll('.right > div')].forEach((element) => {
       if (element.getBoundingClientRect().left < listPosition) {
         leftwardCount++;
       }
@@ -41,7 +41,7 @@ module('Acceptance | swapping lists', function(hooks) {
     await animationsSettled();
   });
 
-  test('toggling with animated sending side', async function(assert) {
+  test('toggling with animated sending side', async function (assert) {
     await visit('/demos/swapping-lists');
     await click(this.element.querySelector('.sending-side > input'));
     await click(this.element.querySelector('button'));
@@ -56,12 +56,14 @@ module('Acceptance | swapping lists', function(hooks) {
     );
     assert.ok(
       hidden < 10,
-      `expected at least one element in right list to be visible, found ${10 -
-        hidden}`,
+      `expected at least one element in right list to be visible, found ${
+        10 - hidden
+      }`,
     );
 
-    let orphans = this.element.querySelectorAll('.animated-orphans > div')
-      .length;
+    let orphans = this.element.querySelectorAll(
+      '.animated-orphans > div',
+    ).length;
     assert.ok(
       orphans >= 3,
       `expected at least 3 orphan elements to be in motion, found ${orphans}`,

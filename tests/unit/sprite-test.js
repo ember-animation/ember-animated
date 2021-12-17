@@ -12,7 +12,7 @@ import {
   approxEqualPixels,
 } from '../helpers/assertions';
 
-module('Unit | Sprite', function(hooks) {
+module('Unit | Sprite', function (hooks) {
   let environment,
     offsetParent,
     intermediate,
@@ -21,7 +21,7 @@ module('Unit | Sprite', function(hooks) {
     external,
     priorSibling;
 
-  hooks.beforeEach(function(assert) {
+  hooks.beforeEach(function (assert) {
     assert.visuallyConstant = visuallyConstant;
     assert.equalBounds = equalBounds;
     assert.approxEqualPixels = approxEqualPixels;
@@ -70,111 +70,111 @@ module('Unit | Sprite', function(hooks) {
     fixture.querySelector('.sibling').style.height = '10px';
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     document.querySelector('#qunit-fixture').innerHTML = '';
   });
 
-  test('Simple case', function(assert) {
+  test('Simple case', function (assert) {
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Scaled ancestor', function(assert) {
+  test('Scaled ancestor', function (assert) {
     environment.style.transform = 'scale(0.5)';
     environment.style['transform-origin'] = '0 0';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Translated ancestor', function(assert) {
+  test('Translated ancestor', function (assert) {
     environment.style.transform = 'translateX(500px) translateY(500px)';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Scaled offsetParent', function(assert) {
+  test('Scaled offsetParent', function (assert) {
     offsetParent.style.transform = 'scale(0.5)';
     offsetParent.style['transform-origin'] = '0 0';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Translated ancestor beneath offsetParent', function(assert) {
+  test('Translated ancestor beneath offsetParent', function (assert) {
     intermediate.style.transform = 'translateX(10px)';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Translated ancestor with border beneath offsetParent', function(assert) {
+  test('Translated ancestor with border beneath offsetParent', function (assert) {
     intermediate.style.transform = 'translateX(10px)';
     intermediate.style.border = '1px solid green';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Translated ancestor with margins beneath offsetParent', function(assert) {
+  test('Translated ancestor with margins beneath offsetParent', function (assert) {
     intermediate.style.transform = 'translateX(10px)';
     addMargins(intermediate);
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Translated offsetParent', function(assert) {
+  test('Translated offsetParent', function (assert) {
     offsetParent.style.transform = 'translateX(500px) translateY(500px)';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Target translated', function(assert) {
+  test('Target translated', function (assert) {
     target.style.transform = 'translateX(500px) translateY(500px)';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Target scaled', function(assert) {
+  test('Target scaled', function (assert) {
     target.style.transform = 'scale(0.5)';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  skip('Target rotated', function(assert) {
+  skip('Target rotated', function (assert) {
     target.style.transform = 'rotate(30deg)';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Margins on target', function(assert) {
+  test('Margins on target', function (assert) {
     addMargins(target);
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Margins on offsetParent', function(assert) {
+  test('Margins on offsetParent', function (assert) {
     addMargins(offsetParent);
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Padding on offsetParent', function(assert) {
+  test('Padding on offsetParent', function (assert) {
     addPadding(offsetParent);
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Border on target', function(assert) {
+  test('Border on target', function (assert) {
     target.style.border = '2px solid blue';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('Border on target, border-box mode', function(assert) {
+  test('Border on target, border-box mode', function (assert) {
     target.style.border = '2px solid blue';
     target.style.boxSizing = 'border-box';
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('No leaked styles', function(assert) {
+  test('No leaked styles', function (assert) {
     let m = sprite(target);
     m.lock();
     m.unlock();
@@ -182,7 +182,7 @@ module('Unit | Sprite', function(hooks) {
     assert.notOk(target.getAttribute('style'), 'empty style');
   });
 
-  test('Restores original styles', function(assert) {
+  test('Restores original styles', function (assert) {
     target.style.position = 'relative';
     target.style.top = '5px';
     target.style.left = '6px';
@@ -200,7 +200,7 @@ module('Unit | Sprite', function(hooks) {
     assert.strictEqual(ownTransform(target).tx, 20, 'translateX');
   });
 
-  test('Restores original styles even when two sprites interrupt each other', function(assert) {
+  test('Restores original styles even when two sprites interrupt each other', function (assert) {
     target.style.position = 'relative';
     target.style.top = '5px';
     target.style.left = '6px';
@@ -220,7 +220,7 @@ module('Unit | Sprite', function(hooks) {
     assert.strictEqual(ownTransform(target).tx, 20, 'translateX');
   });
 
-  test('User-positioned absolute sprite', function(assert) {
+  test('User-positioned absolute sprite', function (assert) {
     target.style.position = 'absolute';
     target.style.top = '5px';
     target.style.left = '6px';
@@ -255,7 +255,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('User-positioned absolute sprite, interrupted', function(assert) {
+  test('User-positioned absolute sprite, interrupted', function (assert) {
     // initial position
     target.style.position = 'absolute';
     target.style.top = '5px';
@@ -304,7 +304,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('User-positioned relative sprite', function(assert) {
+  test('User-positioned relative sprite', function (assert) {
     target.style.position = 'relative';
     target.style.top = '5px';
     target.style.left = '6px';
@@ -337,7 +337,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('User-positioned relative sprite, interrupted', function(assert) {
+  test('User-positioned relative sprite, interrupted', function (assert) {
     // initial position
     target.style.position = 'relative';
     target.style.top = '5px';
@@ -383,7 +383,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('external style mutations persist across unlock: added property that does not collide with our imposed styles', function(assert) {
+  test('external style mutations persist across unlock: added property that does not collide with our imposed styles', function (assert) {
     let m = sprite(target);
     m.lock();
     target.style.borderWidth = '123px';
@@ -391,7 +391,7 @@ module('Unit | Sprite', function(hooks) {
     assert.strictEqual(target.style.borderWidth, '123px');
   });
 
-  test('external style mutations persist across unlock: changed properties that collide with our imposed styles', function(assert) {
+  test('external style mutations persist across unlock: changed properties that collide with our imposed styles', function (assert) {
     target.style.top = '3231px';
     target.style.left = '2423px';
     target.style.width = '5453px';
@@ -418,7 +418,7 @@ module('Unit | Sprite', function(hooks) {
     assert.strictEqual(target.style['margin-top'], '9px', 'margin');
   });
 
-  test('within scrolling context above offset parent', function(assert) {
+  test('within scrolling context above offset parent', function (assert) {
     environment.style['overflow-y'] = 'scroll';
     environment.style.height = '400px';
     offsetParent.style['margin-top'] = '200px';
@@ -430,7 +430,7 @@ module('Unit | Sprite', function(hooks) {
     });
   });
 
-  test('within scrolling offset parent', function(assert) {
+  test('within scrolling offset parent', function (assert) {
     intermediate.style.height = '4000px';
     intermediate.style.width = '200%';
     intermediate.style['padding-top'] = '2000px';
@@ -445,7 +445,7 @@ module('Unit | Sprite', function(hooks) {
     });
   });
 
-  test('target absolutely positioned', function(assert) {
+  test('target absolutely positioned', function (assert) {
     target.style.position = 'absolute';
     target.style.top = '100px';
     target.style.left = '200px';
@@ -454,7 +454,7 @@ module('Unit | Sprite', function(hooks) {
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('target absolutely positioned, border on offsetParent', function(assert) {
+  test('target absolutely positioned, border on offsetParent', function (assert) {
     target.style.position = 'absolute';
     target.style.top = '100px';
     target.style.left = '200px';
@@ -463,7 +463,7 @@ module('Unit | Sprite', function(hooks) {
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('target absolutely positioned with transformed ancestor beneath nearest positioned ancestor', function(assert) {
+  test('target absolutely positioned with transformed ancestor beneath nearest positioned ancestor', function (assert) {
     target.style.position = 'absolute';
     target.style.top = '100px';
     target.style.left = '200px';
@@ -472,7 +472,7 @@ module('Unit | Sprite', function(hooks) {
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('target absolutely positioned with transformed ancestor with border beneath nearest positioned ancestor', function(assert) {
+  test('target absolutely positioned with transformed ancestor with border beneath nearest positioned ancestor', function (assert) {
     target.style.position = 'absolute';
     target.style.top = '100px';
     target.style.left = '200px';
@@ -482,7 +482,7 @@ module('Unit | Sprite', function(hooks) {
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('target fixed positioned', function(assert) {
+  test('target fixed positioned', function (assert) {
     target.style.position = 'fixed';
     target.style.top = '100px';
     target.style.left = '200px';
@@ -490,7 +490,7 @@ module('Unit | Sprite', function(hooks) {
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('static body with margins', function(assert) {
+  test('static body with margins', function (assert) {
     let body = document.querySelector('body');
     assert.strictEqual(
       getComputedStyle(body).position,
@@ -503,7 +503,7 @@ module('Unit | Sprite', function(hooks) {
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('static body with scroll', function(assert) {
+  test('static body with scroll', function (assert) {
     let body = document.querySelector('body');
     assert.strictEqual(
       getComputedStyle(body).position,
@@ -531,7 +531,7 @@ module('Unit | Sprite', function(hooks) {
     assert.visuallyConstant(target, () => m.lock());
   });
 
-  test('remembers initial bounds', function(assert) {
+  test('remembers initial bounds', function (assert) {
     let m = sprite(target);
     assert.approxEqualPixels(
       m.initialBounds.top,
@@ -545,7 +545,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('measures and remembers final bounds', function(assert) {
+  test('measures and remembers final bounds', function (assert) {
     let m = sprite(target);
     target.style.transform = 'translateX(100px)';
     m.measureFinalBounds();
@@ -561,21 +561,21 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('requires an initial position sprite to have an initial positioned offset measurement', function(assert) {
+  test('requires an initial position sprite to have an initial positioned offset measurement', function (assert) {
     let parent = Sprite.offsetParentEndingAt(target);
     assert.throws(() => {
       Sprite.positionedStartingAt(target, parent);
     }, /must have initial bounds/);
   });
 
-  test('requires a final position sprite to have a final positioned offset measurement', function(assert) {
+  test('requires a final position sprite to have a final positioned offset measurement', function (assert) {
     let parent = Sprite.offsetParentStartingAt(target);
     assert.throws(() => {
       Sprite.positionedEndingAt(target, parent);
     }, /must have final bounds/);
   });
 
-  test('can initialize in final position', function(assert) {
+  test('can initialize in final position', function (assert) {
     let parent = Sprite.offsetParentEndingAt(target);
     let m = Sprite.positionedEndingAt(target, parent);
     assert.approxEqualPixels(
@@ -586,7 +586,7 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(m.finalBounds.left, 0, 'left relative to parent');
   });
 
-  test('can get current bounds', function(assert) {
+  test('can get current bounds', function (assert) {
     let m = sprite(target);
     target.style.transform = 'translateX(100px) translateY(120px)';
     let b = m.getCurrentBounds();
@@ -602,7 +602,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('current bounds are unaffected by parent movement', function(assert) {
+  test('current bounds are unaffected by parent movement', function (assert) {
     let m = sprite(target);
     offsetParent.style.transform = 'translateX(100px) translateY(120px)';
     let b = m.getCurrentBounds();
@@ -610,7 +610,7 @@ module('Unit | Sprite', function(hooks) {
     assert.approxEqualPixels(b.left, m.initialBounds.left, 'left constant');
   });
 
-  test('start translated', function(assert) {
+  test('start translated', function (assert) {
     let parent = makeParent(target);
     parent.measureFinalBounds();
     let m = Sprite.positionedEndingAt(target, parent);
@@ -633,7 +633,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('start translated, accounts for parent motion', function(assert) {
+  test('start translated, accounts for parent motion', function (assert) {
     let parent = makeParent(target);
     offsetParent.style.transform = 'translateX(100px) translateY(120px)';
     parent.measureFinalBounds();
@@ -660,7 +660,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test("target's margins collapse with its children", function(assert) {
+  test("target's margins collapse with its children", function (assert) {
     innerContent.style.marginTop = '10px';
     innerContent.style.marginBottom = '20px';
     let m = sprite(target);
@@ -693,7 +693,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('target not eligible for margin collapse', function(assert) {
+  test('target not eligible for margin collapse', function (assert) {
     innerContent.style.marginTop = '10px';
     innerContent.style.marginBottom = '20px';
     target.style.position = 'absolute';
@@ -727,14 +727,14 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('Sprite is sealed in test mode', function(assert) {
+  test('Sprite is sealed in test mode', function (assert) {
     let m = sprite(target);
     assert.throws(() => {
       m.somethingExtra = true;
     });
   });
 
-  test('startAtSprite moves into correct position', function(assert) {
+  test('startAtSprite moves into correct position', function (assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
       makeParent(external),
@@ -756,7 +756,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test("startAtSprite matches the source sprite's dimensions", function(assert) {
+  test("startAtSprite matches the source sprite's dimensions", function (assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
       makeParent(external),
@@ -781,7 +781,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test("startAtSprite matches the source sprite's opacity", function(assert) {
+  test("startAtSprite matches the source sprite's opacity", function (assert) {
     external.style.opacity = 0.3;
     let externalSprite = Sprite.positionedStartingAt(
       external,
@@ -800,7 +800,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('startAtSprite moves into correct position, even when we already had initialBounds', function(assert) {
+  test('startAtSprite moves into correct position, even when we already had initialBounds', function (assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
       makeParent(external),
@@ -825,7 +825,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('moveToFinalPosition moves to correct position', function(assert) {
+  test('moveToFinalPosition moves to correct position', function (assert) {
     let externalSprite = Sprite.positionedStartingAt(
       external,
       makeParent(external),
@@ -847,7 +847,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('rehome', function(assert) {
+  test('rehome', function (assert) {
     // we're going to move the target from being relative to
     // intermediate to being relative to priorSibling
     intermediate.style.position = 'relative';
@@ -870,7 +870,7 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  test('rehome a scaled and translated sprite', function(assert) {
+  test('rehome a scaled and translated sprite', function (assert) {
     // we're going to move the target from being relative to
     // intermediate to being relative to priorSibling
     intermediate.style.position = 'relative';
@@ -894,15 +894,15 @@ module('Unit | Sprite', function(hooks) {
     );
   });
 
-  skip('polyfills WeakMap as needed (and remember to adjust eslint config)', function(assert) {
+  skip('polyfills WeakMap as needed (and remember to adjust eslint config)', function (assert) {
     assert.ok(false);
   });
 
-  skip('polyfills Map as needed (and remember to adjust eslint config)', function(assert) {
+  skip('polyfills Map as needed (and remember to adjust eslint config)', function (assert) {
     assert.ok(false);
   });
 
-  skip('polyfills rAF as needed', function(assert) {
+  skip('polyfills rAF as needed', function (assert) {
     assert.ok(false);
   });
 
@@ -935,11 +935,11 @@ module('Unit | Sprite', function(hooks) {
   }
 });
 
-module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
+module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
-  test('svg elements can use the top <svg> tag as their offset parent', async function(assert) {
+  test('svg elements can use the top <svg> tag as their offset parent', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
@@ -955,7 +955,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('svg elements can use a nested <svg> tag as their offset parent', async function(assert) {
+  test('svg elements can use a nested <svg> tag as their offset parent', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <svg class="inside">
@@ -973,7 +973,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('svg elements skip over <g> when finding their offset parent', async function(assert) {
+  test('svg elements skip over <g> when finding their offset parent', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <svg class="inside">
@@ -993,7 +993,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('SVG rect with manipulated size', async function(assert) {
+  test('SVG rect with manipulated size', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
@@ -1036,7 +1036,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('SVG rect with manipulated x and y', async function(assert) {
+  test('SVG rect with manipulated x and y', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
@@ -1076,7 +1076,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('SVG circle with manipulated position', async function(assert) {
+  test('SVG circle with manipulated position', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
@@ -1116,7 +1116,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('SVG circle with manipulated radius', async function(assert) {
+  test('SVG circle with manipulated radius', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
@@ -1158,7 +1158,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('can read initial and final SVG dimensions', async function(assert) {
+  test('can read initial and final SVG dimensions', async function (assert) {
     await render(hbs`
 <svg width=1000 height=1000>
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
@@ -1182,7 +1182,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     assert.strictEqual(sprite.getFinalDimension('cx'), 120, 'cx final');
   });
 
-  test('rehome a sprite out of a scaled and translated parent', async function(assert) {
+  test('rehome a sprite out of a scaled and translated parent', async function (assert) {
     await render(hbs`
       <div class="sibling" style="position: relative"></div>
       <div class="intermediate" style="position: relative; transform: translateX(65px) translateY(75px) scale(0.55)">
@@ -1210,7 +1210,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  skip('rehome a sprite within a shared scaled and translated context', async function(assert) {
+  skip('rehome a sprite within a shared scaled and translated context', async function (assert) {
     await render(hbs`
       <div class="environment" style="transform: translateX(65px) translateY(75px) scale(0.55)">
         <div class="sibling" style="position: relative"></div>
@@ -1240,7 +1240,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('sprites cleanup their classlist', async function(assert) {
+  test('sprites cleanup their classlist', async function (assert) {
     await render(hbs`<div class="a"></div>`);
     let target = this.element.querySelector('.a');
 
@@ -1257,7 +1257,7 @@ module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
     );
   });
 
-  test('sprites cleanup classlist correctly when there are dynamic classes', async function(assert) {
+  test('sprites cleanup classlist correctly when there are dynamic classes', async function (assert) {
     await render(hbs`<div class="a {{if this.showB "b"}}"></div>`);
 
     let target = this.element.querySelector('.a');

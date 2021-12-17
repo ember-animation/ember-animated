@@ -9,9 +9,9 @@ import {
 
 let tester, target;
 
-module('Unit | Adjust Color', function(hooks) {
+module('Unit | Adjust Color', function (hooks) {
   setupAnimationTest(hooks);
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     tester = MotionTester.create();
     let fixture = document.querySelector('#qunit-fixture');
     fixture.innerHTML = `
@@ -22,7 +22,7 @@ module('Unit | Adjust Color', function(hooks) {
     target.style.height = '400px';
   });
 
-  test('uses existing colors', async function(assert) {
+  test('uses existing colors', async function (assert) {
     assert.expect(3);
     target.style['background-color'] = 'red';
     let sprite = makeSprite();
@@ -48,7 +48,7 @@ module('Unit | Adjust Color', function(hooks) {
     );
   });
 
-  test('explicit source color', async function(assert) {
+  test('explicit source color', async function (assert) {
     assert.expect(3);
     target.style['background-color'] = 'white';
     let sprite = makeSprite();
@@ -76,7 +76,7 @@ module('Unit | Adjust Color', function(hooks) {
     );
   });
 
-  test('explicit destination color', async function(assert) {
+  test('explicit destination color', async function (assert) {
     assert.expect(3);
     target.style['background-color'] = 'white';
     let sprite = makeSprite();
@@ -102,7 +102,7 @@ module('Unit | Adjust Color', function(hooks) {
     );
   });
 
-  test('handles alpha premultiplication', async function(assert) {
+  test('handles alpha premultiplication', async function (assert) {
     assert.expect(3);
     target.style['background-color'] = '#0000ff';
     let sprite = makeSprite();

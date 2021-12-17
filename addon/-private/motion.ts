@@ -37,7 +37,7 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
   run() {
     let context = TransitionContext.forSprite(this.sprite);
     let self = this;
-    return spawnChild(function*() {
+    return spawnChild(function* () {
       context.onMotionStart(self.sprite);
       try {
         yield* self._run();
@@ -65,7 +65,7 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
 
   *_run() {
     try {
-      let others = this._motionList!.filter(m => m !== this);
+      let others = this._motionList!.filter((m) => m !== this);
       if (this._inheritedMotionList) {
         others = others.concat(this._inheritedMotionList);
       }

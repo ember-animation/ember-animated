@@ -9,8 +9,8 @@ let environment, myParent, target;
 const WIDTH = 601;
 const HEIGHT = 402;
 
-module('Unit | Transform', function(hooks) {
-  hooks.beforeEach(function(assert) {
+module('Unit | Transform', function (hooks) {
+  hooks.beforeEach(function (assert) {
     assert.equalTransform = equalTransform;
 
     let fixture = document.querySelector('#qunit-fixture');
@@ -23,18 +23,18 @@ module('Unit | Transform', function(hooks) {
     target.style.height = HEIGHT + 'px';
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     document.querySelector('#qunit-fixture').innerHTML = '';
   });
 
-  test('Degenerate case', function(assert) {
+  test('Degenerate case', function (assert) {
     assert.equalTransform(
       cumulativeTransform(target),
       new Transform(1, 0, 0, 1, 0, 0),
     );
   });
 
-  test('Scale x', function(assert) {
+  test('Scale x', function (assert) {
     target.style.transform = 'scaleX(0.5)';
     assert.equalTransform(
       cumulativeTransform(target),
@@ -42,7 +42,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Scale x (origin top left)', function(assert) {
+  test('Scale x (origin top left)', function (assert) {
     target.style.transform = 'scaleX(0.5)';
     target.style['transform-origin'] = '0px 0px';
     assert.equalTransform(
@@ -51,7 +51,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Scale y', function(assert) {
+  test('Scale y', function (assert) {
     target.style.transform = 'scaleY(2.5)';
     assert.equalTransform(
       cumulativeTransform(target),
@@ -59,7 +59,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Scale both', function(assert) {
+  test('Scale both', function (assert) {
     target.style.transform = 'scale(1.2)';
     assert.equalTransform(
       cumulativeTransform(target),
@@ -74,7 +74,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Scale both nonuniform', function(assert) {
+  test('Scale both nonuniform', function (assert) {
     target.style.transform = 'scaleX(2.5) scaleY(0.7)';
     assert.equalTransform(
       cumulativeTransform(target),
@@ -89,7 +89,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Translation', function(assert) {
+  test('Translation', function (assert) {
     target.style.transform = 'translateX(123px) translateY(456px)';
     assert.equalTransform(
       cumulativeTransform(target),
@@ -97,7 +97,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Scale then translate', function(assert) {
+  test('Scale then translate', function (assert) {
     target.style.transform =
       'scaleX(0.5) scaleY(0.7) translateX(123px) translateY(456px)';
     assert.equalTransform(
@@ -113,7 +113,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Translate then scale', function(assert) {
+  test('Translate then scale', function (assert) {
     target.style.transform =
       'translateX(123px) translateY(456px) scaleX(0.5) scaleY(0.7)';
     assert.equalTransform(
@@ -129,7 +129,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Scale then translate (origin top left)', function(assert) {
+  test('Scale then translate (origin top left)', function (assert) {
     target.style.transform =
       'scaleX(0.5) scaleY(0.7) translateX(123px) translateY(456px)';
     target.style['transform-origin'] = '0px 0px';
@@ -139,7 +139,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Translate then scale (origin top left)', function(assert) {
+  test('Translate then scale (origin top left)', function (assert) {
     target.style.transform =
       'translateX(123px) translateY(456px) scaleX(0.5) scaleY(0.7)';
     target.style['transform-origin'] = '0px 0px';
@@ -149,7 +149,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Stacked transforms', function(assert) {
+  test('Stacked transforms', function (assert) {
     myParent.style.transform = 'translateX(-50px) translateY(-20px)';
     target.style.transform = 'translateX(123px) translateY(456px)';
     target.style['transform-origin'] = '0px 0px';
@@ -159,7 +159,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Stacked transforms (origin top left)', function(assert) {
+  test('Stacked transforms (origin top left)', function (assert) {
     myParent.style.transform = 'translateX(-50px) translateY(-20px)';
     myParent.style['transform-origin'] = '0px 0px';
     target.style.transform = 'translateX(123px) translateY(456px)';
@@ -170,7 +170,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Rotate on center of element', function(assert) {
+  test('Rotate on center of element', function (assert) {
     let s = Math.sin((30 * Math.PI) / 180);
     let c = Math.cos((30 * Math.PI) / 180);
     target.style.transform = 'rotate(30deg)';
@@ -187,7 +187,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Rotate and translate', function(assert) {
+  test('Rotate and translate', function (assert) {
     let s = Math.sin((45 * Math.PI) / 180);
     let c = Math.cos((45 * Math.PI) / 180);
     target.style.transform = 'translateX(123px) rotate(45deg)';
@@ -204,7 +204,7 @@ module('Unit | Transform', function(hooks) {
     );
   });
 
-  test('Rotate and translate (origin top left)', function(assert) {
+  test('Rotate and translate (origin top left)', function (assert) {
     let s = Math.sin((45 * Math.PI) / 180);
     target.style.transform = 'translateX(123px) rotate(45deg)';
     target.style['transform-origin'] = '0px 0px';
@@ -222,8 +222,8 @@ module('Unit | Transform', function(hooks) {
     'scaleX(0.5) translateX(300px)',
     'translateX(300px) scaleX(0.5)',
     'rotate(10deg) translateX(300px) scaleX(0.5)',
-  ].forEach(function(transform) {
-    test(`Adjusts transform-origin correctly for ${transform}, relative to top left`, function(assert) {
+  ].forEach(function (transform) {
+    test(`Adjusts transform-origin correctly for ${transform}, relative to top left`, function (assert) {
       target.style.transform = transform;
       target.style['transform-origin'] = '0px 0px';
       let withTopLeftOrigin = ownTransform(target);
@@ -235,7 +235,7 @@ module('Unit | Transform', function(hooks) {
       assert.equalTransform(withDefaultOrigin, withTopLeftOrigin);
     });
 
-    test(`Adjusts transform-origin correctly for ${transform}, relative to center`, function(assert) {
+    test(`Adjusts transform-origin correctly for ${transform}, relative to center`, function (assert) {
       target.style.transform = transform;
       target.style['transform-origin'] = '50% 50%';
       let withDefaultOrigin = ownTransform(target);

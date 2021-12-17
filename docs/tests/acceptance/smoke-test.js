@@ -14,11 +14,11 @@ import { setupAnimationTest, time } from 'ember-animated/test-support';
 
 const expectedDuration = 250;
 
-module('Acceptance | smoke', function(hooks) {
+module('Acceptance | smoke', function (hooks) {
   setupApplicationTest(hooks);
   setupAnimationTest(hooks);
 
-  test('visiting /', async function(assert) {
+  test('visiting /', async function (assert) {
     function guestElements() {
       return [...document.querySelectorAll('[data-test-guests-demo] .fa-user')];
     }
@@ -26,7 +26,7 @@ module('Acceptance | smoke', function(hooks) {
     function buttonWith(pattern) {
       return [
         ...document.querySelectorAll('[data-test-guests-demo] button'),
-      ].find(elt => pattern.test(elt.textContent));
+      ].find((elt) => pattern.test(elt.textContent));
     }
 
     // load page
@@ -75,14 +75,14 @@ module('Acceptance | smoke', function(hooks) {
 
     // make sure a code snippet is present
     assert.ok(
-      [...document.querySelectorAll('[data-test-guests-demo] pre')].find(elt =>
-        /<Icon 'user' \/>/.test(elt.textContent),
+      [...document.querySelectorAll('[data-test-guests-demo] pre')].find(
+        (elt) => /<Icon 'user' \/>/.test(elt.textContent),
       ),
       'found Icon snippet content',
     );
   });
 
-  test('step through all /docs pages', async function(assert) {
+  test('step through all /docs pages', async function (assert) {
     await visit('/docs');
     assert.strictEqual(currentURL(), '/docs');
     let count = 0;
@@ -102,7 +102,7 @@ module('Acceptance | smoke', function(hooks) {
     assert.strictEqual(count, 19, 'expected number of docs pages');
   });
 
-  test('search functionality', async function(assert) {
+  test('search functionality', async function (assert) {
     await visit('/');
 
     await waitUntil(() => find('[data-search-box] > input').disabled === false);

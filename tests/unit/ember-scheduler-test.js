@@ -6,10 +6,10 @@ import { installLogging } from '../helpers/assertions';
 import { microwait } from 'ember-animated';
 import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
 
-module('Unit | scheduler Ember layer', function(hooks) {
-  hooks.beforeEach(function(assert) {
+module('Unit | scheduler Ember layer', function (hooks) {
+  hooks.beforeEach(function (assert) {
     installLogging(assert);
-    assert.insideRunLoop = function(message) {
+    assert.insideRunLoop = function (message) {
       let result = insideRunLoop();
       this.pushResult({
         result,
@@ -20,7 +20,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     };
   });
 
-  test('sanity check the runloop assertion', function(assert) {
+  test('sanity check the runloop assertion', function (assert) {
     assert.expect(2);
 
     assert.false(insideRunLoop(), 'should be not inside');
@@ -29,11 +29,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('task starts synchronously and sets on self', function(assert) {
+  test('task starts synchronously and sets on self', function (assert) {
     assert.expect(1);
 
     let Class = EmberObject.extend({
-      hello: task(function*() {
+      hello: task(function* () {
         this.set('foo', 'bar');
       }),
     });
@@ -48,10 +48,10 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('task sees self running', function(assert) {
+  test('task sees self running', function (assert) {
     assert.expect(1);
     let Class = EmberObject.extend({
-      hello: task(function*() {
+      hello: task(function* () {
         assert.strictEqual(this.get('hello.concurrency'), 1);
       }),
     });
@@ -65,10 +65,10 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('synchronously done task stops running immediately', function(assert) {
+  test('synchronously done task stops running immediately', function (assert) {
     assert.expect(1);
     let Class = EmberObject.extend({
-      hello: task(function*() {}),
+      hello: task(function* () {}),
     });
     let object = Class.create();
     let done = assert.async();
@@ -81,14 +81,14 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('perform resolves appropriately', function(assert) {
+  test('perform resolves appropriately', function (assert) {
     assert.expect(2);
 
     let resolve;
     let didResolve = false;
     let Class = EmberObject.extend({
-      hello: task(function*() {
-        yield new Promise(r => (resolve = r));
+      hello: task(function* () {
+        yield new Promise((r) => (resolve = r));
       }),
     });
     let object = Class.create();
@@ -109,11 +109,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('still in run loop after yield', function(assert) {
+  test('still in run loop after yield', function (assert) {
     let resolve;
     let Class = EmberObject.extend({
-      hello: task(function*() {
-        yield new Promise(r => (resolve = r));
+      hello: task(function* () {
+        yield new Promise((r) => (resolve = r));
         assert.insideRunLoop();
       }),
     });
@@ -128,9 +128,9 @@ module('Unit | scheduler Ember layer', function(hooks) {
     return promise;
   });
 
-  test('task is canceled when object is destroyed', function(assert) {
+  test('task is canceled when object is destroyed', function (assert) {
     let Class = EmberObject.extend({
-      hello: task(function*() {
+      hello: task(function* () {
         let p = new Promise(() => null);
         registerCancellation(p, () => assert.log('task canceled'));
         yield p;
@@ -144,11 +144,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
     assert.logEquals(['task canceled']);
   });
 
-  test('task refuses to start on destroyed object', function(assert) {
+  test('task refuses to start on destroyed object', function (assert) {
     assert.expect(1);
 
     let Class = EmberObject.extend({
-      hello: task(function*() {
+      hello: task(function* () {
         assert.ok(false, 'should not run');
         yield new Promise(() => null);
       }),
@@ -163,11 +163,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
     );
   });
 
-  test('allows object to be safely destroyed by its own task', function(assert) {
+  test('allows object to be safely destroyed by its own task', function (assert) {
     assert.expect(1);
     let done = assert.async();
     let Class = EmberObject.extend({
-      hello: task(function*() {
+      hello: task(function* () {
         yield microwait();
         this.destroy();
       }),
@@ -182,11 +182,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('restartable task', function(assert) {
+  test('restartable task', function (assert) {
     assert.expect(2);
 
     let Class = EmberObject.extend({
-      hello: task(function*(shouldBlock) {
+      hello: task(function* (shouldBlock) {
         assert.log('task starting');
         if (shouldBlock) {
           let p = new Promise(() => null);
@@ -218,11 +218,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('drop task', function(assert) {
+  test('drop task', function (assert) {
     assert.expect(2);
 
     let Class = EmberObject.extend({
-      hello: task(function*(id, blockerPromise) {
+      hello: task(function* (id, blockerPromise) {
         assert.log(`task ${id} starting`);
         try {
           if (blockerPromise) {
@@ -241,7 +241,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     run(() => {
       promise = object
         .get('hello')
-        .perform('1', new Promise(r => (unblock = r)));
+        .perform('1', new Promise((r) => (unblock = r)));
     });
     run(() => {
       object.get('hello').perform('2', new Promise(() => {}));
@@ -253,15 +253,15 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('can use derived state', function(assert) {
+  test('can use derived state', function (assert) {
     assert.expect(5);
 
     let resolve;
     let Class = EmberObject.extend({
-      hello: task(function*() {
-        yield new Promise(r => (resolve = r));
+      hello: task(function* () {
+        yield new Promise((r) => (resolve = r));
       }),
-      message: computed('hello.isRunning', function() {
+      message: computed('hello.isRunning', function () {
         return this.get('hello.isRunning') ? 'yup' : 'nope';
       }),
     });
@@ -286,9 +286,9 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
   });
 
-  test('can perform tasks based on observation', async function(assert) {
+  test('can perform tasks based on observation', async function (assert) {
     let Class = EmberObject.extend({
-      hello: task(function*() {
+      hello: task(function* () {
         assert.log('ok');
       }).observes('foo'),
     });
@@ -300,11 +300,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
     assert.logEquals(['ok']);
   });
 
-  test('returns final value from generator function', function(assert) {
+  test('returns final value from generator function', function (assert) {
     assert.expect(1);
 
     let Class = EmberObject.extend({
-      hello: task(function*() {
+      hello: task(function* () {
         yield microwait();
         return 42;
       }),
@@ -314,14 +314,14 @@ module('Unit | scheduler Ember layer', function(hooks) {
     run(() => {
       promise = object.get('hello').perform();
     });
-    return promise.then(value => {
+    return promise.then((value) => {
       assert.strictEqual(value, 42);
     });
   });
 
-  test('task promise exposes microtask timing, not ember run loop', async function(assert) {
+  test('task promise exposes microtask timing, not ember run loop', async function (assert) {
     let Class = EmberObject.extend({
-      hello: task(function*() {}),
+      hello: task(function* () {}),
     });
     let object = Class.create();
     let promise;
@@ -333,16 +333,16 @@ module('Unit | scheduler Ember layer', function(hooks) {
     assert.notOk(insideRunLoop());
   });
 
-  test('nested performs are cancelable', function(assert) {
+  test('nested performs are cancelable', function (assert) {
     let Class = EmberObject.extend({
-      outer: task(function*() {
+      outer: task(function* () {
         try {
           yield this.get('inner').perform();
         } finally {
           assert.log('leaving outer');
         }
       }),
-      inner: task(function*() {
+      inner: task(function* () {
         let p = new Promise(() => null);
         registerCancellation(p, () => assert.log('canceled'));
         try {

@@ -13,18 +13,18 @@ export default Component.extend({
     this.rightItems = this.makeRightItems();
   },
 
-  transition: function*(context) {
+  transition: function* (context) {
     let { keptSprites, sentSprites, receivedSprites } = context;
 
-    keptSprites.forEach(sprite => {
+    keptSprites.forEach((sprite) => {
       parallel(move(sprite), scale(sprite));
     });
 
-    sentSprites.forEach(sprite => {
+    sentSprites.forEach((sprite) => {
       parallel(move(sprite), scale(sprite));
     });
 
-    receivedSprites.forEach(sprite => {
+    receivedSprites.forEach((sprite) => {
       sprite.moveToFinalPosition();
     });
   },

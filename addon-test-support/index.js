@@ -13,10 +13,7 @@ export function animationsSettled() {
   let idle;
   let { owner } = getContext();
   run(() => {
-    idle = owner
-      .lookup('service:-ea-motion')
-      .get('waitUntilIdle')
-      .perform();
+    idle = owner.lookup('service:-ea-motion').get('waitUntilIdle').perform();
   });
   return resolve(idle);
 }
@@ -57,14 +54,14 @@ export function boundsAndShape(element) {
 function checkFields(fields, tolerance, value, expected, message) {
   let filteredActual = Object.create(null);
   let filteredExpected = Object.create(null);
-  fields.forEach(field => {
+  fields.forEach((field) => {
     filteredActual[field] = value[field];
     filteredExpected[field] = expected[field];
   });
 
   this.pushResult({
     result: fields.every(
-      field => Math.abs(value[field] - expected[field]) < tolerance,
+      (field) => Math.abs(value[field] - expected[field]) < tolerance,
     ),
     actual: filteredActual,
     expected: filteredExpected,
@@ -93,7 +90,7 @@ export function approxEqualColors(value, expected, message) {
   let channels = ['r', 'g', 'b', 'a'];
   this.pushResult({
     result: channels.every(
-      channel =>
+      (channel) =>
         Math.abs(valueColor[channel] - expectedColor[channel]) < tolerance,
     ),
     actual: value,
@@ -105,7 +102,7 @@ export function approxEqualColors(value, expected, message) {
 export let time;
 
 export function setupAnimationTest(hooks) {
-  hooks.beforeEach(function(assert) {
+  hooks.beforeEach(function (assert) {
     time = new TimeControl();
     time.runAtSpeed(40);
 
@@ -131,7 +128,7 @@ export function setupAnimationTest(hooks) {
     assert.visuallyConstant = visuallyConstant;
     assert.approxEqualColors = approxEqualColors;
   });
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     time.finished();
     time = null;
   });

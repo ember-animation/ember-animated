@@ -12,11 +12,11 @@ const classPrototypes = [
   window.CharacterData,
   window.DocumentType,
 ]
-  .filter(klass => klass)
-  .map(klass => klass.prototype);
+  .filter((klass) => klass)
+  .map((klass) => klass.prototype);
 
-(function(arr) {
-  arr.forEach(function(item) {
+(function (arr) {
+  arr.forEach(function (item) {
     if (Object.prototype.hasOwnProperty.call(item, 'remove')) {
       return;
     }

@@ -40,9 +40,7 @@ export default class TimeControl {
     //   2. Our Tween system doesn't mark Tweens as done until they
     //   had a whole frame in their "done" state (see comments in
     //   ./tween.js).
-    return rAF()
-      .then(rAF)
-      .then(rAF);
+    return rAF().then(rAF).then(rAF);
   }
   runAtSpeed(factor) {
     this._timer = this.now();

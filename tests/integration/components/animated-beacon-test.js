@@ -4,12 +4,12 @@ import { render, settled } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { animationsSettled, bounds } from 'ember-animated/test-support';
 
-module('Integration | Component | animated-beacon', function(hooks) {
+module('Integration | Component | animated-beacon', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('beacons are available in transitions', async function(assert) {
+  test('beacons are available in transitions', async function (assert) {
     assert.expect(1);
-    this.set('transition', function*({ beacons }) {
+    this.set('transition', function* ({ beacons }) {
       assert.ok(beacons.thegroup, 'expected one beacon');
     });
 
@@ -28,12 +28,12 @@ module('Integration | Component | animated-beacon', function(hooks) {
     await animationsSettled();
   });
 
-  test('it picks up correct bounds', async function(assert) {
+  test('it picks up correct bounds', async function (assert) {
     assert.expect(4);
 
     let alpha;
 
-    this.set('transition', function*({ insertedSprites, beacons }) {
+    this.set('transition', function* ({ insertedSprites, beacons }) {
       let sprite = insertedSprites[0];
       sprite.startAtSprite(beacons.thegroup);
       let value = bounds(sprite.element);

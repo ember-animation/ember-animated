@@ -4,18 +4,18 @@ import { currentURL, visit, click } from '@ember/test-helpers';
 import { TimeControl } from 'ember-animated/test-support';
 import { animationsSettled } from 'ember-animated/test-support';
 
-module('Acceptance | here there', function(hooks) {
+module('Acceptance | here there', function (hooks) {
   setupApplicationTest(hooks);
   let time;
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     time = new TimeControl();
   });
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     time.finished();
     time = null;
   });
 
-  test('visiting /here-there', async function(assert) {
+  test('visiting /here-there', async function (assert) {
     await visit('/demos/here-there');
     assert.strictEqual(currentURL(), '/demos/here-there');
     assert.ok(
@@ -28,7 +28,7 @@ module('Acceptance | here there', function(hooks) {
     );
   });
 
-  test('toggling without grouping', async function(assert) {
+  test('toggling without grouping', async function (assert) {
     // this test is not supposed to animate, which is why we never
     // touch the TimeControl. If it erroneously animates, it will hang
     // and timeout.
@@ -44,7 +44,7 @@ module('Acceptance | here there', function(hooks) {
     );
   });
 
-  test('toggling with grouping', async function(assert) {
+  test('toggling with grouping', async function (assert) {
     await visit('/demos/here-there');
     await click(
       this.element.querySelector('.scenario-here-there input[type="checkbox"]'),

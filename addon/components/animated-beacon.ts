@@ -109,7 +109,7 @@ export default class AnimatedBeacon extends Component {
     return undefined;
   }
 
-  @task(function*(this: AnimatedBeacon) {
+  @task(function* (this: AnimatedBeacon) {
     let element = this._firstChildElement();
     if (!element) {
       return;
@@ -123,9 +123,7 @@ export default class AnimatedBeacon extends Component {
       offsetParent.measureFinalBounds();
       sprite.measureFinalBounds();
     });
-    yield this.get('motionService')
-      .get('addBeacon')
-      .perform(this.name, sprite);
+    yield this.get('motionService').get('addBeacon').perform(this.name, sprite);
   })
   participate!: ComputedProperty<Task>;
 }
