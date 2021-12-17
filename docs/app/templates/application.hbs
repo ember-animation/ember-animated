@@ -1,0 +1,10 @@
+{{!-- Support route-specific styles provided by ember-component-css. --}}
+{{#if this.routeStyleNamespaceClassSet}}
+  <div class={{this.routeStyleNamespaceClassSet}}>
+    {{outlet}}
+  </div>
+{{else}}
+  {{outlet}}
+{{/if}}
+
+{{animated-tools}}

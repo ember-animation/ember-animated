@@ -1,5 +1,14 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click, settled, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  settled,
+  fillIn,
+  waitFor,
+  waitUntil,
+  find,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupAnimationTest, time } from 'ember-animated/test-support';
 
@@ -95,11 +104,11 @@ module('Acceptance | smoke', function(hooks) {
 
   test('search functionality', async function(assert) {
     await visit('/');
-    await fillIn(
-      document.querySelector('[data-search-box] > input'),
-      'receivedSprites',
-    );
-    await settled();
+
+    await waitUntil(() => find('[data-search-box] > input').disabled === false);
+    await fillIn('[data-search-box] > input', 'receivedSprites');
+
+    await waitFor('[data-test-search-result-list]');
     assert
       .dom('[data-test-search-result-list]')
       .containsText('Animating Between Components');
