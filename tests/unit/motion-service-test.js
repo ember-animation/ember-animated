@@ -2,10 +2,10 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { wait } from 'ember-animated';
 
-module('Unit | Service | motion', function(hooks) {
+module('Unit | Service | motion', function (hooks) {
   setupTest(hooks);
 
-  test('it can do basic far matching', async function(assert) {
+  test('it can do basic far matching', async function (assert) {
     let service = this.owner.lookup('service:-ea-motion');
 
     let sprite1 = { owner: { id: 1 } };
@@ -24,7 +24,7 @@ module('Unit | Service | motion', function(hooks) {
     assert.ok(service);
   });
 
-  test('entangles animations with matches', async function(assert) {
+  test('entangles animations with matches', async function (assert) {
     let service = this.owner.lookup('service:-ea-motion');
     let log = [];
 
@@ -32,8 +32,8 @@ module('Unit | Service | motion', function(hooks) {
     let sprite2 = { owner: { id: 2 } };
 
     let resolveAnimation1, resolveAnimation2;
-    let animation1 = new Promise(r => (resolveAnimation1 = r));
-    let animation2 = new Promise(r => (resolveAnimation2 = r));
+    let animation1 = new Promise((r) => (resolveAnimation1 = r));
+    let animation2 = new Promise((r) => (resolveAnimation2 = r));
 
     let p1 = service.get('farMatch').perform(animation1, [], [], [sprite1]);
     let p2 = service
@@ -62,7 +62,7 @@ module('Unit | Service | motion', function(hooks) {
     ]);
   });
 
-  test('does not entangle animations without matches', async function(assert) {
+  test('does not entangle animations without matches', async function (assert) {
     let service = this.owner.lookup('service:-ea-motion');
     let log = [];
 
@@ -70,8 +70,8 @@ module('Unit | Service | motion', function(hooks) {
     let sprite2 = { owner: { id: 2 } };
 
     let resolveAnimation1, resolveAnimation2;
-    let animation1 = new Promise(r => (resolveAnimation1 = r));
-    let animation2 = new Promise(r => (resolveAnimation2 = r));
+    let animation1 = new Promise((r) => (resolveAnimation1 = r));
+    let animation2 = new Promise((r) => (resolveAnimation2 = r));
 
     let p1 = service.get('farMatch').perform(animation1, [], [], [sprite1]);
     let p2 = service.get('farMatch').perform(animation2, [sprite2], [], []);

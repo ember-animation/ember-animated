@@ -4,7 +4,7 @@ import moveSVG from 'ember-animated/motions/move-svg';
 import { parallel } from 'ember-animated';
 
 export default Controller.extend({
-  bubbles: computed(function() {
+  bubbles: computed(function () {
     let list = [];
     for (let id = 0; id < 10; id++) {
       list.push({
@@ -17,7 +17,7 @@ export default Controller.extend({
     return list;
   }),
 
-  moveThem: function*({ keptSprites }) {
+  moveThem: function* ({ keptSprites }) {
     keptSprites.forEach(
       parallel(
         moveSVG.property('cx'),

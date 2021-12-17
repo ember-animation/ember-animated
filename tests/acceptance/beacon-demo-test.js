@@ -8,16 +8,16 @@ import {
   animationsSettled,
 } from 'ember-animated/test-support';
 
-module('Acceptance | beacon demo', function(hooks) {
+module('Acceptance | beacon demo', function (hooks) {
   setupApplicationTest(hooks);
   setupAnimationTest(hooks);
 
-  test('visiting /beacon-demo', async function(assert) {
+  test('visiting /beacon-demo', async function (assert) {
     await visit('/demos/beacondemo');
     assert.strictEqual(currentURL(), '/demos/beacondemo');
   });
 
-  test('opening modal begins near button', async function(assert) {
+  test('opening modal begins near button', async function (assert) {
     await visit('/demos/beacondemo');
     time.pause();
     await click(this.element.querySelector('button'));
@@ -27,7 +27,7 @@ module('Acceptance | beacon demo', function(hooks) {
     assert.closeBounds(5, modal, button, 'modal should be near button');
   });
 
-  test('closing modal ends near button', async function(assert) {
+  test('closing modal ends near button', async function (assert) {
     await visit('/demos/beacondemo');
     await click(this.element.querySelector('button'));
     await animationsSettled();

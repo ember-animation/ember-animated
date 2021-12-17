@@ -31,7 +31,7 @@ export class Move extends Motion {
   interrupted(motions) {
     // We only need to track the prior Move we are replacing here,
     // because it will have done the same for any earlier ones.
-    this.prior = motions.find(m => m instanceof Move);
+    this.prior = motions.find((m) => m instanceof Move);
   }
 
   *animate() {

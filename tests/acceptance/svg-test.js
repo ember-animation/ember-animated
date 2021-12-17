@@ -7,13 +7,13 @@ import {
   bounds,
 } from 'ember-animated/test-support';
 
-module('Acceptance | svg', function(hooks) {
+module('Acceptance | svg', function (hooks) {
   setupApplicationTest(hooks);
 
   let time;
 
-  hooks.beforeEach(function(assert) {
-    assert.allClose = function(pixels, firstBoundSet, secondBoundSet) {
+  hooks.beforeEach(function (assert) {
+    assert.allClose = function (pixels, firstBoundSet, secondBoundSet) {
       for (let [id, firstBound] of Object.entries(firstBoundSet)) {
         let secondBound = secondBoundSet[id];
         assert.ok(secondBound, `found no matching bound for id=${id}`);
@@ -27,19 +27,19 @@ module('Acceptance | svg', function(hooks) {
     };
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     if (time) {
       time.finished();
       time = null;
     }
   });
 
-  test('visiting /svg', async function(assert) {
+  test('visiting /svg', async function (assert) {
     await visit('/demos/svg');
     assert.strictEqual(currentURL(), '/demos/svg');
   });
 
-  test('bubbles move smoothly at start of animation', async function(assert) {
+  test('bubbles move smoothly at start of animation', async function (assert) {
     await visit('/demos/svg');
     let initialBounds = boundsById(this.element.querySelectorAll('circle'));
     time = new TimeControl();
@@ -52,7 +52,7 @@ module('Acceptance | svg', function(hooks) {
     );
   });
 
-  test('bubbles move smoothly at end of animation', async function(assert) {
+  test('bubbles move smoothly at end of animation', async function (assert) {
     await visit('/demos/svg');
     time = new TimeControl();
     await click(this.element.querySelector('button'));

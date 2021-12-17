@@ -34,7 +34,7 @@ export class BoxShadowMotion extends Motion {
     while (!shadowTween.done) {
       this.sprite.applyStyles({
         'box-shadow': shadowTween.currentValue
-          .map(shadow => shadow.toString())
+          .map((shadow) => shadow.toString())
           .join(','),
       });
       yield rAF();

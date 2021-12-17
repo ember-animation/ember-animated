@@ -14,7 +14,7 @@ export default Component.extend({
     this.get('startProgress').perform();
   },
 
-  startProgress: task(function*() {
+  startProgress: task(function* () {
     let totalMilliseconds = 5000;
     let millisecondsPerPercent = totalMilliseconds / 100;
 
@@ -26,7 +26,7 @@ export default Component.extend({
     this.get('onDismiss')();
   }),
 
-  progressWidthStyle: computed('progress', function() {
+  progressWidthStyle: computed('progress', function () {
     return htmlSafe(`width: ${this.get('progress')}%`);
   }),
 

@@ -714,7 +714,7 @@ export default class Sprite {
   _cacheOriginalStyles() {
     let cache: Sprite['_styleCache'] = {};
     let style = (this.element as HTMLElement).style;
-    Object.keys(this._imposedStyle!).forEach(property => {
+    Object.keys(this._imposedStyle!).forEach((property) => {
       (cache as any)[property] = (style as any)[property];
     });
     this._styleCache = cache;
@@ -742,7 +742,7 @@ export default class Sprite {
     );
     inFlight.delete(this.element);
     let cache = this._styleCache!;
-    Object.keys(cache).forEach(property => {
+    Object.keys(cache).forEach((property) => {
       setStyle(this.element as HTMLElement, property, cache[property]);
     });
 
@@ -777,15 +777,16 @@ export default class Sprite {
       throw new Error("can't apply styles to non-lockable sprite");
     }
     if (styles !== this._imposedStyle) {
-      Object.keys(styles).forEach(property => {
+      Object.keys(styles).forEach((property) => {
         if (this._imposedStyle![property] == null) {
-          this._styleCache![property] = (this
-            .element as HTMLElement).style.getPropertyValue(property);
+          this._styleCache![property] = (
+            this.element as HTMLElement
+          ).style.getPropertyValue(property);
         }
         this._imposedStyle![property] = styles[property as keyof T];
       });
     }
-    Object.keys(styles).forEach(property => {
+    Object.keys(styles).forEach((property) => {
       let val = styles[property as keyof T];
       if (typeof val !== 'string') {
         throw new Error(

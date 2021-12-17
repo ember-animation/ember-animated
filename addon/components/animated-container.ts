@@ -151,7 +151,7 @@ export default class AnimatedContainerComponent extends Component {
     }
   }
 
-  @(task(function*(
+  @task(function* (
     this: AnimatedContainerComponent,
     duration: number,
     animationTask: Promise<void>,
@@ -197,6 +197,6 @@ export default class AnimatedContainerComponent extends Component {
 
     this.sprite!.unlock();
     this.sprite = null;
-  }).restartable())
+  }).restartable()
   animate!: ComputedProperty<Task>;
 }

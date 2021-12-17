@@ -35,7 +35,7 @@ export default Component.extend({
     return motions;
   },
 
-  transition: function*({ sentSprites }) {
+  transition: function* ({ sentSprites }) {
     let motions = this.motions();
     sentSprites.forEach(parallel(...motions));
   },

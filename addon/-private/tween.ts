@@ -50,7 +50,7 @@ export class DerivedTween {
     private combinator: (...inputs: (Tween | DerivedTween)[]) => number,
   ) {
     this._finalValue = null;
-    this.inputs = inputs.map(t => {
+    this.inputs = inputs.map((t) => {
       if (t.done) {
         // If one of our inputs has already finished, we can just keep its final
         // value around and drop the reference to the original Tween. This
@@ -76,7 +76,7 @@ export class DerivedTween {
     return this.combinator(...this.inputs);
   }
   get done(): boolean {
-    return !this.inputs.find(t => !t.done);
+    return !this.inputs.find((t) => !t.done);
   }
 }
 
@@ -85,7 +85,7 @@ class MotionCurve {
   // same duration that start in the same animation frame.
   static findOrCreate(duration: number, easing: (t: number) => number) {
     let shared = currentCurves.find(
-      c => c.duration === duration && c.easing === easing,
+      (c) => c.duration === duration && c.easing === easing,
     );
     if (shared) {
       return shared;

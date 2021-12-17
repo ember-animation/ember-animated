@@ -3,7 +3,8 @@ import { Tween } from '.';
 import linear from './easings/linear';
 import './element-remove';
 
-const innerPattern = /^ (\d+)px (\d+)px(?: (\d+)px)?(?: (\d+)px)?( inset)?(?:, )?/;
+const innerPattern =
+  /^ (\d+)px (\d+)px(?: (\d+)px)?(?: (\d+)px)?( inset)?(?:, )?/;
 
 export class BoxShadow {
   static fromComputedStyle(string: string) {
@@ -119,10 +120,10 @@ export class BoxShadowTween {
     );
   }
   get currentValue() {
-    return this.shadowTweens.map(tween => tween.currentValue);
+    return this.shadowTweens.map((tween) => tween.currentValue);
   }
   get done() {
-    return this.shadowTweens.every(tween => tween.done);
+    return this.shadowTweens.every((tween) => tween.done);
   }
 }
 
@@ -181,6 +182,6 @@ class OneShadowTween {
       this.yTween,
       this.blurTween,
       this.spreadTween,
-    ].every(tween => tween.done);
+    ].every((tween) => tween.done);
   }
 }

@@ -9,11 +9,11 @@ import {
 } from 'ember-animated/test-support';
 import QUnit from 'qunit';
 
-module('Acceptance | each demo', function(hooks) {
+module('Acceptance | each demo', function (hooks) {
   setupApplicationTest(hooks);
   setupAnimationTest(hooks);
 
-  test('visiting /eachdemo', async function(assert) {
+  test('visiting /eachdemo', async function (assert) {
     await visit('demos/eachdemo');
     assert.strictEqual(currentURL(), 'demos/eachdemo');
     assert.ok(
@@ -22,9 +22,9 @@ module('Acceptance | each demo', function(hooks) {
     );
   });
 
-  hooks.beforeEach(function(assert) {
-    assert.listContents = function(elts, expected, message) {
-      let values = [...elts].map(e => e.textContent.trim());
+  hooks.beforeEach(function (assert) {
+    assert.listContents = function (elts, expected, message) {
+      let values = [...elts].map((e) => e.textContent.trim());
       this.pushResult({
         result: QUnit.equiv(values, expected),
         actual: values,
@@ -34,7 +34,7 @@ module('Acceptance | each demo', function(hooks) {
     };
   });
 
-  test('/eachdemo first removal', async function(assert) {
+  test('/eachdemo first removal', async function (assert) {
     await visit('/demos/eachdemo');
     let APosition = bounds(this.element.querySelector('[data-test-item="A"]'));
     let BPosition = bounds(this.element.querySelector('[data-test-item="B"]'));

@@ -21,22 +21,22 @@ export default Component.extend({
     return result;
   },
 
-  transition: function*({
+  transition: function* ({
     insertedSprites,
     keptSprites,
     removedSprites,
     beacons,
   }) {
-    insertedSprites.forEach(sprite => {
+    insertedSprites.forEach((sprite) => {
       sprite.startAtSprite(beacons.add);
       parallel(move(sprite, scale(sprite)));
     });
 
-    keptSprites.forEach(sprite => {
+    keptSprites.forEach((sprite) => {
       move(sprite, scale(sprite));
     });
 
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       sprite.endAtSprite(beacons.trash);
       parallel(move(sprite, scale(sprite)));
     });
@@ -57,7 +57,10 @@ export default Component.extend({
     removeItem(which) {
       let items = this.get('items');
       let index = items.indexOf(which);
-      this.set('items', items.filter(i => i !== which));
+      this.set(
+        'items',
+        items.filter((i) => i !== which),
+      );
       if (this.get('deleteUndo')) {
         later(() => this.send('restoreItem', which, index), 1000);
       }

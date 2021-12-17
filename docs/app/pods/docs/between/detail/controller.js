@@ -10,10 +10,10 @@ export default Controller.extend({
   scrolling to the top of the page every time, see scroll-to-top */
   preserveScrollPosition: true,
 
-  transition: function*({ receivedSprites, sentSprites, removedSprites }) {
+  transition: function* ({ receivedSprites, sentSprites, removedSprites }) {
     printSprites(arguments[0]);
     // received and sent sprites are flying above all the others
-    receivedSprites.concat(sentSprites).forEach(sprite => {
+    receivedSprites.concat(sentSprites).forEach((sprite) => {
       sprite.applyStyles({
         'z-index': '1',
       });
@@ -22,7 +22,7 @@ export default Controller.extend({
     receivedSprites.forEach(parallel(move, scale));
     sentSprites.forEach(parallel(move, scale));
 
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       sprite.endTranslatedBy(0, 0);
       continuePrior(sprite);
       opacity(sprite, { to: 0 });

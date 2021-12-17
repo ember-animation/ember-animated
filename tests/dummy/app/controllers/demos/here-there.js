@@ -7,11 +7,11 @@ export default Controller.extend({
   showLeft: true,
   showRight: not('showLeft'),
 
-  transition: function*({ receivedSprites }) {
+  transition: function* ({ receivedSprites }) {
     receivedSprites.forEach(move);
   },
 
-  howToGroup: computed('groupTogether', function() {
+  howToGroup: computed('groupTogether', function () {
     if (this.get('groupTogether')) {
       return 'together';
     }

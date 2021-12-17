@@ -7,16 +7,16 @@ import { parallel } from 'ember-animated';
 export default Controller.extend({
   showingModal: false,
 
-  transition: function*(context) {
+  transition: function* (context) {
     let { insertedSprites, removedSprites, keptSprites, beacons } = context;
-    insertedSprites.forEach(sprite => {
+    insertedSprites.forEach((sprite) => {
       sprite.startAtSprite(beacons.beacontest);
       parallel(move(sprite, scale(sprite)));
     });
 
     keptSprites.forEach(move);
 
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       sprite.endAtSprite(beacons.beacontest);
       parallel(move(sprite, scale(sprite), opacity));
     });

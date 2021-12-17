@@ -7,16 +7,16 @@ export default Controller.extend({
   scrolling to the top of the page every time, see scroll-to-top */
   preserveScrollPosition: true,
 
-  transition: function*({ insertedSprites, receivedSprites, removedSprites }) {
-    insertedSprites.forEach(sprite => {
+  transition: function* ({ insertedSprites, receivedSprites, removedSprites }) {
+    insertedSprites.forEach((sprite) => {
       opacity(sprite, { from: 0, to: 1 });
     });
 
-    receivedSprites.forEach(sprite => {
+    receivedSprites.forEach((sprite) => {
       opacity(sprite, { to: 1 });
     });
 
-    removedSprites.forEach(sprite => {
+    removedSprites.forEach((sprite) => {
       opacity(sprite, { to: 0 });
     });
   },

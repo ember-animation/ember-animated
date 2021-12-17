@@ -4,11 +4,11 @@ import { render, click } from '@ember/test-helpers';
 import { time, setupAnimationTest, bounds } from 'ember-animated/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Sprites Example', function(hooks) {
+module('Integration | Sprites Example', function (hooks) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     await render(hbs`
     {{sprites-example}}
     `);
@@ -19,7 +19,7 @@ module('Integration | Sprites Example', function(hooks) {
     );
   });
 
-  test('adding an email', async function(assert) {
+  test('adding an email', async function (assert) {
     await render(hbs`
     {{sprites-example}}
     `);
@@ -32,7 +32,7 @@ module('Integration | Sprites Example', function(hooks) {
     );
   });
 
-  test('deleting an email', async function(assert) {
+  test('deleting an email', async function (assert) {
     await render(hbs`
     {{sprites-example}}
     `);
@@ -47,7 +47,7 @@ module('Integration | Sprites Example', function(hooks) {
     );
   });
 
-  test('transitions get logged to screen', async function(assert) {
+  test('transitions get logged to screen', async function (assert) {
     await render(hbs`
       {{#transition-log-table as |logTransition|}}
         {{logged-sprites logTransition=logTransition}}
@@ -69,8 +69,5 @@ module('Integration | Sprites Example', function(hooks) {
 });
 
 function loggedWords(tdElement) {
-  return tdElement.textContent
-    .trim()
-    .split(',')
-    .filter(Boolean);
+  return tdElement.textContent.trim().split(',').filter(Boolean);
 }

@@ -5,7 +5,7 @@ export default function adjustColor(propertyName, sprite, opts) {
   return new AdjustColor(propertyName, sprite, opts).run();
 }
 
-adjustColor.property = function(propertyName) {
+adjustColor.property = function (propertyName) {
   return this.bind(null, propertyName);
 };
 

@@ -12,30 +12,30 @@ function normalize(dimension, direction) {
   let startTranslatedBy;
   let endTranslatedBy;
   if (dimension.toLowerCase() === 'x') {
-    size = bounds => bounds.width;
+    size = (bounds) => bounds.width;
     if (direction > 0) {
-      position = bounds => bounds.left;
+      position = (bounds) => bounds.left;
       startTranslatedBy = (sprite, distance) =>
         sprite.startTranslatedBy(distance, 0);
       endTranslatedBy = (sprite, distance) =>
         sprite.endTranslatedBy(distance, 0);
     } else {
-      position = bounds => -bounds.right;
+      position = (bounds) => -bounds.right;
       startTranslatedBy = (sprite, distance) =>
         sprite.startTranslatedBy(-distance, 0);
       endTranslatedBy = (sprite, distance) =>
         sprite.endTranslatedBy(-distance, 0);
     }
   } else {
-    size = bounds => bounds.height;
+    size = (bounds) => bounds.height;
     if (direction > 0) {
-      position = bounds => bounds.top;
+      position = (bounds) => bounds.top;
       startTranslatedBy = (sprite, distance) =>
         sprite.startTranslatedBy(0, distance);
       endTranslatedBy = (sprite, distance) =>
         sprite.endTranslatedBy(0, distance);
     } else {
-      position = bounds => -bounds.bottom;
+      position = (bounds) => -bounds.bottom;
       startTranslatedBy = (sprite, distance) =>
         sprite.startTranslatedBy(0, -distance);
       endTranslatedBy = (sprite, distance) =>
@@ -67,7 +67,7 @@ export default function* moveOver(dimension, direction, context) {
     // if any leaving sprites still hang outside the viewport to the
     // left, they add to our offset because the new sprite will be to
     // their left.
-    context.removedSprites.forEach(sprite => {
+    context.removedSprites.forEach((sprite) => {
       let o = position(viewport) - position(sprite.initialBounds);
       if (o > offset) {
         offset = o;
@@ -95,7 +95,7 @@ export default function* moveOver(dimension, direction, context) {
   } else if (context.keptSprites.length) {
     let move = new Move(context.keptSprites[0]);
     move.run();
-    context.removedSprites.forEach(sprite => {
+    context.removedSprites.forEach((sprite) => {
       follow(sprite, { source: move });
     });
   } else {

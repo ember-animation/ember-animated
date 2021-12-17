@@ -11,8 +11,8 @@ function makeSprite() {
   return Sprite.positionedStartingAt(target, p);
 }
 
-module('Unit | Opacity', function(hooks) {
-  hooks.beforeEach(function() {
+module('Unit | Opacity', function (hooks) {
+  hooks.beforeEach(function () {
     time = new TimeControl();
 
     tester = MotionTester.create({
@@ -28,11 +28,11 @@ module('Unit | Opacity', function(hooks) {
     target.style.height = '400px';
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     time.finished();
   });
 
-  test('fade in', async function(assert) {
+  test('fade in', async function (assert) {
     assert.expect(2);
     target.style.opacity = 0;
     let sprite = makeSprite();
@@ -45,7 +45,7 @@ module('Unit | Opacity', function(hooks) {
     assert.strictEqual(target.style.opacity, '1');
   });
 
-  test('fade in to preexisting opacity', async function(assert) {
+  test('fade in to preexisting opacity', async function (assert) {
     assert.expect(2);
     target.style.opacity = 0;
     let sprite = makeSprite();
@@ -57,7 +57,7 @@ module('Unit | Opacity', function(hooks) {
     assert.strictEqual(target.style.opacity, '0.75');
   });
 
-  test('fade out', async function(assert) {
+  test('fade out', async function (assert) {
     assert.expect(2);
     target.style.opacity = 1;
     let sprite = makeSprite();
@@ -71,7 +71,7 @@ module('Unit | Opacity', function(hooks) {
     assert.strictEqual(target.style.opacity, '0');
   });
 
-  test('fade out to preexisting opacity', async function(assert) {
+  test('fade out to preexisting opacity', async function (assert) {
     assert.expect(2);
     target.style.opacity = 1;
     let sprite = makeSprite();
@@ -85,7 +85,7 @@ module('Unit | Opacity', function(hooks) {
     assert.strictEqual(target.style.opacity, '0.3');
   });
 
-  test('interrupt', async function(assert) {
+  test('interrupt', async function (assert) {
     assert.expect(2);
     target.style.opacity = 0;
     let sprite = makeSprite();

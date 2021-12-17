@@ -4,7 +4,7 @@ export default function moveSVG(dimension, sprite, opts) {
   return new MoveSVG(dimension, sprite, opts).run();
 }
 
-moveSVG.property = function(propertyName) {
+moveSVG.property = function (propertyName) {
   return this.bind(null, propertyName);
 };
 
@@ -18,7 +18,7 @@ export class MoveSVG extends Motion {
 
   interrupted(motions) {
     this.prior = motions.find(
-      m => m instanceof MoveSVG && m.dimension === this.dimension,
+      (m) => m instanceof MoveSVG && m.dimension === this.dimension,
     );
   }
 
@@ -40,9 +40,8 @@ export class MoveSVG extends Motion {
       );
     }
     while (!this.tween.done) {
-      this.sprite.element[
-        this.dimension
-      ].baseVal.value = this.tween.currentValue;
+      this.sprite.element[this.dimension].baseVal.value =
+        this.tween.currentValue;
       yield rAF();
     }
   }

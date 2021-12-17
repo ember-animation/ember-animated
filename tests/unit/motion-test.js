@@ -7,8 +7,8 @@ import { logErrors } from 'ember-animated/-private/scheduler';
 
 let tester;
 
-module('Unit | Motion', function(hooks) {
-  hooks.beforeEach(function() {
+module('Unit | Motion', function (hooks) {
+  hooks.beforeEach(function () {
     let fixture = document.querySelector('#qunit-fixture');
     fixture.innerHTML = `
         <div class="target"></div>
@@ -16,11 +16,11 @@ module('Unit | Motion', function(hooks) {
     tester = MotionTester.create();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     document.querySelector('#qunit-fixture').innerHTML = '';
   });
 
-  test('Can be canceled within ember-concurrency tasks', function(assert) {
+  test('Can be canceled within ember-concurrency tasks', function (assert) {
     assert.expect(2);
 
     class TestMotion extends Motion {
@@ -57,12 +57,12 @@ module('Unit | Motion', function(hooks) {
       });
   });
 
-  test('results in Task failure when animation throws asynchronously', function(assert) {
+  test('results in Task failure when animation throws asynchronously', function (assert) {
     assert.expect(1);
 
     class TestMotion extends Motion {
       *animate() {
-        logErrors(err => {
+        logErrors((err) => {
           if (err.message !== 'simulated failure') {
             throw err;
           }
@@ -81,7 +81,7 @@ module('Unit | Motion', function(hooks) {
           assert.ok(false, 'Not supposed to succeed');
           done();
         },
-        error => {
+        (error) => {
           assert.strictEqual(
             error ? error.message : undefined,
             'simulated failure',
@@ -92,12 +92,12 @@ module('Unit | Motion', function(hooks) {
     });
   });
 
-  test('results in Task failure when animation throws synchronously', function(assert) {
+  test('results in Task failure when animation throws synchronously', function (assert) {
     assert.expect(1);
 
     class TestMotion extends Motion {
       *animate() {
-        logErrors(err => {
+        logErrors((err) => {
           if (err.message !== 'simulated failure') {
             throw err;
           }
@@ -115,7 +115,7 @@ module('Unit | Motion', function(hooks) {
           assert.ok(false, 'Not supposed to succeed');
           done();
         },
-        error => {
+        (error) => {
           assert.strictEqual(
             error ? error.message : undefined,
             'simulated failure',

@@ -7,10 +7,10 @@ import { equalBounds } from '../helpers/assertions';
 const FAST = 40;
 
 let time;
-module('Acceptance | hero', function(hooks) {
+module('Acceptance | hero', function (hooks) {
   setupApplicationTest(hooks);
 
-  hooks.beforeEach(assert => {
+  hooks.beforeEach((assert) => {
     assert.equalBounds = equalBounds;
     time = new TimeControl();
     time.runAtSpeed(FAST);
@@ -21,17 +21,17 @@ module('Acceptance | hero', function(hooks) {
     time = null;
   });
 
-  test('visiting /hero', async function(assert) {
+  test('visiting /hero', async function (assert) {
     await visit('/demos/hero');
     assert.strictEqual(currentURL(), '/demos/hero');
   });
 
-  test('visiting /hero/1', async function(assert) {
+  test('visiting /hero/1', async function (assert) {
     await visit('/demos/hero/1');
     assert.strictEqual(currentURL(), '/demos/hero/1');
   });
 
-  test('index to detail', async function(assert) {
+  test('index to detail', async function (assert) {
     await visit('/demos/hero');
     time.pause();
     await click('.hero-list-image');
@@ -49,13 +49,14 @@ module('Acceptance | hero', function(hooks) {
     assert.strictEqual(currentURL(), '/demos/hero/0');
   });
 
-  test('detail to index', async function(assert) {
+  test('detail to index', async function (assert) {
     await visit('/demos/hero/0');
     time.pause();
     await click('.hero-detail a');
     await time.advance(50);
-    let images = this.element.querySelectorAll('.hero-list .hero-list-image')
-      .length;
+    let images = this.element.querySelectorAll(
+      '.hero-list .hero-list-image',
+    ).length;
     let hiddenImages = this.element.querySelectorAll(
       '.hero-list .hero-list-image.ember-animated-hidden',
     ).length;
@@ -66,7 +67,7 @@ module('Acceptance | hero', function(hooks) {
     assert.strictEqual(currentURL(), '/demos/hero');
   });
 
-  test('index to detail with interruption', async function(assert) {
+  test('index to detail with interruption', async function (assert) {
     await visit('/demos/hero');
     time.pause();
     await click('.hero-list-image');

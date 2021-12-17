@@ -7,23 +7,23 @@ import { findByText } from '../helpers/dom';
 
 let time;
 
-module('Acceptance | value demo', function(hooks) {
+module('Acceptance | value demo', function (hooks) {
   setupApplicationTest(hooks);
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     time = new TimeControl();
     time.runAtSpeed(40);
   });
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     time.finished();
     time = null;
   });
 
-  test('visiting /valuedemo', async function(assert) {
+  test('visiting /valuedemo', async function (assert) {
     await visit('demos/valuedemo');
     assert.strictEqual(currentURL(), 'demos/valuedemo');
   });
 
-  test('clicking the button', async function(assert) {
+  test('clicking the button', async function (assert) {
     let number;
 
     await visit('/demos/valuedemo');

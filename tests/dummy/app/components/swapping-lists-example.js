@@ -7,7 +7,7 @@ export default Component.extend({
     'animateSendingSide',
     'moveSent',
     'moveReceived',
-    function() {
+    function () {
       if (this.get('animateSendingSide')) {
         return this.moveSent;
       } else {
@@ -16,18 +16,18 @@ export default Component.extend({
     },
   ),
 
-  moveReceived: function*({ receivedSprites, insertedSprites }) {
+  moveReceived: function* ({ receivedSprites, insertedSprites }) {
     receivedSprites.forEach(move);
     // without this, they won't reveal until the end of the whole
     // transition
-    insertedSprites.forEach(s => s.reveal());
+    insertedSprites.forEach((s) => s.reveal());
   },
 
-  moveSent: function*({ sentSprites, insertedSprites }) {
+  moveSent: function* ({ sentSprites, insertedSprites }) {
     sentSprites.forEach(move);
     // without this, they won't reveal until the end of the whole
     // transition
-    insertedSprites.forEach(s => s.reveal());
+    insertedSprites.forEach((s) => s.reveal());
   },
 
   init() {

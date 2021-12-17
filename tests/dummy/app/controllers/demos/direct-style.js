@@ -5,7 +5,7 @@ import EmberObject, { computed } from '@ember/object';
 import move from 'ember-animated/motions/move';
 
 let Item = EmberObject.extend({
-  style: computed('x', 'y', function() {
+  style: computed('x', 'y', function () {
     return htmlSafe(
       `top: ${parseFloat(this.get('y'))}px; left: ${parseFloat(
         this.get('x'),
@@ -15,11 +15,11 @@ let Item = EmberObject.extend({
 });
 
 export default Controller.extend({
-  transition: function*({ keptSprites }) {
+  transition: function* ({ keptSprites }) {
     keptSprites.forEach(move);
   },
 
-  items: computed(function() {
+  items: computed(function () {
     let items = A();
     for (let i = 0; i < 4; i++) {
       items.push(Item.create({ id: i, x: somewhere(), y: somewhere() }));
@@ -28,7 +28,7 @@ export default Controller.extend({
   }),
   actions: {
     go() {
-      this.get('items').forEach(i => {
+      this.get('items').forEach((i) => {
         i.set('x', somewhere());
         i.set('y', somewhere());
       });

@@ -8,11 +8,11 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import { currentURL, visit, click } from '@ember/test-helpers';
 
-module('Acceptance | orphan', function(hooks) {
+module('Acceptance | orphan', function (hooks) {
   setupApplicationTest(hooks);
   setupAnimationTest(hooks);
 
-  test('visiting /orphan', async function(assert) {
+  test('visiting /orphan', async function (assert) {
     time.pause();
     await visit('/demos/orphan');
     await time.advance(1000);
@@ -35,7 +35,7 @@ module('Acceptance | orphan', function(hooks) {
     assert.strictEqual(currentURL(), '/demos/orphan');
   });
 
-  test('toggle /orphan out', async function(assert) {
+  test('toggle /orphan out', async function (assert) {
     await visit('/demos/orphan');
     await animationsSettled();
 

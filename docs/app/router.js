@@ -6,9 +6,9 @@ export default class Router extends AddonDocsRouter {
   rootURL = config.rootURL;
 }
 
-Router.map(function() {
-  docsRoute(this, function() {
-    this.route('between', function() {
+Router.map(function () {
+  docsRoute(this, function () {
+    this.route('between', function () {
       this.route('detail', { path: '/:id' });
     });
     this.route('sprites');
