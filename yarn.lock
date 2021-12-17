@@ -7355,14 +7355,6 @@ ember-maybe-import-regenerator@^0.1.5:
     ember-cli-babel "^7.26.6"
     regenerator-runtime "^0.13.2"
 
-ember-named-arguments-polyfill@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ember-named-arguments-polyfill/-/ember-named-arguments-polyfill-1.0.0.tgz#0b81fb81a7cef2c89e9e1d0278b579e708bf4ded"
-  integrity sha1-C4H7gafO8sienh0CeLV55wi/Te0=
-  dependencies:
-    ember-cli-babel "^6.6.0"
-    ember-cli-version-checker "^2.1.2"
-
 ember-qunit@^5.1.5:
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/ember-qunit/-/ember-qunit-5.1.5.tgz#24a7850f052be24189ff597dfc31b923e684c444"
