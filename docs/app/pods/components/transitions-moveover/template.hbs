@@ -1,9 +1,16 @@
 {{!BEGIN-SNIPPET transitions-moveover-snippet.hbs}}
 <div class="move-over">
-  <label>Show Hello<input type="checkbox" checked={{showHello}} onchange={{action (mut showHello) (not showHello)}}></label>
+  <label>
+    Show Hello
+    <input
+      type="checkbox"
+      checked={{this.showHello}}
+      {{on "change" (fn (mut this.showHello) (not this.showHello))}}
+    >
+  </label>
 
   <AnimatedContainer>
-    {{#animated-if showHello rules=rules}}
+    {{#animated-if this.showHello rules=this.rules}}
       <div class="hello">
         Hello
       </div>

@@ -1,7 +1,7 @@
 {{! BEGIN-SNIPPET moving-word-snippet.hbs}}
 <AnimatedContainer class="moving-word">
-  {{#animated-value text use=transition duration=duration}}
-    <span>{{text}}</span>
+  {{#animated-value @text use=this.transition duration=this.duration}}
+    <span>{{@text}}</span>
   {{/animated-value}}
 </AnimatedContainer>
 {{! END-SNIPPET }}

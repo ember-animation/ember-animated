@@ -21,20 +21,3 @@
   @extend .opacity-50;
   @extend .pointer-events-none;
 }
-
-.nudge-r-0 {
-  transform: translateX(0);
-}
-.nudge-r-5 {
-  transform: translateX(1.25rem);
-}
-.nudge-r-10 {
-  transform: translateX(2.5rem);
-}
-.-nudge-r-10 {
-  transform: translateX(-2.5rem);
-}
-
-.w-15 {
-  width: 3.75rem;
-}

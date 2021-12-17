@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { task, timeout } from 'ember-concurrency';
-import { computed } from '@ember/object';
+import { computed, action } from '@ember/object';
 import { htmlSafe } from '@ember/string';
 
 export default Component.extend({
@@ -30,13 +30,11 @@ export default Component.extend({
     return htmlSafe(`width: ${this.get('progress')}%`);
   }),
 
-  actions: {
-    cancelProgress() {
-      this.get('startProgress').cancelAll();
-    },
+  cancelProgress: action(function () {
+    this.get('startProgress').cancelAll();
+  }),
 
-    resumeProgress() {
-      this.get('startProgress').perform();
-    },
-  },
+  resumeProgress: action(function () {
+    this.get('startProgress').perform();
+  }),
 });

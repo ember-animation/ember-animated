@@ -1,6 +1,6 @@
-{{ea-docs-header}}
+<EaDocsHeader />
 
-{{docs-hero}}
+<DocsHero />
 
 <div class="my-20 w-full max-w-md lg:max-w-2xl mx-auto px-4">
   <div class="text-center max-w-lg mx-auto">
@@ -13,7 +13,7 @@
   </div>
 
   <div class="mt-16">
-    {{index/demo-1}}
+    <Index::Demo-1 />
   </div>
 
   <div class="text-center mt-32 max-w-lg mx-auto">
@@ -26,7 +26,7 @@
   </div>
 
   <div class="mt-16">
-    {{index/demo-2}}
+    <Index::Demo-2 />
   </div>
 
   <div class="text-center mt-32 max-w-lg mx-auto">
@@ -39,7 +39,7 @@
   </div>
 
   <div class="mt-16">
-    {{index/demo-3}}
+    <Index::Demo-3 />
   </div>
 </div>
 
@@ -47,7 +47,7 @@
   <div class="w-full max-w-md lg:max-w-2xl mx-auto py-32 px-4 text-center text-white">
     <h1 class='leading-tight text-4xl lg:text-5xl'>Ready to dive in?</h1>
     <div class="mt-4">
-      {{#link-to 'docs' class='text-xl text-white'}}Read the docs{{/link-to}}
+      <LinkTo @route="docs" class="text-xl text-white">Read the docs</LinkTo>
     </div>
   </div>
 </div>

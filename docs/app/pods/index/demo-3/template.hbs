@@ -3,19 +3,22 @@
     <div class="rounded-lg overflow-hidden shadow-lg mb-8">
       <div class="bg-white p-4">
         <div class="flex justify-between -mx-2">
-          {{#each categories as |category|}}
-            <button {{action (mut selectedCategoryName) category.name}}
+          {{#each this.categories as |category|}}
+            <button
               class='w-1/3 mx-2 rounded py-2 focus:outline-none group focus:text-blue'
+              type="button"
+              {{on "click" (fn (mut this.selectedCategoryName) category.name)}}
             >
-              <p class='font-semibold {{if (eq selectedCategoryName category.name) 'text-blue'}}'>
+              <p class='font-semibold {{if (eq this.selectedCategoryName category.name) 'text-blue'}}'>
                 {{category.name}}
               </p>
               <div class="mt-4 w-full">
                 <div class="aspect-ratio-square bg-grey-lighter shadow-inner">
                   {{#animated-each
-                    (if (not-eq selectedCategoryName category.name) category.images)
+                    (if (not-eq this.selectedCategoryName category.name) category.images)
                     use=this.collapse
-                  as |image index|}}
+                    as |image index|
+                  }}
                     <div
                       class='
                         pin absolute bg-cover rounded
@@ -34,30 +37,33 @@
 
         <div class="w-4/5 mx-auto mt-4 pb-6">
           <AnimatedContainer>
-            {{#animated-each selectedCategory.images
+            {{#animated-each
+              this.selectedCategory.images
               use=(if this.staggerEnabled this.shuffleWithStagger this.shuffle)
-            as |image|}}
-              <div class='aspect-ratio-square bg-cover mt-6 rounded-lg shadow-md'
-                style={{background-image image}}></div>
+              as |image|
+            }}
+              <div
+                class='aspect-ratio-square bg-cover mt-6 rounded-lg shadow-md'
+                style={{background-image image}}
+              ></div>
             {{/animated-each}}
           </AnimatedContainer>
         </div>
       </div>
 
-      {{#index/components/toggle-bar
-        enabled=this.staggerEnabled
-        onToggle=(action (mut this.staggerEnabled))
-      }}
+      <Index::Components::ToggleBar
+        @enabled={{this.staggerEnabled}}
+        @onToggle={{fn (mut this.staggerEnabled)}}>
         ✨Stagger
-      {{/index/components/toggle-bar}}
+      </Index::Components::ToggleBar>
     </div>
   </div>
 
   <div class='lg:w-3/5 lg:mx-4 overflow-hidden'>
-    {{index/utils/animated-code-diff
-      label='component.js'
-      diff=this.componentDiff
-      isShowingFinal=this.staggerEnabled
-    }}
+    <Index::Utils::AnimatedCodeDiff
+      @label="component.js"
+      @diff={{this.componentDiff}}
+      @isShowingFinal={{this.staggerEnabled}}
+    />
   </div>
 </div>

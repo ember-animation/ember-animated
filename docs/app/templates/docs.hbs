@@ -1,8 +1,8 @@
-{{ea-docs-header}}
+<EaDocsHeader />
 
-{{#docs-viewer as |viewer|}}
+<DocsViewer as |viewer|>
 
-  {{#viewer.nav as |nav|}}
+  <viewer.nav as |nav|>
     {{nav.section "Overview"}}
     {{nav.item "Installation" "docs.index"}}
 
@@ -14,12 +14,12 @@
     {{nav.item "Animating Between Components" "docs.between"}}
     {{nav.item "Beacons" "docs.beacons"}}
 
-  {{/viewer.nav}}
+  </viewer.nav>
 
-  {{#viewer.main}}
+  <viewer.main>
     {{outlet}}
-  {{/viewer.main}}
+  </viewer.main>
 
-{{/docs-viewer}}
+</DocsViewer>
 
-{{docs-keyboard-shortcuts}}
+<DocsKeyboardShortcuts />

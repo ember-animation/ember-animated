@@ -1,6 +1,6 @@
 <div class='rounded-lg overflow-hidden'>
   <div class="bg-black text-white py-2 px-4 text-sm font-medium border-b border-grey-darkest">
-    {{label}}
+    {{@label}}
   </div>
   <div class='flex docs-bg-code-base text-grey overflow-x-scroll'>
     <div class="p-4 w-full">
@@ -9,7 +9,7 @@
           {{#animated-each
             (if this.isShowingFinal this.finalLines this.originalLines)
             key='id'
-            use=codeTransition
+            use=this.codeTransition
             duration=400
           as |line|~}}
             <div>{{line.text}}</div>

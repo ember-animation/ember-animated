@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { A } from '@ember/array';
+import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 import { fadeIn, fadeOut } from 'ember-animated/motions/opacity';
 import dedent from '../utils/dedent';
@@ -55,21 +56,19 @@ export default Component.extend({
     }
   },
 
-  actions: {
-    createNotification() {
-      let id = this.get('nextId');
-      this.get('notifications').pushObject({
-        id,
-        text: MESSAGES[id % MESSAGES.length],
-      });
+  createNotification: action(function () {
+    let id = this.get('nextId');
+    this.get('notifications').pushObject({
+      id,
+      text: MESSAGES[id % MESSAGES.length],
+    });
 
-      this.incrementProperty('nextId');
-    },
+    this.incrementProperty('nextId');
+  }),
 
-    destroyNotification(notification) {
-      this.get('notifications').removeObject(notification);
-    },
-  },
+  destroyNotification: action(function (notification) {
+    this.get('notifications').removeObject(notification);
+  }),
 
   templateDiff: dedent`
       {{#animated-each notifications use=transition as |notification|}}

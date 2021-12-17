@@ -1,23 +1,27 @@
-{{yield (action fullLog) }}
+{{yield this.fullLog}}
 
 <table class="transition-log-table">
-  <tr><td colspan="3">Sprite Log</td></tr>
-  <tr>
-    <th>Kept</th>
-    <th>Sent</th>
-    <th>Received</th>
-  </tr>
-  {{#animated-each messages as |message|}}
+  <thead>
+    <tr><td colspan="3">Sprite Log</td></tr>
     <tr>
-      <td>
-        {{message.kept}}
-      </td>
-      <td>
-        {{message.sent}}
-      </td>
-      <td>
-        {{message.received}}
-      </td>
+      <th>Kept</th>
+      <th>Sent</th>
+      <th>Received</th>
     </tr>
-  {{/animated-each}}
+  </thead>
+  <tbody>
+    {{#animated-each this.messages as |message|}}
+      <tr>
+        <td>
+          {{message.kept}}
+        </td>
+        <td>
+          {{message.sent}}
+        </td>
+        <td>
+          {{message.received}}
+        </td>
+      </tr>
+    {{/animated-each}}
+  </tbody>
 </table>

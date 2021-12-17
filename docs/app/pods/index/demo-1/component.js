@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import { action } from '@ember/object';
 import fade from 'ember-animated/transitions/fade';
 import dedent from '../utils/dedent';
 
@@ -9,23 +10,21 @@ export default Component.extend({
 
   transition: fade,
 
-  actions: {
-    addGuest() {
-      if (this.guests < 6) {
-        this.incrementProperty('guests');
-      }
-    },
+  addGuest: action(function () {
+    if (this.guests < 6) {
+      this.incrementProperty('guests');
+    }
+  }),
 
-    removeGuest() {
-      if (this.guests > 1) {
-        this.decrementProperty('guests');
-      }
-    },
-  },
+  removeGuest: action(function () {
+    if (this.guests > 1) {
+      this.decrementProperty('guests');
+    }
+  }),
 
   templateDiff: dedent`
-    - {{#each guests}}
-    + {{#animated-each guests use=transition}}
+    - {{#each this.guests}}
+    + {{#animated-each this.guests use=this.transition}}
         <Icon 'user' />
     - {{/each}}
     + {{/animated-each}}

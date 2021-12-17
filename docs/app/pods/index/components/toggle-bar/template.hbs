@@ -3,13 +3,15 @@
     {{yield}}
   </span>
 
-  <button {{action @onToggle (not @enabled)}}
+  <button
     class="
       ml-2 w-15 h-5 rounded-full inline-block flex
       relative focus:outline-none focus:shadow-outline shadow-inner
       overflow-hidden transition
       {{if @enabled 'bg-blue' 'bg-grey-light'}}
     "
+    type="button"
+    {{on "click" (fn @onToggle (not @enabled))}}
   >
     <span class="p-px absolute w-5 h-5 flex pin-t pin-l nudge-r-0 transition {{if @enabled 'nudge-r-10'}}">
       <span class="bg-white rounded-full w-full h-full shadow"></span>

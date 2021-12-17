@@ -1,13 +1,13 @@
 {{! BEGIN-SNIPPET detail-snippet.hbs }}
 <div class="hero-detail">
-  {{#link-to "docs.between.index"}}Back to list{{/link-to}}
+  <LinkTo @route="docs.between.index">Back to list</LinkTo>
 
-  <h2>{{model.name}}</h2>
+  <h2>{{this.model.name}}</h2>
 
   <AnimatedContainer>
-    {{#animated-value model use=transition duration=1000 as |m|}}
+    {{#animated-value this.model use=this.transition duration=1000 as |m|}}
       <div class="hero-detail-image">
-        <img src={{m.avatarUrl}}>
+        <img src={{m.avatarUrl}} alt={{m.name}}>
         <span>Big Image</span>
       </div>
     {{/animated-value}}
