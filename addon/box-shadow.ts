@@ -3,7 +3,7 @@ import { Tween } from '.';
 import linear from './easings/linear';
 import './element-remove';
 
-const innerPattern = /^ (\d+)px (\d+)px(?: (\d+)px)?(?: (\d+)px)?( inset)?(?:, )?/;
+const innerPattern = /^ (-?\d+)px (-?\d+)px(?: (\d+)px)?(?: (-?\d+)px)?( inset)?(?:, )?/;
 
 export class BoxShadow {
   static fromComputedStyle(string: string) {
