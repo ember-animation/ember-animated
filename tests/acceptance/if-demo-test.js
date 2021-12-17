@@ -15,7 +15,7 @@ module('Acceptance | if demo', function(hooks) {
   test('visiting /if-demo', async function(assert) {
     await visit('demos/ifdemo');
 
-    assert.equal(currentURL(), 'demos/ifdemo');
+    assert.strictEqual(currentURL(), 'demos/ifdemo');
   });
 
   test('toggle thing', async function(assert) {

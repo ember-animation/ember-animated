@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-conditional-assertions */
 import { set } from '@ember/object';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
@@ -34,9 +35,9 @@ module('Integration | Component | animated value', function(hooks) {
       keptSprites,
     }) {
       if (++transitionCounter === 1) {
-        assert.equal(keptSprites.length, 1, 'kept sprites');
-        assert.equal(insertedSprites.length, 0, 'inserted sprites');
-        assert.equal(removedSprites.length, 0, 'removed sprites');
+        assert.strictEqual(keptSprites.length, 1, 'kept sprites');
+        assert.strictEqual(insertedSprites.length, 0, 'inserted sprites');
+        assert.strictEqual(removedSprites.length, 0, 'removed sprites');
       }
     });
 
@@ -55,6 +56,6 @@ module('Integration | Component | animated value', function(hooks) {
     await animationsSettled();
 
     assert.dom(this.element.querySelector('.test-child')).hasText('a');
-    assert.equal(transitionCounter, 1, 'transitionCounter');
+    assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 });

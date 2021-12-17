@@ -36,7 +36,7 @@ module('Acceptance | svg', function(hooks) {
 
   test('visiting /svg', async function(assert) {
     await visit('/demos/svg');
-    assert.equal(currentURL(), '/demos/svg');
+    assert.strictEqual(currentURL(), '/demos/svg');
   });
 
   test('bubbles move smoothly at start of animation', async function(assert) {

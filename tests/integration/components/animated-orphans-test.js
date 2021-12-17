@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-conditional-assertions */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
@@ -41,7 +42,7 @@ module('Integration | Component | animated orphans', function(hooks) {
     await animationsSettled();
 
     this.set('t1', function*({ removedSprites }) {
-      assert.equal(removedSprites.length, 1, 'second transition');
+      assert.strictEqual(removedSprites.length, 1, 'second transition');
     });
 
     this.set('showIt', false);
@@ -68,12 +69,12 @@ module('Integration | Component | animated orphans', function(hooks) {
     let unblock1, unblock2;
 
     this.set('t1', function*({ removedSprites }) {
-      assert.equal(removedSprites.length, 1, 't1');
+      assert.strictEqual(removedSprites.length, 1, 't1');
       yield new Promise(r => (unblock1 = r));
     });
 
     this.set('t2', function*({ removedSprites }) {
-      assert.equal(removedSprites.length, 1, 't2');
+      assert.strictEqual(removedSprites.length, 1, 't2');
       yield new Promise(r => (unblock2 = r));
     });
 
@@ -109,7 +110,7 @@ module('Integration | Component | animated orphans', function(hooks) {
       .getBoundingClientRect();
 
     this.set('t1', function*({ removedSprites }) {
-      assert.equal(removedSprites.length, 1, 'second transition');
+      assert.strictEqual(removedSprites.length, 1, 'second transition');
       testMotion(removedSprites[0]);
       assert.equalBounds(
         firstBounds,
@@ -143,9 +144,9 @@ module('Integration | Component | animated orphans', function(hooks) {
 
     this.set('t1', function*({ removedSprites }) {
       testMotion(removedSprites[0]);
-      assert.equal(
-        'rgb(12, 34, 56)',
+      assert.strictEqual(
         getComputedStyle(removedSprites[0].element).color,
+        'rgb(12, 34, 56)',
       );
     });
 
@@ -186,21 +187,25 @@ module('Integration | Component | animated orphans', function(hooks) {
     }) {
       counter++;
       if (counter === 1) {
-        assert.equal(removedSprites.length, 1, 'first removed');
-        assert.equal(sentSprites.length, 0, 'first second');
+        assert.strictEqual(removedSprites.length, 1, 'first removed');
+        assert.strictEqual(sentSprites.length, 0, 'first second');
       } else if (counter === 2) {
-        assert.equal(removedSprites.length, 0, 'second removed, old sprite');
-        assert.equal(sentSprites.length, 1, 'second sent, old sprite');
+        assert.strictEqual(
+          removedSprites.length,
+          0,
+          'second removed, old sprite',
+        );
+        assert.strictEqual(sentSprites.length, 1, 'second sent, old sprite');
       } else {
         assert.ok(false, 'should only run twice');
       }
-      assert.equal(keptSprites.length, 0, 'both times kept, old sprite');
-      assert.equal(
+      assert.strictEqual(keptSprites.length, 0, 'both times kept, old sprite');
+      assert.strictEqual(
         insertedSprites.length,
         0,
         'both times inserted, old sprite',
       );
-      assert.equal(
+      assert.strictEqual(
         receivedSprites.length,
         0,
         'both times received, old sprite',
@@ -219,11 +224,23 @@ module('Integration | Component | animated orphans', function(hooks) {
       sentSprites,
       receivedSprites,
     }) {
-      assert.equal(removedSprites.length, 0, 'second removed, new sprite');
-      assert.equal(keptSprites.length, 0, 'second kept, new sprite');
-      assert.equal(insertedSprites.length, 0, 'second inserted, new sprite');
-      assert.equal(sentSprites.length, 0, 'second sent, new sprite');
-      assert.equal(receivedSprites.length, 1, 'second received, new sprite');
+      assert.strictEqual(
+        removedSprites.length,
+        0,
+        'second removed, new sprite',
+      );
+      assert.strictEqual(keptSprites.length, 0, 'second kept, new sprite');
+      assert.strictEqual(
+        insertedSprites.length,
+        0,
+        'second inserted, new sprite',
+      );
+      assert.strictEqual(sentSprites.length, 0, 'second sent, new sprite');
+      assert.strictEqual(
+        receivedSprites.length,
+        1,
+        'second received, new sprite',
+      );
       keptSprites.forEach(testMotion);
     });
     this.set('showIt', true);
@@ -262,18 +279,18 @@ module('Integration | Component | animated orphans', function(hooks) {
       t1Counter++;
 
       if (t1Counter === 1) {
-        assert.equal(removedSprites.length, 1, `t1 removed ${t1Counter}`);
-        assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
+        assert.strictEqual(removedSprites.length, 1, `t1 removed ${t1Counter}`);
+        assert.strictEqual(sentSprites.length, 0, `t1 sent ${t1Counter}`);
       } else if (t1Counter === 2) {
-        assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
-        assert.equal(sentSprites.length, 1, `t1 sent ${t1Counter}`);
+        assert.strictEqual(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+        assert.strictEqual(sentSprites.length, 1, `t1 sent ${t1Counter}`);
       } else {
         assert.ok(false, 'should t1 only run twice');
       }
 
-      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(receivedSprites.length, 0, `t1 received ${t1Counter}`);
+      assert.strictEqual(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.strictEqual(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.strictEqual(receivedSprites.length, 0, `t1 received ${t1Counter}`);
 
       removedSprites.forEach(s => testMotion(s, { shouldBlock: true }));
     });
@@ -290,14 +307,14 @@ module('Integration | Component | animated orphans', function(hooks) {
       t2Counter++;
 
       if (t2Counter === 1) {
-        assert.equal(removedSprites.length, 1, `t2 removed ${t2Counter}`);
-        assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
+        assert.strictEqual(removedSprites.length, 1, `t2 removed ${t2Counter}`);
+        assert.strictEqual(sentSprites.length, 0, `t2 sent ${t2Counter}`);
       } else {
         assert.ok(false, 'should t2 only run once');
       }
-      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
-      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
+      assert.strictEqual(keptSprites.length, 0, `t2 kept ${t2Counter}`);
+      assert.strictEqual(insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
+      assert.strictEqual(receivedSprites.length, 0, `t2 received ${t2Counter}`);
     });
 
     this.set('showIt', false);
@@ -311,11 +328,11 @@ module('Integration | Component | animated orphans', function(hooks) {
       receivedSprites,
     }) {
       let t1Counter = 3;
-      assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
-      assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
-      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(receivedSprites.length, 1, `t1 received ${t1Counter}`);
+      assert.strictEqual(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+      assert.strictEqual(sentSprites.length, 0, `t1 sent ${t1Counter}`);
+      assert.strictEqual(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.strictEqual(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.strictEqual(receivedSprites.length, 1, `t1 received ${t1Counter}`);
     });
 
     this.set('t2', function*() {
@@ -359,18 +376,18 @@ module('Integration | Component | animated orphans', function(hooks) {
       t1Counter++;
 
       if (t1Counter === 1) {
-        assert.equal(removedSprites.length, 1, `t1 removed ${t1Counter}`);
-        assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
+        assert.strictEqual(removedSprites.length, 1, `t1 removed ${t1Counter}`);
+        assert.strictEqual(sentSprites.length, 0, `t1 sent ${t1Counter}`);
       } else if (t1Counter === 2) {
-        assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
-        assert.equal(sentSprites.length, 1, `t1 sent ${t1Counter}`);
+        assert.strictEqual(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+        assert.strictEqual(sentSprites.length, 1, `t1 sent ${t1Counter}`);
       } else {
         assert.ok(false, 'should t1 only run twice');
       }
 
-      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(receivedSprites.length, 0, `t1 received ${t1Counter}`);
+      assert.strictEqual(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.strictEqual(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.strictEqual(receivedSprites.length, 0, `t1 received ${t1Counter}`);
 
       removedSprites.forEach(s => testMotion(s, { shouldBlock: true }));
     });
@@ -387,14 +404,14 @@ module('Integration | Component | animated orphans', function(hooks) {
       t2Counter++;
 
       if (t2Counter === 1) {
-        assert.equal(removedSprites.length, 1, `t2 removed ${t2Counter}`);
-        assert.equal(sentSprites.length, 0, `t2 sent ${t2Counter}`);
+        assert.strictEqual(removedSprites.length, 1, `t2 removed ${t2Counter}`);
+        assert.strictEqual(sentSprites.length, 0, `t2 sent ${t2Counter}`);
       } else {
         assert.ok(false, 'should t2 only run once');
       }
-      assert.equal(keptSprites.length, 0, `t2 kept ${t2Counter}`);
-      assert.equal(insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
-      assert.equal(receivedSprites.length, 0, `t2 received ${t2Counter}`);
+      assert.strictEqual(keptSprites.length, 0, `t2 kept ${t2Counter}`);
+      assert.strictEqual(insertedSprites.length, 0, `t2 inserted ${t2Counter}`);
+      assert.strictEqual(receivedSprites.length, 0, `t2 received ${t2Counter}`);
 
       removedSprites.forEach(s => testMotion(s, { shouldBlock: false }));
     });
@@ -410,11 +427,11 @@ module('Integration | Component | animated orphans', function(hooks) {
       receivedSprites,
     }) {
       let t1Counter = 3;
-      assert.equal(removedSprites.length, 0, `t1 removed ${t1Counter}`);
-      assert.equal(sentSprites.length, 0, `t1 sent ${t1Counter}`);
-      assert.equal(keptSprites.length, 0, `t1 kept ${t1Counter}`);
-      assert.equal(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
-      assert.equal(receivedSprites.length, 1, `t1 received ${t1Counter}`);
+      assert.strictEqual(removedSprites.length, 0, `t1 removed ${t1Counter}`);
+      assert.strictEqual(sentSprites.length, 0, `t1 sent ${t1Counter}`);
+      assert.strictEqual(keptSprites.length, 0, `t1 kept ${t1Counter}`);
+      assert.strictEqual(insertedSprites.length, 0, `t1 inserted ${t1Counter}`);
+      assert.strictEqual(receivedSprites.length, 1, `t1 received ${t1Counter}`);
     });
 
     this.set('t2', function*() {

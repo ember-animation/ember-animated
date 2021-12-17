@@ -70,7 +70,7 @@ module('Unit | Move', function(hooks) {
 
     let done = assert.async();
     run(() => {
-      tester.run(s, { duration: 60 }).then(done, done);
+      tester.run(s, { duration: 60 }).finally(() => done());
       time.advance(60);
     });
   });
@@ -135,6 +135,8 @@ module('Unit | Move', function(hooks) {
   });
 
   test('interrupting with same destination does not extend animation time', function(assert) {
+    assert.expect(2);
+
     let p = Sprite.offsetParentStartingAt(target);
     p.measureFinalBounds();
     let s = Sprite.positionedStartingAt(target, p);
@@ -165,7 +167,7 @@ module('Unit | Move', function(hooks) {
         tester.run(newSprite, { duration: 1000 });
       });
       return time.advance(501).then(() => {
-        assert.ok(!tester.get('isAnimating'), 'should be finished by now');
+        assert.notOk(tester.get('isAnimating'), 'should be finished by now');
       });
     });
   });
@@ -188,10 +190,10 @@ module('Unit | Move', function(hooks) {
 
     tester.run(motion, { duration: 400 });
     await time.advance(100);
-    assert.equal(s.getCurrentBounds().left, -100);
+    assert.strictEqual(s.getCurrentBounds().left, -100);
     await time.advance(200);
-    assert.equal(s.getCurrentBounds().left, 500);
+    assert.strictEqual(s.getCurrentBounds().left, 500);
     await time.advance(100);
-    assert.equal(s.getCurrentBounds().left, 400);
+    assert.strictEqual(s.getCurrentBounds().left, 400);
   });
 });

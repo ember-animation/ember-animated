@@ -6,6 +6,6 @@ module('Acceptance | two lists', function(hooks) {
   setupApplicationTest(hooks);
   test('visiting /two-lists', async function(assert) {
     await visit('/demos/two-lists');
-    assert.equal(currentURL(), '/demos/two-lists');
+    assert.strictEqual(currentURL(), '/demos/two-lists');
   });
 });

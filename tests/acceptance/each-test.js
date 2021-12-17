@@ -6,6 +6,6 @@ module('Acceptance | each', function(hooks) {
   setupApplicationTest(hooks);
   test('visiting /each', async function(assert) {
     await visit('/demos/each');
-    assert.equal(currentURL(), '/demos/each');
+    assert.strictEqual(currentURL(), '/demos/each');
   });
 });

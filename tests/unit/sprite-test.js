@@ -179,7 +179,7 @@ module('Unit | Sprite', function(hooks) {
     m.lock();
     m.unlock();
     // some browsers result in empty string and some in undefined
-    assert.ok(!target.getAttribute('style'), 'empty style');
+    assert.notOk(target.getAttribute('style'), 'empty style');
   });
 
   test('Restores original styles', function(assert) {
@@ -192,12 +192,12 @@ module('Unit | Sprite', function(hooks) {
     let m = sprite(target);
     m.lock();
     m.unlock();
-    assert.equal(target.style.position, 'relative', 'position');
-    assert.equal(target.style.top, '5px', 'top');
-    assert.equal(target.style.left, '6px', 'left');
-    assert.equal(target.style.width, '10px', 'width');
-    assert.equal(target.style.height, '11px', 'height');
-    assert.equal(ownTransform(target).tx, 20, 'translateX');
+    assert.strictEqual(target.style.position, 'relative', 'position');
+    assert.strictEqual(target.style.top, '5px', 'top');
+    assert.strictEqual(target.style.left, '6px', 'left');
+    assert.strictEqual(target.style.width, '10px', 'width');
+    assert.strictEqual(target.style.height, '11px', 'height');
+    assert.strictEqual(ownTransform(target).tx, 20, 'translateX');
   });
 
   test('Restores original styles even when two sprites interrupt each other', function(assert) {
@@ -212,12 +212,12 @@ module('Unit | Sprite', function(hooks) {
     let m2 = sprite(target);
     m2.lock();
     m2.unlock();
-    assert.equal(target.style.position, 'relative', 'position');
-    assert.equal(target.style.top, '5px', 'top');
-    assert.equal(target.style.left, '6px', 'left');
-    assert.equal(target.style.width, '10px', 'width');
-    assert.equal(target.style.height, '11px', 'height');
-    assert.equal(ownTransform(target).tx, 20, 'translateX');
+    assert.strictEqual(target.style.position, 'relative', 'position');
+    assert.strictEqual(target.style.top, '5px', 'top');
+    assert.strictEqual(target.style.left, '6px', 'left');
+    assert.strictEqual(target.style.width, '10px', 'width');
+    assert.strictEqual(target.style.height, '11px', 'height');
+    assert.strictEqual(ownTransform(target).tx, 20, 'translateX');
   });
 
   test('User-positioned absolute sprite', function(assert) {
@@ -388,7 +388,7 @@ module('Unit | Sprite', function(hooks) {
     m.lock();
     target.style.borderWidth = '123px';
     m.unlock();
-    assert.equal(target.style.borderWidth, '123px');
+    assert.strictEqual(target.style.borderWidth, '123px');
   });
 
   test('external style mutations persist across unlock: changed properties that collide with our imposed styles', function(assert) {
@@ -409,13 +409,13 @@ module('Unit | Sprite', function(hooks) {
     target.style.boxSizing = 'border-box';
     target.style['margin-top'] = '9px';
     m.unlock();
-    assert.equal(target.style.top, '3232px', 'top');
-    assert.equal(target.style.left, '2424px', 'left');
-    assert.equal(target.style.width, '5454px', 'width');
-    assert.equal(target.style.height, '6565px', 'height');
-    assert.equal(target.style.position, 'fixed', 'position');
-    assert.equal(target.style['box-sizing'], 'border-box', 'box-sizing');
-    assert.equal(target.style['margin-top'], '9px', 'margin');
+    assert.strictEqual(target.style.top, '3232px', 'top');
+    assert.strictEqual(target.style.left, '2424px', 'left');
+    assert.strictEqual(target.style.width, '5454px', 'width');
+    assert.strictEqual(target.style.height, '6565px', 'height');
+    assert.strictEqual(target.style.position, 'fixed', 'position');
+    assert.strictEqual(target.style['box-sizing'], 'border-box', 'box-sizing');
+    assert.strictEqual(target.style['margin-top'], '9px', 'margin');
   });
 
   test('within scrolling context above offset parent', function(assert) {
@@ -492,7 +492,7 @@ module('Unit | Sprite', function(hooks) {
 
   test('static body with margins', function(assert) {
     let body = document.querySelector('body');
-    assert.equal(
+    assert.strictEqual(
       getComputedStyle(body).position,
       'static',
       'This test cannot work correctly if the body is not statically positioned',
@@ -505,7 +505,7 @@ module('Unit | Sprite', function(hooks) {
 
   test('static body with scroll', function(assert) {
     let body = document.querySelector('body');
-    assert.equal(
+    assert.strictEqual(
       getComputedStyle(body).position,
       'static',
       'This test cannot work correctly if the body is not statically positioned',
@@ -517,8 +517,16 @@ module('Unit | Sprite', function(hooks) {
     intermediate.style.paddingTop = '50%';
     window.scrollTo(10, 100);
 
-    assert.equal(window.scrollY, 100, 'ensure we really scrolled the body');
-    assert.equal(window.scrollX, 10, 'ensure we really scrolled the body');
+    assert.strictEqual(
+      window.scrollY,
+      100,
+      'ensure we really scrolled the body',
+    );
+    assert.strictEqual(
+      window.scrollX,
+      10,
+      'ensure we really scrolled the body',
+    );
     let m = sprite(target);
     assert.visuallyConstant(target, () => m.lock());
   });
@@ -927,7 +935,7 @@ module('Unit | Sprite', function(hooks) {
   }
 });
 
-module('Unit | Sprite', function(hooks) {
+module('Unit | Sprite (SVG sprite locking support)', function(hooks) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
@@ -940,7 +948,7 @@ module('Unit | Sprite', function(hooks) {
 
     let target = this.element.querySelector('.target');
     let parent = Sprite.offsetParentStartingAt(target);
-    assert.equal(
+    assert.strictEqual(
       parent.element,
       this.element.querySelector('svg'),
       'the offset parent sprite should be the <svg> element',
@@ -958,7 +966,7 @@ module('Unit | Sprite', function(hooks) {
 
     let target = this.element.querySelector('.target');
     let parent = Sprite.offsetParentStartingAt(target);
-    assert.equal(
+    assert.strictEqual(
       parent.element,
       this.element.querySelector('.inside'),
       'the offset parent sprite should be the inside <svg> element',
@@ -978,7 +986,7 @@ module('Unit | Sprite', function(hooks) {
 
     let target = this.element.querySelector('.target');
     let parent = Sprite.offsetParentStartingAt(target);
-    assert.equal(
+    assert.strictEqual(
       parent.element,
       this.element.querySelector('.inside'),
       'the offset parent sprite should be the inside <svg> element',
@@ -1170,8 +1178,8 @@ module('Unit | Sprite', function(hooks) {
     parent.measureFinalBounds();
     sprite.measureFinalBounds();
 
-    assert.equal(sprite.getInitialDimension('cx'), 100, 'cx initial');
-    assert.equal(sprite.getFinalDimension('cx'), 120, 'cx final');
+    assert.strictEqual(sprite.getInitialDimension('cx'), 100, 'cx initial');
+    assert.strictEqual(sprite.getFinalDimension('cx'), 120, 'cx final');
   });
 
   test('rehome a sprite out of a scaled and translated parent', async function(assert) {
@@ -1243,8 +1251,8 @@ module('Unit | Sprite', function(hooks) {
     // a class added externally during animation
     target.classList.add('extra');
     sprite.unlock();
-    assert.ok(
-      !target.classList.contains('extra'),
+    assert.notOk(
+      target.classList.contains('extra'),
       'extra should have been cleaned up',
     );
   });
@@ -1267,8 +1275,8 @@ module('Unit | Sprite', function(hooks) {
     target.classList.add('extra');
     sprite.unlock();
 
-    assert.ok(
-      !target.classList.contains('extra'),
+    assert.notOk(
+      target.classList.contains('extra'),
       'extra should have been cleaned up',
     );
     assert.dom(target).hasClass('b', 'keeps the b class');

@@ -36,24 +36,19 @@ module('Unit | scheduler', function(hooks) {
     });
   });
 
-  test('the return value of the spawned task is resolved', function(assert) {
-    return spawn(function*() {
+  test('the return value of the spawned task is resolved', async function(assert) {
+    const value = await spawn(function*() {
       return 42;
-    }).then(value => {
-      assert.equal(value, 42);
     });
+    assert.strictEqual(value, 42);
   });
 
-  test('spawn synchronous exception', function(assert) {
-    return spawn(function*() {
-      throw new Error('boom');
-    }).then(
-      () => {
-        assert.ok(false, 'should not get here');
-      },
-      err => {
-        assert.equal(err.message, 'boom');
-      },
+  test('spawn synchronous exception', async function(assert) {
+    assert.rejects(
+      spawn(function*() {
+        throw new Error('boom');
+      }),
+      err => err.message === 'boom',
     );
   });
 
@@ -64,17 +59,13 @@ module('Unit | scheduler', function(hooks) {
       throw new Error('boom');
     });
     resolve();
-    return p.then(
-      () => {
-        assert.ok(false, 'should not get here');
-      },
-      err => {
-        assert.equal(err.message, 'boom');
-      },
-    );
+
+    assert.rejects(p, err => err.message === 'boom');
   });
 
   test('spawn within spawn', function(assert) {
+    assert.expect(3);
+
     let resolve;
     let p = spawn(function*() {
       assert.log('parent started');
@@ -90,7 +81,7 @@ module('Unit | scheduler', function(hooks) {
     assert.logEquals(['parent started', 'child started', 'parent finishing']);
     resolve();
     return p.then(exitStatus => {
-      assert.equal(exitStatus, 42);
+      assert.strictEqual(exitStatus, 42);
       assert.logEquals([
         'parent started',
         'child started',
@@ -109,21 +100,18 @@ module('Unit | scheduler', function(hooks) {
     });
   });
 
-  test('spawned task can enable error logging', function(assert) {
-    return spawn(function*() {
-      logErrors(err => {
-        assert.log('handled message: ' + err.message);
-      });
-      throw new Error('boom');
-    }).then(
-      () => {
-        assert.ok(false, 'should not get here');
-      },
-      err => {
-        assert.equal(err.message, 'boom');
-        assert.logEquals(['handled message: boom']);
-      },
+  test('spawned task can enable error logging', async function(assert) {
+    await assert.rejects(
+      spawn(function*() {
+        logErrors(err => {
+          assert.log('handled message: ' + err.message);
+        });
+        throw new Error('boom');
+      }),
+      err => err.message === 'boom',
     );
+
+    assert.logEquals(['handled message: boom']);
   });
 
   test('error logging is inherited by children', function(assert) {
@@ -141,18 +129,20 @@ module('Unit | scheduler', function(hooks) {
     });
   });
 
-  test('propagating child error is logged once', function(assert) {
-    return spawn(function*() {
-      logErrors(err => {
-        assert.log('handled message: ' + err.message);
-      });
-      yield spawnChild(function*() {
-        throw new Error('boom');
-      });
-    }).catch(err => {
-      assert.equal(err.message, 'boom');
-      assert.logEquals(['handled message: boom']);
-    });
+  test('propagating child error is logged once', async function(assert) {
+    await assert.rejects(
+      spawn(function*() {
+        logErrors(err => {
+          assert.log('handled message: ' + err.message);
+        });
+        yield spawnChild(function*() {
+          throw new Error('boom');
+        });
+      }),
+      err => err.message === 'boom',
+    );
+
+    assert.logEquals(['handled message: boom']);
   });
 
   test('spawnChild requires a running microroutine', function(assert) {
@@ -201,15 +191,19 @@ module('Unit | scheduler', function(hooks) {
   });
 
   test('immediately returned promise', function(assert) {
+    assert.expect(1);
+
     return spawn(function*() {
       let value = yield spawn(function* example() {
         return new Promise(resolve => resolve(42));
       });
-      assert.equal(value, 42);
+      assert.strictEqual(value, 42);
     });
   });
 
   test('asynchronously returned promise', function(assert) {
+    assert.expect(1);
+
     return spawn(function*() {
       let resolveFirst;
       let p = spawn(function* example() {
@@ -217,7 +211,7 @@ module('Unit | scheduler', function(hooks) {
         return new Promise(resolve => resolve(42));
       });
       resolveFirst();
-      assert.equal(yield p, 42);
+      assert.strictEqual(yield p, 42);
     });
   });
 
@@ -254,6 +248,8 @@ module('Unit | scheduler', function(hooks) {
   });
 
   test('does not continue if a promise resolves after stop', function(assert) {
+    assert.expect(2);
+
     return spawn(function*() {
       let resolve;
       let task = spawn(function*() {
@@ -261,7 +257,7 @@ module('Unit | scheduler', function(hooks) {
           yield new Promise(r => (resolve = r));
           assert.ok(false, 'should never get here (1)');
         } catch (err) {
-          assert.equal(err.message, 'TaskCancelation');
+          assert.strictEqual(err.message, 'TaskCancelation');
           // Here we attempt to keep going after being canceled. Even
           // when our promise resolves, the runtime should refuse to
           // reenter our generator.
@@ -278,6 +274,8 @@ module('Unit | scheduler', function(hooks) {
   });
 
   test('promise returned from spawn does not resolve if an inner promise resolves after stop', function(assert) {
+    assert.expect(1);
+
     return spawn(function*() {
       spawn(function*() {
         let resolve;
@@ -295,16 +293,20 @@ module('Unit | scheduler', function(hooks) {
   });
 
   test('can access self', function(assert) {
+    assert.expect(1);
+
     return spawn(function*() {
       let innerTask;
       let task = spawn(function*() {
         innerTask = current();
       });
-      assert.equal(innerTask, task);
+      assert.strictEqual(innerTask, task);
     });
   });
 
   test('can access self after resolved yield', function(assert) {
+    assert.expect(1);
+
     return spawn(function*() {
       let innerTask;
       let task = spawn(function*() {
@@ -312,11 +314,12 @@ module('Unit | scheduler', function(hooks) {
         innerTask = current();
       });
       yield microwait();
-      assert.equal(innerTask, task);
+      assert.strictEqual(innerTask, task);
     });
   });
 
   test('can access self after rejected yield', function(assert) {
+    assert.expect(1);
     return spawn(function*() {
       let innerTask;
       let task = spawn(function*() {
@@ -327,11 +330,12 @@ module('Unit | scheduler', function(hooks) {
         }
       });
       yield microwait();
-      assert.equal(innerTask, task);
+      assert.strictEqual(innerTask, task);
     });
   });
 
   test('can access self during cancelation', function(assert) {
+    assert.expect(1);
     return spawn(function*() {
       let innerTask;
       let task = spawn(function*() {
@@ -342,11 +346,12 @@ module('Unit | scheduler', function(hooks) {
         }
       });
       stop(task);
-      assert.equal(innerTask, task);
+      assert.strictEqual(innerTask, task);
     });
   });
 
   test('can stop self', function(assert) {
+    assert.expect(1);
     return spawn(function*() {
       spawn(function*() {
         stop(current());
@@ -368,7 +373,7 @@ module('Unit | scheduler', function(hooks) {
             yield new Promise(() => {});
           });
         } catch (err) {
-          assert.equal(err.message, 'TaskCancelation');
+          assert.strictEqual(err.message, 'TaskCancelation');
           throw err;
         }
       });
@@ -502,7 +507,7 @@ module('Unit | scheduler', function(hooks) {
         stopping();
         throw new Error('boom');
       }).catch(err => {
-        assert.equal(err.message, 'boom');
+        assert.strictEqual(err.message, 'boom');
       });
 
       yield stopped;

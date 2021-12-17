@@ -7,6 +7,6 @@ module('Acceptance | direct style', function(hooks) {
 
   test('visiting /direct-style', async function(assert) {
     await visit('/demos/direct-style');
-    assert.equal(currentURL(), '/demos/direct-style');
+    assert.strictEqual(currentURL(), '/demos/direct-style');
   });
 });

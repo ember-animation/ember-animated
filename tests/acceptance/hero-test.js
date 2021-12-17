@@ -23,12 +23,12 @@ module('Acceptance | hero', function(hooks) {
 
   test('visiting /hero', async function(assert) {
     await visit('/demos/hero');
-    assert.equal(currentURL(), '/demos/hero');
+    assert.strictEqual(currentURL(), '/demos/hero');
   });
 
   test('visiting /hero/1', async function(assert) {
     await visit('/demos/hero/1');
-    assert.equal(currentURL(), '/demos/hero/1');
+    assert.strictEqual(currentURL(), '/demos/hero/1');
   });
 
   test('index to detail', async function(assert) {
@@ -42,11 +42,11 @@ module('Acceptance | hero', function(hooks) {
     let hiddenOrphans = this.element.querySelectorAll(
       '.animated-orphans .hero-list-image.ember-animated-hidden',
     ).length;
-    assert.equal(orphans, 8, 'orphans');
-    assert.equal(hiddenOrphans, 1, 'hidden orphans');
+    assert.strictEqual(orphans, 8, 'orphans');
+    assert.strictEqual(hiddenOrphans, 1, 'hidden orphans');
     time.runAtSpeed(FAST);
     await animationsSettled();
-    assert.equal(currentURL(), '/demos/hero/0');
+    assert.strictEqual(currentURL(), '/demos/hero/0');
   });
 
   test('detail to index', async function(assert) {
@@ -59,11 +59,11 @@ module('Acceptance | hero', function(hooks) {
     let hiddenImages = this.element.querySelectorAll(
       '.hero-list .hero-list-image.ember-animated-hidden',
     ).length;
-    assert.equal(images, 8, 'images');
-    assert.equal(hiddenImages, 1, 'hidden images');
+    assert.strictEqual(images, 8, 'images');
+    assert.strictEqual(hiddenImages, 1, 'hidden images');
     time.runAtSpeed(FAST);
     await animationsSettled();
-    assert.equal(currentURL(), '/demos/hero');
+    assert.strictEqual(currentURL(), '/demos/hero');
   });
 
   test('index to detail with interruption', async function(assert) {
@@ -86,6 +86,6 @@ module('Acceptance | hero', function(hooks) {
     );
     time.runAtSpeed(FAST);
     await back;
-    assert.equal(currentURL(), '/demos/hero');
+    assert.strictEqual(currentURL(), '/demos/hero');
   });
 });

@@ -15,7 +15,7 @@ module('Acceptance | container demo', function(hooks) {
   test('visiting /container-demo', async function(assert) {
     await visit('demos/containerdemo');
 
-    assert.equal(currentURL(), 'demos/containerdemo');
+    assert.strictEqual(currentURL(), 'demos/containerdemo');
   });
 
   test('toggle container', async function(assert) {

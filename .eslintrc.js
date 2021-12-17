@@ -92,5 +92,10 @@ module.exports = {
         '@typescript-eslint/no-require-imports': 0,
       },
     },
+    {
+      // test files
+      files: ['tests/**/*-test.{js,ts}'],
+      extends: ['plugin:qunit/recommended'],
+    },
   ],
 };

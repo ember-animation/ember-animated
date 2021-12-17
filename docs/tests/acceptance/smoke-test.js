@@ -22,15 +22,15 @@ module('Acceptance | smoke', function(hooks) {
 
     // load page
     await visit('/');
-    assert.equal(currentURL(), '/');
+    assert.strictEqual(currentURL(), '/');
 
     // try the plus button with animation off
-    assert.equal(guestElements().length, 1, 'one initial guest');
+    assert.strictEqual(guestElements().length, 1, 'one initial guest');
     await time.pause();
     await click(buttonWith(/\+/));
     await time.advance(expectedDuration / 2);
-    assert.equal(guestElements().length, 2, 'second guest added');
-    assert.equal(
+    assert.strictEqual(guestElements().length, 2, 'second guest added');
+    assert.strictEqual(
       getComputedStyle(guestElements()[1].parentElement).opacity,
       '1',
       'no animation so full opacity',
@@ -43,8 +43,8 @@ module('Acceptance | smoke', function(hooks) {
     // try the plus button with animation on
     await click(buttonWith(/\+/));
     await time.advance(expectedDuration / 2);
-    assert.equal(guestElements().length, 3, 'third guest added');
-    assert.equal(
+    assert.strictEqual(guestElements().length, 3, 'third guest added');
+    assert.strictEqual(
       getComputedStyle(guestElements()[2].parentElement).opacity,
       '0.5',
       'half way there',
@@ -54,15 +54,15 @@ module('Acceptance | smoke', function(hooks) {
     // try the minus button with animation off
     await click(buttonWith(/-/));
     await time.advance(expectedDuration / 2);
-    assert.equal(guestElements().length, 3, 'third guest fading');
-    assert.equal(
+    assert.strictEqual(guestElements().length, 3, 'third guest fading');
+    assert.strictEqual(
       getComputedStyle(guestElements()[2].parentElement).opacity,
       '0.5',
       'half way there',
     );
     await time.advance(expectedDuration / 2);
     await settled();
-    assert.equal(guestElements().length, 2, 'third guest gone');
+    assert.strictEqual(guestElements().length, 2, 'third guest gone');
 
     // make sure a code snippet is present
     assert.ok(
@@ -75,7 +75,7 @@ module('Acceptance | smoke', function(hooks) {
 
   test('step through all /docs pages', async function(assert) {
     await visit('/docs');
-    assert.equal(currentURL(), '/docs');
+    assert.strictEqual(currentURL(), '/docs');
     let count = 0;
     while (true) {
       let nextLink = document.querySelector('[data-test-next-link] > a');
@@ -85,12 +85,12 @@ module('Acceptance | smoke', function(hooks) {
       count++;
       await click(nextLink);
     }
-    assert.equal(
+    assert.strictEqual(
       currentURL(),
       '/docs/api/modules/ember-animated/transitions/fade',
       'last expected page',
     );
-    assert.equal(count, 19, 'expected number of docs pages');
+    assert.strictEqual(count, 19, 'expected number of docs pages');
   });
 
   test('search functionality', async function(assert) {

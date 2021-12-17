@@ -20,7 +20,7 @@ module('Acceptance | value demo', function(hooks) {
 
   test('visiting /valuedemo', async function(assert) {
     await visit('demos/valuedemo');
-    assert.equal(currentURL(), 'demos/valuedemo');
+    assert.strictEqual(currentURL(), 'demos/valuedemo');
   });
 
   test('clicking the button', async function(assert) {
@@ -33,6 +33,6 @@ module('Acceptance | value demo', function(hooks) {
     let finalNumber = parseInt(
       this.element.querySelector('.numbers').textContent,
     );
-    assert.equal(finalNumber, number + 1);
+    assert.strictEqual(finalNumber, number + 1);
   });
 });

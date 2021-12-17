@@ -40,9 +40,9 @@ module('Unit | Opacity', function(hooks) {
     sprite.measureFinalBounds();
     tester.run(sprite, { duration: 1000 });
     await time.advance(250);
-    assert.equal(target.style.opacity, 0.25);
+    assert.strictEqual(target.style.opacity, '0.25');
     await time.advance(750);
-    assert.equal(target.style.opacity, 1);
+    assert.strictEqual(target.style.opacity, '1');
   });
 
   test('fade in to preexisting opacity', async function(assert) {
@@ -52,9 +52,9 @@ module('Unit | Opacity', function(hooks) {
     target.style.opacity = 0.75;
     sprite.measureFinalBounds();
     tester.run(sprite, { duration: 1000 });
-    assert.equal(target.style.opacity, 0);
+    assert.strictEqual(target.style.opacity, '0');
     await time.advance(750);
-    assert.equal(target.style.opacity, 0.75);
+    assert.strictEqual(target.style.opacity, '0.75');
   });
 
   test('fade out', async function(assert) {
@@ -66,9 +66,9 @@ module('Unit | Opacity', function(hooks) {
     target.style.opacity = 1;
     tester.run(sprite, { duration: 1000 });
     await time.advance(250);
-    assert.equal(target.style.opacity, 0.75);
+    assert.strictEqual(target.style.opacity, '0.75');
     await time.advance(750);
-    assert.equal(target.style.opacity, 0);
+    assert.strictEqual(target.style.opacity, '0');
   });
 
   test('fade out to preexisting opacity', async function(assert) {
@@ -80,9 +80,9 @@ module('Unit | Opacity', function(hooks) {
     sprite.lock();
     tester.run(sprite, { duration: 1000 });
     await time.advance(350);
-    assert.equal(target.style.opacity, 0.65);
+    assert.strictEqual(target.style.opacity, '0.65');
     await time.advance(350);
-    assert.equal(target.style.opacity, 0.3);
+    assert.strictEqual(target.style.opacity, '0.3');
   });
 
   test('interrupt', async function(assert) {
@@ -106,8 +106,8 @@ module('Unit | Opacity', function(hooks) {
     tester.run(sprite, { duration: 1000, from: 1, to: 0 });
 
     await time.advance(250);
-    assert.equal(target.style.opacity, 0.25);
+    assert.strictEqual(target.style.opacity, '0.25');
     await time.advance(250);
-    assert.equal(target.style.opacity, 0);
+    assert.strictEqual(target.style.opacity, '0');
   });
 });
