@@ -153,7 +153,7 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await animationsSettled();
-    assert.equal(motionSawHeight, 321);
+    assert.strictEqual(motionSawHeight, 321);
   });
 
   test('unlocks only after own motion is done', async function(assert) {
@@ -189,14 +189,14 @@ module('Integration | Component | animated container', function(hooks) {
       });
     });
     await startedMotion;
-    assert.equal(
+    assert.strictEqual(
       height(this.element.querySelector('.animated-container')),
       100,
       'still at previous height',
     );
     finishMotion();
     await animationsSettled();
-    assert.equal(
+    assert.strictEqual(
       height(this.element.querySelector('.animated-container')),
       300,
       'now at final height',
@@ -225,14 +225,14 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await wait(60);
-    assert.equal(
+    assert.strictEqual(
       height(this.element.querySelector('.animated-container')),
       200,
       'should be locked at the static height we measured',
     );
     unblock();
     await wait(60);
-    assert.equal(
+    assert.strictEqual(
       height(this.element.querySelector('.animated-container')),
       300,
       'unlocked and reflecting the actual final height of the animator',
@@ -275,8 +275,16 @@ module('Integration | Component | animated container', function(hooks) {
       'TestMotion',
       class extends Motion {
         *animate() {
-          assert.equal(this.sprite.initialBounds.height, 0, 'initial height');
-          assert.equal(this.sprite.finalBounds.height, 100, 'static height');
+          assert.strictEqual(
+            this.sprite.initialBounds.height,
+            0,
+            'initial height',
+          );
+          assert.strictEqual(
+            this.sprite.finalBounds.height,
+            100,
+            'static height',
+          );
         }
       },
     );
@@ -293,7 +301,7 @@ module('Integration | Component | animated container', function(hooks) {
     `);
 
     await animationsSettled();
-    assert.equal(
+    assert.strictEqual(
       height(this.element.querySelector('.animated-container')),
       200,
       'ends up unlocked',
@@ -390,7 +398,7 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await animationsSettled();
-    assert.equal(
+    assert.strictEqual(
       _bounds(this.element.querySelector('.after')).top,
       initialTop + 1,
       'only changes by one pixel',
@@ -426,7 +434,7 @@ module('Integration | Component | animated container', function(hooks) {
     });
 
     await animationsSettled();
-    assert.equal(
+    assert.strictEqual(
       _bounds(this.element.querySelector('.after')).top,
       initialTop - 1,
       'only changes by one pixel',
@@ -440,8 +448,16 @@ module('Integration | Component | animated container', function(hooks) {
       'TestMotion',
       class extends Motion {
         *animate() {
-          assert.equal(this.sprite.initialBounds.height, 10, 'initial height');
-          assert.equal(this.sprite.finalBounds.height, 20, 'static height');
+          assert.strictEqual(
+            this.sprite.initialBounds.height,
+            10,
+            'initial height',
+          );
+          assert.strictEqual(
+            this.sprite.finalBounds.height,
+            20,
+            'static height',
+          );
         }
       },
     );
@@ -463,7 +479,9 @@ module('Integration | Component | animated container', function(hooks) {
   }
 });
 
-module('Integration | Component | animated container', function(hooks) {
+module('Integration | Component | animated container (resize motion)', function(
+  hooks,
+) {
   setupRenderingTest(hooks);
   setupAnimationTest(hooks);
 
@@ -552,7 +570,7 @@ module('Integration | Component | animated container', function(hooks) {
     let elt = this.element.querySelector('.animated-container');
     assert.dom(elt).hasClass('hello', 'found hello');
     assert.dom(elt).hasClass('world', 'found world');
-    assert.equal(elt.dataset['foo'], 'bar');
+    assert.strictEqual(elt.dataset['foo'], 'bar');
   });
 
   test('accepts custom tagName', async function(assert) {
@@ -561,7 +579,7 @@ module('Integration | Component | animated container', function(hooks) {
     `);
 
     let elt = this.element.querySelector('[data-test-me]');
-    assert.equal(elt.tagName, 'SECTION');
+    assert.strictEqual(elt.tagName, 'SECTION');
   });
 
   test('accepts a custom tag', async function(assert) {
@@ -570,6 +588,6 @@ module('Integration | Component | animated container', function(hooks) {
     `);
 
     let elt = this.element.querySelector('.animated-container');
-    assert.equal(elt.tagName, 'SECTION');
+    assert.strictEqual(elt.tagName, 'SECTION');
   });
 });

@@ -40,19 +40,19 @@ module('Integration | Component | animated-beacon', function(hooks) {
       let expected = bounds(alpha);
 
       // we should be positioned over the beacon
-      assert.equal(value.top, expected.top, 'top');
-      assert.equal(value.left, expected.left, 'left');
+      assert.strictEqual(value.top, expected.top, 'top');
+      assert.strictEqual(value.left, expected.left, 'left');
 
       // and our initialBounds dimensions match the beacon's
       // dimensions (the sprite's element physically does not -- it's
       // up to a motion like scale to decide to do that when it's
       // wanted)
-      assert.equal(
+      assert.strictEqual(
         beacons.thegroup.initialBounds.width,
         expected.width,
         'width',
       );
-      assert.equal(
+      assert.strictEqual(
         beacons.thegroup.initialBounds.height,
         expected.height,
         'height',

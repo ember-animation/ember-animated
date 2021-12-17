@@ -19,7 +19,7 @@ module('Acceptance | bind', function(hooks) {
 
   test('visiting /bind', async function(assert) {
     await visit('/demos/bind');
-    assert.equal(currentURL(), '/demos/bind');
+    assert.strictEqual(currentURL(), '/demos/bind');
   });
 
   test('clicking the button', async function(assert) {
@@ -32,6 +32,6 @@ module('Acceptance | bind', function(hooks) {
     let finalNumber = parseInt(
       this.element.querySelector('.left-count').textContent,
     );
-    assert.equal(finalNumber, number + 1);
+    assert.strictEqual(finalNumber, number + 1);
   });
 });

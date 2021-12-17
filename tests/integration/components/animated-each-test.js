@@ -1,3 +1,4 @@
+/* eslint-disable qunit/no-conditional-assertions */
 import { set } from '@ember/object';
 import { A } from '@ember/array';
 import { setupRenderingTest } from 'ember-qunit';
@@ -72,10 +73,12 @@ module('Integration | Component | animated each', function(hooks) {
   });
 
   test('it can transition at first render', async function(assert) {
+    assert.expect(3);
+
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);
     this.set('transition', function*({ insertedSprites }) {
-      assert.equal(insertedSprites.length, 3);
+      assert.strictEqual(insertedSprites.length, 3);
       transitionCounter++;
     });
     await render(hbs`
@@ -91,7 +94,7 @@ module('Integration | Component | animated each', function(hooks) {
       'b',
       'c',
     ]);
-    assert.equal(transitionCounter, 1, 'transitionCounter');
+    assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
   test(`it yields each inserted and kept item's final index`, async function(assert) {
@@ -114,15 +117,15 @@ module('Integration | Component | animated each', function(hooks) {
     time.pause();
     this.set('items', ['b', 'c', 'q']);
     await time.advance(500); // halfway through the animation
-    assert.equal(
+    assert.strictEqual(
       this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
       '0',
     );
-    assert.equal(
+    assert.strictEqual(
       this.element.querySelector('.test-child[data-item="c"]').dataset['index'],
       '1',
     );
-    assert.equal(
+    assert.strictEqual(
       this.element.querySelector('.test-child[data-item="q"]').dataset['index'],
       '2',
     );
@@ -144,13 +147,15 @@ module('Integration | Component | animated each', function(hooks) {
     time.pause();
     this.set('items', ['a', 'c']);
     await time.advance(500);
-    assert.equal(
+    assert.strictEqual(
       this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
       '1',
     );
   });
 
   test('it updates when list is replaced', async function(assert) {
+    assert.expect(5);
+
     let transitionCounter = 0;
     this.set('items', ['a', 'b', 'c']);
     this.set('transition', function*({
@@ -159,9 +164,9 @@ module('Integration | Component | animated each', function(hooks) {
       keptSprites,
     }) {
       if (++transitionCounter === 1) {
-        assert.equal(keptSprites.length, 2, 'kept sprites');
-        assert.equal(insertedSprites.length, 1, 'inserted sprites');
-        assert.equal(removedSprites.length, 1, 'removed sprites');
+        assert.strictEqual(keptSprites.length, 2, 'kept sprites');
+        assert.strictEqual(insertedSprites.length, 1, 'inserted sprites');
+        assert.strictEqual(removedSprites.length, 1, 'removed sprites');
       }
     });
     await render(hbs`
@@ -181,10 +186,12 @@ module('Integration | Component | animated each', function(hooks) {
       'x',
       'c',
     ]);
-    assert.equal(transitionCounter, 1, 'transitionCounter');
+    assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it updates when list is mutated', async function(assert) {
+    assert.expect(5);
+
     let transitionCounter = 0;
     this.set('items', A(['a', 'b', 'c']));
     this.set('transition', function*({
@@ -193,9 +200,9 @@ module('Integration | Component | animated each', function(hooks) {
       keptSprites,
     }) {
       if (++transitionCounter === 1) {
-        assert.equal(keptSprites.length, 2, 'kept sprites');
-        assert.equal(insertedSprites.length, 1, 'inserted sprites');
-        assert.equal(removedSprites.length, 1, 'removed sprites');
+        assert.strictEqual(keptSprites.length, 2, 'kept sprites');
+        assert.strictEqual(insertedSprites.length, 1, 'inserted sprites');
+        assert.strictEqual(removedSprites.length, 1, 'removed sprites');
       }
     });
 
@@ -215,7 +222,7 @@ module('Integration | Component | animated each', function(hooks) {
       'x',
       'c',
     ]);
-    assert.equal(transitionCounter, 1, 'transitionCounter');
+    assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it animates when an id is mutated', async function(assert) {
@@ -228,9 +235,9 @@ module('Integration | Component | animated each', function(hooks) {
       keptSprites,
     }) {
       if (++transitionCounter === 1) {
-        assert.equal(keptSprites.length, 2, 'kept sprites');
-        assert.equal(insertedSprites.length, 1, 'inserted sprites');
-        assert.equal(removedSprites.length, 1, 'removed sprites');
+        assert.strictEqual(keptSprites.length, 2, 'kept sprites');
+        assert.strictEqual(insertedSprites.length, 1, 'inserted sprites');
+        assert.strictEqual(removedSprites.length, 1, 'removed sprites');
       }
     });
     await render(hbs`
@@ -249,7 +256,7 @@ module('Integration | Component | animated each', function(hooks) {
       'x',
       'c',
     ]);
-    assert.equal(transitionCounter, 1, 'transitionCounter');
+    assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it animates when a watched property is mutated', async function(assert) {
@@ -262,9 +269,9 @@ module('Integration | Component | animated each', function(hooks) {
       keptSprites,
     }) {
       if (++transitionCounter === 1) {
-        assert.equal(keptSprites.length, 3, 'kept sprites');
-        assert.equal(insertedSprites.length, 0, 'inserted sprites');
-        assert.equal(removedSprites.length, 0, 'removed sprites');
+        assert.strictEqual(keptSprites.length, 3, 'kept sprites');
+        assert.strictEqual(insertedSprites.length, 0, 'inserted sprites');
+        assert.strictEqual(removedSprites.length, 0, 'removed sprites');
       }
     });
 
@@ -287,7 +294,7 @@ module('Integration | Component | animated each', function(hooks) {
       'b',
       'c',
     ]);
-    assert.equal(transitionCounter, 1, 'transitionCounter');
+    assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
   test('it can match sprites that are leaving another component', async function(assert) {
@@ -322,11 +329,11 @@ module('Integration | Component | animated each', function(hooks) {
       keptSprites,
       sentSprites,
     }) {
-      assert.equal(keptSprites.length, 2, 'left kept');
-      assert.equal(removedSprites.length, 0, 'left removed');
-      assert.equal(sentSprites.length, 1, 'left sent');
-      assert.equal(receivedSprites.length, 0, 'left received');
-      assert.equal(insertedSprites.length, 0, 'left inserted');
+      assert.strictEqual(keptSprites.length, 2, 'left kept');
+      assert.strictEqual(removedSprites.length, 0, 'left removed');
+      assert.strictEqual(sentSprites.length, 1, 'left sent');
+      assert.strictEqual(receivedSprites.length, 0, 'left received');
+      assert.strictEqual(insertedSprites.length, 0, 'left inserted');
     });
 
     this.set('rightTransition', function*({
@@ -336,11 +343,11 @@ module('Integration | Component | animated each', function(hooks) {
       keptSprites,
       sentSprites,
     }) {
-      assert.equal(keptSprites.length, 0, 'right kept');
-      assert.equal(removedSprites.length, 0, 'right removed');
-      assert.equal(sentSprites.length, 0, 'right sent');
-      assert.equal(receivedSprites.length, 1, 'right received');
-      assert.equal(insertedSprites.length, 0, 'right inserted');
+      assert.strictEqual(keptSprites.length, 0, 'right kept');
+      assert.strictEqual(removedSprites.length, 0, 'right removed');
+      assert.strictEqual(sentSprites.length, 0, 'right sent');
+      assert.strictEqual(receivedSprites.length, 1, 'right received');
+      assert.strictEqual(insertedSprites.length, 0, 'right inserted');
     });
 
     this.set('leftItems', A([{ id: 'a' }, { id: 'c' }]));
@@ -383,7 +390,7 @@ module('Integration | Component | animated each', function(hooks) {
     });
 
     this.set('rightTransition', function*({ receivedSprites }) {
-      assert.equal(receivedSprites.length, 1, 'right found match');
+      assert.strictEqual(receivedSprites.length, 1, 'right found match');
     });
 
     this.set('leftAlive', false);
@@ -466,7 +473,7 @@ module('Integration | Component | animated each', function(hooks) {
 
     this.set('items', ['a', 'c'].map(makeItem));
     await animationsSettled();
-    assert.equal(innerCounter, 1, 'inner transition should run once');
+    assert.strictEqual(innerCounter, 1, 'inner transition should run once');
   });
 
   test('child animator reacts appropriately if its planned destruction is cancelled', async function(assert) {
@@ -572,7 +579,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('items', ['a', 'b', 'c'].map(makeItem));
 
     await animationsSettled();
-    assert.equal(innerCounter, 1, 'inner transition should run once');
+    assert.strictEqual(innerCounter, 1, 'inner transition should run once');
   });
 
   test('does not animate removed sprites at final destruction by default', async function(assert) {
@@ -601,7 +608,7 @@ module('Integration | Component | animated each', function(hooks) {
     this.set('alive', false);
     await settled();
     await animationsSettled();
-    assert.equal(transitionCounter, 0, 'transitionCounter');
+    assert.strictEqual(transitionCounter, 0, 'transitionCounter');
   });
 
   test('can opt in to animating removed sprites at final destruction', async function(assert) {
@@ -626,11 +633,11 @@ module('Integration | Component | animated each', function(hooks) {
     `);
 
     await animationsSettled();
-    assert.equal(transitionCounter, 0, 'transitionCounter precondition');
+    assert.strictEqual(transitionCounter, 0, 'transitionCounter precondition');
 
     this.set('alive', false);
     await settled();
     await animationsSettled();
-    assert.equal(transitionCounter, 1, 'transitionCounter!');
+    assert.strictEqual(transitionCounter, 1, 'transitionCounter!');
   });
 });

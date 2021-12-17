@@ -7,7 +7,7 @@ module('Fastboot | if demo', function(hooks) {
   test('it renders the correct h1 title', async function(assert) {
     const { url } = await visit('demos/ifdemo');
 
-    assert.equal(url, 'demos/ifdemo');
+    assert.strictEqual(url, 'demos/ifdemo');
     assert.dom('.message').doesNotExist();
   });
 });

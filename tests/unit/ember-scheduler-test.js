@@ -21,13 +21,17 @@ module('Unit | scheduler Ember layer', function(hooks) {
   });
 
   test('sanity check the runloop assertion', function(assert) {
-    assert.ok(!insideRunLoop(), 'should be not inside');
+    assert.expect(2);
+
+    assert.false(insideRunLoop(), 'should be not inside');
     run(() => {
-      assert.ok(insideRunLoop(), 'should be inside');
+      assert.true(insideRunLoop(), 'should be inside');
     });
   });
 
   test('task starts synchronously and sets on self', function(assert) {
+    assert.expect(1);
+
     let Class = EmberObject.extend({
       hello: task(function*() {
         this.set('foo', 'bar');
@@ -39,8 +43,8 @@ module('Unit | scheduler Ember layer', function(hooks) {
       object
         .get('hello')
         .perform()
-        .then(done);
-      assert.equal(object.get('foo'), 'bar');
+        .then(() => done());
+      assert.strictEqual(object.get('foo'), 'bar');
     });
   });
 
@@ -48,7 +52,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
     assert.expect(1);
     let Class = EmberObject.extend({
       hello: task(function*() {
-        assert.equal(this.get('hello.concurrency'), 1);
+        assert.strictEqual(this.get('hello.concurrency'), 1);
       }),
     });
     let object = Class.create();
@@ -57,7 +61,7 @@ module('Unit | scheduler Ember layer', function(hooks) {
       object
         .get('hello')
         .perform()
-        .then(done);
+        .then(() => done());
     });
   });
 
@@ -72,12 +76,14 @@ module('Unit | scheduler Ember layer', function(hooks) {
       object
         .get('hello')
         .perform()
-        .then(done);
-      assert.equal(object.get('hello.concurrency'), 0);
+        .then(() => done());
+      assert.strictEqual(object.get('hello.concurrency'), 0);
     });
   });
 
   test('perform resolves appropriately', function(assert) {
+    assert.expect(2);
+
     let resolve;
     let didResolve = false;
     let Class = EmberObject.extend({
@@ -94,10 +100,10 @@ module('Unit | scheduler Ember layer', function(hooks) {
         .then(() => {
           assert.ok(didResolve, 'should only get here after didResolve');
         })
-        .then(done);
+        .then(() => done());
     });
     later(() => {
-      assert.equal(object.get('hello.concurrency'), 1);
+      assert.strictEqual(object.get('hello.concurrency'), 1);
       didResolve = true;
       resolve();
     });
@@ -139,6 +145,8 @@ module('Unit | scheduler Ember layer', function(hooks) {
   });
 
   test('task refuses to start on destroyed object', function(assert) {
+    assert.expect(1);
+
     let Class = EmberObject.extend({
       hello: task(function*() {
         assert.ok(false, 'should not run');
@@ -175,6 +183,8 @@ module('Unit | scheduler Ember layer', function(hooks) {
   });
 
   test('restartable task', function(assert) {
+    assert.expect(2);
+
     let Class = EmberObject.extend({
       hello: task(function*(shouldBlock) {
         assert.log('task starting');
@@ -204,11 +214,13 @@ module('Unit | scheduler Ember layer', function(hooks) {
         'task exiting',
         'task starting',
       ]);
-      assert.equal(object.get('hello.concurrency'), 0);
+      assert.strictEqual(object.get('hello.concurrency'), 0);
     });
   });
 
   test('drop task', function(assert) {
+    assert.expect(2);
+
     let Class = EmberObject.extend({
       hello: task(function*(id, blockerPromise) {
         assert.log(`task ${id} starting`);
@@ -237,11 +249,13 @@ module('Unit | scheduler Ember layer', function(hooks) {
     });
     return promise.then(() => {
       assert.logEquals(['task 1 starting', 'task 1 exiting']);
-      assert.equal(object.get('hello.concurrency'), 0);
+      assert.strictEqual(object.get('hello.concurrency'), 0);
     });
   });
 
   test('can use derived state', function(assert) {
+    assert.expect(5);
+
     let resolve;
     let Class = EmberObject.extend({
       hello: task(function*() {
@@ -254,17 +268,21 @@ module('Unit | scheduler Ember layer', function(hooks) {
     let object = Class.create();
     let promise;
     run(() => {
-      assert.equal(object.get('message'), 'nope', 'initial state');
+      assert.strictEqual(object.get('message'), 'nope', 'initial state');
       promise = object.get('hello').perform();
-      assert.equal(object.get('message'), 'yup', 'running state');
+      assert.strictEqual(object.get('message'), 'yup', 'running state');
     });
     setTimeout(() => {
       resolve();
     }, 0);
     return promise.then(() => {
-      assert.equal(object.get('hello.concurrency'), 0, 'final concurrency');
-      assert.equal(object.get('hello.isRunning'), false, 'final isRunning');
-      assert.equal(object.get('message'), 'nope', 'final state');
+      assert.strictEqual(
+        object.get('hello.concurrency'),
+        0,
+        'final concurrency',
+      );
+      assert.false(object.get('hello.isRunning'), 'final isRunning');
+      assert.strictEqual(object.get('message'), 'nope', 'final state');
     });
   });
 
@@ -283,6 +301,8 @@ module('Unit | scheduler Ember layer', function(hooks) {
   });
 
   test('returns final value from generator function', function(assert) {
+    assert.expect(1);
+
     let Class = EmberObject.extend({
       hello: task(function*() {
         yield microwait();
@@ -295,11 +315,11 @@ module('Unit | scheduler Ember layer', function(hooks) {
       promise = object.get('hello').perform();
     });
     return promise.then(value => {
-      assert.equal(value, 42);
+      assert.strictEqual(value, 42);
     });
   });
 
-  test('task promise exposes microtask timing, not ember run loop', function(assert) {
+  test('task promise exposes microtask timing, not ember run loop', async function(assert) {
     let Class = EmberObject.extend({
       hello: task(function*() {}),
     });
@@ -308,9 +328,9 @@ module('Unit | scheduler Ember layer', function(hooks) {
     run(() => {
       promise = object.get('hello').perform();
     });
-    return promise.then(() => {
-      assert.ok(!insideRunLoop());
-    });
+    await promise;
+
+    assert.notOk(insideRunLoop());
   });
 
   test('nested performs are cancelable', function(assert) {

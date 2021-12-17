@@ -20,10 +20,8 @@ module('Acceptance | orphan', function(hooks) {
     let opacity = parseFloat(
       getComputedStyle(this.element.querySelector('.one')).opacity,
     );
-    assert.ok(
-      opacity > 0 && opacity < 1,
-      `expected opacity to be animating, it's ${opacity}`,
-    );
+    let animating = opacity > 0 && opacity < 1;
+    assert.ok(animating, `expected opacity to be animating, it's ${opacity}`);
 
     let onePosition = bounds(this.element.querySelector('.one')).left;
     let twoPosition = bounds(this.element.querySelector('.two')).left;
@@ -34,7 +32,7 @@ module('Acceptance | orphan', function(hooks) {
     );
     time.runAtSpeed(40);
     await animationsSettled();
-    assert.equal(currentURL(), '/demos/orphan');
+    assert.strictEqual(currentURL(), '/demos/orphan');
   });
 
   test('toggle /orphan out', async function(assert) {
@@ -48,10 +46,8 @@ module('Acceptance | orphan', function(hooks) {
     let opacity = parseFloat(
       getComputedStyle(this.element.querySelector('.one')).opacity,
     );
-    assert.ok(
-      opacity > 0 && opacity < 1,
-      `expected opacity to be animating, it's ${opacity}`,
-    );
+    let animating = opacity > 0 && opacity < 1;
+    assert.ok(animating, `expected opacity to be animating, it's ${opacity}`);
 
     let onePosition = bounds(this.element.querySelector('.one')).left;
     let twoPosition = bounds(this.element.querySelector('.two')).left;

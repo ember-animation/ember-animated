@@ -17,7 +17,7 @@ module('Acceptance | swapping lists', function(hooks) {
 
   test('visiting /swapping-lists', async function(assert) {
     await visit('/demos/swapping-lists');
-    assert.equal(currentURL(), '/demos/swapping-lists');
+    assert.strictEqual(currentURL(), '/demos/swapping-lists');
   });
 
   test('toggling with animated receiving side', async function(assert) {

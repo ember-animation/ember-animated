@@ -14,7 +14,7 @@ module('Acceptance | beacon', function(hooks) {
 
   test('visiting /beacon', async function(assert) {
     await visit('/demos/beacon');
-    assert.equal(currentURL(), '/demos/beacon');
+    assert.strictEqual(currentURL(), '/demos/beacon');
   });
 
   test('opening modal begins near button', async function(assert) {

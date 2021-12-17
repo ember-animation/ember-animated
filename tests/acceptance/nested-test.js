@@ -7,6 +7,6 @@ module('Acceptance | nested', function(hooks) {
 
   test('visiting /nested', async function(assert) {
     await visit('/demos/nested');
-    assert.equal(currentURL(), '/demos/nested');
+    assert.strictEqual(currentURL(), '/demos/nested');
   });
 });

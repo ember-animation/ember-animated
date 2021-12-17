@@ -17,13 +17,13 @@ module('Acceptance | here there', function(hooks) {
 
   test('visiting /here-there', async function(assert) {
     await visit('/demos/here-there');
-    assert.equal(currentURL(), '/demos/here-there');
+    assert.strictEqual(currentURL(), '/demos/here-there');
     assert.ok(
       this.element.querySelector('.left .demo-item'),
       'found left item',
     );
-    assert.ok(
-      !this.element.querySelector('.right .demo-item'),
+    assert.notOk(
+      this.element.querySelector('.right .demo-item'),
       'did not find left item',
     );
   });
@@ -34,8 +34,8 @@ module('Acceptance | here there', function(hooks) {
     // and timeout.
     await visit('/demos/here-there');
     await click(this.element.querySelector('.scenario-here-there button'));
-    assert.ok(
-      !this.element.querySelector('.left .demo-item'),
+    assert.notOk(
+      this.element.querySelector('.left .demo-item'),
       'did not find left item',
     );
     assert.ok(
@@ -62,8 +62,8 @@ module('Acceptance | here there', function(hooks) {
     time.runAtSpeed(60);
     await animationsSettled();
 
-    assert.ok(
-      !this.element.querySelector('.left .demo-item'),
+    assert.notOk(
+      this.element.querySelector('.left .demo-item'),
       'did not find left item',
     );
     assert.ok(

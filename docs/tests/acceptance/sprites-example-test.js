@@ -12,7 +12,7 @@ module('Integration | Sprites Example', function(hooks) {
     await render(hbs`
     {{sprites-example}}
     `);
-    assert.equal(
+    assert.strictEqual(
       this.element.querySelectorAll('.top-bar > button').length,
       2,
       'found two buttons',
@@ -56,15 +56,15 @@ module('Integration | Sprites Example', function(hooks) {
 
     await click(this.element.querySelector('.top-bar > button'));
     let rows = this.element.querySelectorAll('.transition-log-table tr');
-    assert.equal(
+    assert.strictEqual(
       rows.length,
       3,
       'should have one log entry (first two rows are headers)',
     );
     let columns = rows[2].querySelectorAll('td');
-    assert.equal(loggedWords(columns[0]).length, 1, 'One inserted word');
-    assert.equal(loggedWords(columns[1]).length, 7, 'Seven kept words');
-    assert.equal(loggedWords(columns[2]).length, 0, 'No removed words');
+    assert.strictEqual(loggedWords(columns[0]).length, 1, 'One inserted word');
+    assert.strictEqual(loggedWords(columns[1]).length, 7, 'Seven kept words');
+    assert.strictEqual(loggedWords(columns[2]).length, 0, 'No removed words');
   });
 });
 

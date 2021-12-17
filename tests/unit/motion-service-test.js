@@ -19,7 +19,7 @@ module('Unit | Service | motion', function(hooks) {
 
     farMatches = (await p2).farMatches;
     assert.ok(farMatches.get(sprite1), 'p2 saw a match for sprite1');
-    assert.ok(!farMatches.get(sprite2), 'p2 saw no match for sprite2');
+    assert.notOk(farMatches.get(sprite2), 'p2 saw no match for sprite2');
 
     assert.ok(service);
   });
