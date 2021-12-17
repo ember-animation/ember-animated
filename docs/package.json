@@ -31,7 +31,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "ember-auto-import": "^2.2.4",
     "ember-cli": "~3.15.1",
-    "ember-cli-addon-docs": "git+https://github.com/ember-learn/ember-cli-addon-docs.git#82bbdc7cc871a064687db99834dab2c2f58a039f",
+    "ember-cli-addon-docs": "^4.2.1",
     "ember-cli-addon-docs-yuidoc": "^1.0.0",
     "ember-cli-app-version": "^3.2.0",
     "ember-cli-babel": "^7.26.7",
