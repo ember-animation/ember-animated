@@ -15,5 +15,10 @@
 
   <button {{action "increment"}}>+</button>
   <button {{action "decrement"}}>-</button>
-  <input type="checkbox" checked={{this.showBoth}} onchange={{action (mut this.showBoth) (not this.showBoth)}}>
+  <input
+    type="checkbox"
+    aria-label="Toggle both left and right value visibility"
+    checked={{this.showBoth}}
+    {{on "change" (fn (mut this.showBoth) (not this.showBoth))}}
+  >
 </div>
