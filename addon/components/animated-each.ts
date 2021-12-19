@@ -14,8 +14,6 @@ import partition from '../-private/partition';
 import Child from '../-private/child';
 import assertNever from 'assert-never';
 
-// @ts-ignore: templates don't have types
-import layout from '../templates/components/animated-each';
 import MotionService from 'ember-animated/services/motion';
 import { Transition } from '../-private/transition';
 
@@ -58,7 +56,6 @@ import { Transition } from '../-private/transition';
   @public
 */
 export default class AnimatedEach extends Component {
-  layout = layout;
   tagName = '';
   static positionalParams = ['items'];
 

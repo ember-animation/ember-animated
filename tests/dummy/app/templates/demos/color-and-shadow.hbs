@@ -4,7 +4,7 @@
     Toggle Me
   </label>
 
-  {{#if this.showFirst }}
+  {{#if this.showFirst}}
     {{#animated-value "scenario-color-and-shadow.main" use=this.transition}}
       <div class="block first"></div>
     {{/animated-value}}
@@ -16,6 +16,7 @@
 
 </div>
 
+{{! template-lint-disable no-forbidden-elements }}
 <style>
   .scenario-color-and-shadow {
     margin: 40px;

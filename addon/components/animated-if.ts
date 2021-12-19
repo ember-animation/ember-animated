@@ -1,9 +1,6 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 
-// @ts-ignore: templates don't have types
-import layout from '../templates/components/animated-if';
-
 /**
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes.
   Animated-if uses the same arguments as animated-each.
@@ -49,7 +46,6 @@ import layout from '../templates/components/animated-if';
   @public
 */
 export default class AnimatedIfComponent extends Component {
-  layout = layout;
   tagName = '';
   static positionalParams = ['predicate'];
 

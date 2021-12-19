@@ -2,9 +2,6 @@ import { computed } from '@ember/object';
 import Component from '@ember/component';
 import { A } from '@ember/array';
 
-// @ts-ignore: templates don't have types
-import layout from '../templates/components/animated-value';
-
 /**
   A component that animates when a single value changes.
   Animated-value uses the same arguments as animated-each.
@@ -56,7 +53,6 @@ export default class AnimatedValueComponent extends Component {
   value!: unknown;
 
   tagName = '';
-  layout = layout;
 
   static positionalParams = ['value'];
 

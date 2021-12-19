@@ -6,7 +6,6 @@ import { task, Task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '..';
 import { componentNodes } from '../-private/ember-internals';
-import layout from 'ember-animated/templates/components/animated-container';
 import MotionService from 'ember-animated/services/motion';
 import { action } from '@ember/object';
 import { MotionConstructor } from '../-private/motion';
@@ -61,7 +60,6 @@ import { MotionConstructor } from '../-private/motion';
   @public
 */
 export default class AnimatedContainerComponent extends Component {
-  layout = layout;
   tagName = '';
 
   @service('-ea-motion')
