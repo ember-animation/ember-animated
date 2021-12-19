@@ -1,18 +1,15 @@
 //BEGIN-SNIPPET transitions-moveover-snippet.js
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { toLeft, toRight } from 'ember-animated/transitions/move-over';
 
-export default Component.extend({
-  init() {
-    this._super();
-    this.words = ['hello', 'goodbye'];
-    this.message = ['hello'];
-  },
+export default class TransitionMoveOverExample extends Component {
+  @tracked showHello = false;
 
-  toLeft,
-  toRight,
-  counter: 1,
-  showHello: false,
+  @action toggleShowHello() {
+    this.showHello = !this.showHello;
+  }
 
   rules({ newItems }) {
     if (newItems[0]) {
@@ -20,6 +17,6 @@ export default Component.extend({
     } else {
       return toLeft;
     }
-  },
-});
+  }
+}
 //END-SNIPPET

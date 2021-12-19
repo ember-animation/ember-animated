@@ -1,18 +1,16 @@
+/* eslint-disable require-yield */
 //BEGIN-SNIPPET between-components-snippet.js
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
 import { parallel } from 'ember-animated';
 import { later } from '@ember/runloop';
 
-export default Component.extend({
-  init() {
-    this._super();
-    this.items = this.makeItems();
-  },
-
-  deleteUndo: false,
+export default class extends Component {
+  @tracked items = this.makeItems();
+  @tracked deleteUndo = false;
 
   makeItems() {
     let result = [];
@@ -20,14 +18,9 @@ export default Component.extend({
       result.push(makeRandomItem(i));
     }
     return result;
-  },
+  }
 
-  transition: function* ({
-    insertedSprites,
-    keptSprites,
-    removedSprites,
-    beacons,
-  }) {
+  *transition({ insertedSprites, keptSprites, removedSprites, beacons }) {
     insertedSprites.forEach((sprite) => {
       sprite.startAtSprite(beacons.add);
       parallel(move(sprite, scale(sprite)));
@@ -41,37 +34,35 @@ export default Component.extend({
       sprite.endAtSprite(beacons.trash);
       parallel(move(sprite, scale(sprite)));
     });
-  },
+  }
 
-  addItem: action(function () {
-    let items = this.get('items');
+  @action addItem() {
+    let items = this.items;
     let index = Math.floor(Math.random() * Math.floor(10));
-    this.set(
-      'items',
-      items
-        .slice(0, 0)
-        .concat([makeRandomItem(index)])
-        .concat(items.slice(0)),
-    );
-  }),
+    this.items = items
+      .slice(0, 0)
+      .concat([makeRandomItem(index)])
+      .concat(items.slice(0));
+  }
 
-  removeItem: action(function (which) {
-    let items = this.get('items');
+  @action removeItem(which) {
+    let items = this.items;
     let index = items.indexOf(which);
-    this.set(
-      'items',
-      items.filter((i) => i !== which),
-    );
-    if (this.get('deleteUndo')) {
-      later(() => this.send('restoreItem', which, index), 1000);
+    this.items = items.filter((i) => i !== which);
+    if (this.deleteUndo) {
+      later(() => this.restoreItem(which, index), 1000);
     }
-  }),
+  }
 
-  restoreItem: action(function (which, index) {
-    let items = this.get('items');
-    this.set('items', items.concat(items.splice(index, 0, which)));
-  }),
-});
+  @action restoreItem(which, index) {
+    let items = this.items;
+    this.items = items.concat(items.splice(index, 0, which));
+  }
+
+  @action toggleDeleteUndo() {
+    this.deleteUndo = !this.deleteUndo;
+  }
+}
 
 function makeRandomItem(index) {
   let messages = [

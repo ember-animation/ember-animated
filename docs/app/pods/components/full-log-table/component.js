@@ -1,5 +1,5 @@
-import Component from '@ember/component';
-import { A } from '@ember/array';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 function printSprites(context) {
@@ -10,24 +10,10 @@ function printSprites(context) {
   };
 }
 
-export default Component.extend({
-  tagName: '',
-  init() {
-    this._super();
-    this.messages = A();
-  },
-  fullLog: action(function (context) {
-    this.messages.pushObject(printSprites(context));
-  }),
-});
+export default class extends Component {
+  @tracked messages = [];
 
-export const extensions = {
-  init() {
-    this._super();
-    this.transition = this.transition.bind(this);
-  },
-  transition: function (context) {
-    this.fullLog(context);
-    return this._super(context);
-  },
-};
+  @action fullLog(context) {
+    this.messages = [...this.messages, printSprites(context)];
+  }
+}

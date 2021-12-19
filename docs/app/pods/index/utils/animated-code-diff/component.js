@@ -1,36 +1,42 @@
-import { computed } from '@ember/object';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { htmlSafe } from '@ember/template';
 import { wait } from 'ember-animated';
 import move from 'ember-animated/motions/move';
 import { fadeIn, fadeOut } from 'ember-animated/motions/opacity';
 import { highlightCode } from 'ember-cli-addon-docs/utils/compile-markdown';
-import { htmlSafe } from '@ember/string';
 
-export default Component.extend({
-  init() {
-    this._super(...arguments);
+export default class AnimatedCodeDiff extends Component {
+  constructor(...args) {
+    super(...args);
     this.codeTransition = this.codeTransition.bind(this);
-  },
+  }
 
-  onAnimationChange() {},
+  @tracked transitionsRunning = 0;
+  @tracked isAnimatingInsertedLines = false;
 
-  originalLines: linesFromDiff('diff', 'before'),
-  finalLines: linesFromDiff('diff', 'after'),
+  get originalLines() {
+    let lineObjects = getLineObjectsFromDiff(this.args.diff, 'before');
+    let language = this.args.label.substr(this.args.label.lastIndexOf('.') + 1);
 
-  activeLines: computed('isShowingFinal', function () {
-    return this.isShowingFinal ? this.finalLines : this.originalLines;
-  }),
+    return highlightLineObjects(lineObjects, language);
+  }
+  get finalLines() {
+    let lineObjects = getLineObjectsFromDiff(this.args.diff, 'after');
+    let language = this.args.label.substr(this.args.label.lastIndexOf('.') + 1);
 
-  codeTransition: function* ({
-    duration,
-    insertedSprites,
-    removedSprites,
-    keptSprites,
-  }) {
-    this.incrementProperty('transitionsRunning');
-    this.set('isAnimatingInsertedLines', false);
+    return highlightLineObjects(lineObjects, language);
+  }
 
-    if (this.isShowingFinal) {
+  get activeLines() {
+    return this.args.isShowingFinal ? this.finalLines : this.originalLines;
+  }
+
+  *codeTransition({ duration, insertedSprites, removedSprites, keptSprites }) {
+    this.transitionsRunning++;
+    this.isAnimatingInsertedLines = false;
+
+    if (this.args.isShowingFinal) {
       removedSprites.forEach(fadeOut);
 
       // Need to set inserted sprites to 0 opacity in case their animation is interrupted
@@ -47,12 +53,12 @@ export default Component.extend({
 
       yield wait(duration);
 
-      while (this.animationPaused) {
+      while (this.args.animationPaused) {
         yield wait(100);
       }
 
       // this.set('isAnimatingInsertedLines', true);
-      this.onAnimationChange(true);
+      this.args.onAnimationChange?.(true);
 
       for (let sprite of insertedSprites) {
         sprite.moveToFinalPosition();
@@ -81,7 +87,7 @@ export default Component.extend({
       }
 
       // this.set('isAnimatingInsertedLines', false);
-      this.onAnimationChange(false);
+      this.args.onAnimationChange?.(false);
     } else {
       removedSprites.forEach(fadeOut);
       keptSprites.map((sprite) => {
@@ -91,17 +97,8 @@ export default Component.extend({
       insertedSprites.forEach(fadeIn);
     }
 
-    this.decrementProperty('transitionsRunning');
-  },
-});
-
-function linesFromDiff(diffProperty, beforeOrAfter) {
-  return computed(function () {
-    let lineObjects = getLineObjectsFromDiff(this[diffProperty], beforeOrAfter);
-    let language = this.label.substr(this.label.lastIndexOf('.') + 1);
-
-    return highlightLineObjects(lineObjects, language);
-  });
+    this.transitionsRunning--;
+  }
 }
 
 function highlightLineObjects(lineObjects, language) {

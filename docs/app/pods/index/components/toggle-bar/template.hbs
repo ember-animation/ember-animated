@@ -8,24 +8,24 @@
       ml-2 w-15 h-5 rounded-full inline-block flex
       relative focus:outline-none focus:shadow-outline shadow-inner
       overflow-hidden transition
-      {{if @enabled 'bg-blue' 'bg-grey-light'}}
+      {{if @enabled "bg-blue" "bg-grey-light"}}
     "
     type="button"
     {{on "click" (fn @onToggle (not @enabled))}}
   >
-    <span class="p-px absolute w-5 h-5 flex pin-t pin-l nudge-r-0 transition {{if @enabled 'nudge-r-10'}}">
+    <span class="p-px absolute w-5 h-5 flex pin-t pin-l nudge-r-0 transition {{if @enabled "nudge-r-10"}}">
       <span class="bg-white rounded-full w-full h-full shadow"></span>
     </span>
-    <span class='
+    <span class="
       text-white text-sm ml-auto pl-2 font-bold tracking-tight
-      pb-px transition {{if @enabled 'nudge-r-0' '-nudge-r-10'}}
-    '>
+      pb-px transition {{if @enabled "nudge-r-0" "-nudge-r-10"}}
+    ">
       ON
     </span>
-    <span class='
+    <span class="
       text-grey-darker text-sm ml-auto mr-2 font-bold tracking-tight
-      pb-px transition {{if @enabled 'nudge-r-10' 'nudge-r-0'}}
-    '>
+      pb-px transition {{if @enabled "nudge-r-10" "nudge-r-0"}}
+    ">
       OFF
     </span>
   </button>

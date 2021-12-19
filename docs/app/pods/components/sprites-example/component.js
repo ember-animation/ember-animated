@@ -1,14 +1,13 @@
+/* eslint-disable require-yield */
 //BEGIN-SNIPPET sprites-snippet.js
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 
-export default Component.extend({
-  init() {
-    this._super();
-    this.items = this.makeItems();
-  },
+export default class SpriteExample extends Component {
+  @tracked items = this.makeItems();
 
   makeItems() {
     let result = [];
@@ -16,9 +15,9 @@ export default Component.extend({
       result.push(makeRandomItem(i));
     }
     return result;
-  },
+  }
 
-  transition: function* (context) {
+  *transition(context) {
     let { insertedSprites, keptSprites, removedSprites } = context;
     insertedSprites.forEach((sprite) => {
       sprite.applyStyles({ 'z-index': '1' });
@@ -33,31 +32,22 @@ export default Component.extend({
       sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite, { easing: easeIn });
     });
-  },
+  }
 
-  deleteAll: false,
-  refresh: false,
-
-  addItem: action(function () {
-    let items = this.get('items');
+  @action addItem() {
+    let items = this.items;
     let index = Math.floor(Math.random() * Math.floor(10));
-    this.set(
-      'items',
-      items
-        .slice(0, 0)
-        .concat([makeRandomItem(index)])
-        .concat(items.slice(0)),
-    );
-  }),
+    this.items = items
+      .slice(0, 0)
+      .concat([makeRandomItem(index)])
+      .concat(items.slice(0));
+  }
 
-  deleteItems: action(function () {
-    let items = this.get('items');
-    this.set(
-      'items',
-      items.filter((item) => !item.deleteMessage),
-    );
-  }),
-});
+  @action deleteItems() {
+    let items = this.items;
+    this.items = items.filter((item) => !item.deleteMessage);
+  }
+}
 
 function makeRandomItem(index) {
   let messages = [

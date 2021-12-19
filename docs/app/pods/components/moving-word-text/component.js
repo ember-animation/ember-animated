@@ -1,18 +1,16 @@
 //BEGIN-SNIPPET moving-word-text-snippet.js
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import fade from 'ember-animated/transitions/fade';
 
-export default Component.extend({
-  listMode: false,
-  fade,
+export default class TransitionExample extends Component {
+  transition = fade;
 
-  toggle: action(function () {
-    this.set('listMode', !this.listMode);
-  }),
+  @tracked listMode = false;
 
-  normal: action(function () {
-    this.set('noAdjustments', !this.noAdjustments);
-  }),
-});
+  @action toggle() {
+    this.listMode = !this.listMode;
+  }
+}
 //END-SNIPPET

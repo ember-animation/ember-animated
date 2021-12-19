@@ -1,57 +1,58 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import fade from 'ember-animated/transitions/fade';
 import dedent from '../utils/dedent';
 
-export default Component.extend({
-  transitionsRunning: 0,
+export default class IndexDemo1 extends Component {
+  @tracked transitionsRunning = 0;
 
-  guests: 1,
+  @tracked guests = 1;
 
-  transition: fade,
+  transition = fade;
 
-  addGuest: action(function () {
+  @action addGuest() {
     if (this.guests < 6) {
-      this.incrementProperty('guests');
+      this.guests++;
     }
-  }),
+  }
 
-  removeGuest: action(function () {
+  @action removeGuest() {
     if (this.guests > 1) {
-      this.decrementProperty('guests');
+      this.guests--;
     }
-  }),
+  }
 
-  templateDiff: dedent`
+  templateDiff = dedent`
     - {{#each this.guests}}
     + {{#animated-each this.guests use=this.transition}}
-        <Icon 'user' />
+        <Icon "user" />
     - {{/each}}
     + {{/animated-each}}
-  `,
+  `;
 
-  componentDiff: dedent`
-      import Component from '@ember/component';
+  componentDiff = dedent`
+      import Component from '@glimmer/component';
+      import { tracked } from '@glimmer/tracking';
+      import { action } from '@ember/object';
     + import fade from 'ember-animated/transitions/fade';
 
-      export default Component.extend({
-    +   transition: fade,
+      export default class extends Component {
+    +   transition = fade;
     +
-        guests: 1,
+        @tracked guests = 1;
 
-        actions: {
-          addGuest() {
-            if (this.guests < 6) {
-              this.incrementProperty('guests');
-            }
-          },
-
-          removeGuest() {
-            if (this.guests > 1) {
-              this.decrementProperty('guests');
-            }
+        @action addGuest () {
+          if (this.guests < 6) {
+            this.guests++;
           }
         }
-      });
-  `,
-});
+
+        @action removeGuest () {
+          if (this.guests > 1) {
+            this.guests--;
+          }
+        }
+      }
+  `;
+}

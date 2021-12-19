@@ -1,20 +1,20 @@
- {{! BEGIN-SNIPPET transitions-snippet.hbs }}
+{{! BEGIN-SNIPPET transitions-snippet.hbs }}
 <div class="controls">
   <label>
     Show Message
     <input
       type="checkbox"
-      checked={{this.custom}}
-      {{on "change" (fn (mut this.custom) (not this.custom))}}
+      checked={{this.showMessage}}
+      {{on "change" this.toggleShowMessage}}
     >
   </label>
 </div>
 
 <div class="scenario-transitions">
   <AnimatedContainer>
-    {{#animated-if this.custom use=this.slideFromSide}}
+    {{#animated-if this.showMessage use=this.slideFromSide}}
       <div class="message">
-        {{this.mail}}
+        Hello
       </div>
     {{/animated-if}}
   </AnimatedContainer>

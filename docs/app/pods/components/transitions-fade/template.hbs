@@ -5,16 +5,16 @@
     <input
       type="checkbox"
       checked={{this.fadeMessage}}
-      {{on "change" (fn (mut this.fadeMessage) (not this.fadeMessage))}}
+      {{on "change" this.toggleFadeMessage}}
     >
   </label>
 </div>
 
 <div class="scenario-transitions clearfix">
   <AnimatedContainer>
-    {{#animated-if this.fadeMessage use=this.fade}}
+    {{#animated-if this.fadeMessage use=this.transition}}
       <div class="message">
-        {{this.mail}}
+        Hello
       </div>
     {{/animated-if}}
   </AnimatedContainer>

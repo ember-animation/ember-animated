@@ -12,42 +12,42 @@ Transitions are interruptible and they run every time the state of a sprite chan
 
 In this demonstration, the message fades in or it fades out as it changes states. When the checkbox is checked or unchecked the state of the message changes. This change causes the transition to run. Try checking and unchecking the box yourself to watch the message animate in both directions!
 
-{{#docs-demo as |demo|}}
-    {{#demo.example name="fade"}}
-      {{transitions-fade}}
-    {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example @name="fade">
+    <TransitionsFade />
+  </demo.example>
 
-    {{demo.snippet 'transitions-fade-snippet.hbs' label='transitions-fade.hbs'}}
-    {{demo.snippet 'transitions-fade-snippet.js' label='transitions-fade.js'}}
-    {{demo.snippet 'transitions-snippet.css'}}
-{{/docs-demo}}
+  <demo.snippet @name="transitions-fade-snippet.hbs" @label="transitions-fade.hbs" />
+  <demo.snippet @name="transitions-fade-snippet.js" @label="transitions-fade.js" />
+  <demo.snippet @name="transitions-snippet.css" />
+</DocsDemo>
 
 
 ### moveOver
 
 `moveOver` comes with four options: `toLeft`, `toRight`, `toUp`, and `toDown`. `toLeft` and `toRight` are demonstrated here, using `rules` to compare two messages and choose a transition. For more on `rules` see [Data-Dependent Rules](../docs/rules/).
 
-{{#docs-demo as |demo|}}
-  {{#demo.example name="moveover"}}
-    {{transitions-moveover}}
-  {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example @name="moveover">
+    <TransitionsMoveover />
+  </demo.example>
 
-  {{demo.snippet 'transitions-moveover-snippet.hbs' label='transitions-moveover.hbs'}}
-  {{demo.snippet 'transitions-moveover-snippet.js' label='transitions-moveover.js'}}
-  {{demo.snippet 'move-over-snippet.css'}}
-{{/docs-demo}}
+  <demo.snippet @name="transitions-moveover-snippet.hbs" @label="transitions-moveover.hbs" />
+  <demo.snippet @name="transitions-moveover-snippet.js" @label="transitions-moveover.js" />
+  <demo.snippet @name="move-over-snippet.css" />
+</DocsDemo>
 
 
 ### Custom 
 
 You can also create your own transitions. `slideFromSide` is a custom transition that assigns motions to `insertedSprites`, `keptSprites`, and `removedSprites`. The message will slide to and from the side when the button is selected. 
 
-{{#docs-demo as |demo|}}
-    {{#demo.example name="custom"}}
-      {{transitions-example}}
-    {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example @name="custom">
+    <TransitionsExample />
+  </demo.example>
 
-    {{demo.snippet 'transitions-snippet.hbs' label='transitions-example.hbs'}}
-    {{demo.snippet 'transitions-snippet.js' label='transitions-example.js'}}
-    {{demo.snippet 'transitions-snippet.css'}}
-{{/docs-demo}}
+  <demo.snippet @name="transitions-snippet.hbs" @label="transitions-example.hbs" />
+  <demo.snippet @name="transitions-snippet.js" @label="transitions-example.js" />
+  <demo.snippet @name="transitions-snippet.css" />
+</DocsDemo>

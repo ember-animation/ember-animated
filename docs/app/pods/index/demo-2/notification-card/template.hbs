@@ -6,17 +6,17 @@
   {{on "mouseleave" this.resumeProgress}}
 >
   <div class="relative bg-grey-darkest text-white text-sm rounded overflow-hidden px-4 py-3 shadow-md flex">
-    {{!notification.text}}
+    {{@notification.text}}
 
     <div class="mx-auto"></div>
 
-    <div class='ml-3'>
+    <div class="ml-3">
       <button
-        class='px-2 py-1 text-grey-dark hover:text-white focus:outline-none focus:text-white'
+        class="px-2 py-1 text-grey-dark hover:text-white focus:outline-none focus:text-white"
         type="button"
         {{on "click" this.onDismiss}}
       >
-        {{fa-icon 'times'}}
+        {{fa-icon "times"}}
       </button>
     </div>
 

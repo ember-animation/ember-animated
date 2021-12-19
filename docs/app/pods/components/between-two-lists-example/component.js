@@ -1,22 +1,20 @@
+/* eslint-disable require-yield */
 //BEGIN-SNIPPET between-two-lists-example-snippet.js
 import { later } from '@ember/runloop';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
 import { parallel } from 'ember-animated';
 
-export default Component.extend({
-  bounceBack: false,
-  init() {
-    this._super();
-    this.leftItems = this.makeLeftItems();
-    this.rightItems = this.makeRightItems();
-  },
+export default class extends Component {
+  @tracked bounceBack = false;
 
-  transition: function* (context) {
-    let { keptSprites, sentSprites, receivedSprites } = context;
+  @tracked leftItems = this.makeLeftItems();
+  @tracked rightItems = this.makeRightItems();
 
+  *transition({ keptSprites, sentSprites, receivedSprites }) {
     keptSprites.forEach((sprite) => {
       parallel(move(sprite), scale(sprite));
     });
@@ -28,7 +26,7 @@ export default Component.extend({
     receivedSprites.forEach((sprite) => {
       sprite.moveToFinalPosition();
     });
-  },
+  }
 
   makeLeftItems() {
     let result = [];
@@ -36,7 +34,7 @@ export default Component.extend({
       result.push(makeRandomItem(i));
     }
     return result;
-  },
+  }
 
   makeRightItems() {
     let result = [];
@@ -44,31 +42,34 @@ export default Component.extend({
       result.push(makeRandomItem2(i));
     }
     return result;
-  },
+  }
 
-  move: action(function (item, bounceCounter = 1) {
-    let rightItems = this.get('rightItems');
-    let leftItems = this.get('leftItems');
+  @action move(item, bounceCounter = 1) {
+    let rightItems = this.rightItems;
+    let leftItems = this.leftItems;
     let index = rightItems.indexOf(item);
+
     if (index !== -1) {
-      this.set(
-        'rightItems',
-        rightItems.slice(0, index).concat(rightItems.slice(index + 1)),
-      );
-      this.set('leftItems', leftItems.concat([item]));
+      this.rightItems = rightItems
+        .slice(0, index)
+        .concat(rightItems.slice(index + 1));
+      this.leftItems = leftItems.concat([item]);
     } else {
       index = leftItems.indexOf(item);
-      this.set(
-        'leftItems',
-        leftItems.slice(0, index).concat(leftItems.slice(index + 1)),
-      );
-      this.set('rightItems', rightItems.concat([item]));
+      this.leftItems = leftItems
+        .slice(0, index)
+        .concat(leftItems.slice(index + 1));
+      this.rightItems = rightItems.concat([item]);
     }
-    if (this.get('bounceBack') && bounceCounter > 0) {
-      later(() => this.send('move', item, bounceCounter - 1), 1000);
+    if (this.bounceBack && bounceCounter > 0) {
+      later(() => this.move(item, bounceCounter - 1), 1000);
     }
-  }),
-});
+  }
+
+  @action toggleBounceBack() {
+    this.bounceBack = !this.bounceBack;
+  }
+}
 
 function makeRandomItem(index) {
   let messages = ['Dwight', 'Stanley', 'Kelly', 'Ryan', 'Kevin'];

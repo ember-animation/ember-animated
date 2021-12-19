@@ -7,7 +7,7 @@
       <input
         type="checkbox"
         checked={{this.deleteUndo}}
-        {{on "change" (fn (mut this.deleteUndo) (not this.deleteUndo))}}
+        {{on "change" this.toggleDeleteUndo}}
       >
     </label>
   </div>

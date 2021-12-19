@@ -1,18 +1,20 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import move from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
 import { wait } from 'ember-animated';
 import dedent from '../utils/dedent';
 
-export default Component.extend({
+export default class IndexDemo3 extends Component {
+  // eslint-disable-next-line require-yield
   *collapse({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       move(sprite);
       scale(sprite);
     }
-  },
+  }
 
+  // eslint-disable-next-line require-yield
   *shuffle({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({
@@ -23,7 +25,7 @@ export default Component.extend({
       move(sprite);
       scale(sprite);
     }
-  },
+  }
 
   *shuffleWithStagger({ receivedSprites }) {
     for (let sprite of receivedSprites) {
@@ -37,11 +39,11 @@ export default Component.extend({
 
       yield wait(75);
     }
-  },
+  }
 
-  selectedCategoryName: 'Nature',
+  @tracked selectedCategoryName = 'Nature';
 
-  categories: Object.freeze([
+  categories = Object.freeze([
     {
       name: 'Nature',
       images: [
@@ -66,19 +68,19 @@ export default Component.extend({
         'images/food-3.jpeg',
       ],
     },
-  ]),
+  ]);
 
-  selectedCategory: computed('selectedCategoryName', function () {
+  get selectedCategory() {
     return this.categories.find(
       (category) => category.name === this.selectedCategoryName,
     );
-  }),
+  }
 
-  componentDiff: dedent`
-      import Component from '@ember/component';
+  componentDiff = dedent`
+      import Component from '@glimmer/component';
     + import { wait } from 'ember-animated';
 
-      export default Component.extend({
+      export default class extends Component {
 
         * transition({ receivedSprites, sentSprites }) {
           for (let sprite of receivedSprites) {
@@ -94,6 +96,6 @@ export default Component.extend({
           }
         }
 
-      });
-  `,
-});
+      }
+  `;
+}

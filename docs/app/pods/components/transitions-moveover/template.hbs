@@ -5,7 +5,7 @@
     <input
       type="checkbox"
       checked={{this.showHello}}
-      {{on "change" (fn (mut this.showHello) (not this.showHello))}}
+      {{on "change" this.toggleShowHello}}
     >
   </label>
 

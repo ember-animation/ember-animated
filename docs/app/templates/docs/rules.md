@@ -4,13 +4,12 @@
 
 In this demonstration, the `rules` choose a transition based on the number in the counter. When the counter increments, the new number is larger than the old number so the `toUp` transition runs. When the counter decrements, the old number is larger than the new one and and the `toDown` transition runs. 
 
-{{#docs-demo as |demo|}}
-    {{#demo.example}}
-      {{rules-example}}
-    {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example>
+    <RulesExample />
+  </demo.example>
 
-    {{demo.snippet 'rules-snippet.hbs' label='rules-example.hbs'}}
-    {{demo.snippet 'rules-snippet.js' label='rules-example.js'}}
-    {{demo.snippet 'rules-snippet.css'}}
-{{/docs-demo}}
-
+  <demo.snippet @name="rules-snippet.hbs" @label="rules-example.hbs" />
+  <demo.snippet @name="rules-snippet.js" @label="rules-example.js" />
+  <demo.snippet @name="rules-snippet.css" />
+</DocsDemo>
