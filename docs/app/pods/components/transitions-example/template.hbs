@@ -1,13 +1,20 @@
  {{! BEGIN-SNIPPET transitions-snippet.hbs }}
 <div class="controls">
-  <label>Show Message<input type="checkbox" checked={{custom}} onchange={{action (mut custom) (not custom)}}></label>
+  <label>
+    Show Message
+    <input
+      type="checkbox"
+      checked={{this.custom}}
+      {{on "change" (fn (mut this.custom) (not this.custom))}}
+    >
+  </label>
 </div>
 
 <div class="scenario-transitions">
   <AnimatedContainer>
-    {{#animated-if custom use=slideFromSide}}
+    {{#animated-if this.custom use=this.slideFromSide}}
       <div class="message">
-        {{mail}}
+        {{this.mail}}
       </div>
     {{/animated-if}}
   </AnimatedContainer>

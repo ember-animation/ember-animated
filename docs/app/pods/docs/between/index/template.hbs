@@ -1,18 +1,18 @@
 {{! BEGIN-SNIPPET index-snippet.hbs }}
-{{#animated-value "index-route" initialInsertion=true finalRemoval=true use=transition duration=1000}}
+{{#animated-value "index-route" initialInsertion=true finalRemoval=true use=this.transition duration=1000}}
   <div class="hero-list">
-    {{#each model as |person|}}
-      {{#link-to "docs.between.detail" person.id tagName="div"}}
+    {{#each this.model as |person|}}
+      <LinkTo @route="docs.between.detail" @model={{person.id}}>
         <AnimatedContainer>
           {{#animated-value person duration=1000 as |p|}}
             <div class="hero-list-image">
-              <img src={{p.avatarUrl}}>
+              <img src={{p.avatarUrl}} alt={{person.name}}>
               <span>Thumbnail</span>
             </div>
           {{/animated-value}}
         </AnimatedContainer>
         <p>{{person.name}}</p>
-      {{/link-to}}
+      </LinkTo>
     {{/each}}
   </div>
 {{/animated-value}}

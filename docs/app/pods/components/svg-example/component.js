@@ -1,6 +1,6 @@
 //BEGIN-SNIPPET svg-snippet.js
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { computed, action } from '@ember/object';
 import moveSVG from 'ember-animated/motions/move-svg';
 import { parallel } from 'ember-animated';
 
@@ -28,10 +28,8 @@ export default Component.extend({
     );
   },
 
-  actions: {
-    move() {
-      this.notifyPropertyChange('bubbles');
-    },
-  },
+  move: action(function () {
+    this.notifyPropertyChange('bubbles');
+  }),
 });
 //END-SNIPPET

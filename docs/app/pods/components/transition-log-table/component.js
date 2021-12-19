@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { A } from '@ember/array';
+import { action } from '@ember/object';
 
 function printSprites(context) {
   return {
@@ -15,9 +16,9 @@ export default Component.extend({
     this._super();
     this.messages = A();
   },
-  logTransition(context) {
+  logTransition: action(function (context) {
     this.messages.pushObject(printSprites(context));
-  },
+  }),
 });
 
 export const extensions = {

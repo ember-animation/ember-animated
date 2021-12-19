@@ -1,5 +1,6 @@
 //BEGIN-SNIPPET sprites-snippet.js
 import Component from '@ember/component';
+import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 
@@ -37,26 +38,25 @@ export default Component.extend({
   deleteAll: false,
   refresh: false,
 
-  actions: {
-    addItem() {
-      let items = this.get('items');
-      let index = Math.floor(Math.random() * Math.floor(10));
-      this.set(
-        'items',
-        items
-          .slice(0, 0)
-          .concat([makeRandomItem(index)])
-          .concat(items.slice(0)),
-      );
-    },
-    deleteItems() {
-      let items = this.get('items');
-      this.set(
-        'items',
-        items.filter((item) => !item.deleteMessage),
-      );
-    },
-  },
+  addItem: action(function () {
+    let items = this.get('items');
+    let index = Math.floor(Math.random() * Math.floor(10));
+    this.set(
+      'items',
+      items
+        .slice(0, 0)
+        .concat([makeRandomItem(index)])
+        .concat(items.slice(0)),
+    );
+  }),
+
+  deleteItems: action(function () {
+    let items = this.get('items');
+    this.set(
+      'items',
+      items.filter((item) => !item.deleteMessage),
+    );
+  }),
 });
 
 function makeRandomItem(index) {

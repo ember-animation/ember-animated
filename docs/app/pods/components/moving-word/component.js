@@ -39,7 +39,5 @@ export default Component.extend({
     let motions = this.motions();
     sentSprites.forEach(parallel(...motions));
   },
-}).reopenClass({
-  positionalParams: ['text'],
 });
 //END-SNIPPET

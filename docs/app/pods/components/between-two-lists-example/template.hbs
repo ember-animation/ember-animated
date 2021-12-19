@@ -3,20 +3,26 @@
   <div class="party">The Dinner Party Guest List</div>
 
   <div class="bounce">
-    {{svg-jar "rotate-left"}} <input type="checkbox" checked={{bounceBack}} onchange={{action (mut bounceBack) (not bounceBack)}}>
+    {{svg-jar "rotate-left"}}
+    <input
+      type="checkbox"
+      aria-label="Bounce person back"
+      checked={{this.bounceBack}}
+      {{on "change" (fn (mut this.bounceBack) (not this.bounceBack))}}
+    >
   </div>
 
   <AnimatedContainer>
 
     <AnimatedContainer class="left">
       <div class="guest-list-header">Going{{svg-jar "chevron-down"}}</div>
-      {{#animated-each leftItems use=transition as |item|}}
+      {{#animated-each this.leftItems use=this.transition as |item|}}
         <div class="each-item">
           <div class="icon">
-            <img src={{item.image}}>
+            <img src={{item.image}} alt={{item.message}}>
           </div>
           <div class="name">{{item.message}}</div>
-          <button {{action "move" item}}>{{svg-jar "ban"}}</button>
+          <button type="button" {{on "click" (fn this.move item)}}>{{svg-jar "ban"}}</button>
         </div>
       {{/animated-each}}
     </AnimatedContainer>
@@ -24,11 +30,13 @@
 
     <AnimatedContainer class="right">
       <div class="guest-list-header">Can't Go{{svg-jar "chevron-down"}}</div>
-      {{#animated-each rightItems use=transition as |item|}}
+      {{#animated-each this.rightItems use=this.transition as |item|}}
         <div class="each-item">
-          <div class="icon"><img src={{item.image}}></div>
+          <div class="icon">
+            <img src={{item.image}} alt={{item.message}}>
+          </div>
           <div class="name">{{item.message}}</div>
-          <button {{action "move" item}}>{{svg-jar "check"}}</button>
+          <button type="button" {{on "click" (fn this.move item)}}>{{svg-jar "check"}}</button>
         </div>
       {{/animated-each}}
     </AnimatedContainer>

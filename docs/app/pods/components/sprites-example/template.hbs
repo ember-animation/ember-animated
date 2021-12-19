@@ -1,8 +1,8 @@
 {{! BEGIN-SNIPPET sprites-snippet.hbs }}
 <div class="scenario-sprites clearfix">
   <div class="top-bar">
-    <button {{action "addItem"}}>{{svg-jar "envelope-big"}}</button>
-    <button {{action "deleteItems"}}>{{svg-jar "trash-big"}}</button>
+    <button type="button" {{on "click" this.addItem}}>{{svg-jar "envelope-big"}}</button>
+    <button type="button" {{on "click" this.deleteItems}}>{{svg-jar "trash-big"}}</button>
     <div class="mail-buttons">
       {{svg-jar "mail-reply-big"}}
       {{svg-jar "mail-reply-all-big"}}
@@ -13,22 +13,29 @@
   <AnimatedContainer>
     <div class="sidebar">
       <table>
-        <th>Mail {{svg-jar "caret-down"}}</th>
-        <tr>
-          <td>{{svg-jar "inbox"}} Inbox({{items.length}})</td>
-        </tr>
-        <tr>
-          <td>{{svg-jar "paper-plane"}} Sent Mail</td>
-        </tr>
-        <tr>
-          <td>{{svg-jar "edit"}} Drafts(3)</td>
-        </tr>
+        <tbody>
+          <th>Mail {{svg-jar "caret-down"}}</th>
+          <tr>
+            <td>{{svg-jar "inbox"}} Inbox({{this.items.length}})</td>
+          </tr>
+          <tr>
+            <td>{{svg-jar "paper-plane"}} Sent Mail</td>
+          </tr>
+          <tr>
+            <td>{{svg-jar "edit"}} Drafts(3)</td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="inbox">
-      {{#animated-each items use=transition as |item|}}
+      {{#animated-each this.items use=this.transition as |item|}}
         <div class="each-item">
-          <input type="checkbox" checked={{item.deleteMessage}} onchange={{action (mut item.deleteMessage) (not item.deleteMessage)}}>
+          <input
+            aria-label="toggle {{item.message}}"
+            type="checkbox"
+            checked={{item.deleteMessage}}
+            {{on "change" (fn (mut item.deleteMessage) (not item.deleteMessage))}}
+          >
           <div class="message">{{item.message}}</div>
           <div class="date">{{moment-format item.received "MMM D"}}</div>
         </div>

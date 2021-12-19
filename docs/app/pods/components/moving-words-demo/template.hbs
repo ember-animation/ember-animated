@@ -1,13 +1,53 @@
 <div class="motion-menu">
-  <label><input type="checkbox" checked={{not disableMove}} onchange={{action (mut disableMove) (not disableMove)}}> Move</label>
-  <label><input type="checkbox" checked={{not disableCompensateForScale}} onchange={{action (mut disableCompensateForScale) (not disableCompensateForScale)}}> Compensate For Scale</label>
-  <label><input type="checkbox" checked={{not disableAdjustFontSize}} onchange={{action (mut disableAdjustFontSize) (not disableAdjustFontSize)}}> Adjust Font Size</label>
-  <label><input type="checkbox" checked={{not disableAdjustLetterSpacing}} onchange={{action (mut disableAdjustLetterSpacing) (not disableAdjustLetterSpacing)}}> Adjust Letter Spacing</label>
-  <label><input type="checkbox" checked={{not disableAdjustColor}} onchange={{action (mut disableAdjustColor) (not disableAdjustColor)}}> Adjust Color</label>
+  <label>
+    <input
+      type="checkbox"
+      checked={{not this.disableMove}}
+      {{on "change" (fn (mut this.disableMove) (not this.disableMove))}}
+    >
+    Move
+  </label>
+  <label>
+    <input
+      type="checkbox"
+      checked={{not this.disableCompensateForScale}}
+      {{on "change" (fn (mut this.disableCompensateForScale) (not this.disableCompensateForScale))}}
+    >
+    Compensate For Scale
+  </label>
+  <label>
+    <input
+      type="checkbox"
+      checked={{not this.disableAdjustFontSize}}
+      {{on "change" (fn (mut this.disableAdjustFontSize) (not this.disableAdjustFontSize))}}
+    >
+    Adjust Font Size
+  </label>
+  <label>
+    <input
+      type="checkbox"
+      checked={{not this.disableAdjustLetterSpacing}}
+      {{on "change" (fn (mut this.disableAdjustLetterSpacing) (not this.disableAdjustLetterSpacing))}}
+    >
+    Adjust Letter Spacing
+  </label>
+  <label>
+    <input
+      type="checkbox"
+      checked={{not this.disableAdjustColor}}
+      {{on "change" (fn (mut this.disableAdjustColor) (not this.disableAdjustColor))}}
+    >
+    Adjust Color
+  </label>
 </div>
-{{yield (hash moving-word=(component "moving-word"  disableMove=disableMove
-                                                    disableCompensateForScale=disableCompensateForScale
-                                                    disableAdjustFontSize=disableAdjustFontSize
-                                                    disableAdjustLetterSpacing=disableAdjustLetterSpacing
-                                                    disableAdjustColor=disableAdjustColor
-                                            )) }}
+{{yield
+  (hash
+    moving-word=(component "moving-word"
+      disableMove=this.disableMove
+      disableCompensateForScale=this.disableCompensateForScale
+      disableAdjustFontSize=this.disableAdjustFontSize
+      disableAdjustLetterSpacing=this.disableAdjustLetterSpacing
+      disableAdjustColor=this.disableAdjustColor
+    )
+  )
+}}

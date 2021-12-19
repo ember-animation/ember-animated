@@ -2,17 +2,24 @@
 <div class="scenario-sprites clearfix">
 
   <div class="controls">
-    <label>Delete Undo<input type="checkbox" checked={{deleteUndo}} onchange={{action (mut deleteUndo) (not deleteUndo)}}></label>
+    <label>
+      Delete Undo
+      <input
+        type="checkbox"
+        checked={{this.deleteUndo}}
+        {{on "change" (fn (mut this.deleteUndo) (not this.deleteUndo))}}
+      >
+    </label>
   </div>
 
   <div class="top-bar">
-    {{#animated-beacon name="add"}}
-      <button {{action "addItem" item}}>{{svg-jar "envelope-big"}}</button>
-    {{/animated-beacon}}
+    <AnimatedBeacon @name="add">
+      <button type="button" {{on "click" this.addItem}}>{{svg-jar "envelope-big"}}</button>
+    </AnimatedBeacon>
 
-    {{#animated-beacon name="trash"}}
+    <AnimatedBeacon @name="trash">
       {{svg-jar "trash-big"}}
-    {{/animated-beacon}}
+    </AnimatedBeacon>
 
     <div class="mail-buttons">
       {{svg-jar "mail-reply-big"}}
@@ -24,24 +31,30 @@
   <AnimatedContainer>
     <div class="sidebar">
       <table>
-        <th>Mail {{svg-jar "caret-down"}}</th>
-        <tr>
-          <td>{{svg-jar "inbox"}} Inbox({{items.length}})</td>
-        </tr>
-        <tr>
-          <td>{{svg-jar "paper-plane"}} Sent Mail</td>
-        </tr>
-        <tr>
-          <td>{{svg-jar "edit"}} Drafts(3)</td>
-        </tr>
+        <tbody>
+          <th>Mail {{svg-jar "caret-down"}}</th>
+          <tr>
+            <td>{{svg-jar "inbox"}} Inbox({{this.items.length}})</td>
+          </tr>
+          <tr>
+            <td>{{svg-jar "paper-plane"}} Sent Mail</td>
+          </tr>
+          <tr>
+            <td>{{svg-jar "edit"}} Drafts(3)</td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="inbox">
-      {{#animated-each items use=transition as |item|}}
+      {{#animated-each this.items use=this.transition as |item|}}
         <div class="each-item">
-          <input type="checkbox" onclick={{action "removeItem" item}}>
+          <input
+            type="checkbox"
+            aria-label="Remove {{item.message}} from list"
+            {{on "click" (fn this.removeItem item)}}
+          >
           <div class="message">{{item.message}}</div>
-          <div class="date">{{moment-format now "MMM D"}}</div>
+          <div class="date">{{moment-format this.now "MMM D"}}</div>
         </div>
       {{/animated-each}}
     </div>

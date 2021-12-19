@@ -1,15 +1,16 @@
+{{! template-lint-disable no-inline-styles }}
 {{! BEGIN-SNIPPET moving-word-text-snippet.hbs }}
 <div class="moving-word-demo">
   <div style="position: absolute"><AnimatedOrphans/></div>
-  <button {{action "toggle"}}>Toggle</button>
+  <button type="button" {{on "click" this.toggle}}>Toggle</button>
 
-  {{#moving-words-demo as |demo|}}
+  <MovingWordsDemo as |demo|>
     <AnimatedContainer>
-      {{#animated-if listMode use=fade duration=1000 }}
+      {{#animated-if this.listMode use=this.fade duration=1000}}
         <ul>
-          <li>{{demo.moving-word "framework"}}</li>
-          <li>{{demo.moving-word "ambitious"}}</li>
-          <li>{{demo.moving-word "applications"}}</li>
+          <li><demo.moving-word @text="framework" /></li>
+          <li><demo.moving-word @text="ambitious" /></li>
+          <li><demo.moving-word @text="applications" /></li>
         </ul>
       {{else}}
         <p style="color: lightblue; font-size: 20px; letter-spacing: .2rem">
@@ -17,7 +18,7 @@
         </p>
       {{/animated-if}}
     </AnimatedContainer>
-  {{/moving-words-demo}}
+  </MovingWordsDemo>
 
 </div>
 {{! END-SNIPPET }}

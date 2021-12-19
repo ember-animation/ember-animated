@@ -1,5 +1,6 @@
 //BEGIN-SNIPPET rules-snippet.js
 import Component from '@ember/component';
+import { action } from '@ember/object';
 import { toUp, toDown } from 'ember-animated/transitions/move-over';
 
 export default Component.extend({
@@ -12,13 +13,13 @@ export default Component.extend({
   },
 
   counter: 20,
-  actions: {
-    increment() {
-      this.set('counter', this.get('counter') + 1);
-    },
-    decrement() {
-      this.set('counter', this.get('counter') - 1);
-    },
-  },
+
+  increment: action(function () {
+    this.set('counter', this.counter + 1);
+  }),
+
+  decrement: action(function () {
+    this.set('counter', this.counter - 1);
+  }),
 });
 //END-SNIPPET
