@@ -72,7 +72,7 @@
     "ember-decorators-polyfill": "^1.1.1",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.1",
-    "ember-faker": "^1.2.1",
+    "ember-faker": "^2.0.0",
     "ember-load-initializers": "^2.1.1",
     "ember-qunit": "^5.1.5",
     "ember-resolver": "^8.0.0",

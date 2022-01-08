@@ -7112,7 +7112,7 @@ ember-cli-babel-plugin-helpers@^1.0.0, ember-cli-babel-plugin-helpers@^1.1.1:
   resolved "https://registry.yarnpkg.com/ember-cli-babel-plugin-helpers/-/ember-cli-babel-plugin-helpers-1.1.1.tgz#5016b80cdef37036c4282eef2d863e1d73576879"
   integrity sha512-sKvOiPNHr5F/60NLd7SFzMpYPte/nnGkq/tMIfXejfKHIhaiIkYFqX8Z9UFTKWLLn+V7NOaby6niNPZUdvKCRw==
 
-ember-cli-babel@^6.11.0, ember-cli-babel@^6.16.0, ember-cli-babel@^6.4.1, ember-cli-babel@^6.6.0:
+ember-cli-babel@^6.11.0, ember-cli-babel@^6.16.0, ember-cli-babel@^6.6.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-6.18.0.tgz#3f6435fd275172edeff2b634ee7b29ce74318957"
   integrity sha512-7ceC8joNYxY2wES16iIBlbPSxwKDBhYwC8drU3ZEvuPDMwVv1KzxCNu1fvxyFEBWhwaRNTUxSCsEVoTd9nosGA==
@@ -7642,14 +7642,14 @@ ember-export-application-global@^2.0.1:
   resolved "https://registry.yarnpkg.com/ember-export-application-global/-/ember-export-application-global-2.0.1.tgz#b120a70e322ab208defc9e2daebe8d0dfc2dcd46"
   integrity sha512-B7wiurPgsxsSGzJuPFkpBWnaeuCu2PGpG2BjyrfA1VcL7//o+5RSnZqiCEY326y7qmxb2GoCgo0ft03KBU0rRw==
 
-ember-faker@^1.2.1:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/ember-faker/-/ember-faker-1.5.0.tgz#f9454bfbc0bc81aee0fff1a151ecf57634af8ac2"
-  integrity sha512-Qpg7M/K0mbJZKWLj1FIKq5hJDnxc3RBuZ9Sn1msXhFJHiIEbpKGXsQot/tbaDJIrIrUXypV6RclF0LtFPNroMg==
+ember-faker@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ember-faker/-/ember-faker-2.0.0.tgz#c85bd387c92f369aee1b299872964da34c28cc12"
+  integrity sha512-lCt3TNh2C2oa7CXDnB+IETL+BDj+ZswMSbbVLnqqa/Ny0Fuiayp9PjEr/yf8CgAx8Alwkk7a8Gd0L+rFzir6Gg==
   dependencies:
-    ember-cli-babel "^6.4.1"
+    ember-cli-babel "^7.0.0"
     ember-cli-node-assets "^0.2.2"
-    faker "^3.0.0"
+    faker "^5.5.3"
 
 ember-inflector@^3.0.0:
   version "3.0.1"
@@ -8499,10 +8499,10 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-faker@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/faker/-/faker-3.1.0.tgz#0f908faf4e6ec02524e54a57e432c5c013e08c9f"
-  integrity sha1-D5CPr05uwCUk5UpX5DLFwBPgjJ8=
+faker@^5.5.3:
+  version "5.5.3"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-5.5.3.tgz#c57974ee484431b25205c2c8dc09fda861e51e0e"
+  integrity sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==
 
 fast-deep-equal@^2.0.1:
   version "2.0.1"
