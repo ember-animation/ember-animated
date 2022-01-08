@@ -1,43 +1,42 @@
+/* eslint-disable require-yield */
 //BEGIN-SNIPPET moving-word-snippet.js
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import move from 'ember-animated/motions/move';
 import adjustCSS from 'ember-animated/motions/adjust-css';
 import adjustColor from 'ember-animated/motions/adjust-color';
 import compensateForScale from 'ember-animated/motions/compensate-for-scale';
 import { parallel } from 'ember-animated';
 
-export default Component.extend({
-  tagName: '',
-  duration: 1000,
+export default class MovingWord extends Component {
+  constructor(...args) {
+    super(...args);
 
-  init() {
-    this._super();
     this.transition = this.transition.bind(this);
-  },
+  }
 
   motions() {
     let motions = [];
-    if (!this.disableMove) {
+    if (!this.args.disableMove) {
       motions.push(move);
     }
-    if (!this.disableCompensateForScale) {
+    if (!this.args.disableCompensateForScale) {
       motions.push(compensateForScale);
     }
-    if (!this.disableAdjustFontSize) {
+    if (!this.args.disableAdjustFontSize) {
       motions.push(adjustCSS.property('font-size'));
     }
-    if (!this.disableAdjustLetterSpacing) {
+    if (!this.args.disableAdjustLetterSpacing) {
       motions.push(adjustCSS.property('letter-spacing'));
     }
-    if (!this.disableAdjustColor) {
+    if (!this.args.disableAdjustColor) {
       motions.push(adjustColor.property('color'));
     }
     return motions;
-  },
+  }
 
-  transition: function* ({ sentSprites }) {
+  *transition({ sentSprites }) {
     let motions = this.motions();
     sentSprites.forEach(parallel(...motions));
-  },
-});
+  }
+}
 //END-SNIPPET

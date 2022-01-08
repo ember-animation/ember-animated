@@ -1,40 +1,44 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { htmlSafe } from '@ember/template';
 import { task, timeout } from 'ember-concurrency';
-import { computed, action } from '@ember/object';
-import { htmlSafe } from '@ember/string';
 
-export default Component.extend({
-  tagName: '',
+export default class IndexToggleBar extends Component {
+  @tracked progress = 0;
 
-  progress: 0,
-  onDismiss() {},
+  constructor(...args) {
+    super(...args);
 
-  didInsertElement() {
-    this._super(...arguments);
-    this.get('startProgress').perform();
-  },
+    this.startProgressTask.perform();
+  }
 
-  startProgress: task(function* () {
+  @task
+  *startProgressTask() {
     let totalMilliseconds = 5000;
     let millisecondsPerPercent = totalMilliseconds / 100;
 
-    while (this.get('progress') < 100) {
+    while (this.progress < 100) {
       yield timeout(millisecondsPerPercent / 2);
-      this.set('progress', this.get('progress') + 0.5);
+      this.progress = this.progress + 0.5;
     }
 
-    this.get('onDismiss')();
-  }),
+    this.onDismiss();
+  }
 
-  progressWidthStyle: computed('progress', function () {
-    return htmlSafe(`width: ${this.get('progress')}%`);
-  }),
+  @action onDismiss() {
+    this.args.onDismiss?.();
+  }
 
-  cancelProgress: action(function () {
-    this.get('startProgress').cancelAll();
-  }),
+  get progressWidthStyle() {
+    return htmlSafe(`width: ${this.progress}%`);
+  }
 
-  resumeProgress: action(function () {
-    this.get('startProgress').perform();
-  }),
-});
+  @action cancelProgress() {
+    this.startProgressTask.cancelAll();
+  }
+
+  @action resumeProgress() {
+    this.startProgressTask.perform();
+  }
+}

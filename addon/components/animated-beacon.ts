@@ -1,7 +1,7 @@
 import Component, { TemplateFactory } from '@ember/component';
 import { inject as service } from '@ember/service';
 import { task, Task } from '../-private/ember-scheduler';
-import { afterRender, microwait } from '..';
+import { afterRender, microwait } from '../-private/concurrency-helpers';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
 

@@ -6,14 +6,14 @@ In this example, emails animate between Refresh (mail icon), Trash, and the Inbo
 ### Interruption Cases
 In this demonstration, the "Delete with Undo" option shows what happens when an animation is interrupted. An email that would have been a `removedSprite` becomes a `keptSprite`. 
 
-{{#docs-demo as |demo|}}
-    {{#demo.example name="one"}}
-      {{#transition-log-table as |logTransition|}}
-        {{logged-between-components logTransition=logTransition}}      
-      {{/transition-log-table}}
-    {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example @name="one">
+    <TransitionLogTable as |logTransition|>
+      <LoggedBetweenComponents @logTransition={{logTransition}} />      
+    </TransitionLogTable>
+  </demo.example>
 
-    {{demo.snippet 'between-components-snippet.hbs' label='between-components.hbs'}}
-    {{demo.snippet 'between-components-snippet.js' label='between-components.js'}}
-    {{demo.snippet 'sprites-snippet.css'}}
-{{/docs-demo}}
+  <demo.snippet @name="between-components-snippet.hbs" @label="between-components.hbs" />
+  <demo.snippet @name="between-components-snippet.js" @label="between-components.js" />
+  <demo.snippet @name="sprites-snippet.css" />
+</DocsDemo>

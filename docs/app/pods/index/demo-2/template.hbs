@@ -1,57 +1,64 @@
-<div class="lg:flex lg:-mx-4">
-  <div class='lg:w-2/5 lg:flex-no-shrink lg:mx-4'>
-    <div class="bg-white rounded-lg shadow-lg mb-8">
-      <div class='h-96 relative overflow-hidden p-4 flex flex-col items-end'>
-        <button
-          class='absolute pin w-full flex items-center justify-center text-grey
-          font-bold hover:text-blue active:text-blue-dark transition'
-          type="button"
-          {{on "click" this.createNotification}}
+{{#let (track false) as |separateEnabled|}}
+  <div
+    class="lg:flex lg:-mx-4 {{style-namespace "index/demo-2"}}"
+    ...attributes
+  >
+    <div class="lg:w-2/5 lg:flex-no-shrink lg:mx-4">
+      <div class="bg-white rounded-lg shadow-lg mb-8">
+        <div class="h-96 relative overflow-hidden p-4 flex flex-col items-end">
+          <button
+            class="absolute pin w-full flex items-center justify-center text-grey
+            font-bold hover:text-blue active:text-blue-dark transition"
+            type="button"
+            {{on "click" this.createNotification}}
+          >
+            <span>
+              Click anywhere to create a notification
+            </span>
+          </button>
+
+          {{#animated-each
+            (reverse this.notifications)
+            key="id"
+            use=(if separateEnabled.value this.separateTransition this.originalTransition)
+            as |notification|
+          }}
+            <div class="w-2/3">
+              <Index::Demo-2::NotificationCard
+                @notification={{notification}}
+                @onDismiss={{fn this.destroyNotification notification}}
+              />
+            </div>
+          {{/animated-each}}
+        </div>
+
+        <Index::Components::ToggleBar
+          @enabled={{separateEnabled.value}}
+          @onToggle={{separateEnabled.update}}
         >
-          <span>
-            Click anywhere to create a notification
-          </span>
-        </button>
-
-        {{#animated-each
-          (reverse this.notifications)
-          key='id'
-          use=(if this.separateEnabled this.separateTransition this.originalTransition)
-          as |notification|
-        }}
-          <div class='w-2/3'>
-            <Index::Demo-2::NotificationCard
-              @notification={{notification}}
-              @onDismiss={{fn this.destroyNotification notification}}
-            />
-          </div>
-        {{/animated-each}}
+          ✨Separate
+        </Index::Components::ToggleBar>
       </div>
+    </div>
 
-      <Index::Components::ToggleBar
-        @enabled={{this.separateEnabled}}
-        @onToggle={{fn (mut this.separateEnabled)}}
-      >
-        ✨Separate
-      </Index::Components::ToggleBar>
+    <div class="lg:mx-4 lg:w-3/5 overflow-hidden">
+      {{#let (track false) as |isAnimating|}}
+        <Index::Utils::AnimatedCodeDiff
+          @label="template.hbs"
+          @diff={{this.templateDiff}}
+          @isShowingFinal={{separateEnabled.value}}
+          @onAnimationChange={{isAnimating.update}}
+        />
+
+        <div class="mt-4">
+          <Index::Utils::AnimatedCodeDiff
+            @label="component.js"
+            @diff={{this.componentDiff}}
+            @isShowingFinal={{separateEnabled.value}}
+            @animationPaused={{isAnimating.value}}
+          />
+        </div>
+      {{/let}}
     </div>
   </div>
-
-  <div class='lg:mx-4 lg:w-3/5 overflow-hidden'>
-    <Index::Utils::AnimatedCodeDiff
-      @label="template.hbs"
-      @diff={{this.templateDiff}}
-      @isShowingFinal={{this.separateEnabled}}
-      @onAnimationChange={{fn (mut this.isAnimating)}}
-    />
-
-    <div class="mt-4">
-      <Index::Utils::AnimatedCodeDiff
-        @label="component.js"
-        @diff={{this.componentDiff}}
-        @isShowingFinal={{this.separateEnabled}}
-        @animationPaused={{this.isAnimating}}
-      />
-    </div>
-  </div>
-</div>
+{{/let}}

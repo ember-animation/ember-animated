@@ -74,17 +74,17 @@ If you select an email then click the trash can, you'll delete that message. Thi
 Finally, whenever a message is added or deleted, the remaining emails in the inbox smoothly animate to their new position in the list. These messages are `keptSprites`, and each of these sprites have both an "initial bounds" and "final bounds" property. These properties are how these messages are able to smoothly adjust to accommodate the entering and exiting emails.
 
 
-{{#docs-demo as |demo|}}
-    {{#demo.example name="inbox"}}
-       {{#transition-log-table as |logTransition|}}
-        {{logged-sprites logTransition=logTransition}}      
-      {{/transition-log-table}}
-    {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example @name="inbox">
+    <TransitionLogTable as |logTransition|>
+      <LoggedSprites @logTransition={{logTransition}} />      
+    </TransitionLogTable>
+  </demo.example>
 
-    {{demo.snippet 'sprites-snippet.hbs' label='sprites-example.hbs'}}
-    {{demo.snippet 'sprites-snippet.js' label='sprites-example.js'}}
-    {{demo.snippet 'sprites-snippet.css'}}
-{{/docs-demo}}
+  <demo.snippet @name="sprites-snippet.hbs" @label="sprites-example.hbs" />
+  <demo.snippet @name="sprites-snippet.js" @label="sprites-example.js" />
+  <demo.snippet @name="sprites-snippet.css" />
+</DocsDemo>
 
 
 

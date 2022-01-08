@@ -1,6 +1,6 @@
 {{! BEGIN-SNIPPET moving-word-snippet.hbs}}
 <AnimatedContainer class="moving-word">
-  {{#animated-value @text use=this.transition duration=this.duration}}
+  {{#animated-value @text use=this.transition duration=1000}}
     <span>{{@text}}</span>
   {{/animated-value}}
 </AnimatedContainer>

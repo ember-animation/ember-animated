@@ -1,7 +1,7 @@
 {{#animated-value "index-route" initialInsertion=true finalRemoval=true use=this.transition duration=1000}}
   <div class="hero-list">
     {{#each this.model as |person|}}
-      <LinkTo @route="demos.hero.detail" @model={{person.id}} @tagName="div">
+      <LinkTo @route="demos.hero.detail" @model={{person.id}}>
         <AnimatedContainer>
           {{#animated-value person duration=1000 as |p|}}
             <div class="hero-list-image">

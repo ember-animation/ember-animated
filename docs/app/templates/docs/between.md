@@ -68,33 +68,33 @@ In this example, the office is hosting a dinner party. Everyone received an invi
 </ul>
 
 
-{{#docs-demo as |demo|}}
-    {{#demo.example name="two"}}
-      {{#full-log-table as |fullLog|}}
-        {{logged-two-lists fullLog=fullLog}}
-      {{/full-log-table}}
-    {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example @name="two">
+    <FullLogTable as |fullLog|>
+      <LoggedTwoLists @fullLog={{fullLog}} />
+    </FullLogTable>
+  </demo.example>
 
-    {{demo.snippet 'between-two-lists-example-snippet.hbs' label='between-two-lists-example.hbs'}}
-    {{demo.snippet 'between-two-lists-example-snippet.js' label='between-two-lists-example.js'}}
-    {{demo.snippet 'two-lists-snippet.css'}}
-{{/docs-demo}}
+  <demo.snippet @name="between-two-lists-example-snippet.hbs" @label="between-two-lists-example.hbs" />
+  <demo.snippet @name="between-two-lists-example-snippet.js" @label="between-two-lists-example.js" />
+  <demo.snippet @name="two-lists-snippet.css" />
+</DocsDemo>
 
 
 ### Animating Across Routes
 Just like animations can be applied to components, they can be applied to route transitions. This is an example of animating sprites across different routes. When you select an icon from the list, the selected image and the list of images animate as the route changes.
 
-{{#docs-demo as |demo|}}
-    {{#demo.example name="hero"}}
-      <AnimatedContainer class="hero-example">
-        {{hero-example}}
-      </AnimatedContainer>
-    {{/demo.example}}
+<DocsDemo as |demo|>
+  <demo.example @name="hero">
+    <AnimatedContainer class="hero-example">
+      {{hero-example}}
+    </AnimatedContainer>
+  </demo.example>
 
-    {{demo.snippet 'hero-snippet.hbs' label='hero.hbs'}}
-    {{demo.snippet 'detail-snippet.hbs' label='detail.hbs'}}
-    {{demo.snippet 'between-detail-snippet.js' label='detail.js'}}
-    {{demo.snippet 'index-snippet.hbs' label='index.hbs'}}
-    {{demo.snippet 'index-snippet.js' label='index.js'}}
-    {{demo.snippet 'hero-snippet.css'}}
-{{/docs-demo}}
+  <demo.snippet @name="hero-snippet.hbs" @label="hero.hbs" />
+  <demo.snippet @name="detail-snippet.hbs" @label="detail.hbs" />
+  <demo.snippet @name="between-detail-snippet.js" @label="detail.js" />
+  <demo.snippet @name="index-snippet.hbs" @label="index.hbs" />
+  <demo.snippet @name="index-snippet.js" @label="index.js" />
+  <demo.snippet @name="hero-snippet.css" />
+</DocsDemo>

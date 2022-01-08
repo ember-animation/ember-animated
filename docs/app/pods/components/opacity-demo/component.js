@@ -1,14 +1,20 @@
+/* eslint-disable require-yield */
 //BEGIN-SNIPPET opacity-demo-snippet.js
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { fadeOut, fadeIn } from 'ember-animated/motions/opacity';
 
-export default Component.extend({
-  fadeMessage: false,
-  mail: 'Hello',
+export default class OpacityDemo extends Component {
+  @tracked fadeMessage = false;
 
-  transition: function* ({ insertedSprites, removedSprites }) {
+  @action toggleFadeMessage() {
+    this.fadeMessage = !this.fadeMessage;
+  }
+
+  *transition({ insertedSprites, removedSprites }) {
     insertedSprites.forEach(fadeIn);
     removedSprites.forEach(fadeOut);
-  },
-});
+  }
+}
 //END-SNIPPET

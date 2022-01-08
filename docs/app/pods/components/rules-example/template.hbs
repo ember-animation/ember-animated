@@ -1,7 +1,7 @@
 {{!BEGIN-SNIPPET rules-snippet.hbs}}
 <div class="scenario-rules clearfix">
   <button type="button" {{on "click" this.increment}}>+</button>
-  <button type="button" {{on "click" this.decrement }}>-</button>
+  <button type="button" {{on "click" this.decrement}}>-</button>
 
   <AnimatedContainer>
     {{#animated-value this.counter rules=this.rules duration=1000 as |v|}}

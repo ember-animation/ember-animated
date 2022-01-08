@@ -124,6 +124,11 @@
   align-items: center;
 }
 
+.scenario-two-lists .guest-list-header svg {
+  display: flex;
+  align-items: center;
+}
+
 .scenario-two-lists .left {
   width: 45%;
   padding-right: 20px;
@@ -207,33 +212,33 @@
 
 /* BEGIN-SNIPPET rules-snippet.css */
 .scenario-rules .animated-container {
-    font-size: 2.5rem;
-    float: left;
-    margin-right: 3rem;
+  font-size: 2.5rem;
+  float: left;
+  margin-right: 3rem;
 }
 
 .scenario-rules button {
-    float: top;
-    font-size: 3rem;
-    border: 2px solid lightskyblue;
-    width: 1em;
-    color: blue;
-    transition: background-color .5s;
-    border-radius: 5px;
+  float: top;
+  font-size: 3rem;
+  border: 2px solid lightskyblue;
+  width: 1em;
+  color: blue;
+  transition: background-color .5s;
+  border-radius: 5px;
 }
 
 .scenario-rules button:hover {
-    background-color: lightskyblue;
+  background-color: lightskyblue;
 }
 
 .scenario-rules span {
-    border: 1px solid blue;
+  border: 1px solid blue;
 }
 
 .scenario-rules > .animated-container {
-    border: 1px solid red;
-    overflow: hidden;
-    transform: translateZ(0);
+  border: 1px solid red;
+  overflow: hidden;
+  transform: translateZ(0);
 }
 /* END-SNIPPET */
 
@@ -295,31 +300,31 @@
 
 /* BEGIN-SNIPPET transitions-snippet.css */
 .scenario-transitions  {
-    display: flex;
-    margin-block-start: 2em;
-    height: 7em;
+  display: flex;
+  margin-block-start: 2em;
+  height: 7em;
 }
 
 
 .scenario-transitions .message {
-    width: 7em;
-    background-color: lightblue;
-    color: white;
-    font: italic bold 16px/2 cursive;
-    box-sizing: border-box;
-    padding: 2em;
-    border-radius: 10px;
+  width: 7em;
+  background-color: lightblue;
+  color: white;
+  font: italic bold 16px/2 cursive;
+  box-sizing: border-box;
+  padding: 2em;
+  border-radius: 10px;
 }
 
 
 .scenario-transitions .selector {
-    width: 25%;
+  width: 25%;
 }
 
 .scenario-transitions .h1 {
-    font: sans-serif;
-    font-style: bold;
-    background-color: blue;
+  font: sans-serif;
+  font-style: bold;
+  background-color: blue;
 }
 /* END-SNIPPET */
 
@@ -358,6 +363,11 @@
   vertical-align: top;
 }
 
+.moving-word-demo ul {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+}
 
 /* BEGIN-SNIPPET moving-word-snippet.css */
 .moving-word-demo button {
@@ -371,8 +381,6 @@
   background-color: lightblue;
   color: white;
 }
-
-
 
 /* END-SNIPPET */
 

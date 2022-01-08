@@ -8,7 +8,7 @@
       type="checkbox"
       aria-label="Bounce person back"
       checked={{this.bounceBack}}
-      {{on "change" (fn (mut this.bounceBack) (not this.bounceBack))}}
+      {{on "change" this.toggleBounceBack}}
     >
   </div>
 
@@ -36,7 +36,9 @@
             <img src={{item.image}} alt={{item.message}}>
           </div>
           <div class="name">{{item.message}}</div>
-          <button type="button" {{on "click" (fn this.move item)}}>{{svg-jar "check"}}</button>
+          <button type="button" {{on "click" (fn this.move item)}}>
+            {{svg-jar "check" width="14px" height="14px"}}
+          </button>
         </div>
       {{/animated-each}}
     </AnimatedContainer>

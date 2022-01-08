@@ -76,7 +76,7 @@ module('Acceptance | smoke', function (hooks) {
     // make sure a code snippet is present
     assert.ok(
       [...document.querySelectorAll('[data-test-guests-demo] pre')].find(
-        (elt) => /<Icon 'user' \/>/.test(elt.textContent),
+        (elt) => /<Icon "user" \/>/.test(elt.textContent),
       ),
       'found Icon snippet content',
     );
@@ -86,6 +86,7 @@ module('Acceptance | smoke', function (hooks) {
     await visit('/docs');
     assert.strictEqual(currentURL(), '/docs');
     let count = 0;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       let nextLink = document.querySelector('[data-test-next-link] > a');
       if (!nextLink) {
