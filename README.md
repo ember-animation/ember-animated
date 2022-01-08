@@ -21,8 +21,6 @@ Installation
 ember install ember-animated
 ```
 
-This repo is tested against Ember versions going back as far as 2.12.
-
 
 Contributing
 ------------------------------------------------------------------------------
