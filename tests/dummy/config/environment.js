@@ -22,12 +22,6 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-
-    // Enable fake data in all environments (by default ember-faker
-    // does not include itself in production)
-    'ember-faker': {
-      enabled: true,
-    },
   };
 
   if (environment === 'development') {
