@@ -1,24 +1,26 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { tracked } from 'dummy/utils/tracking';
 import opacity from 'ember-animated/motions/opacity';
 import move from 'ember-animated/motions/move';
 import faker from 'faker';
 
-export default Controller.extend({
-  message: '',
-  lastMessage: '',
+export default class extends Controller {
+  @tracked message = '';
+  @tracked lastMessage = '';
 
-  showMessage(m) {
-    this.set('lastMessage', this.message);
-    this.set('message', m);
-  },
+  @action showMessage(m) {
+    this.lastMessage = this.message;
+    this.message = m;
+  }
 
-  showRandomMessage() {
+  @action showRandomMessage() {
     this.showMessage(`Hello ${faker.name.firstName()}`);
-  },
+  }
 
-  showPreviousMessage() {
+  @action showPreviousMessage() {
     this.showMessage(this.lastMessage);
-  },
+  }
 
   *backgroundTransition({ removedSprites, insertedSprites, receivedSprites }) {
     insertedSprites.concat(receivedSprites).forEach((sprite) => {
@@ -34,7 +36,7 @@ export default Controller.extend({
       sprite.applyStyles({ 'pointer-events': 'none' });
       opacity(sprite, { to: 0 });
     });
-  },
+  }
 
   *dialogTransition({ removedSprites, insertedSprites, receivedSprites }) {
     insertedSprites.forEach((sprite) => {
@@ -46,5 +48,5 @@ export default Controller.extend({
       sprite.endAtPixel({ x: window.outerWidth });
       move(sprite);
     });
-  },
-});
+  }
+}

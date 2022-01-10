@@ -1,17 +1,19 @@
 import Controller from '@ember/controller';
+import { tracked } from 'dummy/utils/tracking';
+import { action } from '@ember/object';
 import opacity from 'ember-animated/motions/opacity';
 import move from 'ember-animated/motions/move';
 
-export default Controller.extend({
-  showDetail: true,
+export default class extends Controller {
+  @tracked showDetail = true;
 
-  fade: function* ({ insertedSprites, receivedSprites, removedSprites }) {
+  *fade({ insertedSprites, receivedSprites, removedSprites }) {
     insertedSprites.forEach((s) => opacity(s, { from: 0 }));
     receivedSprites.forEach((s) => opacity(s));
     removedSprites.forEach((s) => opacity(s, { to: 0 }));
-  },
+  }
 
-  fromSide: function* ({ insertedSprites, receivedSprites, removedSprites }) {
+  *fromSide({ insertedSprites, receivedSprites, removedSprites }) {
     insertedSprites.forEach((s) => {
       s.startAtPixel({ x: window.innerWidth * 0.8 });
       move(s);
@@ -21,11 +23,9 @@ export default Controller.extend({
       s.endAtPixel({ x: window.innerWidth * 0.8 });
       move(s);
     });
-  },
+  }
 
-  actions: {
-    toggle() {
-      this.set('showDetail', !this.get('showDetail'));
-    },
-  },
-});
+  @action toggle() {
+    this.showDetail = !this.showDetail;
+  }
+}

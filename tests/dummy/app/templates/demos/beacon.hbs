@@ -1,12 +1,12 @@
 <div class="scenario-beacon">
   {{#animated-beacon name="beacontest"}}
-    <button {{action "launch"}}>Launch</button>
+    <button type="button" {{on "click" this.launch}}>Launch</button>
   {{/animated-beacon}}
 </div>
 
 
 {{#animated-if this.showingModal use=this.transition duration=500}}
-  <div class="scenario-beacon-modal" {{action "dismiss"}}>
+  <div class="scenario-beacon-modal" role="button" {{on "click" this.dismiss}}>
     Hi
   </div>
 {{/animated-if}}

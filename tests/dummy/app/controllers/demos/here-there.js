@@ -1,25 +1,34 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
-import { not } from '@ember/object/computed';
+import { action } from '@ember/object';
+import { tracked, dependentKeyCompat } from 'dummy/utils/tracking';
 import move from 'ember-animated/motions/move';
 
-export default Controller.extend({
-  showLeft: true,
-  showRight: not('showLeft'),
+export default class extends Controller {
+  @tracked showLeft = true;
+  @tracked groupTogether = false;
 
-  transition: function* ({ receivedSprites }) {
-    receivedSprites.forEach(move);
-  },
+  @dependentKeyCompat
+  get showRight() {
+    return !this.showLeft;
+  }
 
-  howToGroup: computed('groupTogether', function () {
-    if (this.get('groupTogether')) {
+  @dependentKeyCompat
+  get howToGroup() {
+    if (this.groupTogether) {
       return 'together';
     }
     return undefined;
-  }),
-  actions: {
-    toggle() {
-      this.set('showLeft', !this.get('showLeft'));
-    },
-  },
-});
+  }
+
+  *transition({ receivedSprites }) {
+    receivedSprites.forEach(move);
+  }
+
+  @action toggle() {
+    this.showLeft = !this.showLeft;
+  }
+
+  @action toggleGroupTogether() {
+    this.groupTogether = !this.groupTogether;
+  }
+}

@@ -1,61 +1,41 @@
-import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from 'dummy/utils/tracking';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { current } from 'ember-animated/-private/scheduler';
 
-export default Component.extend({
-  motionService: service('-ea-motion'),
-  currentSort: numeric,
-  duration: 1000,
-  items: computed({
-    get() {
-      let result = [];
-      for (let i = 0; i < 10; i++) {
-        result.push(makeRandomItem());
-      }
-      return result.sort(numeric);
-    },
-    set(k, v) {
-      return v;
-    },
-  }),
-  addItem: task(function* () {
-    this.get('motionService').willAnimate({
+export default class ItemListsExample extends Component {
+  @service('-ea-motion') motionService;
+
+  duration = 1000;
+
+  @tracked items = makeRandomList();
+
+  @task(function* () {
+    this.motionService.willAnimate({
       task: current,
-      duration: this.get('duration'),
+      duration: this.duration,
       component: this,
     });
-    let items = this.get('items');
-    this.set(
-      'items',
-      items
-        .concat([makeRandomItem()])
-        .sort(this.currentSort)
-        .map((elt) => ({ id: elt.id })),
-    );
-  }),
-  removeItem: task(function* (which) {
-    this.get('motionService').willAnimate({
+
+    this.items = this.items
+      .concat([makeRandomItem()])
+      .sort(numeric)
+      .map((elt) => ({ id: elt.id }));
+  })
+  addItemTask;
+
+  @task(function* (which) {
+    this.motionService.willAnimate({
       task: current,
-      duration: this.get('duration'),
+      duration: this.duration,
       component: this,
     });
-    let items = this.get('items');
-    this.set(
-      'items',
-      items.filter((i) => i !== which),
-    );
-  }),
-  actions: {
-    addItem() {
-      this.get('addItem').perform();
-    },
-    removeItem(which) {
-      this.get('removeItem').perform(which);
-    },
-  },
-});
+
+    this.items = this.items.items.filter((i) => i !== which);
+  })
+  removeItemTask;
+}
 
 function numeric(a, b) {
   return a.id - b.id;
@@ -63,4 +43,12 @@ function numeric(a, b) {
 
 function makeRandomItem() {
   return { id: Math.round(Math.random() * 1000) };
+}
+
+function makeRandomList() {
+  let result = [];
+  for (let i = 0; i < 10; i++) {
+    result.push(makeRandomItem());
+  }
+  return result.sort(numeric);
 }

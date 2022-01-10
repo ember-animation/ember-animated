@@ -1,9 +1,23 @@
-import { A } from '@ember/array';
 import Controller from '@ember/controller';
+import { tracked } from 'dummy/utils/tracking';
+import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 
-export default Controller.extend({
-  transition: function* ({ insertedSprites, keptSprites, removedSprites }) {
+let counter = 0;
+
+export default class extends Controller {
+  @tracked collections = [
+    {
+      title: 'A',
+      members: [{ name: 'one' }, { name: 'two' }, { name: 'three' }],
+    },
+    {
+      title: 'B',
+      members: [{ name: 'four' }, { name: 'five' }, { name: 'six' }],
+    },
+  ];
+
+  *transition({ insertedSprites, keptSprites, removedSprites }) {
     insertedSprites.forEach((sprite) => {
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite);
@@ -18,38 +32,31 @@ export default Controller.extend({
       sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite);
     });
-  },
+  }
 
-  collections: A([
-    {
-      title: 'A',
-      members: A([{ name: 'one' }, { name: 'two' }, { name: 'three' }]),
-    },
-    {
-      title: 'B',
-      members: A([{ name: 'four' }, { name: 'five' }, { name: 'six' }]),
-    },
-  ]),
-  actions: {
-    addMember(collection) {
+  @action addMember(collection) {
+    collection.members.unshift({ name: String(counter++) });
+
+    // trigger autotracking
+    collection.members = [...collection.members];
+    this.collections = [...this.collections];
+  }
+
+  @action addMembers() {
+    this.get('collections').forEach((collection) => {
       collection.members.unshiftObject({
         name: String(counter++),
       });
-    },
-    addMembers() {
-      this.get('collections').forEach((collection) => {
-        collection.members.unshiftObject({
-          name: String(counter++),
-        });
-      });
-    },
-    addCollection() {
-      this.get('collections').unshiftObject({
-        title: String(counter++),
-        members: A(),
-      });
-    },
-  },
-});
+    });
+  }
 
-let counter = 0;
+  @action addCollection() {
+    this.collections = [
+      {
+        title: String(counter++),
+        members: [],
+      },
+      ...this.collections,
+    ];
+  }
+}

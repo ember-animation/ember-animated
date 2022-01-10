@@ -1,13 +1,14 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { tracked } from 'dummy/utils/tracking';
 import fade from 'ember-animated/transitions/fade';
 
-export default Controller.extend({
-  tableMode: false,
-  fade,
+export default class extends Controller {
+  @tracked tableMode = false;
 
-  actions: {
-    toggle() {
-      this.set('tableMode', !this.get('tableMode'));
-    },
-  },
-});
+  fade = fade;
+
+  @action toggle() {
+    this.tableMode = !this.tableMode;
+  }
+}

@@ -1,5 +1,5 @@
 {{#animated-each this.items use=this.transition duration=2000 as |item|}}
-  <div data-test-item={{item}} onclick={{action this.removeItem item}}>
+  <div data-test-item={{item}} role="button" {{on "click" (fn this.removeItem item)}}>
     {{item}}
   </div>
 {{/animated-each}}

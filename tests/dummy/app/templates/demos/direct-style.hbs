@@ -1,6 +1,6 @@
 <div class="scenario-direct-style">
   <div>
-    <button {{action "go"}}>Go</button>
+    <button type="button" {{on "click" this.go}}>Go</button>
   </div>
 
   <AnimatedContainer>
@@ -11,7 +11,7 @@
     {{/animated-each}}
 
     {{#each this.items key="id" as |item|}}
-      <div class="scenario-direct-style--item scenario-direct-style--frame" style={{item.style}} >
+      <div class="scenario-direct-style--item scenario-direct-style--frame" style={{item.style}}>
         {{item.id}}
       </div>
     {{/each}}

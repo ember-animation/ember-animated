@@ -1,3 +1,4 @@
+/* eslint-disable require-yield */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import move from 'ember-animated/motions/move';
@@ -6,7 +7,6 @@ import { wait } from 'ember-animated';
 import dedent from '../utils/dedent';
 
 export default class IndexDemo3 extends Component {
-  // eslint-disable-next-line require-yield
   *collapse({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       move(sprite);
@@ -14,7 +14,6 @@ export default class IndexDemo3 extends Component {
     }
   }
 
-  // eslint-disable-next-line require-yield
   *shuffle({ receivedSprites }) {
     for (let sprite of receivedSprites) {
       sprite.applyStyles({

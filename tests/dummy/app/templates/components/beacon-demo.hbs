@@ -1,9 +1,9 @@
 {{#animated-beacon name="one"}}
-  <button {{action "launch"}}>Launch</button>
+  <button type="button" {{on "click" this.launch}}>Launch</button>
 {{/animated-beacon}}
 
 {{#animated-if this.showThing use=this.transition duration=500}}
-  <div class="beacon-demo--message" {{action "dismiss"}}>
+  <div class="beacon-demo--message" role="button" {{on "click" this.dismiss}}>
     Hello
   </div>
 {{/animated-if}}

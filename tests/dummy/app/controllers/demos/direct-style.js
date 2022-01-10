@@ -1,40 +1,47 @@
-import { A } from '@ember/array';
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { tracked } from 'dummy/utils/tracking';
 import { htmlSafe } from '@ember/string';
-import EmberObject, { computed } from '@ember/object';
 import move from 'ember-animated/motions/move';
 
-let Item = EmberObject.extend({
-  style: computed('x', 'y', function () {
+class Item {
+  @tracked x;
+  @tracked y;
+
+  constructor({ id, x, y }) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+  }
+
+  get style() {
     return htmlSafe(
-      `top: ${parseFloat(this.get('y'))}px; left: ${parseFloat(
-        this.get('x'),
-      )}px; `,
+      `top: ${parseFloat(this.y)}px; left: ${parseFloat(this.x)}px; `,
     );
-  }),
-});
+  }
+}
 
-export default Controller.extend({
-  transition: function* ({ keptSprites }) {
+export default class extends Controller {
+  *transition({ keptSprites }) {
     keptSprites.forEach(move);
-  },
+  }
 
-  items: computed(function () {
-    let items = A();
+  constructor(...args) {
+    super(...args);
+
+    this.items = [];
     for (let i = 0; i < 4; i++) {
-      items.push(Item.create({ id: i, x: somewhere(), y: somewhere() }));
+      this.items.push(new Item({ id: i, x: somewhere(), y: somewhere() }));
     }
-    return items;
-  }),
-  actions: {
-    go() {
-      this.get('items').forEach((i) => {
-        i.set('x', somewhere());
-        i.set('y', somewhere());
-      });
-    },
-  },
-});
+  }
+
+  @action go() {
+    this.items.forEach((i) => {
+      i.x = somewhere();
+      i.y = somewhere();
+    });
+  }
+}
 
 function somewhere() {
   return Math.random() * 300;

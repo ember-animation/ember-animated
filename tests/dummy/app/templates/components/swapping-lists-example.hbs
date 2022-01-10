@@ -3,9 +3,23 @@
     <AnimatedOrphans/>
   </div>
   <div>
-    <button {{action "swap"}}>Swap</button>
-    <label><input type="checkbox" checked={{this.distinguishSides}} onchange={{action (mut this.distinguishSides) (not this.distinguishSides)}}>Distinguish by color</label>
-    <label class="sending-side"><input type="checkbox" checked={{this.animateSendingSide}} onchange={{action (mut this.animateSendingSide) (not this.animateSendingSide)}}> Animate sending side</label>
+    <button type="button" {{on "click" this.swap}}>Swap</button>
+    <label>
+      <input
+        type="checkbox"
+        checked={{this.distinguishSides}}
+        {{on "change" this.toggleDistinguishSides}}
+      >
+      Distinguish by color
+    </label>
+    <label class="sending-side">
+      <input
+        type="checkbox"
+        checked={{this.animateSendingSide}}
+        {{on "change" this.toggleAnimateSendingSide}}
+      >
+      Animate sending side
+    </label>
   </div>
 
   {{#if this.leftItems}}

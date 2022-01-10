@@ -1,16 +1,16 @@
 <div class="inline-text-scenario">
   <div style="position: absolute"><AnimatedOrphans/></div>
-  <button {{action "toggle"}}>Toggle</button>
+  <button type="button" {{on "click" this.toggle}}>Toggle</button>
 
-  {{#animated-if this.tableMode use=this.fade duration=1000 }}
+  {{#animated-if this.tableMode use=this.fade duration=1000}}
     <ul>
-      <li>{{animated-text "framework"}}</li>
-      <li>{{animated-text "ambitious"}}</li>
-      <li>{{animated-text "applications"}}</li>
+      <li><AnimatedText @text="framework" /></li>
+      <li><AnimatedText @text="ambitious" /></li>
+      <li><AnimatedText @text="applications" /></li>
     </ul>
   {{else}}
     <p>
-      A {{animated-text "framework"}} for creating {{animated-text "ambitious"}} web {{animated-text "applications"}}.
+      A <AnimatedText @text="framework" /> for creating <AnimatedText @text="ambitious" /> web <AnimatedText @text="applications" />.
     </p>
   {{/animated-if}}
 </div>

@@ -1,4 +1,6 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from 'dummy/utils/tracking';
+import { action } from '@ember/object';
 import {
   toUp,
   toDown,
@@ -6,14 +8,14 @@ import {
   toRight,
 } from 'ember-animated/transitions/move-over';
 
-export default Component.extend({
+export default class BindExample extends Component {
   rules({ oldItems, newItems }) {
     if (oldItems[0] < newItems[0]) {
       return toDown;
     } else {
       return toUp;
     }
-  },
+  }
 
   rules2({ oldItems, newItems }) {
     if (oldItems[0] < newItems[0]) {
@@ -21,16 +23,20 @@ export default Component.extend({
     } else {
       return toRight;
     }
-  },
+  }
 
-  counter: 20,
-  showBoth: true,
-  actions: {
-    increment() {
-      this.set('counter', this.get('counter') + 1);
-    },
-    decrement() {
-      this.set('counter', this.get('counter') - 1);
-    },
-  },
-});
+  @tracked counter = 20;
+  @tracked showBoth = true;
+
+  @action increment() {
+    this.counter++;
+  }
+
+  @action decrement() {
+    this.counter--;
+  }
+
+  @action toggleShowBoth() {
+    this.showBoth = !this.showBoth;
+  }
+}

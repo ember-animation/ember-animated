@@ -1,12 +1,16 @@
+import Component from '@glimmer/component';
+import { tracked } from 'dummy/utils/tracking';
+import { action } from '@ember/object';
 import { later } from '@ember/runloop';
-import { computed } from '@ember/object';
-import Component from '@ember/component';
 import move from 'ember-animated/motions/move';
 
-export default Component.extend({
-  bounceBack: false,
+export default class TwoListsExample extends Component {
+  @tracked bounceBack = false;
 
-  transition: function* ({ keptSprites, sentSprites, receivedSprites }) {
+  @tracked leftItems = makeRandomItems();
+  @tracked rightItems = makeRandomItems();
+
+  *transition({ keptSprites, sentSprites, receivedSprites }) {
     // The parts of each list that haven't changed moves to accomodate
     // inserted and removed peers
     keptSprites.forEach(move);
@@ -24,59 +28,35 @@ export default Component.extend({
     // receivedSprites, which is starting at the same location as the
     // corresponding element in the other list.
     receivedSprites.forEach((sprite) => sprite.moveToFinalPosition());
-  },
+  }
 
-  leftItems: computed({
-    get() {
-      let result = [];
-      for (let i = 0; i < 10; i++) {
-        result.push(makeRandomItem());
-      }
-      return result.sort(numeric);
-    },
-    set(k, v) {
-      return v;
-    },
-  }),
+  @action move(item, bounceBack) {
+    let rightItems = this.rightItems;
+    let leftItems = this.leftItems;
+    let index = rightItems.indexOf(item);
 
-  rightItems: computed({
-    get() {
-      let result = [];
-      for (let i = 0; i < 10; i++) {
-        result.push(makeRandomItem());
-      }
-      return result.sort(numeric);
-    },
-    set(k, v) {
-      return v;
-    },
-  }),
+    if (index !== -1) {
+      this.rightItems = rightItems
+        .slice(0, index)
+        .concat(rightItems.slice(index + 1));
+      this.leftItems = leftItems.concat([item]).sort(numeric);
+    } else {
+      index = leftItems.indexOf(item);
+      this.leftItems = leftItems
+        .slice(0, index)
+        .concat(leftItems.slice(index + 1));
+      this.rightItems = rightItems.concat([item]).sort(numeric);
+    }
 
-  actions: {
-    move(item, bounceCounter = 1) {
-      let rightItems = this.get('rightItems');
-      let leftItems = this.get('leftItems');
-      let index = rightItems.indexOf(item);
-      if (index !== -1) {
-        this.set(
-          'rightItems',
-          rightItems.slice(0, index).concat(rightItems.slice(index + 1)),
-        );
-        this.set('leftItems', leftItems.concat([item]).sort(numeric));
-      } else {
-        index = leftItems.indexOf(item);
-        this.set(
-          'leftItems',
-          leftItems.slice(0, index).concat(leftItems.slice(index + 1)),
-        );
-        this.set('rightItems', rightItems.concat([item]).sort(numeric));
-      }
-      if (this.get('bounceBack') && bounceCounter > 0) {
-        later(() => this.send('move', item, bounceCounter - 1), 1000);
-      }
-    },
-  },
-});
+    if (bounceBack) {
+      later(() => this.move(item, false), 1000);
+    }
+  }
+
+  @action toggleBounceBack() {
+    this.bounceBack = !this.bounceBack;
+  }
+}
 
 function numeric(a, b) {
   return a.id - b.id;
@@ -84,4 +64,12 @@ function numeric(a, b) {
 
 function makeRandomItem() {
   return { id: Math.round(Math.random() * 1000) };
+}
+
+function makeRandomItems() {
+  let result = [];
+  for (let i = 0; i < 10; i++) {
+    result.push(makeRandomItem());
+  }
+  return result.sort(numeric);
 }

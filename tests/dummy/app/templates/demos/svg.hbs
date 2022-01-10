@@ -1,4 +1,4 @@
-<button {{action "move"}}>Move</button>
+<button type="button" {{on "click" this.move}}>Move</button>
 <svg width="800" height="600" >
   {{#animated-each this.bubbles key="id" watch="x,y,r" use=this.moveThem duration=1000 as |bubble|}}
     <circle id="bubble-{{bubble.id}}" cx="{{bubble.x}}%" cy="{{bubble.y}}%" r={{bubble.radius}} fill="white" stroke="black" />

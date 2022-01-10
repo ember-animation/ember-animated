@@ -1,51 +1,55 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked, dependentKeyCompat } from 'dummy/utils/tracking';
+import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
-import { computed } from '@ember/object';
 
-export default Component.extend({
-  transition: computed(
-    'animateSendingSide',
-    'moveSent',
-    'moveReceived',
-    function () {
-      if (this.get('animateSendingSide')) {
-        return this.moveSent;
-      } else {
-        return this.moveReceived;
-      }
-    },
-  ),
+export default class SwappingListsExample extends Component {
+  @dependentKeyCompat
+  get transition() {
+    if (this.animateSendingSide) {
+      return this.moveSent;
+    } else {
+      return this.moveReceived;
+    }
+  }
 
-  moveReceived: function* ({ receivedSprites, insertedSprites }) {
+  *moveReceived({ receivedSprites, insertedSprites }) {
     receivedSprites.forEach(move);
     // without this, they won't reveal until the end of the whole
     // transition
     insertedSprites.forEach((s) => s.reveal());
-  },
+  }
 
-  moveSent: function* ({ sentSprites, insertedSprites }) {
+  *moveSent({ sentSprites, insertedSprites }) {
     sentSprites.forEach(move);
     // without this, they won't reveal until the end of the whole
     // transition
     insertedSprites.forEach((s) => s.reveal());
-  },
+  }
 
-  init() {
-    this._super();
-    this.set('leftItems', makeRandomList());
-  },
-  actions: {
-    swap() {
-      if (this.get('leftItems')) {
-        this.set('leftItems', null);
-        this.set('rightItems', makeRandomList());
-      } else {
-        this.set('leftItems', makeRandomList());
-        this.set('rightItems', null);
-      }
-    },
-  },
-});
+  @tracked distinguishSides = false;
+  @tracked animateSendingSide = false;
+  @tracked leftItems = makeRandomList();
+  @tracked rightItems;
+
+  @action swap() {
+    if (this.leftItems) {
+      this.leftItems = null;
+      this.rightItems = makeRandomList();
+    } else {
+      this.leftItems = makeRandomList();
+      this.rightItems = null;
+    }
+  }
+
+  @action toggleDistinguishSides() {
+    this.distinguishSides = !this.distinguishSides;
+  }
+
+  @action toggleAnimateSendingSide() {
+    this.animateSendingSide = !this.animateSendingSide;
+  }
+}
 
 function numeric(a, b) {
   return a.id - b.id;

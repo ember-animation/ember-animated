@@ -1,12 +1,14 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from 'dummy/utils/tracking';
+import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
 import { parallel } from 'ember-animated';
 
-export default Component.extend({
-  showThing: false,
+export default class BeaconDemo extends Component {
+  @tracked showThing = false;
 
-  transition: function* (context) {
+  *transition(context) {
     let { insertedSprites, removedSprites, keptSprites, beacons } = context;
     insertedSprites.forEach((sprite) => {
       sprite.startAtSprite(beacons.one);
@@ -19,14 +21,13 @@ export default Component.extend({
       sprite.endAtSprite(beacons.one);
       parallel(move(sprite, scale(sprite)));
     });
-  },
+  }
 
-  actions: {
-    launch() {
-      this.set('showThing', true);
-    },
-    dismiss() {
-      this.set('showThing', false);
-    },
-  },
-});
+  @action launch() {
+    this.showThing = true;
+  }
+
+  @action dismiss() {
+    this.showThing = false;
+  }
+}

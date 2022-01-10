@@ -1,20 +1,20 @@
 <div class="scenario-each">
-  <button {{action "addItem"}}>Add Item</button>
-  <button {{action "shuffle"}}>Shuffle</button>
-  <button {{action "sortNumeric"}}>Sort</button>
+  <button type="button" {{on "click" this.addItem}}>Add Item</button>
+  <button type="button" {{on "click" this.shuffle}}>Shuffle</button>
+  <button type="button" {{on "click" this.sortNumeric}}>Sort</button>
   {{#if this.chaos.isRunning}}
-    <button {{action "stopChaos"}}>Stop</button>
+    <button type="button" {{on "click" this.stopChaos}}>Stop</button>
   {{else}}
-    <button {{action "startChaos"}}>Auto</button>
+    <button type="button" {{on "click" this.startChaos}}>Auto</button>
   {{/if}}
 
   <AnimatedContainer>
     {{#animated-each this.items key="id" use=this.transition as |item|}}
       <div>
         {{item.id}}
-        <button {{action "removeItem" item}}>X</button>
-        <button {{action "replaceItem" item}}>R</button>
-        <button {{action "mutate" item}}>M</button>
+        <button type="button" {{on "click" (fn this.removeItem item)}}>X</button>
+        <button type="button" {{on "click" (fn this.replaceItem item)}}>R</button>
+        <button type="button" {{on "click" (fn this.mutate item)}}>M</button>
       </div>
     {{/animated-each}}
   </AnimatedContainer>

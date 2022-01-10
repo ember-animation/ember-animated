@@ -1,12 +1,16 @@
-import { A } from '@ember/array';
-import { computed, set } from '@ember/object';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from 'dummy/utils/tracking';
+import { action } from '@ember/object';
 import { task, timeout } from 'ember-animated/-private/ember-scheduler';
 import move from 'ember-animated/motions/move';
 import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 
-export default Component.extend({
-  transition: function* ({ insertedSprites, keptSprites, removedSprites }) {
+export default class EachExample extends Component {
+  @tracked currentSort = numeric;
+  @tracked items = makeRandomList();
+  @tracked message = '';
+
+  *transition({ insertedSprites, keptSprites, removedSprites }) {
     insertedSprites.forEach((sprite) => {
       sprite.startAtPixel({ x: window.innerWidth });
       move(sprite, { easing: easeOut });
@@ -21,100 +25,95 @@ export default Component.extend({
       sprite.endAtPixel({ x: window.innerWidth * 0.8 });
       move(sprite, { easing: easeIn });
     });
-  },
+  }
 
-  currentSort: numeric,
-  items: computed({
-    get() {
-      let result = [];
-      for (let i = 0; i < 10; i++) {
-        result.push(makeRandomItem());
-      }
-      return A(result.sort(numeric));
-    },
-    set(k, v) {
-      return A(v);
-    },
-  }),
-
-  chaos: task(function* (running) {
+  @task(function* (running) {
     if (!running) {
       return;
     }
+
     while (true) {
       yield timeout(1000);
-      this.send('addItem');
+      this.addItem();
       yield timeout(1000);
-      this.send(
-        'removeItem',
-        this.get('items')[Math.floor(Math.random() * this.get('items.length'))],
+      this.removeItem(
+        this.items[Math.floor(Math.random() * this.items.length)],
       );
     }
-  }).restartable(),
+  }).restartable() // eslint-disable-line prettier/prettier
+  chaos;
 
-  actions: {
-    addItem() {
-      let items = this.get('items');
-      // This deliberately uses stable keys but unstable objects
-      let item = makeRandomItem();
-      this.set('message', `add ${item.id}`);
-      this.set(
-        'items',
-        items
-          .concat([item])
-          .sort(this.currentSort)
-          .map((elt) => ({ id: elt.id })),
-      );
-    },
-    removeItem(which) {
-      let items = this.get('items');
-      this.set('message', `remove ${which.id}`);
-      this.set(
-        'items',
-        items.filter((i) => i !== which),
-      );
-    },
-    replaceItem(which) {
-      let items = this.get('items');
-      let index = items.indexOf(which);
-      this.set(
-        'items',
-        items
-          .slice(0, index)
-          .concat([makeRandomItem()])
-          .concat(items.slice(index + 1)),
-      );
-    },
-    mutate(item) {
-      set(item, 'id', makeRandomItem().id);
-    },
-    sortNumeric() {
-      let items = this.get('items');
-      this.currentSort = numeric;
-      this.set('items', items.slice().sort(this.currentSort));
-    },
-    shuffle() {
-      let items = this.get('items');
-      this.currentSort = random;
-      this.set('items', items.slice().sort(this.currentSort));
-    },
-    startChaos() {
-      this.get('chaos').perform(true);
-    },
-    stopChaos() {
-      this.get('chaos').perform(false);
-    },
-  },
-});
+  @action addItem() {
+    // This deliberately uses stable keys but unstable objects
+    let item = new Item();
+    this.message = `add ${item.id}`;
+    this.items = this.items
+      .concat([item])
+      .sort(this.currentSort)
+      .map((elt) => ({ id: elt.id }));
+  }
+
+  @action removeItem(which) {
+    this.message = `remove ${which.id}`;
+    this.items = this.items.filter((i) => i !== which);
+  }
+
+  @action replaceItem(which) {
+    let items = this.items;
+    let index = items.indexOf(which);
+    this.items = items
+      .slice(0, index)
+      .concat([new Item()])
+      .concat(items.slice(index + 1));
+  }
+
+  @action mutate(item) {
+    item.id = makeRandomId();
+  }
+
+  @action sortNumeric() {
+    this.currentSort = numeric;
+    this.items = this.items.slice().sort(this.currentSort);
+  }
+
+  @action shuffle() {
+    this.currentSort = random;
+    this.items = this.items.slice().sort(this.currentSort);
+  }
+
+  @action startChaos() {
+    this.chaos.perform(true);
+  }
+
+  @action stopChaos() {
+    this.chaos.perform(false);
+  }
+}
 
 function numeric(a, b) {
   return a.id - b.id;
 }
 
-function makeRandomItem() {
-  return { id: Math.round(Math.random() * 1000) };
+class Item {
+  @tracked id;
+
+  constructor() {
+    this.id = makeRandomId();
+  }
+}
+
+function makeRandomId() {
+  return Math.round(Math.random() * 1000);
 }
 
 function random() {
   return Math.random() - 0.5;
+}
+
+function makeRandomList() {
+  let result = [];
+  for (let i = 0; i < 10; i++) {
+    result.push(new Item());
+  }
+  return result.sort(numeric);
 }
