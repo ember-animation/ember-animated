@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
+import { tracked } from 'dummy/utils/tracking';
 import fade from 'ember-animated/transitions/fade';
 
 export default class extends Controller {

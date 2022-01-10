@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
+import { tracked } from 'dummy/utils/tracking';
 import { htmlSafe } from '@ember/string';
 import move from 'ember-animated/motions/move';
 

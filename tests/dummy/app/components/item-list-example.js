@@ -1,6 +1,6 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import { tracked } from 'dummy/utils/tracking';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { current } from 'ember-animated/-private/scheduler';
 
@@ -11,7 +11,7 @@ export default class ItemListsExample extends Component {
 
   @tracked items = makeRandomList();
 
-  @task *addItemTask() {
+  @task(function* () {
     this.motionService.willAnimate({
       task: current,
       duration: this.duration,
@@ -22,9 +22,10 @@ export default class ItemListsExample extends Component {
       .concat([makeRandomItem()])
       .sort(numeric)
       .map((elt) => ({ id: elt.id }));
-  }
+  })
+  addItemTask;
 
-  @task *removeItemTask(which) {
+  @task(function* (which) {
     this.motionService.willAnimate({
       task: current,
       duration: this.duration,
@@ -32,7 +33,8 @@ export default class ItemListsExample extends Component {
     });
 
     this.items = this.items.items.filter((i) => i !== which);
-  }
+  })
+  removeItemTask;
 }
 
 function numeric(a, b) {

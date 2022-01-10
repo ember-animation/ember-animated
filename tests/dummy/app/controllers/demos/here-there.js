@@ -1,25 +1,27 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
+import { tracked, dependentKeyCompat } from 'dummy/utils/tracking';
 import move from 'ember-animated/motions/move';
 
 export default class extends Controller {
   @tracked showLeft = true;
   @tracked groupTogether = false;
 
+  @dependentKeyCompat
   get showRight() {
     return !this.showLeft;
   }
 
-  *transition({ receivedSprites }) {
-    receivedSprites.forEach(move);
-  }
-
+  @dependentKeyCompat
   get howToGroup() {
     if (this.groupTogether) {
       return 'together';
     }
     return undefined;
+  }
+
+  *transition({ receivedSprites }) {
+    receivedSprites.forEach(move);
   }
 
   @action toggle() {

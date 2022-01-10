@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
+import { tracked } from 'dummy/utils/tracking';
 import move from 'ember-animated/motions/move';
 import scale from 'ember-animated/motions/scale';
 import opacity from 'ember-animated/motions/opacity';

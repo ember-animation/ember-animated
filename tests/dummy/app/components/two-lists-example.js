@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import { tracked } from 'dummy/utils/tracking';
 import { action } from '@ember/object';
 import { later } from '@ember/runloop';
 import move from 'ember-animated/motions/move';
