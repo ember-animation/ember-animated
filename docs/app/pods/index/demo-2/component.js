@@ -1,3 +1,4 @@
+/* eslint-disable require-yield */
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -23,7 +24,6 @@ export default class IndexDemo2 extends Component {
 
   @tracked nextId = 0;
 
-  // eslint-disable-next-line require-yield
   *originalTransition({ insertedSprites, removedSprites, keptSprites }) {
     for (let sprite of insertedSprites) {
       fadeIn(sprite);
@@ -39,7 +39,6 @@ export default class IndexDemo2 extends Component {
     }
   }
 
-  // eslint-disable-next-line require-yield
   *separateTransition({ insertedSprites, removedSprites, keptSprites }) {
     for (let sprite of insertedSprites) {
       sprite.startTranslatedBy(0, -sprite.finalBounds.height);
@@ -73,7 +72,7 @@ export default class IndexDemo2 extends Component {
     this.notifications.splice(i, 1);
 
     // eslint-disable-next-line no-self-assign
-    this.notifications = this.notifications; // trigger tracking
+    this.notifications = this.notifications; // trigger autotracking
   }
 
   templateDiff = dedent`

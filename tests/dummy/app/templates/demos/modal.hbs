@@ -1,7 +1,11 @@
 {{#if this.message}}
   <div class="scenario-modal--container">
     <AnimatedValue @value="background" @use={{this.backgroundTransition}} @initialInsertion={{true}} @finalRemoval={{true}}>
-      <div class="scenario-modal--background" {{action this.showMessage ""}}></div>
+      <div
+        class="scenario-modal--background"
+        role="button"
+        {{on "click" (fn this.showMessage "")}}
+      />
     </AnimatedValue>
     <AnimatedValue @value={{this.message}} @use={{this.dialogTransition}} @initialInsertion={{true}} @finalRemoval={{true}} as |currentMessage|>
       <div class="scenario-modal--contents">
@@ -11,8 +15,8 @@
   </div>
 {{/if}}
 
-<button {{action this.showRandomMessage}}>Show</button>
-<button disabled={{not this.lastMessage}} {{action this.showPreviousMessage}}>Show Previous</button>
+<button type="button" {{on "click" this.showRandomMessage}}>Show</button>
+<button type="button" disabled={{not this.lastMessage}} {{on "click" this.showPreviousMessage}}>Show Previous</button>
 
 
 <AnimatedOrphans />

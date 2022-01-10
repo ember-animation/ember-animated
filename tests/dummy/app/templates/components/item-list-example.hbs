@@ -1,8 +1,8 @@
-<button {{action "addItem" }}>Add Item</button>
+<button type="button" {{on "click" (perform this.addItemTask)}}>Add Item</button>
 
 {{#each this.items key="id" as |item|}}
   <div>
     {{item.id}}
-    <button {{action "removeItem" item}}>X</button>
+    <button type="button" {{on "click" (perform this.removeItemTask item)}}>X</button>
   </div>
 {{/each}}

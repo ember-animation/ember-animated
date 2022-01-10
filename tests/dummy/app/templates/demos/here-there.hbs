@@ -1,8 +1,15 @@
 <div class="scenario-here-there">
 
-  <button {{action "toggle"}}>Toggle</button>
+  <button type="button" {{on "click" this.toggle}}>Toggle</button>
 
-  <label><input type="checkbox" checked={{this.groupTogether}} onchange={{action (mut this.groupTogether) (not this.groupTogether)}}> Grouped</label>
+  <label>
+    <input
+      type="checkbox"
+      checked={{this.groupTogether}}
+      {{on "change" this.toggleGroupTogether}}
+    >
+    Grouped
+  </label>
 
   <div>
     <div class="left">

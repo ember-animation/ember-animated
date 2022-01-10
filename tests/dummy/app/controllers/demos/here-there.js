@@ -1,25 +1,32 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
-import { not } from '@ember/object/computed';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import move from 'ember-animated/motions/move';
 
-export default Controller.extend({
-  showLeft: true,
-  showRight: not('showLeft'),
+export default class extends Controller {
+  @tracked showLeft = true;
+  @tracked groupTogether = false;
 
-  transition: function* ({ receivedSprites }) {
+  get showRight() {
+    return !this.showLeft;
+  }
+
+  *transition({ receivedSprites }) {
     receivedSprites.forEach(move);
-  },
+  }
 
-  howToGroup: computed('groupTogether', function () {
-    if (this.get('groupTogether')) {
+  get howToGroup() {
+    if (this.groupTogether) {
       return 'together';
     }
     return undefined;
-  }),
-  actions: {
-    toggle() {
-      this.set('showLeft', !this.get('showLeft'));
-    },
-  },
-});
+  }
+
+  @action toggle() {
+    this.showLeft = !this.showLeft;
+  }
+
+  @action toggleGroupTogether() {
+    this.groupTogether = !this.groupTogether;
+  }
+}

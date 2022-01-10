@@ -3,5 +3,5 @@
     <span class="numbers">{{v}}</span>
   {{/animated-value}}
 </AnimatedContainer>
-<button {{action "increment"}}>+</button>
-<button {{action "decrement"}}>-</button>
+<button type="button" {{on "click" this.increment}}>+</button>
+<button type="button" {{on "click" this.decrement}}>-</button>
