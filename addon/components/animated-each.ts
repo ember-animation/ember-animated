@@ -159,9 +159,10 @@ export default class AnimatedEach extends Component {
   private _lastTransition: Transition | null = null;
   private _ancestorWillDestroyUs = false;
 
+  // eslint-disable-next-line ember/classic-decorator-hooks
   init() {
     super.init();
-    this.get('motionService')
+    this.motionService
       .register(this)
       .observeDescendantAnimations(this as any, this.maybeReanimate) // TODO: shouldn't need this cast
       .observeAncestorAnimations(this as any, this.ancestorIsAnimating);
@@ -171,7 +172,6 @@ export default class AnimatedEach extends Component {
   _installObservers() {
     let key = this.get('key');
     if (key != null && key !== '@index' && key !== '@identity') {
-      // eslint-disable-next-line ember/no-observers
       this.addObserver(
         `items.@each.${key}` as any,
         this,
@@ -182,7 +182,6 @@ export default class AnimatedEach extends Component {
     let deps = this._deps;
     if (deps) {
       for (let dep of deps) {
-        // eslint-disable-next-line ember/no-observers
         this.addObserver(
           `items.@each.${dep}` as any,
           this,
@@ -330,6 +329,7 @@ export default class AnimatedEach extends Component {
   }
 
   didInsertElement() {
+    super.didInsertElement();
     this._inserted = true;
   }
 
@@ -407,6 +407,7 @@ export default class AnimatedEach extends Component {
   }
 
   willDestroyElement() {
+    super.willDestroyElement();
     // if we already got early warning, we already let our sprites escape.
     if (!this._ancestorWillDestroyUs) {
       this._letSpritesEscape();

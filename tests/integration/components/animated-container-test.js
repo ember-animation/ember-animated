@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes,ember/require-super-in-lifecycle-hooks */
 import { Promise as EmberPromise } from 'rsvp';
 import { run } from '@ember/runloop';
 import { alias } from '@ember/object/computed';

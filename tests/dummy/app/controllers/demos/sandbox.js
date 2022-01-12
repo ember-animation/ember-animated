@@ -1,8 +1,8 @@
 import Controller from '@ember/controller';
 import { wait } from 'ember-animated';
 
-export default Controller.extend({
-  typingTransition: function* ({ duration, insertedSprites }) {
+export default class extends Controller {
+  *typingTransition({ duration, insertedSprites }) {
     for (let sprite of insertedSprites) {
       sprite.moveToFinalPosition();
       sprite.reveal();
@@ -42,5 +42,5 @@ export default Controller.extend({
 
       yield wait(duration / 5);
     }
-  },
-});
+  }
+}

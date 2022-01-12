@@ -45,15 +45,17 @@ export default class AnimatedOrphans extends Component {
   private _cycleCounter = 0;
 
   didInsertElement() {
+    super.didInsertElement();
     this._inserted = true;
-    this.get('motionService')
+    this.motionService
       .register(this)
       .observeOrphans(this.animateOrphans)
       .observeAnimations(this.reanimate);
   }
 
   willDestroyElement() {
-    this.get('motionService')
+    super.willDestroyElement();
+    this.motionService
       .unregister(this)
       .unobserveOrphans(this.animateOrphans)
       .unobserveAnimations(this.reanimate);

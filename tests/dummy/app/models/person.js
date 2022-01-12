@@ -1,9 +1,8 @@
 //BEGIN-SNIPPET person-2-snippet.js
-import DS from 'ember-data';
-const { attr } = DS;
+import Model, { attr } from '@ember-data/model';
 
-export default DS.Model.extend({
-  name: attr(),
-  avatarUrl: attr(),
-});
+export default class Person extends Model {
+  @attr() name;
+  @attr() avatarUrl;
+}
 //END-SNIPPET

@@ -21,8 +21,13 @@ module.exports = {
   },
   rules: {
     // pending complete octane style upgrade
-    'ember/no-get': 0,
-    'ember/use-ember-data-rfc-395-imports': 0,
+    'ember/classic-decorator-no-classic-methods': 'off',
+    'ember/no-classic-components': 'off',
+    'ember/no-component-lifecycle-hooks': 'off',
+    'ember/no-computed-properties-in-native-classes': 'off',
+    'ember/no-get': 'off',
+    'ember/no-observers': 'off',
+    'ember/require-tagless-components': 'off',
 
     'no-var': 'error',
     'no-constant-condition': ['error', { checkLoops: false }],
