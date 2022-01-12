@@ -103,6 +103,7 @@ export default class AnimatedContainerComponent extends Component {
   }
 
   didInsertElement() {
+    super.didInsertElement();
     this._inserted = true;
   }
 
@@ -125,6 +126,7 @@ export default class AnimatedContainerComponent extends Component {
   }
 
   willDestroyElement() {
+    super.willDestroyElement();
     this.get('motionService')
       .unregister(this)
       .unobserveDescendantAnimations(this as any, this.maybeAnimate); // TODO: shouldn't need this cast

@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-classes */
 import { alias } from '@ember/object/computed';
 import EmberObject from '@ember/object';
 import { task } from 'ember-animated/-private/ember-scheduler';
