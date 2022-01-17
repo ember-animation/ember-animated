@@ -1,10 +1,7 @@
 import { tracked as nativeTracked } from '@glimmer/tracking';
 import { dependentKeyCompat as nativeDependentKeyCompat } from '@ember/object/compat';
-import {
-  dependencySatisfies,
-  macroCondition,
-  importSync,
-} from '@embroider/macros';
+import { gte } from 'ember-compatibility-helpers';
+import { importSync } from '@embroider/macros';
 
 let tracked;
 let dependentKeyCompat;
@@ -15,12 +12,12 @@ let dependentKeyCompat;
  *
  * Dependency on `ember-tracked-polyfill` could be removed
  * once we drop support for Ember versions older than 3.13 in CI.
+ *
+ * As this is an addon, dependencySatisfies() from @embroider/macros
+ * needs 'ember-source' to be listed in deps or peerDeps
+ * which is not needed for the addon so use compatibility-helpers for the time being.
  */
-if (
-  macroCondition(
-    dependencySatisfies('ember-source', '>=3.13.0-canary || >=3.13.0-beta'),
-  )
-) {
+if (gte('3.13.0')) {
   tracked = nativeTracked;
   dependentKeyCompat = nativeDependentKeyCompat;
 } else {
