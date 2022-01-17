@@ -78,7 +78,7 @@
     "webpack": "^5.65.0"
   },
   "engines": {
-    "node": "8.* || >= 10.*"
+    "node": "12.* || 14.* || >= 16"
   },
   "resolutions": {
     "ember-cli-addon-docs/ember-data": "^3.15.0",
