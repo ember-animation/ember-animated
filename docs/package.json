@@ -36,7 +36,7 @@
     "ember-cli": "~3.15.1",
     "ember-cli-addon-docs": "^4.2.1",
     "ember-cli-addon-docs-yuidoc": "^1.0.0",
-    "ember-cli-app-version": "^3.2.0",
+    "ember-cli-app-version": "^5.0.0",
     "ember-cli-babel": "^7.26.7",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-deploy": "^1.0.2",
@@ -75,7 +75,7 @@
     "qunit-dom": "^2.0.0",
     "sass": "1.47.0",
     "typescript": "^4.5.4",
-    "webpack": "^5.65.0"
+    "webpack": "^5.66.0"
   },
   "engines": {
     "node": "12.* || 14.* || >= 16"
