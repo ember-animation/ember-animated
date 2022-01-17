@@ -12,7 +12,7 @@ module.exports = async function () {
         npm: {
           devDependencies: {
             'ember-decorators-polyfill': '^1.1.5',
-            'ember-source': '~3.12.0',
+            'ember-source': '~3.12.4',
             'ember-tracked-polyfill': '^0.1.0',
           },
         },
