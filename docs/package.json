@@ -88,5 +88,8 @@
     "paths": [
       ".."
     ]
+  },
+  "volta": {
+    "extends": "../package.json"
   }
 }
