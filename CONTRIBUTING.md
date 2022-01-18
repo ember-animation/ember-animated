@@ -2,15 +2,14 @@
 
 ## Installation
 
-* `git clone <repository-url>`
-* `cd my-addon`
+* `git clone https://github.com/ember-animation/ember-animated.git`
+* `cd ember-animated`
 * `yarn install`
 
 ## Linting
 
-* `yarn lint:hbs`
-* `yarn lint:js`
-* `yarn lint:js --fix`
+* `yarn lint`
+* `yarn lint:fix`
 
 ## Running tests
 

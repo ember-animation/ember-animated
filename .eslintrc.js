@@ -12,9 +12,9 @@ module.exports = {
   },
   plugins: ['ember', '@typescript-eslint'],
   extends: [
-    'plugin:prettier/recommended',
     'eslint:recommended',
     'plugin:ember/recommended',
+    'plugin:prettier/recommended',
   ],
   env: {
     browser: true,
@@ -66,23 +66,15 @@ module.exports = {
     // node files
     {
       files: [
-        '.eslintrc.js',
-        '.prettierrc.js',
-        '.template-lintrc.js',
-        'ember-cli-build.js',
-        '.eslintrc.js',
-        'index.js',
-        'testem.js',
-        'blueprints/*/index.js',
-        'config/**/*.js',
-        'tests/dummy/config/**/*.js',
-      ],
-      excludedFiles: [
-        'addon/**',
-        'addon-test-support/**',
-        'version-specific-*/**',
-        'config/addon-docs.js',
-        'tests/dummy/app/**',
+        './.eslintrc.js',
+        './.prettierrc.js',
+        './.template-lintrc.js',
+        './ember-cli-build.js',
+        './index.js',
+        './testem.js',
+        './blueprints/*/index.js',
+        './config/**/*.js',
+        './tests/dummy/config/**/*.js',
       ],
       parserOptions: {
         sourceType: 'script',
