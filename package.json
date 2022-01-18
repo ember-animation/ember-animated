@@ -103,5 +103,9 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
+  },
+  "volta": {
+    "node": "12.22.7",
+    "yarn": "1.22.17"
   }
 }
