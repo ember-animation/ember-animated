@@ -1,3 +1,8 @@
+# 0.12.0
+ - BREAKING: drop support for Node < 12
+ - BREAKING: drop support for Ember < 3.16
+ - COMPATABILITY: many updates for compatibility with Ember 4+ and Embroider by @SergeAstapov
+
 # 0.11.0
  - HOUSEKEEPING: fix lint error in demo code by @balinterdi
  - HOUSEKEEPING: update CI config for PRs by SergeAstapov
