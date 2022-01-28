@@ -140,7 +140,7 @@ module('Integration | Component | animated container', function (hooks) {
     );
 
     await render(hbs`
-      <AnimatedContainer @motion={{TestMotion}}>
+      <AnimatedContainer @motion={{this.TestMotion}}>
         <div class="inside">
           {{fake-animator}}
         </div>
@@ -175,7 +175,7 @@ module('Integration | Component | animated container', function (hooks) {
     );
 
     await render(hbs`
-      <AnimatedContainer @motion={{TestMotion}}>
+      <AnimatedContainer @motion={{this.TestMotion}}>
         <div class="inside">
           {{fake-animator}}
         </div>
@@ -252,7 +252,7 @@ module('Integration | Component | animated container', function (hooks) {
     );
 
     await render(hbs`
-      <AnimatedContainer @motion={{TestMotion}}>
+      <AnimatedContainer @motion={{this.TestMotion}}>
         <div class="inside">
           {{fake-animator}}
         </div>
@@ -296,8 +296,8 @@ module('Integration | Component | animated container', function (hooks) {
       finalHeight: 200,
     });
     await render(hbs`
-      <AnimatedContainer @motion={{TestMotion}} @onInitialRender={{true}}>
-        {{fake-animator onInitialRender=opts}}
+      <AnimatedContainer @motion={{this.TestMotion}} @onInitialRender={{true}}>
+        {{fake-animator onInitialRender=this.opts}}
       </AnimatedContainer>
     `);
 
@@ -464,8 +464,8 @@ module('Integration | Component | animated container', function (hooks) {
     );
     this.set('items', ['a']);
     await render(hbs`
-      <AnimatedContainer @motion={{TestMotion}}>
-        {{#animated-each items use=transition as |item|}}
+      <AnimatedContainer @motion={{this.TestMotion}}>
+        {{#animated-each this.items use=this.transition as |item|}}
           <div style="height: 10px"></div>
         {{/animated-each}}
       </AnimatedContainer>
@@ -490,7 +490,7 @@ module(
       this.set('transition', function* () {});
       await render(hbs`
       <AnimatedContainer>
-        {{#animated-if showThing use=transition duration=1000}}
+        {{#animated-if this.showThing use=this.transition duration=1000}}
           <div>Content</div>
         {{/animated-if}}
       </AnimatedContainer>
@@ -509,7 +509,7 @@ module(
       this.set('transition', function* () {});
       await render(hbs`
       <AnimatedContainer>
-        {{#animated-if showThing use=transition duration=1000}}
+        {{#animated-if this.showThing use=this.transition duration=1000}}
           <div>Content</div>
         {{/animated-if}}
       </AnimatedContainer>
@@ -531,7 +531,7 @@ module(
       await render(hbs`
       <div style="transform: scale(0.5)">
         <AnimatedContainer>
-          {{#animated-if showThing use=transition duration=1000}}
+          {{#animated-if this.showThing use=this.transition duration=1000}}
             <div>Content</div>
           {{/animated-if}}
         </AnimatedContainer>
@@ -553,7 +553,7 @@ module(
       time.pause();
       await render(hbs`
       <AnimatedContainer @onInitialRender={{true}}>
-        {{#animated-if showThing use=transition initialInsertion=true duration=1000}}
+        {{#animated-if this.showThing use=this.transition initialInsertion=true duration=1000}}
           <div style="height: 100px">Content</div>
         {{/animated-if}}
       </AnimatedContainer>

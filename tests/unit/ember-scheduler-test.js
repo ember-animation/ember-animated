@@ -1,6 +1,6 @@
 /* eslint-disable ember/no-classic-classes */
 import EmberObject, { computed } from '@ember/object';
-import { run, later } from '@ember/runloop';
+import { run, later, _getCurrentRunLoop } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
@@ -369,6 +369,6 @@ module('Unit | scheduler Ember layer', function (hooks) {
   });
 
   function insideRunLoop() {
-    return !!run.currentRunLoop;
+    return !!_getCurrentRunLoop();
   }
 });
