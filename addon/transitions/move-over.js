@@ -56,6 +56,8 @@ export default function* moveOver(dimension, direction, context) {
     viewport = context.insertedSprites[0].finalBounds;
   } else if (context.keptSprites.length) {
     viewport = context.keptSprites[0].finalBounds;
+  } else if (context.receivedSprites.length) {
+    viewport = context.receivedSprites[0].finalBounds;
   } else {
     throw new Error('Unimplemented');
   }
@@ -96,6 +98,12 @@ export default function* moveOver(dimension, direction, context) {
     let move = new Move(context.keptSprites[0]);
     move.run();
     context.removedSprites.forEach((sprite) => {
+      follow(sprite, { source: move });
+    });
+  } else if (context.receivedSprites.length) {
+    let move = new Move(context.receivedSprites[0]);
+    move.run();
+    context.removedSprites.forEach(sprite => {
       follow(sprite, { source: move });
     });
   } else {
