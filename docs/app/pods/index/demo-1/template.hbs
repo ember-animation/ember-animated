@@ -44,12 +44,12 @@
             {{#if animationEnabled.value}}
               <AnimatedContainer>
                 {{#animated-each (range 0 this.guests) use=this.transition}}
-                  <span class="inline-block">{{fa-icon "user"}}</span>
+                  <span class="inline-block"><FaIcon @icon="user" /></span>
                 {{/animated-each}}
               </AnimatedContainer>
             {{else}}
               {{#each (range 0 this.guests)}}
-                <span class="inline-block">{{fa-icon "user"}}</span>
+                <span class="inline-block"><FaIcon @icon="user" /></span>
               {{/each}}
             {{/if}}
           </div>
