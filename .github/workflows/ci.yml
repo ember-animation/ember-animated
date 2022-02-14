@@ -110,6 +110,7 @@ jobs:
         run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
 
   typescript-compatibility:
+    if: ${{ false }}  # disable for now
     name: Type checking - ${{ matrix.typescript-scenario }}
     runs-on: ubuntu-latest
     needs: 'test-library'
