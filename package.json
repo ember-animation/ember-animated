@@ -39,7 +39,7 @@
     "ember-cli-htmlbars": "^5.7.2",
     "ember-cli-typescript": "^4.2.1",
     "ember-compatibility-helpers": "^1.2.0",
-    "ember-element-helper": "^0.5.0",
+    "ember-element-helper": "^0.5.0 || ^0.6.0",
     "ember-maybe-import-regenerator": "^0.1.5 || ^1.0.0"
   },
   "devDependencies": {
