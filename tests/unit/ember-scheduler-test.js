@@ -1,11 +1,12 @@
 /* eslint-disable ember/no-classic-classes */
 import EmberObject, { computed } from '@ember/object';
-import { run, later } from '@ember/runloop';
+import { run, later, _getCurrentRunLoop } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
 import { microwait } from 'ember-animated';
 import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
+import { gte } from 'ember-compatibility-helpers';
 
 module('Unit | scheduler Ember layer', function (hooks) {
   hooks.beforeEach(function (assert) {
@@ -369,6 +370,10 @@ module('Unit | scheduler Ember layer', function (hooks) {
   });
 
   function insideRunLoop() {
-    return !!run.currentRunLoop;
+    if (gte('4.0.0')) {
+      return !!_getCurrentRunLoop();
+    } else {
+      return !!run.currentRunLoop;
+    }
   }
 });

@@ -33,8 +33,8 @@ module('Integration | Component | animated orphans', function (hooks) {
     await render(hbs`
   <AnimatedOrphans/>
 
-  {{#if showIt}}
-    {{#animated-value "one" use=t1 finalRemoval=true }}
+  {{#if this.showIt}}
+    {{#animated-value "one" use=this.t1 finalRemoval=true}}
       <span class="one">One</span>
     {{/animated-value}}
   {{/if}}
@@ -55,11 +55,11 @@ module('Integration | Component | animated orphans', function (hooks) {
     await render(hbs`
   <AnimatedOrphans/>
 
-  {{#if showIt}}
-    {{#animated-value "one" use=t1 finalRemoval=true}}
+  {{#if this.showIt}}
+    {{#animated-value "one" use=this.t1 finalRemoval=true}}
       <span class="one">One</span>
     {{/animated-value}}
-    {{#animated-value "two" use=t2 finalRemoval=true}}
+    {{#animated-value "two" use=this.t2 finalRemoval=true}}
       <span class="two">Two</span>
     {{/animated-value}}
   {{/if}}
@@ -97,8 +97,8 @@ module('Integration | Component | animated orphans', function (hooks) {
    <AnimatedOrphans/>
   </div>
 
-  {{#if showIt}}
-    {{#animated-value "one" use=t1 finalRemoval=true}}
+  {{#if this.showIt}}
+    {{#animated-value "one" use=this.t1 finalRemoval=true}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -132,9 +132,9 @@ module('Integration | Component | animated orphans', function (hooks) {
    <AnimatedOrphans/>
   </div>
 
-  {{#if showIt}}
+  {{#if this.showIt}}
     <div style="color: rgb(12, 34, 56)">
-    {{#animated-value "one" use=t1 finalRemoval=true}}
+    {{#animated-value "one" use=this.t1 finalRemoval=true}}
       <div class="one">One</div>
     {{/animated-value}}
     </div>
@@ -165,8 +165,8 @@ module('Integration | Component | animated orphans', function (hooks) {
    <AnimatedOrphans/>
   </div>
 
-  {{#if showIt}}
-    {{#animated-value "one" use=t1 finalRemoval=true}}
+  {{#if this.showIt}}
+    {{#animated-value "one" use=this.t1 finalRemoval=true}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -266,11 +266,11 @@ module('Integration | Component | animated orphans', function (hooks) {
    <AnimatedOrphans/>
   </div>
 
-  {{#if showIt}}
-    {{#animated-value "one" use=t1 finalRemoval=true }}
+  {{#if this.showIt}}
+    {{#animated-value "one" use=this.t1 finalRemoval=true }}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2 finalRemoval=true }}
+    {{#animated-value "two" use=this.t2 finalRemoval=true }}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}
@@ -408,11 +408,11 @@ module('Integration | Component | animated orphans', function (hooks) {
    <AnimatedOrphans/>
   </div>
 
-  {{#if showIt}}
-    {{#animated-value "one" use=t1 finalRemoval=true }}
+  {{#if this.showIt}}
+    {{#animated-value "one" use=this.t1 finalRemoval=true}}
       <div class="one">One</div>
     {{/animated-value}}
-    {{#animated-value "two" use=t2 finalRemoval=true  }}
+    {{#animated-value "two" use=this.t2 finalRemoval=true}}
       <div class="one">One</div>
     {{/animated-value}}
   {{/if}}

@@ -18,7 +18,7 @@ module('Integration | Component | animated-beacon', function (hooks) {
   <div class="alpha"></div>
 {{/animated-beacon}}
 
-{{#animated-value showIt use=transition }}
+{{#animated-value this.showIt use=this.transition }}
   <div class="beta"></div>
 {{/animated-value}}
 `);
@@ -72,7 +72,7 @@ module('Integration | Component | animated-beacon', function (hooks) {
   <div class="alpha"></div>
 {{/animated-beacon}}
 
-{{#animated-value showIt use=transition}}
+{{#animated-value this.showIt use=this.transition}}
   <div class="beta"></div>
 {{/animated-value}}
 `);

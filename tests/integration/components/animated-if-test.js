@@ -9,7 +9,7 @@ module('Integration | Component | animated if', function (hooks) {
   test('it renders when true', async function (assert) {
     this.set('x', true);
     await render(hbs`
-      {{#animated-if x}}
+      {{#animated-if this.x}}
         <div class="truthy"></div>
       {{/animated-if}}
     `);
@@ -18,7 +18,7 @@ module('Integration | Component | animated if', function (hooks) {
 
   test('it does not render when false', async function (assert) {
     await render(hbs`
-      {{#animated-if x}}
+      {{#animated-if this.x}}
         <div class="truthy"></div>
       {{/animated-if}}
     `);
@@ -27,7 +27,7 @@ module('Integration | Component | animated if', function (hooks) {
 
   test('it renders inverse block when false', async function (assert) {
     await render(hbs`
-      {{#animated-if x}}
+      {{#animated-if this.x}}
         <div class="truthy"></div>
       {{else}}
         <div class="falsey"></div>

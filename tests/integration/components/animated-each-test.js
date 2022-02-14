@@ -33,7 +33,7 @@ module('Integration | Component | animated each', function (hooks) {
     assert.expect(2);
     this.set('items', ['a', 'b', 'c']);
     await render(hbs`
-      {{#animated-each items as |item index|}}
+      {{#animated-each this.items as |item index|}}
         <div class="test-child">{{item}}</div>
         <div class="test-child-index">{{index}}</div>
       {{/animated-each}}
@@ -54,7 +54,7 @@ module('Integration | Component | animated each', function (hooks) {
   test('it renders when list is missing', async function (assert) {
     assert.expect(0);
     await render(hbs`
-      {{#animated-each items as |item|}}
+      {{#animated-each this.items as |item|}}
         <div class="test-child">{{item}}</div>
       {{/animated-each}}
     `);
@@ -63,7 +63,7 @@ module('Integration | Component | animated each', function (hooks) {
   test('it renders the block within else clause', async function (assert) {
     assert.expect(1);
     await render(hbs`
-      {{#animated-each items as |item|}}
+      {{#animated-each this.items as |item|}}
         <div class="test-child">{{item}}</div>
       {{else}}
         <span>No items</span>
@@ -82,7 +82,7 @@ module('Integration | Component | animated each', function (hooks) {
       transitionCounter++;
     });
     await render(hbs`
-      {{#animated-each items use=transition initialInsertion=true as |item|}}
+      {{#animated-each this.items use=this.transition initialInsertion=true as |item|}}
         <div class="test-child">{{item}}</div>
       {{/animated-each}}
     `);
@@ -108,7 +108,7 @@ module('Integration | Component | animated each', function (hooks) {
 
     this.set('items', ['a', 'b', 'c']);
     await render(hbs`
-      {{#animated-each items use=transition as |item index|}}
+      {{#animated-each this.items use=this.transition as |item index|}}
         <div class="test-child" data-item={{item}} data-index={{index}}>{{item}}</div>
       {{/animated-each}}
     `);
@@ -138,7 +138,7 @@ module('Integration | Component | animated each', function (hooks) {
 
     this.set('items', ['a', 'b', 'c']);
     await render(hbs`
-      {{#animated-each items use=transition as |item index|}}
+      {{#animated-each this.items use=this.transition as |item index|}}
         <div class="test-child" data-item={{item}} data-index={{index}}>{{item}}</div>
       {{/animated-each}}
     `);
@@ -169,7 +169,7 @@ module('Integration | Component | animated each', function (hooks) {
       },
     );
     await render(hbs`
-      {{#animated-each items use=transition as |item|}}
+      {{#animated-each this.items use=this.transition as |item|}}
         <div class="test-child">{{item}}</div>
       {{/animated-each}}
     `);
@@ -205,7 +205,7 @@ module('Integration | Component | animated each', function (hooks) {
     );
 
     await render(hbs`
-      {{#animated-each items use=transition as |item|}}
+      {{#animated-each this.items use=this.transition as |item|}}
         <div class="test-child">{{item}}</div>
       {{/animated-each}}
     `);
@@ -238,7 +238,7 @@ module('Integration | Component | animated each', function (hooks) {
       },
     );
     await render(hbs`
-      {{#animated-each items use=transition key="id" as |item|}}
+      {{#animated-each this.items use=this.transition key="id" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
     `);
@@ -272,7 +272,7 @@ module('Integration | Component | animated each', function (hooks) {
     );
 
     await render(hbs`
-      {{#animated-each items use=transition key="id" watch="x,y" as |item|}}
+      {{#animated-each this.items use=this.transition key="id" watch="x,y" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
     `);
@@ -308,10 +308,10 @@ module('Integration | Component | animated each', function (hooks) {
     });
 
     await render(hbs`
-      {{#animated-each leftItems use=leftTransition key="id" as |item|}}
+      {{#animated-each this.leftItems use=this.leftTransition key="id" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
-      {{#animated-each rightItems use=rightTransition key="id" as |item|}}
+      {{#animated-each this.rightItems use=this.rightTransition key="id" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-each}}
     `);
@@ -374,12 +374,12 @@ module('Integration | Component | animated each', function (hooks) {
     this.set('leftAlive', true);
 
     await render(hbs`
-      {{#if leftAlive}}
-        {{#animated-each leftItems use=leftTransition key="id" as |item|}}
+      {{#if this.leftAlive}}
+        {{#animated-each this.leftItems use=this.leftTransition key="id" as |item|}}
           <div class="test-child">{{item.id}}</div>
         {{/animated-each}}
       {{else}}
-        {{#animated-each rightItems use=rightTransition key="id" as |item|}}
+        {{#animated-each this.rightItems use=this.rightTransition key="id" as |item|}}
           <div class="test-child">{{item.id}}</div>
         {{/animated-each}}
       {{/if}}
@@ -414,10 +414,10 @@ module('Integration | Component | animated each', function (hooks) {
 
     await render(hbs`
       <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
-      {{#animated-each items use=outerTransition key="id" as |item|}}
+      {{#animated-each this.items use=this.outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
-          {{#animated-each item.comments key="id" use=innerTransition finalRemoval=true as |comment|}}
+          {{#animated-each item.comments key="id" use=this.innerTransition finalRemoval=true as |comment|}}
             <div>{{comment.id}}</div>
           {{/animated-each}}
         </div>
@@ -497,10 +497,10 @@ module('Integration | Component | animated each', function (hooks) {
 
     await render(hbs`
       <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
-      {{#animated-each items use=outerTransition key="id" as |item|}}
+      {{#animated-each this.items use=this.outerTransition key="id" as |item|}}
         <div class="test-child">
           {{item.id}}
-          {{#animated-each item.comments key="id" use=innerTransition finalRemoval=true as |comment|}}
+          {{#animated-each item.comments key="id" use=this.innerTransition finalRemoval=true as |comment|}}
             <div>{{comment.id}}</div>
           {{/animated-each}}
         </div>
@@ -592,8 +592,8 @@ module('Integration | Component | animated each', function (hooks) {
 
     await render(hbs`
       <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
-      {{#if alive}}
-        {{#animated-each items use=transition as |item|}}
+      {{#if this.alive}}
+        {{#animated-each this.items use=this.transition as |item|}}
           <div class="test-child">
             {{item.id}}
           </div>
@@ -621,8 +621,8 @@ module('Integration | Component | animated each', function (hooks) {
 
     await render(hbs`
       <div style="position: fixed; top: 0; left: 0"><AnimatedOrphans/></div>
-      {{#if alive}}
-        {{#animated-each items use=transition finalRemoval=true as |item|}}
+      {{#if this.alive}}
+        {{#animated-each this.items use=this.transition finalRemoval=true as |item|}}
           <div class="test-child">
             {{item.id}}
           </div>

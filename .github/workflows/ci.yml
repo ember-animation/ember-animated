@@ -7,16 +7,18 @@ on:
       - master
   pull_request: {}
 
+concurrency:
+   group: ci-${{ github.head_ref || github.ref }}
+   cancel-in-progress: true
+
 jobs:
   test-library:
     name: "Library"
     runs-on: ubuntu-latest
-    env:
-      CI: true
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install node
+      - name: Install Node
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
@@ -31,12 +33,10 @@ jobs:
   test-library-floating:
     name: "Library - Floating Dependencies"
     runs-on: ubuntu-latest
-    env:
-      CI: true
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install node
+      - name: Install Node
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
@@ -49,12 +49,10 @@ jobs:
   test-docs:
     name: "Docs"
     runs-on: ubuntu-latest
-    env:
-      CI: true
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install node
+      - name: Install Node
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
@@ -74,12 +72,10 @@ jobs:
         run: yarn test:ember
         working-directory: docs
 
-  ember-compatibility:
+  try-scenarios:
     name: ${{ matrix.try-scenario }}
     runs-on: ubuntu-latest
     needs: 'test-library'
-    env:
-      CI: true
 
     strategy:
       fail-fast: false
@@ -89,11 +85,11 @@ jobs:
           - ember-lts-3.16
           - ember-lts-3.20
           - ember-lts-3.24
-#          - ember-release
-#          - ember-beta
-#          - ember-canary
+          - ember-lts-3.28
+          - ember-release
+          - ember-beta
+          - ember-canary
           - ember-classic
-          - ember-default-with-jquery
 #          - embroider-safe
 #          - embroider-optimized
 

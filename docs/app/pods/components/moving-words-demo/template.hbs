@@ -1,53 +1,58 @@
-<div class="motion-menu">
-  <label>
-    <input
-      type="checkbox"
-      checked={{not this.disableMove}}
-      {{on "change" (fn (mut this.disableMove) (not this.disableMove))}}
-    >
-    Move
-  </label>
-  <label>
-    <input
-      type="checkbox"
-      checked={{not this.disableCompensateForScale}}
-      {{on "change" (fn (mut this.disableCompensateForScale) (not this.disableCompensateForScale))}}
-    >
-    Compensate For Scale
-  </label>
-  <label>
-    <input
-      type="checkbox"
-      checked={{not this.disableAdjustFontSize}}
-      {{on "change" (fn (mut this.disableAdjustFontSize) (not this.disableAdjustFontSize))}}
-    >
-    Adjust Font Size
-  </label>
-  <label>
-    <input
-      type="checkbox"
-      checked={{not this.disableAdjustLetterSpacing}}
-      {{on "change" (fn (mut this.disableAdjustLetterSpacing) (not this.disableAdjustLetterSpacing))}}
-    >
-    Adjust Letter Spacing
-  </label>
-  <label>
-    <input
-      type="checkbox"
-      checked={{not this.disableAdjustColor}}
-      {{on "change" (fn (mut this.disableAdjustColor) (not this.disableAdjustColor))}}
-    >
-    Adjust Color
-  </label>
-</div>
-{{yield
-  (hash
-    moving-word=(component "moving-word"
-      disableMove=this.disableMove
-      disableCompensateForScale=this.disableCompensateForScale
-      disableAdjustFontSize=this.disableAdjustFontSize
-      disableAdjustLetterSpacing=this.disableAdjustLetterSpacing
-      disableAdjustColor=this.disableAdjustColor
-    )
-  )
+{{#let
+  (track false) (track false) (track false) (track false) (track false)
+  as |disableMove disableCompensateForScale disableAdjustFontSize disableAdjustLetterSpacing disableAdjustColor|
 }}
+  <div class="motion-menu">
+    <label>
+      <input
+        type="checkbox"
+        checked={{not disableMove.value}}
+        {{on "change" (fn disableMove.update (not disableMove.value))}}
+      >
+      Move
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        checked={{not disableCompensateForScale.value}}
+        {{on "change" (fn disableCompensateForScale.update (not disableCompensateForScale.value))}}
+      >
+      Compensate For Scale
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        checked={{not disableAdjustFontSize.value}}
+        {{on "change" (fn disableAdjustFontSize.update (not disableAdjustFontSize.value))}}
+      >
+      Adjust Font Size
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        checked={{not disableAdjustLetterSpacing.value}}
+        {{on "change" (fn disableAdjustLetterSpacing.update (not disableAdjustLetterSpacing.value))}}
+      >
+      Adjust Letter Spacing
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        checked={{not disableAdjustColor.value}}
+        {{on "change" (fn disableAdjustColor.update (not disableAdjustColor.value))}}
+      >
+      Adjust Color
+    </label>
+  </div>
+  {{yield
+    (hash
+      moving-word=(component "moving-word"
+        disableMove=disableMove.value
+        disableCompensateForScale=disableCompensateForScale.value
+        disableAdjustFontSize=disableAdjustFontSize.value
+        disableAdjustLetterSpacing=disableAdjustLetterSpacing.value
+        disableAdjustColor=disableAdjustColor.value
+      )
+    )
+  }}
+{{/let}}

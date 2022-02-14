@@ -11,6 +11,7 @@ module.exports = async function () {
         name: 'ember-lts-3.12',
         npm: {
           devDependencies: {
+            'ember-data': '~3.12.0',
             'ember-decorators-polyfill': '^1.1.5',
             'ember-source': '~3.12.4',
             'ember-tracked-polyfill': '^0.1.0',
@@ -42,6 +43,14 @@ module.exports = async function () {
         },
       },
       {
+        name: 'ember-lts-3.28',
+        npm: {
+          devDependencies: {
+            'ember-source': '~3.28.8',
+          },
+        },
+      },
+      {
         name: 'ember-release',
         npm: {
           devDependencies: {
@@ -66,19 +75,6 @@ module.exports = async function () {
         },
       },
       {
-        name: 'ember-default-with-jquery',
-        env: {
-          EMBER_OPTIONAL_FEATURES: JSON.stringify({
-            'jquery-integration': true,
-          }),
-        },
-        npm: {
-          devDependencies: {
-            '@ember/jquery': '^1.1.0',
-          },
-        },
-      },
-      {
         name: 'ember-classic',
         env: {
           EMBER_OPTIONAL_FEATURES: JSON.stringify({
@@ -89,7 +85,7 @@ module.exports = async function () {
         },
         npm: {
           devDependencies: {
-            'ember-source': '~3.24.3',
+            'ember-source': '~3.28.8',
           },
           ember: {
             edition: 'classic',

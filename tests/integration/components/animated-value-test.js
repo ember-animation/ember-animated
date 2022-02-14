@@ -17,7 +17,7 @@ module('Integration | Component | animated value', function (hooks) {
   test('it renders', async function (assert) {
     this.set('value', 'hello');
     await render(hbs`
-      {{#animated-value value as |v|}}
+      {{#animated-value this.value as |v|}}
         <span>{{v}}</span>
       {{/animated-value}}
     `);
@@ -41,7 +41,7 @@ module('Integration | Component | animated value', function (hooks) {
     );
 
     await render(hbs`
-      {{#animated-value item use=transition key="id" watch="x,y" as |item|}}
+      {{#animated-value this.item use=this.transition key="id" watch="x,y" as |item|}}
         <div class="test-child">{{item.id}}</div>
       {{/animated-value}}
     `);
