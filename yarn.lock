@@ -4809,9 +4809,10 @@ elliptic@^6.5.3:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
-"ember-animated-tools@github:ember-animation/ember-animated-tools#master":
-  version "0.4.2"
-  resolved "https://codeload.github.com/ember-animation/ember-animated-tools/tar.gz/ea78df5284e050122726e17fd6dfcb56ea879cdd"
+ember-animated-tools@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/ember-animated-tools/-/ember-animated-tools-0.5.0.tgz#02103c0209aad8619f1aef0a48b11e677cfa6588"
+  integrity sha512-XH/nmJ3fa9VH2HmQzCzwcX7haJPLs8lapruLVs2brPb5xt/DBDMG2brek+dPIvgB6IIleMhaNEajl+BpEFzYNA==
   dependencies:
     broccoli-funnel "^3.0.8"
     broccoli-merge-trees "^4.2.0"
