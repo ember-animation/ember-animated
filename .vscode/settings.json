@@ -5,7 +5,9 @@
   ],
   "eslint.workingDirectories": [
     ".",
-    "docs"
+    "addon",
+    "docs",
+    "test-app"
   ],
   "[javascript]": {
     "editor.formatOnSave": true

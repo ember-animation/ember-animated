@@ -7,9 +7,9 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Dummy App",
+            "name": "Launch Test App",
             "program": "${workspaceRoot}/node_modules/ember-cli/bin/ember",
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/test-app",
             "args": [
                 "serve"
             ]

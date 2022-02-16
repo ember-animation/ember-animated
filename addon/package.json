@@ -1,0 +1,59 @@
+{
+  "name": "ember-animated",
+  "version": "0.12.0",
+  "description": "Core animation primitives for Ember",
+  "keywords": [
+    "animation",
+    "ember",
+    "ember-addon",
+    "transition"
+  ],
+  "repository": "https://github.com/ember-animation/ember-animated",
+  "license": "MIT",
+  "author": "Edward Faulkner <edward@eaf4.com>",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
+    "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
+    "lint:hbs": "ember-template-lint .",
+    "lint:hbs:fix": "ember-template-lint . --fix",
+    "lint:js": "eslint . --cache --ext .ts,.js",
+    "lint:js:fix": "eslint . --fix --ext .ts,.js",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "ember ts:precompile",
+    "postpublish": "ember ts:clean"
+  },
+  "dependencies": {
+    "@ember/test-helpers": "^2.6.0",
+    "assert-never": "^1.2.0",
+    "ember-auto-import": "^2.4.0",
+    "ember-cli-babel": "^7.26.11",
+    "ember-cli-htmlbars": "^6.0.1",
+    "ember-cli-typescript": "^4.2.1",
+    "ember-compatibility-helpers": "^1.2.6",
+    "ember-element-helper": "^0.5.0 || ^0.6.0"
+  },
+  "devDependencies": {
+    "ember-template-lint": "^4.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-ember": "^10.5.8",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1"
+  },
+  "engines": {
+    "node": "12.* || 14.* || >= 16"
+  },
+  "ember": {
+    "edition": "octane"
+  },
+  "ember-addon": {
+  },
+  "volta": {
+    "extends": "../package.json"
+  }
+}

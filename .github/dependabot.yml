@@ -5,6 +5,14 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "npm"
-    directory: "/docs/"
+    directory: "/addon/"
     schedule:
       interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/docs/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/test-app/"
+    schedule:
+      interval: "weekly"
