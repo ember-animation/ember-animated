@@ -76,7 +76,7 @@ module('Acceptance | smoke', function (hooks) {
     // make sure a code snippet is present
     assert.ok(
       [...document.querySelectorAll('[data-test-guests-demo] pre')].find(
-        (elt) => /<Icon "user" \/>/.test(elt.textContent),
+        (elt) => /<Icon @icon="user" \/>/.test(elt.textContent),
       ),
       'found Icon snippet content',
     );
