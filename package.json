@@ -1,10 +1,48 @@
 {
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ember-animation/ember-animated.git"
+  },
   "workspaces": [
     "addon",
     "docs",
     "test-app"
   ],
+  "devDependencies": {
+    "release-it": "^14.2.1",
+    "release-it-lerna-changelog": "^3.1.0",
+    "release-it-yarn-workspaces": "^2.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": false
+      },
+      "release-it-yarn-workspaces": {
+        "workspaces": [
+          "addon"
+        ],
+        "additionalManifests": {
+          "dependencyUpdates": [
+            "test-app/package.json"
+          ]
+        }
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
+    },
+    "npm": false
+  },
   "volta": {
     "node": "12.22.7",
     "yarn": "1.22.17"
