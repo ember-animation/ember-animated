@@ -22,17 +22,21 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          cache: yarn
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 6.32.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
       - name: Lint Addon
-        run: yarn lint
+        run: pnpm run lint
         working-directory: addon
       - name: Lint Test App
-        run: yarn lint
+        run: pnpm run lint
         working-directory: test-app
       - name: Run Tests
-        run: yarn test:ember
+        run: pnpm run test:ember
         working-directory: test-app
 
   test-library-floating:
@@ -45,11 +49,19 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          cache: yarn
+      # pnpm does not have --no-lockfile option
+      - name: Remove lock file
+        shell: bash
+        run: |
+          rm pnpm-lock.yaml
       - name: Install Dependencies
-        run: yarn install --no-lockfile
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 6.32.1
+          run_install: |
+            - recursive: true
       - name: Run Tests
-        run: yarn test:ember
+        run: pnpm run test:ember
         working-directory: test-app
 
   test-docs:
@@ -62,14 +74,18 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          cache: yarn
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 6.32.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
       - name: Lint
-        run: yarn lint
+        run: pnpm run lint
         working-directory: docs
       - name: Run Tests
-        run: yarn test:ember
+        run: pnpm run test:ember
         working-directory: docs
 
   try-scenarios:
@@ -99,9 +115,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          cache: yarn
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 6.32.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
       - name: Run Tests
         run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
         working-directory: test-app
@@ -128,9 +148,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          cache: yarn
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 6.32.1
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
       - name: Type checking
         run: ./node_modules/.bin/ember try:one --config-path="./config/ember-try-typescript.js" ${{ matrix.typescript-scenario }}
         working-directory: test-app

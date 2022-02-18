@@ -5,12 +5,13 @@ const getChannelURL = require('ember-source-channel-url');
 
 module.exports = async function () {
   return {
-    useYarn: true,
+    usePnpm: true,
     scenarios: [
       {
         name: 'ember-lts-3.12',
         npm: {
           devDependencies: {
+            '@ember/string': '^3.0.0',
             'ember-data': '~3.12.0',
             'ember-decorators-polyfill': '^1.1.5',
             'ember-source': '~3.12.4',
