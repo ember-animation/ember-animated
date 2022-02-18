@@ -13,8 +13,6 @@
   float: left;
 }
 
-/* BEGIN-SNIPPET two-lists-snippet.css */
-
 .scenario-two-lists {
   border-radius: 5px;
   padding: 10px;
@@ -112,10 +110,6 @@
 }
 
 
-/* END-SNIPPET */
-
-
-/* BEGIN-SNIPPET swapping-lists-snippet.css */
 .scenario-swapping-lists .left {
     width:40%;
     float: left;
@@ -128,7 +122,6 @@
 .scenario-swapping-lists .left-item {
     color: red;
 }
-/* END-SNIPPET */
 
 
 .scenario-bind .animated-container {
@@ -152,7 +145,7 @@
     transform: translateZ(0);
 }
 
-/* BEGIN-SNIPPET hero-snippet.css */
+
 .hero-list {
   display: flex;
   flex-wrap: wrap;
@@ -205,7 +198,7 @@
 .hero-example {
   height: 300px;
 }
-/* END-SNIPPET */
+
 
 .scenario-direct-style--item {
     position: absolute;

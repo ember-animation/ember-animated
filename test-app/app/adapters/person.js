@@ -1,4 +1,3 @@
-//BEGIN-SNIPPET person-snippet.js
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
 import faker from 'faker';
 
@@ -39,4 +38,3 @@ export default class PersonAdapter extends JSONAPIAdapter {
     };
   }
 }
-//END-SNIPPET
