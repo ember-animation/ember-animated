@@ -26,7 +26,7 @@ export default class IndexDemo1 extends Component {
   templateDiff = dedent`
     - {{#each this.guests}}
     + {{#animated-each this.guests use=this.transition}}
-        <Icon "user" />
+        <Icon @icon="user" />
     - {{/each}}
     + {{/animated-each}}
   `;

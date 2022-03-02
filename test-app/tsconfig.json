@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noEmitOnError": false,
+    "noEmit": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "baseUrl": ".",
+    "module": "es6",
+    "paths": {
+      "test-app/tests/*": [
+        "tests/*"
+      ],
+      "test-app/*": [
+        "app/*"
+      ],
+      "*": [
+        "types/*"
+      ]
+    }
+  },
+  "include": [
+    "app/**/*",
+    "tests/**/*",
+    "types/**/*",
+  ]
+}
