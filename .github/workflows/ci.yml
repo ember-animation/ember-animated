@@ -121,7 +121,7 @@ jobs:
           version: 6.32.1
           run_install: |
             - recursive: true
-              args: [--frozen-lockfile]
+              args: [--frozen-lockfile --filter=!docs]
       - name: Run Tests
         run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
         working-directory: test-app
