@@ -251,7 +251,7 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.13.0_3a0304e4216f58c7e1135459c8d18e32
       '@typescript-eslint/parser': 5.13.0_eslint@7.32.0+typescript@4.6.2
       broccoli-asset-rev: 3.0.0
-      ember-animated: link:../addon
+      ember-animated: file:addon_88529b470ee52e8fbcbefd4b88b0a9d4
       ember-animated-tools: github.com/ember-animation/ember-animated-tools/1edcfd7f0be0a9b4b69450f0fc4d945f31277215
       ember-auto-import: 2.4.0_webpack@5.69.1
       ember-cli: 4.1.1
@@ -296,6 +296,9 @@ importers:
       sass: 1.49.9
       typescript: 4.6.2
       webpack: 5.69.1
+    dependenciesMeta:
+      ember-animated:
+        injected: true
 
 packages:
 
@@ -7743,6 +7746,20 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+
+  /ember-element-helper/0.6.0_ember-source@4.1.0:
+    resolution: {integrity: sha512-sS3VIGdzF81lQrlMvFC8H71vwGrOl7b3+LK+9GTpLI555YF1b4sLmNylLkhaXv8UVEZUmsPHedVJY00Xarrc3Q==}
+    engines: {node: 12.* || 14.* || >= 16}
+    peerDependencies:
+      ember-source: ^3.8 || 4 || *
+    dependencies:
+      '@embroider/util': 1.2.0_ember-source@4.1.0
+      ember-cli-babel: 7.26.11
+      ember-cli-htmlbars: 6.0.1
+      ember-source: 4.1.0_webpack@5.69.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /ember-export-application-global/2.0.1:
     resolution: {integrity: sha512-B7wiurPgsxsSGzJuPFkpBWnaeuCu2PGpG2BjyrfA1VcL7//o+5RSnZqiCEY326y7qmxb2GoCgo0ft03KBU0rRw==}
@@ -15960,6 +15977,28 @@ packages:
       minimatch: 3.1.2
       rimraf: 2.7.1
       yui: 3.18.1
+    dev: true
+
+  file:addon_88529b470ee52e8fbcbefd4b88b0a9d4:
+    resolution: {directory: addon, type: directory}
+    id: file:addon
+    name: ember-animated
+    version: 0.12.0
+    engines: {node: 12.* || 14.* || >= 16}
+    dependencies:
+      '@ember/test-helpers': 2.6.0
+      assert-never: 1.2.1
+      ember-auto-import: 2.4.0_webpack@5.69.1
+      ember-cli-babel: 7.26.11
+      ember-cli-htmlbars: 6.0.1
+      ember-cli-typescript: 4.2.1
+      ember-compatibility-helpers: 1.2.6
+      ember-element-helper: 0.6.0_ember-source@4.1.0
+    transitivePeerDependencies:
+      - '@babel/core'
+      - ember-source
+      - supports-color
+      - webpack
     dev: true
 
   github.com/ember-animation/ember-animated-tools/1edcfd7f0be0a9b4b69450f0fc4d945f31277215:

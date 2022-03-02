@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
+          cache: 'pnpm'
       - name: Install Dependencies
         uses: pnpm/action-setup@v2.1.0
         with:
@@ -49,6 +50,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
+          cache: 'pnpm'
       # pnpm does not have --no-lockfile option
       - name: Remove lock file
         shell: bash
@@ -74,6 +76,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
+          cache: 'pnpm'
       - name: Install Dependencies
         uses: pnpm/action-setup@v2.1.0
         with:
@@ -115,6 +118,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
+          cache: 'pnpm'
       - name: Install Dependencies
         uses: pnpm/action-setup@v2.1.0
         with:
@@ -148,6 +152,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
+          cache: 'pnpm'
       - name: Install Dependencies
         uses: pnpm/action-setup@v2.1.0
         with:
