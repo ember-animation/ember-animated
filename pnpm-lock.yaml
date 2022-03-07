@@ -88,8 +88,8 @@ importers:
       '@glimmer/tracking': ^1.0.4
       babel-eslint: ^10.1.0
       broccoli-asset-rev: ^3.0.0
-      ember-animated: 0.12.0
-      ember-animated-tools: github:ember-animation/ember-animated-tools#1edcfd7f0be0a9b4b69450f0fc4d945f31277215
+      ember-animated: workspace:*
+      ember-animated-tools: file:../ember-animated-tools-0.5.0.tgz
       ember-auto-import: ^2.4.0
       ember-cli: ~4.1.1
       ember-cli-addon-docs: ^4.2.1
@@ -144,7 +144,7 @@ importers:
       babel-eslint: 10.1.0_eslint@7.32.0
       broccoli-asset-rev: 3.0.0
       ember-animated: link:../addon
-      ember-animated-tools: github.com/ember-animation/ember-animated-tools/1edcfd7f0be0a9b4b69450f0fc4d945f31277215
+      ember-animated-tools: file:ember-animated-tools-0.5.0.tgz
       ember-auto-import: 2.4.0_webpack@5.69.1
       ember-cli: 4.1.1
       ember-cli-addon-docs: 4.2.2_578fc293af2b428d27934ea7a79f391a
@@ -208,8 +208,8 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.11.0
       '@typescript-eslint/parser': ^5.11.0
       broccoli-asset-rev: ^3.0.0
-      ember-animated: 0.12.0
-      ember-animated-tools: github:ember-animation/ember-animated-tools#1edcfd7f0be0a9b4b69450f0fc4d945f31277215
+      ember-animated: workspace:*
+      ember-animated-tools: file:../ember-animated-tools-0.5.0.tgz
       ember-auto-import: ^2.4.0
       ember-cli: ~4.1.1
       ember-cli-babel: ^7.26.11
@@ -272,7 +272,7 @@ importers:
       '@typescript-eslint/parser': 5.12.1_eslint@7.32.0+typescript@4.5.5
       broccoli-asset-rev: 3.0.0
       ember-animated: file:addon_a685827f996f41ed5f67becff747a217
-      ember-animated-tools: github.com/ember-animation/ember-animated-tools/1edcfd7f0be0a9b4b69450f0fc4d945f31277215
+      ember-animated-tools: file:ember-animated-tools-0.5.0.tgz_ember-animated@0.12.0
       ember-auto-import: 2.4.0_webpack@5.69.1
       ember-cli: 4.1.1
       ember-cli-babel: 7.26.11
@@ -1817,6 +1817,15 @@ packages:
     dependencies:
       '@embroider/shared-internals': 1.2.0
       semver: 7.3.5
+    dev: false
+
+  /@embroider/addon-shim/1.4.0:
+    resolution: {integrity: sha512-ulPSV/QFZezBYs0p5g2mUdzcximPsIhjf47rVHyLX2rLzyGf3+79ZNk/5DwA6LQg5cw1lpt02zD26Lk3BBxPxg==}
+    engines: {node: 12.* || 14.* || >= 16}
+    dependencies:
+      '@embroider/shared-internals': 1.4.0
+      semver: 7.3.5
+    dev: true
 
   /@embroider/macros/1.2.0:
     resolution: {integrity: sha512-WD2V3OKXZB73OymI/zC2+MbqIYaAskhjtSOVVY6yG6kWILyVsJ6+fcbNHEnZyGqs4sm0TvHVJfevmA2OXV8Pww==}
@@ -1844,6 +1853,19 @@ packages:
       resolve-package-path: 4.0.3
       semver: 7.3.5
       typescript-memoize: 1.1.0
+
+  /@embroider/shared-internals/1.4.0:
+    resolution: {integrity: sha512-R5j82Mok6x7LQ995c6yW4mqctxiMpsDEypwG3nD5mS/D4+0v51Det4Whon5WWC1+HI/NGu8JooBP/vPtRzccdw==}
+    engines: {node: 12.* || 14.* || >= 16}
+    dependencies:
+      babel-import-util: 1.1.0
+      ember-rfc176-data: 0.3.17
+      fs-extra: 9.1.0
+      lodash: 4.17.21
+      resolve-package-path: 4.0.3
+      semver: 7.3.5
+      typescript-memoize: 1.1.0
+    dev: true
 
   /@embroider/test-setup/1.2.0:
     resolution: {integrity: sha512-2N/+yqNmiDmh+wCDCPPYFSJX7wInWwQPEEkCU8GHM/S0GUHS6tsMEZK5ZxlbgLDCT/OP2AxGpeWIEBUMgQsA8w==}
@@ -6910,7 +6932,7 @@ packages:
       '@babel/preset-env': 7.16.11_@babel+core@7.17.5
       '@babel/traverse': 7.17.3
       '@babel/types': 7.17.0
-      '@embroider/shared-internals': 1.2.0
+      '@embroider/shared-internals': 1.4.0
       babel-core: 6.26.3
       babel-loader: 8.2.3_a58183228c2c7b1a132de84b2b6f9adf
       babel-plugin-syntax-dynamic-import: 6.18.0
@@ -16300,7 +16322,7 @@ packages:
         optional: true
     dependencies:
       '@ember/test-helpers': 2.6.0
-      '@embroider/addon-shim': 1.2.0
+      '@embroider/addon-shim': 1.4.0
       assert-never: 1.2.1
       ember-element-helper: 0.6.0_ember-source@4.1.0
     transitivePeerDependencies:
@@ -16308,19 +16330,28 @@ packages:
       - supports-color
     dev: true
 
-  github.com/ember-animation/ember-animated-tools/1edcfd7f0be0a9b4b69450f0fc4d945f31277215:
-    resolution: {tarball: https://codeload.github.com/ember-animation/ember-animated-tools/tar.gz/1edcfd7f0be0a9b4b69450f0fc4d945f31277215}
+  file:ember-animated-tools-0.5.0.tgz:
+    resolution: {integrity: sha512-TDUbDdq0xoUQ/mo39kkZC9r/gIcmGB4Uln/+7duhgUfArOPHcqZiOmUxHBs/p4y1JAphEt0SAQdO+niXsthTow==, tarball: file:ember-animated-tools-0.5.0.tgz}
     name: ember-animated-tools
     version: 0.5.0
     engines: {node: 12.* || 14.* || >= 16}
+    peerDependencies:
+      ember-animated: workspace:*
     dependencies:
-      broccoli-funnel: 3.0.8
-      broccoli-merge-trees: 4.2.0
-      ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.0.1
-      resolve: 1.22.0
-    transitivePeerDependencies:
-      - supports-color
+      '@embroider/addon-shim': 1.4.0
+    dev: true
+
+  file:ember-animated-tools-0.5.0.tgz_ember-animated@0.12.0:
+    resolution: {integrity: sha512-TDUbDdq0xoUQ/mo39kkZC9r/gIcmGB4Uln/+7duhgUfArOPHcqZiOmUxHBs/p4y1JAphEt0SAQdO+niXsthTow==, tarball: file:ember-animated-tools-0.5.0.tgz}
+    id: file:ember-animated-tools-0.5.0.tgz
+    name: ember-animated-tools
+    version: 0.5.0
+    engines: {node: 12.* || 14.* || >= 16}
+    peerDependencies:
+      ember-animated: workspace:*
+    dependencies:
+      '@embroider/addon-shim': 1.4.0
+      ember-animated: file:addon_a685827f996f41ed5f67becff747a217
     dev: true
 
   github.com/emberjs/ember-legacy-built-in-components/a84513d197eeafbb01eae81e0f101b86ccde0ecf_ember-source@4.1.0:
