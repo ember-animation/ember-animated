@@ -1,12 +1,10 @@
-import Component, { TemplateFactory } from '@ember/component';
+import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { task, Task } from '../-private/ember-scheduler';
 import { afterRender, microwait } from '../-private/concurrency-helpers';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
 
-// @ts-ignore: templates don't have types
-import layout from '../templates/components/animated-beacon';
 import ComputedProperty from '@ember/object/computed';
 import MotionService from '../services/motion';
 
@@ -69,7 +67,6 @@ import MotionService from '../services/motion';
 export default class AnimatedBeacon extends Component {
   name: string | undefined;
 
-  layout: TemplateFactory = layout;
   tagName = '';
   _inserted = false;
 

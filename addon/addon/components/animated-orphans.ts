@@ -1,8 +1,6 @@
 import { inject as service } from '@ember/service';
 import ComputedProperty, { alias } from '@ember/object/computed';
 import Component from '@ember/component';
-// @ts-ignore: templates don't have types
-import layout from '../templates/components/animated-orphans';
 import { task, Task } from '../-private/ember-scheduler';
 import { afterRender, microwait, continueMotions } from '..';
 import TransitionContext, {
@@ -28,7 +26,6 @@ import { Transition } from '../-private/transition';
 */
 export default class AnimatedOrphans extends Component {
   classNames: string[] = this.classNames.concat('animated-orphans');
-  layout = layout;
 
   @service('-ea-motion')
   motionService!: MotionService;
