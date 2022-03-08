@@ -46,8 +46,7 @@
     "npm": false
   },
   "volta": {
-    "node": "12.22.7",
-    "yarn": "1.22.17"
+    "node": "12.22.7"
   },
   "resolutions": {
     "@ember/legacy-built-in-components": "github:emberjs/ember-legacy-built-in-components#a84513d197eeafbb01eae81e0f101b86ccde0ecf",
