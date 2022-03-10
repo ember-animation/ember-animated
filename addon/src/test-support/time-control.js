@@ -1,6 +1,7 @@
 import { clock, rAF } from '../-private/concurrency-helpers';
+import { getOrCreate } from '../-private/singleton';
 
-let origNow = clock.now;
+let origNow = getOrCreate('time-control', () => clock.now);
 
 export default class TimeControl {
   constructor() {

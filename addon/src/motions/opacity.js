@@ -1,4 +1,6 @@
-import { Motion, rAF, Tween } from '..';
+import { rAF } from '../-private/concurrency-helpers';
+import Motion from '../-private/motion';
+import Tween from '../-private/tween';
 import linear from '../easings/linear';
 
 export default function opacity(sprite, opts) {

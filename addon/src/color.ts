@@ -1,4 +1,4 @@
-import { Tween } from '.';
+import Tween from './-private/tween';
 import linear from './easings/linear';
 
 // We use Element.remove in our color parser below.

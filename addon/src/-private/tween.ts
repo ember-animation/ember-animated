@@ -1,6 +1,8 @@
-import { rAF, currentFrameClock, clock } from './concurrency-helpers';
+import { rAF, frameState, clock } from './concurrency-helpers';
 import { easeInAndOut } from '../easings/cosine';
-const currentCurves: MotionCurve[] = [];
+import { getOrCreate } from './singleton';
+
+const currentCurves = getOrCreate<MotionCurve[]>('tween', () => []);
 
 /*
   A Tween automatically recalculates on demand at most once per
@@ -113,8 +115,8 @@ class MotionCurve {
     this._tick();
   }
   _tick() {
-    if (this._lastTick !== currentFrameClock) {
-      this._lastTick = currentFrameClock;
+    if (this._lastTick !== frameState.currentFrameClock) {
+      this._lastTick = frameState.currentFrameClock;
       this._runTime = clock.now() - this.startTime;
       this._timeProgress =
         this.duration === 0 ? 1 : Math.min(this._runTime / this.duration, 1);

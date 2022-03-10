@@ -25,7 +25,6 @@ module('Acceptance | beacon demo', function (hooks) {
     let modal = bounds(this.element.querySelector('.beacon-demo--message'));
     let button = bounds(this.element.querySelector('button'));
     assert.closeBounds(5, modal, button, 'modal should be near button');
-    await this.pauseTest();
   });
 
   test('closing modal ends near button', async function (assert) {

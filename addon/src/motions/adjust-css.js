@@ -12,7 +12,6 @@ import { rAF } from '../-private/concurrency-helpers';
   @param {Object} options
   @return {Motion}
 */
-
 export default function adjustCSS(propertyName, sprite, opts) {
   return new AdjustCSS(propertyName, sprite, opts).run();
 }

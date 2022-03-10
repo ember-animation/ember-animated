@@ -70,7 +70,6 @@ module.exports = {
         './.prettierrc.js',
         './.template-lintrc.js',
         './addon-main.js',
-        './babel.config.cjs',
         './testem.js',
         './config/**/*.js',
       ],

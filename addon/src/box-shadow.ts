@@ -1,5 +1,5 @@
 import { Color, ColorTween } from './color';
-import { Tween } from '.';
+import Tween from './-private/tween';
 import linear from './easings/linear';
 import './element-remove';
 

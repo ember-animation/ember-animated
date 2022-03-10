@@ -17,10 +17,6 @@
     "./test-support": "./dist/test-support/index.js",
     "./addon-main.js": "./addon-main.js"
   },
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
   "files": [
     "addon-main.js",
     "dist"
@@ -39,7 +35,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@embroider/addon-shim": "^1.2.0",
+    "@embroider/addon-shim": "^1.5.0",
     "assert-never": "^1.2.0",
     "ember-element-helper": "^0.5.0 || ^0.6.0"
   },
@@ -49,7 +45,7 @@
     "@babel/plugin-proposal-decorators": "^7.17.2",
     "@babel/plugin-transform-typescript": "^7.16.8",
     "@babel/preset-typescript": "^7.16.7",
-    "@embroider/addon-dev": "^1.2.0",
+    "@embroider/addon-dev": "^1.5.0",
     "@glimmer/env": "^0.1.7",
     "@rollup/plugin-babel": "^5.3.0",
     "@types/ember": "^4.0.0",

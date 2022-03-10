@@ -1,3 +1,5 @@
+import './styles/ember-animated.css';
+
 export {
   rAF,
   microwait,

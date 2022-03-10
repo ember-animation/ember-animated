@@ -10,8 +10,9 @@ import {
   emptyBounds,
 } from './bounds';
 import Child from './child';
+import { getOrCreate } from './singleton';
 
-const inFlight = new WeakMap();
+const inFlight = getOrCreate('sprite', () => new WeakMap());
 
 /**
   A Sprite is our handle to a DOM element that we want to animate.
@@ -735,7 +736,7 @@ export default class Sprite {
     warn(
       `Probable bug in ember-animated: an interrupted sprite tried to unlock itself.
        This is usually caused by a direct child of an animated component also being an
-       animated component. To fix it, wrap the child in another DOM element. 
+       animated component. To fix it, wrap the child in another DOM element.
        https://github.com/ember-animation/ember-animated/issues/178`,
       this.stillInFlight(),
       { id: 'ember-animated-sprite-unlock' },
@@ -1297,7 +1298,30 @@ class CopiedCSS {
   'box-shadow': string;
 }
 
-const COPIED_CSS_PROPERTIES = Object.keys(new CopiedCSS());
+const COPIED_CSS_PROPERTIES = [
+  'opacity',
+  'font-size',
+  'font-family',
+  'font-weight',
+  'color',
+  'background-color',
+  'border-color',
+  'letter-spacing',
+  'line-height',
+  'text-align',
+  'text-transform',
+  'padding',
+  'padding-top',
+  'padding-bottom',
+  'padding-left',
+  'padding-right',
+  'border-radius',
+  'border-top-left-radius',
+  'border-top-right-radius',
+  'border-bottom-left-radius',
+  'border-bottom-right-radius',
+  'box-shadow',
+];
 
 interface SVGPosition {
   x: number | null;

@@ -6,6 +6,14 @@ import { relativeBounds } from '../-private/bounds';
 import { cumulativeTransform } from '../-private/transform';
 import TimeControl from './time-control';
 
+// Re-export to ensure instanceof within MotionTester works properly.
+// Importing from 'ember-animated' would happen from different entry-point
+// when done from the app or from the test. Hence we need re-export.
+export { default as Sprite } from '../-private/sprite';
+export { default as Motion } from '../-private/motion';
+export { AdjustColor } from '../motions/adjust-color';
+export { Move } from '../motions/move';
+
 export { TimeControl };
 export { default as MotionTester } from './motion-tester';
 

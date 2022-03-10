@@ -27,8 +27,8 @@ importers:
       '@babel/plugin-proposal-decorators': ^7.17.2
       '@babel/plugin-transform-typescript': ^7.16.8
       '@babel/preset-typescript': ^7.16.7
-      '@embroider/addon-dev': ^1.2.0
-      '@embroider/addon-shim': ^1.2.0
+      '@embroider/addon-dev': ^1.5.0
+      '@embroider/addon-shim': ^1.5.0
       '@glimmer/env': ^0.1.7
       '@rollup/plugin-babel': ^5.3.0
       '@types/ember': ^4.0.0
@@ -49,7 +49,7 @@ importers:
       tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
-      '@embroider/addon-shim': 1.2.0
+      '@embroider/addon-shim': 1.5.0
       assert-never: 1.2.1
       ember-element-helper: 0.6.0
     devDependencies:
@@ -58,7 +58,7 @@ importers:
       '@babel/plugin-proposal-decorators': 7.17.2_@babel+core@7.17.5
       '@babel/plugin-transform-typescript': 7.16.8_@babel+core@7.17.5
       '@babel/preset-typescript': 7.16.7_@babel+core@7.17.5
-      '@embroider/addon-dev': 1.2.0_rollup@2.68.0
+      '@embroider/addon-dev': 1.5.0_rollup@2.68.0
       '@glimmer/env': 0.1.7
       '@rollup/plugin-babel': 5.3.1_@babel+core@7.17.5+rollup@2.68.0
       '@types/ember': 4.0.0
@@ -193,8 +193,8 @@ importers:
     specifiers:
       '@ember/optional-features': ^2.0.0
       '@ember/test-helpers': ^2.6.0
-      '@embroider/macros': ^1.2.0
-      '@embroider/test-setup': ^1.2.0
+      '@embroider/macros': ^1.5.0
+      '@embroider/test-setup': ^1.5.0
       '@glimmer/component': ^1.0.4
       '@glimmer/tracking': ^1.0.4
       '@types/ember': ^4.0.0
@@ -256,8 +256,8 @@ importers:
     devDependencies:
       '@ember/optional-features': 2.0.0
       '@ember/test-helpers': 2.6.0
-      '@embroider/macros': 1.2.0
-      '@embroider/test-setup': 1.2.0
+      '@embroider/macros': 1.5.0
+      '@embroider/test-setup': 1.5.0
       '@glimmer/component': 1.0.4
       '@glimmer/tracking': 1.0.4
       '@types/ember': 4.0.0
@@ -1794,12 +1794,12 @@ packages:
       - supports-color
     dev: true
 
-  /@embroider/addon-dev/1.2.0_rollup@2.68.0:
-    resolution: {integrity: sha512-u+Zgj750zikDonL3PF2C2tGMz2KheZ/7waRaUaf1cR30lQvCejGODPUuKrqgnQR1+kO4mIR7DuRWHh4m2tx8ig==}
+  /@embroider/addon-dev/1.5.0_rollup@2.68.0:
+    resolution: {integrity: sha512-F8zkTA7LgOTN8uK8Lzy8GMnbfk31NZ6NDLRSELAyLQpECmTqXauy0HDAcmcIKVcwBxNVDTbLENCro12cgyTnMA==}
     engines: {node: 12.* || 14.* || >= 16}
     hasBin: true
     dependencies:
-      '@embroider/shared-internals': 1.2.0
+      '@embroider/shared-internals': 1.5.0
       '@rollup/pluginutils': 4.1.2
       fs-extra: 10.0.1
       minimatch: 3.1.2
@@ -1811,21 +1811,12 @@ packages:
       - rollup
     dev: true
 
-  /@embroider/addon-shim/1.2.0:
-    resolution: {integrity: sha512-GnhJWjvOWRU87eZrswO8/CmAWbyeG48B5/3Ana0reUzxpoTJHnkrBHdDcnrOYshF4YPgWmAMEkJVCXyjM1joNA==}
+  /@embroider/addon-shim/1.5.0:
+    resolution: {integrity: sha512-5zgwA/wTYjgn2Oo6hKRQhF/5Gnwb+hGhj/WXhZQa5yA7fRRdBV1tVMS7b7SLawZcmOhuWkyPwFdgsYtGBvDB0w==}
     engines: {node: 12.* || 14.* || >= 16}
     dependencies:
-      '@embroider/shared-internals': 1.2.0
+      '@embroider/shared-internals': 1.5.0
       semver: 7.3.5
-    dev: false
-
-  /@embroider/addon-shim/1.4.0:
-    resolution: {integrity: sha512-ulPSV/QFZezBYs0p5g2mUdzcximPsIhjf47rVHyLX2rLzyGf3+79ZNk/5DwA6LQg5cw1lpt02zD26Lk3BBxPxg==}
-    engines: {node: 12.* || 14.* || >= 16}
-    dependencies:
-      '@embroider/shared-internals': 1.4.0
-      semver: 7.3.5
-    dev: true
 
   /@embroider/macros/1.2.0:
     resolution: {integrity: sha512-WD2V3OKXZB73OymI/zC2+MbqIYaAskhjtSOVVY6yG6kWILyVsJ6+fcbNHEnZyGqs4sm0TvHVJfevmA2OXV8Pww==}
@@ -1841,6 +1832,22 @@ packages:
       semver: 7.3.5
     transitivePeerDependencies:
       - supports-color
+
+  /@embroider/macros/1.5.0:
+    resolution: {integrity: sha512-QqNsWmIJ8LvwWg+YAfB+nfcRZ49hAJNTJAKt2IDpgZDKa/FYj/Mp75UWfJ1BJvB3KUq50OQCOv4TZ3ZcU9h/TQ==}
+    engines: {node: 12.* || 14.* || >= 16}
+    dependencies:
+      '@embroider/shared-internals': 1.5.0
+      assert-never: 1.2.1
+      babel-import-util: 1.1.0
+      ember-cli-babel: 7.26.11
+      find-up: 5.0.0
+      lodash: 4.17.21
+      resolve: 1.22.0
+      semver: 7.3.5
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /@embroider/shared-internals/1.2.0:
     resolution: {integrity: sha512-11RfGuXxT+m2xPcpny/ENHjw53CuKPcrx7222LFQ53+I09hLxsvPCsH8be5E99LePDA46YGX41vxOxxfowD4OQ==}
@@ -1867,8 +1874,20 @@ packages:
       typescript-memoize: 1.1.0
     dev: true
 
-  /@embroider/test-setup/1.2.0:
-    resolution: {integrity: sha512-2N/+yqNmiDmh+wCDCPPYFSJX7wInWwQPEEkCU8GHM/S0GUHS6tsMEZK5ZxlbgLDCT/OP2AxGpeWIEBUMgQsA8w==}
+  /@embroider/shared-internals/1.5.0:
+    resolution: {integrity: sha512-kdR7Fh2YdzsNofJO+DJxLfrlMbW4/NNf78aMXgE21z/tg9GO5W2mKlI1DzsO2JlO5yfZdiYfqb9C9vSLJEx14A==}
+    engines: {node: 12.* || 14.* || >= 16}
+    dependencies:
+      babel-import-util: 1.1.0
+      ember-rfc176-data: 0.3.17
+      fs-extra: 9.1.0
+      lodash: 4.17.21
+      resolve-package-path: 4.0.3
+      semver: 7.3.5
+      typescript-memoize: 1.1.0
+
+  /@embroider/test-setup/1.5.0:
+    resolution: {integrity: sha512-4C0dgVswxfA/lBCD8FUWADQhjeO8AJ2KmRkvItOPSwPlAA1QI7gOD28DuiAnCAK18muIFq7P++gvl1qBNid6lg==}
     engines: {node: 12.* || 14.* || >= 16}
     dependencies:
       lodash: 4.17.21
@@ -16322,7 +16341,7 @@ packages:
         optional: true
     dependencies:
       '@ember/test-helpers': 2.6.0
-      '@embroider/addon-shim': 1.4.0
+      '@embroider/addon-shim': 1.5.0
       assert-never: 1.2.1
       ember-element-helper: 0.6.0_ember-source@4.1.0
     transitivePeerDependencies:
@@ -16338,7 +16357,7 @@ packages:
     peerDependencies:
       ember-animated: workspace:*
     dependencies:
-      '@embroider/addon-shim': 1.4.0
+      '@embroider/addon-shim': 1.5.0
     dev: true
 
   file:ember-animated-tools-0.5.0.tgz_ember-animated@0.12.0:
@@ -16350,7 +16369,7 @@ packages:
     peerDependencies:
       ember-animated: workspace:*
     dependencies:
-      '@embroider/addon-shim': 1.4.0
+      '@embroider/addon-shim': 1.5.0
       ember-animated: file:addon_a685827f996f41ed5f67becff747a217
     dev: true
 
@@ -16363,7 +16382,7 @@ packages:
     peerDependencies:
       ember-source: '*'
     dependencies:
-      '@embroider/macros': 1.2.0
+      '@embroider/macros': 1.5.0
       ember-cli-babel: 7.26.11
       ember-cli-htmlbars: 5.7.2
       ember-cli-typescript: 4.2.1

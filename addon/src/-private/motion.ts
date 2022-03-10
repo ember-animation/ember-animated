@@ -3,8 +3,12 @@ import { rAF, microwait } from './concurrency-helpers';
 import { continuedFromElement } from './motion-bridge';
 import TransitionContext from './transition-context';
 import Sprite from './sprite';
+import { getOrCreate } from './singleton';
 
-const motions: WeakMap<Element, Motion[]> = new WeakMap();
+const motions = getOrCreate<WeakMap<Element, Motion[]>>(
+  'motion',
+  () => new WeakMap(),
+);
 
 export interface BaseOptions {
   duration: number;

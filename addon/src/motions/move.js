@@ -1,4 +1,6 @@
-import { Motion, rAF, Tween } from '..';
+import { rAF } from '../-private/concurrency-helpers';
+import Motion from '../-private/motion';
+import Tween from '../-private/tween';
 
 /**
   Animates _sprite_ from its initial position to its final position.

@@ -6,6 +6,11 @@ import { spawn, current, stop, logErrors } from './scheduler';
 import Ember from 'ember';
 import { microwait } from './concurrency-helpers';
 import { DEBUG } from '@glimmer/env';
+import { getOrCreate as _getOrCreate } from './singleton';
+
+function getOrCreate<T>(key: string, construct: () => T): T {
+  return _getOrCreate(`ember-scheduler.${key}`, construct);
+}
 
 type HostObject = Record<string, any>;
 
@@ -85,7 +90,8 @@ interface TaskPrivate {
   name: string;
 }
 
-let priv: WeakMap<Task, TaskPrivate> = new WeakMap();
+let priv = getOrCreate<WeakMap<Task, TaskPrivate>>('priv', () => new WeakMap());
+
 function getPriv(task: Task): TaskPrivate {
   return priv.get(task)!;
 }

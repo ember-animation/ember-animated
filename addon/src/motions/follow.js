@@ -1,5 +1,6 @@
 import { Move } from './move';
-import { rAF, Tween } from '..';
+import { rAF } from '../-private/concurrency-helpers';
+import Tween from '../-private/tween';
 
 export default function follow(sprite, opts) {
   return new Follow(sprite, opts).run();

@@ -38,6 +38,11 @@ API
 */
 
 import { registerCancellation, fireCancellation } from './concurrency-helpers';
+import { getOrCreate as _getOrCreate } from './singleton';
+
+function getOrCreate<T>(key: string, construct: () => T): T {
+  return _getOrCreate(`scheduler.${key}`, construct);
+}
 
 // TODO: specialize the Generator types here so you can only yield promises and
 // get back the promise's resolved type.
@@ -99,16 +104,30 @@ let withCurrent: (routine: MicroRoutine, fn: () => void) => void;
 let getCurrent: () => MicroRoutine | undefined;
 let onStack: (routine: MicroRoutine) => StackEntry | undefined;
 {
-  let cur: MicroRoutine | undefined;
-  let prior: StackEntry[] = [];
+  interface routinesState {
+    cur: MicroRoutine | undefined;
+    prior: StackEntry[];
+  }
+
+  const routines = getOrCreate(
+    'routines',
+    () =>
+      ({
+        cur: undefined,
+        prior: [],
+      } as routinesState),
+  );
+
+  // let cur: MicroRoutine | undefined;
+  // let prior: StackEntry[] = [];
   withCurrent = function (routine, fn) {
-    prior.unshift({ microroutine: cur, throw: undefined });
-    cur = routine;
+    routines.prior.unshift({ microroutine: routines.cur, throw: undefined });
+    routines.cur = routine;
     try {
       return fn();
     } finally {
-      let restore = prior.shift()!;
-      cur = restore.microroutine;
+      let restore = routines.prior.shift()!;
+      routines.cur = restore.microroutine;
       if (restore.throw) {
         /*
            Why is this not really "unsafe"? Because if the
@@ -122,10 +141,10 @@ let onStack: (routine: MicroRoutine) => StackEntry | undefined;
     }
   };
   getCurrent = function () {
-    return cur;
+    return routines.cur;
   };
   onStack = function (microroutine) {
-    return prior.find((entry) => entry.microroutine === microroutine);
+    return routines.prior.find((entry) => entry.microroutine === microroutine);
   };
 }
 
@@ -137,8 +156,14 @@ function ensureCurrent(label: string) {
   return cur;
 }
 
-let loggedErrors: WeakSet<Error> = new WeakSet();
-let microRoutines: WeakMap<Promise<any>, MicroRoutine> = new WeakMap();
+let loggedErrors = getOrCreate<WeakSet<Error>>(
+  'loggedErrors',
+  () => new WeakSet(),
+);
+let microRoutines = getOrCreate<WeakMap<Promise<any>, MicroRoutine>>(
+  'microRoutines',
+  () => new WeakMap(),
+);
 
 class MicroRoutine {
   private generator: Generator;

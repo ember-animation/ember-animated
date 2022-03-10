@@ -3,7 +3,8 @@ import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import Component from '@ember/component';
 import { task, Task } from '../-private/ember-scheduler';
-import { afterRender, microwait, continueMotions } from '..';
+import { afterRender, microwait } from '../-private/concurrency-helpers';
+import { continueMotions } from '../-private/motion-bridge';
 import TransitionContext, {
   runToCompletion,
 } from '../-private/transition-context';

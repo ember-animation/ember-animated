@@ -1,8 +1,9 @@
 import { childrenSettled } from './scheduler';
 import Sprite from './sprite';
 import { Transition } from './transition';
+import { getOrCreate } from './singleton';
 
-const spriteContext = new WeakMap();
+const spriteContext = getOrCreate('transition-context', () => new WeakMap());
 
 export function* runToCompletion(
   context: TransitionContext,

@@ -1,6 +1,7 @@
 import { rAF } from './concurrency-helpers';
+import { getOrCreate } from './singleton';
 
-const bridges = new WeakMap();
+const bridges = getOrCreate('motion-bridges', () => new WeakMap());
 
 export function continueMotions(
   oldElement: Element,

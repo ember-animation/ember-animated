@@ -1,7 +1,7 @@
 {{!--
   The @class is only there to support a deprecated usage.
 --}}
-{{#let (component (ensure-safe-component (-element this.tag))) as |Tag|~}}
+{{#let (component (ensure-safe-component (-element this.tag)) tagName=this.tag) as |Tag|~}}
   <Tag class="animated-container {{@class}}" ...attributes >
     {{yield}}
   </Tag>
