@@ -6,16 +6,19 @@ import { relativeBounds } from '../-private/bounds';
 import { cumulativeTransform } from '../-private/transform';
 import TimeControl from './time-control';
 
-// Re-export to ensure instanceof within MotionTester works properly.
+export { TimeControl };
+export { default as MotionTester } from './motion-tester';
+
+// Re-export to ensure "instanceof" works properly within MotionTester.
 // Importing from 'ember-animated' would happen from different entry-point
-// when done from the app or from the test. Hence we need re-export.
+// when done from the app or from the test. Hence, we need re-export.
+// We should remove below re-exports once ember-auto-import gets fixed,
+// so we would have single entry point for app and tests.
+// Link to track status: https://github.com/ef4/ember-auto-import/issues/503
 export { default as Sprite } from '../-private/sprite';
 export { default as Motion } from '../-private/motion';
 export { AdjustColor } from '../motions/adjust-color';
 export { Move } from '../motions/move';
-
-export { TimeControl };
-export { default as MotionTester } from './motion-tester';
 
 export function animationsSettled() {
   let idle;
