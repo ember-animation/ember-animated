@@ -46,7 +46,7 @@
     "npm": false
   },
   "volta": {
-    "node": "12.22.7"
+    "node": "12.22.10"
   },
   "pnpm": {
     "overrides": {

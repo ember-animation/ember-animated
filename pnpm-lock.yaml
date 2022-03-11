@@ -16429,7 +16429,7 @@ packages:
     dev: true
 
   file:ember-animated-tools-0.5.0.tgz:
-    resolution: {integrity: sha512-TDUbDdq0xoUQ/mo39kkZC9r/gIcmGB4Uln/+7duhgUfArOPHcqZiOmUxHBs/p4y1JAphEt0SAQdO+niXsthTow==, tarball: file:ember-animated-tools-0.5.0.tgz}
+    resolution: {integrity: sha512-Fkm3IBy290PYVqxmtBaKzMnKaSuZLhoB3HUxNdqiLAoE8oQWGCLeIzOjzugWArI/pRDtCxpUhQS/Ox6U5XV6TQ==, tarball: file:ember-animated-tools-0.5.0.tgz}
     name: ember-animated-tools
     version: 0.5.0
     engines: {node: 12.* || 14.* || >= 16}
@@ -16440,7 +16440,7 @@ packages:
     dev: true
 
   file:ember-animated-tools-0.5.0.tgz_ember-animated@0.12.0:
-    resolution: {integrity: sha512-TDUbDdq0xoUQ/mo39kkZC9r/gIcmGB4Uln/+7duhgUfArOPHcqZiOmUxHBs/p4y1JAphEt0SAQdO+niXsthTow==, tarball: file:ember-animated-tools-0.5.0.tgz}
+    resolution: {integrity: sha512-Fkm3IBy290PYVqxmtBaKzMnKaSuZLhoB3HUxNdqiLAoE8oQWGCLeIzOjzugWArI/pRDtCxpUhQS/Ox6U5XV6TQ==, tarball: file:ember-animated-tools-0.5.0.tgz}
     id: file:ember-animated-tools-0.5.0.tgz
     name: ember-animated-tools
     version: 0.5.0
