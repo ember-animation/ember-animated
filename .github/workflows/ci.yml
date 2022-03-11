@@ -54,12 +54,8 @@ jobs:
         with:
           node-version: 12.x
           cache: 'pnpm'
-      # pnpm does not have --no-lockfile option
-      - name: Remove lock file
-        shell: bash
-        run: rm pnpm-lock.yaml
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --no-lockfile
       - name: Run Tests
         run: pnpm run test:ember
         working-directory: test-app

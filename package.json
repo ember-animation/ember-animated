@@ -50,7 +50,6 @@
   },
   "pnpm": {
     "overrides": {
-      "@ember/legacy-built-in-components": "github:emberjs/ember-legacy-built-in-components#a84513d197eeafbb01eae81e0f101b86ccde0ecf",
       "ember-modal-dialog": "4.0.0"
     }
   }
