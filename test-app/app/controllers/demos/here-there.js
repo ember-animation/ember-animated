@@ -1,18 +1,16 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked, dependentKeyCompat } from 'test-app/utils/tracking';
+import { tracked } from '@glimmer/tracking';
 import move from 'ember-animated/motions/move';
 
 export default class extends Controller {
   @tracked showLeft = true;
   @tracked groupTogether = false;
 
-  @dependentKeyCompat
   get showRight() {
     return !this.showLeft;
   }
 
-  @dependentKeyCompat
   get howToGroup() {
     if (this.groupTogether) {
       return 'together';

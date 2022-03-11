@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { tracked } from 'test-app/utils/tracking';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import moveSVG from 'ember-animated/motions/move-svg';
 import { parallel } from 'ember-animated';

@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
-import { tracked, dependentKeyCompat } from 'test-app/utils/tracking';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import move from 'ember-animated/motions/move';
 
 export default class SwappingListsExample extends Component {
-  @dependentKeyCompat
   get transition() {
     if (this.animateSendingSide) {
       return this.moveSent;

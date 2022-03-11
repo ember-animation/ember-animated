@@ -19,9 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v2
         with:
-          version: 6.32.3
+          version: 6.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
@@ -46,9 +46,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v2
         with:
-          version: 6.32.3
+          version: 6.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
@@ -67,9 +67,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v2
         with:
-          version: 6.32.3
+          version: 6.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
@@ -93,7 +93,6 @@ jobs:
       fail-fast: false
       matrix:
         try-scenario:
-          - ember-lts-3.12
           - ember-lts-3.16
           - ember-lts-3.20
           - ember-lts-3.24
@@ -108,9 +107,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v2
         with:
-          version: 6.32.3
+          version: 6.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
@@ -141,9 +140,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v2
         with:
-          version: 6.32.3
+          version: 6.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
