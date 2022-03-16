@@ -59,7 +59,7 @@
     "ember-cli-inject-live-reload": "^2.1.0",
     "ember-cli-sass": "^10.0.0",
     "ember-cli-terser": "^4.0.2",
-    "ember-cli-typescript": "^4.2.1",
+    "ember-cli-typescript": "^5.0.0",
     "ember-cli-typescript-blueprints": "^3.0.0",
     "ember-compatibility-helpers": "^1.2.6",
     "ember-composable-helpers": "^5.0.0",
