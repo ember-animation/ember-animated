@@ -52,7 +52,7 @@
     "@types/ember__object": "^4.0.1",
     "@types/rsvp": "^4.0.4",
     "ember-template-lint": "^4.0.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-ember": "^10.5.8",
     "eslint-plugin-node": "^11.1.0",
