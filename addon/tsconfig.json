@@ -16,26 +16,9 @@
     "inlineSources": true,
     "baseUrl": ".",
     "module": "es6",
-    "paths": {
-      "ember-animated": [
-        "addon"
-      ],
-      "ember-animated/*": [
-        "addon/*"
-      ],
-      "ember-animated/test-support": [
-        "addon-test-support"
-      ],
-      "ember-animated/test-support/*": [
-        "addon-test-support/*"
-      ],
-      "*": [
-        "types/*"
-      ]
-    }
+    "paths": {}
   },
   "include": [
-    "addon/**/*",
-    "addon-test-support/**/*"
+    "src/**/*",
   ]
 }

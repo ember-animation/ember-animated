@@ -11,30 +11,46 @@
   "repository": "https://github.com/ember-animation/ember-animated",
   "license": "MIT",
   "author": "Edward Faulkner <edward@eaf4.com>",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*",
+    "./test-support": "./dist/test-support/index.js",
+    "./addon-main.js": "./addon-main.js"
   },
+  "files": [
+    "addon-main.js",
+    "dist"
+  ],
   "scripts": {
+    "build": "rollup --config",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache --ext .ts,.js",
     "lint:js:fix": "eslint . --fix --ext .ts,.js",
+    "prepublishOnly": "rollup --config",
+    "start": "rollup --config --watch",
+    "test": "echo 'Please refer to test-app for addon tests'",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ember/test-helpers": "^2.6.0",
+    "@embroider/addon-shim": "^1.5.0",
     "assert-never": "^1.2.0",
-    "ember-auto-import": "^2.4.0",
-    "ember-cli-babel": "^7.26.11",
-    "ember-cli-htmlbars": "^6.0.1",
-    "ember-cli-typescript": "^4.2.1",
-    "ember-compatibility-helpers": "^1.2.6",
     "ember-element-helper": "^0.5.0 || ^0.6.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-proposal-decorators": "^7.17.2",
+    "@babel/plugin-transform-typescript": "^7.16.8",
+    "@babel/preset-typescript": "^7.16.7",
+    "@embroider/addon-dev": "^1.5.0",
+    "@glimmer/env": "^0.1.7",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@types/ember": "^4.0.0",
+    "@types/ember__object": "^4.0.1",
+    "@types/rsvp": "^4.0.4",
     "ember-template-lint": "^4.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -42,7 +58,19 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "rollup": "^2.70.0",
+    "rollup-plugin-ts": "^2.0.5",
+    "tslib": "^2.3.1",
+    "typescript": "^4.6.2"
+  },
+  "peerDependencies": {
+    "@ember/test-helpers": "^2.6.0"
+  },
+  "peerDependenciesMeta": {
+    "@ember/test-helpers": {
+      "optional": true
+    }
   },
   "engines": {
     "node": "12.* || 14.* || >= 16"
@@ -51,6 +79,19 @@
     "edition": "octane"
   },
   "ember-addon": {
+    "main": "addon-main.js",
+    "type": "addon",
+    "version": 2,
+    "app-js": {
+      "./components/animated-beacon.js": "./dist/_app_/components/animated-beacon.js",
+      "./components/animated-container.js": "./dist/_app_/components/animated-container.js",
+      "./components/animated-each.js": "./dist/_app_/components/animated-each.js",
+      "./components/animated-if.js": "./dist/_app_/components/animated-if.js",
+      "./components/animated-orphans.js": "./dist/_app_/components/animated-orphans.js",
+      "./components/animated-value.js": "./dist/_app_/components/animated-value.js",
+      "./components/ea-list-element.js": "./dist/_app_/components/ea-list-element.js",
+      "./services/-ea-motion.js": "./dist/_app_/services/-ea-motion.js"
+    }
   },
   "volta": {
     "extends": "../package.json"

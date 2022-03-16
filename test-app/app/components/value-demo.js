@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { tracked } from 'test-app/utils/tracking';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { toLeft, toRight } from 'ember-animated/transitions/move-over';
 

@@ -3,16 +3,16 @@
 <DocsViewer as |viewer|>
 
   <viewer.nav as |nav|>
-    {{nav.section "Overview"}}
-    {{nav.item "Installation" "docs.index"}}
+    <nav.section @label="Overview" />
+    <nav.item @label="Installation" @route="docs.index" />
 
-    {{nav.section "Concepts"}}
-    {{nav.item "Sprites" "docs.sprites"}}
-    {{nav.item "Transitions" "docs.transitions"}}
-    {{nav.item "Motions" "docs.motions"}}
-    {{nav.item "Data-Dependent Rules" "docs.rules"}}
-    {{nav.item "Animating Between Components" "docs.between"}}
-    {{nav.item "Beacons" "docs.beacons"}}
+    <nav.section @label="Concepts" />
+    <nav.item @label="Sprites" @route="docs.sprites" />
+    <nav.item @label="Transitions" @route="docs.transitions" />
+    <nav.item @label="Motions" @route="docs.motions" />
+    <nav.item @label="Data-Dependent Rules" @route="docs.rules" />
+    <nav.item @label="Animating Between Components" @route="docs.between" />
+    <nav.item @label="Beacons" @route="docs.beacons" />
 
   </viewer.nav>
 

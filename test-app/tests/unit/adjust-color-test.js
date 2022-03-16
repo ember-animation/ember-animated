@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
-import Sprite from 'ember-animated/-private/sprite';
-import { AdjustColor } from 'ember-animated/motions/adjust-color';
 import {
   MotionTester,
   time,
   setupAnimationTest,
+  Sprite,
+  AdjustColor,
 } from 'ember-animated/test-support';
 
 let tester, target;
