@@ -63,7 +63,7 @@
     "ember-simple-track-helper": "^1.0.0",
     "ember-source": "~4.1.0",
     "ember-template-lint": "^4.0.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-ember": "^10.5.8",
     "eslint-plugin-node": "^11.1.0",
