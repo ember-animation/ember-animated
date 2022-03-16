@@ -274,7 +274,7 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.15.0_f2c49ce7d0e93ebcfdb4b7d25b131b28
       '@typescript-eslint/parser': 5.15.0_eslint@8.11.0+typescript@4.6.2
       broccoli-asset-rev: 3.0.0
-      ember-animated: file:addon_3a6dfdea6beaf198be52176466a58937
+      ember-animated: link:../addon
       ember-animated-tools: 1.0.0_3a6dfdea6beaf198be52176466a58937
       ember-auto-import: 2.4.0_webpack@5.70.0
       ember-cli: 4.2.0
@@ -319,9 +319,6 @@ importers:
       sass: 1.49.9
       typescript: 4.6.2
       webpack: 5.70.0
-    dependenciesMeta:
-      ember-animated:
-        injected: true
 
 packages:
 
@@ -16427,27 +16424,6 @@ packages:
       minimatch: 3.1.2
       rimraf: 2.7.1
       yui: 3.18.1
-    dev: true
-
-  file:addon_3a6dfdea6beaf198be52176466a58937:
-    resolution: {directory: addon, type: directory}
-    id: file:addon
-    name: ember-animated
-    version: 1.0.0
-    engines: {node: 12.* || 14.* || >= 16}
-    peerDependencies:
-      '@ember/test-helpers': ^2.6.0
-    peerDependenciesMeta:
-      '@ember/test-helpers':
-        optional: true
-    dependencies:
-      '@ember/test-helpers': 2.6.0
-      '@embroider/addon-shim': 1.5.0
-      assert-never: 1.2.1
-      ember-element-helper: 0.6.0_ember-source@4.2.0
-    transitivePeerDependencies:
-      - ember-source
-      - supports-color
     dev: true
 
   file:docs/ember-cli-addon-docs-4.2.2.tgz_b38d67f015f11bd85089af29ff853309:

@@ -13,6 +13,11 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': '~3.16.0',
           },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
+          },
         },
       },
       {
@@ -20,6 +25,11 @@ module.exports = async function () {
         npm: {
           devDependencies: {
             'ember-source': '~3.20.5',
+          },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
           },
         },
       },
@@ -29,6 +39,11 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': '~3.24.3',
           },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
+          },
         },
       },
       {
@@ -36,6 +51,11 @@ module.exports = async function () {
         npm: {
           devDependencies: {
             'ember-source': '~3.28.8',
+          },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
           },
         },
       },
@@ -45,6 +65,11 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': await getChannelURL('release'),
           },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
+          },
         },
       },
       {
@@ -53,6 +78,11 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': await getChannelURL('beta'),
           },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
+          },
         },
       },
       {
@@ -60,6 +90,11 @@ module.exports = async function () {
         npm: {
           devDependencies: {
             'ember-source': await getChannelURL('canary'),
+          },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
           },
         },
       },
@@ -79,10 +114,31 @@ module.exports = async function () {
           ember: {
             edition: 'classic',
           },
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
+          },
         },
       },
-      embroiderSafe(),
-      embroiderOptimized(),
+      embroiderSafe({
+        npm: {
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
+          },
+        },
+      }),
+      embroiderOptimized({
+        npm: {
+          dependenciesMeta: {
+            'ember-animated': {
+              injected: true,
+            },
+          },
+        },
+      }),
     ],
   };
 };

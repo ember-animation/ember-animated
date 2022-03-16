@@ -10,6 +10,7 @@
     "test-app"
   ],
   "scripts": {
+    "prepare": "cd addon && pnpm run build",
     "release": "release-it"
   },
   "devDependencies": {
