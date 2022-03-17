@@ -137,7 +137,7 @@ export function wait(ms = 0) {
 export function afterRender() {
   let ticket: EmberRunTimer;
   let promise = new Promise<void>((resolve) => {
-    ticket = schedule('afterRender', resolve);
+    ticket = schedule('afterRender', () => resolve());
   });
   registerCancellation(promise, () => {
     cancel(ticket);
