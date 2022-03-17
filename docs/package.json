@@ -23,6 +23,10 @@
     "test:ember": "ember test",
     "test:ember-compatibility": "ember try:each"
   },
+  "resolutions": {
+    "ember-cli-addon-docs/ember-component-css": "^0.7.4",
+    "ember-cli-addon-docs/ember-data": "^3.15.0"
+  },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@ember/optional-features": "^2.0.0",
@@ -82,17 +86,13 @@
   "engines": {
     "node": "12.* || 14.* || >= 16"
   },
-  "resolutions": {
-    "ember-cli-addon-docs/ember-data": "^3.15.0",
-    "ember-cli-addon-docs/ember-component-css": "^0.7.4"
+  "ember": {
+    "edition": "octane"
   },
   "ember-addon": {
     "paths": [
       "../addon"
     ]
-  },
-  "ember": {
-    "edition": "octane"
   },
   "volta": {
     "extends": "../package.json"

@@ -19,6 +19,11 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
+  "pnpm": {
+    "overrides": {
+      "ember-modal-dialog": "4.0.0"
+    }
+  },
   "release-it": {
     "plugins": {
       "release-it-lerna-changelog": {
@@ -47,10 +52,5 @@
   },
   "volta": {
     "node": "12.22.10"
-  },
-  "pnpm": {
-    "overrides": {
-      "ember-modal-dialog": "4.0.0"
-    }
   }
 }
