@@ -1,6 +1,6 @@
 import { test, module } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
-import { currentURL, visit, click } from '@ember/test-helpers';
+import { currentURL, visit, click, find, findAll } from '@ember/test-helpers';
 import { TimeControl, animationsSettled } from 'ember-animated/test-support';
 
 module('Acceptance | swapping lists', function (hooks) {
@@ -22,13 +22,11 @@ module('Acceptance | swapping lists', function (hooks) {
 
   test('toggling with animated receiving side', async function (assert) {
     await visit('/demos/swapping-lists');
-    await click(this.element.querySelector('button'));
+    await click('button');
     await time.advance(100);
-    let listPosition = this.element
-      .querySelector('.right')
-      .getBoundingClientRect().left;
+    let listPosition = find('.right').getBoundingClientRect().left;
     let leftwardCount = 0;
-    [...this.element.querySelectorAll('.right > div')].forEach((element) => {
+    [...findAll('.right > div')].forEach((element) => {
       if (element.getBoundingClientRect().left < listPosition) {
         leftwardCount++;
       }
@@ -43,13 +41,11 @@ module('Acceptance | swapping lists', function (hooks) {
 
   test('toggling with animated sending side', async function (assert) {
     await visit('/demos/swapping-lists');
-    await click(this.element.querySelector('.sending-side > input'));
-    await click(this.element.querySelector('button'));
+    await click('.sending-side > input');
+    await click('button');
     await time.advance(100);
 
-    let hidden = this.element.querySelectorAll(
-      '.right > div.ember-animated-hidden',
-    ).length;
+    let hidden = findAll('.right > div.ember-animated-hidden').length;
     assert.ok(
       hidden >= 3,
       `expected at least 3 elements in right list to be hidden, found ${hidden}`,
@@ -61,9 +57,7 @@ module('Acceptance | swapping lists', function (hooks) {
       }`,
     );
 
-    let orphans = this.element.querySelectorAll(
-      '.animated-orphans > div',
-    ).length;
+    let orphans = findAll('.animated-orphans > div').length;
     assert.ok(
       orphans >= 3,
       `expected at least 3 orphan elements to be in motion, found ${orphans}`,

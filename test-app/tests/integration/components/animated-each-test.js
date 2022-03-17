@@ -2,7 +2,7 @@
 import { set } from '@ember/object';
 import { A } from '@ember/array';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, settled } from '@ember/test-helpers';
+import { render, settled, find, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import QUnit, { module, test } from 'qunit';
 import {
@@ -39,16 +39,8 @@ module('Integration | Component | animated each', function (hooks) {
       {{/animated-each}}
     `);
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), [
-      'a',
-      'b',
-      'c',
-    ]);
-    assert.listContents(this.element.querySelectorAll('.test-child-index'), [
-      '0',
-      '1',
-      '2',
-    ]);
+    assert.listContents(findAll('.test-child'), ['a', 'b', 'c']);
+    assert.listContents(findAll('.test-child-index'), ['0', '1', '2']);
   });
 
   test('it renders when list is missing', async function (assert) {
@@ -89,11 +81,7 @@ module('Integration | Component | animated each', function (hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), [
-      'a',
-      'b',
-      'c',
-    ]);
+    assert.listContents(findAll('.test-child'), ['a', 'b', 'c']);
     assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -118,15 +106,15 @@ module('Integration | Component | animated each', function (hooks) {
     this.set('items', ['b', 'c', 'q']);
     await time.advance(500); // halfway through the animation
     assert.strictEqual(
-      this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
+      find('.test-child[data-item="b"]').dataset['index'],
       '0',
     );
     assert.strictEqual(
-      this.element.querySelector('.test-child[data-item="c"]').dataset['index'],
+      find('.test-child[data-item="c"]').dataset['index'],
       '1',
     );
     assert.strictEqual(
-      this.element.querySelector('.test-child[data-item="q"]').dataset['index'],
+      find('.test-child[data-item="q"]').dataset['index'],
       '2',
     );
   });
@@ -148,7 +136,7 @@ module('Integration | Component | animated each', function (hooks) {
     this.set('items', ['a', 'c']);
     await time.advance(500);
     assert.strictEqual(
-      this.element.querySelector('.test-child[data-item="b"]').dataset['index'],
+      find('.test-child[data-item="b"]').dataset['index'],
       '1',
     );
   });
@@ -180,11 +168,7 @@ module('Integration | Component | animated each', function (hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), [
-      'a',
-      'x',
-      'c',
-    ]);
+    assert.listContents(findAll('.test-child'), ['a', 'x', 'c']);
     assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -215,11 +199,7 @@ module('Integration | Component | animated each', function (hooks) {
       this.get('items').replace(1, 1, ['x']);
     });
     await animationsSettled();
-    assert.listContents(this.element.querySelectorAll('.test-child'), [
-      'a',
-      'x',
-      'c',
-    ]);
+    assert.listContents(findAll('.test-child'), ['a', 'x', 'c']);
     assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -248,11 +228,7 @@ module('Integration | Component | animated each', function (hooks) {
       set(this.get('items')[1], 'id', 'x');
     });
     await animationsSettled();
-    assert.listContents(this.element.querySelectorAll('.test-child'), [
-      'a',
-      'x',
-      'c',
-    ]);
+    assert.listContents(findAll('.test-child'), ['a', 'x', 'c']);
     assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 
@@ -285,11 +261,7 @@ module('Integration | Component | animated each', function (hooks) {
 
     await animationsSettled();
 
-    assert.listContents(this.element.querySelectorAll('.test-child'), [
-      'a',
-      'b',
-      'c',
-    ]);
+    assert.listContents(findAll('.test-child'), ['a', 'b', 'c']);
     assert.strictEqual(transitionCounter, 1, 'transitionCounter');
   });
 

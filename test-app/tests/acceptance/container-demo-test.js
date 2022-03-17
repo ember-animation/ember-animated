@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import {
   setupAnimationTest,
@@ -23,12 +23,12 @@ module('Acceptance | container demo', function (hooks) {
     await animationsSettled();
 
     time.pause();
-    await click(this.element.querySelector('button'));
+    await click('button');
     await time.advance(125);
 
-    let onePosition = bounds(this.element.querySelector('.message')).left;
+    let onePosition = bounds(find('.message')).left;
     await time.advance(125);
-    let twoPosition = bounds(this.element.querySelector('.message')).left;
+    let twoPosition = bounds(find('.message')).left;
     assert.ok(
       twoPosition < onePosition,
       `expected element .two to be animating in, ${twoPosition} > ${onePosition}`,

@@ -23,7 +23,7 @@ module('Acceptance | inline text', function (hooks) {
     await visit('/demos/inline-text');
     time = new TimeControl();
     time.runAtSpeed(40);
-    await click(this.element.querySelector('button'));
+    await click('button');
     await animationsSettled();
   });
 
@@ -32,9 +32,9 @@ module('Acceptance | inline text', function (hooks) {
     await visit('/demos/inline-text');
     time = new TimeControl();
     time.runAtSpeed(40);
-    await click(this.element.querySelector('button'));
+    await click('button');
     await animationsSettled();
-    await click(this.element.querySelector('button'));
+    await click('button');
     await animationsSettled();
   });
 });

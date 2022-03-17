@@ -1,5 +1,5 @@
-export function findByText(element, selector, text) {
-  return [...element.querySelectorAll(selector)].find(
-    (elt) => elt.textContent.trim() === text,
-  );
+import { findAll } from '@ember/test-helpers';
+
+export function findByText(selector, text) {
+  return [...findAll(selector)].find((elt) => elt.textContent.trim() === text);
 }

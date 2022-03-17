@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, settled } from '@ember/test-helpers';
+import { render, settled, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { equalBounds, visuallyConstant } from '../../helpers/assertions';
 import { task } from 'ember-animated/-private/ember-scheduler';
@@ -90,16 +90,16 @@ module('Integration | Component | animated container', function (hooks) {
       </AnimatedContainer>
     `);
 
-    this.element.querySelector('.inside').style.height = '210px';
+    find('.inside').style.height = '210px';
 
-    let container = _bounds(this.element.querySelector('.animated-container'));
-    let inside = _bounds(this.element.querySelector('.inside'));
+    let container = _bounds(find('.animated-container'));
+    let inside = _bounds(find('.inside'));
     assert.equalBounds(container, inside, 'takes size of content');
 
-    this.element.querySelector('.inside').style.height = '600px';
+    find('.inside').style.height = '600px';
 
-    container = _bounds(this.element.querySelector('.animated-container'));
-    let tallerInside = _bounds(this.element.querySelector('.inside'));
+    container = _bounds(find('.animated-container'));
+    let tallerInside = _bounds(find('.inside'));
     assert.equalBounds(container, tallerInside, 'adapts to height of content');
     assert.ok(tallerInside.height > inside.height, 'inside content got taller');
   });
@@ -112,17 +112,17 @@ module('Integration | Component | animated container', function (hooks) {
         </div>
       </AnimatedContainer>
     `);
-    this.element.querySelector('.inside').style.height = '210px';
+    find('.inside').style.height = '210px';
 
-    let original = _bounds(this.element.querySelector('.animated-container'));
+    let original = _bounds(find('.animated-container'));
 
     run(() => {
       this.get('fakeAnimator.animate').perform();
     });
 
-    this.element.querySelector('.inside').style.height = '600px';
+    find('.inside').style.height = '600px';
 
-    let final = _bounds(this.element.querySelector('.animated-container'));
+    let final = _bounds(find('.animated-container'));
 
     assert.equalBounds(final, original, 'height can be locked');
   });
@@ -191,14 +191,14 @@ module('Integration | Component | animated container', function (hooks) {
     });
     await startedMotion;
     assert.strictEqual(
-      height(this.element.querySelector('.animated-container')),
+      height(find('.animated-container')),
       100,
       'still at previous height',
     );
     finishMotion();
     await animationsSettled();
     assert.strictEqual(
-      height(this.element.querySelector('.animated-container')),
+      height(find('.animated-container')),
       300,
       'now at final height',
     );
@@ -227,14 +227,14 @@ module('Integration | Component | animated container', function (hooks) {
 
     await wait(60);
     assert.strictEqual(
-      height(this.element.querySelector('.animated-container')),
+      height(find('.animated-container')),
       200,
       'should be locked at the static height we measured',
     );
     unblock();
     await wait(60);
     assert.strictEqual(
-      height(this.element.querySelector('.animated-container')),
+      height(find('.animated-container')),
       300,
       'unlocked and reflecting the actual final height of the animator',
     );
@@ -303,7 +303,7 @@ module('Integration | Component | animated container', function (hooks) {
 
     await animationsSettled();
     assert.strictEqual(
-      height(this.element.querySelector('.animated-container')),
+      height(find('.animated-container')),
       200,
       'ends up unlocked',
     );
@@ -318,15 +318,12 @@ module('Integration | Component | animated container', function (hooks) {
       </AnimatedContainer>
     `);
 
-    assert.visuallyConstant(
-      this.element.querySelector('.animated-container'),
-      () => {
-        run(() => {
-          this.get('fakeAnimator.animate').perform();
-        });
-        this.element.querySelector('.inside').style.position = 'absolute';
-      },
-    );
+    assert.visuallyConstant(find('.animated-container'), () => {
+      run(() => {
+        this.get('fakeAnimator.animate').perform();
+      });
+      find('.inside').style.position = 'absolute';
+    });
   });
 
   test('Accounts for top margin collapse between self and descendant', async function (assert) {
@@ -339,15 +336,12 @@ module('Integration | Component | animated container', function (hooks) {
       </AnimatedContainer>
     `);
 
-    assert.visuallyConstant(
-      this.element.querySelector('.animated-container'),
-      () => {
-        run(() => {
-          this.get('fakeAnimator.animate').perform();
-        });
-        this.element.querySelector('.inside').style.position = 'absolute';
-      },
-    );
+    assert.visuallyConstant(find('.animated-container'), () => {
+      run(() => {
+        this.get('fakeAnimator.animate').perform();
+      });
+      find('.inside').style.position = 'absolute';
+    });
   });
 
   test('Accounts for bottom margin collapse between self and child', async function (assert) {
@@ -362,11 +356,11 @@ module('Integration | Component | animated container', function (hooks) {
       </div>
     `);
 
-    assert.visuallyConstant(this.element.querySelector('.after'), () => {
+    assert.visuallyConstant(find('.after'), () => {
       run(() => {
         this.get('fakeAnimator.animate').perform();
       });
-      this.element.querySelector('.inside').style.position = 'absolute';
+      find('.inside').style.position = 'absolute';
     });
   });
 
@@ -388,7 +382,7 @@ module('Integration | Component | animated container', function (hooks) {
 
     this.get('fakeAnimator').element.style.height = '0px';
 
-    let initialTop = _bounds(this.element.querySelector('.after')).top;
+    let initialTop = _bounds(find('.after')).top;
 
     run(() => {
       this.get('fakeAnimator.animate').perform({
@@ -400,7 +394,7 @@ module('Integration | Component | animated container', function (hooks) {
 
     await animationsSettled();
     assert.strictEqual(
-      _bounds(this.element.querySelector('.after')).top,
+      _bounds(find('.after')).top,
       initialTop + 1,
       'only changes by one pixel',
     );
@@ -424,7 +418,7 @@ module('Integration | Component | animated container', function (hooks) {
 
     this.get('fakeAnimator').element.style.height = '1px';
 
-    let initialTop = _bounds(this.element.querySelector('.after')).top;
+    let initialTop = _bounds(find('.after')).top;
 
     run(() => {
       this.get('fakeAnimator.animate').perform({
@@ -436,7 +430,7 @@ module('Integration | Component | animated container', function (hooks) {
 
     await animationsSettled();
     assert.strictEqual(
-      _bounds(this.element.querySelector('.after')).top,
+      _bounds(find('.after')).top,
       initialTop - 1,
       'only changes by one pixel',
     );
@@ -496,12 +490,12 @@ module(
       </AnimatedContainer>
     `);
       await animationsSettled();
-      let before = _bounds(this.element.querySelector('.animated-container'));
+      let before = _bounds(find('.animated-container'));
       time.pause();
       this.set('showThing', true);
       await settled();
       await time.advance(10);
-      let after = _bounds(this.element.querySelector('.animated-container'));
+      let after = _bounds(find('.animated-container'));
       assert.closeSize(5, after, before);
     });
 
@@ -519,10 +513,10 @@ module(
       this.set('showThing', true);
       await settled();
       await time.advance(990);
-      let before = _bounds(this.element.querySelector('.animated-container'));
+      let before = _bounds(find('.animated-container'));
       time.runAtSpeed(40);
       await animationsSettled();
-      let after = _bounds(this.element.querySelector('.animated-container'));
+      let after = _bounds(find('.animated-container'));
       assert.closeSize(5, after, before);
     });
 
@@ -538,12 +532,12 @@ module(
       </div>
     `);
       await animationsSettled();
-      let before = _bounds(this.element.querySelector('.animated-container'));
+      let before = _bounds(find('.animated-container'));
       time.pause();
       this.set('showThing', true);
       await settled();
       await time.advance(10);
-      let after = _bounds(this.element.querySelector('.animated-container'));
+      let after = _bounds(find('.animated-container'));
       assert.closeSize(5, after, before);
     });
 
@@ -559,7 +553,7 @@ module(
       </AnimatedContainer>
     `);
       await time.advance(10);
-      let actual = _bounds(this.element.querySelector('.animated-container'));
+      let actual = _bounds(find('.animated-container'));
       assert.closeSize(5, actual, { width: 0, height: 0 });
     });
 
@@ -568,7 +562,7 @@ module(
       <AnimatedContainer class="hello world" data-foo="bar"/>
     `);
 
-      let elt = this.element.querySelector('.animated-container');
+      let elt = find('.animated-container');
       assert.dom(elt).hasClass('hello', 'found hello');
       assert.dom(elt).hasClass('world', 'found world');
       assert.strictEqual(elt.dataset['foo'], 'bar');
@@ -579,7 +573,7 @@ module(
       <AnimatedContainer data-test-me @tagName="section"/>
     `);
 
-      let elt = this.element.querySelector('[data-test-me]');
+      let elt = find('[data-test-me]');
       assert.strictEqual(elt.tagName, 'SECTION');
     });
 
@@ -588,7 +582,7 @@ module(
       <AnimatedContainer @tag="section"/>
     `);
 
-      let elt = this.element.querySelector('.animated-container');
+      let elt = find('.animated-container');
       assert.strictEqual(elt.tagName, 'SECTION');
     });
   },
