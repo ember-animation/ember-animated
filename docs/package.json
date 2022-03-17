@@ -24,6 +24,7 @@
     "test:ember-compatibility": "ember try:each"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/string": "^3.0.0",
     "@ember/test-helpers": "^2.6.0",
@@ -31,7 +32,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
-    "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-animated": "workspace:*",
     "ember-animated-tools": "file:../ember-animated-tools-0.5.0.tgz",
@@ -62,22 +62,22 @@
     "ember-resolver": "^8.0.3",
     "ember-simple-track-helper": "^1.0.0",
     "ember-source": "~4.1.0",
-    "ember-template-lint": "^4.0.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-ember": "^10.5.8",
+    "ember-template-lint": "^4.3.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-ember": "^10.5.9",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-qunit": "^7.2.0",
     "faker": "5.5.3",
     "loader.js": "^4.7.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.0",
     "qunit": "^2.17.2",
     "qunit-dom": "^2.0.0",
     "sass": "1.48.0",
     "typescript": "^4.5.4",
-    "webpack": "^5.66.0"
+    "webpack": "^5.70.0"
   },
   "engines": {
     "node": "12.* || 14.* || >= 16"
