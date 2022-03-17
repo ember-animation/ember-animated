@@ -133,7 +133,7 @@ importers:
       prettier: ^2.6.0
       qunit: ^2.18.0
       qunit-dom: ^2.0.0
-      sass: 1.48.0
+      sass: ^1.49.9
       typescript: ^4.6.2
       webpack: ^5.70.0
     devDependencies:
@@ -188,7 +188,7 @@ importers:
       prettier: 2.6.0
       qunit: 2.18.0
       qunit-dom: 2.0.0
-      sass: 1.48.0
+      sass: 1.49.9
       typescript: 4.6.2
       webpack: 5.70.0
 
@@ -14297,16 +14297,6 @@ packages:
       micromatch: 4.0.4
       minimist: 1.2.5
       walker: 1.0.8
-    dev: true
-
-  /sass/1.48.0:
-    resolution: {integrity: sha512-hQi5g4DcfjcipotoHZ80l7GNJHGqQS5LwMBjVYB/TaT0vcSSpbgM8Ad7cgfsB2M0MinbkEQQPO9+sjjSiwxqmw==}
-    engines: {node: '>=8.9.0'}
-    hasBin: true
-    dependencies:
-      chokidar: 3.5.3
-      immutable: 4.0.0
-      source-map-js: 1.0.2
     dev: true
 
   /sass/1.49.9:
