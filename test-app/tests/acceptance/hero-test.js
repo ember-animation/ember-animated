@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
-import { visit, click, currentURL } from '@ember/test-helpers';
+import { visit, click, currentURL, find, findAll } from '@ember/test-helpers';
 import { TimeControl, animationsSettled } from 'ember-animated/test-support';
 import { equalBounds } from '../helpers/assertions';
 
@@ -36,10 +36,8 @@ module('Acceptance | hero', function (hooks) {
     time.pause();
     await click('.hero-list-image');
     await time.advance(50);
-    let orphans = this.element.querySelectorAll(
-      '.animated-orphans .hero-list-image',
-    ).length;
-    let hiddenOrphans = this.element.querySelectorAll(
+    let orphans = findAll('.animated-orphans .hero-list-image').length;
+    let hiddenOrphans = findAll(
       '.animated-orphans .hero-list-image.ember-animated-hidden',
     ).length;
     assert.strictEqual(orphans, 8, 'orphans');
@@ -54,10 +52,8 @@ module('Acceptance | hero', function (hooks) {
     time.pause();
     await click('.hero-detail a');
     await time.advance(50);
-    let images = this.element.querySelectorAll(
-      '.hero-list .hero-list-image',
-    ).length;
-    let hiddenImages = this.element.querySelectorAll(
+    let images = findAll('.hero-list .hero-list-image').length;
+    let hiddenImages = findAll(
       '.hero-list .hero-list-image.ember-animated-hidden',
     ).length;
     assert.strictEqual(images, 8, 'images');
@@ -72,14 +68,10 @@ module('Acceptance | hero', function (hooks) {
     time.pause();
     await click('.hero-list-image');
     await time.advance(50);
-    let beforeInterruption = document
-      .querySelector('.hero-detail-image')
-      .getBoundingClientRect();
+    let beforeInterruption = find('.hero-detail-image').getBoundingClientRect();
     let back = visit('/demos/hero');
     await time.advance(0);
-    let afterInterruption = document
-      .querySelector('.hero-detail-image')
-      .getBoundingClientRect();
+    let afterInterruption = find('.hero-detail-image').getBoundingClientRect();
     assert.equalBounds(
       afterInterruption,
       beforeInterruption,

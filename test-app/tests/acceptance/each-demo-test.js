@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import {
   setupAnimationTest,
@@ -16,10 +16,7 @@ module('Acceptance | each demo', function (hooks) {
   test('visiting /eachdemo', async function (assert) {
     await visit('demos/eachdemo');
     assert.strictEqual(currentURL(), 'demos/eachdemo');
-    assert.ok(
-      this.element.querySelector('[data-test-item="A"]'),
-      'found first item',
-    );
+    assert.dom('[data-test-item="A"]').exists('found first item');
   });
 
   hooks.beforeEach(function (assert) {
@@ -36,14 +33,14 @@ module('Acceptance | each demo', function (hooks) {
 
   test('/eachdemo first removal', async function (assert) {
     await visit('/demos/eachdemo');
-    let APosition = bounds(this.element.querySelector('[data-test-item="A"]'));
-    let BPosition = bounds(this.element.querySelector('[data-test-item="B"]'));
+    let APosition = bounds(find('[data-test-item="A"]'));
+    let BPosition = bounds(find('[data-test-item="B"]'));
     time.pause();
-    await click(this.element.querySelector('[data-test-item="A"]'));
+    await click('[data-test-item="A"]');
     await time.advance(1000);
-    let B2Position = bounds(this.element.querySelector('[data-test-item="B"]'));
+    let B2Position = bounds(find('[data-test-item="B"]'));
     await time.advance(1000);
-    let B3Position = bounds(this.element.querySelector('[data-test-item="B"]'));
+    let B3Position = bounds(find('[data-test-item="B"]'));
     assert.strictEqual(B3Position.top, APosition.top, 'final B is initial A');
     assert.notEqual(
       B2Position.top,

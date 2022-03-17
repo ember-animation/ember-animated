@@ -1,7 +1,7 @@
 import { test, module } from 'qunit';
 import { TimeControl } from 'ember-animated/test-support';
 import { setupApplicationTest } from 'ember-qunit';
-import { currentURL, click, visit } from '@ember/test-helpers';
+import { currentURL, click, visit, find } from '@ember/test-helpers';
 import { findByText } from '../helpers/dom';
 
 let time;
@@ -26,12 +26,10 @@ module('Acceptance | bind', function (hooks) {
     let number;
 
     await visit('/demos/bind');
-    number = parseInt(this.element.querySelector('.left-count').textContent);
+    number = parseInt(find('.left-count').textContent);
 
-    await click(findByText(this.element, 'button', '+'));
-    let finalNumber = parseInt(
-      this.element.querySelector('.left-count').textContent,
-    );
+    await click(findByText('button', '+'));
+    let finalNumber = parseInt(find('.left-count').textContent);
     assert.strictEqual(finalNumber, number + 1);
   });
 });

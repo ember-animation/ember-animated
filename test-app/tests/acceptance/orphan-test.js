@@ -6,7 +6,7 @@ import {
   bounds,
 } from 'ember-animated/test-support';
 import { setupApplicationTest } from 'ember-qunit';
-import { currentURL, visit, click } from '@ember/test-helpers';
+import { currentURL, visit, click, find } from '@ember/test-helpers';
 
 module('Acceptance | orphan', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,14 +17,12 @@ module('Acceptance | orphan', function (hooks) {
     await visit('/demos/orphan');
     await time.advance(1000);
 
-    let opacity = parseFloat(
-      getComputedStyle(this.element.querySelector('.one')).opacity,
-    );
+    let opacity = parseFloat(getComputedStyle(find('.one')).opacity);
     let animating = opacity > 0 && opacity < 1;
     assert.ok(animating, `expected opacity to be animating, it's ${opacity}`);
 
-    let onePosition = bounds(this.element.querySelector('.one')).left;
-    let twoPosition = bounds(this.element.querySelector('.two')).left;
+    let onePosition = bounds(find('.one')).left;
+    let twoPosition = bounds(find('.two')).left;
 
     assert.ok(
       twoPosition > onePosition,
@@ -40,17 +38,15 @@ module('Acceptance | orphan', function (hooks) {
     await animationsSettled();
 
     time.pause();
-    await click(this.element.querySelector('button'));
+    await click('button');
     await time.advance(1000);
 
-    let opacity = parseFloat(
-      getComputedStyle(this.element.querySelector('.one')).opacity,
-    );
+    let opacity = parseFloat(getComputedStyle(find('.one')).opacity);
     let animating = opacity > 0 && opacity < 1;
     assert.ok(animating, `expected opacity to be animating, it's ${opacity}`);
 
-    let onePosition = bounds(this.element.querySelector('.one')).left;
-    let twoPosition = bounds(this.element.querySelector('.two')).left;
+    let onePosition = bounds(find('.one')).left;
+    let twoPosition = bounds(find('.two')).left;
     assert.ok(
       twoPosition > onePosition,
       `expected element .two to be animating out, ${twoPosition} > ${onePosition}`,

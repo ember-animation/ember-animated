@@ -18,14 +18,8 @@ module('Acceptance | here there', function (hooks) {
   test('visiting /here-there', async function (assert) {
     await visit('/demos/here-there');
     assert.strictEqual(currentURL(), '/demos/here-there');
-    assert.ok(
-      this.element.querySelector('.left .demo-item'),
-      'found left item',
-    );
-    assert.notOk(
-      this.element.querySelector('.right .demo-item'),
-      'did not find left item',
-    );
+    assert.dom('.left .demo-item').exists('found left item');
+    assert.dom('.right .demo-item').doesNotExist('did not find left item');
   });
 
   test('toggling without grouping', async function (assert) {
@@ -33,42 +27,22 @@ module('Acceptance | here there', function (hooks) {
     // touch the TimeControl. If it erroneously animates, it will hang
     // and timeout.
     await visit('/demos/here-there');
-    await click(this.element.querySelector('.scenario-here-there button'));
-    assert.notOk(
-      this.element.querySelector('.left .demo-item'),
-      'did not find left item',
-    );
-    assert.ok(
-      this.element.querySelector('.right .demo-item'),
-      'found right item',
-    );
+    await click('.scenario-here-there button');
+    assert.dom('.left .demo-item').doesNotExist('did not find left item');
+    assert.dom('.right .demo-item').exists('found right item');
   });
 
   test('toggling with grouping', async function (assert) {
     await visit('/demos/here-there');
-    await click(
-      this.element.querySelector('.scenario-here-there input[type="checkbox"]'),
-    );
-    await click(this.element.querySelector('.scenario-here-there button'));
+    await click('.scenario-here-there input[type="checkbox"]');
+    await click('.scenario-here-there button');
     await time.advance(100);
-    assert.ok(
-      this.element.querySelector('.left .demo-item'),
-      'left item in flight',
-    );
-    assert.ok(
-      this.element.querySelector('.right .demo-item'),
-      'right item in flight',
-    );
+    assert.dom('.left .demo-item').exists('left item in flight');
+    assert.dom('.right .demo-item').exists('right item in flight');
     time.runAtSpeed(60);
     await animationsSettled();
 
-    assert.notOk(
-      this.element.querySelector('.left .demo-item'),
-      'did not find left item',
-    );
-    assert.ok(
-      this.element.querySelector('.right .demo-item'),
-      'found right item',
-    );
+    assert.dom('.left .demo-item').doesNotExist('did not find left item');
+    assert.dom('.right .demo-item').exists('found right item');
   });
 });

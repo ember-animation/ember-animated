@@ -13,7 +13,7 @@ module('Integration | Component | animated if', function (hooks) {
         <div class="truthy"></div>
       {{/animated-if}}
     `);
-    assert.ok(this.element.querySelector('.truthy'));
+    assert.dom('.truthy').exists();
   });
 
   test('it does not render when false', async function (assert) {
@@ -22,7 +22,7 @@ module('Integration | Component | animated if', function (hooks) {
         <div class="truthy"></div>
       {{/animated-if}}
     `);
-    assert.notOk(this.element.querySelector('.truthy'));
+    assert.dom('.truthy').doesNotExist();
   });
 
   test('it renders inverse block when false', async function (assert) {
@@ -33,6 +33,6 @@ module('Integration | Component | animated if', function (hooks) {
         <div class="falsey"></div>
       {{/animated-if}}
     `);
-    assert.ok(this.element.querySelector('.falsey'));
+    assert.dom('.falsey').exists();
   });
 });

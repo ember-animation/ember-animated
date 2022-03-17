@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL } from '@ember/test-helpers';
+import { visit, currentURL, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { TimeControl } from 'ember-animated/test-support';
 import { click } from '@ember/test-helpers';
@@ -27,12 +27,10 @@ module('Acceptance | value demo', function (hooks) {
     let number;
 
     await visit('/demos/valuedemo');
-    number = parseInt(this.element.querySelector('.numbers').textContent);
+    number = parseInt(find('.numbers').textContent);
 
-    await click(findByText(this.element, 'button', '+'));
-    let finalNumber = parseInt(
-      this.element.querySelector('.numbers').textContent,
-    );
+    await click(findByText('button', '+'));
+    let finalNumber = parseInt(find('.numbers').textContent);
     assert.strictEqual(finalNumber, number + 1);
   });
 });

@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, settled } from '@ember/test-helpers';
+import { render, settled, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { animationsSettled, bounds } from 'ember-animated/test-support';
 
@@ -77,7 +77,7 @@ module('Integration | Component | animated-beacon', function (hooks) {
 {{/animated-value}}
 `);
 
-    alpha = this.element.querySelector('.alpha');
+    alpha = find('.alpha');
     this.set('showIt', true);
     await settled();
     await animationsSettled();

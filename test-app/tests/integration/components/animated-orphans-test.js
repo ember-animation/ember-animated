@@ -1,7 +1,7 @@
 /* eslint-disable qunit/no-conditional-assertions */
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { animationsSettled } from 'ember-animated/test-support';
 import { wait, Motion } from 'ember-animated';
@@ -105,9 +105,7 @@ module('Integration | Component | animated orphans', function (hooks) {
   `);
     await animationsSettled();
 
-    let firstBounds = this.element
-      .querySelector('.one')
-      .getBoundingClientRect();
+    let firstBounds = find('.one').getBoundingClientRect();
 
     this.set('t1', function* ({ removedSprites }) {
       assert.strictEqual(removedSprites.length, 1, 'second transition');

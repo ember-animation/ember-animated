@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import {
   TimeControl,
@@ -41,30 +41,22 @@ module('Acceptance | svg', function (hooks) {
 
   test('bubbles move smoothly at start of animation', async function (assert) {
     await visit('/demos/svg');
-    let initialBounds = boundsById(this.element.querySelectorAll('circle'));
+    let initialBounds = boundsById(findAll('circle'));
     time = new TimeControl();
-    await click(this.element.querySelector('button'));
+    await click('button');
     await time.advance(10);
-    assert.allClose(
-      5,
-      initialBounds,
-      boundsById(this.element.querySelectorAll('circle')),
-    );
+    assert.allClose(5, initialBounds, boundsById(findAll('circle')));
   });
 
   test('bubbles move smoothly at end of animation', async function (assert) {
     await visit('/demos/svg');
     time = new TimeControl();
-    await click(this.element.querySelector('button'));
+    await click('button');
     await time.advance(990);
-    let initialBounds = boundsById(this.element.querySelectorAll('circle'));
+    let initialBounds = boundsById(findAll('circle'));
     await time.advance(20);
     await animationsSettled();
-    assert.allClose(
-      5,
-      initialBounds,
-      boundsById(this.element.querySelectorAll('circle')),
-    );
+    assert.allClose(5, initialBounds, boundsById(findAll('circle')));
   });
 });
 

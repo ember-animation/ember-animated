@@ -5,7 +5,7 @@ import { shiftedBounds } from 'ember-animated/-private/bounds';
 import Sprite from 'ember-animated/-private/sprite';
 import { hbs } from 'ember-cli-htmlbars';
 import { bounds, setupAnimationTest } from 'ember-animated/test-support';
-import { render, settled } from '@ember/test-helpers';
+import { render, settled, find } from '@ember/test-helpers';
 import {
   equalBounds,
   visuallyConstant,
@@ -946,11 +946,11 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     assert.strictEqual(
       parent.element,
-      this.element.querySelector('svg'),
+      find('svg'),
       'the offset parent sprite should be the <svg> element',
     );
   });
@@ -964,11 +964,11 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     assert.strictEqual(
       parent.element,
-      this.element.querySelector('.inside'),
+      find('.inside'),
       'the offset parent sprite should be the inside <svg> element',
     );
   });
@@ -984,11 +984,11 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     assert.strictEqual(
       parent.element,
-      this.element.querySelector('.inside'),
+      find('.inside'),
       'the offset parent sprite should be the inside <svg> element',
     );
   });
@@ -1000,7 +1000,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
@@ -1043,7 +1043,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
@@ -1083,7 +1083,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
@@ -1123,7 +1123,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
@@ -1165,7 +1165,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 </svg>
 `);
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
@@ -1193,11 +1193,11 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
     // we're going to move the target from being relative to
     // intermediate to being relative to sibling
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
-    let destination = new Sprite(this.element.querySelector('.sibling'), true);
+    let destination = new Sprite(find('.sibling'), true);
 
     await assert.visuallyConstant(
       target,
@@ -1223,11 +1223,11 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
     // we're going to move the target from being relative to
     // intermediate to being relative to sibling
 
-    let target = this.element.querySelector('.target');
+    let target = find('.target');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
-    let destination = new Sprite(this.element.querySelector('.sibling'), true);
+    let destination = new Sprite(find('.sibling'), true);
 
     await assert.visuallyConstant(
       target,
@@ -1242,7 +1242,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('sprites cleanup their classlist', async function (assert) {
     await render(hbs`<div class="a"></div>`);
-    let target = this.element.querySelector('.a');
+    let target = find('.a');
 
     let parent = Sprite.offsetParentEndingAt(target);
     let sprite = Sprite.positionedEndingAt(target, parent);
@@ -1260,7 +1260,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
   test('sprites cleanup classlist correctly when there are dynamic classes', async function (assert) {
     await render(hbs`<div class="a {{if this.showB "b"}}"></div>`);
 
-    let target = this.element.querySelector('.a');
+    let target = find('.a');
     let parent = Sprite.offsetParentStartingAt(target);
     let sprite = Sprite.positionedStartingAt(target, parent);
 
