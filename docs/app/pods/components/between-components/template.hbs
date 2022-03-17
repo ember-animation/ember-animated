@@ -54,7 +54,7 @@
             {{on "click" (fn this.removeItem item)}}
           >
           <div class="message">{{item.message}}</div>
-          <div class="date">{{moment-format this.now "MMM D"}}</div>
+          <div class="date">{{moment-format (now) "MMM D"}}</div>
         </div>
       {{/animated-each}}
     </div>
