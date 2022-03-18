@@ -1,3 +1,21 @@
+
+## v1.0.0 (2022-03-18)
+
+#### :boom: Breaking Change
+* [#397](https://github.com/ember-animation/ember-animated/pull/397) V2 addon ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :house: Internal
+* [#423](https://github.com/ember-animation/ember-animated/pull/423) Replace usage of `this.element` with test helpers ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#426](https://github.com/ember-animation/ember-animated/pull/426) Add `publishConfig.registry` to addon/package.json ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#419](https://github.com/ember-animation/ember-animated/pull/419) Run `npx ember-cli-update --to=v4.2.0` to align with the latest bluep… ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#400](https://github.com/ember-animation/ember-animated/pull/400) Remove unused BEGIN-SNIPPET/END-SNIPPET from test-app ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#388](https://github.com/ember-animation/ember-animated/pull/388) Convert addon setup to monorepo ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#370](https://github.com/ember-animation/ember-animated/pull/370) Run `npx ember-cli-update --to=4.1.0` to sync with the latest blueprint ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#377](https://github.com/ember-animation/ember-animated/pull/377) Disable TypeScript scenarios for now ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 1
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+
 # 0.12.0
  - BREAKING: drop support for Node < 12
  - BREAKING: drop support for Ember < 3.16

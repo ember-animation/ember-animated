@@ -1,6 +1,6 @@
 {
   "name": "test-app",
-  "version": "0.12.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Core animation primitives for Ember",
   "keywords": [
@@ -47,7 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
     "broccoli-asset-rev": "^3.0.0",
-    "ember-animated": "workspace:*",
+    "ember-animated": "1.0.0",
     "ember-animated-tools": "file:../ember-animated-tools-0.5.0.tgz",
     "ember-auto-import": "^2.4.0",
     "ember-cli": "~4.2.0",
