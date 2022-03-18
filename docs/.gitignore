@@ -10,9 +10,10 @@
 
 # misc
 /.env*
-/.pnp*
-/.sass-cache
 /.eslintcache
+/.pnp*
+/.pnpm-debug.log
+/.sass-cache
 /connect.lock
 /coverage/
 /libpeerconnection.log
