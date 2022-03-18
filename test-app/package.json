@@ -48,7 +48,7 @@
     "@typescript-eslint/parser": "^5.15.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-animated": "1.0.0",
-    "ember-animated-tools": "file:../ember-animated-tools-0.5.0.tgz",
+    "ember-animated-tools": "^1.0.0",
     "ember-auto-import": "^2.4.0",
     "ember-cli": "~4.2.0",
     "ember-cli-babel": "^7.26.11",
