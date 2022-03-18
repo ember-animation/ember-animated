@@ -33,7 +33,7 @@
     "@ember/string": "^3.0.0",
     "@ember/test-helpers": "^2.6.0",
     "@fortawesome/ember-fontawesome": "^0.3.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^6.1.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "broccoli-asset-rev": "^3.0.0",
