@@ -9,6 +9,9 @@
     "docs",
     "test-app"
   ],
+  "scripts": {
+    "release": "release-it"
+  },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
