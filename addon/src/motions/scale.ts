@@ -1,6 +1,7 @@
 import { rAF } from '../-private/concurrency-helpers';
-import Motion from '../-private/motion';
-import Tween from '../-private/tween';
+import Motion, { BaseOptions } from '../-private/motion';
+import Sprite from '../-private/sprite';
+import Tween, { TweenLike } from '../-private/tween';
 
 /**
   Smoothly scales _sprite_ from its the initial size to its final size.
@@ -19,19 +20,26 @@ import Tween from '../-private/tween';
   @param {Sprite} sprite
   @return {Motion}
 */
-export default function scale(sprite, opts) {
+export default function scale(
+  sprite: Sprite,
+  opts: Partial<ScaleOptions> = {},
+) {
   return new Scale(sprite, opts).run();
 }
 
-export class Scale extends Motion {
-  constructor(sprite, opts) {
-    super(sprite, opts);
-    this.widthTween = null;
-    this.heightTween = null;
-  }
+interface ScaleOptions extends BaseOptions {
+  easing: (time: number) => number;
+}
+
+export class Scale extends Motion<ScaleOptions> {
+  widthTween: TweenLike | null = null;
+  heightTween: TweenLike | null = null;
 
   *animate() {
+    this.sprite.assertHasInitialBounds();
+    this.sprite.assertHasFinalBounds();
     let sprite = this.sprite;
+
     let duration = this.duration;
 
     let initialWidthFactor, initialHeightFactor;

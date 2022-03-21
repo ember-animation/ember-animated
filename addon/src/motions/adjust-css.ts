@@ -1,6 +1,7 @@
-import Motion from '../-private/motion';
-import Tween from '../-private/tween';
+import Motion, { BaseOptions } from '../-private/motion';
+import Tween, { TweenLike } from '../-private/tween';
 import { rAF } from '../-private/concurrency-helpers';
+import Sprite, { CopiedCSS } from '../-private/sprite';
 
 /**
   Animates the change in style of a Sprite. Applies to CSS properties that are a unit and a number (font-size, letter spacing, etc.).
@@ -12,40 +13,57 @@ import { rAF } from '../-private/concurrency-helpers';
   @param {Object} options
   @return {Motion}
 */
-export default function adjustCSS(propertyName, sprite, opts) {
+export default function adjustCSS(
+  propertyName: keyof CopiedCSS,
+  sprite: Sprite,
+  opts: Partial<AdjustCSSOptions> = {},
+) {
   return new AdjustCSS(propertyName, sprite, opts).run();
 }
 
-adjustCSS.property = function (propertyName) {
+adjustCSS.property = function (propertyName: keyof CopiedCSS) {
   return this.bind(null, propertyName);
 };
 
-export class AdjustCSS extends Motion {
-  constructor(propertyName, sprite, opts) {
+interface AdjustCSSOptions extends BaseOptions {
+  easing: (time: number) => number;
+}
+
+export class AdjustCSS extends Motion<AdjustCSSOptions> {
+  prior: AdjustCSS | null | undefined = null;
+  tween: TweenLike | null = null;
+
+  constructor(
+    readonly propertyName: keyof CopiedCSS,
+    sprite: Sprite,
+    opts: Partial<AdjustCSSOptions> = {},
+  ) {
     super(sprite, opts);
-    this.propertyName = propertyName;
-    this.prior = null;
-    this.tween = null;
   }
 
-  interrupted(motions) {
+  interrupted(motions: Motion[]) {
     this.prior = motions.find(
       (m) => m instanceof AdjustCSS && m.propertyName === this.propertyName,
-    );
+      // SAFETY: We just checked that it's an instance of AdjustCSS
+    ) as AdjustCSS | undefined;
   }
 
   *animate() {
     let { value: finalValue, unit } = this._splitUnit(
-      this.sprite.finalComputedStyle[this.propertyName],
+      this.sprite.finalComputedStyle![this.propertyName],
     );
     if (this.prior) {
+      let prior: AdjustCSS = this.prior;
+      prior.assertHasTween();
+
       this.tween = new Tween(
         0,
-        finalValue - this.prior.tween.finalValue,
+        finalValue - prior.tween.finalValue,
         this.duration,
         this.opts.easing,
-      ).plus(this.prior.tween);
+      ).plus(prior.tween);
     } else {
+      this.sprite.assertHasInitialBounds();
       this.tween = new Tween(
         this._splitUnit(
           this.sprite.initialComputedStyle[this.propertyName],
@@ -63,7 +81,7 @@ export class AdjustCSS extends Motion {
     }
   }
 
-  _splitUnit(s) {
+  _splitUnit(s: string) {
     if (this.propertyName === 'letter-spacing' && s === 'normal') {
       return {
         value: 0,
@@ -81,4 +99,14 @@ export class AdjustCSS extends Motion {
       unit: m[2] || '',
     };
   }
+
+  assertHasTween(): asserts this is AdjustCSSWithTween {
+    if (!this.tween) {
+      throw new Error(`motion does not have tween`);
+    }
+  }
+}
+
+interface AdjustCSSWithTween extends AdjustCSS {
+  tween: TweenLike;
 }

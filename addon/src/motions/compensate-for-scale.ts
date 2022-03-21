@@ -1,21 +1,25 @@
 import { rAF } from '../-private/concurrency-helpers';
-import Motion from '../-private/motion';
+import Motion, { BaseOptions } from '../-private/motion';
+import Sprite from '../-private/sprite';
 import Tween from '../-private/tween';
 
-export default function compensateForScale(sprite, opts) {
+export default function compensateForScale(
+  sprite: Sprite,
+  opts: Partial<BaseOptions> = {},
+) {
   return new CompensateForScale(sprite, opts).run();
 }
 
 export class CompensateForScale extends Motion {
-  constructor(sprite, opts) {
-    super(sprite, opts);
-    this.widthTween = null;
-    this.heightTween = null;
-  }
+  widthTween: Tween | null = null;
+  heightTween: Tween | null = null;
 
   *animate() {
-    let sprite = this.sprite;
     let duration = this.duration;
+
+    this.sprite.assertHasInitialBounds();
+    this.sprite.assertHasFinalBounds();
+    let sprite = this.sprite;
 
     let widthFactor =
       sprite.finalCumulativeTransform.a / sprite.initialCumulativeTransform.a;

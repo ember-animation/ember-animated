@@ -1,6 +1,7 @@
 import { rAF } from '../-private/concurrency-helpers';
-import Motion from '../-private/motion';
-import Tween from '../-private/tween';
+import Motion, { BaseOptions } from '../-private/motion';
+import Sprite from '../-private/sprite';
+import Tween, { TweenLike } from '../-private/tween';
 
 /**
   Animates _sprite_ from its initial position to its final position.
@@ -18,26 +19,31 @@ import Tween from '../-private/tween';
   @param {Sprite} sprite
   @return {Motion}
 */
-export default function move(sprite, opts) {
+export default function move(sprite: Sprite, opts: Partial<MoveOptions> = {}) {
   return new Move(sprite, opts).run();
 }
 
-export class Move extends Motion {
-  constructor(sprite, opts) {
-    super(sprite, opts);
-    this.prior = null;
-    this.xTween = null;
-    this.yTween = null;
-  }
+export interface MoveOptions extends BaseOptions {
+  easing: (time: number) => number;
+}
 
-  interrupted(motions) {
+export class Move<T extends MoveOptions = MoveOptions> extends Motion<T> {
+  prior: Move | undefined | null = null;
+  xTween: TweenLike | null = null;
+  yTween: TweenLike | null = null;
+
+  interrupted(motions: Motion[]) {
     // We only need to track the prior Move we are replacing here,
     // because it will have done the same for any earlier ones.
-    this.prior = motions.find((m) => m instanceof Move);
+    // SAFETY: We know this is a Move because we checked the instance type.
+    this.prior = motions.find((m) => m instanceof Move) as Move | undefined;
   }
 
   *animate() {
     let duration = this.duration;
+
+    this.sprite.assertHasInitialBounds();
+    this.sprite.assertHasFinalBounds();
     let sprite = this.sprite;
 
     // How far our sprite needs to move.
@@ -67,9 +73,12 @@ export class Move extends Motion {
         this.opts.easing,
       );
     } else {
+      let prior: Move = this.prior;
+      prior.assertHasTweens();
+
       // Here we are interrupting a prior Move.
-      let priorXTween = this.prior.xTween;
-      let priorYTween = this.prior.yTween;
+      let priorXTween = prior.xTween;
+      let priorYTween = prior.yTween;
 
       // The transformDiffs account for the fact that our old and new
       // tweens may be measuring from different origins.
@@ -100,19 +109,20 @@ export class Move extends Motion {
         transformDiffX + dx,
         durationX,
         this.opts.easing,
-      ).plus(this.prior.xTween);
+      ).plus(prior.xTween);
       this.yTween = new Tween(
         transformDiffY,
         transformDiffY + dy,
         durationY,
         this.opts.easing,
-      ).plus(this.prior.yTween);
+      ).plus(prior.yTween);
     }
 
     yield* this._moveIt();
   }
 
   *_moveIt() {
+    this.assertHasTweens();
     let sprite = this.sprite;
     while (!this.xTween.done || !this.yTween.done) {
       sprite.translate(
@@ -122,15 +132,29 @@ export class Move extends Motion {
       yield rAF();
     }
   }
+
+  assertHasTweens(): asserts this is MoveWithTweens {
+    if (!this.xTween) {
+      throw new Error(`motion does not have xTween`);
+    }
+    if (!this.yTween) {
+      throw new Error(`motion does not have yTween`);
+    }
+  }
+}
+
+interface MoveWithTweens extends Move {
+  xTween: TweenLike;
+  yTween: TweenLike;
 }
 
 // Because sitting around while your sprite animates by 3e-15 pixels
 // is no fun.
-function fuzzyZero(number) {
+function fuzzyZero(number: number) {
   return Math.abs(number) < 0.00001;
 }
 
-export function continuePrior(sprite, opts) {
+export function continuePrior(sprite: Sprite, opts: Partial<MoveOptions> = {}) {
   return new ContinuePrior(sprite, opts).run();
 }
 
