@@ -1,5 +1,5 @@
 import Motion, { type BaseOptions } from '../-private/motion';
-import Tween, { TweenLike } from '../-private/tween';
+import Tween, { type TweenLike } from '../-private/tween';
 import { rAF } from '../-private/concurrency-helpers';
 import { type default as Sprite, type CopiedCSS } from '../-private/sprite';
 

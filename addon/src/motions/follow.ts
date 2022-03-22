@@ -1,4 +1,4 @@
-import { Move, MoveOptions } from './move';
+import { Move, type MoveOptions } from './move';
 import { rAF } from '../-private/concurrency-helpers';
 import type Sprite from '../-private/sprite';
 import Tween from '../-private/tween';

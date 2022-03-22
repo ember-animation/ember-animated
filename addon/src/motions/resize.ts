@@ -1,6 +1,6 @@
 import { rAF } from '../-private/concurrency-helpers';
 import Motion, { type BaseOptions } from '../-private/motion';
-import Tween, { DerivedTween } from '../-private/tween';
+import Tween, { type DerivedTween } from '../-private/tween';
 import type Sprite from '../-private/sprite';
 
 interface Options extends BaseOptions {

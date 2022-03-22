@@ -1,6 +1,6 @@
 import { DEBUG } from '@glimmer/env';
-import TransitionContext from './transition-context';
-import Sprite from './sprite';
+import type TransitionContext from './transition-context';
+import type Sprite from './sprite';
 
 let printSprites;
 

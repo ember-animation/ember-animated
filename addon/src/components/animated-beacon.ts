@@ -1,10 +1,10 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { task, Task } from '../-private/ember-scheduler';
+import { task, type Task } from '../-private/ember-scheduler';
 import { afterRender, microwait } from '../-private/concurrency-helpers';
 import { componentNodes } from '../-private/ember-internals';
 import Sprite from '../-private/sprite';
-import MotionService from '../services/-ea-motion';
+import type MotionService from '../services/-ea-motion';
 
 /**
   A component that marks a region of the page that

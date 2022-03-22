@@ -2,7 +2,7 @@ import { spawnChild } from './scheduler';
 import { rAF, microwait } from './concurrency-helpers';
 import { continuedFromElement } from './motion-bridge';
 import TransitionContext from './transition-context';
-import Sprite from './sprite';
+import type Sprite from './sprite';
 import { getOrCreate } from './singleton';
 
 const motions = getOrCreate<WeakMap<Element, Motion[]>>(

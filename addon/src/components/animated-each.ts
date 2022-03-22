@@ -3,7 +3,7 @@ import { computed, get, action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import assertNever from 'assert-never';
-import { task, Task } from '../-private/ember-scheduler';
+import { task, type Task } from '../-private/ember-scheduler';
 import { current } from '../-private/scheduler';
 import { afterRender, microwait } from '../-private/concurrency-helpers';
 import TransitionContext, {
@@ -13,8 +13,8 @@ import Sprite from '../-private/sprite';
 import { componentNodes, keyForArray } from '../-private/ember-internals';
 import partition from '../-private/partition';
 import Child from '../-private/child';
-import MotionService from '../services/-ea-motion';
-import { Transition } from '../-private/transition';
+import type MotionService from '../services/-ea-motion';
+import type { Transition } from '../-private/transition';
 
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list.
