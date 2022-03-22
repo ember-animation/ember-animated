@@ -9,7 +9,8 @@
 import { get } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import Ember from 'ember';
-import Component from '@ember/component';
+import type Component from '@ember/component';
+
 const { getViewBounds } = Ember.ViewUtils as unknown as {
   getViewBounds(view: Component): { firstNode: Node; lastNode: Node };
 };

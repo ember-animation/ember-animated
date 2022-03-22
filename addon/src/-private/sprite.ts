@@ -9,7 +9,7 @@ import {
   resizedBounds,
   emptyBounds,
 } from './bounds';
-import Child from './child';
+import type Child from './child';
 import { getOrCreate } from './singleton';
 
 const inFlight = getOrCreate('sprite', () => new WeakMap());

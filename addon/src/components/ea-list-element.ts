@@ -1,7 +1,7 @@
 import { warn } from '@ember/debug';
 import Component from '@ember/component';
 import { componentNodes } from '../-private/ember-internals';
-import Child from '../-private/child';
+import type Child from '../-private/child';
 
 /*
    This component has one job: tracking which DOM elements correspond

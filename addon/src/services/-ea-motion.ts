@@ -1,7 +1,9 @@
-import EmberObject, { computed } from '@ember/object';
+import type EmberObject from '@ember/object';
+import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
-import { task, Task } from '../-private/ember-scheduler';
+import type { Task } from '../-private/ember-scheduler';
+import { task } from '../-private/ember-scheduler';
 import {
   microwait,
   rAF,

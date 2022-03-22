@@ -1,4 +1,4 @@
-import TransitionContext from 'src/-private/transition-context';
+import type TransitionContext from 'src/-private/transition-context';
 import opacity from '../motions/opacity';
 
 /**

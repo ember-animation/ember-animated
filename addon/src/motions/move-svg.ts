@@ -1,6 +1,6 @@
 import Motion, { type BaseOptions } from '../-private/motion';
 import { type default as Sprite, type SVGPosition } from '../-private/sprite';
-import Tween, { TweenLike } from '../-private/tween';
+import Tween, { type TweenLike } from '../-private/tween';
 import { rAF } from '../-private/concurrency-helpers';
 
 export default function moveSVG(

@@ -3,12 +3,12 @@ import Component from '@ember/component';
 import { alias } from '@ember/object/computed';
 import { action } from '@ember/object';
 import { Resize } from '../motions/resize';
-import { task, Task } from '../-private/ember-scheduler';
+import { task, type Task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
 import { afterRender, microwait } from '../-private/concurrency-helpers';
 import { componentNodes } from '../-private/ember-internals';
-import MotionService from '../services/-ea-motion';
-import { MotionConstructor } from '../-private/motion';
+import type MotionService from '../services/-ea-motion';
+import type { MotionConstructor } from '../-private/motion';
 
 /**
  Provides a boundary between animator components and the surrounding document
