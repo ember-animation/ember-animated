@@ -8,9 +8,9 @@ import {
   afterRender,
   allSettled,
 } from '../-private/concurrency-helpers';
-import Sprite from '../-private/sprite';
-import Child from '../-private/child';
-import { Transition } from '../-private/transition';
+import type Sprite from '../-private/sprite';
+import type Child from '../-private/child';
+import type { Transition } from '../-private/transition';
 
 interface Animator extends EmberObject {
   beginStaticMeasurement(): void;

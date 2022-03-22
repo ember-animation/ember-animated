@@ -1,7 +1,7 @@
 import { BoxShadow, BoxShadowTween } from '../box-shadow';
-import Motion, { BaseOptions } from '../-private/motion';
+import Motion, { type BaseOptions } from '../-private/motion';
 import { rAF } from '../-private/concurrency-helpers';
-import Sprite from '../-private/sprite';
+import type Sprite from '../-private/sprite';
 
 export default function boxShadow(
   sprite: Sprite,

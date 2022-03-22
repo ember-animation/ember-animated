@@ -1,6 +1,6 @@
 import { rAF } from '../-private/concurrency-helpers';
-import Motion, { BaseOptions } from '../-private/motion';
-import Sprite, { CopiedCSS } from '../-private/sprite';
+import Motion, { type BaseOptions } from '../-private/motion';
+import { type default as Sprite, type CopiedCSS } from '../-private/sprite';
 import { Color, ColorTween } from '../color';
 
 export default function adjustColor(

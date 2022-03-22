@@ -1,6 +1,6 @@
 import { Move, MoveOptions } from './move';
 import { rAF } from '../-private/concurrency-helpers';
-import Sprite from '../-private/sprite';
+import type Sprite from '../-private/sprite';
 import Tween from '../-private/tween';
 
 export default function follow(

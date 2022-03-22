@@ -1,5 +1,5 @@
-import Motion, { BaseOptions } from '../-private/motion';
-import Sprite, { SVGPosition } from '../-private/sprite';
+import Motion, { type BaseOptions } from '../-private/motion';
+import { type default as Sprite, type SVGPosition } from '../-private/sprite';
 import Tween, { TweenLike } from '../-private/tween';
 import { rAF } from '../-private/concurrency-helpers';
 

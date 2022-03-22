@@ -1,7 +1,7 @@
-import Motion, { BaseOptions } from '../-private/motion';
+import Motion, { type BaseOptions } from '../-private/motion';
 import Tween, { TweenLike } from '../-private/tween';
 import { rAF } from '../-private/concurrency-helpers';
-import Sprite, { CopiedCSS } from '../-private/sprite';
+import { type default as Sprite, type CopiedCSS } from '../-private/sprite';
 
 /**
   Animates the change in style of a Sprite. Applies to CSS properties that are a unit and a number (font-size, letter spacing, etc.).

@@ -1,6 +1,6 @@
 import { rAF } from '../-private/concurrency-helpers';
-import Motion, { BaseOptions } from '../-private/motion';
-import Sprite from '../-private/sprite';
+import Motion, { type BaseOptions } from '../-private/motion';
+import type Sprite from '../-private/sprite';
 import Tween, { TweenLike } from '../-private/tween';
 import linear from '../easings/linear';
 
