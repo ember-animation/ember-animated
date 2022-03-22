@@ -98,6 +98,19 @@
       "./services/-ea-motion.js": "./dist/_app_/services/-ea-motion.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "*": [
+        "./dist/*"
+      ],
+      "test-support": [
+        "./dist/test-support/index.d.ts"
+      ]
+    }
+  },
   "volta": {
     "extends": "../package.json"
   }
