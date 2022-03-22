@@ -1,22 +1,36 @@
-import { Move } from './move';
+import { Move, MoveOptions } from './move';
 import { rAF } from '../-private/concurrency-helpers';
+import type Sprite from '../-private/sprite';
 import Tween from '../-private/tween';
 
-export default function follow(sprite, opts) {
+export default function follow(
+  sprite: Sprite,
+  opts: Partial<FollowOptions> = {},
+) {
   return new Follow(sprite, opts).run();
+}
+
+interface FollowOptions extends MoveOptions {
+  source: Move;
 }
 
 // Because we inherit from Move, if we are interrupted by a Move the
 // new Move will still preserve our momentum.
-export class Follow extends Move {
-  constructor(sprite, opts) {
+export class Follow extends Move<FollowOptions> {
+  readonly source: Move;
+
+  constructor(sprite: Sprite, opts: Partial<MoveOptions> = {}) {
     super(sprite, opts);
     if (!(this.opts.source instanceof Move)) {
       throw new Error('Follow requires a `source` Move to follow');
     }
+    this.source = this.opts.source;
   }
+
   *animate() {
-    let source = this.opts.source;
+    this.source.assertHasTweens();
+    let source = this.source;
+
     let sprite = this.sprite;
     let transformOffsetX = sprite.transform.tx - source.sprite.transform.tx;
     let transformOffsetY = sprite.transform.ty - source.sprite.transform.ty;

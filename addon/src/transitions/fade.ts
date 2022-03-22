@@ -1,3 +1,4 @@
+import TransitionContext from 'src/-private/transition-context';
 import opacity from '../motions/opacity';
 
 /**
@@ -25,7 +26,7 @@ export default function* ({
   insertedSprites,
   keptSprites,
   duration,
-}) {
+}: TransitionContext) {
   // We yield Promise.all here because we want to wait for this
   // step before starting what comes after.
   yield Promise.all(
@@ -36,6 +37,7 @@ export default function* ({
           duration: duration / 2,
         });
       }
+      return undefined;
     }),
   );
 

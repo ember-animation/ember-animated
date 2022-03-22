@@ -4,6 +4,12 @@ import { getOrCreate } from './singleton';
 
 const currentCurves = getOrCreate<MotionCurve[]>('tween', () => []);
 
+export interface TweenLike {
+  currentValue: number;
+  finalValue: number;
+  done: boolean;
+}
+
 /*
   A Tween automatically recalculates on demand at most once per
   animation frame. As long as you're using the rAF helper from
@@ -12,7 +18,7 @@ const currentCurves = getOrCreate<MotionCurve[]>('tween', () => []);
   time, we can avoid a lot of duplicate work and keep them in sync.
 */
 
-export default class Tween {
+export default class Tween implements TweenLike {
   private curve: MotionCurve;
   private diff: number;
 
@@ -34,22 +40,21 @@ export default class Tween {
   get done() {
     return this.curve.done;
   }
-  plus(otherTween: Tween | DerivedTween) {
+  plus(otherTween: TweenLike) {
     return new DerivedTween(
       [this, otherTween],
-      (a: Tween | DerivedTween, b: Tween | DerivedTween) =>
-        a.currentValue + b.currentValue,
+      (a: TweenLike, b: TweenLike) => a.currentValue + b.currentValue,
     );
   }
 }
 
-export class DerivedTween {
+export class DerivedTween implements TweenLike {
   private _finalValue: number | null = null;
-  private inputs: (Tween | DerivedTween)[];
+  private inputs: TweenLike[];
 
   constructor(
-    inputs: (Tween | DerivedTween)[],
-    private combinator: (...inputs: (Tween | DerivedTween)[]) => number,
+    inputs: TweenLike[],
+    private combinator: (...inputs: TweenLike[]) => number,
   ) {
     this._finalValue = null;
     this.inputs = inputs.map((t) => {

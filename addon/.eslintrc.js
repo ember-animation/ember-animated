@@ -31,6 +31,7 @@ module.exports = {
 
     'no-var': 'error',
     'no-constant-condition': ['error', { checkLoops: false }],
+    'no-dupe-class-members': 'off', // TS Checks this
     'require-yield': 0,
     semi: 0,
     '@typescript-eslint/adjacent-overload-signatures': 'error',

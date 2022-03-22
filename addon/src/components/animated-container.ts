@@ -112,7 +112,7 @@ export default class AnimatedContainerComponent extends Component {
     let node: Node | null = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
-        return node as Element;
+        return node as HTMLElement | SVGElement;
       }
       if (node === lastNode) {
         break;

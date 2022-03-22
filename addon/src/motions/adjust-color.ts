@@ -1,20 +1,35 @@
 import { rAF } from '../-private/concurrency-helpers';
-import Motion from '../-private/motion';
+import Motion, { type BaseOptions } from '../-private/motion';
+import { type default as Sprite, type CopiedCSS } from '../-private/sprite';
 import { Color, ColorTween } from '../color';
 
-export default function adjustColor(propertyName, sprite, opts) {
+export default function adjustColor(
+  propertyName: keyof CopiedCSS,
+  sprite: Sprite,
+  opts: Partial<AdjustColorOptions> = {},
+) {
   return new AdjustColor(propertyName, sprite, opts).run();
 }
 
-adjustColor.property = function (propertyName) {
+adjustColor.property = function (propertyName: keyof CopiedCSS) {
   return this.bind(null, propertyName);
 };
 
-export class AdjustColor extends Motion {
-  constructor(propertyName, sprite, opts) {
+interface AdjustColorOptions extends BaseOptions {
+  from: string;
+  to: string;
+  easing: (time: number) => number;
+}
+
+export class AdjustColor extends Motion<AdjustColorOptions> {
+  colorTween: ColorTween | null = null;
+
+  constructor(
+    readonly propertyName: keyof CopiedCSS,
+    sprite: Sprite,
+    opts: Partial<AdjustColorOptions> = {},
+  ) {
     super(sprite, opts);
-    this.propertyName = propertyName;
-    this.colorTween = null;
   }
 
   *animate() {
@@ -34,6 +49,7 @@ export class AdjustColor extends Motion {
       // an insertedSprite to an explicit color, and they expect the
       // "from" value to just match the way the sprite will
       // look when it's normal.
+      this.sprite.assertHasFinalBounds();
       from = Color.fromComputedStyle(
         this.sprite.finalComputedStyle[this.propertyName],
       );
@@ -46,6 +62,7 @@ export class AdjustColor extends Motion {
         this.sprite.finalComputedStyle[this.propertyName],
       );
     } else {
+      this.sprite.assertHasInitialBounds();
       to = Color.fromComputedStyle(
         this.sprite.initialComputedStyle[this.propertyName],
       );

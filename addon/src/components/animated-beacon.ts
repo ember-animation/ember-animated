@@ -87,13 +87,13 @@ export default class AnimatedBeacon extends Component {
     this.participate.perform();
   }
 
-  _firstChildElement(): Element | undefined {
+  _firstChildElement(): HTMLElement | SVGElement | undefined {
     if (this._inserted) {
       let { firstNode, lastNode } = componentNodes(this);
       let node: Node | null = firstNode;
       while (node) {
         if (node.nodeType === Node.ELEMENT_NODE) {
-          return node as Element;
+          return node as HTMLElement | SVGElement;
         }
         if (node === lastNode) {
           break;

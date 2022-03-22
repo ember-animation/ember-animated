@@ -1,9 +1,13 @@
 import { rAF } from '../-private/concurrency-helpers';
-import Motion from '../-private/motion';
-import Tween from '../-private/tween';
+import Motion, { type BaseOptions } from '../-private/motion';
+import type Sprite from '../-private/sprite';
+import Tween, { TweenLike } from '../-private/tween';
 import linear from '../easings/linear';
 
-export default function opacity(sprite, opts) {
+export default function opacity(
+  sprite: Sprite,
+  opts: Partial<OpacityOptions> = {},
+) {
   return new Opacity(sprite, opts).run();
 }
 
@@ -20,7 +24,7 @@ export default function opacity(sprite, opts) {
   @param {Sprite} sprite
   @return {Motion}
 */
-export function fadeIn(sprite, opts) {
+export function fadeIn(sprite: Sprite, opts: Partial<OpacityOptions> = {}) {
   let innerOpts = Object.assign(
     {
       to: 1,
@@ -43,7 +47,7 @@ export function fadeIn(sprite, opts) {
   @param {Sprite} sprite
   @return {Motion}
 */
-export function fadeOut(sprite, opts) {
+export function fadeOut(sprite: Sprite, opts: Partial<OpacityOptions> = {}) {
   let innerOpts = Object.assign(
     {
       to: 0,
@@ -53,15 +57,21 @@ export function fadeOut(sprite, opts) {
   return opacity(sprite, innerOpts);
 }
 
-export class Opacity extends Motion {
-  constructor(sprite, opts) {
-    super(sprite, opts);
-    this.prior = null;
-    this.tween = null;
-  }
+interface OpacityOptions extends BaseOptions {
+  from: number;
+  to: number;
+  easing: (time: number) => number;
+}
 
-  interrupted(motions) {
-    this.prior = motions.find((m) => m instanceof this.constructor);
+export class Opacity extends Motion<OpacityOptions> {
+  prior: Opacity | null | undefined = null;
+  tween: TweenLike | null = null;
+
+  interrupted(motions: Motion[]) {
+    // SAFTEY: We just checked the types
+    this.prior = motions.find((m) => m instanceof this.constructor) as
+      | Opacity
+      | undefined;
   }
 
   /*
@@ -80,10 +90,13 @@ export class Opacity extends Motion {
     let from;
 
     if (this.prior) {
+      let prior: Opacity = this.prior;
+      prior.assertHasTween();
+
       // when we're interrupting a prior opacity motion, we always
       // take its value as our starting point, regardless of whether
       // the user set a "from" option.
-      from = this.prior.tween.currentValue;
+      from = prior.tween.currentValue;
     } else {
       // otherwise we start at the user-provided option, the sprite's
       // found initial opacity, or zero, in that priority order.
@@ -110,4 +123,14 @@ export class Opacity extends Motion {
       yield rAF();
     }
   }
+
+  assertHasTween(): asserts this is OpacityWithTween {
+    if (!this.tween) {
+      throw new Error(`motion does not have tween`);
+    }
+  }
+}
+
+interface OpacityWithTween extends Opacity {
+  tween: TweenLike;
 }

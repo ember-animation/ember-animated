@@ -337,7 +337,7 @@ export default class AnimatedEach extends Component {
     let node: Node | null = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
-        yield node as Element;
+        yield node as HTMLElement | SVGElement;
       }
       if (node === lastNode) {
         break;

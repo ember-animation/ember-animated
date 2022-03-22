@@ -28,3 +28,5 @@ export { default as Motion } from './-private/motion';
 export { continueMotions } from './-private/motion-bridge';
 
 export { default as Tween } from './-private/tween';
+
+export type { default as Sprite } from './-private/sprite';

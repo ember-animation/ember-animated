@@ -86,7 +86,12 @@ export default class AnimatedOrphans extends Component {
   @action
   reanimate() {
     if (!this.get('startAnimation.isRunning' as any)) {
-      let ownSprite = new Sprite(this.element, true, null, null);
+      let ownSprite = new Sprite(
+        this.element as HTMLElement | SVGElement,
+        true,
+        null,
+        null,
+      );
       let activeSprites = this._findActiveSprites(ownSprite);
       this.animate.perform({ ownSprite, activeSprites });
     }
@@ -303,7 +308,10 @@ export default class AnimatedOrphans extends Component {
           element.remove();
           return undefined;
         } else {
-          let sprite = Sprite.positionedStartingAt(element, ownSprite);
+          let sprite = Sprite.positionedStartingAt(
+            element as HTMLElement | SVGElement,
+            ownSprite,
+          );
           sprite.owner = child;
           // we need to flag each existing child for removal at the
           // start of each animation. That's what reinitializes its
@@ -336,7 +344,7 @@ export default class AnimatedOrphans extends Component {
 
   _prepareSprite(sprite: Sprite) {
     sprite.hide();
-    let newElement = sprite.element.cloneNode(true) as Element;
+    let newElement = sprite.element.cloneNode(true) as HTMLElement | SVGElement;
     continueMotions(sprite.element, newElement);
     sprite.element = newElement;
     return sprite;

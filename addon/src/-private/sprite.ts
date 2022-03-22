@@ -383,7 +383,7 @@ export default class Sprite {
   _getCurrentPosition(): SpritePosition {
     let { element } = this;
     if (isSVG(element)) {
-      return {
+      let position: SVGPosition = {
         x: getSVGLength(element, 'x'),
         y: getSVGLength(element, 'y'),
         cx: getSVGLength(element, 'cx'),
@@ -393,9 +393,10 @@ export default class Sprite {
         height: getSVGLength(element, 'height'),
         transform: element.getAttribute('transform'),
       };
+      return position;
     } else {
       let style = (this.element as HTMLElement).style;
-      return {
+      let position: HTMLPosition = {
         top: style.top,
         left: style.left,
         bottom: style.bottom,
@@ -403,6 +404,7 @@ export default class Sprite {
         transform: style.transform,
         classList: Array.from(this.element.classList),
       };
+      return position;
     }
   }
 
@@ -1273,7 +1275,7 @@ function copyComputedStyle(element: Element): CopiedCSS {
   return output;
 }
 
-class CopiedCSS {
+export class CopiedCSS {
   'opacity': string;
   'font-size': string;
   'font-family': string;
@@ -1323,7 +1325,7 @@ const COPIED_CSS_PROPERTIES = [
   'box-shadow',
 ];
 
-interface SVGPosition {
+export interface SVGPosition {
   x: number | null;
   y: number | null;
   cx: number | null;
@@ -1343,7 +1345,17 @@ interface HTMLPosition {
   classList: string[];
 }
 
-type SpritePosition = HTMLPosition | SVGPosition;
+// This strange construct allows access of the alternative type's keys returning undefined values.
+// This significantly simplifies our typing efforts.
+export type SpritePosition =
+  | (HTMLPosition &
+      Partial<
+        Record<Exclude<keyof SVGPosition, keyof HTMLPosition>, undefined>
+      >)
+  | (SVGPosition &
+      Partial<
+        Record<Exclude<keyof HTMLPosition, keyof SVGPosition>, undefined>
+      >);
 
 export interface SpriteWithInitialBounds extends Sprite {
   initialBounds: DOMRect;
