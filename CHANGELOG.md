@@ -1,4 +1,26 @@
 
+
+## v1.0.1 (2022-03-28)
+
+#### :rocket: Enhancement
+* [#430](https://github.com/ember-animation/ember-animated/pull/430) Convert to TS and Improve Types ([@wagenet](https://github.com/wagenet))
+
+#### :bug: Bug Fix
+* [#432](https://github.com/ember-animation/ember-animated/pull/432) Fix TypeScript types paths ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :memo: Documentation
+* [#427](https://github.com/ember-animation/ember-animated/pull/427) Update documentation around using pnpm instead of yarn ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :house: Internal
+* [#434](https://github.com/ember-animation/ember-animated/pull/434) Enable `consistent-type-imports` eslint rule ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#433](https://github.com/ember-animation/ember-animated/pull/433) Sort .eslintrc.js rules ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#416](https://github.com/ember-animation/ember-animated/pull/416) Move `dependenciesMeta.*.injected` config to `ember-try` ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#428](https://github.com/ember-animation/ember-animated/pull/428) Use upstream ember-animated-tools ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 2
+- Peter Wagenet ([@wagenet](https://github.com/wagenet))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+
 ## v1.0.0 (2022-03-18)
 
 #### :boom: Breaking Change

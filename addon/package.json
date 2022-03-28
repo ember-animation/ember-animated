@@ -1,6 +1,6 @@
 {
   "name": "ember-animated",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Core animation primitives for Ember",
   "keywords": [
     "animation",

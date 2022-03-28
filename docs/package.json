@@ -1,6 +1,6 @@
 {
   "name": "ember-animated-docs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Docs app for Ember Animated",
   "repository": "https://github.com/ember-animation/ember-animated",
@@ -37,7 +37,7 @@
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "broccoli-asset-rev": "^3.0.0",
-    "ember-animated": "1.0.0",
+    "ember-animated": "1.0.1",
     "ember-animated-tools": "^1.0.0",
     "ember-auto-import": "^2.4.0",
     "ember-cli": "~4.2.0",
