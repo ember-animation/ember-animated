@@ -91,7 +91,7 @@ importers:
       '@glimmer/component': ^1.0.4
       '@glimmer/tracking': ^1.0.4
       broccoli-asset-rev: ^3.0.0
-      ember-animated: 1.0.0
+      ember-animated: 1.0.1
       ember-animated-tools: ^1.0.0
       ember-auto-import: ^2.4.0
       ember-cli: ~4.2.0
@@ -211,7 +211,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.15.0
       '@typescript-eslint/parser': ^5.15.0
       broccoli-asset-rev: ^3.0.0
-      ember-animated: 1.0.0
+      ember-animated: 1.0.1
       ember-animated-tools: ^1.0.0
       ember-auto-import: ^2.4.0
       ember-cli: ~4.2.0
