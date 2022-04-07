@@ -36,13 +36,13 @@
   },
   "dependencies": {
     "@embroider/addon-shim": "^1.5.0",
-    "assert-never": "^1.2.0",
+    "assert-never": "^1.2.1",
     "ember-element-helper": "^0.5.0 || ^0.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.5",
+    "@babel/core": "^7.17.9",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
-    "@babel/plugin-proposal-decorators": "^7.17.2",
+    "@babel/plugin-proposal-decorators": "^7.17.9",
     "@babel/plugin-transform-typescript": "^7.16.8",
     "@babel/preset-typescript": "^7.16.7",
     "@embroider/addon-dev": "^1.5.0",
@@ -51,20 +51,20 @@
     "@types/ember": "^4.0.0",
     "@types/ember__object": "^4.0.1",
     "@types/rsvp": "^4.0.4",
-    "@typescript-eslint/eslint-plugin": "^5.15.0",
-    "@typescript-eslint/parser": "^5.15.0",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
     "ember-template-lint": "^4.3.0",
-    "eslint": "^8.11.0",
+    "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-ember": "^10.5.9",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.6.0",
-    "rollup": "^2.70.0",
+    "prettier": "^2.6.2",
+    "rollup": "^2.70.1",
     "rollup-plugin-ts": "^2.0.5",
     "tslib": "^2.3.1",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.3"
   },
   "peerDependencies": {
     "@ember/test-helpers": "^2.6.0"
