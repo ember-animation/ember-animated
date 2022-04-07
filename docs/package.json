@@ -60,7 +60,7 @@
     "ember-qunit": "^5.1.5",
     "ember-resolver": "^8.0.3",
     "ember-simple-track-helper": "^1.0.0",
-    "ember-source": "~4.2.0",
+    "ember-source": "~4.3.0",
     "ember-template-lint": "^4.3.0",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
