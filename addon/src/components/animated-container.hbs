@@ -1,4 +1,4 @@
-{{#if this.useElementHelper}}
+{{#if (macroCondition (macroDependencySatisfies 'ember-element-helper' '^0.6.1'))}}
   {{!--
     The @class is only there to support a deprecated usage.
   --}}
