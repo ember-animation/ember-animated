@@ -579,8 +579,8 @@ module(
 
     test('accepts a custom tag', async function (assert) {
       await render(hbs`
-      <AnimatedContainer @tag="section"/>
-    `);
+        <AnimatedContainer @tag="section"/>
+      `);
 
       let elt = find('.animated-container');
       assert.strictEqual(elt.tagName, 'SECTION');

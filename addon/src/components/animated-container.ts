@@ -2,6 +2,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import { alias } from '@ember/object/computed';
 import { action } from '@ember/object';
+import { dependencySatisfies } from '@embroider/macros';
 import { Resize } from '../motions/resize';
 import { task, type Task } from '../-private/ember-scheduler';
 import Sprite from '../-private/sprite';
@@ -199,4 +200,8 @@ export default class AnimatedContainerComponent extends Component {
     this.sprite = null;
   }).restartable()
   animate!: Task;
+
+  get useElementHelper() {
+    return dependencySatisfies('ember-element-helper', '^0.6.1');
+  }
 }
