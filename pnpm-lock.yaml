@@ -28,6 +28,7 @@ importers:
       '@babel/preset-typescript': ^7.16.7
       '@embroider/addon-dev': ^1.5.0
       '@embroider/addon-shim': ^1.5.0
+      '@embroider/macros': ^1.5.0
       '@glimmer/env': ^0.1.7
       '@rollup/plugin-babel': ^5.3.1
       '@types/ember': ^4.0.0
@@ -51,6 +52,7 @@ importers:
       typescript: ^4.6.3
     dependencies:
       '@embroider/addon-shim': 1.5.0
+      '@embroider/macros': 1.5.0
       assert-never: 1.2.1
       ember-element-helper: 0.6.0
     devDependencies:
@@ -11551,6 +11553,7 @@ packages:
   /lru-cache/7.7.3:
     resolution: {integrity: sha512-WY9wjJNQt9+PZilnLbuFKM+SwDull9+6IAguOrarOMoOHTcJ9GnXSO11+Gw6c7xtDkBkthR57OZMtZKYr+1CEw==}
     engines: {node: '>=12'}
+    deprecated: Please update to latest patch version to fix memory leak https://github.com/isaacs/node-lru-cache/issues/227
 
   /lunr/2.3.9:
     resolution: {integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==}

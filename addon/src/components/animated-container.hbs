@@ -1,8 +1,19 @@
-{{!--
-  The @class is only there to support a deprecated usage.
---}}
-{{#let (component (ensure-safe-component (-element this.tag)) tagName=this.tag) as |Tag|~}}
-  <Tag class="animated-container {{@class}}" ...attributes >
-    {{yield}}
-  </Tag>
-{{/let}}
+{{#if this.useElementHelper}}
+  {{!--
+    The @class is only there to support a deprecated usage.
+  --}}
+  {{#let (element this.tag) as |Tag|~}}
+    <Tag class="animated-container {{@class}}" ...attributes>
+      {{yield}}
+    </Tag>
+  {{/let}}
+{{else}}
+  {{!--
+    The @class is only there to support a deprecated usage.
+  --}}
+  {{#let (component (ensure-safe-component (-element this.tag)) tagName=this.tag) as |Tag|~}}
+    <Tag class="animated-container {{@class}}" ...attributes>
+      {{yield}}
+    </Tag>
+  {{/let}}
+{{/if}}
