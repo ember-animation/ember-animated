@@ -1,0 +1,38 @@
+# For every push to the master branch, this publishes an NPM package to the
+# "unstable" NPM tag.
+
+name: Publish Unstable
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  publish:
+    name: "NPM Publish"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6.x
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.x
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: set version
+        run: npm version --no-git-tag-version --workspaces-update=false `node -e "console.log(require('./package.json').version)"`-unstable.`git rev-parse --short HEAD`
+        working-directory: addon
+      - name: npm publish
+        run: npm publish --tag=unstable
+        working-directory: addon
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
