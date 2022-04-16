@@ -32,8 +32,7 @@ jobs:
         run: npm version --no-git-tag-version --workspaces-update=false `node -e "console.log(require('./package.json').version)"`-unstable.`git rev-parse --short HEAD`
         working-directory: addon
       - name: npm publish
-        run: npm publish --tag=unstable --verbose
-        working-directory: addon
+        run: npm publish --tag=unstable --verbose --workspace=addon
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
