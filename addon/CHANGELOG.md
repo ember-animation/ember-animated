@@ -1,5 +1,22 @@
 
 
+
+## v1.0.2 (2022-04-16)
+
+#### :bug: Bug Fix
+* [#453](https://github.com/ember-animation/ember-animated/pull/453) Fix compatibility with 0.6.1 ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :memo: Documentation
+* [#444](https://github.com/ember-animation/ember-animated/pull/444)  move `.md` files to published package ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :house: Internal
+* [#445](https://github.com/ember-animation/ember-animated/pull/445) Remove `treePaths.addon` override ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 3
+- Edward Faulkner ([@ef4](https://github.com/ef4))
+- Peter Wagenet ([@wagenet](https://github.com/wagenet))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+
 ## v1.0.1 (2022-03-28)
 
 #### :rocket: Enhancement
