@@ -1,4 +1,3 @@
-import { Promise as EmberPromise } from 'rsvp';
 import { join, scheduleOnce } from '@ember/runloop';
 import { addObserver } from '@ember/object/observers';
 import { computed, set } from '@ember/object';
@@ -268,5 +267,5 @@ function* withRunLoop(generator: Generator): Generator {
 }
 
 export function timeout(ms: number) {
-  return new EmberPromise((resolve) => setTimeout(resolve, ms));
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }

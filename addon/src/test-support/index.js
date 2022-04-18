@@ -1,5 +1,4 @@
 import { importSync } from '@embroider/macros';
-import { resolve } from 'rsvp';
 import { run } from '@ember/runloop';
 import { Color } from '../color';
 import { relativeBounds } from '../-private/bounds';
@@ -27,7 +26,7 @@ export function animationsSettled() {
   run(() => {
     idle = owner.lookup('service:-ea-motion').get('waitUntilIdle').perform();
   });
-  return resolve(idle);
+  return Promise.resolve(idle);
 }
 
 // This is like getBoundingClientRect, but it is relative to the
