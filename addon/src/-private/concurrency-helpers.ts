@@ -1,20 +1,9 @@
 import { schedule, cancel } from '@ember/runloop';
-import { warn } from '@ember/debug';
-import RSVP from 'rsvp';
 import type { EmberRunTimer } from '@ember/runloop/types';
 import { getOrCreate as _getOrCreate } from './singleton';
 
 function getOrCreate<T>(key: string, construct: () => T): T {
   return _getOrCreate(`concurrency-helpers.${key}`, construct);
-}
-
-if (!(window as any).Promise) {
-  warn(
-    'Unable to achieve proper rAF timing on this browser, microtask-based Promise implementation needed.',
-    false,
-    { id: 'ember-animated-missing-microtask' },
-  );
-  window.Promise = RSVP.Promise as any as PromiseConstructor;
 }
 
 interface iFrameState {
@@ -103,10 +92,10 @@ export function microwait(): Promise<void> {
   return new Promise((resolve) => resolve());
 }
 
-export function wait(ms = 0) {
+export function wait(ms = 0): Promise<void> {
   if (clock.now === originalClock) {
     let ticket: number;
-    let promise = new RSVP.Promise((resolve) => {
+    let promise = new Promise<void>((resolve) => {
       ticket = window.setTimeout(resolve, ms);
     });
     registerCancellation(promise, () => {
@@ -116,7 +105,7 @@ export function wait(ms = 0) {
   } else {
     let canceled = false;
     let started = clock.now();
-    let promise = new RSVP.Promise((resolve) => {
+    let promise = new Promise<void>((resolve) => {
       function checkIt() {
         if (!canceled) {
           if (clock.now() - started > ms) {
