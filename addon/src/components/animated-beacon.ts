@@ -105,6 +105,14 @@ export default class AnimatedBeacon extends Component {
   }
 
   @task(function* (this: AnimatedBeacon) {
+    if (!this.name) {
+      throw new Error('Beacons must have a name.');
+    }
+
+    if (this.motionService.hasBeacon(this.name)) {
+      return;
+    }
+
     let element = this._firstChildElement();
     if (!element) {
       return;

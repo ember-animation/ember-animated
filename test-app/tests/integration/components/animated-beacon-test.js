@@ -29,9 +29,13 @@ module('Integration | Component | animated-beacon', function (hooks) {
   });
 
   test('beacons are available in transitions when multiple animated components are present', async function (assert) {
-    assert.expect(1);
-    this.set('transition', function* ({ beacons }) {
-      assert.ok(beacons.thegroup, 'expected one beacon');
+    assert.expect(2);
+    this.set('transition1', function* ({ beacons }) {
+      assert.ok(beacons.thegroup, '1st transition expected a beacon');
+    });
+
+    this.set('transition2', function* ({ beacons }) {
+      assert.ok(beacons.thegroup, '2nd transition expected a beacon');
     });
 
     await render(hbs`
@@ -39,10 +43,10 @@ module('Integration | Component | animated-beacon', function (hooks) {
   <div class="alpha"></div>
 {{/animated-beacon}}
 
-{{#animated-value this.showIt use=this.transition }}
+{{#animated-value this.showIt use=this.transition1 }}
   <div class="beta"></div>
 {{/animated-value}}
-{{#animated-value this.showIt use=this.transition }}
+{{#animated-value this.showIt use=this.transition2 }}
   <div class="theta"></div>
 {{/animated-value}}
 `);

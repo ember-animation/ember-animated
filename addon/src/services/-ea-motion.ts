@@ -240,14 +240,14 @@ export default class MotionService extends Service {
     }
   }
 
+  hasBeacon(name: string) {
+    return this._beacons?.[name];
+  }
+
   @task(function* (this: MotionService, name: string, beacon: Sprite) {
     if (!this._beacons) {
       this._beacons = {};
     }
-    if (this._beacons[name]) {
-      throw new Error(`There is more than one beacon named "${name}"`);
-    }
-
     this._beacons[name] = beacon;
     // allows other farMatches to start
     yield microwait();
