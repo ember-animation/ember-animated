@@ -24,6 +24,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: set version
-        run: pnpm dlx ember deploy production --verbose
+      - name: ember deploy production
+        run: pnpm exec ember deploy production --verbose
         working-directory: docs
