@@ -17,6 +17,19 @@
     "./test-support": "./dist/test-support/index.js",
     "./addon-main.js": "./addon-main.js"
   },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "*": [
+        "./dist/*"
+      ],
+      "test-support": [
+        "./dist/test-support/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "addon-main.js",
     "dist"
@@ -42,9 +55,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-proposal-decorators": "^7.17.9",
-    "@babel/plugin-transform-typescript": "^7.16.8",
     "@babel/preset-typescript": "^7.16.7",
     "@embroider/addon-dev": "^1.5.0",
     "@glimmer/env": "^0.1.7",
@@ -52,8 +63,8 @@
     "@types/ember": "^4.0.0",
     "@types/ember__object": "^4.0.1",
     "@types/rsvp": "^4.0.4",
-    "@typescript-eslint/eslint-plugin": "^5.18.0",
-    "@typescript-eslint/parser": "^5.18.0",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
     "ember-template-lint": "^4.3.0",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
@@ -62,8 +73,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
-    "rollup": "^2.70.1",
-    "rollup-plugin-ts": "^2.0.5",
+    "rollup": "^2.70.2",
+    "rollup-plugin-ts": "^2.0.7",
     "tslib": "^2.3.1",
     "typescript": "^4.6.3"
   },
@@ -97,19 +108,6 @@
       "./components/animated-value.js": "./dist/_app_/components/animated-value.js",
       "./components/ea-list-element.js": "./dist/_app_/components/ea-list-element.js",
       "./services/-ea-motion.js": "./dist/_app_/services/-ea-motion.js"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/index.d.ts"
-      ],
-      "*": [
-        "./dist/*"
-      ],
-      "test-support": [
-        "./dist/test-support/index.d.ts"
-      ]
     }
   },
   "volta": {

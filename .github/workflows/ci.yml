@@ -110,19 +110,21 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 6.x
+
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: 12.x
           cache: 'pnpm'
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Run Tests
         run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }}
         working-directory: test-app
 
   typescript-compatibility:
-    if: ${{ false }}  # disable for now
     name: Type checking - ${{ matrix.typescript-scenario }}
     runs-on: ubuntu-latest
     needs: 'test-library'
@@ -131,11 +133,9 @@ jobs:
       fail-fast: false
       matrix:
         typescript-scenario:
-          - typescript-4.2
-          - typescript-4.3
-          - typescript-4.4
-          - typescript-4.5
-          - typescript-next
+          - typescript@4.5
+          - typescript@4.6
+          - typescript@next
 
     steps:
       - uses: actions/checkout@v3
@@ -143,13 +143,20 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 6.x
+
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: 12.x
           cache: 'pnpm'
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Update TS version
+        run: pnpm add --ignore-scripts --save-dev ${{ matrix.typescript-scenario }}
+        working-directory: addon
+
       - name: Type checking
-        run: ./node_modules/.bin/ember try:one --config-path="./config/ember-try-typescript.js" ${{ matrix.typescript-scenario }}
-        working-directory: test-app
+        run: tsc --noEmit
+        working-directory: addon
