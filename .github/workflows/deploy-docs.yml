@@ -1,0 +1,29 @@
+# For every push to the master branch, this publishes an NPM package to the
+# "unstable" NPM tag.
+
+name: Deploy Docs App
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  publish:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6.x
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: set version
+        run: pnpm dlx ember deploy production --verbose
+        working-directory: docs
