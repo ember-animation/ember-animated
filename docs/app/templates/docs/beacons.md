@@ -1,5 +1,5 @@
 ## Beacons
-See {{docs-link 'animated-beacon' 'docs.api.item' 'components/animated-beacon'}}.
+See <DocsLink @route="docs.api.item" @model="components/animated-beacon">`<AnimatedBeacon/>`</DocsLink>.
 
 In this example, emails animate between Refresh (mail icon), Trash, and the Inbox. When an email gets deleted, it is a `removedSprite`. If you refresh your inbox, the new email added is an `insertedSprite`. Both the refresh button and the trash button are beacons.
 
