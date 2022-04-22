@@ -48,7 +48,7 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-This app gets deployed automatically via TravisCI using ember-cli-deploy.
+This app gets deployed automatically via GitHub Actions using ember-cli-deploy.
 
 ## Further Reading / Useful Links
 

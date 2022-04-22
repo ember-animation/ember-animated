@@ -1,7 +1,20 @@
-# you definitely want this:
-node_modules
+# See https://help.github.com/ignore-files/ for more about ignoring files.
 
-# and you can put in anything else that tends to accumulate in your environment:
+# compiled output
+dist/
+
+# dependencies
+node_modules/
+
+# misc
+.env*
+.eslintcache
+.pnp*
 .pnpm-debug.log
-.DS_Store
+.sass-cache
+connect.lock
+coverage/
+libpeerconnection.log
+npm-debug.log*
 yarn-error.log
+.DS_Store

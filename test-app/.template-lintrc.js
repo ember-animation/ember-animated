@@ -13,7 +13,4 @@ module.exports = {
       ],
     },
   },
-
-  // the docs app lints itself
-  ignore: ['docs/**'],
 };
