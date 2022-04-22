@@ -88,6 +88,6 @@ Finally, whenever a message is added or deleted, the remaining emails in the inb
 
 
 
-The last two categories of sprites, `sentSprites` and `receivedSprites`, are covered in {{docs-link 'Animating between components' 'docs.between'}}.
+The last two categories of sprites, `sentSprites` and `receivedSprites`, are covered in <DocsLink @route="docs.between">Animating between components</DocsLink>.
 
 For now, read on to learn all about Transitions.
