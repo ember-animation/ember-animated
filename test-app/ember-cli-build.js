@@ -6,6 +6,7 @@ module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     autoImport: {
       forbidEval: true,
+      watchDependencies: ['ember-animated'],
     },
     // Add options here
   });

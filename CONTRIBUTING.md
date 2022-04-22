@@ -27,6 +27,9 @@ Inside any of the packages you can run:
 * `cd test-app && ember test --server` – Runs the test suite in "watch mode"
 * `cd test-app && ember try:each` – Runs the test suite against multiple Ember versions
 
+During development, if you'd like test app to pick up changes in the addon, make sure to run both
+`cd addon && pnpm run start` and `cd test-app && ember test --server` in different terminals.
+
 ## Running the test application
 
 * `cd test-app && ember serve`
