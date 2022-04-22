@@ -38,6 +38,7 @@
         "launchEditor": false
       },
       "release-it-yarn-workspaces": {
+        "publish": false,
         "workspaces": [
           "addon"
         ],
