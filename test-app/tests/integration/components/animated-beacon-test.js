@@ -28,6 +28,34 @@ module('Integration | Component | animated-beacon', function (hooks) {
     await animationsSettled();
   });
 
+  test('beacons are available in transitions when multiple animated components are present', async function (assert) {
+    assert.expect(2);
+    this.set('transition1', function* ({ beacons }) {
+      assert.ok(beacons.thegroup, '1st transition expected a beacon');
+    });
+
+    this.set('transition2', function* ({ beacons }) {
+      assert.ok(beacons.thegroup, '2nd transition expected a beacon');
+    });
+
+    await render(hbs`
+{{#animated-beacon name="thegroup"}}
+  <div class="alpha"></div>
+{{/animated-beacon}}
+
+{{#animated-value this.showIt use=this.transition1 }}
+  <div class="beta"></div>
+{{/animated-value}}
+{{#animated-value this.showIt use=this.transition2 }}
+  <div class="theta"></div>
+{{/animated-value}}
+`);
+
+    this.set('showIt', true);
+    await settled();
+    await animationsSettled();
+  });
+
   test('it picks up correct bounds', async function (assert) {
     assert.expect(4);
 
