@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import opacity from 'ember-animated/motions/opacity';
 import move from 'ember-animated/motions/move';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 export default class extends Controller {
   @tracked message = '';
