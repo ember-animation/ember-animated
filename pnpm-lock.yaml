@@ -92,7 +92,7 @@ importers:
       '@glimmer/component': ^1.1.2
       '@glimmer/tracking': ^1.1.2
       broccoli-asset-rev: ^3.0.0
-      ember-animated: 1.0.2
+      ember-animated: 1.0.3
       ember-animated-tools: ^1.0.0
       ember-auto-import: ^2.4.1
       ember-cli: ~4.3.0
@@ -211,7 +211,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.20.0
       '@typescript-eslint/parser': ^5.20.0
       broccoli-asset-rev: ^3.0.0
-      ember-animated: 1.0.2
+      ember-animated: 1.0.3
       ember-animated-tools: ^1.0.0
       ember-auto-import: ^2.4.1
       ember-cli: ~4.3.0
@@ -1563,7 +1563,7 @@ packages:
     engines: {node: 12.* || >= 14.*}
     dependencies:
       ember-cli-babel: 7.26.11
-      ember-cli-typescript: 5.0.0
+      ember-cli-typescript: 5.1.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2125,13 +2125,6 @@ packages:
       '@glimmer/util': 0.84.1
       '@handlebars/parser': 2.0.0
       simple-html-tokenizer: 0.5.11
-    dev: true
-
-  /@glimmer/tracking/1.1.1:
-    resolution: {integrity: sha512-ZdwyzHww8Svdy8kfMgL9pffiWO7DmD+1GMq9hsOMQMsuZ23E2ZAb9nLjt6hKqBpPLu1yQSXreL22YPmTZ0f9tw==}
-    dependencies:
-      '@glimmer/env': 0.1.7
-      '@glimmer/validator': 0.44.0
     dev: true
 
   /@glimmer/tracking/1.1.2:
@@ -6975,7 +6968,7 @@ packages:
     resolution: {integrity: sha512-JOK7kBCWsTVCzmCefK4nr9BACDJk0owt9oIUaVt6Q0UtQ4XeAHmoK5kQ/YtDcxQF1ZevHQFdGhsTR3JLaHNJgA==}
     engines: {node: 10.* || >= 12}
     dependencies:
-      '@glimmer/tracking': 1.1.1
+      '@glimmer/tracking': 1.1.2
       ember-cache-primitive-polyfill: 1.0.1
       ember-cli-babel: 7.26.11
       ember-cli-babel-plugin-helpers: 1.1.1
@@ -7480,7 +7473,7 @@ packages:
       fs-extra: 9.1.0
       resolve: 1.22.0
       rsvp: 4.8.5
-      semver: 7.3.6
+      semver: 7.3.7
       stagehand: 1.0.0
       walk-sync: 2.2.0
     transitivePeerDependencies:
