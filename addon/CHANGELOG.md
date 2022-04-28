@@ -1,6 +1,26 @@
 
 
 
+
+## v1.0.3 (2022-04-28)
+
+#### :bug: Bug Fix
+* [#458](https://github.com/ember-animation/ember-animated/pull/458) Allow multiple beacons with the same name ([@mattmarcum](https://github.com/mattmarcum))
+
+#### :memo: Documentation
+* [#461](https://github.com/ember-animation/ember-animated/pull/461) Improve contributing docs ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#459](https://github.com/ember-animation/ember-animated/pull/459) Use angle bracket syntax for `<DocsLink>` ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :house: Internal
+* [#462](https://github.com/ember-animation/ember-animated/pull/462) Publish to npm from CI ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#460](https://github.com/ember-animation/ember-animated/pull/460) run `npx ember-cli-update --to=4.3.0` to align with blueprint ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#446](https://github.com/ember-animation/ember-animated/pull/446) Simplify type checking workflow ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 3
+- Moacir P. de Sá Pereira ([@muziejus](https://github.com/muziejus))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- strangelooper ([@mattmarcum](https://github.com/mattmarcum))
+
 ## v1.0.2 (2022-04-16)
 
 #### :bug: Bug Fix
