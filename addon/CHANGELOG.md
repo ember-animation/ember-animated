@@ -1,13 +1,14 @@
 
-
-
-
 ## v1.0.3 (2022-04-28)
+
+#### :rocket: Enhancement
+* [#457](https://github.com/ember-animation/ember-animated/pull/457) Replace use of RSVP with native Promise ([@SergeAstapov](https://github.com/SergeAstapov))
 
 #### :bug: Bug Fix
 * [#458](https://github.com/ember-animation/ember-animated/pull/458) Allow multiple beacons with the same name ([@mattmarcum](https://github.com/mattmarcum))
 
 #### :memo: Documentation
+* [#464](https://github.com/ember-animation/ember-animated/pull/464) Replace faker with @faker-js/faker ([@muziejus](https://github.com/muziejus))
 * [#461](https://github.com/ember-animation/ember-animated/pull/461) Improve contributing docs ([@SergeAstapov](https://github.com/SergeAstapov))
 * [#459](https://github.com/ember-animation/ember-animated/pull/459) Use angle bracket syntax for `<DocsLink>` ([@SergeAstapov](https://github.com/SergeAstapov))
 
@@ -23,6 +24,9 @@
 
 ## v1.0.2 (2022-04-16)
 
+#### :rocket: Enhancement
+* [#454](https://github.com/ember-animation/ember-animated/pull/454) Make TransitionContext type export public ([@SergeAstapov](https://github.com/SergeAstapov))
+ 
 #### :bug: Bug Fix
 * [#453](https://github.com/ember-animation/ember-animated/pull/453) Fix compatibility with 0.6.1 ([@SergeAstapov](https://github.com/SergeAstapov))
 
