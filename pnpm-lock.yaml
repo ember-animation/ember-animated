@@ -86,6 +86,7 @@ importers:
       '@ember/optional-features': ^2.0.0
       '@ember/string': ^3.0.0
       '@ember/test-helpers': ^2.7.0
+      '@faker-js/faker': ^6.2.0
       '@fortawesome/ember-fontawesome': ^0.3.2
       '@fortawesome/free-solid-svg-icons': ^5.15.4
       '@glimmer/component': ^1.1.2
@@ -126,7 +127,6 @@ importers:
       eslint-plugin-node: ^11.1.0
       eslint-plugin-prettier: ^4.0.0
       eslint-plugin-qunit: ^7.2.0
-      faker: 5.5.3
       loader.js: ^4.7.0
       moment: ^2.29.3
       npm-run-all: ^4.1.5
@@ -141,6 +141,7 @@ importers:
       '@ember/optional-features': 2.0.0
       '@ember/string': 3.0.0
       '@ember/test-helpers': 2.7.0
+      '@faker-js/faker': 6.2.0
       '@fortawesome/ember-fontawesome': 0.3.2
       '@fortawesome/free-solid-svg-icons': 5.15.4
       '@glimmer/component': 1.1.2
@@ -181,7 +182,6 @@ importers:
       eslint-plugin-node: 11.1.0_eslint@8.13.0
       eslint-plugin-prettier: 4.0.0_1815ac95b7fb26c13c7d48a8eef62d0f
       eslint-plugin-qunit: 7.2.0_eslint@8.13.0
-      faker: 5.5.3
       loader.js: 4.7.0
       moment: 2.29.3
       npm-run-all: 4.1.5
@@ -198,6 +198,7 @@ importers:
       '@ember/test-helpers': ^2.7.0
       '@embroider/macros': ^1.6.0
       '@embroider/test-setup': ^1.6.0
+      '@faker-js/faker': ^6.2.0
       '@glimmer/component': ^1.1.2
       '@glimmer/tracking': ^1.1.2
       '@types/ember': 4.0.0
@@ -246,7 +247,6 @@ importers:
       eslint-plugin-node: ^11.1.0
       eslint-plugin-prettier: ^4.0.0
       eslint-plugin-qunit: ^7.2.0
-      faker: 5.5.3
       loader.js: ^4.7.0
       npm-run-all: ^4.1.5
       prettier: ^2.6.2
@@ -260,6 +260,7 @@ importers:
       '@ember/test-helpers': 2.7.0
       '@embroider/macros': 1.6.0
       '@embroider/test-setup': 1.6.0
+      '@faker-js/faker': 6.2.0
       '@glimmer/component': 1.1.2
       '@glimmer/tracking': 1.1.2
       '@types/ember': 4.0.0
@@ -308,7 +309,6 @@ importers:
       eslint-plugin-node: 11.1.0_eslint@8.13.0
       eslint-plugin-prettier: 4.0.0_1815ac95b7fb26c13c7d48a8eef62d0f
       eslint-plugin-qunit: 7.2.0_eslint@8.13.0
-      faker: 5.5.3
       loader.js: 4.7.0
       npm-run-all: 4.1.5
       prettier: 2.6.2
@@ -1946,6 +1946,11 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@faker-js/faker/6.2.0:
+    resolution: {integrity: sha512-3kIcQ+aTr3I+LqDbJwbINFk5oA+a63LH57GPJt9PM8AWqN7nCwnubuSiWosHYQlyf2NicrvpzXQxllyLeEdpyQ==}
+    engines: {node: '>=14.0.0', npm: '>=6.0.0'}
     dev: true
 
   /@fortawesome/ember-fontawesome/0.3.2:
@@ -8900,10 +8905,6 @@ packages:
   /extract-stack/2.0.0:
     resolution: {integrity: sha512-AEo4zm+TenK7zQorGK1f9mJ8L14hnTDi2ZQPR+Mub1NX8zimka1mXpV5LpH8x9HoUmFSHZCfLHqWvp0Y4FxxzQ==}
     engines: {node: '>=8'}
-    dev: true
-
-  /faker/5.5.3:
-    resolution: {integrity: sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==}
     dev: true
 
   /fast-deep-equal/3.1.3:

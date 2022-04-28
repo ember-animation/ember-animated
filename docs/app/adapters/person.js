@@ -1,6 +1,6 @@
 //BEGIN-SNIPPET person-snippet.js
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 export default class extends JSONAPIAdapter {
   shouldReloadAll() {
