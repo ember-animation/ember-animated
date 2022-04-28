@@ -28,7 +28,7 @@
 * [#454](https://github.com/ember-animation/ember-animated/pull/454) Make TransitionContext type export public ([@SergeAstapov](https://github.com/SergeAstapov))
  
 #### :bug: Bug Fix
-* [#453](https://github.com/ember-animation/ember-animated/pull/453) Fix compatibility with 0.6.1 ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#453](https://github.com/ember-animation/ember-animated/pull/453) Fix compatibility with ember-element-helper@0.6.1 ([@SergeAstapov](https://github.com/SergeAstapov))
 
 #### :memo: Documentation
 * [#444](https://github.com/ember-animation/ember-animated/pull/444)  move `.md` files to published package ([@SergeAstapov](https://github.com/SergeAstapov))
