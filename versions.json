@@ -118,5 +118,11 @@
     "name": "v1.0.1",
     "sha": "fee6f3a00a91ab0afdeeee88e5c9109df8f2c3d7",
     "tag": "v1.0.1"
+  },
+  "macroCondition": {
+    "path": "versions/macroCondition",
+    "name": "macroCondition",
+    "sha": "6d75357231c7a1894caf0121d89e9a0d7811142f",
+    "tag": null
   }
 }
