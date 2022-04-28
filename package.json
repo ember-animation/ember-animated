@@ -33,7 +33,8 @@
   },
   "release-it": {
     "hooks": {
-      "after:bump": "pnpm install"
+      "after:bump": "pnpm install",
+      "after:release": "cd docs && pnpm run deploy"
     },
     "plugins": {
       "release-it-lerna-changelog": {
