@@ -8,7 +8,12 @@
     "ember-addon",
     "transition"
   ],
-  "repository": "https://github.com/ember-animation/ember-animated",
+  "homepage": "https://ember-animation.github.io/ember-animated/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ember-animation/ember-animated.git",
+    "directory": "addon"
+  },
   "license": "MIT",
   "author": "Edward Faulkner <edward@eaf4.com>",
   "exports": {
@@ -96,6 +101,7 @@
     "edition": "octane"
   },
   "ember-addon": {
+    "demoURL": "https://ember-animation.github.io/ember-animated/",
     "main": "addon-main.js",
     "type": "addon",
     "version": 2,
