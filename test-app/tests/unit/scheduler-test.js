@@ -274,7 +274,7 @@ module('Unit | scheduler', function (hooks) {
   });
 
   test('promise returned from spawn does not resolve if an inner promise resolves after stop', function (assert) {
-    assert.expect(1);
+    assert.expect(2);
 
     return spawn(function* () {
       spawn(function* () {
