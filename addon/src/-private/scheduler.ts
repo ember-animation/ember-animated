@@ -235,6 +235,7 @@ class MicroRoutine {
   }
   stop() {
     this.stopped = true;
+    this.resolve({ stopped: true });
     if (this.state && isPromise(this.state.value)) {
       fireCancellation(this.state.value);
     }

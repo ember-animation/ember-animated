@@ -284,8 +284,11 @@ module('Unit | scheduler', function (hooks) {
         });
         stop(task);
         resolve();
-        yield task;
-        assert.ok(false, 'should never get here');
+        let yielded = yield task;
+        assert.ok(
+          yielded.stopped,
+          'After stopping a Microtask it should yield `{ stopped: true }`.',
+        );
       });
       yield microwait();
       assert.ok(true, 'got to end');
