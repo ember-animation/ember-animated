@@ -5,27 +5,29 @@ import { computed } from '@ember/object';
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes.
   Animated-if uses the same arguments as animated-each.
   ```hbs
-  <button {{action toggleThing}}>Toggle</button>
+  <button {{on 'click' this.toggleThing}}>Toggle</button>
 
   {{#animated-if showThing use=transition}}
-      <div class="message" {{action "toggleThing"}}>
-          myContent
-      </div>
+    <div class="message" {{on 'click' "toggleThing"}} role="button">
+      myContent
+    </div>
   {{/animated-if}}
   ```
   ```js
-  import Component from '@ember/component';
+  import Component from '@glimmer/component';
   import move from 'ember-animated/motions/move';
   import { easeOut, easeIn } from 'ember-animated/easings/cosine';
+  import { tracked } from '@glimmer/tracking';
 
-  export default Component.extend({
-    showThing: false,
+  export default class FooComponent extends Component {
+    @tracked showThing = false;
 
     toggleThing() {
-      this.set('showThing', !this.get('showThing'));
-    },
+      this.showThing = !this.showThing;
+    }
 
-    transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+    // eslint-disable-next-line require-yield
+    *transition({ insertedSprites, keptSprites, removedSprites }) {
       for (let sprite of insertedSprites) {
         sprite.startAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeOut });
@@ -39,7 +41,7 @@ import { computed } from '@ember/object';
         sprite.endAtPixel({ x: window.innerWidth });
         move(sprite, { easing: easeIn });
       }
-    },
+    }
   });
   ```
   @class animated-if
