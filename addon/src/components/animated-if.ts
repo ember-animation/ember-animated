@@ -8,7 +8,7 @@ import { computed } from '@ember/object';
   <button {{on 'click' this.toggleThing}}>Toggle</button>
 
   {{#animated-if showThing use=transition}}
-    <div class="message" {{on 'click' "toggleThing"}} role="button">
+    <div class="message" {{on 'click' this.toggleThing}} role="button">
       myContent
     </div>
   {{/animated-if}}
