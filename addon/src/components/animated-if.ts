@@ -42,7 +42,7 @@ import { computed } from '@ember/object';
         move(sprite, { easing: easeIn });
       }
     }
-  });
+  };
   ```
   @class animated-if
   @public
