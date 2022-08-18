@@ -33,6 +33,7 @@
   },
   "release-it": {
     "hooks": {
+      "before:init": "cp README.md LICENSE.md addon/",
       "after:bump": "pnpm install",
       "after:release": "cd docs && pnpm run deploy"
     },
