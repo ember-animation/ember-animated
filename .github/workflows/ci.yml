@@ -23,11 +23,11 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -50,11 +50,11 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install --no-lockfile
@@ -71,11 +71,11 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -111,12 +111,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
 
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
 
       - name: Install Dependencies
@@ -144,12 +144,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
 
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
 
       - name: Install Dependencies
@@ -174,12 +174,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
 
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
           # This creates an .npmrc that reads the NODE_AUTH_TOKEN environment variable
           registry-url: 'https://registry.npmjs.org'
