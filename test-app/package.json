@@ -30,6 +30,7 @@
     "test:ember-compatibility": "ember try:each"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.13",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.7.0",
     "@embroider/macros": "^1.6.0",
