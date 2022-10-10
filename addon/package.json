@@ -64,7 +64,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@embroider/addon-dev": "^1.6.0",
     "@glimmer/env": "^0.1.7",
-    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-babel": "^6.0.0",
     "@types/ember": "^4.0.0",
     "@types/ember__object": "^4.0.1",
     "@types/rsvp": "^4.0.4",
