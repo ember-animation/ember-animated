@@ -224,8 +224,7 @@ export default class AnimatedEach extends Component {
       let item = items[i];
       signature.push(getKey(item, i));
       if (deps) {
-        for (let j = 0; j < deps.length; j++) {
-          let dep = deps[j];
+        for (const dep of deps) {
           signature.push(get(item as any, dep));
         }
       }

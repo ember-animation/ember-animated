@@ -78,11 +78,18 @@ const matrixPattern = /matrix\((.*)\)/;
 
 function parseTransform(matrixString: string): Transform {
   let match = matrixPattern.exec(matrixString);
-  if (!match) {
+  if (!match || !match[1]) {
     return identity;
   }
   let [a, b, c, d, tx, ty] = match[1].split(',').map(parseFloat);
-  return new Transform(a, b, c, d, tx, ty);
+  return new Transform(
+    a as number,
+    b as number,
+    c as number,
+    d as number,
+    tx as number,
+    ty as number,
+  );
 }
 
 function parseOrigin(originString: string): [number, number] {
