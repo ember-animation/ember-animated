@@ -32,17 +32,17 @@ export default {
     // not everything in publicEntrypoints necessarily needs to go here.
     addon.appReexports(globallyAvailable),
 
+    // Follow the V2 Addon rules about dependencies. Your code can import from
+    // `dependencies` and `peerDependencies` as well as standard Ember-provided
+    // package names.
+    addon.dependencies(),
+
     // compile TypeScript to latest JavaScript, including Babel transpilation
     typescript({
       transpiler: 'babel',
       browserslist: false,
       transpileOnly: false,
     }),
-
-    // Follow the V2 Addon rules about dependencies. Your code can import from
-    // `dependencies` and `peerDependencies` as well as standard Ember-provided
-    // package names.
-    addon.dependencies(),
 
     // Ensure that standalone .hbs files are properly integrated as Javascript.
     addon.hbs(),
