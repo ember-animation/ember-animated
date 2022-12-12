@@ -23,20 +23,25 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
+
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Lint Addon
         run: pnpm run lint
         working-directory: addon
+
       - name: Lint Test App
         run: pnpm run lint
         working-directory: test-app
+
       - name: Run Tests
         run: pnpm run test:ember
         working-directory: test-app
@@ -50,14 +55,17 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
+
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
+
       - name: Install Dependencies
         run: pnpm install --no-lockfile
+
       - name: Run Tests
         run: pnpm run test:ember
         working-directory: test-app
@@ -71,17 +79,21 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
+
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Lint
         run: pnpm run lint
         working-directory: docs
+
       - name: Run Tests
         run: pnpm run test:ember
         working-directory: docs
@@ -99,6 +111,7 @@ jobs:
           - ember-lts-3.20
           - ember-lts-3.24
           - ember-lts-3.28
+          - ember-lts-4.4
           - ember-release
           - ember-beta
           - ember-canary
@@ -111,12 +124,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
 
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
 
       - name: Install Dependencies
@@ -137,6 +150,8 @@ jobs:
         typescript-scenario:
           - typescript@4.5
           - typescript@4.6
+          - typescript@4.7
+          - typescript@4.8
           - typescript@next
 
     steps:
@@ -144,12 +159,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
 
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
 
       - name: Install Dependencies
@@ -174,12 +189,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.x
+          version: 7.x
 
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 14.x
           cache: 'pnpm'
           # This creates an .npmrc that reads the NODE_AUTH_TOKEN environment variable
           registry-url: 'https://registry.npmjs.org'
