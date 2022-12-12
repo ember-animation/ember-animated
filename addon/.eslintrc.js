@@ -57,10 +57,10 @@ module.exports = {
     'no-dupe-class-members': 'off', // TS Checks this
     'no-unused-vars': 'off',
     'no-var': 'error',
-    'require-yield': 0,
+    'require-yield': 'off',
     // pending complete octane style upgrade
     indent: 'off',
-    semi: 0,
+    semi: 'off',
   },
   globals: {
     WeakMap: false,
@@ -74,8 +74,6 @@ module.exports = {
         './.prettierrc.js',
         './.template-lintrc.js',
         './addon-main.js',
-        './testem.js',
-        './config/**/*.js',
       ],
       parserOptions: {
         sourceType: 'script',
@@ -87,8 +85,9 @@ module.exports = {
       plugins: ['node'],
       extends: ['plugin:node/recommended'],
       rules: {
-        '@typescript-eslint/no-var-requires': 0,
-        '@typescript-eslint/no-require-imports': 0,
+        // We *want* to use traditional require statements in Node `.js` files.
+        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
       },
     },
   ],

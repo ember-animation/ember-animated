@@ -21,13 +21,16 @@
     "release-it-lerna-changelog": "^4.0.1",
     "release-it-yarn-workspaces": "^2.0.1"
   },
+  "volta": {
+    "node": "14.21.1",
+    "npm": "8.19.3"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "pnpm": {
     "overrides": {
       "ember-modal-dialog": "4.0.0",
-      "@types/ember": "4.0.0",
       "@types/eslint": "8.4.1"
     }
   },
@@ -67,9 +70,5 @@
       "tokenRef": "GITHUB_AUTH"
     },
     "npm": false
-  },
-  "volta": {
-    "node": "12.22.10",
-    "npm": "8.7.0"
   }
 }
