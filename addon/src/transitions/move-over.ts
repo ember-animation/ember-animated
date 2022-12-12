@@ -52,21 +52,21 @@ export default function* moveOver(
   direction: number,
   context: TransitionContext,
 ) {
-  let { position, size, startTranslatedBy, endTranslatedBy } = normalize(
+  const { position, size, startTranslatedBy, endTranslatedBy } = normalize(
     dimension,
     direction,
   );
 
   let viewport: DOMRect | null;
-  if (context.insertedSprites.length) {
+  if (context.insertedSprites[0]) {
     viewport = context.insertedSprites[0].finalBounds;
-  } else if (context.keptSprites.length) {
+  } else if (context.keptSprites[0]) {
     viewport = context.keptSprites[0].finalBounds;
   } else {
     throw new Error('Unimplemented');
   }
 
-  if (context.insertedSprites.length) {
+  if (context.insertedSprites[0]) {
     // Offset is how far out of place we're going to start the inserted sprite.
     let offset = 0;
 
@@ -75,7 +75,7 @@ export default function* moveOver(
     // their left.
     context.removedSprites.forEach((sprite: Sprite) => {
       sprite.assertHasInitialBounds();
-      let o = position(viewport!) - position(sprite.initialBounds);
+      const o = position(viewport!) - position(sprite.initialBounds);
       if (o > offset) {
         offset = o;
       }
@@ -84,25 +84,25 @@ export default function* moveOver(
     // the new sprite's own width adds to our offset because we want its
     // right edge (not left edge) to start touching the leftmost leaving
     // sprite (or viewport if no leaving sprites)
-    let firstInserted: Sprite = context.insertedSprites[0];
+    const firstInserted: Sprite = context.insertedSprites[0];
     firstInserted.assertHasFinalBounds();
     offset += size(firstInserted.finalBounds);
 
     startTranslatedBy(firstInserted, -offset);
 
-    if (context.removedSprites.length > 0) {
+    if (context.removedSprites[0]) {
       endTranslatedBy(context.removedSprites[0], offset);
-      let move = new Move(context.removedSprites[0]);
+      const move = new Move(context.removedSprites[0]);
       move.run();
-      for (let i = 1; i < context.removedSprites.length; i++) {
-        follow(context.removedSprites[i], { source: move });
+      for (const removedSprite of context.removedSprites) {
+        follow(removedSprite, { source: move });
       }
       follow(firstInserted, { source: move });
     } else {
       new Move(firstInserted).run();
     }
-  } else if (context.keptSprites.length) {
-    let move = new Move(context.keptSprites[0]);
+  } else if (context.keptSprites[0]) {
+    const move = new Move(context.keptSprites[0]);
     move.run();
     context.removedSprites.forEach((sprite) => {
       follow(sprite, { source: move });

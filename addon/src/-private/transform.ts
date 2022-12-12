@@ -77,12 +77,19 @@ export const identity = new Transform(1, 0, 0, 1, 0, 0);
 const matrixPattern = /matrix\((.*)\)/;
 
 function parseTransform(matrixString: string): Transform {
-  let match = matrixPattern.exec(matrixString);
-  if (!match) {
+  const match = matrixPattern.exec(matrixString);
+  if (!match || !match[1]) {
     return identity;
   }
-  let [a, b, c, d, tx, ty] = match[1].split(',').map(parseFloat);
-  return new Transform(a, b, c, d, tx, ty);
+  const [a, b, c, d, tx, ty] = match[1].split(',').map(parseFloat);
+  return new Transform(
+    a as number,
+    b as number,
+    c as number,
+    d as number,
+    tx as number,
+    ty as number,
+  );
 }
 
 function parseOrigin(originString: string): [number, number] {
@@ -102,7 +109,7 @@ export function cumulativeTransform(elt: HTMLElement) {
   let accumulator = null;
   let current: HTMLElement | null = elt;
   while (current && current.nodeType === 1) {
-    let transform = ownTransform(current);
+    const transform = ownTransform(current);
     if (transform !== identity && !transform.isIdentity()) {
       if (accumulator) {
         accumulator = transform.mult(accumulator);
@@ -124,22 +131,22 @@ export function cumulativeTransform(elt: HTMLElement) {
  * @return {Transform} instance representing this element's css transform property.
  */
 export function ownTransform(elt: HTMLElement): Transform {
-  let eltStyles = window.getComputedStyle(elt);
-  let t =
+  const eltStyles = window.getComputedStyle(elt);
+  const t =
     eltStyles.transform !== '' ? eltStyles.transform! : elt.style.transform!;
   if (t === 'none') {
     // This constant value is an optimization, and we rely on that in
     // cumulativeTransform
     return identity;
   }
-  let matrix = parseTransform(t);
+  const matrix = parseTransform(t);
   if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
     // If there is any rotation, scaling, or skew we need to do it within the context of transform-origin.
-    let origin =
+    const origin =
       eltStyles.getPropertyValue('transform-origin') !== ''
         ? eltStyles.getPropertyValue('transform-origin')!
         : elt.style.getPropertyValue('transform-origin')!;
-    let [originX, originY] = parseOrigin(origin);
+    const [originX, originY] = parseOrigin(origin);
     if (originX === 0 && originY === 0) {
       // transform origin is at 0,0 so it will have no effect, so we're done.
       return matrix;

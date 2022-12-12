@@ -38,9 +38,9 @@ export class Scale extends Motion<ScaleOptions> {
   *animate() {
     this.sprite.assertHasInitialBounds();
     this.sprite.assertHasFinalBounds();
-    let sprite = this.sprite;
+    const sprite = this.sprite;
 
-    let duration = this.duration;
+    const duration = this.duration;
 
     let initialWidthFactor, initialHeightFactor;
 
@@ -61,8 +61,9 @@ export class Scale extends Motion<ScaleOptions> {
         sprite.initialBounds.height / sprite.originalFinalBounds.height;
     }
 
-    let widthFactor = sprite.finalBounds.width / sprite.initialBounds.width;
-    let heightFactor = sprite.finalBounds.height / sprite.initialBounds.height;
+    const widthFactor = sprite.finalBounds.width / sprite.initialBounds.width;
+    const heightFactor =
+      sprite.finalBounds.height / sprite.initialBounds.height;
 
     this.widthTween = new Tween(
       sprite.transform.a * initialWidthFactor,

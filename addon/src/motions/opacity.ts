@@ -25,7 +25,7 @@ export default function opacity(
   @return {Motion}
 */
 export function fadeIn(sprite: Sprite, opts: Partial<OpacityOptions> = {}) {
-  let innerOpts = Object.assign(
+  const innerOpts = Object.assign(
     {
       to: 1,
     },
@@ -48,7 +48,7 @@ export function fadeIn(sprite: Sprite, opts: Partial<OpacityOptions> = {}) {
   @return {Motion}
 */
 export function fadeOut(sprite: Sprite, opts: Partial<OpacityOptions> = {}) {
-  let innerOpts = Object.assign(
+  const innerOpts = Object.assign(
     {
       to: 0,
     },
@@ -80,8 +80,8 @@ export class Opacity extends Motion<OpacityOptions> {
     closer than that take proportionately less time.
   */
   *animate() {
-    let { sprite, duration, opts } = this;
-    let to =
+    const { sprite, duration, opts } = this;
+    const to =
       opts.to != null
         ? opts.to
         : sprite.finalComputedStyle != null
@@ -90,7 +90,7 @@ export class Opacity extends Motion<OpacityOptions> {
     let from;
 
     if (this.prior) {
-      let prior: Opacity = this.prior;
+      const prior: Opacity = this.prior;
       prior.assertHasTween();
 
       // when we're interrupting a prior opacity motion, we always
@@ -108,7 +108,7 @@ export class Opacity extends Motion<OpacityOptions> {
           : 0;
     }
 
-    let proportionalDuration = Math.abs(from - to) * duration;
+    const proportionalDuration = Math.abs(from - to) * duration;
     this.tween = new Tween(
       from,
       to,

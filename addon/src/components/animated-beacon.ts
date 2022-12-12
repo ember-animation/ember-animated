@@ -89,7 +89,7 @@ export default class AnimatedBeacon extends Component {
 
   _firstChildElement(): HTMLElement | SVGElement | undefined {
     if (this._inserted) {
-      let { firstNode, lastNode } = componentNodes(this);
+      const { firstNode, lastNode } = componentNodes(this);
       let node: Node | null = firstNode;
       while (node) {
         if (node.nodeType === Node.ELEMENT_NODE) {
@@ -113,12 +113,12 @@ export default class AnimatedBeacon extends Component {
       return;
     }
 
-    let element = this._firstChildElement();
+    const element = this._firstChildElement();
     if (!element) {
       return;
     }
-    let offsetParent = Sprite.offsetParentStartingAt(element);
-    let sprite = Sprite.positionedStartingAt(element, offsetParent);
+    const offsetParent = Sprite.offsetParentStartingAt(element);
+    const sprite = Sprite.positionedStartingAt(element, offsetParent);
 
     yield afterRender();
     yield microwait();

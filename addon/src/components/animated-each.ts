@@ -166,7 +166,7 @@ export default class AnimatedEach extends Component {
   }
 
   _installObservers() {
-    let key = this.key;
+    const key = this.key;
     if (key != null && key !== '@index' && key !== '@identity') {
       this.addObserver(
         `items.@each.${key}` as any,
@@ -175,9 +175,9 @@ export default class AnimatedEach extends Component {
       );
     }
 
-    let deps = this._deps;
+    const deps = this._deps;
     if (deps) {
-      for (let dep of deps) {
+      for (const dep of deps) {
         this.addObserver(
           `items.@each.${dep}` as any,
           this,
@@ -189,7 +189,7 @@ export default class AnimatedEach extends Component {
 
   @computed('watch')
   get _deps() {
-    let w = this.watch;
+    const w = this.watch;
     // Firefox has an `Object.prototype.watch` that can troll us here
     if (typeof w === 'string') {
       return w.split(/\s*,\s*/);
@@ -199,7 +199,7 @@ export default class AnimatedEach extends Component {
 
   @computed('duration')
   get durationWithDefault() {
-    let d = this.duration;
+    const d = this.duration;
     if (d == null) {
       return 500;
     } else {
@@ -218,14 +218,13 @@ export default class AnimatedEach extends Component {
     if (!items) {
       return [];
     }
-    let deps = this._deps;
-    let signature: string[] = [];
+    const deps = this._deps;
+    const signature: string[] = [];
     for (let i = 0; i < items.length; i++) {
-      let item = items[i];
+      const item = items[i];
       signature.push(getKey(item, i));
       if (deps) {
-        for (let j = 0; j < deps.length; j++) {
-          let dep = deps[j];
+        for (const dep of deps) {
           signature.push(get(item as any, dep));
         }
       }
@@ -243,38 +242,38 @@ export default class AnimatedEach extends Component {
   // animation is needed.
   @computed('items.[]', 'group')
   get renderedChildren() {
-    let firstTime = this._firstTime;
+    const firstTime = this._firstTime;
     this._firstTime = false;
 
-    let getKey = this.keyGetter;
-    let oldChildren = this._renderedChildren;
-    let oldItems = this._prevItems;
-    let oldSignature = this._prevSignature;
+    const getKey = this.keyGetter;
+    const oldChildren = this._renderedChildren;
+    const oldItems = this._prevItems;
+    const oldSignature = this._prevSignature;
     let newItems: unknown[] = this.items;
-    let newSignature = this._identitySignature(newItems, getKey);
-    let group = this.group || '__default__';
+    const newSignature = this._identitySignature(newItems, getKey);
+    const group = this.group || '__default__';
     this._prevItems = newItems ? newItems.slice() : [];
     this._prevSignature = newSignature;
     if (!newItems) {
       newItems = [];
     }
 
-    let oldIndices = new Map();
+    const oldIndices = new Map();
     oldChildren.forEach((child, index) => {
       oldIndices.set(child.id, index);
     });
 
-    let newIndices = new Map();
+    const newIndices = new Map();
     newItems.forEach((item, index) => {
       newIndices.set(getKey(item, index), index);
     });
 
-    let newChildren = newItems
+    const newChildren = newItems
       .map((value, listIndex) => {
-        let id = getKey(value, listIndex);
-        let index = oldIndices.get(id);
+        const id = getKey(value, listIndex);
+        const index = oldIndices.get(id);
         if (index != null) {
-          let child = new Child(group, id, value, listIndex);
+          const child = new Child(group, id, value, listIndex);
           child.state = 'kept';
           return child;
         } else {
@@ -303,11 +302,12 @@ export default class AnimatedEach extends Component {
     this._renderedChildrenStartedMoving = false;
 
     if (
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore: untyped FastBoot global
       typeof FastBoot === 'undefined' &&
       !isStable(oldSignature, newSignature)
     ) {
-      let transition = this._transitionFor(firstTime, oldItems, newItems);
+      const transition = this._transitionFor(firstTime, oldItems, newItems);
       this.animate.perform(transition, firstTime);
     }
 
@@ -333,7 +333,7 @@ export default class AnimatedEach extends Component {
     if (!this._inserted) {
       return;
     }
-    let { firstNode, lastNode } = componentNodes(this);
+    const { firstNode, lastNode } = componentNodes(this);
     let node: Node | null = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
@@ -370,7 +370,7 @@ export default class AnimatedEach extends Component {
       // could happen.
       this._ancestorWillDestroyUs = false;
       // treat all our sprites as re-inserted, because we had already handed them off as orphans
-      let transition = this._transitionFor(
+      const transition = this._transitionFor(
         this._firstTime,
         [],
         this._prevItems,
@@ -380,14 +380,18 @@ export default class AnimatedEach extends Component {
   }
 
   _letSpritesEscape() {
-    let transition = this._transitionFor(this._firstTime, this._prevItems, []);
-    let removedSprites = [];
+    const transition = this._transitionFor(
+      this._firstTime,
+      this._prevItems,
+      [],
+    );
+    const removedSprites = [];
     let parent;
-    for (let element of this._ownElements()) {
+    for (const element of this._ownElements()) {
       if (!parent) {
         parent = Sprite.offsetParentStartingAt(element);
       }
-      let sprite = Sprite.positionedStartingAt(element, parent);
+      const sprite = Sprite.positionedStartingAt(element, parent);
       sprite.owner = this._elementToChild.get(element)!;
       removedSprites.push(sprite);
     }
@@ -431,13 +435,13 @@ export default class AnimatedEach extends Component {
   }
 
   _findCurrentSprites() {
-    let currentSprites = [];
+    const currentSprites = [];
     let parent;
-    for (let element of this._ownElements()) {
+    for (const element of this._ownElements()) {
       if (!parent) {
         parent = Sprite.offsetParentStartingAt(element);
       }
-      let sprite = Sprite.positionedStartingAt(element, parent);
+      const sprite = Sprite.positionedStartingAt(element, parent);
       currentSprites.push(sprite);
     }
     return { currentSprites, parent };
@@ -455,7 +459,7 @@ export default class AnimatedEach extends Component {
         return;
       }
 
-      let child: Child = this._elementToChild.get(sprite.element)!;
+      const child: Child = this._elementToChild.get(sprite.element)!;
       sprite.owner = child;
 
       if (this._ancestorWillDestroyUs) {
@@ -505,7 +509,7 @@ export default class AnimatedEach extends Component {
     transition: Transition,
     firstTime: boolean,
   ) {
-    let {
+    const {
       parent,
       currentSprites,
       insertedSprites,
@@ -519,7 +523,7 @@ export default class AnimatedEach extends Component {
       removedSprites: Sprite[];
     };
 
-    let { matchingAnimatorsFinished } = (yield this.runAnimation.perform(
+    const { matchingAnimatorsFinished } = (yield this.runAnimation.perform(
       transition,
       parent,
       currentSprites,
@@ -549,13 +553,13 @@ export default class AnimatedEach extends Component {
     // everything into static positioning at any point in time, so
     // that any animation that's starting up can figure out what the
     // DOM is going to look like.
-    let keptSprites = (this._keptSprites = []);
-    let removedSprites = (this._removedSprites = []);
-    let insertedSprites = (this._insertedSprites = []);
+    const keptSprites = (this._keptSprites = []);
+    const removedSprites = (this._removedSprites = []);
+    const insertedSprites = (this._insertedSprites = []);
 
     // Start by locating our current sprites based off the actual DOM
     // elements we contain. This records their initial positions.
-    let { currentSprites, parent } = this._findCurrentSprites();
+    const { currentSprites, parent } = this._findCurrentSprites();
 
     // Warn the rest of the universe that we're about to animate.
     this.motionService.willAnimate({
@@ -605,14 +609,14 @@ export default class AnimatedEach extends Component {
         parent.measureFinalBounds();
       }
 
-      for (let element of this._ownElements()) {
+      for (const element of this._ownElements()) {
         // now is when we find all the newly inserted sprites and
         // remember their final bounds.
         if (!currentSprites.find((sprite) => sprite.element === element)) {
           if (!parent) {
             parent = Sprite.offsetParentEndingAt(element);
           }
-          let sprite = Sprite.positionedEndingAt(element, parent);
+          const sprite = Sprite.positionedEndingAt(element, parent);
           sprite.owner = this._elementToChild.get(element)!;
           sprite.hide();
           insertedSprites.push(sprite);
@@ -626,7 +630,7 @@ export default class AnimatedEach extends Component {
     // some of our sprites may match up with sprites that are entering
     // or leaving other simulatneous animators. So we hit another
     // coordination point via the motionService
-    let { farMatches, matchingAnimatorsFinished, beacons } =
+    const { farMatches, matchingAnimatorsFinished, beacons } =
       (yield this.motionService
         .get('farMatch')
         .perform(current(), insertedSprites, keptSprites, removedSprites)) as {
@@ -646,10 +650,10 @@ export default class AnimatedEach extends Component {
       parent.measureInitialBounds();
     }
 
-    let [sentSprites, unmatchedRemovedSprites] = partition(
+    const [sentSprites, unmatchedRemovedSprites] = partition(
       removedSprites,
       (sprite) => {
-        let other = farMatches.get(sprite);
+        const other = farMatches.get(sprite);
         if (other) {
           sprite.endAtSprite(other);
           if (other.revealed && !sprite.revealed) {
@@ -665,10 +669,11 @@ export default class AnimatedEach extends Component {
     // they become receivedSprites and they get initialBounds
     // (derived from their far away matching sprite) and motion
     // continuity via `startAtSprite`.
+    // eslint-disable-next-line prefer-const
     let [receivedSprites, unmatchedInsertedSprites] = partition(
       insertedSprites,
       (sprite) => {
-        let other = farMatches.get(sprite);
+        const other = farMatches.get(sprite);
         if (other) {
           sprite.startAtSprite(other);
           return true;
@@ -677,10 +682,10 @@ export default class AnimatedEach extends Component {
       },
     );
 
-    let [matchedKeptSprites, unmatchedKeptSprites] = partition(
+    const [matchedKeptSprites, unmatchedKeptSprites] = partition(
       keptSprites,
       (sprite) => {
-        let other = farMatches.get(sprite);
+        const other = farMatches.get(sprite);
         if (other) {
           if (other.revealed && !sprite.revealed) {
             sprite.startAtSprite(other);
@@ -726,7 +731,7 @@ export default class AnimatedEach extends Component {
       return { matchingAnimatorsFinished };
     }
 
-    let context = new TransitionContext(
+    const context = new TransitionContext(
       this.durationWithDefault,
       unmatchedInsertedSprites, // user-visible insertedSprites
       unmatchedKeptSprites, // user-visible keptSprites
@@ -737,7 +742,7 @@ export default class AnimatedEach extends Component {
       (sprite: Sprite) => this._motionStarted(sprite, cycle),
       (sprite: Sprite) => this._motionEnded(sprite, cycle),
     );
-    let cycle = this._cycleCounter++;
+    const cycle = this._cycleCounter++;
 
     yield* runToCompletion(context, transition);
     return { matchingAnimatorsFinished };
@@ -797,7 +802,7 @@ export default class AnimatedEach extends Component {
     oldItems: unknown[],
     newItems: unknown[],
   ): Transition {
-    let rules = this.rules;
+    const rules = this.rules;
     if (rules) {
       return rules({ firstTime, oldItems, newItems });
     } else {

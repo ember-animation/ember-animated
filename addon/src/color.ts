@@ -6,8 +6,8 @@ import './element-remove';
 
 export class Color {
   static fromComputedStyle(colorString: string) {
-    let channels = parseComputedColor(colorString);
-    return new Color(channels, channels.m[0]);
+    const channels = parseComputedColor(colorString);
+    return new Color(channels, channels.m[0]!);
   }
   static fromUserProvidedColor(colorString: string) {
     return new Color(parseUserProvidedColor(colorString), colorString);
@@ -66,7 +66,7 @@ export class ColorTween {
     this.aTween = new Tween(initialColor.a, finalColor.a, duration, easing);
   }
   get currentValue() {
-    let nonZeroAlpha = this.aTween.currentValue || 1;
+    const nonZeroAlpha = this.aTween.currentValue || 1;
     return new Color(
       {
         r: Math.floor(this.rTween.currentValue / nonZeroAlpha),
@@ -88,9 +88,9 @@ function parseComputedColor(c: string) {
   let m = /^rgb\((\d+), (\d+), (\d+)\)/.exec(c);
   if (m) {
     return {
-      r: parseInt(m[1]),
-      g: parseInt(m[2]),
-      b: parseInt(m[3]),
+      r: parseInt(m[1]!),
+      g: parseInt(m[2]!),
+      b: parseInt(m[3]!),
       a: 1,
       m,
     };
@@ -98,10 +98,10 @@ function parseComputedColor(c: string) {
   m = /^rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
   if (m) {
     return {
-      r: parseInt(m[1]),
-      g: parseInt(m[2]),
-      b: parseInt(m[3]),
-      a: parseFloat(m[4]),
+      r: parseInt(m[1]!),
+      g: parseInt(m[2]!),
+      b: parseInt(m[3]!),
+      a: parseFloat(m[4]!),
       m,
     };
   }
@@ -109,11 +109,11 @@ function parseComputedColor(c: string) {
 }
 
 function parseUserProvidedColor(c: string) {
-  let testElement = document.createElement('div');
+  const testElement = document.createElement('div');
   testElement.style.display = 'none';
   testElement.style.color = c;
   document.body.appendChild(testElement);
-  let result = parseComputedColor(getComputedStyle(testElement).color!);
+  const result = parseComputedColor(getComputedStyle(testElement).color!);
   testElement.remove();
   return result;
 }

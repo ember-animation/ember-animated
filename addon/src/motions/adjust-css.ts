@@ -49,11 +49,11 @@ export class AdjustCSS extends Motion<AdjustCSSOptions> {
   }
 
   *animate() {
-    let { value: finalValue, unit } = this._splitUnit(
+    const { value: finalValue, unit } = this._splitUnit(
       this.sprite.finalComputedStyle![this.propertyName],
     );
     if (this.prior) {
-      let prior: AdjustCSS = this.prior;
+      const prior: AdjustCSS = this.prior;
       prior.assertHasTween();
 
       this.tween = new Tween(
@@ -88,14 +88,14 @@ export class AdjustCSS extends Motion<AdjustCSSOptions> {
         unit: 'px',
       };
     }
-    let m = /(\d+(?:\.\d+)?)(\w+)/.exec(s);
+    const m = /(\d+(?:\.\d+)?)(\w+)/.exec(s);
     if (!m) {
       throw new Error(
         `Unable to use adjustCSS for property ${this.propertyName} which has value ${s}`,
       );
     }
     return {
-      value: parseFloat(m[1]),
+      value: parseFloat(m[1]!),
       unit: m[2] || '',
     };
   }

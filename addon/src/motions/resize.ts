@@ -36,15 +36,15 @@ export class Resize extends Motion<Options> {
   heightTween: Tween | DerivedTween | null = null;
 
   interrupted(motions: Motion[]) {
-    let prior = motions.find((m) => m instanceof this.constructor);
+    const prior = motions.find((m) => m instanceof this.constructor);
     if (prior) {
       this.prior = prior as Resize;
     }
   }
 
   *animate() {
-    let sprite: Sprite = this.sprite;
-    let duration = this.duration;
+    const sprite: Sprite = this.sprite;
+    const duration = this.duration;
     let widthTween: Tween | DerivedTween;
     let heightTween: Tween | DerivedTween;
 

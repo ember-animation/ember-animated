@@ -23,7 +23,7 @@ export function collapsedChildren(
       block = lastChildBlock(element);
     }
     if (block) {
-      let [child, childCS] = block;
+      const [child, childCS] = block;
       children.push(child);
       collapsedChildren(child, childCS, which, children);
     }
@@ -35,14 +35,14 @@ function firstChildBlock(
   element: Element,
 ): [Element, CSSStyleDeclaration] | undefined {
   for (let i = 0; i < element.children.length; i++) {
-    let child = element.children[i];
-    let childCS = getComputedStyle(child);
+    const child = element.children[i];
+    const childCS = getComputedStyle(child as Element);
     if (childCS.clear !== 'none') {
       // an intervening block with clearance prevents margin collapse
       return;
     }
     if (isBlock(childCS)) {
-      return [child, childCS];
+      return [child as Element, childCS];
     }
   }
   return;
@@ -52,14 +52,14 @@ function lastChildBlock(
   element: Element,
 ): [Element, CSSStyleDeclaration] | undefined {
   for (let i = element.children.length - 1; i >= 0; i--) {
-    let child = element.children[i];
-    let childCS = getComputedStyle(child);
+    const child = element.children[i];
+    const childCS = getComputedStyle(child as Element);
     if (childCS.clear !== 'none') {
       // an intervening block with clearance prevents margin collapse
       return;
     }
     if (isBlock(childCS)) {
-      return [child, childCS];
+      return [child as Element, childCS];
     }
   }
   return;

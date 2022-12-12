@@ -86,13 +86,13 @@ export default class AnimatedOrphans extends Component {
   @action
   reanimate() {
     if (!this.get('startAnimation.isRunning' as any)) {
-      let ownSprite = new Sprite(
+      const ownSprite = new Sprite(
         this.element as HTMLElement | SVGElement,
         true,
         null,
         null,
       );
-      let activeSprites = this._findActiveSprites(ownSprite);
+      const activeSprites = this._findActiveSprites(ownSprite);
       this.animate.perform({ ownSprite, activeSprites });
     }
   }
@@ -101,14 +101,16 @@ export default class AnimatedOrphans extends Component {
     // we don't have any impact on static layout
   }
 
-  endStaticMeasurement() {}
+  endStaticMeasurement() {
+    /* nothing to do here */
+  }
 
   @alias('animate.isRunning')
   isAnimating!: boolean;
 
   @task(function* (this: AnimatedOrphans, { ownSprite, activeSprites }) {
     yield this.startAnimation.perform(ownSprite);
-    let { matchingAnimatorsFinished } = (yield this.runAnimation.perform(
+    const { matchingAnimatorsFinished } = (yield this.runAnimation.perform(
       activeSprites,
       ownSprite,
     )) as { matchingAnimatorsFinished: Promise<void> };
@@ -128,17 +130,19 @@ export default class AnimatedOrphans extends Component {
   @task(function* (this: AnimatedOrphans, activeSprites, ownSprite) {
     // we don't need any static measurements, but we wait for this so
     // we stay on the same timing as all the other animators
-    yield* this.motionService.staticMeasurement(() => {});
+    yield* this.motionService.staticMeasurement(() => {
+      /* nothing to do here */
+    });
 
     // Some of the new orphan transitions may be handing us sprites we
     // already have matches for, in which case our active sprites take
     // precedence.
     {
-      let activeIds = Object.create(null);
-      for (let sprite of activeSprites) {
+      const activeIds = Object.create(null);
+      for (const sprite of activeSprites) {
         activeIds[`${sprite.owner.group}/${sprite.owner.id}`] = true;
       }
-      for (let entry of this._newOrphanTransitions) {
+      for (const entry of this._newOrphanTransitions) {
         entry.removedSprites = entry.removedSprites.filter((s: Sprite) => {
           s.assertHasOwner();
           return !activeIds[`${s.owner.group}/${s.owner.id}`];
@@ -149,7 +153,7 @@ export default class AnimatedOrphans extends Component {
     // our sprites from prior animation runs are eligible to be
     // matched by other animators (this is how an orphan sprites that
     // are animating away can get interrupted into coming back)
-    let { farMatches, matchingAnimatorsFinished } = (yield this.motionService
+    const { farMatches, matchingAnimatorsFinished } = (yield this.motionService
       .get('farMatch')
       .perform(
         current(),
@@ -163,13 +167,13 @@ export default class AnimatedOrphans extends Component {
       farMatches: Map<Sprite, Sprite>;
     };
 
-    let cycle = this._cycleCounter++;
+    const cycle = this._cycleCounter++;
 
-    for (let { transition, duration, sprites } of this._groupActiveSprites(
+    for (const { transition, duration, sprites } of this._groupActiveSprites(
       activeSprites,
     )) {
-      let [sentSprites, removedSprites] = partition(sprites, (sprite) => {
-        let other = farMatches.get(sprite);
+      const [sentSprites, removedSprites] = partition(sprites, (sprite) => {
+        const other = farMatches.get(sprite);
         if (other) {
           sprite.endAtSprite(other);
           if (other.revealed && !sprite.revealed) {
@@ -179,7 +183,7 @@ export default class AnimatedOrphans extends Component {
         }
         return false;
       });
-      let context = new TransitionContext(
+      const context = new TransitionContext(
         duration,
         [],
         [],
@@ -208,8 +212,8 @@ export default class AnimatedOrphans extends Component {
       // because each one is going to potentially trigger DOM cloning,
       // so any animated descendants need to get hidden before one of
       // their ancestors clones them.
-      let entry = this._newOrphanTransitions.pop()!;
-      let { transition, duration, removedSprites, shouldAnimateRemoved } =
+      const entry = this._newOrphanTransitions.pop()!;
+      const { transition, duration, removedSprites, shouldAnimateRemoved } =
         entry;
 
       if (removedSprites.length === 0) {
@@ -219,18 +223,18 @@ export default class AnimatedOrphans extends Component {
         continue;
       }
 
-      for (let _sprite of removedSprites) {
+      for (const _sprite of removedSprites) {
         // typesecript workaround for https://github.com/microsoft/TypeScript/issues/35940
-        let sprite: Sprite = _sprite;
+        const sprite: Sprite = _sprite;
         sprite.assertHasOwner();
         sprite.rehome(ownSprite);
         this._childToTransition.set(sprite.owner, entry);
       }
 
-      let [sentSprites, unmatchedRemovedSprites] = partition(
+      const [sentSprites, unmatchedRemovedSprites] = partition(
         removedSprites,
         (sprite) => {
-          let other = farMatches.get(sprite);
+          const other = farMatches.get(sprite);
           if (other) {
             sprite.endAtSprite(other);
             if (other.revealed && !sprite.revealed) {
@@ -242,7 +246,8 @@ export default class AnimatedOrphans extends Component {
         },
       );
 
-      let self = this;
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const self = this;
       spawnChild(function* () {
         yield microwait();
         sentSprites.forEach((s) => s.hide());
@@ -265,7 +270,7 @@ export default class AnimatedOrphans extends Component {
           return;
         }
 
-        let context = new TransitionContext(
+        const context = new TransitionContext(
           duration,
           [],
           [],
@@ -289,7 +294,7 @@ export default class AnimatedOrphans extends Component {
 
   @task(function* (activeSprites, matchingAnimatorsFinished) {
     yield matchingAnimatorsFinished;
-    for (let sprite of activeSprites) {
+    for (const sprite of activeSprites) {
       sprite.element.remove();
     }
   })
@@ -301,14 +306,14 @@ export default class AnimatedOrphans extends Component {
     }
     return Array.from(this.element.children)
       .map((element) => {
-        let child = this._elementToChild.get(element);
+        const child = this._elementToChild.get(element);
         if (child.shouldRemove) {
           // child was not animating in the previously interrupted
           // animation, so its safe to remove
           element.remove();
           return undefined;
         } else {
-          let sprite = Sprite.positionedStartingAt(
+          const sprite = Sprite.positionedStartingAt(
             element as HTMLElement | SVGElement,
             ownSprite,
           );
@@ -326,12 +331,14 @@ export default class AnimatedOrphans extends Component {
   _groupActiveSprites(
     activeSprites: Sprite[],
   ): { transition: Transition; duration: number; sprites: Sprite[] }[] {
-    let groups = [] as ReturnType<AnimatedOrphans['_groupActiveSprites']>;
-    for (let _sprite of activeSprites) {
+    const groups = [] as ReturnType<AnimatedOrphans['_groupActiveSprites']>;
+    for (const _sprite of activeSprites) {
       // ts workaround for https://github.com/microsoft/TypeScript/issues/35940
-      let sprite: Sprite = _sprite;
+      const sprite: Sprite = _sprite;
       sprite.assertHasOwner();
-      let { transition, duration } = this._childToTransition.get(sprite.owner);
+      const { transition, duration } = this._childToTransition.get(
+        sprite.owner,
+      );
       let group = groups.find((g) => g.transition === transition);
       if (!group) {
         group = { transition, duration, sprites: [] };
@@ -344,7 +351,9 @@ export default class AnimatedOrphans extends Component {
 
   _prepareSprite(sprite: Sprite) {
     sprite.hide();
-    let newElement = sprite.element.cloneNode(true) as HTMLElement | SVGElement;
+    const newElement = sprite.element.cloneNode(true) as
+      | HTMLElement
+      | SVGElement;
     continueMotions(sprite.element, newElement);
     sprite.element = newElement;
     return sprite;
@@ -364,7 +373,7 @@ export default class AnimatedOrphans extends Component {
       // line-height that gives us the "used value" not the "computed value".
       // The used value doesn't inherit correctly, so we can't set it here, so
       // we're pulling that one out.
-      let s: Record<string, any> = Object.assign(
+      const s: Record<string, any> = Object.assign(
         {},
         sprite.initialComputedStyle,
       );

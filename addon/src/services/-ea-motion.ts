@@ -114,7 +114,7 @@ export default class MotionService extends Service {
     return this;
   }
   unobserveAnimations(fn: AnimationObserver) {
-    let index = this._animationObservers.indexOf(fn);
+    const index = this._animationObservers.indexOf(fn);
     if (index !== -1) {
       this._animationObservers.splice(index, 1);
     }
@@ -131,7 +131,7 @@ export default class MotionService extends Service {
     component: ComponentLike,
     fn: AnimationObserver,
   ) {
-    let entry = this._descendantObservers.find(
+    const entry = this._descendantObservers.find(
       (e) => e.component === component && e.fn === fn,
     );
     if (entry) {
@@ -149,7 +149,7 @@ export default class MotionService extends Service {
   // animation.
   observeAncestorAnimations(component: ComponentLike, fn: AncestorObserver) {
     let id;
-    for (let ancestorComponent of ancestorsOf(component)) {
+    for (const ancestorComponent of ancestorsOf(component)) {
       // when we find an animated list element, we save its ID
       if ('isEmberAnimatedListElement' in ancestorComponent) {
         id = ancestorComponent.child.id;
@@ -170,8 +170,8 @@ export default class MotionService extends Service {
     return this;
   }
   unobserveAncestorAnimations(component: ComponentLike, fn: AncestorObserver) {
-    for (let ancestorComponent of ancestorsOf(component)) {
-      let observers = this._ancestorObservers.get(ancestorComponent);
+    for (const ancestorComponent of ancestorsOf(component)) {
+      const observers = this._ancestorObservers.get(ancestorComponent);
       if (observers) {
         observers.delete(fn);
       }
@@ -265,8 +265,8 @@ export default class MotionService extends Service {
     removed: Sprite[],
     longWait = false,
   ) {
-    let matches = new Map() as Map<Sprite, Sprite>;
-    let mine = {
+    const matches = new Map() as Map<Sprite, Sprite>;
+    const mine = {
       inserted,
       kept,
       removed,
@@ -314,11 +314,11 @@ export default class MotionService extends Service {
     component: ComponentLike;
     children: Child[];
   }) {
-    let message = { task, duration };
+    const message = { task, duration };
 
     // tell any of our ancestors who are observing their descendants
-    let ancestors = [...ancestorsOf(component)];
-    for (let { component: observingComponent, fn } of this
+    const ancestors = [...ancestorsOf(component)];
+    for (const { component: observingComponent, fn } of this
       ._descendantObservers) {
       if (ancestors.indexOf(observingComponent) !== -1) {
         fn(message);
@@ -326,10 +326,10 @@ export default class MotionService extends Service {
     }
 
     // tell any of our descendants who are observing their ancestors
-    let observers = this._ancestorObservers.get(component);
+    const observers = this._ancestorObservers.get(component);
     if (observers) {
-      for (let [fn, id] of observers.entries()) {
-        let child = children.find((child) => child.id === id);
+      for (const [fn, id] of observers.entries()) {
+        const child = children.find((child) => child.id === id);
         if (child) {
           fn(child.state);
         } // the else case here applies to descendants that are about
@@ -341,13 +341,13 @@ export default class MotionService extends Service {
     }
 
     // tell anybody who is listening for all animations
-    for (let fn of this._animationObservers) {
+    for (const fn of this._animationObservers) {
       fn(message);
     }
   }
 
   *staticMeasurement(fn: Measurement['fn']) {
-    let measurement: Measurement = { fn, resolved: false, value: null };
+    const measurement: Measurement = { fn, resolved: false, value: null };
     this._measurements.push(measurement);
     try {
       // allow all concurrent animators to join in with our single
@@ -357,7 +357,7 @@ export default class MotionService extends Service {
       if (!measurement.resolved) {
         // we are the first concurrent task to wake up, so we do the
         // actual resolution for everyone.
-        let animators = this._animators;
+        const animators = this._animators;
         animators.forEach((animator) => animator.beginStaticMeasurement());
         this._measurements.forEach((m) => {
           try {
@@ -380,7 +380,7 @@ export default class MotionService extends Service {
 
 function performMatches(sink: Rendezvous, source: Rendezvous) {
   sink.inserted.concat(sink.kept).forEach((sprite) => {
-    let match = source.removed.find(
+    const match = source.removed.find(
       // TODO: an OwnedSprite type could eliminate the need for these
       // non-nullable casts.
       (mySprite) =>

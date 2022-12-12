@@ -47,22 +47,22 @@ function getOrCreate<T>(key: string, construct: () => T): T {
 // TODO: specialize the Generator types here so you can only yield promises and
 // get back the promise's resolved type.
 export function spawn(genFn: () => Generator) {
-  let m = new MicroRoutine(genFn, false);
+  const m = new MicroRoutine(genFn, false);
   return m.promise;
 }
 
 export function spawnChild(genFn: () => Generator) {
-  let m = new MicroRoutine(genFn, true);
+  const m = new MicroRoutine(genFn, true);
   return m.promise;
 }
 
 export function stop(microRoutinePromise: Promise<any>) {
   if (microRoutinePromise === current()) {
-    let e = new Error('TaskCancelation');
+    const e = new Error('TaskCancelation');
     e.message = 'TaskCancelation';
     throw e;
   }
-  let microRoutine = microRoutines.get(microRoutinePromise);
+  const microRoutine = microRoutines.get(microRoutinePromise);
   if (microRoutine) {
     microRoutine.stop();
   }
@@ -73,7 +73,7 @@ export function logErrors(fn: (err: Error) => void) {
 }
 
 export function current() {
-  let cur = getCurrent();
+  const cur = getCurrent();
   if (cur) {
     return cur.promise;
   }
@@ -126,7 +126,7 @@ let onStack: (routine: MicroRoutine) => StackEntry | undefined;
     try {
       return fn();
     } finally {
-      let restore = routines.prior.shift()!;
+      const restore = routines.prior.shift()!;
       routines.cur = restore.microroutine;
       if (restore.throw) {
         /*
@@ -149,18 +149,18 @@ let onStack: (routine: MicroRoutine) => StackEntry | undefined;
 }
 
 function ensureCurrent(label: string) {
-  let cur = getCurrent();
+  const cur = getCurrent();
   if (!cur) {
     throw new Error(`${label}: only works inside a running microroutine`);
   }
   return cur;
 }
 
-let loggedErrors = getOrCreate<WeakSet<Error>>(
+const loggedErrors = getOrCreate<WeakSet<Error>>(
   'loggedErrors',
   () => new WeakSet(),
 );
-let microRoutines = getOrCreate<WeakMap<Promise<any>, MicroRoutine>>(
+const microRoutines = getOrCreate<WeakMap<Promise<any>, MicroRoutine>>(
   'microRoutines',
   () => new WeakMap(),
 );
@@ -186,7 +186,7 @@ class MicroRoutine {
     registerCancellation(this.promise, this.stop.bind(this));
 
     if (linkToParent) {
-      let parent = ensureCurrent('spawnChild');
+      const parent = ensureCurrent('spawnChild');
       parent.linked.push(this);
       this.errorLogger = parent.errorLogger;
     }
@@ -241,7 +241,7 @@ class MicroRoutine {
     this.linked.forEach((microRoutine) => {
       microRoutine.stop();
     });
-    let e = new Error('TaskCancelation');
+    const e = new Error('TaskCancelation');
     e.message = 'TaskCancelation';
     if (getCurrent() === this) {
       // when a microroutine calls stop() resulting it stopping
@@ -249,7 +249,7 @@ class MicroRoutine {
       // own stack.
       throw e;
     }
-    let s = onStack(this);
+    const s = onStack(this);
     if (s) {
       // because of the synchronous nature of spawn() and stop(), it's
       // possible that the microroutine we're stopping is already on
@@ -267,7 +267,7 @@ class MicroRoutine {
 }
 
 function cancelGenerator(generator: Generator) {
-  let e = new Error('TaskCancelation');
+  const e = new Error('TaskCancelation');
   e.message = 'TaskCancelation';
   try {
     generator.throw!(e);
@@ -290,6 +290,7 @@ function isPromise(thing: any): thing is Promise<any> {
 //
 export function parallel(...functions: ((...args: any[]) => unknown)[]) {
   return function (...args: any[]) {
+    // eslint-disable-next-line prefer-spread
     return Promise.all(functions.map((f) => f.apply(null, args)));
   };
 }
@@ -303,7 +304,8 @@ export function parallel(...functions: ((...args: any[]) => unknown)[]) {
 export function serial(...functions: ((...args: any[]) => unknown)[]) {
   return function (...args: any[]) {
     return spawnChild(function* () {
-      for (let fn of functions) {
+      for (const fn of functions) {
+        // eslint-disable-next-line prefer-spread
         yield fn.apply(null, args);
       }
     });

@@ -72,8 +72,8 @@ export class DerivedTween implements TweenLike {
   get finalValue() {
     if (this._finalValue == null) {
       let accum = 0;
-      for (let i = 0; i < this.inputs.length; i++) {
-        accum += this.inputs[i].finalValue;
+      for (const input of this.inputs) {
+        accum += input.finalValue;
       }
       this._finalValue = accum;
     }
@@ -91,13 +91,13 @@ class MotionCurve {
   // we share motion curves among all concurrent motions that have the
   // same duration that start in the same animation frame.
   static findOrCreate(duration: number, easing: (t: number) => number) {
-    let shared = currentCurves.find(
+    const shared = currentCurves.find(
       (c) => c.duration === duration && c.easing === easing,
     );
     if (shared) {
       return shared;
     }
-    let created = new this(duration, easing);
+    const created = new this(duration, easing);
     currentCurves.push(created);
     rAF().then(() => {
       currentCurves.splice(currentCurves.indexOf(created), 1);

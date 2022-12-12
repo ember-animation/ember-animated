@@ -40,7 +40,7 @@ export class MoveSVG extends Motion<MoveSVGOptions> {
 
   *animate() {
     if (this.prior) {
-      let prior: MoveSVG = this.prior;
+      const prior: MoveSVG = this.prior;
       prior.assertHasTween();
 
       this.tween = new Tween(

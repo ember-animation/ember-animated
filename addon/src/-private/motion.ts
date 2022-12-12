@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { spawnChild } from './scheduler';
 import { rAF, microwait } from './concurrency-helpers';
 import { continuedFromElement } from './motion-bridge';
@@ -39,8 +40,9 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
   }
 
   run() {
-    let context = TransitionContext.forSprite(this.sprite);
-    let self = this;
+    const context = TransitionContext.forSprite(this.sprite);
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     return spawnChild(function* () {
       context.onMotionStart(self.sprite);
       try {
@@ -83,7 +85,7 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
   }
 
   _setupMotionList() {
-    let element = this.sprite.element;
+    const element = this.sprite.element;
     let motionList = motions.get(element);
     if (!motionList) {
       motions.set(element, (motionList = []));
@@ -97,9 +99,9 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
         this._motionList.unshift(this);
       }
     });
-    let oldElement = continuedFromElement(element);
+    const oldElement = continuedFromElement(element);
     if (oldElement) {
-      let inheritedMotions = motions.get(oldElement);
+      const inheritedMotions = motions.get(oldElement);
       if (inheritedMotions) {
         this._inheritedMotionList = inheritedMotions;
       }
@@ -108,7 +110,7 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
 
   _clearMotionList() {
     if (this._motionList) {
-      let index = this._motionList.indexOf(this);
+      const index = this._motionList.indexOf(this);
       this._motionList.splice(index, 1);
       if (this._motionList.length === 0) {
         motions.delete(this.sprite.element);

@@ -40,17 +40,17 @@ export class Move<T extends MoveOptions = MoveOptions> extends Motion<T> {
   }
 
   *animate() {
-    let duration = this.duration;
+    const duration = this.duration;
 
     this.sprite.assertHasInitialBounds();
     this.sprite.assertHasFinalBounds();
-    let sprite = this.sprite;
+    const sprite = this.sprite;
 
     // How far our sprite needs to move.
     let dx, dy;
     {
-      let initial = sprite.initialBounds;
-      let final = sprite.finalBounds;
+      const initial = sprite.initialBounds;
+      const final = sprite.finalBounds;
       dx = final.left - initial.left;
       dy = final.top - initial.top;
     }
@@ -73,17 +73,17 @@ export class Move<T extends MoveOptions = MoveOptions> extends Motion<T> {
         this.opts.easing,
       );
     } else {
-      let prior: Move = this.prior;
+      const prior: Move = this.prior;
       prior.assertHasTweens();
 
       // Here we are interrupting a prior Move.
-      let priorXTween = prior.xTween;
-      let priorYTween = prior.yTween;
+      const priorXTween = prior.xTween;
+      const priorYTween = prior.yTween;
 
       // The transformDiffs account for the fact that our old and new
       // tweens may be measuring from different origins.
-      let transformDiffX = sprite.transform.tx - priorXTween.currentValue;
-      let transformDiffY = sprite.transform.ty - priorYTween.currentValue;
+      const transformDiffX = sprite.transform.tx - priorXTween.currentValue;
+      const transformDiffY = sprite.transform.ty - priorYTween.currentValue;
 
       // We adjust our move distances so that they cancel out the
       // remainder of the previous move.
@@ -94,8 +94,8 @@ export class Move<T extends MoveOptions = MoveOptions> extends Motion<T> {
       // we were already going, we don't really want to extend the
       // time of the overall animation (it looks funny when you're
       // waiting around for nothing to happen).
-      let durationX = fuzzyZero(dx) ? 0 : duration;
-      let durationY = fuzzyZero(dy) ? 0 : duration;
+      const durationX = fuzzyZero(dx) ? 0 : duration;
+      const durationY = fuzzyZero(dy) ? 0 : duration;
 
       // We add our new differential tweens to the prior tweens. This
       // is the magic that gives us smooth continuity. At the very
@@ -123,7 +123,7 @@ export class Move<T extends MoveOptions = MoveOptions> extends Motion<T> {
 
   *_moveIt() {
     this.assertHasTweens();
-    let sprite = this.sprite;
+    const sprite = this.sprite;
     while (!this.xTween.done || !this.yTween.done) {
       sprite.translate(
         this.xTween.currentValue - sprite.transform.tx,
