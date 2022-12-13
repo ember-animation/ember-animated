@@ -109,7 +109,7 @@ export default class AnimatedContainerComponent extends Component {
     if (!this._inserted) {
       return undefined;
     }
-    const { firstNode, lastNode } = componentNodes(this);
+    let { firstNode, lastNode } = componentNodes(this);
     let node: Node | null = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
@@ -158,10 +158,10 @@ export default class AnimatedContainerComponent extends Component {
     animationTask: Promise<void>,
   ) {
     this._startingUp = true;
-    const service = this.motionService;
+    let service = this.motionService;
     let sprite: Sprite;
     let useMotion;
-    const element = this._ownElement();
+    let element = this._ownElement();
 
     if (element) {
       sprite = Sprite.sizedStartingAt(element);

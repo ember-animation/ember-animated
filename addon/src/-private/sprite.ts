@@ -63,7 +63,7 @@ export default class Sprite {
   }
 
   static sizedEndingAt(element: Element) {
-    const sprite = new this(element, false, 'size', null);
+    let sprite = new this(element, false, 'size', null);
     sprite._initialBounds = emptyBounds;
     sprite._initialComputedStyle = sprite._finalComputedStyle;
     sprite._initialPosition = sprite._finalPosition;
@@ -113,7 +113,7 @@ export default class Sprite {
       this.measureFinalBounds();
     }
 
-    const predecessor = inFlight.get(element);
+    let predecessor = inFlight.get(element);
     if (predecessor && lockMode) {
       // When we finish, we want to be able to set the style back to
       // whatever it was before any Sprites starting locking things,
@@ -381,9 +381,9 @@ export default class Sprite {
     @return {Object}
   */
   _getCurrentPosition(): SpritePosition {
-    const { element } = this;
+    let { element } = this;
     if (isSVG(element)) {
-      const position: SVGPosition = {
+      let position: SVGPosition = {
         x: getSVGLength(element, 'x'),
         y: getSVGLength(element, 'y'),
         cx: getSVGLength(element, 'cx'),
@@ -395,8 +395,8 @@ export default class Sprite {
       };
       return position;
     } else {
-      const style = (this.element as HTMLElement).style;
-      const position: HTMLPosition = {
+      let style = (this.element as HTMLElement).style;
+      let position: HTMLPosition = {
         top: style.top,
         left: style.left,
         bottom: style.bottom,
@@ -422,7 +422,7 @@ export default class Sprite {
       return;
     }
     if (isSVG(this.element)) {
-      const { element } = this;
+      let { element } = this;
       setSVGLength(element, 'x', pos);
       setSVGLength(element, 'y', pos);
       setSVGLength(element, 'cx', pos);
@@ -432,18 +432,18 @@ export default class Sprite {
       setSVGLength(element, 'height', pos);
       setAttribute(element, 'transform', pos);
     } else {
-      const style = (this.element as HTMLElement).style;
-      const p = pos as HTMLPosition;
+      let style = (this.element as HTMLElement).style;
+      let p = pos as HTMLPosition;
       style.top = p.top ?? '';
       style.left = p.left ?? '';
       style.right = p.right ?? '';
       style.bottom = p.bottom ?? '';
       style.transform = p.transform ?? '';
 
-      for (const cls of p.classList) {
+      for (let cls of p.classList) {
         this.element.classList.add(cls);
       }
-      for (const cls of Array.from(this.element.classList)) {
+      for (let cls of Array.from(this.element.classList)) {
         if (!p.classList.includes(cls)) {
           this.element.classList.remove(cls);
         }
@@ -608,9 +608,9 @@ export default class Sprite {
     // at the point in time when this runs, we always have either initial or
     // final measurements, but not both. So this will successfully pick the one
     // we do have, which applies to what we are currently measuring.
-    const transform = (this.initialCumulativeTransform ||
+    let transform = (this.initialCumulativeTransform ||
       this.finalCumulativeTransform)!;
-    const bounds = (this.initialBounds || this.finalBounds)!;
+    let bounds = (this.initialBounds || this.finalBounds)!;
 
     this._imposedStyle = {};
 
@@ -660,9 +660,9 @@ export default class Sprite {
   }
 
   _rememberPosition() {
-    const computedStyle = getComputedStyle(this.element);
-    const style = (this.element as HTMLElement).style;
-    const offsets = this._lazyOffsets(computedStyle);
+    let computedStyle = getComputedStyle(this.element);
+    let style = (this.element as HTMLElement).style;
+    let offsets = this._lazyOffsets(computedStyle);
     let tx = 0;
     let ty = 0;
 
@@ -715,8 +715,8 @@ export default class Sprite {
   }
 
   _cacheOriginalStyles() {
-    const cache: Sprite['_styleCache'] = {};
-    const style = (this.element as HTMLElement).style;
+    let cache: Sprite['_styleCache'] = {};
+    let style = (this.element as HTMLElement).style;
     Object.keys(this._imposedStyle!).forEach((property) => {
       (cache as any)[property] = (style as any)[property];
     });
@@ -744,7 +744,7 @@ export default class Sprite {
       { id: 'ember-animated-sprite-unlock' },
     );
     inFlight.delete(this.element);
-    const cache = this._styleCache!;
+    let cache = this._styleCache!;
     Object.keys(cache).forEach((property) => {
       setStyle(
         this.element as HTMLElement,
@@ -794,7 +794,7 @@ export default class Sprite {
       });
     }
     Object.keys(styles).forEach((property) => {
-      const val = styles[property as keyof T];
+      let val = styles[property as keyof T];
       if (typeof val !== 'string') {
         throw new Error(
           `Sprite#applyStyles only accepts string values. Convert any numeric values to strings (with appropriate units) before calling. You passed ${property}=${val}`,
@@ -892,7 +892,7 @@ export default class Sprite {
     @return {void}
   */
   scale(scaleX: number, scaleY: number) {
-    const t = this.transform.mult(new Transform(scaleX, 0, 0, scaleY, 0, 0));
+    let t = this.transform.mult(new Transform(scaleX, 0, 0, scaleY, 0, 0));
     this._transform = t;
     this.applyStyles({
       transform: t.serialize(),
@@ -909,15 +909,15 @@ export default class Sprite {
     @return {void}
   */
   rehome(newOffsetSprite: Sprite) {
-    const screenBounds = this.absoluteInitialBounds;
-    const newRelativeBounds = shiftedBounds(
+    let screenBounds = this.absoluteInitialBounds;
+    let newRelativeBounds = shiftedBounds(
       screenBounds,
       -newOffsetSprite.initialBounds!.left,
       -newOffsetSprite.initialBounds!.top,
     );
 
-    const initialAmbientTransform = this._offsetSprite!.cumulativeTransform;
-    const finalAmbientTransform = newOffsetSprite.cumulativeTransform;
+    let initialAmbientTransform = this._offsetSprite!.cumulativeTransform;
+    let finalAmbientTransform = newOffsetSprite.cumulativeTransform;
 
     let t = this.transform;
     t = t.mult(
@@ -966,7 +966,7 @@ export default class Sprite {
   */
   startAtSprite(otherSprite: Sprite) {
     continueMotions(otherSprite.element, this.element);
-    const diff = this.difference('finalBounds', otherSprite, 'initialBounds');
+    let diff = this.difference('finalBounds', otherSprite, 'initialBounds');
     this.startTranslatedBy(-diff.dx, -diff.dy);
     this._initialBounds = resizedBounds(
       this._initialBounds!,
@@ -1016,7 +1016,7 @@ export default class Sprite {
     @return {void}
   */
   startTranslatedBy(dx: number, dy: number) {
-    const priorInitialBounds = this._initialBounds!;
+    let priorInitialBounds = this._initialBounds!;
     let offsetX = 0;
     let offsetY = 0;
     if (this._offsetSprite) {
@@ -1056,10 +1056,10 @@ export default class Sprite {
   */
   moveToFinalPosition() {
     if (this._inInitialPosition) {
-      const initial = this._initialBounds!;
-      const final = this._finalBounds!;
-      const dx = final.left - initial.left;
-      const dy = final.top - initial.top;
+      let initial = this._initialBounds!;
+      let final = this._finalBounds!;
+      let dx = final.left - initial.left;
+      let dy = final.top - initial.top;
       this.translate(dx, dy);
       this._inInitialPosition = false;
     }
@@ -1073,7 +1073,7 @@ export default class Sprite {
     @return {void}
   */
   endAtSprite(otherSprite: Sprite) {
-    const diff = otherSprite.difference('finalBounds', this, 'initialBounds');
+    let diff = otherSprite.difference('finalBounds', this, 'initialBounds');
     this.endTranslatedBy(diff.dx, diff.dy);
     this._finalBounds = resizedBounds(
       this._finalBounds!,
@@ -1148,7 +1148,7 @@ function findOffsets(
   transform: Transform,
   offsetSprite: Sprite,
 ) {
-  const ownBounds = element.getBoundingClientRect();
+  let ownBounds = element.getBoundingClientRect();
   let left = ownBounds.left;
   let top = ownBounds.top;
   let effectiveOffsetParent;
@@ -1167,17 +1167,17 @@ function findOffsets(
       top += effectiveOffsetParent.scrollTop;
     }
 
-    const eopComputedStyle = getComputedStyle(effectiveOffsetParent);
+    let eopComputedStyle = getComputedStyle(effectiveOffsetParent);
     if (
       eopComputedStyle.position !== 'static' ||
       eopComputedStyle.transform !== 'none'
     ) {
-      const eopBounds = effectiveOffsetParent.getBoundingClientRect();
+      let eopBounds = effectiveOffsetParent.getBoundingClientRect();
       left -=
         eopBounds.left + parseFloat(eopComputedStyle.borderLeftWidth || '0');
       top -= eopBounds.top + parseFloat(eopComputedStyle.borderTopWidth || '0');
 
-      const eopTransform = cumulativeTransform(
+      let eopTransform = cumulativeTransform(
         effectiveOffsetParent as HTMLElement,
       );
       left /= eopTransform.a;
@@ -1223,12 +1223,11 @@ function getEffectiveOffsetParent(element: HTMLElement) {
     // HTML rules below.
   }
 
-  const offsetParent = element.offsetParent;
+  let offsetParent = element.offsetParent;
   let cursor = element.parentElement;
   while (cursor && offsetParent && cursor !== offsetParent) {
-    const styles = window.getComputedStyle(cursor);
-    const t =
-      styles.transform !== '' ? styles.transform : cursor.style.transform;
+    let styles = window.getComputedStyle(cursor);
+    let t = styles.transform !== '' ? styles.transform : cursor.style.transform;
     if (t !== 'none') {
       return cursor;
     }
@@ -1251,7 +1250,7 @@ function setSVGLength(element: SVGElement, property: string, values: any) {
 }
 
 function setAttribute(element: Element, attrName: string, values: any) {
-  const value = values[attrName];
+  let value = values[attrName];
   if (value) {
     element.setAttribute(attrName as string, value);
   } else {
@@ -1272,9 +1271,9 @@ function setStyle(element: HTMLElement, property: string, value: string) {
 // keep changing as the element changes. So we use this to copy off a
 // snapshot of the properties we potentially care about.
 function copyComputedStyle(element: Element): CopiedCSS {
-  const computed = getComputedStyle(element);
-  const output = new CopiedCSS();
-  for (const property of COPIED_CSS_PROPERTIES) {
+  let computed = getComputedStyle(element);
+  let output = new CopiedCSS();
+  for (let property of COPIED_CSS_PROPERTIES) {
     output[property as keyof CopiedCSS] = computed.getPropertyValue(property);
   }
   return output;

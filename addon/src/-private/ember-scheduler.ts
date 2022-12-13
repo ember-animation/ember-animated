@@ -1,4 +1,3 @@
-/* eslint-disable prefer-rest-params */
 import { join, scheduleOnce } from '@ember/runloop';
 import { addObserver } from '@ember/object/observers';
 import { computed, set } from '@ember/object';
@@ -15,7 +14,7 @@ function getOrCreate<T>(key: string, construct: () => T): T {
 type HostObject = Record<string, any>;
 
 export function task(taskFn: (...args: any[]) => Generator) {
-  const tp = _computed(function (this: HostObject, propertyName: string) {
+  let tp = _computed(function (this: HostObject, propertyName: string) {
     return new Task(this, taskFn, tp, propertyName);
   }) as unknown as TaskProperty;
 
@@ -24,7 +23,7 @@ export function task(taskFn: (...args: any[]) => Generator) {
 }
 
 function _computed(fn: (this: HostObject, propertyName: string) => Task) {
-  const cp = function (proto: HostObject, key: string) {
+  let cp = function (proto: HostObject, key: string) {
     if ((cp as any).setup !== undefined) {
       (cp as any).setup(proto, key);
     }
@@ -38,7 +37,6 @@ let handlerCounter = 0;
 
 let BaseTaskProperty: { new (): HostObject };
 
-// eslint-disable-next-line prefer-const
 BaseTaskProperty = class {};
 
 type BufferPolicy = (task: Task, priv: TaskPrivate) => Promise<void> | void;
@@ -63,22 +61,20 @@ export class TaskProperty extends BaseTaskProperty {
   }
 
   setup(proto: HostObject, taskName: string) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: depending on the ember version we may or may not have a super
     // method.
     if (super.setup) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       super.setup(...arguments);
     }
     if (this._observes) {
-      const handlerName = `_ember_animated_handler_${handlerCounter++}`;
+      let handlerName = `_ember_animated_handler_${handlerCounter++}`;
       (proto as any)[handlerName] = function () {
-        const task = this[taskName];
+        let task = this[taskName];
         scheduleOnce('actions', task, '_safePerform');
       };
       for (let i = 0; i < this._observes.length; ++i) {
-        const name = this._observes[i];
+        let name = this._observes[i];
         (addObserver as any)(proto, name, null, handlerName);
       }
     }
@@ -93,10 +89,7 @@ interface TaskPrivate {
   name: string;
 }
 
-const priv = getOrCreate<WeakMap<Task, TaskPrivate>>(
-  'priv',
-  () => new WeakMap(),
-);
+let priv = getOrCreate<WeakMap<Task, TaskPrivate>>('priv', () => new WeakMap());
 
 function getPriv(task: Task): TaskPrivate {
   return priv.get(task)!;
@@ -121,12 +114,11 @@ export class Task {
     });
   }
   perform(...args: unknown[]) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
-    const privSelf = getPriv(this);
-    const context = privSelf.context;
-    const implementation = privSelf.implementation;
-    const policy = privSelf.taskProperty._bufferPolicy;
+    let self = this;
+    let privSelf = getPriv(this);
+    let context = privSelf.context;
+    let implementation = privSelf.implementation;
+    let policy = privSelf.taskProperty._bufferPolicy;
     if ((context as any).isDestroyed) {
       throw new Error(
         `Tried to perform task ${privSelf.name} on an already destroyed object`,
@@ -145,12 +137,12 @@ export class Task {
       try {
         self._addInstance(current()!);
         if (policy) {
-          const maybeWait = policy(self, privSelf);
+          let maybeWait = policy(self, privSelf);
           if (maybeWait) {
             yield maybeWait;
           }
         }
-        const finalValue = yield* withRunLoop(
+        let finalValue = yield* withRunLoop(
           implementation.call(context, ...args),
         );
         return finalValue;
@@ -170,13 +162,13 @@ export class Task {
     set(this, 'concurrency', this.concurrency + 1);
   }
   _removeInstance(i: Promise<void>) {
-    const instances = getPriv(this).instances;
+    let instances = getPriv(this).instances;
     instances.splice(instances.indexOf(i), 1);
     set(this, 'concurrency', this.concurrency - 1);
     set(this, 'isRunning', this.concurrency > 0);
   }
   _safePerform() {
-    const { context } = getPriv(this);
+    let { context } = getPriv(this);
     if (!(context as any).isDestroyed) {
       this.perform();
     }
@@ -198,14 +190,13 @@ function cleanupOnDestroy(
   }
 
   if (!owner.willDestroy.__ember_processes_destroyers__) {
-    const oldWillDestroy = owner.willDestroy;
-    const disposers: (() => void)[] = [];
+    let oldWillDestroy = owner.willDestroy;
+    let disposers: (() => void)[] = [];
 
     owner.willDestroy = function () {
       for (const disposer of disposers) {
         disposer();
       }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       oldWillDestroy.apply(owner, arguments);
     };
@@ -216,7 +207,6 @@ function cleanupOnDestroy(
     try {
       object.cancelAll();
     } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (err.message !== 'TaskCancelation') {
         throw err;
@@ -233,7 +223,7 @@ function cancelAllButLast(_task: Task, privTask: TaskPrivate) {
 }
 
 function drop(_task: Task, privTask: TaskPrivate) {
-  const instances = privTask.instances;
+  let instances = privTask.instances;
   for (let i = 1; i < instances.length; i++) {
     stop(instances[i]!);
   }
@@ -253,7 +243,6 @@ function* withRunLoop(generator: Generator): Generator {
           state = generator.throw(nextValue);
         }
       } catch (err) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         threw = err;
       }

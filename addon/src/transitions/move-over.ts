@@ -52,7 +52,7 @@ export default function* moveOver(
   direction: number,
   context: TransitionContext,
 ) {
-  const { position, size, startTranslatedBy, endTranslatedBy } = normalize(
+  let { position, size, startTranslatedBy, endTranslatedBy } = normalize(
     dimension,
     direction,
   );
@@ -75,7 +75,7 @@ export default function* moveOver(
     // their left.
     context.removedSprites.forEach((sprite: Sprite) => {
       sprite.assertHasInitialBounds();
-      const o = position(viewport!) - position(sprite.initialBounds);
+      let o = position(viewport!) - position(sprite.initialBounds);
       if (o > offset) {
         offset = o;
       }
@@ -84,7 +84,7 @@ export default function* moveOver(
     // the new sprite's own width adds to our offset because we want its
     // right edge (not left edge) to start touching the leftmost leaving
     // sprite (or viewport if no leaving sprites)
-    const firstInserted: Sprite = context.insertedSprites[0];
+    let firstInserted: Sprite = context.insertedSprites[0];
     firstInserted.assertHasFinalBounds();
     offset += size(firstInserted.finalBounds);
 
@@ -92,7 +92,7 @@ export default function* moveOver(
 
     if (context.removedSprites[0]) {
       endTranslatedBy(context.removedSprites[0], offset);
-      const move = new Move(context.removedSprites[0]);
+      let move = new Move(context.removedSprites[0]);
       move.run();
       for (const removedSprite of context.removedSprites) {
         follow(removedSprite, { source: move });

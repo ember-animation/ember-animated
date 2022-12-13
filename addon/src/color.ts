@@ -6,8 +6,8 @@ import './element-remove';
 
 export class Color {
   static fromComputedStyle(colorString: string) {
-    const channels = parseComputedColor(colorString);
-    return new Color(channels, channels.m[0]!);
+    let channels = parseComputedColor(colorString);
+    return new Color(channels, channels.m[0]);
   }
   static fromUserProvidedColor(colorString: string) {
     return new Color(parseUserProvidedColor(colorString), colorString);
@@ -66,7 +66,7 @@ export class ColorTween {
     this.aTween = new Tween(initialColor.a, finalColor.a, duration, easing);
   }
   get currentValue() {
-    const nonZeroAlpha = this.aTween.currentValue || 1;
+    let nonZeroAlpha = this.aTween.currentValue || 1;
     return new Color(
       {
         r: Math.floor(this.rTween.currentValue / nonZeroAlpha),
@@ -109,11 +109,11 @@ function parseComputedColor(c: string) {
 }
 
 function parseUserProvidedColor(c: string) {
-  const testElement = document.createElement('div');
+  let testElement = document.createElement('div');
   testElement.style.display = 'none';
   testElement.style.color = c;
   document.body.appendChild(testElement);
-  const result = parseComputedColor(getComputedStyle(testElement).color!);
+  let result = parseComputedColor(getComputedStyle(testElement).color!);
   testElement.remove();
   return result;
 }

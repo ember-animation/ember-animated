@@ -91,13 +91,13 @@ class MotionCurve {
   // we share motion curves among all concurrent motions that have the
   // same duration that start in the same animation frame.
   static findOrCreate(duration: number, easing: (t: number) => number) {
-    const shared = currentCurves.find(
+    let shared = currentCurves.find(
       (c) => c.duration === duration && c.easing === easing,
     );
     if (shared) {
       return shared;
     }
-    const created = new this(duration, easing);
+    let created = new this(duration, easing);
     currentCurves.push(created);
     rAF().then(() => {
       currentCurves.splice(currentCurves.indexOf(created), 1);

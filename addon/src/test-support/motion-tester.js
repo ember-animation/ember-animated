@@ -9,12 +9,8 @@ import TransitionContext from '../-private/transition-context';
 export default EmberObject.extend({
   motion: null,
   duration: 1,
-  beforeAnimation() {
-    /* nothing to do here */
-  },
-  afterAnimation() {
-    /* nothing to do here */
-  },
+  beforeAnimation() {},
+  afterAnimation() {},
   run(...args) {
     let motion;
     if (args[0] instanceof Motion) {

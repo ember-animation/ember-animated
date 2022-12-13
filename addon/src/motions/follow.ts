@@ -29,11 +29,11 @@ export class Follow extends Move<FollowOptions> {
 
   *animate() {
     this.source.assertHasTweens();
-    const source = this.source;
+    let source = this.source;
 
-    const sprite = this.sprite;
-    const transformOffsetX = sprite.transform.tx - source.sprite.transform.tx;
-    const transformOffsetY = sprite.transform.ty - source.sprite.transform.ty;
+    let sprite = this.sprite;
+    let transformOffsetX = sprite.transform.tx - source.sprite.transform.tx;
+    let transformOffsetY = sprite.transform.ty - source.sprite.transform.ty;
     this.xTween = new Tween(transformOffsetX, transformOffsetX, 0).plus(
       source.xTween,
     );

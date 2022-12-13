@@ -15,15 +15,15 @@ export class CompensateForScale extends Motion {
   heightTween: Tween | null = null;
 
   *animate() {
-    const duration = this.duration;
+    let duration = this.duration;
 
     this.sprite.assertHasInitialBounds();
     this.sprite.assertHasFinalBounds();
-    const sprite = this.sprite;
+    let sprite = this.sprite;
 
-    const widthFactor =
+    let widthFactor =
       sprite.finalCumulativeTransform.a / sprite.initialCumulativeTransform.a;
-    const heightFactor =
+    let heightFactor =
       sprite.finalCumulativeTransform.d / sprite.initialCumulativeTransform.d;
 
     this.widthTween = new Tween(

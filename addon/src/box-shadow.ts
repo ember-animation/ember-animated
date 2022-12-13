@@ -8,35 +8,35 @@ const innerPattern =
 
 export class BoxShadow {
   static fromComputedStyle(string: string) {
-    const originalString = string;
-    const shadows: BoxShadow[] = [];
+    let originalString = string;
+    let shadows: BoxShadow[] = [];
     if (!string || string === 'none') {
       return shadows;
     }
     while (string.length > 0) {
-      const color = Color.fromComputedStyle(string);
+      let color = Color.fromComputedStyle(string);
       string = string.slice(color.sourceString.length);
-      const m = innerPattern.exec(string);
+      let m = innerPattern.exec(string);
       if (!m) {
         throw new Error(`failed to parse computed shadow ${originalString}`);
       }
-      const x = parseInt(m[1]!);
-      const y = parseInt(m[2]!);
-      const blur = m[3] == null ? 0 : parseInt(m[3]);
-      const spread = m[4] == null ? 0 : parseInt(m[4]);
-      const inset = m[5] != null;
+      let x = parseInt(m[1]!);
+      let y = parseInt(m[2]!);
+      let blur = m[3] == null ? 0 : parseInt(m[3]);
+      let spread = m[4] == null ? 0 : parseInt(m[4]);
+      let inset = m[5] != null;
       shadows.push(new BoxShadow({ color, x, y, blur, spread, inset }));
-      string = string.slice(m[0]!.length);
+      string = string.slice(m[0].length);
     }
     return shadows;
   }
 
   static fromUserProvidedShadow(string: string) {
-    const testElement = document.createElement('div');
+    let testElement = document.createElement('div');
     testElement.style.display = 'none';
     testElement.style.boxShadow = string;
     document.body.appendChild(testElement);
-    const result = this.fromComputedStyle(
+    let result = this.fromComputedStyle(
       getComputedStyle(testElement).boxShadow!,
     );
     testElement.remove();
@@ -100,7 +100,7 @@ export class BoxShadowTween {
     duration: number,
     easing: (time: number) => number = linear,
   ) {
-    const shadowCount = Math.max(fromShadows.length, toShadows.length);
+    let shadowCount = Math.max(fromShadows.length, toShadows.length);
     if (fromShadows.length < shadowCount) {
       fromShadows = fromShadows.slice();
       while (fromShadows.length < shadowCount) {

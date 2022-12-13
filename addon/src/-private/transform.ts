@@ -109,7 +109,7 @@ export function cumulativeTransform(elt: HTMLElement) {
   let accumulator = null;
   let current: HTMLElement | null = elt;
   while (current && current.nodeType === 1) {
-    const transform = ownTransform(current);
+    let transform = ownTransform(current);
     if (transform !== identity && !transform.isIdentity()) {
       if (accumulator) {
         accumulator = transform.mult(accumulator);
@@ -131,22 +131,22 @@ export function cumulativeTransform(elt: HTMLElement) {
  * @return {Transform} instance representing this element's css transform property.
  */
 export function ownTransform(elt: HTMLElement): Transform {
-  const eltStyles = window.getComputedStyle(elt);
-  const t =
+  let eltStyles = window.getComputedStyle(elt);
+  let t =
     eltStyles.transform !== '' ? eltStyles.transform! : elt.style.transform!;
   if (t === 'none') {
     // This constant value is an optimization, and we rely on that in
     // cumulativeTransform
     return identity;
   }
-  const matrix = parseTransform(t);
+  let matrix = parseTransform(t);
   if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
     // If there is any rotation, scaling, or skew we need to do it within the context of transform-origin.
-    const origin =
+    let origin =
       eltStyles.getPropertyValue('transform-origin') !== ''
         ? eltStyles.getPropertyValue('transform-origin')!
         : elt.style.getPropertyValue('transform-origin')!;
-    const [originX, originY] = parseOrigin(origin);
+    let [originX, originY] = parseOrigin(origin);
     if (originX === 0 && originY === 0) {
       // transform origin is at 0,0 so it will have no effect, so we're done.
       return matrix;

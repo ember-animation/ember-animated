@@ -2,7 +2,7 @@
 // It's not available on Edge or IE11
 
 function nonEnumerable(target: any, propertyKey: string) {
-  const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey) || {};
+  let descriptor = Object.getOwnPropertyDescriptor(target, propertyKey) || {};
   if (descriptor.enumerable != false) {
     descriptor.enumerable = false;
     Object.defineProperty(target, propertyKey, descriptor);

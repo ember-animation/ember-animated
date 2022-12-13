@@ -10,9 +10,9 @@ if (DEBUG) {
     label?: string,
   ) {
     let isOrphan: boolean | null = null;
-    const prefix = label ? label + ' ' : '';
+    let prefix = label ? label + ' ' : '';
     /* eslint no-console:0 */
-    const spriteSummary = ['inserted', 'kept', 'removed', 'sent', 'received']
+    let spriteSummary = ['inserted', 'kept', 'removed', 'sent', 'received']
       .map((type) => {
         return (
           type +
@@ -43,9 +43,7 @@ if (DEBUG) {
     console.log(prefix + spriteSummary + (isOrphan ? ' | (orphan)' : ''));
   };
 } else {
-  printSprites = function () {
-    /* nothing to do */
-  };
+  printSprites = function () {};
 }
 
 export { printSprites };

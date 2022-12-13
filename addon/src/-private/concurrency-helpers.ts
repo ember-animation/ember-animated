@@ -38,7 +38,7 @@ export function registerCancellation(
 }
 
 export function fireCancellation(promise: Promise<any>) {
-  const fn = cancellation.get(promise);
+  let fn = cancellation.get(promise);
   if (fn) {
     fn(promise);
   }
@@ -55,7 +55,7 @@ export function rAF() {
     frameState.nextFrame = requestAnimationFrame(rAFDidFire);
   }
   let resolve;
-  const promise = new Promise((r) => {
+  let promise = new Promise((r) => {
     resolve = r;
   });
   frameState.nextFrameWaiters.push({
@@ -69,7 +69,7 @@ export function rAF() {
 function rAFDidFire(clock: number) {
   frameState.nextFrame = null;
   frameState.currentFrameClock = clock;
-  const waiters = frameState.nextFrameWaiters;
+  let waiters = frameState.nextFrameWaiters;
   frameState.nextFrameWaiters = [];
   for (const waiter of waiters) {
     waiter.resolve();
@@ -77,11 +77,11 @@ function rAFDidFire(clock: number) {
 }
 
 function removeWaiter(promise: Promise<any>) {
-  const pair = frameState.nextFrameWaiters.find(
+  let pair = frameState.nextFrameWaiters.find(
     (pair) => pair.promise === promise,
   );
   if (pair) {
-    const index = frameState.nextFrameWaiters.indexOf(pair);
+    let index = frameState.nextFrameWaiters.indexOf(pair);
     if (index > -1) {
       frameState.nextFrameWaiters.splice(index, 1);
     }
@@ -95,7 +95,7 @@ export function microwait(): Promise<void> {
 export function wait(ms = 0): Promise<void> {
   if (clock.now === originalClock) {
     let ticket: number;
-    const promise = new Promise<void>((resolve) => {
+    let promise = new Promise<void>((resolve) => {
       ticket = window.setTimeout(resolve, ms);
     });
     registerCancellation(promise, () => {
@@ -104,8 +104,8 @@ export function wait(ms = 0): Promise<void> {
     return promise;
   } else {
     let canceled = false;
-    const started = clock.now();
-    const promise = new Promise<void>((resolve) => {
+    let started = clock.now();
+    let promise = new Promise<void>((resolve) => {
       function checkIt() {
         if (!canceled) {
           if (clock.now() - started > ms) {
@@ -125,7 +125,7 @@ export function wait(ms = 0): Promise<void> {
 
 export function afterRender() {
   let ticket: EmberRunTimer;
-  const promise = new Promise<void>((resolve) => {
+  let promise = new Promise<void>((resolve) => {
     ticket = schedule('afterRender', () => resolve());
   });
   registerCancellation(promise, () => {
@@ -135,7 +135,7 @@ export function afterRender() {
 }
 
 // This provides a unified place to hook into time control for testing.
-export const clock = getOrCreate('clock', () => ({
+export let clock = getOrCreate('clock', () => ({
   now() {
     return new Date().getTime();
   },

@@ -38,7 +38,7 @@ export class BoxShadowMotion extends Motion<BoxShadowMotionOptions> {
       );
     }
 
-    const shadowTween = new BoxShadowTween(
+    let shadowTween = new BoxShadowTween(
       from,
       to,
       this.duration,

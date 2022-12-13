@@ -23,10 +23,10 @@ export function getOrCreate<T>(key: string, construct: () => T): T {
   // add it if it does not have the symbol, yet
   // ------------------------------------------
 
-  const globalSymbols = Object.getOwnPropertySymbols(
+  let globalSymbols = Object.getOwnPropertySymbols(
     window.emberAnimatedSingleton,
   );
-  const hasFoo = globalSymbols.indexOf(symbol) > -1;
+  let hasFoo = globalSymbols.indexOf(symbol) > -1;
 
   if (!hasFoo) {
     window.emberAnimatedSingleton[symbol] = construct();

@@ -17,15 +17,15 @@ export default class extends Component {
 
   didRender() {
     super.didRender();
-    const mapping = this.elementToChild;
-    const child = this.child;
+    let mapping = this.elementToChild;
+    let child = this.child;
     this._forEachElement((elt) => {
       mapping.set(elt, child);
     });
   }
 
   _forEachElement(fn: (elt: Element) => void) {
-    const { firstNode, lastNode } = componentNodes(this);
+    let { firstNode, lastNode } = componentNodes(this);
     let node: Node | null = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {

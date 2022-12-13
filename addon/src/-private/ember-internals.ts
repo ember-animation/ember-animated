@@ -16,7 +16,7 @@ const { getViewBounds } = Ember.ViewUtils as unknown as {
 };
 
 export function componentNodes(view: Component) {
-  const bounds = getViewBounds(view);
+  let bounds = getViewBounds(view);
   return {
     firstNode: bounds.firstNode,
     lastNode: bounds.lastNode,
