@@ -31,7 +31,7 @@
     "@ember/test-helpers": "^2.7.0",
     "@faker-js/faker": "^6.2.0",
     "@fortawesome/ember-fontawesome": "^0.3.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
