@@ -31,7 +31,7 @@ export default class Sprite {
   static offsetParentStartingAt(element: Element) {
     let parent = getEffectiveOffsetParent(element as HTMLElement);
     if (!parent) {
-      parent = document.getElementsByTagName('body')[0];
+      parent = document.getElementsByTagName('body')[0] as Element;
     }
     return new this(parent, true, null, null);
   }
@@ -39,7 +39,7 @@ export default class Sprite {
   static offsetParentEndingAt(element: Element) {
     let parent = getEffectiveOffsetParent(element as HTMLElement);
     if (!parent) {
-      parent = document.getElementsByTagName('body')[0];
+      parent = document.getElementsByTagName('body')[0] as Element;
     }
     return new this(parent, false, null, null);
   }
@@ -631,7 +631,7 @@ export default class Sprite {
     // actually returns the "used" values for width and height).
 
     if ((this.element as HTMLElement).style.width === '') {
-      this._imposedStyle.width = `${bounds.width / transform.a}px`;
+      this._imposedStyle['width'] = `${bounds.width / transform.a}px`;
       // TODO: do a more sophisticated size measurement so we don't
       // need to impose border-box. If we're only imposing width OR
       // height and we weren't originally in border box, we can get an
@@ -639,7 +639,7 @@ export default class Sprite {
       this._imposedStyle['box-sizing'] = 'border-box';
     }
     if ((this.element as HTMLElement).style.height === '') {
-      this._imposedStyle.height = `${bounds.height / transform.d}px`;
+      this._imposedStyle['height'] = `${bounds.height / transform.d}px`;
       this._imposedStyle['box-sizing'] = 'border-box';
     }
   }
@@ -678,14 +678,14 @@ export default class Sprite {
       computedStyle.position !== 'absolute' &&
       computedStyle.position !== 'fixed'
     ) {
-      this._imposedStyle!.position = 'absolute';
+      this._imposedStyle!['position'] = 'absolute';
     }
 
     if (style.top === '' && style.bottom === '') {
       // The user had no preexisting inline vertical positioning, so we take over.
-      this._imposedStyle!.top = `${offsets().top}px`;
+      this._imposedStyle!['top'] = `${offsets().top}px`;
       this._imposedStyle!['margin-top'] = '0px';
-    } else if (this._imposedStyle!.position) {
+    } else if (this._imposedStyle!['position']) {
       // the user has inline styles for controlling vertical position,
       // but the element was not absolutely positioned, so we apply an
       // offseting transform.
@@ -694,9 +694,9 @@ export default class Sprite {
 
     if (style.left === '' && style.bottom === '') {
       // The user had no preexisting inline horizontal positioning, so we take over.
-      this._imposedStyle!.left = `${offsets().left}px`;
+      this._imposedStyle!['left'] = `${offsets().left}px`;
       this._imposedStyle!['margin-left'] = `0px`;
-    } else if (this._imposedStyle!.position) {
+    } else if (this._imposedStyle!['position']) {
       // the user has inline styles for controlling vertical position,
       // but the element was not absolutely positioned, so we apply an
       // offseting transform.
@@ -704,7 +704,7 @@ export default class Sprite {
     }
     if (tx || ty) {
       this._transform = this.transform.mult(new Transform(1, 0, 0, 1, tx, ty));
-      this._imposedStyle!.transform = this.transform.serialize();
+      this._imposedStyle!['transform'] = this.transform.serialize();
     }
 
     this._collapsingChildren = collapsedChildren(
@@ -746,7 +746,11 @@ export default class Sprite {
     inFlight.delete(this.element);
     let cache = this._styleCache!;
     Object.keys(cache).forEach((property) => {
-      setStyle(this.element as HTMLElement, property, cache[property]);
+      setStyle(
+        this.element as HTMLElement,
+        property,
+        cache[property] as string,
+      );
     });
 
     // In case the user has caused our inline-style-driven position
@@ -927,10 +931,10 @@ export default class Sprite {
       ),
     );
     this._transform = t;
-    this._imposedStyle!.transform = t.serialize();
+    this._imposedStyle!['transform'] = t.serialize();
     this._imposedStyle!['transform-origin'] = '0 0';
-    this._imposedStyle!.top = `0px`;
-    this._imposedStyle!.left = `0px`;
+    this._imposedStyle!['top'] = `0px`;
+    this._imposedStyle!['left'] = `0px`;
     this._offsetSprite = newOffsetSprite;
     this._initialBounds = newRelativeBounds;
     this._inInitialPosition = true;
@@ -938,17 +942,17 @@ export default class Sprite {
 
   _handleMarginCollapse() {
     if (this._collapsingChildren) {
-      let children = this._collapsingChildren;
-      for (let i = 0; i < children.length; i++) {
-        children[i].classList.add('ember-animated-top-collapse');
+      const children = this._collapsingChildren;
+      for (const child of children) {
+        child.classList.add('ember-animated-top-collapse');
       }
     }
   }
   _clearMarginCollapse() {
     if (this._collapsingChildren) {
-      let children = this._collapsingChildren;
-      for (let i = 0; i < children.length; i++) {
-        children[i].classList.remove('ember-animated-top-collapse');
+      const children = this._collapsingChildren;
+      for (const child of children) {
+        child.classList.remove('ember-animated-top-collapse');
       }
     }
   }

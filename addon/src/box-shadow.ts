@@ -20,8 +20,8 @@ export class BoxShadow {
       if (!m) {
         throw new Error(`failed to parse computed shadow ${originalString}`);
       }
-      let x = parseInt(m[1]);
-      let y = parseInt(m[2]);
+      let x = parseInt(m[1]!);
+      let y = parseInt(m[2]!);
       let blur = m[3] == null ? 0 : parseInt(m[3]);
       let spread = m[4] == null ? 0 : parseInt(m[4]);
       let inset = m[5] != null;
@@ -104,19 +104,19 @@ export class BoxShadowTween {
     if (fromShadows.length < shadowCount) {
       fromShadows = fromShadows.slice();
       while (fromShadows.length < shadowCount) {
-        fromShadows.push(emptyShadowOfType(toShadows[fromShadows.length]));
+        fromShadows.push(emptyShadowOfType(toShadows[fromShadows.length]!));
       }
     }
     if (toShadows.length < shadowCount) {
       toShadows = toShadows.slice();
       while (toShadows.length < shadowCount) {
-        toShadows.push(emptyShadowOfType(fromShadows[toShadows.length]));
+        toShadows.push(emptyShadowOfType(fromShadows[toShadows.length]!));
       }
     }
 
     this.shadowTweens = fromShadows.map(
       (fromShadow, index) =>
-        new OneShadowTween(fromShadow, toShadows[index], duration, easing),
+        new OneShadowTween(fromShadow, toShadows[index]!, duration, easing),
     );
   }
   get currentValue() {

@@ -194,8 +194,8 @@ function cleanupOnDestroy(
     let disposers: (() => void)[] = [];
 
     owner.willDestroy = function () {
-      for (let i = 0, l = disposers.length; i < l; i++) {
-        disposers[i]();
+      for (const disposer of disposers) {
+        disposer();
       }
       // @ts-ignore
       oldWillDestroy.apply(owner, arguments);
@@ -216,16 +216,16 @@ function cleanupOnDestroy(
 }
 
 function cancelAllButLast(_task: Task, privTask: TaskPrivate) {
-  let instances = privTask.instances;
-  for (let i = 0; i < instances.length - 1; i++) {
-    stop(instances[i]);
+  const instances = privTask.instances;
+  for (const instance of instances.slice(0, -1)) {
+    stop(instance);
   }
 }
 
 function drop(_task: Task, privTask: TaskPrivate) {
   let instances = privTask.instances;
   for (let i = 1; i < instances.length; i++) {
-    stop(instances[i]);
+    stop(instances[i]!);
   }
 }
 

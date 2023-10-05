@@ -72,8 +72,8 @@ export class DerivedTween implements TweenLike {
   get finalValue() {
     if (this._finalValue == null) {
       let accum = 0;
-      for (let i = 0; i < this.inputs.length; i++) {
-        accum += this.inputs[i].finalValue;
+      for (const input of this.inputs) {
+        accum += input.finalValue;
       }
       this._finalValue = accum;
     }

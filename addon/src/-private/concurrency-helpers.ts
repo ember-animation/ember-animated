@@ -71,8 +71,8 @@ function rAFDidFire(clock: number) {
   frameState.currentFrameClock = clock;
   let waiters = frameState.nextFrameWaiters;
   frameState.nextFrameWaiters = [];
-  for (let i = 0; i < waiters.length; i++) {
-    waiters[i].resolve();
+  for (const waiter of waiters) {
+    waiter.resolve();
   }
 }
 

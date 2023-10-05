@@ -6,7 +6,7 @@ const addon = new Addon({
   destDir: 'dist',
 });
 
-const globallyAvailable = ['components/*.{js,ts}', 'services/*.{js,ts}'];
+const globallyAvailable = ['components/*.js', 'services/*.js'];
 
 export default {
   // This provides defaults that work well alongside `publicEntrypoints` below.
@@ -17,13 +17,13 @@ export default {
     // These are the modules that users should be able to import from your
     // addon. Anything not listed here may get optimized away.
     addon.publicEntrypoints([
-      '-private/**/*.{js,ts}',
-      'easings/**/*.{js,ts}',
-      'motions/**/*.{js,ts}',
-      'test-support/**/*.{js,ts}',
-      'transitions/**/*.{js,ts}',
-      'index.{js,ts}',
-      'box-shadow.{js,ts}',
+      '-private/**/*.js',
+      'easings/**/*.js',
+      'motions/**/*.js',
+      'test-support/**/*.js',
+      'transitions/**/*.js',
+      'index.js',
+      'box-shadow.js',
       ...globallyAvailable,
     ]),
 
@@ -32,30 +32,11 @@ export default {
     // not everything in publicEntrypoints necessarily needs to go here.
     addon.appReexports(globallyAvailable),
 
-    // This babel config should *not* apply presets or compile away ES modules.
-    // It exists only to provide development niceties for you, like automatic
-    // template colocation.
-    //
-    // By default, this will load the actual babel config from the file
-    // babel.config.json.
-    // typescript(),
+    // compile TypeScript to the latest JavaScript, including Babel transpilation
     typescript({
-      // can be changed to swc or other transpilers later
-      // but we need the ember plugins converted first
-      // (template compilation and co-location)
       transpiler: 'babel',
       browserslist: false,
-      // NOTE: babel config must be CJS if in the same directory as CWD
-      //       https://github.com/wessberg/rollup-plugin-ts/issues/167
-      //       otherwise ESM babel.config.js can be imported and set here
-      // babelConfig,
-      // setting this true greatly improves performance, but
-      // at the cost of safety (and no declarations output in your dist directory).
-      // transpileOnly: false,
-      tsconfig: {
-        fileName: 'tsconfig.json',
-        hook: (config) => ({ ...config, declaration: true }),
-      },
+      transpileOnly: false,
     }),
 
     // Follow the V2 Addon rules about dependencies. Your code can import from

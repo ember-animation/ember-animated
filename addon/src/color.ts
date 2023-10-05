@@ -88,9 +88,9 @@ function parseComputedColor(c: string) {
   let m = /^rgb\((\d+), (\d+), (\d+)\)/.exec(c);
   if (m) {
     return {
-      r: parseInt(m[1]),
-      g: parseInt(m[2]),
-      b: parseInt(m[3]),
+      r: parseInt(m[1]!),
+      g: parseInt(m[2]!),
+      b: parseInt(m[3]!),
       a: 1,
       m,
     };
@@ -98,10 +98,10 @@ function parseComputedColor(c: string) {
   m = /^rgba\((\d+), (\d+), (\d+), (\d+(?:\.\d+)?)\)/.exec(c);
   if (m) {
     return {
-      r: parseInt(m[1]),
-      g: parseInt(m[2]),
-      b: parseInt(m[3]),
-      a: parseFloat(m[4]),
+      r: parseInt(m[1]!),
+      g: parseInt(m[2]!),
+      b: parseInt(m[3]!),
+      a: parseFloat(m[4]!),
       m,
     };
   }

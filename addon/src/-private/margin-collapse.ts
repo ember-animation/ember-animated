@@ -36,13 +36,13 @@ function firstChildBlock(
 ): [Element, CSSStyleDeclaration] | undefined {
   for (let i = 0; i < element.children.length; i++) {
     let child = element.children[i];
-    let childCS = getComputedStyle(child);
+    let childCS = getComputedStyle(child as Element);
     if (childCS.clear !== 'none') {
       // an intervening block with clearance prevents margin collapse
       return;
     }
     if (isBlock(childCS)) {
-      return [child, childCS];
+      return [child as Element, childCS];
     }
   }
   return;
@@ -53,13 +53,13 @@ function lastChildBlock(
 ): [Element, CSSStyleDeclaration] | undefined {
   for (let i = element.children.length - 1; i >= 0; i--) {
     let child = element.children[i];
-    let childCS = getComputedStyle(child);
+    let childCS = getComputedStyle(child as Element);
     if (childCS.clear !== 'none') {
       // an intervening block with clearance prevents margin collapse
       return;
     }
     if (isBlock(childCS)) {
-      return [child, childCS];
+      return [child as Element, childCS];
     }
   }
   return;

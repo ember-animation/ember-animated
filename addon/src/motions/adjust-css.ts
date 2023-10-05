@@ -95,7 +95,7 @@ export class AdjustCSS extends Motion<AdjustCSSOptions> {
       );
     }
     return {
-      value: parseFloat(m[1]),
+      value: parseFloat(m[1]!),
       unit: m[2] || '',
     };
   }
