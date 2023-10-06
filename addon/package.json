@@ -104,9 +104,6 @@
       "optional": true
     }
   },
-  "engines": {
-    "node": "12.* || 14.* || 16.* || >= 18"
-  },
   "volta": {
     "extends": "../package.json"
   },
