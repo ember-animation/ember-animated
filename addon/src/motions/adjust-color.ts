@@ -1,7 +1,8 @@
-import { rAF } from '../-private/concurrency-helpers';
-import Motion, { type BaseOptions } from '../-private/motion';
-import { type default as Sprite, type CopiedCSS } from '../-private/sprite';
-import { Color, ColorTween } from '../color';
+import { rAF } from '../-private/concurrency-helpers.ts';
+import Motion, { type BaseOptions } from '../-private/motion.ts';
+import type Sprite from '../-private/sprite.ts';
+import { type CopiedCSS } from '../-private/sprite.ts';
+import { Color, ColorTween } from '../color.ts';
 
 export default function adjustColor(
   propertyName: keyof CopiedCSS,

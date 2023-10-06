@@ -2,17 +2,17 @@ import type EmberObject from '@ember/object';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import Service from '@ember/service';
-import type { Task } from '../-private/ember-scheduler';
-import { task } from '../-private/ember-scheduler';
+import type { Task } from '../-private/ember-scheduler.ts';
+import { task } from '../-private/ember-scheduler.ts';
 import {
   microwait,
   rAF,
   afterRender,
   allSettled,
-} from '../-private/concurrency-helpers';
-import type Sprite from '../-private/sprite';
+} from '../-private/concurrency-helpers.ts';
+import type Sprite from '../-private/sprite.ts';
 import type Child from '../-private/child';
-import type { Transition } from '../-private/transition';
+import type { Transition } from '../-private/transition.ts';
 
 interface Animator extends EmberObject {
   beginStaticMeasurement(): void;

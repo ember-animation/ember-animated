@@ -1,10 +1,10 @@
 /* eslint-disable ember/no-classic-classes */
 import { alias } from '@ember/object/computed';
 import EmberObject from '@ember/object';
-import { task } from '../-private/ember-scheduler';
-import Motion from '../-private/motion';
-import Sprite from '../-private/sprite';
-import TransitionContext from '../-private/transition-context';
+import { task } from '../-private/ember-scheduler.ts';
+import Motion from '../-private/motion.ts';
+import Sprite from '../-private/sprite.ts';
+import TransitionContext from '../-private/transition-context.ts';
 
 export default EmberObject.extend({
   motion: null,

@@ -1,12 +1,12 @@
 import { importSync } from '@embroider/macros';
 import { run } from '@ember/runloop';
-import { Color } from '../color';
-import { relativeBounds } from '../-private/bounds';
-import { cumulativeTransform } from '../-private/transform';
-import TimeControl from './time-control';
+import { Color } from '../color.ts';
+import { relativeBounds } from '../-private/bounds.ts';
+import { cumulativeTransform } from '../-private/transform.ts';
+import TimeControl from './time-control.js';
 
 export { TimeControl };
-export { default as MotionTester } from './motion-tester';
+export { default as MotionTester } from './motion-tester.js';
 
 // Re-export to ensure "instanceof" works properly within MotionTester.
 // Importing from 'ember-animated' would happen from different entry-point
@@ -14,10 +14,10 @@ export { default as MotionTester } from './motion-tester';
 // We should remove below re-exports once ember-auto-import gets fixed,
 // so we would have single entry point for app and tests.
 // Link to track status: https://github.com/ef4/ember-auto-import/issues/503
-export { default as Sprite } from '../-private/sprite';
-export { default as Motion } from '../-private/motion';
-export { AdjustColor } from '../motions/adjust-color';
-export { Move } from '../motions/move';
+export { default as Sprite } from '../-private/sprite.ts';
+export { default as Motion } from '../-private/motion.ts';
+export { AdjustColor } from '../motions/adjust-color.ts';
+export { Move } from '../motions/move.ts';
 
 export function animationsSettled() {
   let idle;

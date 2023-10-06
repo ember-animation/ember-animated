@@ -1,4 +1,4 @@
-import '../domrect-polyfill';
+import '../domrect-polyfill.ts';
 
 /**
   Shifts the coordinates of the given bounds using the provided

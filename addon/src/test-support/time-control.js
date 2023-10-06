@@ -1,5 +1,5 @@
-import { clock, rAF } from '../-private/concurrency-helpers';
-import { getOrCreate } from '../-private/singleton';
+import { clock, rAF } from '../-private/concurrency-helpers.ts';
+import { getOrCreate } from '../-private/singleton.ts';
 
 let origNow = getOrCreate('time-control', () => clock.now);
 

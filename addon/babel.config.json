@@ -1,8 +1,13 @@
 {
-  "presets": [["@babel/preset-typescript"]],
   "plugins": [
+  ["@babel/plugin-transform-typescript", { "allExtensions": true, "onlyRemoveTypeImports": true, "allowDeclareFields": true }],
     "@embroider/addon-dev/template-colocation-plugin",
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    ["@babel/plugin-proposal-class-properties", { "loose": true}]
+    "@babel/plugin-transform-class-static-block",
+    ["babel-plugin-ember-template-compilation", {
+      "targetFormat": "hbs",
+      "transforms": []
+    }],
+    ["@babel/plugin-proposal-decorators", { "version": "legacy" }],
+    "@babel/plugin-proposal-class-properties"
   ]
 }

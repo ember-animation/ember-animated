@@ -1,5 +1,5 @@
-import type TransitionContext from '../-private/transition-context';
-import opacity from '../motions/opacity';
+import type TransitionContext from '../-private/transition-context.ts';
+import opacity from '../motions/opacity.ts';
 
 /**
   Fades inserted, removed, and kept sprites.

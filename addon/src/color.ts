@@ -1,8 +1,8 @@
-import Tween from './-private/tween';
-import linear from './easings/linear';
+import Tween from './-private/tween.ts';
+import linear from './easings/linear.ts';
 
 // We use Element.remove in our color parser below.
-import './element-remove';
+import './element-remove.ts';
 
 export class Color {
   static fromComputedStyle(colorString: string) {

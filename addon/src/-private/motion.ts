@@ -1,9 +1,9 @@
-import { spawnChild } from './scheduler';
-import { rAF, microwait } from './concurrency-helpers';
-import { continuedFromElement } from './motion-bridge';
-import TransitionContext from './transition-context';
-import type Sprite from './sprite';
-import { getOrCreate } from './singleton';
+import { spawnChild } from './scheduler.ts';
+import { rAF, microwait } from './concurrency-helpers.ts';
+import { continuedFromElement } from './motion-bridge.ts';
+import TransitionContext from './transition-context.ts';
+import type Sprite from './sprite.ts';
+import { getOrCreate } from './singleton.ts';
 
 const motions = getOrCreate<WeakMap<Element, Motion[]>>(
   'motion',

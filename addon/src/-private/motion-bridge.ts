@@ -1,5 +1,5 @@
-import { rAF } from './concurrency-helpers';
-import { getOrCreate } from './singleton';
+import { rAF } from './concurrency-helpers.ts';
+import { getOrCreate } from './singleton.ts';
 
 const bridges = getOrCreate('motion-bridges', () => new WeakMap());
 

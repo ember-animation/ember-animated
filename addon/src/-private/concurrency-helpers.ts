@@ -1,6 +1,6 @@
 import { schedule, cancel } from '@ember/runloop';
 import type { EmberRunTimer } from '@ember/runloop/types';
-import { getOrCreate as _getOrCreate } from './singleton';
+import { getOrCreate as _getOrCreate } from './singleton.ts';
 
 function getOrCreate<T>(key: string, construct: () => T): T {
   return _getOrCreate(`concurrency-helpers.${key}`, construct);

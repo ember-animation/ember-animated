@@ -1,34 +1,26 @@
-Ember Animated
-==============================================================================
+# Ember Animated
 
 This library is intended to become a robust foundation for animation in Ember.
 
 Interactive docs are at https://ember-animation.github.io/ember-animated/
 
 
-Compatibility
-------------------------------------------------------------------------------
+## Compatibility
 
-* Ember.js v3.12 or above
-* Ember CLI v3.12 or above
-* Node.js v12 or above
+- Ember.js v3.12 or above
+- Embroider or ember-auto-import v2
 
-
-Installation
-------------------------------------------------------------------------------
+## Installation
 
 ```
 ember install ember-animated
 ```
 
 
-Contributing
-------------------------------------------------------------------------------
+## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
 
-
-License
-------------------------------------------------------------------------------
+## License
 
 This project is licensed under the [MIT License](LICENSE.md).

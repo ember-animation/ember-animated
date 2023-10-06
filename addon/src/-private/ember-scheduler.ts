@@ -1,11 +1,11 @@
 import { join, scheduleOnce } from '@ember/runloop';
 import { addObserver } from '@ember/object/observers';
 import { computed, set } from '@ember/object';
-import { spawn, current, stop, logErrors } from './scheduler';
 import Ember from 'ember';
-import { microwait } from './concurrency-helpers';
 import { DEBUG } from '@glimmer/env';
-import { getOrCreate as _getOrCreate } from './singleton';
+import { spawn, current, stop, logErrors } from './scheduler.ts';
+import { microwait } from './concurrency-helpers.ts';
+import { getOrCreate as _getOrCreate } from './singleton.ts';
 
 function getOrCreate<T>(key: string, construct: () => T): T {
   return _getOrCreate(`ember-scheduler.${key}`, construct);

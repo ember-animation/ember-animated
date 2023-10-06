@@ -1,7 +1,7 @@
-import { childrenSettled } from './scheduler';
-import type Sprite from './sprite';
-import type { Transition } from './transition';
-import { getOrCreate } from './singleton';
+import { childrenSettled } from './scheduler.ts';
+import type Sprite from './sprite.ts';
+import type { Transition } from './transition.ts';
+import { getOrCreate } from './singleton.ts';
 
 const spriteContext = getOrCreate('transition-context', () => new WeakMap());
 

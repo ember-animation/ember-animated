@@ -1,4 +1,4 @@
 packages:
-  - addon
-  - docs
-  - test-app
+  - 'addon'
+  - 'docs'
+  - 'test-app'
