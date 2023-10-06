@@ -23,7 +23,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7.x
+          version: 8.x
 
       - name: Install Node
         uses: actions/setup-node@v3
@@ -55,7 +55,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7.x
+          version: 8.x
 
       - name: Install Node
         uses: actions/setup-node@v3
@@ -79,7 +79,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7.x
+          version: 8.x
 
       - name: Install Node
         uses: actions/setup-node@v3
@@ -124,7 +124,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7.x
+          version: 8.x
 
       - name: Install Node
         uses: actions/setup-node@v3
@@ -159,7 +159,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7.x
+          version: 8.x
 
       - name: Install Node
         uses: actions/setup-node@v3
@@ -189,7 +189,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 7.x
+          version: 8.x
 
       - name: Install Node
         uses: actions/setup-node@v3
