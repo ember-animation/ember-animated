@@ -7,7 +7,7 @@ export {
   afterRender,
   clock,
   allSettled,
-} from './-private/concurrency-helpers';
+} from './-private/concurrency-helpers.ts';
 
 export {
   spawn,
@@ -17,17 +17,17 @@ export {
   childrenSettled,
   parallel,
   serial,
-} from './-private/scheduler';
+} from './-private/scheduler.ts';
 
-export { task } from './-private/ember-scheduler';
+export { task } from './-private/ember-scheduler.ts';
 
-export { printSprites } from './-private/debug';
+export { printSprites } from './-private/debug.ts';
 
-export { default as Motion } from './-private/motion';
+export { default as Motion } from './-private/motion.ts';
 
-export { continueMotions } from './-private/motion-bridge';
+export { continueMotions } from './-private/motion-bridge.ts';
 
-export { default as Tween } from './-private/tween';
+export { default as Tween } from './-private/tween.ts';
 
-export type { default as Sprite } from './-private/sprite';
-export type { default as TransitionContext } from './-private/transition-context';
+export type { default as Sprite } from './-private/sprite.ts';
+export type { default as TransitionContext } from './-private/transition-context.ts';

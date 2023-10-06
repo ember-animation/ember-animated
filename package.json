@@ -10,20 +10,28 @@
     "test-app"
   ],
   "scripts": {
-    "prepare": "cd addon && pnpm run build",
+    "build": "pnpm --filter ember-animated build",
+    "lint": "pnpm --filter '*' lint",
+    "lint:fix": "pnpm --filter '*' lint:fix",
+    "prepare": "pnpm build",
     "release": "release-it",
-    "test": "cd test-app && pnpm run test:ember"
+    "start": "concurrently 'npm:start:*' --restart-after 5000 --prefix-colors cyan,white,yellow",
+    "start:addon": "pnpm --filter ember-animated start --no-watch.clearScreen",
+    "start:test-app": "pnpm --filter test-app start",
+    "test": "pnpm --filter '*' test",
+    "test:ember": "pnpm --filter '*' test:ember"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.3.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "release-it": "^14.14.2",
-    "release-it-lerna-changelog": "^4.0.1",
-    "release-it-yarn-workspaces": "^2.0.1"
+    "@release-it-plugins/lerna-changelog": "^6.0.0",
+    "@release-it-plugins/workspaces": "^4.0.0",
+    "concurrently": "^8.2.0",
+    "release-it": "^16.2.1"
   },
   "volta": {
-    "node": "14.21.1",
-    "npm": "8.19.3"
+    "node": "16.20.2",
+    "npm": "9.8.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -41,7 +49,7 @@
       "after:release": "cd docs && pnpm run deploy"
     },
     "plugins": {
-      "release-it-lerna-changelog": {
+      "@release-it-plugins/lerna-changelog": {
         "infile": "CHANGELOG.md",
         "launchEditor": false
       },
@@ -49,17 +57,7 @@
         "publish": false,
         "workspaces": [
           "addon"
-        ],
-        "additionalManifests": {
-          "dependencyUpdates": [
-            "docs/package.json",
-            "test-app/package.json"
-          ],
-          "versionUpdates": [
-            "docs/package.json",
-            "test-app/package.json"
-          ]
-        }
+        ]
       }
     },
     "git": {

@@ -1,8 +1,8 @@
-import { rAF } from '../-private/concurrency-helpers';
-import Motion, { type BaseOptions } from '../-private/motion';
-import type Sprite from '../-private/sprite';
-import Tween, { type TweenLike } from '../-private/tween';
-import linear from '../easings/linear';
+import { rAF } from '../-private/concurrency-helpers.ts';
+import Motion, { type BaseOptions } from '../-private/motion.ts';
+import type Sprite from '../-private/sprite.ts';
+import Tween, { type TweenLike } from '../-private/tween.ts';
+import linear from '../easings/linear.ts';
 
 export default function opacity(
   sprite: Sprite,

@@ -1,7 +1,7 @@
-import { Move } from '../motions/move';
-import follow from '../motions/follow';
-import type Sprite from '../-private/sprite';
-import type TransitionContext from '../-private/transition-context';
+import { Move } from '../motions/move.ts';
+import follow from '../motions/follow.ts';
+import type Sprite from '../-private/sprite.ts';
+import type TransitionContext from '../-private/transition-context.ts';
 
 export const toLeft = moveOver.bind(null, 'x', -1);
 export const toRight = moveOver.bind(null, 'x', 1);

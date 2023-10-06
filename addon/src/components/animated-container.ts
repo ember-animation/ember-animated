@@ -3,13 +3,13 @@ import Component from '@ember/component';
 import { alias } from '@ember/object/computed';
 import { action } from '@ember/object';
 import { dependencySatisfies } from '@embroider/macros';
-import { Resize } from '../motions/resize';
-import { task, type Task } from '../-private/ember-scheduler';
-import Sprite from '../-private/sprite';
-import { afterRender, microwait } from '../-private/concurrency-helpers';
-import { componentNodes } from '../-private/ember-internals';
-import type MotionService from '../services/-ea-motion';
-import type { MotionConstructor } from '../-private/motion';
+import { Resize } from '../motions/resize.ts';
+import { task, type Task } from '../-private/ember-scheduler.ts';
+import Sprite from '../-private/sprite.ts';
+import { afterRender, microwait } from '../-private/concurrency-helpers.ts';
+import { componentNodes } from '../-private/ember-internals.ts';
+import type MotionService from '../services/-ea-motion.ts';
+import type { MotionConstructor } from '../-private/motion.ts';
 
 /**
  Provides a boundary between animator components and the surrounding document

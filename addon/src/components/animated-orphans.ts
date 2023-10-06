@@ -2,18 +2,18 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import Component from '@ember/component';
-import { task, type Task } from '../-private/ember-scheduler';
-import { afterRender, microwait } from '../-private/concurrency-helpers';
-import { continueMotions } from '../-private/motion-bridge';
+import { task, type Task } from '../-private/ember-scheduler.ts';
+import { afterRender, microwait } from '../-private/concurrency-helpers.ts';
+import { continueMotions } from '../-private/motion-bridge.ts';
 import TransitionContext, {
   runToCompletion,
-} from '../-private/transition-context';
-import { spawnChild, childrenSettled, current } from '../-private/scheduler';
-import Sprite from '../-private/sprite';
-import partition from '../-private/partition';
-import '../element-remove';
-import type MotionService from '../services/-ea-motion';
-import type { Transition } from '../-private/transition';
+} from '../-private/transition-context.ts';
+import { spawnChild, childrenSettled, current } from '../-private/scheduler.ts';
+import Sprite from '../-private/sprite.ts';
+import partition from '../-private/partition.ts';
+import '../element-remove.ts';
+import type MotionService from '../services/-ea-motion.ts';
+import type { Transition } from '../-private/transition.ts';
 
 /**
   A component that adopts any orphaned sprites so they can continue animating even

@@ -1,8 +1,5 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
-# compiled output
-dist/
-
 # dependencies
 node_modules/
 
@@ -16,9 +13,5 @@ node_modules/
 .pnp*
 .pnpm-debug.log
 .sass-cache
-connect.lock
 coverage/
-libpeerconnection.log
-npm-debug.log*
-yarn-error.log
 .DS_Store

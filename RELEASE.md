@@ -61,5 +61,5 @@ pushing the tag and commits, etc.
 
 ## Unstable Tag
 
-For every push to the master branch, [`Publish Unstable`](./.github/workflows/publish-unstable.yml)
-publishes an NPM package to the "unstable" NPM tag.
+For every push to the master branch, [`push-dist`](./.github/workflows/push-dist.yml)
+places the compiled assets on a "dist" branch.

@@ -37,8 +37,8 @@ API
 
 */
 
-import { registerCancellation, fireCancellation } from './concurrency-helpers';
-import { getOrCreate as _getOrCreate } from './singleton';
+import { registerCancellation, fireCancellation } from './concurrency-helpers.ts';
+import { getOrCreate as _getOrCreate } from './singleton.ts';
 
 function getOrCreate<T>(key: string, construct: () => T): T {
   return _getOrCreate(`scheduler.${key}`, construct);

@@ -1,6 +1,6 @@
-import { rAF, frameState, clock } from './concurrency-helpers';
-import { easeInAndOut } from '../easings/cosine';
-import { getOrCreate } from './singleton';
+import { rAF, frameState, clock } from './concurrency-helpers.ts';
+import { easeInAndOut } from '../easings/cosine.ts';
+import { getOrCreate } from './singleton.ts';
 
 const currentCurves = getOrCreate<MotionCurve[]>('tween', () => []);
 

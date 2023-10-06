@@ -1,7 +1,7 @@
-import { rAF } from '../-private/concurrency-helpers';
-import Motion, { type BaseOptions } from '../-private/motion';
-import Tween, { type DerivedTween } from '../-private/tween';
-import type Sprite from '../-private/sprite';
+import { rAF } from '../-private/concurrency-helpers.ts';
+import Motion, { type BaseOptions } from '../-private/motion.ts';
+import Tween, { type DerivedTween } from '../-private/tween.ts';
+import type Sprite from '../-private/sprite.ts';
 
 interface Options extends BaseOptions {
   easing: (t: number) => number;

@@ -1,7 +1,7 @@
-import { Color, ColorTween } from './color';
-import Tween from './-private/tween';
-import linear from './easings/linear';
-import './element-remove';
+import { Color, ColorTween } from './color.ts';
+import Tween from './-private/tween.ts';
+import linear from './easings/linear.ts';
+import './element-remove.ts';
 
 const innerPattern =
   /^ (\d+)px (\d+)px(?: (\d+)px)?(?: (\d+)px)?( inset)?(?:, )?/;

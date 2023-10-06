@@ -1,7 +1,8 @@
-import Motion, { type BaseOptions } from '../-private/motion';
-import { type default as Sprite, type SVGPosition } from '../-private/sprite';
-import Tween, { type TweenLike } from '../-private/tween';
-import { rAF } from '../-private/concurrency-helpers';
+import Motion, { type BaseOptions } from '../-private/motion.ts';
+import type Sprite from '../-private/sprite.ts';
+import { type SVGPosition } from '../-private/sprite.ts';
+import Tween, { type TweenLike } from '../-private/tween.ts';
+import { rAF } from '../-private/concurrency-helpers.ts';
 
 export default function moveSVG(
   dimension: keyof SVGPosition,

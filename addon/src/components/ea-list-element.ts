@@ -1,6 +1,6 @@
 import { warn } from '@ember/debug';
 import Component from '@ember/component';
-import { componentNodes } from '../-private/ember-internals';
+import { componentNodes } from '../-private/ember-internals.ts';
 import type Child from '../-private/child';
 
 /*

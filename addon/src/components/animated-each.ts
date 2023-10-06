@@ -3,18 +3,18 @@ import { computed, get, action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 import assertNever from 'assert-never';
-import { task, type Task } from '../-private/ember-scheduler';
-import { current } from '../-private/scheduler';
-import { afterRender, microwait } from '../-private/concurrency-helpers';
+import { task, type Task } from '../-private/ember-scheduler.ts';
+import { current } from '../-private/scheduler.ts';
+import { afterRender, microwait } from '../-private/concurrency-helpers.ts';
 import TransitionContext, {
   runToCompletion,
-} from '../-private/transition-context';
-import Sprite from '../-private/sprite';
-import { componentNodes, keyForArray } from '../-private/ember-internals';
-import partition from '../-private/partition';
-import Child from '../-private/child';
-import type MotionService from '../services/-ea-motion';
-import type { Transition } from '../-private/transition';
+} from '../-private/transition-context.ts';
+import Sprite from '../-private/sprite.ts';
+import { componentNodes, keyForArray } from '../-private/ember-internals.ts';
+import partition from '../-private/partition.ts';
+import Child from '../-private/child.ts';
+import type MotionService from '../services/-ea-motion.ts';
+import type { Transition } from '../-private/transition.ts';
 
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list.

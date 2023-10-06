@@ -1,16 +1,16 @@
 import { warn } from '@ember/debug';
 import Ember from 'ember';
-import Transform, { ownTransform, cumulativeTransform } from './transform';
-import { continueMotions } from './motion-bridge';
-import { collapsedChildren } from './margin-collapse';
+import Transform, { ownTransform, cumulativeTransform } from './transform.ts';
+import { continueMotions } from './motion-bridge.ts';
+import { collapsedChildren } from './margin-collapse.ts';
 import {
   shiftedBounds,
   relativeBounds,
   resizedBounds,
   emptyBounds,
-} from './bounds';
-import type Child from './child';
-import { getOrCreate } from './singleton';
+} from './bounds.ts';
+import type Child from './child.ts';
+import { getOrCreate } from './singleton.ts';
 
 const inFlight = getOrCreate('sprite', () => new WeakMap());
 

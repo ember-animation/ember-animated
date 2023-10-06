@@ -1,7 +1,7 @@
-import { rAF } from '../-private/concurrency-helpers';
-import Motion, { type BaseOptions } from '../-private/motion';
-import type Sprite from '../-private/sprite';
-import Tween from '../-private/tween';
+import { rAF } from '../-private/concurrency-helpers.ts';
+import Motion, { type BaseOptions } from '../-private/motion.ts';
+import type Sprite from '../-private/sprite.ts';
+import Tween from '../-private/tween.ts';
 
 export default function compensateForScale(
   sprite: Sprite,
