@@ -1,5 +1,16 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import type { AnimatedEachSignature } from './animated-each.ts';
+
+interface AnimatedIfSignature<T> {
+  Args: {
+    Named: AnimatedEachSignature<any>['Args']['Named'] & { predicate: T };
+  };
+  Blocks: {
+    default: [];
+    else: [];
+  };
+}
 
 /**
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes.
@@ -47,11 +58,20 @@ import { computed } from '@ember/object';
   @class animated-if
   @public
 */
-export default class AnimatedIfComponent extends Component {
+export default class AnimatedIfComponent<T> extends Component<
+  AnimatedIfSignature<T>
+> {
   tagName = '';
   static positionalParams = ['predicate'];
 
-  group: string | undefined;
+  declare predicate: T;
+  group: AnimatedEachSignature<T>['Args']['Named']['group'];
+  finalRemoval: AnimatedEachSignature<T>['Args']['Named']['finalRemoval'];
+  initialInsertion: AnimatedEachSignature<T>['Args']['Named']['initialInsertion'];
+  key: AnimatedEachSignature<T>['Args']['Named']['key'];
+  rules: AnimatedEachSignature<T>['Args']['Named']['rules'];
+  use: AnimatedEachSignature<T>['Args']['Named']['use'];
+  duration: AnimatedEachSignature<T>['Args']['Named']['duration'];
 
   @computed('group')
   get realGroup() {

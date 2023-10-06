@@ -6,6 +6,15 @@ import { componentNodes } from '../-private/ember-internals.ts';
 import Sprite from '../-private/sprite.ts';
 import type MotionService from '../services/-ea-motion.ts';
 
+interface AnimatedBeaconSignature {
+  Args: {
+    name: string;
+  };
+  Blocks: {
+    default: [];
+  };
+}
+
 /**
   A component that marks a region of the page that
   can serve as a source or destination for sprites to animate to and from.
@@ -62,7 +71,7 @@ import type MotionService from '../services/-ea-motion.ts';
   @class animated-beacon
   @public
 */
-export default class AnimatedBeacon extends Component {
+export default class AnimatedBeacon extends Component<AnimatedBeaconSignature> {
   name: string | undefined;
 
   tagName = '';
@@ -89,7 +98,9 @@ export default class AnimatedBeacon extends Component {
 
   _firstChildElement(): HTMLElement | SVGElement | undefined {
     if (this._inserted) {
-      let { firstNode, lastNode } = componentNodes(this);
+      let { firstNode, lastNode } = componentNodes(
+        this as unknown as Component,
+      );
       let node: Node | null = firstNode;
       while (node) {
         if (node.nodeType === Node.ELEMENT_NODE) {

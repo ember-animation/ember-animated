@@ -3,12 +3,24 @@ import Component from '@ember/component';
 import { componentNodes } from '../-private/ember-internals.ts';
 import type Child from '../-private/child.ts';
 
+interface EaListElementSignature<T = unknown> {
+  Args: {
+    Named: {
+      child: T;
+      elementToChild: WeakMap<Element, Child>;
+    };
+  };
+  Blocks: {
+    default: [T, number];
+  };
+}
+
 /*
    This component has one job: tracking which DOM elements correspond
    with which list elements.
 */
 
-export default class EaListElement extends Component {
+export default class EaListElement extends Component<EaListElementSignature> {
   tagName = '';
   isEmberAnimatedListElement = true;
 
@@ -25,7 +37,7 @@ export default class EaListElement extends Component {
   }
 
   _forEachElement(fn: (elt: Element) => void) {
-    let { firstNode, lastNode } = componentNodes(this);
+    let { firstNode, lastNode } = componentNodes(this as unknown as Component);
     let node: Node | null = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {

@@ -11,6 +11,25 @@ import { componentNodes } from '../-private/ember-internals.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { MotionConstructor } from '../-private/motion.ts';
 
+interface AnimatedContainerSignature<Tag extends string> {
+  /** Multiple tags supported for base element via `tag` arg */
+  // Element: ElementFromTagName<Tag>; // @todo https://github.com/typed-ember/glint/issues/610
+  Element: HTMLDivElement;
+  Args: {
+    motion?: string;
+
+    /** Whether to animate the initial render. You will probably also need to set initialInsertion=true on a child component of animated-container. Defaults to false. */
+    onInitialRender?: boolean;
+
+    /** Use a custom tag for the container. Defaults to div. */
+    tag?: Tag;
+    class?: string;
+  };
+  Blocks: {
+    default: [];
+  };
+}
+
 /**
  Provides a boundary between animator components and the surrounding document
  which smoothly resizes as animators change. Use animated-container whenever you
@@ -60,7 +79,9 @@ import type { MotionConstructor } from '../-private/motion.ts';
   @class animated-container
   @public
 */
-export default class AnimatedContainerComponent extends Component {
+export default class AnimatedContainerComponent<
+  Tag extends string = 'div',
+> extends Component<AnimatedContainerSignature<Tag>> {
   tagName = '';
 
   @service('-ea-motion')
@@ -71,7 +92,9 @@ export default class AnimatedContainerComponent extends Component {
     @argument tag
     @type String
   */
-  tag = 'div';
+  tag = 'div' as const;
+  // @todo https://github.com/typed-ember/glint/issues/610
+  // tag: Tag = 'div' as Tag;
 
   /**
    * Whether to animate the initial render. You will probably also need to set
@@ -201,7 +224,7 @@ export default class AnimatedContainerComponent extends Component {
   }).restartable()
   animate!: Task;
 
-  get useElementHelper() {
+  get useElementHelper(): boolean {
     return dependencySatisfies('ember-element-helper', '>=0.6.1');
   }
 }
