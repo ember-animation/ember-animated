@@ -32,15 +32,15 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      # We need a workspace aware version of npm because our addon is in a subdir but our .npmrc is in the root
-      - name: npm8
-        run: npm install -g npm@8
-
-      - name: set version
-        run: npm version --no-git-tag-version --workspaces-update=false `node -e "console.log(require('./package.json').version)"`-unstable.`git rev-parse --short HEAD`
-        working-directory: addon
-
-      - name: npm publish
-        run: npm publish --tag=unstable --verbose --workspace=addon
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+#      # We need a workspace aware version of npm because our addon is in a subdir but our .npmrc is in the root
+#      - name: npm8
+#        run: npm install -g npm@8
+#
+#      - name: set version
+#        run: npm version --no-git-tag-version --workspaces-update=false `node -e "console.log(require('./package.json').version)"`-unstable.`git rev-parse --short HEAD`
+#        working-directory: addon
+#
+#      - name: npm publish
+#        run: npm publish --tag=unstable --verbose --workspace=addon
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
