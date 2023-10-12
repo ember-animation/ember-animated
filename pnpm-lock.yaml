@@ -567,8 +567,8 @@ importers:
         specifier: ^5.1.5
         version: 5.1.5(@ember/test-helpers@2.7.0)(qunit@2.18.2)
       ember-resolver:
-        specifier: ^8.0.3
-        version: 8.0.3(@babel/core@7.20.5)
+        specifier: ^11.0.1
+        version: 11.0.1(ember-source@4.3.0)
       ember-source:
         specifier: ~4.3.0
         version: 4.3.0(@babel/core@7.20.5)(webpack@5.75.0)
@@ -11887,6 +11887,21 @@ packages:
       - supports-color
       - webpack-cli
       - webpack-command
+    dev: true
+
+  /ember-resolver@11.0.1(ember-source@4.3.0):
+    resolution: {integrity: sha512-ucBk3oM+PR+AfYoSUXeQh8cDQS1sSiEKp4Pcgbew5cFMSqPxJfqd1zyZsfQKNTuyubeGmWxBOyMVSTvX2LeCyg==}
+    engines: {node: 14.* || 16.* || >= 18}
+    peerDependencies:
+      ember-source: ^4.8.3 || >= 5.0.0
+    peerDependenciesMeta:
+      ember-source:
+        optional: true
+    dependencies:
+      ember-cli-babel: 7.26.11
+      ember-source: 4.3.0(@babel/core@7.20.5)(webpack@5.75.0)
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /ember-resolver@8.0.3(@babel/core@7.20.5):
