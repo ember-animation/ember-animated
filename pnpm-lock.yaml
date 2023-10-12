@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  ember-animated: workspace:*
   ember-modal-dialog: 4.0.0
   '@types/eslint': 8.4.1
 
@@ -233,7 +234,7 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       ember-animated:
-        specifier: 1.0.4
+        specifier: workspace:*
         version: link:../addon
       ember-animated-tools:
         specifier: ^1.0.0

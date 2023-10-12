@@ -38,6 +38,7 @@
   },
   "pnpm": {
     "overrides": {
+      "ember-animated": "workspace:*",
       "ember-modal-dialog": "4.0.0",
       "@types/eslint": "8.4.1"
     }
