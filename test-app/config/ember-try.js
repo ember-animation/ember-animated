@@ -79,11 +79,6 @@ module.exports = async function () {
             'ember-source': await getChannelURL('release'),
             'ember-element-helper': '^0.8.0',
           },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
-          },
         },
       },
       {
@@ -93,11 +88,6 @@ module.exports = async function () {
             'ember-source': await getChannelURL('beta'),
             'ember-element-helper': '^0.8.0',
           },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
-          },
         },
       },
       {
@@ -106,11 +96,6 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': await getChannelURL('canary'),
             'ember-element-helper': '^0.8.0',
-          },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
           },
         },
       },
