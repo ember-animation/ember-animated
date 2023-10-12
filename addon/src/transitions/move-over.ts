@@ -47,6 +47,7 @@ function normalize(dimension: string, direction: number) {
   return { position, size, startTranslatedBy, endTranslatedBy };
 }
 
+// eslint-disable-next-line require-yield
 export default function* moveOver(
   dimension: string,
   direction: number,

@@ -1,4 +1,4 @@
-export default class Child {
+export default class Child<T = unknown> {
   state: 'new' | 'kept' | 'removing' = 'new';
   private removalBlockers = 0;
   private removalCycle: number | null = null;
@@ -6,7 +6,7 @@ export default class Child {
   constructor(
     readonly group: string,
     readonly id: string,
-    readonly value: unknown,
+    readonly value: T,
     readonly index: number,
   ) {
     this.removalBlockers = 0;

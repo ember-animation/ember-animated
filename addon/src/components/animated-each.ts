@@ -302,6 +302,7 @@ export default class AnimatedEach extends Component {
     this._renderedChildrenStartedMoving = false;
 
     if (
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore: untyped FastBoot global
       typeof FastBoot === 'undefined' &&
       !isStable(oldSignature, newSignature)
@@ -565,7 +566,7 @@ export default class AnimatedEach extends Component {
     });
 
     // Make all our current sprites absolutely positioned so they won't move during render.
-    currentSprites.forEach((sprite) => sprite.lock());
+    currentSprites.forEach((sprite: Sprite) => sprite.lock());
 
     // Wait for Ember to render our latest state.
     yield afterRender();

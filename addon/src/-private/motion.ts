@@ -22,7 +22,10 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
   private _motionList: Motion[] | undefined;
   private _inheritedMotionList: Motion[] | undefined;
 
-  constructor(readonly sprite: Sprite, readonly opts: Partial<T> = {}) {
+  constructor(
+    readonly sprite: Sprite,
+    readonly opts: Partial<T> = {},
+  ) {
     this.sprite = sprite;
     this.opts = opts;
     this._setupMotionList();
@@ -40,6 +43,7 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
 
   run() {
     let context = TransitionContext.forSprite(this.sprite);
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
     return spawnChild(function* () {
       context.onMotionStart(self.sprite);
@@ -57,6 +61,7 @@ export default abstract class Motion<T extends BaseOptions = BaseOptions> {
   // been interrupted during this frame. You should save any state on
   // `this` in order to influence your own animation. This hook is
   // skipped if there were no other motions.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interrupted(_otherMotions: Motion[]): void {}
 
   // Implement your animation here. It must be a generator function
