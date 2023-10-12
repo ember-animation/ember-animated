@@ -23,7 +23,7 @@ export const frameState = getOrCreate(
       // "did I already do that this frame?" without needing to thread the
       // clock values around.
       currentFrameClock: -Infinity,
-    } as iFrameState),
+    }) as iFrameState,
 );
 
 const cancellation = getOrCreate<

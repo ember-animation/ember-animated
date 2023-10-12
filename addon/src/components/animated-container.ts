@@ -202,6 +202,6 @@ export default class AnimatedContainerComponent extends Component {
   animate!: Task;
 
   get useElementHelper() {
-    return dependencySatisfies('ember-element-helper', '^0.6.1');
+    return dependencySatisfies('ember-element-helper', '>=0.6.1');
   }
 }

@@ -11,12 +11,9 @@ module.exports = async function () {
         name: 'ember-lts-3.16',
         npm: {
           devDependencies: {
+            'ember-data': '~3.16.0',
+            'ember-resolver': '^8.0.3',
             'ember-source': '~3.16.0',
-          },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
           },
         },
       },
@@ -24,12 +21,9 @@ module.exports = async function () {
         name: 'ember-lts-3.20',
         npm: {
           devDependencies: {
+            'ember-data': '~3.20.0',
+            'ember-resolver': '^8.0.3',
             'ember-source': '~3.20.5',
-          },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
           },
         },
       },
@@ -37,12 +31,9 @@ module.exports = async function () {
         name: 'ember-lts-3.24',
         npm: {
           devDependencies: {
+            'ember-data': '~3.24.0',
+            'ember-resolver': '^8.0.3',
             'ember-source': '~3.24.3',
-          },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
           },
         },
       },
@@ -50,12 +41,8 @@ module.exports = async function () {
         name: 'ember-lts-3.28',
         npm: {
           devDependencies: {
+            'ember-resolver': '^8.0.3',
             'ember-source': '~3.28.8',
-          },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
           },
         },
       },
@@ -63,12 +50,8 @@ module.exports = async function () {
         name: 'ember-lts-4.4',
         npm: {
           devDependencies: {
+            'ember-resolver': '^8.0.3',
             'ember-source': '~4.4.0',
-          },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
           },
         },
       },
@@ -78,11 +61,6 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': await getChannelURL('release'),
           },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
-          },
         },
       },
       {
@@ -91,11 +69,6 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': await getChannelURL('beta'),
           },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
-          },
         },
       },
       {
@@ -103,11 +76,6 @@ module.exports = async function () {
         npm: {
           devDependencies: {
             'ember-source': await getChannelURL('canary'),
-          },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
           },
         },
       },
@@ -127,31 +95,10 @@ module.exports = async function () {
           ember: {
             edition: 'classic',
           },
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
-          },
         },
       },
-      embroiderSafe({
-        npm: {
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
-          },
-        },
-      }),
-      embroiderOptimized({
-        npm: {
-          dependenciesMeta: {
-            'ember-animated': {
-              injected: true,
-            },
-          },
-        },
-      }),
+      embroiderSafe(),
+      embroiderOptimized(),
     ],
   };
 };

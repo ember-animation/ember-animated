@@ -37,7 +37,10 @@ API
 
 */
 
-import { registerCancellation, fireCancellation } from './concurrency-helpers.ts';
+import {
+  registerCancellation,
+  fireCancellation,
+} from './concurrency-helpers.ts';
 import { getOrCreate as _getOrCreate } from './singleton.ts';
 
 function getOrCreate<T>(key: string, construct: () => T): T {
@@ -115,7 +118,7 @@ let onStack: (routine: MicroRoutine) => StackEntry | undefined;
       ({
         cur: undefined,
         prior: [],
-      } as routinesState),
+      }) as routinesState,
   );
 
   // let cur: MicroRoutine | undefined;
@@ -290,6 +293,7 @@ function isPromise(thing: any): thing is Promise<any> {
 //
 export function parallel(...functions: ((...args: any[]) => unknown)[]) {
   return function (...args: any[]) {
+    // eslint-disable-next-line prefer-spread
     return Promise.all(functions.map((f) => f.apply(null, args)));
   };
 }
@@ -304,6 +308,7 @@ export function serial(...functions: ((...args: any[]) => unknown)[]) {
   return function (...args: any[]) {
     return spawnChild(function* () {
       for (let fn of functions) {
+        // eslint-disable-next-line prefer-spread
         yield fn.apply(null, args);
       }
     });

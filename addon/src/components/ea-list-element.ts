@@ -1,14 +1,14 @@
 import { warn } from '@ember/debug';
 import Component from '@ember/component';
 import { componentNodes } from '../-private/ember-internals.ts';
-import type Child from '../-private/child';
+import type Child from '../-private/child.ts';
 
 /*
    This component has one job: tracking which DOM elements correspond
    with which list elements.
 */
 
-export default class extends Component {
+export default class EaListElement extends Component {
   tagName = '';
   isEmberAnimatedListElement = true;
 

@@ -242,6 +242,7 @@ export default class AnimatedOrphans extends Component {
         },
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       let self = this;
       spawnChild(function* () {
         yield microwait();

@@ -27,6 +27,7 @@ function _computed(fn: (this: HostObject, propertyName: string) => Task) {
     if ((cp as any).setup !== undefined) {
       (cp as any).setup(proto, key);
     }
+    // eslint-disable-next-line prefer-rest-params
     return (computed(fn) as any)(...arguments);
   };
   (Ember as any)._setClassicDecorator(cp);
@@ -61,11 +62,13 @@ export class TaskProperty extends BaseTaskProperty {
   }
 
   setup(proto: HostObject, taskName: string) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: depending on the ember version we may or may not have a super
     // method.
     if (super.setup) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      super.setup(...arguments);
+      super.setup(...arguments); // eslint-disable-line prefer-rest-params
     }
     if (this._observes) {
       let handlerName = `_ember_animated_handler_${handlerCounter++}`;
@@ -114,6 +117,7 @@ export class Task {
     });
   }
   perform(...args: unknown[]) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
     let privSelf = getPriv(this);
     let context = privSelf.context;
@@ -197,8 +201,9 @@ function cleanupOnDestroy(
       for (const disposer of disposers) {
         disposer();
       }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      oldWillDestroy.apply(owner, arguments);
+      oldWillDestroy.apply(owner, arguments); // eslint-disable-line prefer-rest-params
     };
     owner.willDestroy.__ember_processes_destroyers__ = disposers;
   }
@@ -207,6 +212,7 @@ function cleanupOnDestroy(
     try {
       object.cancelAll();
     } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (err.message !== 'TaskCancelation') {
         throw err;
@@ -243,6 +249,7 @@ function* withRunLoop(generator: Generator): Generator {
           state = generator.throw(nextValue);
         }
       } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         threw = err;
       }

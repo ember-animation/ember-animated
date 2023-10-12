@@ -15,7 +15,15 @@ module.exports = {
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    'ember/classic-decorator-no-classic-methods': 'off',
+    'ember/no-classic-components': 'off',
+    'ember/no-component-lifecycle-hooks': 'off',
+    'ember/no-computed-properties-in-native-classes': 'off',
+    'ember/no-get': 'off',
+    'ember/no-observers': 'off',
+    'ember/require-tagless-components': 'off',
+  },
   overrides: [
     // ts files
     {
@@ -26,6 +34,8 @@ module.exports = {
       ],
       rules: {
         // Add any custom rules here
+        '@typescript-eslint/no-explicit-any': 'off',
+        'prefer-const': 'off',
       },
     },
     // node files
