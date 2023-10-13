@@ -15,6 +15,12 @@ import '../element-remove.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { Transition } from '../-private/transition.ts';
 
+interface AnimatedOrphansSignature {
+  Blocks: {
+    default: [];
+  };
+}
+
 /**
   A component that adopts any orphaned sprites so they can continue animating even
   after their original parent component has been destroyed. This relies on cloning
@@ -25,7 +31,7 @@ import type { Transition } from '../-private/transition.ts';
   @class animated-orphans
   @public
 */
-export default class AnimatedOrphans extends Component {
+export default class AnimatedOrphans extends Component<AnimatedOrphansSignature> {
   classNames: string[] = this.classNames.concat('animated-orphans');
 
   @service('-ea-motion')

@@ -3,6 +3,7 @@
     The @class is only there to support a deprecated usage.
   --}}
   {{#let (element this.tag) as |Tag|~}}
+    {{! @glint-ignore: https://github.com/typed-ember/glint/issues/610 }}
     <Tag class="animated-container {{@class}}" ...attributes>
       {{yield}}
     </Tag>
@@ -11,7 +12,8 @@
   {{!--
     The @class is only there to support a deprecated usage.
   --}}
-  {{#let (component (ensure-safe-component (-element this.tag)) tagName=this.tag) as |Tag|~}}
+  {{#let (component (-element this.tag) tagName=this.tag) as |Tag|~}}
+    {{! @glint-ignore: https://github.com/typed-ember/glint/issues/610 }}
     <Tag class="animated-container {{@class}}" ...attributes>
       {{yield}}
     </Tag>

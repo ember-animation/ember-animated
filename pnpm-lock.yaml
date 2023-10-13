@@ -8,7 +8,6 @@ overrides:
   ember-animated-tools>ember-animated: workspace:*
   ember-modal-dialog: 4.0.0
   '@types/eslint': 8.4.1
-  fastboot: 4.1.1
 
 importers:
 

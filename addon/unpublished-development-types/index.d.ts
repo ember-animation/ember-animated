@@ -3,10 +3,12 @@
 
 import '@glint/environment-ember-loose';
 
+import type EmberAnimatedRegistry from '../src/template-registry.ts';
+
 declare module '@glint/environment-ember-loose/registry' {
   // Remove this once entries have been added! 👇
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export default interface Registry {
+  export default interface Registry extends EmberAnimatedRegistry {
     // Add any registry entries from other addons here that your addon itself uses (in non-strict mode templates)
     // See https://typed-ember.gitbook.io/glint/using-glint/ember/using-addons
   }

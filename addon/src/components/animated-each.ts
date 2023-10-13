@@ -16,6 +16,54 @@ import Child from '../-private/child.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { Transition } from '../-private/transition.ts';
 
+export interface AnimatedEachSignature<T> {
+  Args: {
+    Positional: [T[]];
+    Named: {
+      /* The list of data you are trying to render. */
+      items?: T[];
+
+      /** Represents the amount of time an animation takes in miliseconds. */
+      duration?: number;
+
+      /**
+       * When true, all the items in the list will animate as removedSprites when the {{#animated-each}} is destroyed. Defaults to false.
+       *
+       * Note that an <AnimatedOrphans/> component must be actively rendered when this animator is removed for this option to have any effect.
+       */
+      finalRemoval?: boolean;
+
+      /** If set, this animator will only match other animators that have the same group value. */
+      group?: string;
+
+      /** When true, all the items in the list will animate as insertedSprites when the {{#animated-each}} is first rendered. Defaults to false. */
+      initialInsertion?: boolean;
+
+      /** Serves the same purpose as the key in ember {{#each}}, and it's also used to compare values when animating between components. */
+      key?: string;
+
+      /** Specifies data-dependent Rules that choose which Transition to run when the list changes. This takes precedence over use. */
+      rules?:
+        | ((args: {
+            firstTime: boolean;
+            oldItems: unknown[];
+            newItems: unknown[];
+          }) => Transition)
+        | undefined;
+
+      /** Specifies the Transition to run when the list changes. */
+      use?: Transition;
+
+      /** An optional comma-separated list of properties to observe on each of the objects in the items list. If any of those properties change, we will trigger an animated transition. Without this, we only animate when the list contents change, not when any deeper properties change. */
+      watch?: string;
+    };
+  };
+  Blocks: {
+    default: [T, number];
+    else: [];
+  };
+}
+
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list.
   ```hbs
@@ -54,7 +102,9 @@ import type { Transition } from '../-private/transition.ts';
   @class animated-each
   @public
 */
-export default class AnimatedEach extends Component {
+export default class AnimatedEach<T> extends Component<
+  AnimatedEachSignature<T>
+> {
   tagName = '';
   static positionalParams = ['items'];
 
@@ -66,7 +116,7 @@ export default class AnimatedEach extends Component {
     @argument items
     @type Array
   */
-  items!: unknown[];
+  items!: T[];
 
   /**
    * If set, this animator will only [match](../../between) other animators that have the same group value.
@@ -146,7 +196,7 @@ export default class AnimatedEach extends Component {
   private _prevSignature: string[] = [];
   private _firstTime = true;
   private _inserted = false;
-  private _renderedChildren: Child[] = [];
+  private _renderedChildren: Child<T>[] = [];
   private _renderedChildrenStartedMoving = false;
   private _cycleCounter = 0;
   private _keptSprites: Sprite[] | null = null;
@@ -241,7 +291,7 @@ export default class AnimatedEach extends Component {
   // Child models that will be rendered by our template and decide whether an
   // animation is needed.
   @computed('items.[]', 'group')
-  get renderedChildren() {
+  get renderedChildren(): Child<T>[] {
     let firstTime = this._firstTime;
     this._firstTime = false;
 
@@ -249,7 +299,7 @@ export default class AnimatedEach extends Component {
     let oldChildren = this._renderedChildren;
     let oldItems = this._prevItems;
     let oldSignature = this._prevSignature;
-    let newItems: unknown[] = this.items;
+    let newItems: T[] = this.items;
     let newSignature = this._identitySignature(newItems, getKey);
     let group = this.group || '__default__';
     this._prevItems = newItems ? newItems.slice() : [];
@@ -333,7 +383,7 @@ export default class AnimatedEach extends Component {
     if (!this._inserted) {
       return;
     }
-    let { firstNode, lastNode } = componentNodes(this);
+    let { firstNode, lastNode } = componentNodes(this as unknown as Component);
     let node: Node | null = firstNode;
     while (node) {
       if (node.nodeType === Node.ELEMENT_NODE) {
@@ -501,7 +551,7 @@ export default class AnimatedEach extends Component {
   //   cleaning up our own sprite state.
   //
   @task(function* (
-    this: AnimatedEach,
+    this: AnimatedEach<T>,
     transition: Transition,
     firstTime: boolean,
   ) {
@@ -538,7 +588,7 @@ export default class AnimatedEach extends Component {
   }).restartable()
   animate!: Task;
 
-  @task(function* (this: AnimatedEach, transition, animateTask) {
+  @task(function* (this: AnimatedEach<T>, transition, animateTask) {
     // we remember the transition we're using in case we need to
     // recalculate based on other animators potentially moving our DOM
     // around
@@ -581,7 +631,7 @@ export default class AnimatedEach extends Component {
   startAnimation!: Task; // todo: restartable?
 
   @task(function* (
-    this: AnimatedEach,
+    this: AnimatedEach<T>,
     transition: Transition,
     parent: Sprite,
     currentSprites: Sprite[],
@@ -745,7 +795,7 @@ export default class AnimatedEach extends Component {
   runAnimation!: Task;
 
   @task(function* (
-    this: AnimatedEach,
+    this: AnimatedEach<T>,
     insertedSprites: Sprite[],
     keptSprites: Sprite[],
     removedSprites: Sprite[],
