@@ -1,6 +1,6 @@
 # test-app
 
-This is the documentation app for Ember Animated.
+This is the documentation test app for Ember Animated addon.
 
 ## Prerequisites
 
@@ -8,24 +8,22 @@ You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
 * [Node.js](https://nodejs.org/)
-* [Yarn](https://yarnpkg.com/)
+* [pnpm](https://pnpm.io/)
 * [Ember CLI](https://cli.emberjs.com/release/)
 * [Google Chrome](https://google.com/chrome/)
 
 ## Installation
 
-PAY ATTENTION here, this is slightly different than a normal Ember app.
-
 * `git clone https://github.com/ember-animation/ember-animated.git` this repository
-* `cd ember-animated/docs`
+* `cd ember-animated/test-app`
 * `pnpm install`
 * `ember s`
 
 ## Running / Development
 
 * `ember serve`
-* Visit your app at [http://localhost:4201](http://localhost:4201).
-* Visit your tests at [http://localhost:4201/tests](http://localhost:4201/tests).
+* Visit your app at [http://localhost:4200](http://localhost:4200).
+* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
 ### Code Generators
 

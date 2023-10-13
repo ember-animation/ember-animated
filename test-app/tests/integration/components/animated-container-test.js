@@ -34,14 +34,14 @@ module('Integration | Component | animated container', function (hooks) {
         init() {
           this._super();
           here.set('fakeAnimator', this);
-          this.get('motionService').register(this);
+          this.motionService.register(this);
         },
         willDestroyElement() {
-          this.get('motionService').unregister(this);
+          this.motionService.unregister(this);
         },
         didInsertElement() {
           if (this.onInitialRender) {
-            this.get('animate').perform(this.onInitialRender);
+            this.animate.perform(this.onInitialRender);
           }
         },
         beginStaticMeasurement() {
@@ -64,7 +64,7 @@ module('Integration | Component | animated container', function (hooks) {
           this.finalHeight = opts.finalHeight == null ? 200 : opts.finalHeight;
 
           this.element.style.height = this.initialHeight + 'px';
-          let service = this.get('motionService');
+          let service = this.motionService;
           service.willAnimate({
             duration: opts.duration == null ? 1 : opts.duration,
             task: current(),
@@ -85,7 +85,7 @@ module('Integration | Component | animated container', function (hooks) {
     await render(hbs`
       <AnimatedContainer>
         <div class="inside">
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
@@ -108,7 +108,7 @@ module('Integration | Component | animated container', function (hooks) {
     await render(hbs`
       <AnimatedContainer>
         <div class="inside">
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
@@ -117,7 +117,7 @@ module('Integration | Component | animated container', function (hooks) {
     let original = _bounds(find('.animated-container'));
 
     run(() => {
-      this.get('fakeAnimator.animate').perform();
+      this.fakeAnimator.animate.perform();
     });
 
     find('.inside').style.height = '600px';
@@ -142,13 +142,13 @@ module('Integration | Component | animated container', function (hooks) {
     await render(hbs`
       <AnimatedContainer @motion={{this.TestMotion}}>
         <div class="inside">
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
 
     run(() => {
-      this.get('fakeAnimator.animate').perform({
+      this.fakeAnimator.animate.perform({
         staticHeight: 321,
       });
     });
@@ -177,13 +177,13 @@ module('Integration | Component | animated container', function (hooks) {
     await render(hbs`
       <AnimatedContainer @motion={{this.TestMotion}}>
         <div class="inside">
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
 
     run(() => {
-      this.get('fakeAnimator.animate').perform({
+      this.fakeAnimator.animate.perform({
         initialHeight: 100,
         staticHeight: 200,
         finalHeight: 300,
@@ -211,13 +211,13 @@ module('Integration | Component | animated container', function (hooks) {
     await render(hbs`
       <AnimatedContainer>
         <div class="inside">
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
 
     run(() => {
-      this.get('fakeAnimator.animate').perform({
+      this.fakeAnimator.animate.perform({
         block,
         initialHeight: 100,
         staticHeight: 200,
@@ -254,13 +254,13 @@ module('Integration | Component | animated container', function (hooks) {
     await render(hbs`
       <AnimatedContainer @motion={{this.TestMotion}}>
         <div class="inside">
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
 
     run(() => {
-      this.get('fakeAnimator.animate').perform({
+      this.fakeAnimator.animate.perform({
         duration: 456,
       });
     });
@@ -297,7 +297,7 @@ module('Integration | Component | animated container', function (hooks) {
     });
     await render(hbs`
       <AnimatedContainer @motion={{this.TestMotion}} @onInitialRender={{true}}>
-        {{fake-animator onInitialRender=this.opts}}
+        <FakeAnimator @onInitialRender={{this.opts}} />
       </AnimatedContainer>
     `);
 
@@ -313,14 +313,14 @@ module('Integration | Component | animated container', function (hooks) {
     await render(hbs`
       <AnimatedContainer>
         <div class="inside" style="margin-top: 10px; height: 100px;">
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
 
     assert.visuallyConstant(find('.animated-container'), () => {
       run(() => {
-        this.get('fakeAnimator.animate').perform();
+        this.fakeAnimator.animate.perform();
       });
       find('.inside').style.position = 'absolute';
     });
@@ -331,14 +331,14 @@ module('Integration | Component | animated container', function (hooks) {
       <AnimatedContainer>
         <div class="inside">
           <div style="margin-top: 10px; height: 100px;"></div>
-          {{fake-animator}}
+          <FakeAnimator />
         </div>
       </AnimatedContainer>
     `);
 
     assert.visuallyConstant(find('.animated-container'), () => {
       run(() => {
-        this.get('fakeAnimator.animate').perform();
+        this.fakeAnimator.animate.perform();
       });
       find('.inside').style.position = 'absolute';
     });
@@ -349,7 +349,7 @@ module('Integration | Component | animated container', function (hooks) {
       <div style="border: 1px solid black">
         <AnimatedContainer>
           <div class="inside" style="margin-bottom: 10px; height: 100px;">
-            {{fake-animator}}
+            <FakeAnimator />
           </div>
         </AnimatedContainer>
         <div class="after">This comes after</div>
@@ -358,7 +358,7 @@ module('Integration | Component | animated container', function (hooks) {
 
     assert.visuallyConstant(find('.after'), () => {
       run(() => {
-        this.get('fakeAnimator.animate').perform();
+        this.fakeAnimator.animate.perform();
       });
       find('.inside').style.position = 'absolute';
     });
@@ -375,17 +375,17 @@ module('Integration | Component | animated container', function (hooks) {
         }
       </style>
       <AnimatedContainer class="example">
-        {{fake-animator}}
+        <FakeAnimator />
       </AnimatedContainer>
       <div class="after">This comes after</div>
     `);
 
-    this.get('fakeAnimator').element.style.height = '0px';
+    this.fakeAnimator.element.style.height = '0px';
 
     let initialTop = _bounds(find('.after')).top;
 
     run(() => {
-      this.get('fakeAnimator.animate').perform({
+      this.fakeAnimator.animate.perform({
         initialHeight: 0,
         staticHeight: 1,
         finalHeight: 1,
@@ -411,17 +411,17 @@ module('Integration | Component | animated container', function (hooks) {
         }
       </style>
       <AnimatedContainer class="example">
-        {{fake-animator}}
+        <FakeAnimator />
       </AnimatedContainer>
       <div class="after">This comes after</div>
     `);
 
-    this.get('fakeAnimator').element.style.height = '1px';
+    this.fakeAnimator.element.style.height = '1px';
 
     let initialTop = _bounds(find('.after')).top;
 
     run(() => {
-      this.get('fakeAnimator.animate').perform({
+      this.fakeAnimator.animate.perform({
         initialHeight: 1,
         staticHeight: 0,
         finalHeight: 0,
@@ -459,7 +459,7 @@ module('Integration | Component | animated container', function (hooks) {
     this.set('items', ['a']);
     await render(hbs`
       <AnimatedContainer @motion={{this.TestMotion}}>
-        {{#animated-each this.items use=this.transition as |item|}}
+        {{#animated-each this.items use=this.transition}}
           <div style="height: 10px"></div>
         {{/animated-each}}
       </AnimatedContainer>

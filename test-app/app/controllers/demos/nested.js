@@ -43,7 +43,7 @@ export default class extends Controller {
   }
 
   @action addMembers() {
-    this.get('collections').forEach((collection) => {
+    this.collections.forEach((collection) => {
       collection.members.unshiftObject({
         name: String(counter++),
       });

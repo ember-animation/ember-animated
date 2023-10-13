@@ -4,11 +4,7 @@ module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module',
-    ecmaFeatures: {
-      legacyDecorators: true,
-    },
+    ecmaVersion: 'latest',
   },
   plugins: ['ember', '@typescript-eslint'],
   extends: [
@@ -24,50 +20,25 @@ module.exports = {
     'ember/classic-decorator-no-classic-methods': 'off',
     'ember/no-classic-components': 'off',
     'ember/no-component-lifecycle-hooks': 'off',
-    'ember/no-computed-properties-in-native-classes': 'off',
-    'ember/no-get': 'off',
-    'ember/no-observers': 'off',
-    'ember/require-tagless-components': 'off',
 
-    'no-var': 'error',
-    'no-constant-condition': ['error', { checkLoops: false }],
-    'require-yield': 0,
-    semi: 0,
-    '@typescript-eslint/adjacent-overload-signatures': 'error',
-    '@typescript-eslint/array-type': 'error',
-    '@typescript-eslint/ban-types': 'error',
-    indent: 'off',
-    '@typescript-eslint/member-delimiter-style': 'error',
-    '@typescript-eslint/consistent-type-assertions': 'error',
-    '@typescript-eslint/consistent-type-definitions': 'error',
-    'no-array-constructor': 'off',
-    '@typescript-eslint/no-array-constructor': 'error',
-    '@typescript-eslint/no-empty-interface': 'error',
-    '@typescript-eslint/no-inferrable-types': 'error',
-    '@typescript-eslint/no-misused-new': 'error',
-    '@typescript-eslint/no-namespace': 'error',
-    '@typescript-eslint/triple-slash-reference': [
-      'error',
-      { path: 'never', types: 'never', lib: 'never' },
-    ],
-    'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/no-var-requires': 'error',
-    '@typescript-eslint/prefer-namespace-keyword': 'error',
-    '@typescript-eslint/type-annotation-spacing': 'error',
-    '@typescript-eslint/no-require-imports': 'error',
-    '@typescript-eslint/no-for-in-array': 'error',
-  },
-  globals: {
-    WeakMap: false,
-    Map: false,
+    'require-yield': 'off',
   },
   overrides: [
+    // ts files
+    {
+      files: ['**/*.ts'],
+      extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      rules: {},
+    },
     // node files
     {
       files: [
         './.eslintrc.js',
         './.prettierrc.js',
+        './.stylelintrc.js',
         './.template-lintrc.js',
         './ember-cli-build.js',
         './testem.js',
@@ -76,24 +47,19 @@ module.exports = {
         './lib/*/index.js',
         './server/**/*.js',
       ],
-      parserOptions: {
-        sourceType: 'script',
-      },
       env: {
         browser: false,
         node: true,
       },
-      plugins: ['node'],
-      extends: ['plugin:node/recommended'],
-      rules: {
-        '@typescript-eslint/no-var-requires': 0,
-        '@typescript-eslint/no-require-imports': 0,
-      },
+      extends: ['plugin:n/recommended'],
     },
     {
       // test files
       files: ['tests/**/*-test.{js,ts}'],
       extends: ['plugin:qunit/recommended'],
+      rules: {
+        'qunit/require-expect': ['error', 'except-simple'],
+      },
     },
   ],
 };

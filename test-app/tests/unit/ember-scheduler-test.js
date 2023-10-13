@@ -2,11 +2,11 @@
 import EmberObject, { computed } from '@ember/object';
 import { run, later, _getCurrentRunLoop } from '@ember/runloop';
 import { module, test } from 'qunit';
+import { macroCondition, dependencySatisfies } from '@embroider/macros';
 import { task } from 'ember-animated/-private/ember-scheduler';
 import { installLogging } from '../helpers/assertions';
 import { microwait } from 'ember-animated';
 import { registerCancellation } from 'ember-animated/-private/concurrency-helpers';
-import { gte } from 'ember-compatibility-helpers';
 
 module('Unit | scheduler Ember layer', function (hooks) {
   hooks.beforeEach(function (assert) {
@@ -54,7 +54,7 @@ module('Unit | scheduler Ember layer', function (hooks) {
     assert.expect(1);
     let Class = EmberObject.extend({
       hello: task(function* () {
-        assert.strictEqual(this.get('hello.concurrency'), 1);
+        assert.strictEqual(this.hello.concurrency, 1);
       }),
     });
     let object = Class.create();
@@ -264,7 +264,7 @@ module('Unit | scheduler Ember layer', function (hooks) {
         yield new Promise((r) => (resolve = r));
       }),
       message: computed('hello.isRunning', function () {
-        return this.get('hello.isRunning') ? 'yup' : 'nope';
+        return this.hello.isRunning ? 'yup' : 'nope';
       }),
     });
     let object = Class.create();
@@ -339,7 +339,7 @@ module('Unit | scheduler Ember layer', function (hooks) {
     let Class = EmberObject.extend({
       outer: task(function* () {
         try {
-          yield this.get('inner').perform();
+          yield this.inner.perform();
         } finally {
           assert.log('leaving outer');
         }
@@ -370,7 +370,7 @@ module('Unit | scheduler Ember layer', function (hooks) {
   });
 
   function insideRunLoop() {
-    if (gte('4.0.0')) {
+    if (macroCondition(dependencySatisfies('ember-source', '>=4.0.0'))) {
       return !!_getCurrentRunLoop();
     } else {
       return !!run.currentRunLoop;

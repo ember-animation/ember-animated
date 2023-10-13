@@ -196,7 +196,7 @@ module('Integration | Component | animated each', function (hooks) {
 
     await animationsSettled();
     run(() => {
-      this.get('items').replace(1, 1, ['x']);
+      this.items.replace(1, 1, ['x']);
     });
     await animationsSettled();
     assert.listContents(findAll('.test-child'), ['a', 'x', 'c']);
@@ -225,7 +225,7 @@ module('Integration | Component | animated each', function (hooks) {
 
     await animationsSettled();
     run(() => {
-      set(this.get('items')[1], 'id', 'x');
+      set(this.items[1], 'id', 'x');
     });
     await animationsSettled();
     assert.listContents(findAll('.test-child'), ['a', 'x', 'c']);
@@ -256,7 +256,7 @@ module('Integration | Component | animated each', function (hooks) {
     await animationsSettled();
 
     run(() => {
-      set(this.get('items')[0], 'y', 3);
+      set(this.items[0], 'y', 3);
     });
 
     await animationsSettled();

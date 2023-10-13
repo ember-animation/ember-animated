@@ -49,7 +49,7 @@ module('Integration | Component | animated value', function (hooks) {
     await animationsSettled();
 
     run(() => {
-      set(this.get('item'), 'y', 3);
+      set(this.item, 'y', 3);
     });
 
     await animationsSettled();

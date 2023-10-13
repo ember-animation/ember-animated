@@ -11,6 +11,8 @@ module.exports = async function () {
         name: 'ember-lts-3.16',
         npm: {
           devDependencies: {
+            '@ember/test-helpers': '^2.7.0',
+            'ember-cli': '~3.16.0',
             'ember-data': '~3.16.0',
             'ember-resolver': '^8.0.3',
             'ember-source': '~3.16.0',
@@ -21,6 +23,8 @@ module.exports = async function () {
         name: 'ember-lts-3.20',
         npm: {
           devDependencies: {
+            '@ember/test-helpers': '^2.7.0',
+            'ember-cli': '~3.20.0',
             'ember-data': '~3.20.0',
             'ember-resolver': '^8.0.3',
             'ember-source': '~3.20.5',
@@ -31,6 +35,8 @@ module.exports = async function () {
         name: 'ember-lts-3.24',
         npm: {
           devDependencies: {
+            '@ember/test-helpers': '^2.7.0',
+            'ember-cli': '~3.24.0',
             'ember-data': '~3.24.0',
             'ember-resolver': '^8.0.3',
             'ember-source': '~3.24.3',
@@ -41,6 +47,8 @@ module.exports = async function () {
         name: 'ember-lts-3.28',
         npm: {
           devDependencies: {
+            '@ember/test-helpers': '^2.7.0',
+            'ember-cli': '~3.28.0',
             'ember-resolver': '^8.0.3',
             'ember-source': '~3.28.8',
           },
@@ -106,6 +114,9 @@ module.exports = async function () {
         },
         npm: {
           devDependencies: {
+            '@ember/test-helpers': '^2.7.0',
+            'ember-cli': '~3.28.0',
+            'ember-resolver': '^8.0.3',
             'ember-source': '~3.28.8',
           },
           ember: {

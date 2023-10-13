@@ -941,7 +941,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('svg elements can use the top <svg> tag as their offset parent', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
 </svg>
 `);
@@ -957,7 +957,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('svg elements can use a nested <svg> tag as their offset parent', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <svg class="inside">
     <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
   </svg>
@@ -975,7 +975,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('svg elements skip over <g> when finding their offset parent', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <svg class="inside">
     <g>
       <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
@@ -995,7 +995,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('SVG rect with manipulated size', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
 </svg>
 `);
@@ -1038,7 +1038,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('SVG rect with manipulated x and y', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <rect class="target" width="40" height="50" x="100" y="200" fill="blue" />
 </svg>
 `);
@@ -1078,7 +1078,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('SVG circle with manipulated position', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
 </svg>
 `);
@@ -1118,7 +1118,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('SVG circle with manipulated radius', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
 </svg>
 `);
@@ -1160,7 +1160,7 @@ module('Unit | Sprite (SVG sprite locking support)', function (hooks) {
 
   test('can read initial and final SVG dimensions', async function (assert) {
     await render(hbs`
-<svg width=1000 height=1000>
+<svg width="1000" height="1000">
   <circle class="target" r="50" cx="100" cy="200" fill="blue" />
 </svg>
 `);
