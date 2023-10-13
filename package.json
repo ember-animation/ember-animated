@@ -30,7 +30,7 @@
     "release-it": "^16.2.1"
   },
   "volta": {
-    "node": "16.20.2",
+    "node": "18.18.1",
     "npm": "9.8.1"
   },
   "publishConfig": {
