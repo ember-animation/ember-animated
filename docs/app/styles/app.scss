@@ -231,7 +231,8 @@
   background-color: lightskyblue;
 }
 
-.scenario-rules span {
+.scenario-rules .count {
+  display: inline-block;
   border: 1px solid blue;
 }
 
@@ -370,6 +371,10 @@
 }
 
 /* BEGIN-SNIPPET moving-word-snippet.css */
+.moving-word span {
+  display: inline-block;
+}
+
 .moving-word-demo button {
   font-weight: bold;
   border: 2px solid rgb(7, 170, 219);

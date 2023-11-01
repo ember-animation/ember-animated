@@ -4,6 +4,8 @@
 
 In this demonstration, the `rules` choose a transition based on the number in the counter. When the counter increments, the new number is larger than the old number so the `toUp` transition runs. When the counter decrements, the old number is larger than the new one and and the `toDown` transition runs. 
 
+> NOTE: When elements are animated, they are absolutely positioned, which implies `display: block`. If you are attempting to animate an inline element, there will be a slight visual "jump" when switching between inline and block displays.  Therefore, when using any of the animators &mdash; like `{{animated-value}}` used here &mdash; the animated children should not be `display: inline`.  In this demo, `count` is `display: inline-block`.
+
 <DocsDemo as |demo|>
   <demo.example>
     <RulesExample />
