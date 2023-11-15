@@ -10,7 +10,7 @@ module('Integration | Sprites Example', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`
-    {{sprites-example}}
+     <SpritesExample />
     `);
     assert.strictEqual(
       this.element.querySelectorAll('.top-bar > button').length,
@@ -21,7 +21,7 @@ module('Integration | Sprites Example', function (hooks) {
 
   test('adding an email', async function (assert) {
     await render(hbs`
-    {{sprites-example}}
+     <SpritesExample />
     `);
     await time.pause();
     await click(this.element.querySelector('.top-bar > button'));
@@ -34,7 +34,7 @@ module('Integration | Sprites Example', function (hooks) {
 
   test('deleting an email', async function (assert) {
     await render(hbs`
-    {{sprites-example}}
+     <SpritesExample />
     `);
     let emails = this.element.querySelectorAll('.each-item');
     await click(emails[0].querySelector('input[type="checkbox"]'));
@@ -49,9 +49,9 @@ module('Integration | Sprites Example', function (hooks) {
 
   test('transitions get logged to screen', async function (assert) {
     await render(hbs`
-      {{#transition-log-table as |logTransition|}}
-        {{logged-sprites logTransition=logTransition}}
-      {{/transition-log-table}}
+      <TransitionLogTable as |logTransition|>
+        <LoggedSprites @logTransition={{logTransition}} />
+      </TransitionLogTable>
     `);
 
     await click(this.element.querySelector('.top-bar > button'));

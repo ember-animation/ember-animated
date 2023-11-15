@@ -1,13 +1,9 @@
-# unconventional js
+# unconventional files
 /blueprints/*/files/
+/app/styles/tailwind-utilities.min.css
 
 # compiled output
 /dist/
 
-# misc
-/coverage/
-!.*
-.*/
-
-# ember-try
+# addons
 /.node_modules.ember-try/

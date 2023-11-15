@@ -1,0 +1,42 @@
+diff --git a/addon/models/class.js b/addon/models/class.js
+index f2ce23fce37fe737e0f151c1a2d855c3dfb8badb..b7e5ea53b38f56da97fb0d380aedf4d232a5b5ef 100644
+--- a/addon/models/class.js
++++ b/addon/models/class.js
+@@ -3,7 +3,7 @@ import { filterBy, or, union } from '@ember/object/computed';
+ import { memberUnion, hasMemberType } from '../utils/computed';
+ 
+ export default class Class extends Model {
+-  @belongsTo('class', { async: false, inverse: null })
++  @belongsTo('class', { async: false, inverse: null, polymorphic: false })
+   parentClass;
+ 
+   isClass = true;
+diff --git a/addon/models/module.js b/addon/models/module.js
+index 4887ba3bd30829653cd6944f1097ed65db41a9da..eb40ea0b9d3b4f8cf1dac70fa99fea28f04f2300 100644
+--- a/addon/models/module.js
++++ b/addon/models/module.js
+@@ -10,10 +10,10 @@ export default class Module extends Model {
+   @attr
+   functions;
+ 
+-  @hasMany('class', { async: false, inverse: null })
++  @hasMany('class', { async: false, inverse: null, polymorphic: true })
+   classes;
+ 
+-  @hasMany('class', { async: false, inverse: null })
++  @hasMany('class', { async: false, inverse: null, polymorphic: true })
+   components;
+ 
+   /*
+diff --git a/addon/models/project.js b/addon/models/project.js
+index a7c67e3e269632b64e5d092506b48664a3889681..4186a39c0e74089b404cd7b41aa742cb7b7beedc 100644
+--- a/addon/models/project.js
++++ b/addon/models/project.js
+@@ -13,6 +13,6 @@ export default class Project extends Model {
+   @attr
+   navigationIndex;
+ 
+-  @hasMany('module', { async: false, inverse: null })
++  @hasMany('module', { async: false, inverse: null, polymorphic: false })
+   modules;
+ }

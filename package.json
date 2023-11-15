@@ -41,6 +41,9 @@
       "ember-animated-tools>ember-animated": "workspace:*",
       "ember-modal-dialog": "4.0.0",
       "@types/eslint": "8.4.1"
+    },
+    "patchedDependencies": {
+      "ember-cli-addon-docs@6.0.2": "patches/ember-cli-addon-docs@6.0.2.patch"
     }
   },
   "release-it": {
