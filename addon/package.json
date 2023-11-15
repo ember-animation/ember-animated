@@ -79,7 +79,7 @@
     "@glint/core": "^1.2.1",
     "@glint/environment-ember-loose": "^1.2.1",
     "@glint/environment-ember-template-imports": "^1.2.1",
-    "@glint/template": "^1.2.1",
+    "@glint/template": "1.2.1",
     "@rollup/plugin-babel": "^6.0.4",
     "@tsconfig/ember": "^2.0.0",
     "@types/ember": "^4.0.9",
