@@ -7,7 +7,7 @@ module('Integration | Between Two Lists Example', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    await render(hbs`{{between-two-lists-example}}`);
+    await render(hbs`<BetweenTwoListsExample />`);
 
     assert.dom('.bounce').exists({ count: 1 }, 'found undo button');
   });

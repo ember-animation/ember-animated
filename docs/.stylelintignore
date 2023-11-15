@@ -1,5 +1,6 @@
 # unconventional files
 /blueprints/*/files/
+/app/styles/tailwind-utilities.min.css
 
 # compiled output
 /dist/

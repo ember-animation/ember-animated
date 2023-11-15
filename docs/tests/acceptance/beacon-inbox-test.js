@@ -10,7 +10,7 @@ module('Integration | Beacon Demo', function (hooks) {
 
   skip('visiting /between-components', async function (assert) {
     await render(hbs`
-      {{between-components}}
+      <BetweenComponents />
     `);
     await time.pause();
     await click(this.element.querySelector('button'));
