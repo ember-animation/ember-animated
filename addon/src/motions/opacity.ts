@@ -85,8 +85,8 @@ export class Opacity extends Motion<OpacityOptions> {
       opts.to != null
         ? opts.to
         : sprite.finalComputedStyle != null
-        ? parseFloat(sprite.finalComputedStyle.opacity)
-        : 1;
+          ? parseFloat(sprite.finalComputedStyle.opacity)
+          : 1;
     let from;
 
     if (this.prior) {
@@ -104,8 +104,8 @@ export class Opacity extends Motion<OpacityOptions> {
         opts.from != null
           ? opts.from
           : sprite.initialComputedStyle != null
-          ? parseFloat(sprite.initialComputedStyle.opacity)
-          : 0;
+            ? parseFloat(sprite.initialComputedStyle.opacity)
+            : 0;
     }
 
     let proportionalDuration = Math.abs(from - to) * duration;
