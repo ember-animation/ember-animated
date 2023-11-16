@@ -26,8 +26,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@release-it-plugins/lerna-changelog": "^6.0.0",
     "@release-it-plugins/workspaces": "^4.0.0",
-    "concurrently": "^8.2.0",
-    "release-it": "^16.2.1"
+    "concurrently": "^8.2.2",
+    "release-it": "^17.0.0"
   },
   "volta": {
     "node": "18.18.2",
