@@ -221,8 +221,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(@glint/template@1.2.1)(ember-source@5.3.0)(webpack@5.89.0)
       '@faker-js/faker':
-        specifier: ^6.3.1
-        version: 6.3.1
+        specifier: ^8.3.1
+        version: 8.3.1
       '@fortawesome/ember-fontawesome':
         specifier: ^0.3.4
         version: 0.3.4(rollup@3.29.4)
@@ -407,8 +407,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       '@faker-js/faker':
-        specifier: ^6.3.1
-        version: 6.3.1
+        specifier: ^8.3.1
+        version: 8.3.1
       '@glimmer/component':
         specifier: ^1.1.2
         version: 1.1.2(@babel/core@7.23.3)
@@ -2697,9 +2697,9 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@faker-js/faker@6.3.1:
-    resolution: {integrity: sha512-8YXBE2ZcU/pImVOHX7MWrSR/X5up7t6rPWZlk34RwZEcdr3ua6X+32pSd6XuOQRN+vbuvYNfA6iey8NbrjuMFQ==}
-    engines: {node: '>=14.0.0', npm: '>=6.0.0'}
+  /@faker-js/faker@8.3.1:
+    resolution: {integrity: sha512-FdgpFxY6V6rLZE9mmIBb9hM0xpfvQOSNOLnzolzKwsE1DH+gC7lEKV1p1IbR0lAYyvYd5a4u3qWJzowUkw1bIw==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: true
 
   /@fortawesome/ember-fontawesome@0.3.4(rollup@3.29.4):
@@ -12052,7 +12052,7 @@ packages:
       function-bind: 1.1.2
 
   /hawk@1.1.1:
-    resolution: {integrity: sha1-h81JH5tG5OKurKM1QWdmiF0tHtk=}
+    resolution: {integrity: sha512-am8sVA2bCJIw8fuuVcKvmmNnGFUGW8spTkVtj2fXTEZVkfN42bwFZFtDem57eFi+NSxurJB8EQ7Jd3uCHLn8Vw==}
     engines: {node: '>=0.8.0'}
     deprecated: This module moved to @hapi/hawk. Please make sure to switch over as this distribution is no longer supported and may contain bugs and critical security issues.
     requiresBuild: true

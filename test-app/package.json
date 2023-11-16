@@ -32,7 +32,7 @@
     "@ember/test-helpers": "^3.2.0",
     "@embroider/macros": "^1.13.3",
     "@embroider/test-setup": "^3.0.3",
-    "@faker-js/faker": "^6.3.1",
+    "@faker-js/faker": "^8.3.1",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@glint/core": "^1.2.1",
