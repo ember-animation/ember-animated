@@ -16,7 +16,7 @@ export default class extends JSONAPIAdapter {
             type: 'person',
             id: String(i),
             attributes: Object.seal({
-              name: faker.name.firstName(),
+              name: faker.person.firstName(),
               'avatar-url': faker.image.avatar(),
             }),
           }),
