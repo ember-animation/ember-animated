@@ -1,11 +1,11 @@
 .scenario-each > .animated-container {
-    overflow: hidden;
-    transform: translateZ(0);
-    border: 1px solid green;
+  overflow: hidden;
+  transform: translateZ(0);
+  border: 1px solid green;
 }
 
 .scenario-container-only > .animated-container {
-    border: 1px solid red;
+  border: 1px solid red;
 }
 
 .scenario-two-lists2 > .animated-container {
@@ -26,7 +26,7 @@
 
 .scenario-two-lists .bounce {
   font-family: "Andale Mono";
-  color: rgb(9, 114, 149);
+  color: rgb(9 114 149);
   padding: 5px;
   display: flex;
   align-items: center;
@@ -48,26 +48,26 @@
   font-weight: bold;
   text-align: left;
   font-size: 25px;
-  border-bottom: 2px solid rgb(60, 127, 168);
+  border-bottom: 2px solid rgb(60 127 168);
   font-family: "Helvetica Neue";
-  color: rgb(9, 59, 91);
+  color: rgb(9 59 91);
 }
 
 .scenario-two-lists .guest-list-header {
   font-weight: bold;
   font-size: 15px;
-  border-top: 2px solid rgb(60, 127, 168);
-  border-bottom: 2px solid rgb(60, 127, 168);
+  border-top: 2px solid rgb(60 127 168);
+  border-bottom: 2px solid rgb(60 127 168);
   border-radius: 5px;
   padding: 5px;
   font-family: "Helvetica Neue";
-  color: rgb(9, 59, 91);
-  background-color: rgb(227, 244, 250);
+  color: rgb(9 59 91);
+  background-color: rgb(227 244 250);
 }
 
 .scenario-two-lists .each-item {
   border-collapse: collapse;
-  border: 2px solid rgb(68, 172, 207);
+  border: 2px solid rgb(68 172 207);
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
@@ -98,53 +98,51 @@
 
 .scenario-two-lists button {
   padding-right: 10px;
-  color: rgb(37, 158, 199);
+  color: rgb(37 158 199);
 }
 
 .scenario-two-lists .left > .each-item > button:hover {
-  color: rgb(230, 107, 107);
+  color: rgb(230 107 107);
 }
 
 .scenario-two-lists .right > .each-item > button:hover {
-  color: rgb(202, 236, 149);
+  color: rgb(202 236 149);
 }
-
 
 .scenario-swapping-lists .left {
-    width:40%;
-    float: left;
+  width: 40%;
+  float: left;
 }
+
 .scenario-swapping-lists .right {
-    width: 40%;
-    float: right;
+  width: 40%;
+  float: right;
 }
 
 .scenario-swapping-lists .left-item {
-    color: red;
+  color: red;
 }
 
-
 .scenario-bind .animated-container {
-    font-size: 3rem;
-    float: left;
-    margin: 3rem;
+  font-size: 3rem;
+  float: left;
+  margin: 3rem;
 }
 
 .scenario-bind button {
-    float: left;
-    font-size: 3rem;
+  float: left;
+  font-size: 3rem;
 }
 
 .scenario-bind span {
-    border: 1px solid blue;
+  border: 1px solid blue;
 }
 
 .scenario-bind > .animated-container {
-    border: 1px solid red;
-    overflow: hidden;
-    transform: translateZ(0);
+  border: 1px solid red;
+  overflow: hidden;
+  transform: translateZ(0);
 }
-
 
 .hero-list {
   display: flex;
@@ -199,59 +197,57 @@
   height: 300px;
 }
 
-
 .scenario-direct-style--item {
-    position: absolute;
-    text-align: center;
-    padding: 4px;
+  position: absolute;
+  text-align: center;
+  padding: 4px;
 }
 
 .scenario-direct-style--frame {
-    border: 1px solid blue;
-    color: transparent;
+  border: 1px solid blue;
+  color: transparent;
 }
 
 .inline-text-scenario .inline {
-    display: inline-block;
+  display: inline-block;
 }
 
 .scenario-orphan {
-    width: 10em;
-    margin-left: 5em;
+  width: 10em;
+  margin-left: 5em;
 }
 
 .scenario-orphan h1 {
-    background-color: #bbebbb;
-    padding: 0 0.5em;
-    margin: 0.5em;
-    transform: translateX(20px);
+  background-color: #bbebbb;
+  padding: 0 0.5em;
+  margin: 0.5em;
+  transform: translateX(20px);
 }
 
-
 .scenario-here-there > div {
-    display: flex;
+  display: flex;
 }
 
 .scenario-here-there > div > div {
-    width: 50%;
+  width: 50%;
 }
 
 .scenario-here-there .demo-item {
-    width: 100px;
-    height: 100px;
-    background-color: blue;
+  width: 100px;
+  height: 100px;
+  background-color: blue;
 }
 
 .scenario-beacon-modal {
-    position: absolute;
-    left: 30%;
-    top: 40%;
-    width: 20em;
-    min-height: 10em;
-    background-color: #c4c4ff;
-    box-sizing: border-box;
-    padding: 2em;
-    border-radius: 5px;
+  position: absolute;
+  left: 30%;
+  top: 40%;
+  width: 20em;
+  min-height: 10em;
+  background-color: #c4c4ff;
+  box-sizing: border-box;
+  padding: 2em;
+  border-radius: 5px;
 }
 
 .scenario-modal--container {
@@ -260,7 +256,7 @@
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 .scenario-modal--background {

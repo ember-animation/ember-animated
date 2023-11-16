@@ -6,7 +6,7 @@ import {
   animationsSettled,
   bounds,
 } from 'ember-animated/test-support';
-import { gte } from 'ember-compatibility-helpers';
+import { dependencySatisfies, macroCondition } from '@embroider/macros';
 
 module('Acceptance | svg', function (hooks) {
   setupApplicationTest(hooks);
@@ -51,18 +51,25 @@ module('Acceptance | svg', function (hooks) {
 
   // avoid an error in 3.26 ember-try scenario
   // NotSupportedError: Failed to set the 'value' property on 'SVGLength': Could not resolve relative length.
-  (gte('3.20.0')
+  const maybeTodo = macroCondition(
+    dependencySatisfies('ember-source', '>=3.20.0'),
+  )
     ? test
-    : test.todo)('bubbles move smoothly at end of animation', async function (assert) {
-    await visit('/demos/svg');
-    time = new TimeControl();
-    await click('button');
-    await time.advance(990);
-    let initialBounds = boundsById(findAll('circle'));
-    await time.advance(20);
-    await animationsSettled();
-    assert.allClose(5, initialBounds, boundsById(findAll('circle')));
-  });
+    : test.todo;
+
+  maybeTodo(
+    'bubbles move smoothly at end of animation',
+    async function (assert) {
+      await visit('/demos/svg');
+      time = new TimeControl();
+      await click('button');
+      await time.advance(990);
+      let initialBounds = boundsById(findAll('circle'));
+      await time.advance(20);
+      await animationsSettled();
+      assert.allClose(5, initialBounds, boundsById(findAll('circle')));
+    },
+  );
 });
 
 function boundsById(elementList) {
