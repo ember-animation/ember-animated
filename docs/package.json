@@ -80,7 +80,7 @@
     "moment": "^2.29.4",
     "prettier": "^3.1.0",
     "qunit": "^2.20.0",
-    "qunit-dom": "^2.0.0",
+    "qunit-dom": "^3.0.0",
     "rollup": "^3.29.4",
     "sass": "^1.69.5",
     "stylelint": "^15.11.0",
