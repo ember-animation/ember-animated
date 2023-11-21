@@ -506,8 +506,8 @@ importers:
         specifier: ^4.0.6
         version: 4.0.6(@babel/core@7.23.3)
       '@types/qunit':
-        specifier: ^2.19.8
-        version: 2.19.8
+        specifier: ^2.19.9
+        version: 2.19.9
       '@types/rsvp':
         specifier: ^4.0.7
         version: 4.0.7
@@ -4058,8 +4058,8 @@ packages:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
     dev: true
 
-  /@types/qunit@2.19.8:
-    resolution: {integrity: sha512-L4JyeRG1CJGSzJKd1b78DX/ll91E8e50IXkkl8KzW6W0IWz6FTHWEYvTEi8QVNHkUqUu6hjTffwV7ffxcoka0g==}
+  /@types/qunit@2.19.9:
+    resolution: {integrity: sha512-Ym6B8Ewt1R1b0EgSqISSrAKp2Pg5MNgKK3/d2Fbls3PN7kNnucVSGaRx9Prxeo78HfQofYJMWDWLPlfAuwx7IQ==}
     dev: true
 
   /@types/range-parser@1.2.4:
