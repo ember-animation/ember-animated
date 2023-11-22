@@ -1,4 +1,32 @@
 
+
+## v1.1.0 (2023-11-22)
+
+#### :rocket: Enhancement
+* [#625](https://github.com/ember-animation/ember-animated/pull/625) add support for @ember/test-helpers v3 ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#613](https://github.com/ember-animation/ember-animated/pull/613) Introduce Glint types ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#615](https://github.com/ember-animation/ember-animated/pull/615) Widen range of ember-element-helper versions ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#607](https://github.com/ember-animation/ember-animated/pull/607) remove engines.node from addon's package.json ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :bug: Bug Fix
+* [#606](https://github.com/ember-animation/ember-animated/pull/606) Fix types for modern TS ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### :memo: Documentation
+* [#619](https://github.com/ember-animation/ember-animated/pull/619) Update docs to use and recommend inline-block ([@tcjr](https://github.com/tcjr))
+* [#466](https://github.com/ember-animation/ember-animated/pull/466) move *.md files to repo root and copy via release-it hook ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :house: Internal
+* [#617](https://github.com/ember-animation/ember-animated/pull/617) `npx ember-cli-update --to=v5.3.0` in test-app ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#624](https://github.com/ember-animation/ember-animated/pull/624) Add 4.8 and 4.12 ember-try scenarios ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#620](https://github.com/ember-animation/ember-animated/pull/620) `npx ember-cli-update --to=v5.3.0` in docs ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#608](https://github.com/ember-animation/ember-animated/pull/608) replace publish-unstable workflow with push-dist ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 4
+- Jan Werkhoven 岩 ([@janwerkhoven](https://github.com/janwerkhoven))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- Tom Carter ([@tcjr](https://github.com/tcjr))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## v1.0.3 (2022-04-28)
 
 #### :rocket: Enhancement

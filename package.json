@@ -72,5 +72,6 @@
       "tokenRef": "GITHUB_AUTH"
     },
     "npm": false
-  }
+  },
+  "version": "1.1.0"
 }
