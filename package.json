@@ -57,7 +57,7 @@
         "infile": "CHANGELOG.md",
         "launchEditor": false
       },
-      "release-it-yarn-workspaces": {
+      "@release-it-plugins/workspaces": {
         "publish": false,
         "workspaces": [
           "addon"
