@@ -7,7 +7,6 @@ on:
       - master
     tags:
       - v*
-  pull_request: {}
 
 jobs:
   publish:
@@ -39,7 +38,7 @@ jobs:
 
       # We need a workspace aware version of npm because our addon is in a subdir but our .npmrc is in the root
       - name: copy .md files
-        run: cp README.md LICENSE.md addon/
+        run: cp README.md LICENSE.md CHANGELOG.md addon/
 
       - name: npm publish
         run: npm publish --tag=latest --verbose --workspace=addon
