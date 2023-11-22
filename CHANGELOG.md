@@ -1,5 +1,14 @@
 
 
+
+## v1.1.1 (2023-11-22)
+
+#### :memo: Documentation
+* [#636](https://github.com/ember-animation/ember-animated/pull/636) Include .md files in tarball ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 1
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+
 ## v1.1.0 (2023-11-22)
 
 #### :rocket: Enhancement
