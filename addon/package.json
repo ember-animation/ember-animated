@@ -82,7 +82,7 @@
     "@glint/template": "1.2.1",
     "@rollup/plugin-babel": "^6.0.4",
     "@tsconfig/ember": "^2.0.0",
-    "@types/ember": "^4.0.9",
+    "@types/ember": "^4.0.10",
     "@types/ember__application": "^4.0.10",
     "@types/ember__array": "^4.0.8",
     "@types/ember__component": "^4.0.20",
