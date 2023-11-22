@@ -161,6 +161,7 @@ jobs:
           - typescript@4.9
           - typescript@5.0
           - typescript@5.1
+          - typescript@5.2
           - typescript@next
 
     steps:
