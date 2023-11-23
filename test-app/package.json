@@ -46,7 +46,7 @@
     "@types/ember-data__serializer": "^4.0.5",
     "@types/ember-data__store": "^4.0.6",
     "@types/ember__application": "^4.0.10",
-    "@types/ember__array": "^4.0.8",
+    "@types/ember__array": "^4.0.9",
     "@types/ember__component": "^4.0.20",
     "@types/ember__controller": "^4.0.10",
     "@types/ember__debug": "^4.0.7",

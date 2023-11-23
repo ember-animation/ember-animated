@@ -84,7 +84,7 @@ importers:
         version: 1.2.1(typescript@5.3.2)
       '@glint/environment-ember-loose':
         specifier: ^1.2.1
-        version: 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.8)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
+        version: 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.9)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
       '@glint/environment-ember-template-imports':
         specifier: ^1.2.1
         version: 1.2.1(@glint/environment-ember-loose@1.2.1)(@glint/template@1.2.1)(@types/ember__component@4.0.20)(@types/ember__routing@4.0.18)
@@ -104,8 +104,8 @@ importers:
         specifier: ^4.0.10
         version: 4.0.10(@babel/core@7.23.3)
       '@types/ember__array':
-        specifier: ^4.0.8
-        version: 4.0.8(@babel/core@7.23.3)
+        specifier: ^4.0.9
+        version: 4.0.9(@babel/core@7.23.3)
       '@types/ember__component':
         specifier: ^4.0.20
         version: 4.0.20(@babel/core@7.23.3)
@@ -420,7 +420,7 @@ importers:
         version: 1.2.1(typescript@5.3.2)
       '@glint/environment-ember-loose':
         specifier: ^1.2.1
-        version: 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.8)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
+        version: 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.9)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
       '@glint/template':
         specifier: ^1.2.1
         version: 1.2.1
@@ -449,8 +449,8 @@ importers:
         specifier: ^4.0.10
         version: 4.0.10(@babel/core@7.23.3)
       '@types/ember__array':
-        specifier: ^4.0.8
-        version: 4.0.8(@babel/core@7.23.3)
+        specifier: ^4.0.9
+        version: 4.0.9(@babel/core@7.23.3)
       '@types/ember__component':
         specifier: ^4.0.20
         version: 4.0.20(@babel/core@7.23.3)
@@ -2527,7 +2527,7 @@ packages:
         optional: true
     dependencies:
       '@embroider/macros': 1.13.3(@glint/template@1.2.1)
-      '@glint/environment-ember-loose': 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.8)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
+      '@glint/environment-ember-loose': 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.9)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
       '@glint/template': 1.2.1
       broccoli-funnel: 3.0.8
       ember-cli-babel: 7.26.11
@@ -2948,7 +2948,7 @@ packages:
       - supports-color
     dev: true
 
-  /@glint/environment-ember-loose@1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.8)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0):
+  /@glint/environment-ember-loose@1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.9)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0):
     resolution: {integrity: sha512-ZA0Ht7vwd1FosVLtMFrB2Er62P1v6yX/UuS6z9UVR6DMPfrL5qx6vef+EGJPLBrBKZMlm7zMB6Fyca201y4hDA==}
     peerDependencies:
       '@glimmer/component': ^1.1.2
@@ -2978,7 +2978,7 @@ packages:
     dependencies:
       '@glimmer/component': 1.1.2(@babel/core@7.23.3)
       '@glint/template': 1.2.1
-      '@types/ember__array': 4.0.8(@babel/core@7.23.3)
+      '@types/ember__array': 4.0.9(@babel/core@7.23.3)
       '@types/ember__component': 4.0.20(@babel/core@7.23.3)
       '@types/ember__controller': 4.0.10(@babel/core@7.23.3)
       '@types/ember__object': 4.0.10(@babel/core@7.23.3)
@@ -3005,7 +3005,7 @@ packages:
       '@types/ember__routing':
         optional: true
     dependencies:
-      '@glint/environment-ember-loose': 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.8)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
+      '@glint/environment-ember-loose': 1.2.1(@glimmer/component@1.1.2)(@glint/template@1.2.1)(@types/ember__array@4.0.9)(@types/ember__component@4.0.20)(@types/ember__controller@4.0.10)(@types/ember__object@4.0.10)(@types/ember__routing@4.0.18)(ember-cli-htmlbars@6.3.0)
       '@glint/template': 1.2.1
       '@types/ember__component': 4.0.20(@babel/core@7.23.3)
       '@types/ember__routing': 4.0.18(@babel/core@7.23.3)
@@ -3623,7 +3623,7 @@ packages:
     resolution: {integrity: sha512-wASNwm5qp7Q03Hr7cYUq1zhZ0k9nqqA5r/rWYwscax2sKwP2higNk+zy0hA+HhyweyNqYumwh9jZN9vxOyFaFA==}
     dependencies:
       '@types/ember__application': 4.0.10(@babel/core@7.23.3)
-      '@types/ember__array': 4.0.8(@babel/core@7.23.3)
+      '@types/ember__array': 4.0.9(@babel/core@7.23.3)
       '@types/ember__component': 4.0.20(@babel/core@7.23.3)
       '@types/ember__controller': 4.0.10(@babel/core@7.23.3)
       '@types/ember__debug': 4.0.7(@babel/core@7.23.3)
@@ -3670,8 +3670,8 @@ packages:
       '@types/ember__object': 3.12.12
     dev: true
 
-  /@types/ember__array@4.0.8(@babel/core@7.23.3):
-    resolution: {integrity: sha512-EEJBDd8IsWVMmfU4wiWR3uu/UH+jIEvKiN4ULvpp+TYddp83Fzj8T78PIjRgPp0iyCQ7PBPyV1WjqbHAqB35MQ==}
+  /@types/ember__array@4.0.9(@babel/core@7.23.3):
+    resolution: {integrity: sha512-c1ifxQyYxRY9DLrSD5H0O4yhqQNGpMzxeE8ZDVUFNJePaheHnkkhOcgSozRvAexpWkYU33QgZO/331KaZGY7BQ==}
     dependencies:
       '@types/ember': 4.0.10(@babel/core@7.23.3)
       '@types/ember__object': 4.0.10(@babel/core@7.23.3)
@@ -11797,7 +11797,7 @@ packages:
       function-bind: 1.1.2
 
   /hawk@1.1.1:
-    resolution: {integrity: sha1-h81JH5tG5OKurKM1QWdmiF0tHtk=}
+    resolution: {integrity: sha512-am8sVA2bCJIw8fuuVcKvmmNnGFUGW8spTkVtj2fXTEZVkfN42bwFZFtDem57eFi+NSxurJB8EQ7Jd3uCHLn8Vw==}
     engines: {node: '>=0.8.0'}
     deprecated: This module moved to @hapi/hawk. Please make sure to switch over as this distribution is no longer supported and may contain bugs and critical security issues.
     requiresBuild: true
