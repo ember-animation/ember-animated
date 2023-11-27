@@ -18,15 +18,15 @@
   "author": "Edward Faulkner <edward@eaf4.com>",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./declarations/index.d.ts",
       "default": "./dist/index.js"
     },
     "./*": {
-      "types": "./dist/*.d.ts",
+      "types": "./declarations/*.d.ts",
       "default": "./dist/*"
     },
     "./test-support": {
-      "types": "./dist/test-support/index.d.ts",
+      "types": "./declarations/test-support/index.d.ts",
       "default": "./dist/test-support/index.js"
     },
     "./addon-main.js": "./addon-main.cjs"
