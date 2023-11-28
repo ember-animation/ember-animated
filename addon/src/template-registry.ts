@@ -10,8 +10,12 @@ import type AnimatedIf from './components/animated-if.ts';
 import type AnimatedOrphans from './components/animated-orphans.ts';
 import type AnimatedValue from './components/animated-value.ts';
 import type EaListElement from './components/ea-list-element.ts';
+import { EmbroiderMacrosRegistry } from '@embroider/macros';
+import { EmbroiderUtilRegistry } from '@embroider/util';
 
-export default interface Registry {
+export default interface Registry
+  extends EmbroiderMacrosRegistry,
+    EmbroiderUtilRegistry {
   AnimatedBeacon: typeof AnimatedBeacon;
   'animated-beacon': typeof AnimatedBeacon;
   AnimatedContainer: typeof AnimatedContainer;

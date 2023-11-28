@@ -72,5 +72,9 @@
     },
     "npm": false
   },
-  "version": "1.1.1"
+  "version": "1.1.1",
+  "dependencies": {
+    "@embroider/util": "^1.12.1",
+    "ember-animated": "link:addon"
+  }
 }

@@ -1,4 +1,4 @@
-{{#if this.useElementHelper}}
+{{#if (macroDependencySatisfies 'ember-element-helper' '^0.6.1')}}
   {{!--
     The @class is only there to support a deprecated usage.
   --}}
@@ -12,7 +12,8 @@
   {{!--
     The @class is only there to support a deprecated usage.
   --}}
-  {{#let (component (-element this.tag) tagName=this.tag) as |Tag|~}}
+  {{! @glint-ignore: can potentially be undefined from types, but not likely here }}
+  {{#let (component (ensure-safe-component (-element this.tag)) tagName=this.tag) as |Tag|~}}
     {{! @glint-ignore: https://github.com/typed-ember/glint/issues/610 }}
     <Tag class="animated-container {{@class}}" ...attributes>
       {{yield}}
