@@ -35,10 +35,10 @@ interface AnimatedContainerSignature<Tag extends string> {
  which smoothly resizes as animators change. Use animated-container whenever you
  need to "hold a place for" some animated content while that content is animating.
   ```hbs
-  <button {{action toggleThing}}>Toggle</button>
+  <button {{on "click" this.toggleThing}}>Toggle</button>
   <AnimatedContainer>
-    {{#animated-if showThing use=transition }}
-        <div class="message" {{action "toggleThing"}}>
+    {{#animated-if this.showThing use=this.transition }}
+        <div class="message" {{on "click" this.toggleThing}}>
             Hello!
         </div>
     {{/animated-if}}
@@ -49,32 +49,35 @@ interface AnimatedContainerSignature<Tag extends string> {
   ```
   ```js
   import Component from '@ember/component';
+  import { action } from '@ember/object';
+  import { tracked } from '@glimmer/tracking';
   import move from 'ember-animated/motions/move';
-  import {easeOut, easeIn } from 'ember-animated/easings/cosine';
+  import { easeOut, easeIn } from 'ember-animated/easings/cosine';
 
-  export default Component.extend({
-    showThing: false,
+  export default class AnimatedContainerComponentExample extends Component {
+    @tracked showThing = false;
 
+    @action
     toggleThing() {
-      this.set('showThing', !this.get('showThing'));
-    },
+      this.showThing = !this.showThing;
+    }
 
-    transition: function * ({ insertedSprites, keptSprites, removedSprites }) {
+    *transition({ insertedSprites, keptSprites, removedSprites }) {
       for (let sprite of insertedSprites) {
         sprite.startAtPixel({ x: window.innerWidth });
-        move(sprite, { easing: easeOut });
+        yield move(sprite, { easing: easeOut });
       }
 
       for (let sprite of keptSprites) {
-        move(sprite);
+        yield move(sprite);
       }
 
       for (let sprite of removedSprites) {
         sprite.endAtPixel({ x: window.innerWidth });
-        move(sprite, { easing: easeIn });
+        yield move(sprite, { easing: easeIn });
       }
-    },
-  });
+    }
+  }
   ```
   @class animated-container
   @public
