@@ -64,7 +64,7 @@
     "@embroider/addon-shim": "^1.8.7",
     "@embroider/macros": "^1.13.3",
     "assert-never": "^1.2.1",
-    "ember-element-helper": ">=0.5.0"
+    "ember-element-helper": ">=0.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",

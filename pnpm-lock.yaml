@@ -49,7 +49,7 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1
       ember-element-helper:
-        specifier: '>=0.5.0'
+        specifier: '>=0.6.1'
         version: 0.8.5(@glint/environment-ember-loose@1.2.1)(@glint/template@1.2.1)
     devDependencies:
       '@babel/core':
