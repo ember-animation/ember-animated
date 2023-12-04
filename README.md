@@ -7,7 +7,7 @@ Interactive docs are at https://ember-animation.github.io/ember-animated/
 
 ## Compatibility
 
-- Ember.js v3.16 or above
+- Ember.js v4.8 or above
 - Embroider or ember-auto-import v2
 
 ## Installation
