@@ -218,8 +218,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       '@ember/test-helpers':
-        specifier: ^3.2.0
-        version: 3.2.0(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
+        specifier: ^3.2.1
+        version: 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
       '@faker-js/faker':
         specifier: ^8.3.1
         version: 8.3.1
@@ -255,7 +255,7 @@ importers:
         version: 5.3.0
       ember-cli-addon-docs:
         specifier: ^6.0.2
-        version: 6.0.2(patch_hash=l7hnbifrpk7l7zjqv6alnbitse)(@babel/core@7.23.3)(@ember/test-helpers@3.2.0)(ember-data@5.3.0)(ember-fetch@8.1.2)(ember-source@5.4.0)(webpack@5.89.0)
+        version: 6.0.2(patch_hash=l7hnbifrpk7l7zjqv6alnbitse)(@babel/core@7.23.3)(@ember/test-helpers@3.2.1)(ember-data@5.3.0)(ember-fetch@8.1.2)(ember-source@5.4.0)(webpack@5.89.0)
       ember-cli-addon-docs-yuidoc:
         specifier: ^1.0.0
         version: 1.0.0
@@ -318,7 +318,7 @@ importers:
         version: 10.0.0(moment@2.29.4)
       ember-qunit:
         specifier: ^8.0.2
-        version: 8.0.2(@ember/test-helpers@3.2.0)(@glint/template@1.2.1)(ember-source@5.4.0)(qunit@2.20.0)
+        version: 8.0.2(@ember/test-helpers@3.2.1)(@glint/template@1.2.1)(ember-source@5.4.0)(qunit@2.20.0)
       ember-resolver:
         specifier: ^11.0.1
         version: 11.0.1(ember-source@5.4.0)
@@ -398,8 +398,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       '@ember/test-helpers':
-        specifier: ^3.2.0
-        version: 3.2.0(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
+        specifier: ^3.2.1
+        version: 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
       '@embroider/macros':
         specifier: ^1.13.3
         version: 1.13.3(@glint/template@1.2.1)
@@ -582,7 +582,7 @@ importers:
         version: 8.1.0(ember-source@5.4.0)
       ember-qunit:
         specifier: ^8.0.2
-        version: 8.0.2(@ember/test-helpers@3.2.0)(@glint/template@1.2.1)(ember-source@5.4.0)(qunit@2.20.0)
+        version: 8.0.2(@ember/test-helpers@3.2.1)(@glint/template@1.2.1)(ember-source@5.4.0)(qunit@2.20.0)
       ember-resolver:
         specifier: ^11.0.1
         version: 11.0.1(ember-source@5.4.0)
@@ -2312,8 +2312,8 @@ packages:
       - supports-color
     dev: true
 
-  /@ember/test-helpers@3.2.0(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0):
-    resolution: {integrity: sha512-3yWpPsK5O77tUdCwW3HayrAcdlRitIRYMvLIG69Pkal1JMIGdNYVTvJ2R1lenhQh2syd/WFmGM07vQuDAtotQw==}
+  /@ember/test-helpers@3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0):
+    resolution: {integrity: sha512-DvJSihJPV4xshwEgBrFN4aUVc9m/Y/hVzwcslfSVq/h3dMWCyAj4+agkkdJPQrwBaE+H4IyGNzr555S7bTErEA==}
     engines: {node: 16.* || >= 18}
     peerDependencies:
       ember-source: ^4.0.0 || ^5.0.0
@@ -8469,7 +8469,7 @@ packages:
       - supports-color
     dev: true
 
-  /ember-cli-addon-docs@6.0.2(patch_hash=l7hnbifrpk7l7zjqv6alnbitse)(@babel/core@7.23.3)(@ember/test-helpers@3.2.0)(ember-data@5.3.0)(ember-fetch@8.1.2)(ember-source@5.4.0)(webpack@5.89.0):
+  /ember-cli-addon-docs@6.0.2(patch_hash=l7hnbifrpk7l7zjqv6alnbitse)(@babel/core@7.23.3)(@ember/test-helpers@3.2.1)(ember-data@5.3.0)(ember-fetch@8.1.2)(ember-source@5.4.0)(webpack@5.89.0):
     resolution: {integrity: sha512-pHcrMttJV5pH6QKvHUhoCLxraxJFVvyVRwXuU09yXcmrNI5jSaqnOCyif2wa/ibTQvejt/kwsAn1yHB4bZVs4w==}
     engines: {node: 16.* || >= 18}
     peerDependencies:
@@ -8508,7 +8508,7 @@ packages:
       ember-concurrency: 3.1.1(@babel/core@7.23.3)(ember-source@5.4.0)
       ember-data: 5.3.0(@babel/core@7.23.3)(@ember/string@3.1.1)(@glimmer/tracking@1.1.2)(@glint/template@1.2.1)(ember-source@5.4.0)
       ember-fetch: 8.1.2
-      ember-keyboard: 8.2.1(@babel/core@7.23.3)(@ember/test-helpers@3.2.0)(ember-source@5.4.0)
+      ember-keyboard: 8.2.1(@babel/core@7.23.3)(@ember/test-helpers@3.2.1)(ember-source@5.4.0)
       ember-modal-dialog: 4.0.0(ember-source@5.4.0)
       ember-responsive: 5.0.0
       ember-router-generator: 2.0.0
@@ -9542,7 +9542,7 @@ packages:
       - supports-color
     dev: true
 
-  /ember-keyboard@8.2.1(@babel/core@7.23.3)(@ember/test-helpers@3.2.0)(ember-source@5.4.0):
+  /ember-keyboard@8.2.1(@babel/core@7.23.3)(@ember/test-helpers@3.2.1)(ember-source@5.4.0):
     resolution: {integrity: sha512-wT9xpt3GKsiodGZoifKU4OyeRjXWlmKV9ZHHsp6wJBwMFpl4wWPjTNdINxivk2qg/WFNIh8nUiwuG4+soWXPdw==}
     peerDependencies:
       '@ember/test-helpers': ^2.6.0 || ^3.0.0
@@ -9550,7 +9550,7 @@ packages:
       '@ember/test-helpers':
         optional: true
     dependencies:
-      '@ember/test-helpers': 3.2.0(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
+      '@ember/test-helpers': 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
       '@embroider/addon-shim': 1.8.7
       ember-destroyable-polyfill: 2.0.3(@babel/core@7.23.3)
       ember-modifier: 4.1.0(ember-source@5.4.0)
@@ -9646,14 +9646,14 @@ packages:
       - supports-color
     dev: true
 
-  /ember-qunit@8.0.2(@ember/test-helpers@3.2.0)(@glint/template@1.2.1)(ember-source@5.4.0)(qunit@2.20.0):
+  /ember-qunit@8.0.2(@ember/test-helpers@3.2.1)(@glint/template@1.2.1)(ember-source@5.4.0)(qunit@2.20.0):
     resolution: {integrity: sha512-Rf60jeUTWNsF3Imf/FLujW/B/DFmKVXKmXO1lirTXjpertKfwRhp/3MnN8a/U/WyodTIsERkInGT1IqTtphCdQ==}
     peerDependencies:
       '@ember/test-helpers': '>=3.0.3'
       ember-source: '>=4.0.0'
       qunit: ^2.13.0
     dependencies:
-      '@ember/test-helpers': 3.2.0(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
+      '@ember/test-helpers': 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
       '@embroider/addon-shim': 1.8.7
       '@embroider/macros': 1.13.3(@glint/template@1.2.1)
       ember-cli-test-loader: 3.1.0
@@ -9891,7 +9891,7 @@ packages:
       ora: 5.4.1
       slash: 3.0.0
       tmp: 0.2.1
-      workerpool: 6.5.0
+      workerpool: 6.5.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -18491,10 +18491,6 @@ packages:
       rsvp: 4.8.5
     transitivePeerDependencies:
       - supports-color
-
-  /workerpool@6.5.0:
-    resolution: {integrity: sha512-r64Ea3glXY2RVzMeNxB+4J+0YHAVzUdV4cM5nHi4BBC2LvnO1pWFAIYKYuGcPElbg1/7eEiaPtZ/jzCjIUuGBg==}
-    dev: true
 
   /workerpool@6.5.1:
     resolution: {integrity: sha512-Fs4dNYcsdpYSAfVxhnl1L5zTksjvOJxtC5hzMNl+1t9B8hTJTdKDyZ5ju7ztgPy+ft9tBFXoOlDNiOT9WUXZlA==}
