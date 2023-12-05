@@ -4,7 +4,8 @@ import type { AnimatedEachSignature } from './animated-each.ts';
 
 interface AnimatedIfSignature<T> {
   Args: {
-    Named: AnimatedEachSignature<any>['Args']['Named'] & { predicate: T };
+    Positional: [T];
+    Named: AnimatedEachSignature<[T]>['Args']['Named'];
   };
   Blocks: {
     default: [];
