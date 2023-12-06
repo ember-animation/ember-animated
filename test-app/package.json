@@ -40,7 +40,7 @@
     "@glint/template": "^1.2.1",
     "@tsconfig/ember": "^3.0.2",
     "@types/ember": "^4.0.10",
-    "@types/ember-data": "^4.4.14",
+    "@types/ember-data": "^4.4.15",
     "@types/ember-data__adapter": "^4.0.5",
     "@types/ember-data__model": "^4.0.4",
     "@types/ember-data__serializer": "^4.0.5",
