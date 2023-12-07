@@ -73,7 +73,7 @@
     "@babel/plugin-transform-class-static-block": "^7.23.3",
     "@babel/plugin-transform-typescript": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
-    "@babel/runtime": "^7.23.2",
+    "@babel/runtime": "^7.23.5",
     "@embroider/addon-dev": "^4.1.2",
     "@glimmer/env": "^0.1.7",
     "@glint/core": "^1.2.1",
