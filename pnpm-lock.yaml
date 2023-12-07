@@ -152,8 +152,8 @@ importers:
         specifier: ^4.0.5
         version: 4.0.5(@babel/core@7.23.3)
       '@types/ember__test-helpers':
-        specifier: ~2.8.3
-        version: 2.8.3(@babel/core@7.23.3)
+        specifier: ~2.9.1
+        version: 2.9.1(@glint/template@1.2.1)
       '@types/ember__utils':
         specifier: ^4.0.6
         version: 4.0.6(@babel/core@7.23.3)
@@ -219,7 +219,7 @@ importers:
         version: 3.1.1
       '@ember/test-helpers':
         specifier: ^3.2.1
-        version: 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
+        version: 3.2.1(ember-source@5.4.0)(webpack@5.89.0)
       '@faker-js/faker':
         specifier: ^8.3.1
         version: 8.3.1
@@ -318,7 +318,7 @@ importers:
         version: 10.0.0(moment@2.29.4)
       ember-qunit:
         specifier: ^8.0.2
-        version: 8.0.2(@ember/test-helpers@3.2.1)(@glint/template@1.2.1)(ember-source@5.4.0)(qunit@2.20.0)
+        version: 8.0.2(@ember/test-helpers@3.2.1)(ember-source@5.4.0)(qunit@2.20.0)
       ember-resolver:
         specifier: ^11.0.1
         version: 11.0.1(ember-source@5.4.0)
@@ -2333,6 +2333,27 @@ packages:
       - webpack
     dev: true
 
+  /@ember/test-helpers@3.2.1(ember-source@5.4.0)(webpack@5.89.0):
+    resolution: {integrity: sha512-DvJSihJPV4xshwEgBrFN4aUVc9m/Y/hVzwcslfSVq/h3dMWCyAj4+agkkdJPQrwBaE+H4IyGNzr555S7bTErEA==}
+    engines: {node: 16.* || >= 18}
+    peerDependencies:
+      ember-source: ^4.0.0 || ^5.0.0
+    dependencies:
+      '@ember/test-waiters': 3.1.0
+      '@embroider/macros': 1.13.3(@glint/template@1.2.1)
+      '@simple-dom/interface': 1.4.0
+      broccoli-debug: 0.6.5
+      broccoli-funnel: 3.0.8
+      ember-auto-import: 2.7.0(@glint/template@1.2.1)(webpack@5.89.0)
+      ember-cli-babel: 7.26.11
+      ember-cli-htmlbars: 6.3.0
+      ember-source: 5.4.0(@babel/core@7.23.3)(@glimmer/component@1.1.2)(@glint/template@1.2.1)(webpack@5.89.0)
+    transitivePeerDependencies:
+      - '@glint/template'
+      - supports-color
+      - webpack
+    dev: true
+
   /@ember/test-waiters@3.1.0:
     resolution: {integrity: sha512-bb9h95ktG2wKY9+ja1sdsFBdOms2lB19VWs8wmNpzgHv1NCetonBoV5jHBV4DHt0uS1tg9z66cZqhUVlYs96KQ==}
     engines: {node: 10.* || 12.* || >= 14.*}
@@ -3702,16 +3723,6 @@ packages:
       - supports-color
     dev: true
 
-  /@types/ember-resolver@9.0.0:
-    resolution: {integrity: sha512-lEuC2QD8K6rRAbELMejrALFBgelRPt6OQtapny4Oke07ZtK/Lbf9zn5KIDl7PNkirxMD0AStsQTdUqFu6eVbVw==}
-    deprecated: This is a stub types definition. ember-resolver provides its own type definitions, so you do not need this installed.
-    dependencies:
-      ember-resolver: 11.0.1(ember-source@5.4.0)
-    transitivePeerDependencies:
-      - ember-source
-      - supports-color
-    dev: true
-
   /@types/ember@3.16.12:
     resolution: {integrity: sha512-N6US/ceg+UUzqNKpOV+jE7XP52mZpv8FOqAdS/hnTIqPAAmSkZ14NIpiNEcZz+Nne+D6ahuQjZk+maMKige2Ow==}
     dependencies:
@@ -3978,18 +3989,16 @@ packages:
   /@types/ember__template@4.0.5:
     resolution: {integrity: sha512-cuyurEDnVX5fEX8P5UAgPYMPJG8WzN5ubdQy+spMNNiEm20vg4teeyzZa1vZLGgai065fYpVy3JTsEjbzskQAg==}
 
-  /@types/ember__test-helpers@2.8.3(@babel/core@7.23.3):
-    resolution: {integrity: sha512-1GVCW8ok5IaYXM0GBswT5lFSeHu3NCBas6Sz4Tsvkc0Myc6lzSSRDG3sj6pacgJr71n4eBqaVaYu/ZHw7DjYfQ==}
+  /@types/ember__test-helpers@2.9.1(@glint/template@1.2.1):
+    resolution: {integrity: sha512-KZ6jYr0ZiQHlklLcfyuy1j+FkvygEayf5mZ9FcaSOahw9ghK3K5TYSRDCuIBELRw//OB/WP9J7v9NduFRNfRgg==}
+    deprecated: This is a stub types definition. @ember/test-helpers provides its own type definitions, so you do not need this installed.
     dependencies:
-      '@types/ember-resolver': 9.0.0
-      '@types/ember__application': 4.0.10(@babel/core@7.23.3)
-      '@types/ember__error': 4.0.5
-      '@types/ember__owner': 4.0.8
-      '@types/htmlbars-inline-precompile': 3.0.2
+      '@ember/test-helpers': 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
     transitivePeerDependencies:
-      - '@babel/core'
+      - '@glint/template'
       - ember-source
       - supports-color
+      - webpack
     dev: true
 
   /@types/ember__test@3.16.6:
@@ -4077,10 +4086,6 @@ packages:
     dependencies:
       '@types/minimatch': 3.0.5
       '@types/node': 20.9.0
-
-  /@types/htmlbars-inline-precompile@3.0.2:
-    resolution: {integrity: sha512-tLt8u+8fJIPrv7kJBSOMiOuTBYMBH7fVCu8zaxnGwZO/tvrfpgGTOwkmbjHSxnoGBeEfbAq1sbbGJDXcD1eyyw==}
-    dev: true
 
   /@types/http-cache-semantics@4.0.2:
     resolution: {integrity: sha512-FD+nQWA2zJjh4L9+pFXqWOi0Hs1ryBCfI+985NjluQ1p8EYtoLvjLOKidXBtZ4/IcxDX4o8/E8qDS3540tNliw==}
@@ -9577,7 +9582,7 @@ packages:
       '@ember/test-helpers':
         optional: true
     dependencies:
-      '@ember/test-helpers': 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
+      '@ember/test-helpers': 3.2.1(ember-source@5.4.0)(webpack@5.89.0)
       '@embroider/addon-shim': 1.8.7
       ember-destroyable-polyfill: 2.0.3(@babel/core@7.23.3)
       ember-modifier: 4.1.0(ember-source@5.4.0)
@@ -9681,6 +9686,24 @@ packages:
       qunit: ^2.13.0
     dependencies:
       '@ember/test-helpers': 3.2.1(@glint/template@1.2.1)(ember-source@5.4.0)(webpack@5.89.0)
+      '@embroider/addon-shim': 1.8.7
+      '@embroider/macros': 1.13.3(@glint/template@1.2.1)
+      ember-cli-test-loader: 3.1.0
+      ember-source: 5.4.0(@babel/core@7.23.3)(@glimmer/component@1.1.2)(@glint/template@1.2.1)(webpack@5.89.0)
+      qunit: 2.20.0
+    transitivePeerDependencies:
+      - '@glint/template'
+      - supports-color
+    dev: true
+
+  /ember-qunit@8.0.2(@ember/test-helpers@3.2.1)(ember-source@5.4.0)(qunit@2.20.0):
+    resolution: {integrity: sha512-Rf60jeUTWNsF3Imf/FLujW/B/DFmKVXKmXO1lirTXjpertKfwRhp/3MnN8a/U/WyodTIsERkInGT1IqTtphCdQ==}
+    peerDependencies:
+      '@ember/test-helpers': '>=3.0.3'
+      ember-source: '>=4.0.0'
+      qunit: ^2.13.0
+    dependencies:
+      '@ember/test-helpers': 3.2.1(ember-source@5.4.0)(webpack@5.89.0)
       '@embroider/addon-shim': 1.8.7
       '@embroider/macros': 1.13.3(@glint/template@1.2.1)
       ember-cli-test-loader: 3.1.0
