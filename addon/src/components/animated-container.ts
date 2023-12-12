@@ -226,8 +226,4 @@ export default class AnimatedContainerComponent<
     this.sprite = null;
   }).restartable()
   animate!: Task;
-
-  get useElementHelper(): boolean {
-    return dependencySatisfies('ember-element-helper', '>=0.6.1');
-  }
 }
