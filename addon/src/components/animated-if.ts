@@ -16,6 +16,7 @@ interface AnimatedIfSignature<T> {
 /**
   A drop in replacement for `{{#if}}` that animates changes when the predicate changes.
   Animated-if uses the same arguments as animated-each.
+
   ```hbs
   <button {{on 'click' this.toggleThing}}>Toggle</button>
 
