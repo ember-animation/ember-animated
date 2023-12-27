@@ -15,7 +15,7 @@ export default class extends Controller {
   }
 
   @action showRandomMessage() {
-    this.showMessage(`Hello ${faker.name.firstName()}`);
+    this.showMessage(`Hello ${faker.person.firstName()}`);
   }
 
   @action showPreviousMessage() {
