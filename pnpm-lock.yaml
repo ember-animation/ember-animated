@@ -45,9 +45,6 @@ importers:
       '@embroider/macros':
         specifier: ^1.13.3
         version: 1.13.3(@glint/template@1.2.1)
-      '@embroider/util':
-        specifier: ^1.0.0
-        version: 1.12.1(@glint/environment-ember-loose@1.2.1)(@glint/template@1.2.1)
       assert-never:
         specifier: ^1.2.1
         version: 1.2.1
