@@ -2,6 +2,7 @@
 // These will *not* be published as part of your addon, so be careful that your published code does not rely on them!
 
 import '@glint/environment-ember-loose';
+import '@glint/environment-ember-template-imports';
 
 import type EmberAnimatedRegistry from '../src/template-registry.ts';
 
