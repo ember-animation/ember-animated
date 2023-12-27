@@ -6,8 +6,8 @@ import type { AnimatedEachSignature } from './animated-each.ts';
 
 interface AnimatedValueSignature<T> {
   Args: {
-    Positional?: [T] | [];
-    Named: AnimatedEachSignature<T>['Args']['Named'] & { value?: T };
+    Positional: [T];
+    Named: AnimatedEachSignature<[T]>['Args']['Named'];
   };
   Blocks: {
     default: [T];

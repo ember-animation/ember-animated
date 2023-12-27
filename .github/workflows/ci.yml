@@ -111,11 +111,6 @@ jobs:
       fail-fast: false
       matrix:
         try-scenario:
-          - ember-lts-3.16
-          - ember-lts-3.20
-          - ember-lts-3.24
-          - ember-lts-3.28
-          - ember-lts-4.4
           - ember-lts-4.8
           - ember-lts-4.12
           - ember-release
@@ -154,10 +149,6 @@ jobs:
       fail-fast: false
       matrix:
         typescript-scenario:
-          - typescript@4.5
-          - typescript@4.6
-          - typescript@4.7
-          - typescript@4.8
           - typescript@4.9
           - typescript@5.0
           - typescript@5.1

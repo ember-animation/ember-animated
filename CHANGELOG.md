@@ -1,6 +1,30 @@
 
 
 
+
+
+## v1.1.3 (2023-12-27)
+
+#### :bug: Bug Fix
+* [#669](https://github.com/ember-animation/ember-animated/pull/669) Bring back ensure-safe-component to make Embroider build pass ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 1
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+
+## v1.1.2 (2023-12-05)
+
+#### :bug: Bug Fix
+* [#661](https://github.com/ember-animation/ember-animated/pull/661) Glint: make predicate Positional in animated-if and animated-value signatures ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#644](https://github.com/ember-animation/ember-animated/pull/644) Glint ember-animated/template-registry not found ([@deathaz](https://github.com/deathaz))
+
+#### :memo: Documentation
+* [#648](https://github.com/ember-animation/ember-animated/pull/648) docs: modernize docs to show class based component syntax for animated-container ([@johanrd](https://github.com/johanrd))
+
+#### Committers: 3
+- Dev Chong ([@deathaz](https://github.com/deathaz))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- [@johanrd](https://github.com/johanrd)
+
 ## v1.1.1 (2023-11-22)
 
 #### :memo: Documentation
