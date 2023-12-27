@@ -3,7 +3,6 @@
 // See https://typed-ember.gitbook.io/glint/environments/ember/authoring-addons
 
 import type { element as ElementHelper } from 'ember-element-helper';
-import type { EmbroiderUtilRegistry } from '@embroider/util';
 import type AnimatedBeacon from './components/animated-beacon.ts';
 import type AnimatedContainer from './components/animated-container.ts';
 import type AnimatedEach from './components/animated-each.ts';
@@ -12,7 +11,7 @@ import type AnimatedOrphans from './components/animated-orphans.ts';
 import type AnimatedValue from './components/animated-value.ts';
 import type EaListElement from './components/ea-list-element.ts';
 
-export default interface Registry extends EmbroiderUtilRegistry {
+export default interface Registry {
   AnimatedBeacon: typeof AnimatedBeacon;
   'animated-beacon': typeof AnimatedBeacon;
   AnimatedContainer: typeof AnimatedContainer;
