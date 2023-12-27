@@ -3,6 +3,24 @@
 
 
 
+
+## v2.0.0 (2023-12-27)
+
+#### :boom: Breaking Change
+* [#672](https://github.com/ember-animation/ember-animated/pull/672) Drop support for ember-element-helper <= 0.6.0 ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#659](https://github.com/ember-animation/ember-animated/pull/659) Drop support for TypeScript 4.8 and below ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#660](https://github.com/ember-animation/ember-animated/pull/660) Drop support for Ember.js 4.4 and below ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :rocket: Enhancement
+* [#671](https://github.com/ember-animation/ember-animated/pull/671) Sync with embroider-addon blueprint and use decorator-transforms ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :house: Internal
+* [#673](https://github.com/ember-animation/ember-animated/pull/673) run `npx ember-cli-update --to=5.5.0` to align with blueprint ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#670](https://github.com/ember-animation/ember-animated/pull/670) Fix publish workflow name ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 1
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+
 ## v1.1.3 (2023-12-27)
 
 #### :bug: Bug Fix
