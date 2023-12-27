@@ -2,6 +2,15 @@
 
 
 
+
+## v1.1.3 (2023-12-27)
+
+#### :bug: Bug Fix
+* [#669](https://github.com/ember-animation/ember-animated/pull/669) Bring back ensure-safe-component to make Embroider build pass ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 1
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+
 ## v1.1.2 (2023-12-05)
 
 #### :bug: Bug Fix
