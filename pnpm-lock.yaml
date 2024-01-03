@@ -312,8 +312,8 @@ importers:
         specifier: ^11.0.1
         version: 11.0.1(ember-source@5.4.0)
       ember-simple-track-helper:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^2.0.0
+        version: 2.0.0
       ember-source:
         specifier: ~5.4.0
         version: 5.4.0(@babel/core@7.23.3)(@glimmer/component@1.1.2)(webpack@5.89.0)
@@ -11768,13 +11768,11 @@ packages:
       - supports-color
     dev: true
 
-  /ember-simple-track-helper@1.0.0:
-    resolution: {integrity: sha512-00e0wS7nuQeJvIk0kCMpJrkr5EOnfSqI3LzIJo4MJxpWdEi0oSVnUrJ5WSsqnApjIxBw2EU79CC02GC2gareug==}
-    engines: {node: 12.* || >= 14}
+  /ember-simple-track-helper@2.0.0:
+    resolution: {integrity: sha512-URkvEQjxnHfhDW09nYZnbvAN414pyYQfEai1uKfaW+R1PpUfxFj7ERqzDKKq/P0acLBzpsLezp9LY40GSOOgjA==}
+    engines: {node: 14.* || 16.* || >= 18}
     dependencies:
-      ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 5.7.2
-      ember-cli-typescript: 4.2.1
+      '@embroider/addon-shim': 1.8.7
     transitivePeerDependencies:
       - supports-color
     dev: true
