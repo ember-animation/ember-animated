@@ -54,7 +54,7 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "lint:types": "glint",
-    "prepack": "rollup --config && glint --declaration",
+    "prepack": "rollup --config",
     "start": "concurrently 'npm:start:*'",
     "start:js": "rollup --config --watch --no-watch.clearScreen",
     "start:types": "glint --declaration --watch",
