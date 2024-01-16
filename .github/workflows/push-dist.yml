@@ -10,6 +10,7 @@ on:
     branches:
       - main
       - master
+      - v1
 
 jobs:
   push-dist:
@@ -20,6 +21,6 @@ jobs:
       - uses: wyvox/action-setup-pnpm@v3
       - uses: kategengler/put-built-npm-package-contents-on-branch@v2.0.0
         with:
-          branch: dist
+          branch: dist-v1
           token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: addon

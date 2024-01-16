@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - v1
     tags:
       - v*
 
