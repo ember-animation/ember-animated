@@ -66,6 +66,7 @@ export interface AnimatedEachSignature<T> {
 
 /**
   A drop in replacement for `{{#each}}` that animates changes to a list.
+
   ```hbs
   {{#animated-each items use=transition duration=2000 as |item|}}
     <div data-test-item={{item}} onclick={{action removeItem item}}>
