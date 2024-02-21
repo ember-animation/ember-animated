@@ -17,16 +17,18 @@ interface AnimatedValueSignature<T> {
 /**
   A component that animates when a single value changes.
   Animated-value uses the same arguments as animated-each.
-  ```hbs
-    <AnimatedContainer>
-      {{#animated-value this.counter rules=this.rules duration=100 as |v|}}
-          <span class="numbers">{{v}}</span>
-      {{/animated-value}}
-    </AnimatedContainer>
 
-    <button {{action "increment"}}>+</button>
-    <button {{action "decrement"}}>-</button>
+  ```hbs
+  <AnimatedContainer>
+    {{#animated-value this.counter rules=this.rules duration=100 as |v|}}
+        <span class="numbers">{{v}}</span>
+    {{/animated-value}}
+  </AnimatedContainer>
+
+  <button {{action "increment"}}>+</button>
+  <button {{action "decrement"}}>-</button>
   ```
+
   ```js
   import Component from '@ember/component';
   import { toLeft, toRight } from 'ember-animated/transitions/move-over';
