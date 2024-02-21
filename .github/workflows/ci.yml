@@ -113,6 +113,7 @@ jobs:
         try-scenario:
           - ember-lts-4.8
           - ember-lts-4.12
+          - ember-lts-5.4
           - ember-release
           - ember-beta
           - ember-canary
@@ -153,6 +154,7 @@ jobs:
           - typescript@5.0
           - typescript@5.1
           - typescript@5.2
+          - typescript@5.3
           - typescript@next
 
     steps:

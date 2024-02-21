@@ -5,8 +5,13 @@
 /LICENSE.md
 
 # compiled output
-/dist
-/declarations
+dist/
+declarations/
 
 # npm/pnpm/yarn pack output
 *.tgz
+
+# deps & caches
+node_modules/
+.eslintcache
+.prettiercache
