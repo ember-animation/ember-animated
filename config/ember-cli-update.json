@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "@embroider/addon-blueprint",
-      "version": "2.7.0",
+      "version": "2.13.0",
       "blueprints": [
         {
           "name": "@embroider/addon-blueprint",
@@ -12,7 +12,6 @@
             "--addon-location=addon",
             "--ci-provider=github",
             "--pnpm",
-            "--release-it",
             "--test-app-location=test-app",
             "--typescript"
           ]

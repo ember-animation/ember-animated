@@ -15,3 +15,5 @@ node_modules/
 .sass-cache
 coverage/
 .DS_Store
+
+/.idea/
