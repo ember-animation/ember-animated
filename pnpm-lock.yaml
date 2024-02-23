@@ -246,8 +246,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(@babel/core@7.23.9)(@ember/test-helpers@3.3.0)(ember-data@5.3.0)(ember-fetch@8.1.2)(ember-source@5.6.0)(webpack@5.90.3)
       ember-cli-addon-docs-yuidoc:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.1.0
+        version: 1.1.0
       ember-cli-app-version:
         specifier: ^6.0.1
         version: 6.0.1(ember-source@5.6.0)
@@ -4726,7 +4726,7 @@ packages:
     resolution: {integrity: sha512-H3LU5RLiSsGXPhN+Nipar0iR0IofH+8r89G2y1tBKxQ/agagKyAjhkAFDRBfodP2caPrNKHpAWNIM/c9yeL7uA==}
 
   /array-flatten@1.1.1:
-    resolution: {integrity: sha1-ml9pkFGx5wczKPKgCJaLZOopVdI=}
+    resolution: {integrity: sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg==}
     dev: true
 
   /array-to-error@1.1.1:
@@ -7161,7 +7161,7 @@ packages:
     dev: true
 
   /concat-map@0.0.1:
-    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
   /concurrently@8.2.2:
     resolution: {integrity: sha512-1dP4gpXFhei8IOtlXRE/T/4H88ElHgTiUzh71YUmtjTEHMSRS2Z/fgOxHSxxusGHogsRfxNq1vyAwxSC+EVyDg==}
@@ -7438,7 +7438,7 @@ packages:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
   /cookie-signature@1.0.6:
-    resolution: {integrity: sha1-4wOogrNCzD7oylE6eZmXNNqzriw=}
+    resolution: {integrity: sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==}
     dev: true
 
   /cookie@0.4.2:
@@ -7701,7 +7701,7 @@ packages:
     dev: true
 
   /ctype@0.5.3:
-    resolution: {integrity: sha1-gsGMJGH3QRTvFsE1IkrQuRRMoS8=}
+    resolution: {integrity: sha512-T6CEkoSV4q50zW3TlTHMbzy1E5+zlnNcY+yb7tWVYlTwPhx9LpnfAkd4wecpWknDyptp4k97LUZeInlf6jdzBg==}
     engines: {node: '>= 0.4'}
     requiresBuild: true
     dev: true
@@ -8142,7 +8142,7 @@ packages:
       semver: 6.3.1
 
   /ee-first@1.1.1:
-    resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
+    resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
     dev: true
 
   /electron-to-chromium@1.4.616:
@@ -8274,8 +8274,8 @@ packages:
       - supports-color
     dev: true
 
-  /ember-cli-addon-docs-yuidoc@1.0.0:
-    resolution: {integrity: sha512-q7tNVbD4niPgXEQ1Exfeh7Mfiwi3sbT5IG8vXgAumpJgATouTJrk3MGeZjInR7x6CV0AKDiExF/BdMwAshTmrg==}
+  /ember-cli-addon-docs-yuidoc@1.1.0:
+    resolution: {integrity: sha512-Cx8znIPNJA/mlpKdS/F+lRTExuTzvUIkk1Nr6FNWfaNJlrFAtaN6QgSEcGi09lHdjNOcgFvuriPMoW1Y9XHAiA==}
     engines: {node: 10.* || >= 12}
     dependencies:
       broccoli-caching-writer: 3.0.3
@@ -10958,7 +10958,7 @@ packages:
     dev: true
 
   /fresh@0.5.2:
-    resolution: {integrity: sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=}
+    resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
     dev: true
 
@@ -13426,7 +13426,7 @@ packages:
     dev: true
 
   /media-typer@0.3.0:
-    resolution: {integrity: sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=}
+    resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
     dev: true
 
@@ -13450,7 +13450,7 @@ packages:
     dev: true
 
   /merge-descriptors@1.0.1:
-    resolution: {integrity: sha1-sAqqVW3YtEVoFQ7J0blT8/kMu2E=}
+    resolution: {integrity: sha512-cCi6g3/Zr1iqQi6ySbseM1Xvooa98N0w31jzUYrXPX2xqObmFGHJ0tQ5u74H3mVh7wLouTseZyYIq39g8cNp1w==}
     dev: true
 
   /merge-stream@2.0.0:
@@ -15163,6 +15163,7 @@ packages:
 
   /psl@1.9.0:
     resolution: {integrity: sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag==}
+    requiresBuild: true
     dev: true
 
   /pump@3.0.0:
@@ -17690,7 +17691,7 @@ packages:
     dev: true
 
   /utils-merge@1.0.1:
-    resolution: {integrity: sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=}
+    resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
     dev: true
 
