@@ -4,6 +4,25 @@
 
 
 
+
+## v2.0.1 (2024-03-20)
+
+#### :bug: Bug Fix
+* [#694](https://github.com/ember-animation/ember-animated/pull/694) Fix test-support exports ([@simonihmig](https://github.com/simonihmig))
+
+#### :memo: Documentation
+* [#668](https://github.com/ember-animation/ember-animated/pull/668) Fix documentation code blocks ([@backspace](https://github.com/backspace))
+
+#### :house: Internal
+* [#683](https://github.com/ember-animation/ember-animated/pull/683) Sync with embroider-addon blueprint ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#682](https://github.com/ember-animation/ember-animated/pull/682) Bump pnpm/action-setup to v3 ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#429](https://github.com/ember-animation/ember-animated/pull/429) Enable embroider scenarios in CI ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 3
+- Buck Doyle ([@backspace](https://github.com/backspace))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- Simon Ihmig ([@simonihmig](https://github.com/simonihmig))
+
 ## v2.0.0 (2023-12-27)
 
 #### :boom: Breaking Change
