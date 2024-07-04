@@ -43,6 +43,7 @@
       "@types/eslint": "8.4.1"
     }
   },
+  "packageManager": "pnpm@8.15.8",
   "release-it": {
     "hooks": {
       "after:bump": "pnpm install",
