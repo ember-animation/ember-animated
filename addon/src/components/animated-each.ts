@@ -44,12 +44,12 @@ export interface AnimatedEachSignature<T> {
 
       /** Specifies data-dependent Rules that choose which Transition to run when the list changes. This takes precedence over use. */
       rules?:
-        | ((args: {
-            firstTime: boolean;
-            oldItems: unknown[];
-            newItems: unknown[];
-          }) => Transition)
-        | undefined;
+      | ((args: {
+        firstTime: boolean;
+        oldItems: unknown[];
+        newItems: unknown[];
+      }) => Transition)
+      | undefined;
 
       /** Specifies the Transition to run when the list changes. */
       use?: Transition;
@@ -149,10 +149,10 @@ export default class AnimatedEach<T> extends Component<
   */
   rules:
     | ((args: {
-        firstTime: boolean;
-        oldItems: unknown[];
-        newItems: unknown[];
-      }) => Transition)
+      firstTime: boolean;
+      oldItems: unknown[];
+      newItems: unknown[];
+    }) => Transition)
     | undefined;
 
   /**
@@ -551,7 +551,7 @@ export default class AnimatedEach<T> extends Component<
   //   animators that are still in `runAnimation`, then we are
   //   cleaning up our own sprite state.
   //
-  @task(function* (
+  @(task(function* (
     this: AnimatedEach<T>,
     transition: Transition,
     firstTime: boolean,
@@ -586,7 +586,7 @@ export default class AnimatedEach<T> extends Component<
       removedSprites,
       matchingAnimatorsFinished,
     );
-  }).restartable()
+  }).restartable())
   animate!: Task;
 
   @task(function* (this: AnimatedEach<T>, transition, animateTask) {
@@ -681,10 +681,10 @@ export default class AnimatedEach<T> extends Component<
       (yield this.motionService
         .get('farMatch')
         .perform(current(), insertedSprites, keptSprites, removedSprites)) as {
-        farMatches: Map<Sprite, Sprite>;
-        matchingAnimatorsFinished: Promise<void>;
-        beacons: { [name: string]: Sprite };
-      };
+          farMatches: Map<Sprite, Sprite>;
+          matchingAnimatorsFinished: Promise<void>;
+          beacons: { [name: string]: Sprite };
+        };
 
     // TODO: This is best effort. The parent isn't necessarily in
     // the initial position at this point, but in practice if people

@@ -108,12 +108,12 @@ export default class AnimatedOrphans extends Component<AnimatedOrphansSignature>
     // we don't have any impact on static layout
   }
 
-  endStaticMeasurement() {}
+  endStaticMeasurement() { }
 
   @alias('animate.isRunning')
   isAnimating!: boolean;
 
-  @task(function* (this: AnimatedOrphans, { ownSprite, activeSprites }) {
+  @(task(function* (this: AnimatedOrphans, { ownSprite, activeSprites }) {
     yield this.startAnimation.perform(ownSprite);
     let { matchingAnimatorsFinished } = (yield this.runAnimation.perform(
       activeSprites,
@@ -123,7 +123,7 @@ export default class AnimatedOrphans extends Component<AnimatedOrphansSignature>
       activeSprites,
       matchingAnimatorsFinished,
     );
-  }).restartable()
+  }).restartable())
   animate!: Task;
 
   @task(function* (this: AnimatedOrphans, ownSprite) {
@@ -135,7 +135,7 @@ export default class AnimatedOrphans extends Component<AnimatedOrphansSignature>
   @task(function* (this: AnimatedOrphans, activeSprites, ownSprite) {
     // we don't need any static measurements, but we wait for this so
     // we stay on the same timing as all the other animators
-    yield* this.motionService.staticMeasurement(() => {});
+    yield* this.motionService.staticMeasurement(() => { });
 
     // Some of the new orphan transitions may be handing us sprites we
     // already have matches for, in which case our active sprites take
@@ -166,9 +166,9 @@ export default class AnimatedOrphans extends Component<AnimatedOrphansSignature>
           ...this._newOrphanTransitions.map((t) => t.removedSprites),
         ),
       )) as {
-      matchingAnimatorsFinished: Promise<void>;
-      farMatches: Map<Sprite, Sprite>;
-    };
+        matchingAnimatorsFinished: Promise<void>;
+        farMatches: Map<Sprite, Sprite>;
+      };
 
     let cycle = this._cycleCounter++;
 

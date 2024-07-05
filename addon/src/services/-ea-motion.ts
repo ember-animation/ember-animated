@@ -201,10 +201,10 @@ export default class MotionService extends Service {
   }
 
   // Invalidation support for isAnimating
-  @task(function* (this: MotionService) {
+  @(task(function* (this: MotionService) {
     yield rAF();
     this.notifyPropertyChange('isAnimating');
-  }).observes('isAnimatingSync')
+  }).observes('isAnimatingSync'))
   _invalidateIsAnimating!: Task;
 
   @task(function* (this: MotionService) {
