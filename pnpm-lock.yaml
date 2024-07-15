@@ -195,8 +195,8 @@ importers:
         specifier: ^7.23.9
         version: 7.23.9
       '@babel/eslint-parser':
-        specifier: ^7.23.10
-        version: 7.23.10(@babel/core@7.23.9)(eslint@8.56.0)
+        specifier: ^7.24.8
+        version: 7.24.8(@babel/core@7.23.9)(eslint@8.56.0)
       '@babel/plugin-proposal-decorators':
         specifier: ^7.23.9
         version: 7.23.9(@babel/core@7.23.9)
@@ -703,12 +703,12 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@babel/eslint-parser@7.23.10(@babel/core@7.23.9)(eslint@8.56.0):
-    resolution: {integrity: sha512-3wSYDPZVnhseRnxRJH6ZVTNknBz76AEnyC+AYYhasjP3Yy23qz0ERR7Fcd2SHmYuSFJ2kY9gaaDd3vyqU09eSw==}
+  /@babel/eslint-parser@7.24.8(@babel/core@7.23.9)(eslint@8.56.0):
+    resolution: {integrity: sha512-nYAikI4XTGokU2QX7Jx+v4rxZKhKivaQaREZjuW3mrJrbdWJ5yUfohnoUULge+zEEaKjPYNxhoRgUKktjXtbwA==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': ^7.11.0
-      eslint: ^7.5.0 || ^8.0.0
+      eslint: ^7.5.0 || ^8.0.0 || ^9.0.0
     dependencies:
       '@babel/core': 7.23.9
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
@@ -9176,7 +9176,7 @@ packages:
     resolution: {integrity: sha512-nCgRkQ/ujzy4fqxSvoaQD8j1ev3LOA30STlZTvHt+dhyfYC6ojMqTBl7SatPcv7Fz6Vy6BqE/Sqy3vhOHCzQJg==}
     engines: {node: 14.* || 16.* || 18.* || >= 20}
     dependencies:
-      '@babel/eslint-parser': 7.23.10(@babel/core@7.23.9)(eslint@8.56.0)
+      '@babel/eslint-parser': 7.24.8(@babel/core@7.23.9)(eslint@8.56.0)
       chalk: 4.1.2
       ember-cli-deploy-plugin: 0.2.9
       glob: 10.3.10
