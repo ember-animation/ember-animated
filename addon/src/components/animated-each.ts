@@ -551,7 +551,7 @@ export default class AnimatedEach<T> extends Component<
   //   animators that are still in `runAnimation`, then we are
   //   cleaning up our own sprite state.
   //
-  @task(function* (
+  @(task(function* (
     this: AnimatedEach<T>,
     transition: Transition,
     firstTime: boolean,
@@ -586,7 +586,7 @@ export default class AnimatedEach<T> extends Component<
       removedSprites,
       matchingAnimatorsFinished,
     );
-  }).restartable()
+  }).restartable())
   animate!: Task;
 
   @task(function* (this: AnimatedEach<T>, transition, animateTask) {

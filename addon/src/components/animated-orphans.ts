@@ -113,7 +113,7 @@ export default class AnimatedOrphans extends Component<AnimatedOrphansSignature>
   @alias('animate.isRunning')
   isAnimating!: boolean;
 
-  @task(function* (this: AnimatedOrphans, { ownSprite, activeSprites }) {
+  @(task(function* (this: AnimatedOrphans, { ownSprite, activeSprites }) {
     yield this.startAnimation.perform(ownSprite);
     let { matchingAnimatorsFinished } = (yield this.runAnimation.perform(
       activeSprites,
@@ -123,7 +123,7 @@ export default class AnimatedOrphans extends Component<AnimatedOrphansSignature>
       activeSprites,
       matchingAnimatorsFinished,
     );
-  }).restartable()
+  }).restartable())
   animate!: Task;
 
   @task(function* (this: AnimatedOrphans, ownSprite) {

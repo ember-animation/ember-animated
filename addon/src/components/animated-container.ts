@@ -177,7 +177,7 @@ export default class AnimatedContainerComponent<
     }
   }
 
-  @task(function* (
+  @(task(function* (
     this: AnimatedContainerComponent,
     duration: number,
     animationTask: Promise<void>,
@@ -223,6 +223,6 @@ export default class AnimatedContainerComponent<
 
     this.sprite!.unlock();
     this.sprite = null;
-  }).restartable()
+  }).restartable())
   animate!: Task;
 }
