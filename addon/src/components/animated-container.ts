@@ -108,7 +108,7 @@ export default class AnimatedContainerComponent<
   onInitialRender = false;
 
   /**
-   * Use a custom tag for the container. Defaults to div.
+   * Use a custom motion to resize the container. Defaults to `Resize`.
     @argument motion
     @type String
   */
