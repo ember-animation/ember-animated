@@ -5,6 +5,22 @@
 
 
 
+
+## v2.1.0 (2024-08-23)
+
+#### :rocket: Enhancement
+* [#716](https://github.com/ember-animation/ember-animated/pull/716) Widen peer range for peer, @ember/test-helpers ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### :memo: Documentation
+* [#715](https://github.com/ember-animation/ember-animated/pull/715) [docs] Update description for motion argument on AnimatedContainer ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :house: Internal
+* [#703](https://github.com/ember-animation/ember-animated/pull/703) Add parentheses for decorators to prevent TS1497 error. ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 2
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## v2.0.1 (2024-03-20)
 
 #### :bug: Bug Fix
