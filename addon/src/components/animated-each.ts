@@ -74,6 +74,7 @@ export interface AnimatedEachSignature<T> {
     </div>
   {{/animated-each}}
   ```
+
   ```js
   import Component from '@ember/component';
   import move from 'ember-animated/motions/move';
