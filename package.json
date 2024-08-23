@@ -30,8 +30,8 @@
     "release-it": "^17.1.1"
   },
   "volta": {
-    "node": "18.18.2",
-    "npm": "9.8.1"
+    "node": "18.20.4",
+    "pnpm": "8.15.9"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -43,7 +43,7 @@
       "@types/eslint": "8.4.1"
     }
   },
-  "packageManager": "pnpm@8.15.8",
+  "packageManager": "pnpm@8.15.9",
   "release-it": {
     "hooks": {
       "after:bump": "pnpm install",
