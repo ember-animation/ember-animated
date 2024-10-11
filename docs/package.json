@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
+    "@ember-data/adapter": "^5.3.8",
     "@babel/eslint-parser": "^7.24.8",
     "@babel/plugin-proposal-decorators": "^7.23.9",
     "@ember/optional-features": "^2.0.0",
