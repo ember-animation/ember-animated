@@ -1,6 +1,20 @@
 'use strict';
 
-const getChannelURL = require('ember-source-channel-url');
+// @toto uncomment when https://github.com/emberjs/ember.js/issues/20777 resolved
+// const getChannelURL = require('ember-source-channel-url');
+async function getChannelURL(channelType) {
+  let HOST =
+    process.env.EMBER_SOURCE_CHANNEL_URL_HOST || 'https://s3.amazonaws.com';
+  let PATH = 'builds.emberjs.com';
+
+  const response = await fetch(`${HOST}/${PATH}/${channelType}.json`);
+  const result = await response.json();
+
+  return result.version
+    .replace('.canary', '')
+    .replace('.beta', '')
+    .replace('-release', '');
+}
 const { embroiderSafe, embroiderOptimized } = require('@embroider/test-setup');
 
 module.exports = async function () {
