@@ -25,6 +25,7 @@ interface AnimatedIfSignature<T> {
     </div>
   {{/animated-if}}
   ```
+
   ```js
   import Component from '@glimmer/component';
   import move from 'ember-animated/motions/move';
