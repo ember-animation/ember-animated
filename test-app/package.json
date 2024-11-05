@@ -70,7 +70,7 @@
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "broccoli-asset-rev": "^3.0.0",
-    "concurrently": "^8.2.2",
+    "concurrently": "^9.1.0",
     "ember-animated": "workspace:*",
     "ember-animated-tools": "^2.0.0",
     "ember-auto-import": "^2.9.0",
