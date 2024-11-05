@@ -1,0 +1,1 @@
+{"version":3,"file":"linear.js","sources":["../../src/easings/linear.ts"],"sourcesContent":["export default function (t: number) {\n  return t;\n}\n"],"names":["t"],"mappings":"AAAe,eAAA,EAAUA,CAAS,EAAE;AAClC,EAAA,OAAOA,CAAC,CAAA;AACV;;;;"}
