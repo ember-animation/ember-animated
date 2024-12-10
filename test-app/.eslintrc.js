@@ -22,6 +22,7 @@ module.exports = {
     'ember/no-component-lifecycle-hooks': 'off',
 
     'require-yield': 'off',
+    'ember/no-runloop': 'off',
   },
   overrides: [
     // ts files
