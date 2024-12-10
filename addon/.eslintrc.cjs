@@ -22,6 +22,7 @@ module.exports = {
     'ember/no-computed-properties-in-native-classes': 'off',
     'ember/no-get': 'off',
     'ember/no-observers': 'off',
+    'ember/no-runloop': 'off',
     'ember/require-tagless-components': 'off',
   },
   overrides: [
