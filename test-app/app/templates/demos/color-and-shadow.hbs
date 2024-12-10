@@ -1,6 +1,6 @@
 <div class="scenario-color-and-shadow">
   <label>
-    <Input @type="checkbox" @checked={{this.showFirst}} />
+    <input type="checkbox" checked={{this.showFirst}} {{on "input" this.setShowFirst}}/>
     Toggle Me
   </label>
 
