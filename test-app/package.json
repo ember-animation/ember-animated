@@ -106,7 +106,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-qunit": "^8.1.1",
     "loader.js": "^4.7.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.2",
     "qunit": "^2.20.1",
     "qunit-dom": "^3.0.0",
     "sass": "^1.80.5",

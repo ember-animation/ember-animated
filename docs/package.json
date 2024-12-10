@@ -80,7 +80,7 @@
     "eslint-plugin-qunit": "^8.1.1",
     "loader.js": "^4.7.0",
     "moment": "^2.30.1",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.2",
     "qunit": "^2.20.1",
     "qunit-dom": "^3.0.0",
     "rollup": "^4.18.0",
