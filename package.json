@@ -20,7 +20,7 @@
     "@release-it-plugins/lerna-changelog": "^7.0.0",
     "@release-it-plugins/workspaces": "^4.2.0",
     "concurrently": "^9.1.0",
-    "release-it": "^17.6.0"
+    "release-it": "^17.10.0"
   },
   "volta": {
     "node": "18.20.4",
