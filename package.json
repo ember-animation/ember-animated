@@ -24,7 +24,7 @@
   },
   "volta": {
     "node": "18.20.4",
-    "pnpm": "9.12.2"
+    "pnpm": "10.6.3"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -36,7 +36,7 @@
       "@types/eslint": "8.4.1"
     }
   },
-  "packageManager": "pnpm@9.12.2",
+  "packageManager": "pnpm@10.6.3",
   "release-it": {
     "hooks": {
       "after:bump": "pnpm install",
