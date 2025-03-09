@@ -33,7 +33,12 @@ interface AnimatedOrphansSignature {
   @public
 */
 export default class AnimatedOrphans extends Component<AnimatedOrphansSignature> {
-  classNames: string[] = this.classNames.concat('animated-orphans');
+  // eslint-disable-next-line ember/classic-decorator-hooks
+  init(...args: []): void {
+    super.init(...args);
+
+    this.classNames = this.classNames.concat(['animated-orphans']);
+  }
 
   @service('-ea-motion')
   motionService!: MotionService;
