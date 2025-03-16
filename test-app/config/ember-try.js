@@ -85,28 +85,6 @@ module.exports = async function () {
           },
         },
       },
-      {
-        name: 'ember-classic',
-        env: {
-          EMBER_OPTIONAL_FEATURES: JSON.stringify({
-            'application-template-wrapper': true,
-            'default-async-observers': false,
-            'template-only-glimmer-components': false,
-          }),
-        },
-        npm: {
-          devDependencies: {
-            '@ember/test-helpers': '^2.7.0',
-            'ember-cli': '~3.28.0',
-            'ember-qunit': '^5.1.5',
-            'ember-resolver': '^8.0.3',
-            'ember-source': '~3.28.8',
-          },
-          ember: {
-            edition: 'classic',
-          },
-        },
-      },
       embroiderSafe(),
       embroiderOptimized(),
     ],
