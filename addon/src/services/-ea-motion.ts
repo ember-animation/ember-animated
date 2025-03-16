@@ -13,6 +13,7 @@ import {
 import type Sprite from '../-private/sprite.ts';
 import type Child from '../-private/child';
 import type { Transition } from '../-private/transition.ts';
+import type NativeArray from '@ember/array/-private/native-array';
 
 interface Animator extends EmberObject {
   beginStaticMeasurement(): void;
@@ -63,7 +64,7 @@ interface Rendezvous {
 export default class MotionService extends Service {
   _rendezvous: Rendezvous[] = [];
   _measurements: Measurement[] = [];
-  _animators = A<Animator>();
+  _animators: NativeArray<Animator> = A<Animator>();
   _orphanObserver: OrphanObserver | null = null;
   _animationObservers: AnimationObserver[] = [];
   _descendantObservers: {
