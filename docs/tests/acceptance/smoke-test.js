@@ -86,7 +86,7 @@ module('Acceptance | smoke', function (hooks) {
     await visit('/docs');
     assert.strictEqual(currentURL(), '/docs');
     let count = 0;
-    // eslint-disable-next-line no-constant-condition
+
     while (true) {
       let nextLink = document.querySelector('[data-test-next-link] > a');
       if (!nextLink) {

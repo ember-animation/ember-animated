@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-conditional-assertions */
 import { set } from '@ember/object';
 import { A } from '@ember/array';
 import { setupRenderingTest } from 'ember-qunit';
