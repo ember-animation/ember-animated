@@ -22,7 +22,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 22.x
           cache: 'pnpm'
           # This creates an .npmrc that reads the NODE_AUTH_TOKEN environment variable
           registry-url: 'https://registry.npmjs.org'

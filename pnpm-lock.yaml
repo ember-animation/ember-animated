@@ -249,8 +249,8 @@ importers:
         specifier: ~6.2.3
         version: 6.2.3(babel-core@6.26.3)(handlebars@4.7.8)(underscore@1.13.7)
       ember-cli-addon-docs:
-        specifier: ^7.0.1
-        version: 7.2.2(1e127dc1a13ee6127e9dc721efb2017e)
+        specifier: ^8.0.8
+        version: 8.0.8(1e127dc1a13ee6127e9dc721efb2017e)
       ember-cli-addon-docs-yuidoc:
         specifier: ^1.1.0
         version: 1.1.0
@@ -4569,8 +4569,8 @@ packages:
     resolution: {integrity: sha512-Cx8znIPNJA/mlpKdS/F+lRTExuTzvUIkk1Nr6FNWfaNJlrFAtaN6QgSEcGi09lHdjNOcgFvuriPMoW1Y9XHAiA==}
     engines: {node: 10.* || >= 12}
 
-  ember-cli-addon-docs@7.2.2:
-    resolution: {integrity: sha512-aYh4T0QGAHHroiTiP7OrZ7eoG7118rzt0ehIB+GXCsQxHZI9zjKJ9/mxhsEuOIwHHI/gVxEmEHlkxQuvH04qUw==}
+  ember-cli-addon-docs@8.0.8:
+    resolution: {integrity: sha512-yQxysY5/yJo9XY7OExQL2CeF2qhBnt26TvoyeAXP+SkuIDerSq4Ncx3FoYvuOUgijHarz8xT/9LnPo69NVecSA==}
     engines: {node: '>= 18'}
     peerDependencies:
       '@ember-data/adapter': '>= 3.0.0'
@@ -4859,10 +4859,10 @@ packages:
     resolution: {integrity: sha512-jlOzpu37FKv8rj7Ps8v0wRDBWRZ6vrcvC1MZ1XV9g7UIYgVC4I1KAcAk5ZRxYeVFdZfLHlGm2Cxdqsd086d+eQ==}
     engines: {node: 10.* || >= 12}
 
-  ember-keyboard@8.2.1:
-    resolution: {integrity: sha512-wT9xpt3GKsiodGZoifKU4OyeRjXWlmKV9ZHHsp6wJBwMFpl4wWPjTNdINxivk2qg/WFNIh8nUiwuG4+soWXPdw==}
+  ember-keyboard@9.0.1:
+    resolution: {integrity: sha512-zCIrs8ktI8nxDTBLodASYrWtg5I5ZTZ7hdfFr+upfyRKzbLub5Pnvlj60zpvSAVDyNJBlQJ7eSn3sZlwEA01wQ==}
     peerDependencies:
-      '@ember/test-helpers': ^2.6.0 || ^3.0.0
+      '@ember/test-helpers': ^2.6.0 || ^3.0.0 || >= 4.0.0
     peerDependenciesMeta:
       '@ember/test-helpers':
         optional: true
@@ -15187,7 +15187,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-cli-addon-docs@7.2.2(1e127dc1a13ee6127e9dc721efb2017e):
+  ember-cli-addon-docs@8.0.8(1e127dc1a13ee6127e9dc721efb2017e):
     dependencies:
       '@csstools/postcss-sass': 5.1.1(postcss@8.5.3)
       '@ember/render-modifiers': 2.1.0(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))
@@ -15220,7 +15220,7 @@ snapshots:
       ember-composable-helpers: 5.0.0
       ember-concurrency: 3.1.1(@babel/core@7.26.10)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))
       ember-data: 5.3.11(@ember/string@3.1.1)(@ember/test-helpers@3.3.1(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))(webpack@5.98.0))(@ember/test-waiters@3.1.0)(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))(qunit@2.24.1)
-      ember-keyboard: 8.2.1(@babel/core@7.26.10)(@ember/test-helpers@3.3.1(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))(webpack@5.98.0))(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))
+      ember-keyboard: 9.0.1(@babel/core@7.26.10)(@ember/test-helpers@3.3.1(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))(webpack@5.98.0))(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))
       ember-modal-dialog: 4.0.0(@glint/environment-ember-loose@1.5.2(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(@types/ember__array@4.0.10(@babel/core@7.26.10))(@types/ember__component@4.0.22(@babel/core@7.26.10))(@types/ember__controller@4.0.12(@babel/core@7.26.10))(@types/ember__object@4.0.12(@babel/core@7.26.10))(@types/ember__routing@4.0.22(@babel/core@7.26.10))(ember-cli-htmlbars@6.3.0)(ember-modifier@4.2.0(@babel/core@7.26.10)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))))(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))
       ember-responsive: 5.0.0
       ember-router-generator: 2.0.0
@@ -16125,7 +16125,7 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  ember-keyboard@8.2.1(@babel/core@7.26.10)(@ember/test-helpers@3.3.1(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))(webpack@5.98.0))(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0)):
+  ember-keyboard@9.0.1(@babel/core@7.26.10)(@ember/test-helpers@3.3.1(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0))(webpack@5.98.0))(ember-source@5.6.0(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.98.0)):
     dependencies:
       '@embroider/addon-shim': 1.9.0
       ember-destroyable-polyfill: 2.0.3(@babel/core@7.26.10)
