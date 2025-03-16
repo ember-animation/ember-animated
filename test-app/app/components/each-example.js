@@ -40,7 +40,7 @@ export default class EachExample extends Component {
         this.items[Math.floor(Math.random() * this.items.length)],
       );
     }
-  }).restartable() // eslint-disable-line prettier/prettier
+  }).restartable()
   chaos;
 
   @action addItem() {

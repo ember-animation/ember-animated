@@ -325,7 +325,7 @@ module('Unit | scheduler', function (hooks) {
       let task = spawn(function* () {
         try {
           yield new Promise((resolve, reject) => reject());
-        } catch (err) {
+        } catch {
           innerTask = current();
         }
       });

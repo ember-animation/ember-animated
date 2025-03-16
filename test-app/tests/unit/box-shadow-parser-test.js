@@ -26,7 +26,7 @@ module('Unit | BoxShadow', function (hooks) {
         assert.strictEqual(shadow.y, expectedShadow.y, `shadow ${index} y`);
         assert.strictEqual(
           shadow.blur,
-          // eslint-disable-next-line qunit/no-assert-logical-expression
+
           expectedShadow.blur || 0,
           `shadow ${index} blur`,
         );
@@ -37,7 +37,7 @@ module('Unit | BoxShadow', function (hooks) {
         );
         assert.strictEqual(
           shadow.inset,
-          // eslint-disable-next-line qunit/no-assert-logical-expression
+
           expectedShadow.inset || false,
           `shadow ${index} inset`,
         );
