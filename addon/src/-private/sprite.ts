@@ -790,7 +790,7 @@ export default class Sprite {
             this.element as HTMLElement
           ).style.getPropertyValue(property);
         }
-        this._imposedStyle![property] = styles[property as keyof T] ?? '';
+        this._imposedStyle![property] = styles[property as keyof T] as string;
       });
     }
     Object.keys(styles).forEach((property) => {
@@ -803,7 +803,7 @@ export default class Sprite {
         setStyle(
           this.element as HTMLElement,
           property,
-          styles[property as keyof T] ?? '',
+          styles[property as keyof T] as string,
         );
       }
     });
