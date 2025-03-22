@@ -31,6 +31,13 @@
     "concurrently": "^9.1.2",
     "release-it": "^17.10.0"
   },
+  "pnpm": {
+    "overrides": {
+      "ember-animated-tools>ember-animated": "workspace:*",
+      "ember-modal-dialog": "4.0.0",
+      "@types/eslint": "8.4.1"
+    }
+  },
   "release-it": {
     "hooks": {
       "after:bump": "pnpm install",
