@@ -13,7 +13,7 @@ import {
 import type Sprite from '../-private/sprite.ts';
 import type Child from '../-private/child';
 import type { Transition } from '../-private/transition.ts';
-import type NativeArray from '@ember/array/-private/native-array';
+import type { NativeArray } from '@ember/array';
 
 interface Animator extends EmberObject {
   beginStaticMeasurement(): void;

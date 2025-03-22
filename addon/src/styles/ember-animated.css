@@ -1,24 +1,25 @@
 .ember-animated-hidden {
-    visibility: hidden !important;
+  visibility: hidden !important;
 }
 
 .ember-animated-none {
-    display: none !important;
+  display: none !important;
 }
 
 .ember-animated-top-collapse {
-    margin-top: 0 !important;
+  margin-top: 0 !important;
 }
 
 .animated-container {
-    position: relative;
+  position: relative;
 }
 
-.animated-container:before, .animated-container:after {
-    content: ' ';
-    display: table;
+.animated-container:before,
+.animated-container:after {
+  content: " ";
+  display: table;
 }
 
 .animated-orphans {
-    position: relative;
+  position: relative;
 }

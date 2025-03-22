@@ -10,17 +10,11 @@
     "lint:fix": "pnpm --filter '*' lint:fix",
     "prepare": "pnpm build",
     "release": "release-it",
-    "start": "concurrently 'npm:start:*' --restart-after 5000 --prefix-colors cyan,white,yellow",
+    "start": "concurrently 'pnpm:start:*' --restart-after 5000 --prefixColors auto",
     "start:addon": "pnpm --filter ember-animated start --no-watch.clearScreen",
     "start:test-app": "pnpm --filter test-app start",
     "test": "pnpm --filter '*' test",
     "test:ember": "pnpm --filter '*' test:ember"
-  },
-  "devDependencies": {
-    "@release-it-plugins/lerna-changelog": "^7.0.0",
-    "@release-it-plugins/workspaces": "^4.2.0",
-    "concurrently": "^9.1.0",
-    "release-it": "^17.10.0"
   },
   "volta": {
     "node": "22.14.0",
@@ -29,6 +23,14 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
+  "packageManager": "pnpm@10.6.3",
+  "devDependencies": {
+    "@glint/core": "^1.2.1",
+    "@release-it-plugins/lerna-changelog": "^7.0.0",
+    "@release-it-plugins/workspaces": "^4.2.0",
+    "concurrently": "^9.1.2",
+    "release-it": "^17.10.0"
+  },
   "pnpm": {
     "overrides": {
       "ember-animated-tools>ember-animated": "workspace:*",
@@ -36,7 +38,6 @@
       "@types/eslint": "8.4.1"
     }
   },
-  "packageManager": "pnpm@10.6.3",
   "release-it": {
     "hooks": {
       "after:bump": "pnpm install",
