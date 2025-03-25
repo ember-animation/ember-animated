@@ -779,7 +779,7 @@ export default class Sprite {
     @param {Object} styles The styles to apply to the sprite.
     @return {void}
   */
-  applyStyles<T extends { [P in keyof T]: string }>(styles: T) {
+  applyStyles<T extends { [key: string]: string }>(styles: T) {
     if (!this._lockMode) {
       throw new Error("can't apply styles to non-lockable sprite");
     }
@@ -790,7 +790,7 @@ export default class Sprite {
             this.element as HTMLElement
           ).style.getPropertyValue(property);
         }
-        this._imposedStyle![property] = styles[property as keyof T];
+        this._imposedStyle![property] = styles[property as keyof T] as string;
       });
     }
     Object.keys(styles).forEach((property) => {
@@ -803,7 +803,7 @@ export default class Sprite {
         setStyle(
           this.element as HTMLElement,
           property,
-          styles[property as keyof T],
+          styles[property as keyof T] as string,
         );
       }
     });

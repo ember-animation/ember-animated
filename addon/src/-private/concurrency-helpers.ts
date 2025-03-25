@@ -1,5 +1,5 @@
 import { schedule, cancel } from '@ember/runloop';
-import type { EmberRunTimer } from '@ember/runloop/types';
+import type { Timer as EmberRunTimer } from '@ember/runloop';
 import { getOrCreate as _getOrCreate } from './singleton.ts';
 
 function getOrCreate<T>(key: string, construct: () => T): T {

@@ -9,6 +9,7 @@ import { afterRender, microwait } from '../-private/concurrency-helpers.ts';
 import { componentNodes } from '../-private/ember-internals.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { MotionConstructor } from '../-private/motion.ts';
+import type Owner from '@ember/owner';
 
 interface AnimatedContainerSignature<Tag extends string> {
   /** Multiple tags supported for base element via `tag` arg */
@@ -118,7 +119,7 @@ export default class AnimatedContainerComponent<
   private _startingUp = false;
   private sprite: Sprite | null = null;
 
-  constructor(properties: Record<string, unknown> | undefined) {
+  constructor(properties: Owner | undefined) {
     super(properties);
     this.motionService
       .register(this as any)
