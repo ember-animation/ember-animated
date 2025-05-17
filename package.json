@@ -4,6 +4,11 @@
     "type": "git",
     "url": "https://github.com/ember-animation/ember-animated.git"
   },
+  "workspaces": [
+    "addon",
+    "docs",
+    "test-app"
+  ],
   "scripts": {
     "build": "pnpm --filter ember-animated build",
     "lint": "pnpm --filter '*' lint",
