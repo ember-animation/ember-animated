@@ -6,6 +6,29 @@
 
 
 
+
+## v2.1.1 (2025-05-17)
+
+#### :rocket: Enhancement
+* [#750](https://github.com/ember-animation/ember-animated/pull/750) Add components re-export from top-level module and document imports for Template Tag support ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :bug: Bug Fix
+* [#779](https://github.com/ember-animation/ember-animated/pull/779) Removed unneeded peer declaration ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### :memo: Documentation
+* [#690](https://github.com/ember-animation/ember-animated/pull/690) fix: Make it so that code examples render correctly v2.x/master ([@MichalBryxi](https://github.com/MichalBryxi))
+
+#### :house: Internal
+* [#772](https://github.com/ember-animation/ember-animated/pull/772) run `npx ember-cli-update` to align with addon blueprint ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#774](https://github.com/ember-animation/ember-animated/pull/774) Fix ember-data:deprecate-store-extends-ember-object deprecation ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#768](https://github.com/ember-animation/ember-animated/pull/768) Use Node.js v22 in CI ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#745](https://github.com/ember-animation/ember-animated/pull/745) Widen test matrix to include TS 5.4-5.7 and 5.8-5.12 LTS ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### Committers: 3
+- Michal Bryxí ([@MichalBryxi](https://github.com/MichalBryxi))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## v2.1.0 (2024-08-23)
 
 #### :rocket: Enhancement
