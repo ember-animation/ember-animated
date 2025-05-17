@@ -7,7 +7,8 @@
 
 
 
-## v2.1.1 (2025-05-17)
+
+## v2.2.0 (2025-05-17)
 
 #### :rocket: Enhancement
 * [#750](https://github.com/ember-animation/ember-animated/pull/750) Add components re-export from top-level module and document imports for Template Tag support ([@SergeAstapov](https://github.com/SergeAstapov))
@@ -23,6 +24,7 @@
 * [#774](https://github.com/ember-animation/ember-animated/pull/774) Fix ember-data:deprecate-store-extends-ember-object deprecation ([@SergeAstapov](https://github.com/SergeAstapov))
 * [#768](https://github.com/ember-animation/ember-animated/pull/768) Use Node.js v22 in CI ([@SergeAstapov](https://github.com/SergeAstapov))
 * [#745](https://github.com/ember-animation/ember-animated/pull/745) Widen test matrix to include TS 5.4-5.7 and 5.8-5.12 LTS ([@SergeAstapov](https://github.com/SergeAstapov))
+* [#780](https://github.com/ember-animation/ember-animated/pull/780) Fix release process ([@SergeAstapov](https://github.com/SergeAstapov))
 
 #### Committers: 3
 - Michal Bryxí ([@MichalBryxi](https://github.com/MichalBryxi))
