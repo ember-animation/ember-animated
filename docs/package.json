@@ -42,6 +42,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@warp-drive/build-config": "^5.5.0",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.2",
     "ember-animated": "workspace:*",
