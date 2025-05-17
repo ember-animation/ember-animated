@@ -2,6 +2,7 @@ import Application from '@ember/application';
 import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import config from 'ember-animated-docs/config/environment';
+import './font-awesome';
 
 export default class App extends Application {
   modulePrefix = config.modulePrefix;
