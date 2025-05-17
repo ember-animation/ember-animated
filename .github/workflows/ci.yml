@@ -176,3 +176,24 @@ jobs:
       - name: Type checking
         run: tsc --noEmit
         working-directory: addon
+
+  publish-config:
+    name: Publish config
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Check workspaces property
+        run: |
+          if [ "$(npm pkg get workspaces | jq '. | length')" -eq 0 ]; then
+            echo "You removed "workspaces" key in root package.json that is used during publish process. Please bring it back." && \
+            exit 1
+          fi

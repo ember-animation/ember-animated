@@ -4,6 +4,11 @@
     "type": "git",
     "url": "https://github.com/ember-animation/ember-animated.git"
   },
+  "workspaces": [
+    "addon",
+    "docs",
+    "test-app"
+  ],
   "scripts": {
     "build": "pnpm --filter ember-animated build",
     "lint": "pnpm --filter '*' lint",
@@ -25,6 +30,7 @@
   },
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@glint/core": "^1.2.1",
     "@release-it-plugins/lerna-changelog": "^7.0.0",
     "@release-it-plugins/workspaces": "^4.2.0",
