@@ -16,7 +16,7 @@ For usage in `gts` and `gjs`, `ember-animated` provides following import paths:
 import AnimatedBeacon from 'ember-animated/components/animated-beacon';
 import AnimatedContainer from 'ember-animated/components/animated-container';
 import animatedEach from 'ember-animated/components/animated-each';
-import animatedIf from 'ember-animated/components/animated-id';
+import animatedIf from 'ember-animated/components/animated-if';
 import AnimatedOrphans from 'ember-animated/components/animated-orphans';
 import animatedValue from 'ember-animated/components/animated-value';
 
