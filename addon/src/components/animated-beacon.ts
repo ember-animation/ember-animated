@@ -1,10 +1,11 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
+import * as emberService from "@ember/service";
 import { task, type Task } from '../-private/ember-scheduler.ts';
 import { afterRender, microwait } from '../-private/concurrency-helpers.ts';
 import { componentNodes } from '../-private/ember-internals.ts';
 import Sprite from '../-private/sprite.ts';
 import type MotionService from '../services/-ea-motion.ts';
+const service = emberService.service ?? emberService.inject;
 
 interface AnimatedBeaconSignature {
   Args: {
