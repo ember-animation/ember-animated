@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import * as emberService from '@ember/service';
 import Component from '@ember/component';
 import { alias } from '@ember/object/computed';
 import { action } from '@ember/object';
@@ -10,6 +10,7 @@ import { componentNodes } from '../-private/ember-internals.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { MotionConstructor } from '../-private/motion.ts';
 import type Owner from '@ember/owner';
+const service = emberService.service ?? emberService.inject;
 
 interface AnimatedContainerSignature<Tag extends string> {
   /** Multiple tags supported for base element via `tag` arg */

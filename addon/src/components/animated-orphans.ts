@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import * as emberService from '@ember/service';
 import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import Component from '@ember/component';
@@ -14,6 +14,7 @@ import partition from '../-private/partition.ts';
 import '../element-remove.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { Transition } from '../-private/transition.ts';
+const service = emberService.service ?? emberService.inject;
 
 interface AnimatedOrphansSignature {
   Blocks: {

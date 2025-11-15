@@ -1,6 +1,6 @@
 import { alias } from '@ember/object/computed';
 import { computed, get, action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import * as emberService from '@ember/service';
 import Component from '@ember/component';
 import assertNever from 'assert-never';
 import { task, type Task } from '../-private/ember-scheduler.ts';
@@ -15,6 +15,7 @@ import partition from '../-private/partition.ts';
 import Child from '../-private/child.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { Transition } from '../-private/transition.ts';
+const service = emberService.service ?? emberService.inject;
 
 export interface AnimatedEachSignature<T> {
   Args: {
