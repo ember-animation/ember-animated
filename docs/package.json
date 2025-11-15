@@ -94,7 +94,7 @@
     "stylelint": "^16.16.0",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-prettier": "^5.0.3",
-    "tracked-built-ins": "^3.4.0",
+    "tracked-built-ins": "^4.0.0",
     "webpack": "^5.98.0"
   },
   "engines": {
