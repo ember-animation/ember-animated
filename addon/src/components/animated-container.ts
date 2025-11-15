@@ -1,4 +1,4 @@
-import * as emberService from "@ember/service";
+import * as emberService from '@ember/service';
 import Component from '@ember/component';
 import { alias } from '@ember/object/computed';
 import { action } from '@ember/object';

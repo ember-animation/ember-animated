@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import * as emberService from "@ember/service";
+import * as emberService from '@ember/service';
 import { task, type Task } from '../-private/ember-scheduler.ts';
 import { afterRender, microwait } from '../-private/concurrency-helpers.ts';
 import { componentNodes } from '../-private/ember-internals.ts';

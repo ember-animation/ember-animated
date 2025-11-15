@@ -1,6 +1,6 @@
 import { alias } from '@ember/object/computed';
 import { computed, get, action } from '@ember/object';
-import * as emberService from "@ember/service";
+import * as emberService from '@ember/service';
 import Component from '@ember/component';
 import assertNever from 'assert-never';
 import { task, type Task } from '../-private/ember-scheduler.ts';
