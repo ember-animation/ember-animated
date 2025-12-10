@@ -1,7 +1,0 @@
-{{~#each this.renderedChildren key="id" as |child|~}}
-  <EaListElement @child={{child}} @elementToChild={{this._elementToChild}}>
-    {{~yield child.value child.index~}}
-  </EaListElement>
-{{~else}}
-  {{~yield to="inverse"~}}
-{{/each}}
