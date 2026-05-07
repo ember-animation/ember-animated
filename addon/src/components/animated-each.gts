@@ -15,11 +15,12 @@ import partition from '../-private/partition.ts';
 import Child from '../-private/child.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { Transition } from '../-private/transition.ts';
+import EaListElement from './ea-list-element.ts';
 const service = emberService.service ?? emberService.inject;
 
 export interface AnimatedEachSignature<T> {
   Args: {
-    Positional: [T[]];
+    Positional: [T[]] | [];
     Named: {
       /* The list of data you are trying to render. */
       items?: T[];
@@ -857,6 +858,16 @@ export default class AnimatedEach<T> extends Component<
       return this.use!;
     }
   }
+
+  <template>
+    {{~#each this.renderedChildren key="id" as |child|~}}
+      <EaListElement @child={{child}} @elementToChild={{this._elementToChild}}>
+        {{~yield child.value child.index~}}
+      </EaListElement>
+    {{~else}}
+      {{~yield to="inverse"~}}
+    {{/each}}
+  </template>
 }
 
 function isStable(before: string[], after: string[]) {

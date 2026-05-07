@@ -3,12 +3,12 @@
 // See https://typed-ember.gitbook.io/glint/environments/ember/authoring-addons
 
 import type { element as ElementHelper } from 'ember-element-helper';
-import type AnimatedBeacon from './components/animated-beacon.ts';
-import type AnimatedContainer from './components/animated-container.ts';
-import type AnimatedEach from './components/animated-each.ts';
-import type AnimatedIf from './components/animated-if.ts';
-import type AnimatedOrphans from './components/animated-orphans.ts';
-import type AnimatedValue from './components/animated-value.ts';
+import type AnimatedBeacon from './components/animated-beacon.gts';
+import type AnimatedContainer from './components/animated-container.gts';
+import type AnimatedEach from './components/animated-each.gts';
+import type AnimatedIf from './components/animated-if.gts';
+import type AnimatedOrphans from './components/animated-orphans.gts';
+import type AnimatedValue from './components/animated-value.gts';
 import type EaListElement from './components/ea-list-element.ts';
 
 export default interface Registry {

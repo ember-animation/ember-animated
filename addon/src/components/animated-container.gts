@@ -10,6 +10,7 @@ import { componentNodes } from '../-private/ember-internals.ts';
 import type MotionService from '../services/-ea-motion.ts';
 import type { MotionConstructor } from '../-private/motion.ts';
 import type Owner from '@ember/owner';
+import { element } from 'ember-element-helper';
 const service = emberService.service ?? emberService.inject;
 
 interface AnimatedContainerSignature<Tag extends string> {
@@ -227,4 +228,16 @@ export default class AnimatedContainerComponent<
     this.sprite = null;
   }).restartable())
   animate!: Task;
+
+  <template>
+    {{!
+      The @class is only there to support a deprecated usage.
+    }}
+    {{#let (element this.tag) as |Tag|~}}
+      {{! @glint-ignore: https://github.com/typed-ember/glint/issues/610 }}
+      <Tag class="animated-container {{@class}}" ...attributes>
+        {{yield}}
+      </Tag>
+    {{/let}}
+  </template>
 }

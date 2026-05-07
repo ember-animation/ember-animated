@@ -1,11 +1,14 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import type { AnimatedEachSignature } from './animated-each.ts';
+import type { AnimatedEachSignature } from './animated-each.gts';
+import AnimatedValue from './animated-value.gts';
 
 interface AnimatedIfSignature<T> {
   Args: {
     Positional: [T];
-    Named: AnimatedEachSignature<[T]>['Args']['Named'];
+    Named: Omit<AnimatedEachSignature<T>['Args']['Named'], 'items'> & {
+      predicate?: T;
+    };
   };
   Blocks: {
     default: [];
@@ -80,4 +83,24 @@ export default class AnimatedIfComponent<T> extends Component<
   get realGroup() {
     return this.group || `animated_if_${Math.floor(Math.random() * 1000000)}`;
   }
+
+  <template>
+    <AnimatedValue
+      @value={{this.predicate}}
+      @key={{this.key}}
+      @rules={{this.rules}}
+      @use={{this.use}}
+      @duration={{this.duration}}
+      @group={{this.realGroup}}
+      @initialInsertion={{this.initialInsertion}}
+      @finalRemoval={{this.finalRemoval}}
+      as |currentPredicate|
+    >
+      {{#if currentPredicate}}
+        {{yield}}
+      {{else}}
+        {{yield to="inverse"}}
+      {{/if}}
+    </AnimatedValue>
+  </template>
 }

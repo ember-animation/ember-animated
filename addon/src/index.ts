@@ -32,9 +32,9 @@ export { default as Tween } from './-private/tween.ts';
 export type { default as Sprite } from './-private/sprite.ts';
 export type { default as TransitionContext } from './-private/transition-context.ts';
 
-export { default as AnimatedBeacon } from './components/animated-beacon.ts';
-export { default as AnimatedContainer } from './components/animated-container.ts';
-export { default as animatedEach } from './components/animated-each.ts';
-export { default as animatedIf } from './components/animated-if.ts';
-export { default as AnimatedOrphans } from './components/animated-orphans.ts';
-export { default as animatedValue } from './components/animated-value.ts';
+export { default as AnimatedBeacon } from './components/animated-beacon.gts';
+export { default as AnimatedContainer } from './components/animated-container.gts';
+export { default as animatedEach } from './components/animated-each.gts';
+export { default as animatedIf } from './components/animated-if.gts';
+export { default as AnimatedOrphans } from './components/animated-orphans.gts';
+export { default as animatedValue } from './components/animated-value.gts';

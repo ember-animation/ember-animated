@@ -2,12 +2,14 @@ import { computed } from '@ember/object';
 import Component from '@ember/component';
 import { A } from '@ember/array';
 
-import type { AnimatedEachSignature } from './animated-each.ts';
+import AnimatedEach, { type AnimatedEachSignature } from './animated-each.gts';
 
 interface AnimatedValueSignature<T> {
   Args: {
-    Positional: [T];
-    Named: AnimatedEachSignature<[T]>['Args']['Named'];
+    Positional: [T] | [];
+    Named: Omit<AnimatedEachSignature<T>['Args']['Named'], 'items'> & {
+      value?: T;
+    };
   };
   Blocks: {
     default: [T];
@@ -85,4 +87,21 @@ export default class AnimatedValueComponent<T> extends Component<
   get items(): T[] {
     return A([this.value]);
   }
+
+  <template>
+    {{#AnimatedEach
+      this.items
+      key=this.key
+      rules=this.rules
+      use=this.use
+      duration=this.duration
+      group=this.group
+      watch=this.watch
+      initialInsertion=this.initialInsertion
+      finalRemoval=this.finalRemoval
+      as |item|
+    }}
+      {{yield item}}
+    {{/AnimatedEach}}
+  </template>
 }

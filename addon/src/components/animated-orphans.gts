@@ -405,4 +405,9 @@ export default class AnimatedOrphans extends Component<AnimatedOrphansSignature>
     sprite.assertHasOwner();
     sprite.owner.unblock(cycle);
   }
+
+  <template>
+    {{! template-lint-disable no-yield-only }}
+    {{yield}}
+  </template>
 }

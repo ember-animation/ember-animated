@@ -141,4 +141,9 @@ export default class AnimatedBeacon extends Component<AnimatedBeaconSignature> {
     yield this.motionService.addBeacon.perform(this.name, sprite);
   })
   participate!: Task;
+
+  <template>
+    {{! template-lint-disable no-yield-only }}
+    {{yield}}
+  </template>
 }
