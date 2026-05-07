@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -59,7 +59,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install Dependencies
         run: pnpm install --no-lockfile
@@ -82,7 +82,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -98,7 +98,7 @@ jobs:
   try-scenarios:
     name: ${{ matrix.try-scenario }}
     runs-on: ubuntu-latest
-    needs: 'test-library'
+    needs: "test-library"
     timeout-minutes: 10
 
     strategy:
@@ -125,7 +125,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -137,7 +137,7 @@ jobs:
   typescript-compatibility:
     name: Type checking - ${{ matrix.typescript-scenario }}
     runs-on: ubuntu-latest
-    needs: 'test-library'
+    needs: "test-library"
 
     strategy:
       fail-fast: false
@@ -164,18 +164,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - run: pnpm build
+        working-directory: addon
+
       - name: Update TS version
         run: pnpm add --ignore-scripts --save-dev ${{ matrix.typescript-scenario }}
-        working-directory: addon
+        working-directory: test-types
 
       - name: Type checking
         run: tsc --noEmit
-        working-directory: addon
+        working-directory: test-types
 
   publish-config:
     name: Publish config

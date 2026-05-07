@@ -2,5 +2,6 @@ packages:
   - addon
   - docs
   - test-app
+  - test-types
 onlyBuiltDependencies:
   - ember-modal-dialog
