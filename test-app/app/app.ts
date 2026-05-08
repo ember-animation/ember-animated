@@ -5,7 +5,7 @@ import config from 'test-app/config/environment';
 import setupDeprecationWorkflow from 'ember-cli-deprecation-workflow';
 
 setupDeprecationWorkflow({
-  thowOnUnhandled: true,
+  throwOnUnhandled: true,
 });
 
 export default class App extends Application {
