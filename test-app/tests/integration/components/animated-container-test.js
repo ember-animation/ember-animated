@@ -2,7 +2,7 @@
 import { Promise as EmberPromise } from 'rsvp';
 import { run } from '@ember/runloop';
 import { alias } from '@ember/object/computed';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@ember/component';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
