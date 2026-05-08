@@ -1,7 +1,9 @@
 import { join, scheduleOnce } from '@ember/runloop';
 import { addObserver } from '@ember/object/observers';
 import { computed, set } from '@ember/object';
-import Ember from 'ember';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: private API, no public types
+import { setClassicDecorator } from '@ember/-internals/metal';
 import { DEBUG } from '@glimmer/env';
 import { spawn, current, stop, logErrors } from './scheduler.ts';
 import { microwait } from './concurrency-helpers.ts';
@@ -30,7 +32,7 @@ function _computed(fn: (this: HostObject, propertyName: string) => Task) {
     // eslint-disable-next-line prefer-rest-params
     return (computed(fn) as any)(...arguments);
   };
-  (Ember as any)._setClassicDecorator(cp);
+  setClassicDecorator(cp);
   return cp;
 }
 

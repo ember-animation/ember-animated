@@ -9,6 +9,11 @@ module.exports = function (defaults) {
       watchDependencies: ['ember-animated'],
     },
     'ember-cli-babel': { enableTypeScriptTransform: true },
+    emberData: {
+      deprecations: {
+        DEPRECATE_STORE_EXTENDS_EMBER_OBJECT: false,
+      },
+    },
 
     // Add options here
   });

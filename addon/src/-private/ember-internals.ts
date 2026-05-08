@@ -8,11 +8,14 @@
  */
 import { get } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
-import Ember from 'ember';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: private API, no public types
+import { getViewBounds as _getViewBounds } from '@ember/-internals/views';
 import type Component from '@ember/component';
 
-const { getViewBounds } = Ember.ViewUtils as unknown as {
-  getViewBounds(view: Component): { firstNode: Node; lastNode: Node };
+const getViewBounds = _getViewBounds as unknown as (view: Component) => {
+  firstNode: Node;
+  lastNode: Node;
 };
 
 export function componentNodes(view: Component) {
