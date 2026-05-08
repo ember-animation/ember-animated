@@ -14,10 +14,13 @@
     <link rel="stylesheet" href="{{rootURL}}assets/test-support.css">
     <style type="text/css">
       /* These default styles trigger suble browser bugs when it comes
-      to measurement and bounding client rects. */
+         to measurement and bounding client rects.
+         `!important` because @ember/test-helpers' CSS is injected by
+         style-loader at runtime — after this <style>, so a plain rule
+         loses the cascade. */
       #ember-testing {
-        width: auto;
-        transform: none;
+        width: auto !important;
+        transform: none !important;
       }
     </style>
 
