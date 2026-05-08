@@ -2,6 +2,11 @@ import Application from '@ember/application';
 import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import config from 'test-app/config/environment';
+import setupDeprecationWorkflow from 'ember-cli-deprecation-workflow';
+
+setupDeprecationWorkflow({
+  thowOnUnhandled: true,
+});
 
 export default class App extends Application {
   modulePrefix = config.modulePrefix;
