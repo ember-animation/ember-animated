@@ -1,6 +1,22 @@
 'use strict';
 
+const { readFileSync, writeFileSync } = require('node:fs');
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+let ember = require('./package.json').devDependencies['ember-source'];
+
+if (ember.startsWith('6.12') || ember.startsWith('7.')) {
+  let optionalFeatures = JSON.parse(
+    readFileSync('./config/optional-features.json'),
+  );
+  writeFileSync(
+    './config/optional-features.json',
+    JSON.stringify({
+      ...optionalFeatures,
+      'use-ember-modules': true,
+    }),
+  );
+}
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
