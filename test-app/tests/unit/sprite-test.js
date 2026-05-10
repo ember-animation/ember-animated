@@ -54,8 +54,8 @@ module('Unit | Sprite', function (hooks) {
     offsetParent.style.position = 'relative';
     innerContent.style.height = '400px';
     let externalParent = fixture.querySelector('.external-parent');
-    (externalParent.style.position = 'absolute'),
-      (externalParent.style.left = '500px');
+    externalParent.style.position = 'absolute';
+    externalParent.style.left = '500px';
     externalParent.style.top = '500px';
     externalParent.style.width = '500px';
     externalParent.style.height = '500px';

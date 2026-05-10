@@ -1,5 +1,4 @@
 declare global {
-  // eslint-disable-next-line no-var
   var emberAnimatedSingleton: {
     [key: symbol]: unknown;
   };

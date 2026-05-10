@@ -66,9 +66,8 @@ export class AdjustCSS extends Motion<AdjustCSSOptions> {
     } else {
       this.sprite.assertHasInitialBounds();
       this.tween = new Tween(
-        this._splitUnit(
-          this.sprite.initialComputedStyle[this.propertyName],
-        ).value,
+        this._splitUnit(this.sprite.initialComputedStyle[this.propertyName])
+          .value,
         finalValue,
         this.duration,
         this.opts.easing,
