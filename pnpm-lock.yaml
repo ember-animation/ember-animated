@@ -467,6 +467,9 @@ importers:
       ember-cli-dependency-checker:
         specifier: ^3.3.3
         version: 3.3.3(ember-cli@6.2.3(babel-core@6.26.3)(handlebars@4.7.8)(underscore@1.13.7))
+      ember-cli-deprecation-workflow:
+        specifier: ^4.0.1
+        version: 4.0.1(@babel/core@7.26.10)
       ember-cli-htmlbars:
         specifier: ^6.3.0
         version: 6.3.0
@@ -4655,6 +4658,9 @@ packages:
   ember-cli-deploy@2.0.0:
     resolution: {integrity: sha512-x6vtuxruExD66qo/OvNldGbxZ3NTaeRSdL63Q9clJ/+JspLXeHtKxl5dDMqRNvl8sItVrZJqq9GYMJfPsg5SWA==}
     engines: {node: 12.* || 14.* || >= 16}
+
+  ember-cli-deprecation-workflow@4.0.1:
+    resolution: {integrity: sha512-XJzUZVXyb6/nFKU7GzGRlHlcAl4KtkioBTjfuIHp1aysbRZ6XxYLSPtP090EbOxQBtYwAPsH2kPAtPS86tL2RA==}
 
   ember-cli-get-component-path-option@1.0.0:
     resolution: {integrity: sha512-k47TDwcJ2zPideBCZE8sCiShSxQSpebY2BHcX2DdipMmBox5gsfyVrbKJWIHeSTTKyEUgmBIvQkqTOozEziCZA==}
@@ -15495,6 +15501,14 @@ snapshots:
       rsvp: 3.6.2
       silent-error: 1.1.1
     transitivePeerDependencies:
+      - supports-color
+
+  ember-cli-deprecation-workflow@4.0.1(@babel/core@7.26.10):
+    dependencies:
+      '@embroider/addon-shim': 1.10.2
+      decorator-transforms: 2.3.0(@babel/core@7.26.10)
+    transitivePeerDependencies:
+      - '@babel/core'
       - supports-color
 
   ember-cli-get-component-path-option@1.0.0: {}
