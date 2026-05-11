@@ -34,6 +34,7 @@ module.exports = async function () {
         name: 'ember-lts-4.12',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^2.1.1',
             'ember-source': '~4.12.0',
           },
         },
@@ -42,6 +43,7 @@ module.exports = async function () {
         name: 'ember-lts-5.4',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^2.1.1',
             'ember-source': '~5.4.0',
           },
         },
@@ -50,6 +52,7 @@ module.exports = async function () {
         name: 'ember-lts-5.8',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^2.1.1',
             'ember-source': '~5.8.0',
           },
         },
@@ -58,6 +61,7 @@ module.exports = async function () {
         name: 'ember-lts-5.12',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^2.1.1',
             'ember-source': '~5.12.0',
           },
         },
@@ -66,6 +70,7 @@ module.exports = async function () {
         name: 'ember-release',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^2.1.1',
             'ember-source': await getChannelURL('release'),
           },
         },
@@ -74,6 +79,7 @@ module.exports = async function () {
         name: 'ember-beta',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^2.1.1',
             'ember-source': await getChannelURL('beta'),
           },
         },
@@ -82,6 +88,7 @@ module.exports = async function () {
         name: 'ember-canary',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^2.1.1',
             'ember-source': await getChannelURL('canary'),
           },
         },
