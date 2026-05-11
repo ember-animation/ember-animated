@@ -25,6 +25,7 @@ module.exports = async function () {
         name: 'ember-lts-4.8',
         npm: {
           devDependencies: {
+            '@glimmer/component': '^1.0.0',
             'ember-source': '~4.8.0',
           },
         },
