@@ -4,3 +4,4 @@
 
 # misc
 /coverage/
+*.yaml

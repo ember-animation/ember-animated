@@ -8,6 +8,7 @@
 /coverage/
 !.*
 .*/
+*.yaml
 
 # ember-try
 /.node_modules.ember-try/
