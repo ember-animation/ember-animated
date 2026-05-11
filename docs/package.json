@@ -40,7 +40,7 @@
     "@fortawesome/ember-fontawesome": "^3.0.1",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@glimmer/component": "^2.1.1",
+    "@glimmer/component": "2.1.1",
     "@glimmer/tracking": "^1.1.2",
     "@warp-drive/build-config": "^5.5.0",
     "broccoli-asset-rev": "^3.0.0",
