@@ -5,3 +5,5 @@ packages:
   - test-types
 onlyBuiltDependencies:
   - ember-modal-dialog
+
+sharedWorkspaceLockfile: false
