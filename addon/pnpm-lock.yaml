@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
-overrides:
-  ember-animated-tools>ember-animated: workspace:*
-
 importers:
 
   .:
