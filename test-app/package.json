@@ -57,6 +57,7 @@
     "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
     "@warp-drive/core-types": "~0.0.1",
+    "babel-plugin-undeprecate-inject-from-at-ember-service": "^1.0.7",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.2",
     "ember-animated": "workspace:*",

@@ -23,6 +23,34 @@ module.exports = function (defaults) {
     autoImport: {
       forbidEval: true,
       watchDependencies: ['ember-animated'],
+      webpack: {
+        module: {
+          rules: [
+            {
+              test: (filename) => filename.endsWith('.js'),
+              use: {
+                loader: 'babel-loader-8',
+                options: {
+                  plugins: [
+                    [
+                      require.resolve('babel-plugin-undeprecate-inject-from-at-ember-service'),
+                      {},
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+    babel: {
+      plugins: [
+        [
+          require.resolve('babel-plugin-undeprecate-inject-from-at-ember-service'),
+          {},
+        ],
+      ],
     },
     'ember-cli-babel': { enableTypeScriptTransform: true },
     emberData: {

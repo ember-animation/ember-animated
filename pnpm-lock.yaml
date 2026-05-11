@@ -239,7 +239,7 @@ importers:
         version: 1.0.1
       ember-cli-htmlbars:
         specifier: 7.0.1
-        version: 7.0.1(@babel/core@7.29.0)(ember-source@5.6.0(@babel/core@7.29.0)(@glint/template@1.7.7)(rsvp@4.8.5))
+        version: 7.0.1(@babel/core@7.29.0)(ember-source@5.6.0(@babel/core@7.29.0)(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.106.2))
       ember-cli-inject-live-reload:
         specifier: ^2.1.0
         version: 2.1.0
@@ -441,6 +441,9 @@ importers:
       '@warp-drive/core-types':
         specifier: ~0.0.1
         version: 0.0.3(@babel/core@7.29.0)(@glint/template@1.7.7)
+      babel-plugin-undeprecate-inject-from-at-ember-service:
+        specifier: ^1.0.7
+        version: 1.0.7(@babel/core@7.29.0)
       broccoli-asset-rev:
         specifier: ^3.0.0
         version: 3.0.0
@@ -3120,6 +3123,11 @@ packages:
 
   babel-plugin-syntax-dynamic-import@6.18.0:
     resolution: {integrity: sha512-MioUE+LfjCEz65Wf7Z/Rm4XCP5k2c+TbMd2Z2JKc7U9uwjBhAfNPE48KC4GTGKhppMeYVepwDBNO/nGY6NYHBA==}
+
+  babel-plugin-undeprecate-inject-from-at-ember-service@1.0.7:
+    resolution: {integrity: sha512-S212WzLYD4lTq5GVYLYdQytbV7sNG3J1G7M927DrS9yT1kE9A65G4JXlVP8nTHV8VL25cw0oU+G2+PZiCsBHaA==}
+    peerDependencies:
+      '@babel/core': ^7.0.0
 
   babel-remove-types@1.1.0:
     resolution: {integrity: sha512-2wszSY8Pll8uefPFrJcOb2cP67epjpDnLADtzgQ9u1WgFJmBdJAkx5MGISjFCg/56Q8YgzA/o9RBMpScjhf+dw==}
@@ -12553,6 +12561,10 @@ snapshots:
 
   babel-plugin-syntax-dynamic-import@6.18.0: {}
 
+  babel-plugin-undeprecate-inject-from-at-ember-service@1.0.7(@babel/core@7.29.0):
+    dependencies:
+      '@babel/core': 7.29.0
+
   babel-remove-types@1.1.0:
     dependencies:
       '@babel/core': 7.29.0
@@ -14297,6 +14309,7 @@ snapshots:
       walk-sync: 4.0.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   ember-cli-htmlbars@7.0.1(@babel/core@7.29.0)(ember-source@6.2.0(@glimmer/component@2.1.1)(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.106.2)):
     dependencies:
