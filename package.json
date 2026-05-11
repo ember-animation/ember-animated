@@ -38,6 +38,9 @@
   },
   "pnpm": {
     "overrides": {
+      "ember-cli-htmlbars": "7.0.1",
+      "ember-cli-babel": "8.3.1",
+      "ember-auto-import": "2.13.1",
       "ember-animated-tools>ember-animated": "workspace:*",
       "ember-modal-dialog": "4.0.0",
       "@types/eslint": "8.4.1"
