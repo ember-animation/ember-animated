@@ -109,7 +109,9 @@
   },
   "pnpm": {
     "overrides": {
-      "ember-animated-tools>ember-animated": "workspace:*"
+      "ember-animated-tools>ember-animated": "workspace:*",
+      "@handlebars/parser": "2.1.0",
+      "tracked-toolbox": "2.0.0"
     }
   },
   "ember-addon": {

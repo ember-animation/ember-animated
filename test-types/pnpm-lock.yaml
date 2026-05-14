@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
+overrides:
+  ember-animated-tools>ember-animated: workspace:*
+  '@handlebars/parser': 2.1.0
+  tracked-toolbox: 2.0.0
+
 importers:
 
   .:
@@ -607,9 +612,8 @@ packages:
   '@glint/template@1.7.7':
     resolution: {integrity: sha512-jcPdQ3A6cXo5h9RBi0tK4/o5qNn7868Y8xpkwWQNPAd8xQKuRKmG9dGJwUycXvtqISzfrnL1p3MQr3hYN/Ua6Q==}
 
-  '@handlebars/parser@2.2.2':
-    resolution: {integrity: sha512-n/SZW+12rwikx/f8YcSv9JCi5p9vn1Bnts9ZtVvfErG4h0gbjHI1H1ZMhVUnaOC7yzFc6PtsCKIK8XeTnL90Gw==}
-    engines: {node: ^18 || ^20 || ^22 || >=24}
+  '@handlebars/parser@2.1.0':
+    resolution: {integrity: sha512-R14NuNaSKZ6eE9y4t0fg/1f8iKd5ZJtSOTIseGFzXINTV17XffhLG2Y0CvdKOgyVQ7+UnXi89YGzRo/xsgwHIA==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -2402,7 +2406,7 @@ snapshots:
       '@glimmer/interfaces': 0.94.6
       '@glimmer/util': 0.94.8
       '@glimmer/wire-format': 0.94.8
-      '@handlebars/parser': 2.2.2
+      '@handlebars/parser': 2.1.0
       simple-html-tokenizer: 0.5.11
 
   '@glimmer/util@0.94.8':
@@ -2437,7 +2441,7 @@ snapshots:
 
   '@glint/template@1.7.7': {}
 
-  '@handlebars/parser@2.2.2': {}
+  '@handlebars/parser@2.1.0': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

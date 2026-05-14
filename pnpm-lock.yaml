@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
+overrides:
+  ember-animated-tools>ember-animated: workspace:*
+  '@handlebars/parser': 2.1.0
+  tracked-toolbox: 2.0.0
+
 importers:
 
   .:
@@ -55,8 +60,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.0'
 
-  '@handlebars/parser@2.0.0':
-    resolution: {integrity: sha512-EP9uEDZv/L5Qh9IWuMUGJRfwhXJ4h1dqKTT4/3+tY0eu7sPis7xh23j61SYUnNF4vqCQvvUXpDo9Bh/+q1zASA==}
+  '@handlebars/parser@2.1.0':
+    resolution: {integrity: sha512-R14NuNaSKZ6eE9y4t0fg/1f8iKd5ZJtSOTIseGFzXINTV17XffhLG2Y0CvdKOgyVQ7+UnXi89YGzRo/xsgwHIA==}
 
   '@iarna/toml@2.2.5':
     resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
@@ -1627,7 +1632,7 @@ snapshots:
     dependencies:
       '@glimmer/interfaces': 0.84.3
       '@glimmer/util': 0.84.3
-      '@handlebars/parser': 2.0.0
+      '@handlebars/parser': 2.1.0
       simple-html-tokenizer: 0.5.11
 
   '@glimmer/util@0.84.3':
@@ -1650,7 +1655,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@handlebars/parser@2.0.0': {}
+  '@handlebars/parser@2.1.0': {}
 
   '@iarna/toml@2.2.5': {}
 
