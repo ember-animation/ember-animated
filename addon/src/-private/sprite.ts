@@ -1,5 +1,5 @@
 import { warn } from '@ember/debug';
-import Ember from 'ember';
+import { macroCondition, isTesting } from '@embroider/macros';
 import Transform, { ownTransform, cumulativeTransform } from './transform.ts';
 import { continueMotions } from './motion-bridge.ts';
 import { collapsedChildren } from './margin-collapse.ts';
@@ -142,7 +142,7 @@ export default class Sprite {
       }
     }
 
-    if (Ember.testing) {
+    if (macroCondition(isTesting())) {
       Object.seal(this);
     }
   }
