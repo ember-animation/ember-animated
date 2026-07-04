@@ -4,17 +4,11 @@
     "type": "git",
     "url": "https://github.com/ember-animation/ember-animated.git"
   },
-  "workspaces": [
-    "addon",
-    "docs",
-    "test-app"
-  ],
   "scripts": {
     "build": "pnpm --filter ember-animated build",
     "lint": "pnpm --filter '*' lint",
     "lint:fix": "pnpm --filter '*' lint:fix",
     "prepare": "pnpm build",
-    "release": "release-it",
     "start": "concurrently 'pnpm:start:*' --restart-after 5000 --prefixColors auto",
     "start:addon": "pnpm --filter ember-animated start --no-watch.clearScreen",
     "start:test-app": "pnpm --filter test-app start",
@@ -31,10 +25,7 @@
   "packageManager": "pnpm@10.6.3",
   "devDependencies": {
     "@glint/core": "^1.2.1",
-    "@release-it-plugins/lerna-changelog": "^7.0.0",
-    "@release-it-plugins/workspaces": "^4.2.0",
-    "concurrently": "^9.1.2",
-    "release-it": "^17.10.0"
+    "concurrently": "^9.1.2"
   },
   "pnpm": {
     "overrides": {
@@ -42,32 +33,6 @@
       "ember-modal-dialog": "4.0.0",
       "@types/eslint": "8.4.1"
     }
-  },
-  "release-it": {
-    "hooks": {
-      "after:bump": "pnpm install",
-      "after:release": "cd docs && pnpm run deploy"
-    },
-    "plugins": {
-      "@release-it-plugins/lerna-changelog": {
-        "infile": "CHANGELOG.md",
-        "launchEditor": true
-      },
-      "@release-it-plugins/workspaces": {
-        "publish": false,
-        "workspaces": [
-          "addon"
-        ]
-      }
-    },
-    "git": {
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true,
-      "tokenRef": "GITHUB_AUTH"
-    },
-    "npm": false
   },
   "version": "2.2.0"
 }
