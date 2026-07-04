@@ -1,4 +1,5 @@
 {
+  "version": "2.2.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -15,6 +16,12 @@
     "test": "pnpm --filter '*' test",
     "test:ember": "pnpm --filter '*' test:ember"
   },
+  "devDependencies": {
+    "@glint/core": "^1.2.1",
+    "concurrently": "^9.1.2",
+    "release-plan": "^0.18.0"
+  },
+  "packageManager": "pnpm@10.6.3",
   "volta": {
     "node": "22.14.0",
     "pnpm": "10.6.3"
@@ -22,17 +29,11 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
-  "packageManager": "pnpm@10.6.3",
-  "devDependencies": {
-    "@glint/core": "^1.2.1",
-    "concurrently": "^9.1.2"
-  },
   "pnpm": {
     "overrides": {
+      "@types/eslint": "8.4.1",
       "ember-animated-tools>ember-animated": "workspace:*",
-      "ember-modal-dialog": "4.0.0",
-      "@types/eslint": "8.4.1"
+      "ember-modal-dialog": "4.0.0"
     }
-  },
-  "version": "2.2.0"
+  }
 }
