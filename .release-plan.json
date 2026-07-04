@@ -1,0 +1,26 @@
+{
+  "solution": {
+    "ember-animated": {
+      "impact": "minor",
+      "oldVersion": "2.2.0",
+      "newVersion": "2.3.0",
+      "tagName": "latest",
+      "constraints": [
+        {
+          "impact": "minor",
+          "reason": "Appears in changelog section :rocket: Enhancement"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :house: Internal"
+        }
+      ],
+      "pkgJSONPath": "./addon/package.json"
+    }
+  },
+  "description": "## Release (2026-07-04)\n\n* ember-animated 2.3.0 (minor)\n\n#### :rocket: Enhancement\n* `ember-animated`\n  * [#800](https://github.com/ember-animation/ember-animated/pull/800) Fix barrel-import and inject deprecations ([@backspace](https://github.com/backspace))\n  * [#793](https://github.com/ember-animation/ember-animated/pull/793) Convert handlebar templates into template tags ([@mogstad](https://github.com/mogstad))\n\n#### :bug: Bug Fix\n* `ember-animated`\n  * [#792](https://github.com/ember-animation/ember-animated/pull/792) Get ember service in way that avoids deprecation ([@evoactivity](https://github.com/evoactivity))\n\n#### :memo: Documentation\n* [#784](https://github.com/ember-animation/ember-animated/pull/784) docs: fix \"animated-if\" import ([@machty](https://github.com/machty))\n\n#### :house: Internal\n* `ember-animated`\n  * [#802](https://github.com/ember-animation/ember-animated/pull/802) Replace release-it with release-plan ([@SergeAstapov](https://github.com/SergeAstapov))\n* Other\n  * [#797](https://github.com/ember-animation/ember-animated/pull/797) Remove ember-cli-fastboot from test-app ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))\n  * [#798](https://github.com/ember-animation/ember-animated/pull/798) Modify ember try command to skip cleanup ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n  * [#795](https://github.com/ember-animation/ember-animated/pull/795) Setup type-checking project ([@NullVoxPopuli](https://github.com/NullVoxPopuli))\n\n#### Committers: 7\n- @NullVoxPopuli's reduced-access machine account for AI usage ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))\n- Alex Matchneer ([@machty](https://github.com/machty))\n- Bjarne Mogstad ([@mogstad](https://github.com/mogstad))\n- Buck Doyle ([@backspace](https://github.com/backspace))\n- Liam ([@evoactivity](https://github.com/evoactivity))\n- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))\n- [@NullVoxPopuli](https://github.com/NullVoxPopuli)\n"
+}

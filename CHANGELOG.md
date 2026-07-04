@@ -1,5 +1,38 @@
 # Changelog
 
+## Release (2026-07-04)
+
+* ember-animated 2.3.0 (minor)
+
+#### :rocket: Enhancement
+* `ember-animated`
+  * [#800](https://github.com/ember-animation/ember-animated/pull/800) Fix barrel-import and inject deprecations ([@backspace](https://github.com/backspace))
+  * [#793](https://github.com/ember-animation/ember-animated/pull/793) Convert handlebar templates into template tags ([@mogstad](https://github.com/mogstad))
+
+#### :bug: Bug Fix
+* `ember-animated`
+  * [#792](https://github.com/ember-animation/ember-animated/pull/792) Get ember service in way that avoids deprecation ([@evoactivity](https://github.com/evoactivity))
+
+#### :memo: Documentation
+* [#784](https://github.com/ember-animation/ember-animated/pull/784) docs: fix "animated-if" import ([@machty](https://github.com/machty))
+
+#### :house: Internal
+* `ember-animated`
+  * [#802](https://github.com/ember-animation/ember-animated/pull/802) Replace release-it with release-plan ([@SergeAstapov](https://github.com/SergeAstapov))
+* Other
+  * [#797](https://github.com/ember-animation/ember-animated/pull/797) Remove ember-cli-fastboot from test-app ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+  * [#798](https://github.com/ember-animation/ember-animated/pull/798) Modify ember try command to skip cleanup ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+  * [#795](https://github.com/ember-animation/ember-animated/pull/795) Setup type-checking project ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 7
+- @NullVoxPopuli's reduced-access machine account for AI usage ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+- Alex Matchneer ([@machty](https://github.com/machty))
+- Bjarne Mogstad ([@mogstad](https://github.com/mogstad))
+- Buck Doyle ([@backspace](https://github.com/backspace))
+- Liam ([@evoactivity](https://github.com/evoactivity))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## v2.2.0 (2025-05-17)
 
 #### :rocket: Enhancement
