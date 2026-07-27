@@ -274,7 +274,7 @@ module('Unit | scheduler', function (hooks) {
   });
 
   test('promise returned from spawn does not resolve if an inner promise resolves after stop', function (assert) {
-    assert.expect(1);
+    assert.expect(2);
 
     return spawn(function* () {
       spawn(function* () {
@@ -284,8 +284,11 @@ module('Unit | scheduler', function (hooks) {
         });
         stop(task);
         resolve();
-        yield task;
-        assert.ok(false, 'should never get here');
+        let yielded = yield task;
+        assert.ok(
+          yielded.stopped,
+          'After stopping a Microtask it should yield `{ stopped: true }`.',
+        );
       });
       yield microwait();
       assert.ok(true, 'got to end');
